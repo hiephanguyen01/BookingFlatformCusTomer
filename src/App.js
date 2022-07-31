@@ -1,9 +1,10 @@
+import { Button } from "antd";
 import "./App.less";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header"></header>
+      <Button>asdasdas</Button>
     </div>
   );
 }
