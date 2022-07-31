@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import "./App.less";
+import "./App.scss";
 
 function App() {
   return (
