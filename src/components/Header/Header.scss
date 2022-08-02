@@ -1,0 +1,49 @@
+.Header {
+  font-size: 15px;
+  color: #828282;
+  padding: 17px 0;
+  box-shadow: 4px 4px 10px 1px #00000005;
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ant-input-affix-wrapper {
+    width: 50% !important;
+  }
+  .user {
+    display: flex;
+    align-items: center;
+  }
+  .tip {
+    text-align: center;
+  }
+  .text {
+    margin-left: 10px;
+  }
+}
+.search-modal {
+  .ant-modal-title {
+    width: fit-content;
+  }
+  .ant-input-affix-wrapper {
+    width: 100% !important;
+  }
+  .ant-modal-footer {
+    display: none;
+  }
+  .logo {
+    text-align: center;
+    margin: 20px;
+  }
+  .filter {
+    font-weight: 600;
+    size: 18px;
+    padding: 20px 0;
+  }
+  .time {
+    font-weight: 700;
+    size: 16px;
+    padding: 20px 0;
+  }
+}
