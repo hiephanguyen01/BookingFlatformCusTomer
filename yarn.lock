@@ -2582,6 +2582,13 @@ ansi-styles@^5.0.0:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
 
+antd-img-crop@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/antd-img-crop/-/antd-img-crop-4.2.3.tgz#9d1127415e1230fed27d691482363985f4eb188d"
+  integrity sha512-YZgsUdfHnkBCOQ1sLXTwfVRgBdMRM//joddFnSlWe/QU52m8PPbBxtgt0YdEf+UTPXOAx6RQJp1gUjAmMU2knA==
+  dependencies:
+    react-easy-crop "^4.1.5"
+
 antd@^4.22.2:
   version "4.22.2"
   resolved "https://registry.yarnpkg.com/antd/-/antd-4.22.2.tgz#8b022c7d234f9038f9aa018e837544bc1caace8c"
@@ -7097,6 +7104,11 @@ normalize-url@^6.0.1:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-6.1.0.tgz#40d0885b535deffe3f3147bec877d05fe4c5668a"
   integrity sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==
 
+normalize-wheel@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/normalize-wheel/-/normalize-wheel-1.0.1.tgz#aec886affdb045070d856447df62ecf86146ec45"
+  integrity sha512-1OnlAPZ3zgrk8B91HyRj+eVv+kS5u+Z0SCsak6Xil/kmgEia50ga7zfkumayonZrImffAxPU/5WcyGhzetHNPA==
+
 npm-run-path@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-4.0.1.tgz#b7ecd1e5ed53da8e37a55e1c2269e0b97ed748ea"
@@ -8629,6 +8641,14 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-easy-crop@^4.1.5:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/react-easy-crop/-/react-easy-crop-4.4.1.tgz#435b2014781d44857591091af5c2a5a15dd1ebd8"
+  integrity sha512-GNeGK36bBVEHjYbVSBxfpuTIEhBxy/AWwPEe9afc3l0KikqSd64Bpi4SnR8snGbTaTioa2LYo16LKmp0IcZkiw==
+  dependencies:
+    normalize-wheel "^1.0.1"
+    tslib "2.0.1"
+
 react-error-overlay@^6.0.11:
   version "6.0.11"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.11.tgz#92835de5841c5cf08ba00ddd2d677b6d17ff9adb"
@@ -9960,6 +9980,11 @@ tsconfig-paths@^3.14.1:
     json5 "^1.0.1"
     minimist "^1.2.6"
     strip-bom "^3.0.0"
+
+tslib@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
+  integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
 
 tslib@^1.8.1:
   version "1.14.1"
