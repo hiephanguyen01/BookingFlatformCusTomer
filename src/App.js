@@ -1,4 +1,5 @@
 import "./App.scss";
+
 import { AuthPage } from "./pages/Auth/AuthPage";
 import { Routes, Route } from "react-router-dom";
 import UserAccount from "./pages/UserAccount";
