@@ -8,7 +8,7 @@ import Dao from "./pages/Dao";
 function App() {
   return (
     <div className="App">
-      <Header></Header>
+      <Header />
       <Routes>
         <Route
           path="/auth"
