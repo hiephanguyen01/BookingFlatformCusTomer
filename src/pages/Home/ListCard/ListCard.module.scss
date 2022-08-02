@@ -1,0 +1,38 @@
+.ListItem {
+    margin-top: 36px;
+    .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background: #ffffff;
+        h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #222222;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+        }
+        a {
+            color: #03ac84;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+    }
+    .box-container {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 9px;
+    }
+}
+
+@media (min-width: 1450px) {
+    .ListItem {
+        .box-container {
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+        }
+    }
+}
