@@ -1,7 +1,7 @@
 import React from 'react'
-import ggLogo from '../../../assets/img/google.png'
-import fbLogo from '../../../assets/img/facebook.png'
-import vietnam from '../../../assets/img/vietnam.png'
+import ggLogo from '../../../assets/imgAuth/google.png'
+import fbLogo from '../../../assets/imgAuth/facebook.png'
+import vietnam from '../../../assets/imgAuth/vietnam.png'
 import './SignUp.scss'
 import { Link } from "react-router-dom";
 export const SignUp = () => {

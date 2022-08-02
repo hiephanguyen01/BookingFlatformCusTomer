@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import ReactInputVerificationCode from "react-input-verification-code";
-import back from "../../../../assets/img/back-arrow.png";
+import back from "../../../../assets/imgAuth/back-arrow.png";
 import "./SignUpWithPhone.scss";
 import { Link } from "react-router-dom";
 const StyledReactInputVerificationCode = styled.div`

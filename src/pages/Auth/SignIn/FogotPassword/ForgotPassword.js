@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import {useNavigate} from 'react-router-dom'
 import "./ForgotPassword.scss";
-import back from "../../../../assets/img/back-arrow.png";
-import vietnam from "../../../../assets/img/vietnam.png";
+import back from "../../../../assets/imgAuth/back-arrow.png";
+import vietnam from "../../../../assets/imgAuth/vietnam.png";
 import { CheckOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 export const ForgotPassword = () => {

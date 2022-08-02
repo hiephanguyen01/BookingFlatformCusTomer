@@ -1,6 +1,6 @@
 import React from "react";
-import logo from "../../../assets/img/logobooking.png";
-import authPic from "../../../assets/img/auth-pic.png";
+import logo from "../../../assets/imgAuth/logobooking.png";
+import authPic from "../../../assets/imgAuth/auth-pic.png";
 import "./AuthLayout.scss";
 export const AuthLayout = ({children}) => {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import "./SignIn.scss";
-import ggLogo from "../../../assets/img/google.png";
-import fbLogo from "../../../assets/img/facebook.png";
+import ggLogo from "../../../assets/imgAuth/google.png";
+import fbLogo from "../../../assets/imgAuth/facebook.png";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Input } from "antd";
 import { Link } from "react-router-dom";

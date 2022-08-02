@@ -2,7 +2,7 @@ import { useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Input } from "antd";
 import "./SetPassword.scss";
-import back from "../../../../assets/img/back-arrow.png";
+import back from "../../../../assets/imgAuth/back-arrow.png";
 import { Link } from "react-router-dom";
 export const SetPassword = ({backLink,nextLink,header,submit}) => {
   const phoneNum = "0965026910";
