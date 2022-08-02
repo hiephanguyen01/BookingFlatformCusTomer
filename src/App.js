@@ -1,12 +1,11 @@
-import { Button } from "antd";
 import { Routes ,Route } from "react-router-dom";
 import "./App.scss";
-
+import { AuthPage } from "./pages/Auth/AuthPage";
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/auth" element={<p style={{fontSize:"100px"}}>KAJSHKjahskJAHSKjahs</p>}></Route>
+        <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
         <Route />
       </Routes>
     </div>
