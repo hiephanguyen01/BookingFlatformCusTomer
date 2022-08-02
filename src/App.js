@@ -8,7 +8,8 @@ import { CustomerLayout } from "./pages/CustomerLayout";
 function App() {
   return (
     <div className="App">
-      <Routes>
+
+      <Routes >
         <Route  index path="*" element={<Navigate to="/auth/sign-up" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
         <Route path="/" element={<CustomerLayout />}>

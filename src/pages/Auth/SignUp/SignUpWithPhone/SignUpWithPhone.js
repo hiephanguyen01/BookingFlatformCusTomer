@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import ReactInputVerificationCode from "react-input-verification-code";
 import back from "../../../../assets/imgAuth/back-arrow.png";
 import "./SignUpWithPhone.scss";
-import firebase from "../../FireBaseSetUp/Firebase";
 import { Link, useNavigate } from "react-router-dom";
 const StyledReactInputVerificationCode = styled.div`
   display: flex;
@@ -64,7 +63,9 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
     }, 1000);
 
     return () => clearInterval(timerId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <>
       <div className="header">
