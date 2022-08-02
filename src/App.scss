@@ -23,7 +23,7 @@ $primary-300: #fda8a8;
 // 500
 $primary-500: #f66a6a;
 // 700
-$primary-700: #e22828;
+$primary-700-: #e22828;
 // //SECONDARY
 // 50
 $secondary-50: #e3faf4;
@@ -61,8 +61,8 @@ html {
 }
 p,
 ul {
-  margin: 0%;
-  padding: 0%;
+  margin: 0 !important;
+  padding: 0;
 }
 
 ul {
@@ -125,6 +125,7 @@ h5 {
 }
 
 .container {
+  margin: 0 auto;
   width: 80%;
 }
 .w-20 {
@@ -136,7 +137,6 @@ h5 {
 .table-row-dark {
   background-color: #fbfbfb !important;
 }
-
 .App {
   width: 100%;
 }
