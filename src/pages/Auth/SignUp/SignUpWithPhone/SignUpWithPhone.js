@@ -36,8 +36,6 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
     window.confirmationResult
       .confirm(Number(data))
       .then((result) => {
-        const user = result.user;
-        console.log(JSON.stringify(user));
         if (flag) {
           setCode(data);
           setIsInvalid(false);
@@ -67,7 +65,7 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
   }, []);
 
   return (
-    <>
+    <div className="SignUpWithPhone" >
       <div className="header">
         <Link to={backLink}>
           <button className="back-button-sign-up">
@@ -88,6 +86,7 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
             placeholder={""}
             onCompleted={(data) => {
               handleCompletedCode(data);
+              setCode("");
             }}
           />
         </StyledReactInputVerificationCode>
@@ -130,6 +129,6 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
       ) : (
         <button className="stop-sign-up">Tiếp tục</button>
       )}
-    </>
+    </div>
   );
 };

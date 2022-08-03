@@ -1,150 +1,160 @@
-.sign-up-button{
-    border: none;
-    background-color: #fff;
-    color:#E22828 ;
-    font-size: 20px;
-    font-weight: 700;
-    margin-right: 30px;
-}
-.sign-in-button{
-    border: none;
-    background-color: #fff;
-    color:#828282 ;
-    font-size: 20px;
-    font-weight: 700;
-    &:hover{
-        transform: scale(1.03);
-        cursor: pointer;
-    }
-}
-.face-google-login{
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    height: 140px;
-    justify-content: space-between;
-    
-}
-.facebook-button,
-.google-button{
-    position: relative;
-    border-radius: 10px;
-    padding: 15px 10px;
-    border: 1px solid #B2B2B2;
-    background-color: #fff;
-    &:hover{
-        transform: scale(1.01);
-        cursor: pointer;
-    }
-}
-.fb-logo,
-.gg-logo{
-    left: 0;
-    transform:translateX(30px) ;
-    position: absolute;
-}
-.divine-login{
-    height: 1px;
-    width: 100%;
-    background-color: #CACACA;
-    margin-top: 50px;
-    margin-bottom: 41px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
-.divinve-login-content{
-    position: absolute;
-    background-color: #fff;
-    padding: 10px;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    color: #616161;
-}
-.phone-sign-up{
-    display: flex;
-    
-    flex-direction: column;
-    width: 100%;
-   
+@import "../../../App.scss";
+.sign-up-button {
+  border: none;
+  background-color: #fff;
+  color: $primary-700;
+  font-size: 20px;
+  font-weight: 700;
+  margin-right: 30px;
 }
 
-.phone-zone-sign-up{
+.sign-in-button {
+  border: none;
+  background-color: #fff;
+  color: $neutral-400;
+  font-size: 20px;
+  font-weight: 700;
+  &:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+  }
+}
+
+.face-google-login {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  height: 140px;
+  justify-content: space-between;
+}
+.facebook-button,
+.google-button {
+  position: relative;
+  border-radius: 10px;
+  padding: 15px 10px;
+  border: 1px solid $neutral-300;
+  background-color: #fff;
+  &:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+  }
+}
+
+.fb-logo,
+.gg-logo {
+  left: 0;
+  transform: translateX(30px);
+  position: absolute;
+}
+
+.divine-login {
+  height: 1px;
+  width: 100%;
+  background-color: $neutral-200;
+  margin-top: 50px;
+  margin-bottom: 41px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.divinve-login-content {
+  position: absolute;
+  background-color: #fff;
+  padding: 10px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: $neutral-500;
+}
+
+.phone-sign-up {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .phone-zone-sign-up {
     width: 100%;
-    border: 1px solid #B2B2B2 ;
+    border: 1px solid $neutral-300;
     padding: 12px 25px;
-    display: flex;   
+    display: flex;
     border-radius: 10px;
     margin-top: 15px;
     position: relative;
-    .invalidPhone{
-        position: absolute;
-        bottom: -30px;
-        right: 0px;
-        color: #E22828;
+    input:focus {
+      outline: none !important;
+    }
+    .code-vn-login {
+      color: $neutral-500;
+      padding: 0 5px;
+    }
+    .invalidPhone {
+      position: absolute;
+      bottom: -30px;
+      right: 0px;
+      color: $primary-700;
+    }
+    .input-phone {
+      border: none;
+      width: 100%;
+    }
+    .white-hide {
+      padding: 20px;
+      position: absolute;
+      right: 10px;
+      background-color: #fff;
+      top: 5px;
+    }
+    .d-none {
+      display: none;
+    }
+  }
+}
 
-    }
-    .white-hide{
-        padding: 20px;
-        position: absolute;
-        right: 10px;
-        background-color: #fff;
-        top:5px
-    }
-    .d-none{
-        display: none;
-    }
-}
-.input-phone{
-    border: none;
-    width: 100%;
-}
-.phone-zone-sign-up input:focus{
-    outline: none !important;
-}
-.code-vn-login{
-    color: #616161;
-    padding: 0 5px;
-}
-.confirm-sign-up{
-    margin-top: 67px;
-    padding: 11px;
-    font-size: 16px;
-    width: 100%;
-    position: relative;
-    font-weight: 700;
-    color: #fff;
-    background-color: #E22828;
-    border: none;
-    border-radius: 8px;
-    &:hover{
-        cursor: pointer;
-        transform: scale(1.02);
-    }
-    .loadingEffect{
-        width: 20px;
-        height: 10px;
-        position: absolute;
-        top:-9px;
-        left: 30%;
-    }
-}
-.have-account{
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 400;
-}
-.have-account-content{
-    color: #616161
-}
-.have-account-button{
-    padding-left: 5px;
-    color: #E22828;
-    
-}
-.have-account-button:hover{
-    transform: scale(1.1);
+.confirm-sign-up {
+  margin-top: 67px;
+  padding: 11px;
+  font-size: 16px;
+  width: 100%;
+  position: relative;
+  font-weight: 700;
+  color: #fff;
+  background-color: $primary-700;
+  border: none;
+  border-radius: 8px;
+  &:hover {
     cursor: pointer;
+    transform: scale(1.02);
+  }
+  .loadingEffect {
+    width: 20px;
+    height: 10px;
+    position: absolute;
+    top: -9px;
+    left: 30%;
+  }
+}
+
+.have-account {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 400;
+  .have-account-content {
+    color: $neutral-500;
+  }
+  .have-account-button {
+    padding-left: 5px;
+
+    color: $primary-700;
+    &:hover {
+      color: $primary-500;
+      cursor: pointer;
+    }
+  }
+}
+
+@media only screen and (max-height: 800px) {
+  .divine-login {
+    display: none;
+  }
 }

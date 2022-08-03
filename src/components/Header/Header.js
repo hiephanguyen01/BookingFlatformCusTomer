@@ -1,19 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Header.scss";
 import logo from "../../assets/img/Logo1.png";
+import noBody from "../../assets/img/no-body.png";
 import FeedIcon from "../../assets/img/FeedIcon.png";
-
-import { Avatar, Button, Form, Input, Modal, Select } from "antd";
+import { UserAuth } from "../../pages/Auth/AuthContext/AuthContext";
+import {
+  Avatar,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Dropdown,
+  Menu,
+} from "antd";
 import {
   DownOutlined,
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
-
 const { Option } = Select;
 const Header = () => {
+  const { user, logOut } = UserAuth();
+  const [flag,setFlag] = useState(false)
   const categories = [
     {
       id: 1,
@@ -40,9 +51,73 @@ const Header = () => {
       name: "Thiết bị",
     },
   ];
+  const menuSignIn = (
+    <Menu
+      style={{
+        width: "250px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+      items={[
+        {
+          className: "w-100",
+          key: "1",
+          label: (
+            <Link to="/auth/sign-in">
+              <Button
+                type="primary"
+                className="w-100 "
+                style={{ borderRadius: "5px" }}
+              >
+                Đăng nhập
+              </Button>
+            </Link>
+          ),
+        },
+        {
+          key: "2",
+          label: (
+            <div style={{ fontSize: "14px" }}>
+              Chưa có tài khoản ?{" "}
+              <span style={{ color: "#e22828" }}>
+                {" "}
+                <Link to="/auth/sign-up">Đăng ký</Link>
+              </span>
+            </div>
+          ),
+        },
+      ]}
+    />
+  );
+  const menuSignOut = (
+    <Menu
+      style={{
+        width: "250px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+      items={[
+        {
+          className: "w-100",
+          key: "1",
+          label: (
+            <Button
+              type="primary"
+              className="w-100 "
+              style={{ borderRadius: "5px" }}
+              onClick={() => handleSignOut()}
+            >
+              Đăng xuất
+            </Button>
+          ),
+        },
+      ]}
+    />
+  );
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-
   const inputRef = useRef();
   const handleCancel = () => {
     setVisible(false);
@@ -60,7 +135,19 @@ const Header = () => {
     navigate("/filter");
     setVisible(false);
   };
-
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+      setFlag(true)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (flag) {
+      navigate("/auth/sign-in");
+    }
+  }, [user]);
   return (
     <div className="Header">
       <Modal
@@ -68,7 +155,8 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}>
+        footer={[]}
+      >
         <div className="logo">
           <img src={logo} alt="" />
         </div>
@@ -80,7 +168,8 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="location"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
                 <Option value="hcm">Hồ Chí Minh</Option>
@@ -90,7 +179,8 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -117,7 +207,8 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}>
+              style={{ width: "50%" }}
+            >
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -141,16 +232,37 @@ const Header = () => {
           <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
           <p>Giỏ hàng</p>
         </div>
-        <div className="user">
-          <Avatar src="https://joeschmoe.io/api/v1/random" />
-          <div className="text ">
-            <p>Tài khoản</p>
-            <p>
-              Khương Duy{" "}
-              <DownOutlined style={{ fontSize: "10px", color: "#828282" }} />
-            </p>
-          </div>
-        </div>
+        {user ? (
+          <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+            <div className="user">
+              <Avatar src={user.photoURL?user.photoURL:noBody} />
+              <div className="text">
+                <p>Tài khoản</p>
+                <p>
+                  {user.displayName?user.displayName:user.phoneNumber}
+                  <DownOutlined
+                    style={{ fontSize: "10px", color: "#828282" }}
+                  />
+                </p>
+              </div>
+            </div>
+          </Dropdown>
+        ) : (
+          <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+            <div className="user">
+              <Avatar src={noBody} />
+              <div className="text">
+                <p>Đăng ký/Đăng nhập</p>
+                <p>
+                  Tài khoản
+                  <DownOutlined
+                    style={{ fontSize: "10px", color: "#828282" }}
+                  />
+                </p>
+              </div>
+            </div>
+          </Dropdown>
+        )}
       </div>
     </div>
   );

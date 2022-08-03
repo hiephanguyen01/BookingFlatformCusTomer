@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import {getAuth} from  'firebase/auth';
 import 'firebase/compat/firestore';
+import 'firebase/compat/auth';
 var firebaseConfig = {
   apiKey: "AIzaSyCxpOVv1LgWYOy2jZhONCyTCHdDRvKyVAY",
   authDomain: "phoneauth-6486b.firebaseapp.com",
@@ -12,7 +13,9 @@ var firebaseConfig = {
 };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+  const app = firebase.initializeApp(firebaseConfig);
   
-export default firebase
+export default firebase;
+export const auth = getAuth(app);
 
  

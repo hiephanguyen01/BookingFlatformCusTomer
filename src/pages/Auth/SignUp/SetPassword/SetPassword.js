@@ -69,7 +69,7 @@ export const SetPassword = ({backLink,nextLink,header,submit}) => {
         <span className="policy-sign-up">Chính sách bảo mật</span> của chúng
         tôi.
       </div>
-      <Link to={nextLink}>
+      <Link to={checkNormal && checkUpper && checkInrange?nextLink:''}>
       <button
         className={
           checkNormal && checkUpper && checkInrange
