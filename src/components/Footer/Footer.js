@@ -1,5 +1,4 @@
-import { Col, Row, Space } from "antd";
-import React from "react";
+import { Col, Row} from "antd";
 import Andriod from "../../assets/footer/android.png";
 import { ReactComponent as Ios } from "../../assets/footer/ios.svg";
 import { ReactComponent as Facebook } from "../../assets/footer/facebook.svg";

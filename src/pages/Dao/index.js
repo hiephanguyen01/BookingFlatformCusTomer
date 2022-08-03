@@ -2,7 +2,6 @@ import "./dao.scss";
 import { CheckOutlined } from "@ant-design/icons";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import { posts } from "../../examples_data/DaoPost/daopost";
-import { useEffect } from "react";
 import DaoPost from "../../components/DaoPost";
 
 const tagItems = [

@@ -12,10 +12,8 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
-import { Item } from "rc-menu";
 import React from "react";
 import ImgDefaultUser from "../../../../assets/img/userAccount/default-user-image.png";
-import imgClause from "../../../../assets/img/userAccount/clause.png";
 import { Link, useLocation } from "react-router-dom";
 
 const ITEM_USER_ACCOUNT_ASIDE = [

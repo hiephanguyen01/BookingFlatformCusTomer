@@ -63,9 +63,12 @@
 }
 .phone-sign-up{
     display: flex;
+    
     flex-direction: column;
     width: 100%;
+   
 }
+
 .phone-zone-sign-up{
     width: 100%;
     border: 1px solid #B2B2B2 ;
@@ -73,10 +76,28 @@
     display: flex;   
     border-radius: 10px;
     margin-top: 15px;
+    position: relative;
+    .invalidPhone{
+        position: absolute;
+        bottom: -30px;
+        right: 0px;
+        color: #E22828;
+
+    }
+    .white-hide{
+        padding: 20px;
+        position: absolute;
+        right: 10px;
+        background-color: #fff;
+        top:5px
+    }
+    .d-none{
+        display: none;
+    }
 }
 .input-phone{
     border: none;
-    width: 300px;
+    width: 100%;
 }
 .phone-zone-sign-up input:focus{
     outline: none !important;
@@ -90,6 +111,7 @@
     padding: 11px;
     font-size: 16px;
     width: 100%;
+    position: relative;
     font-weight: 700;
     color: #fff;
     background-color: #E22828;
@@ -98,6 +120,13 @@
     &:hover{
         cursor: pointer;
         transform: scale(1.02);
+    }
+    .loadingEffect{
+        width: 20px;
+        height: 10px;
+        position: absolute;
+        top:-9px;
+        left: 30%;
     }
 }
 .have-account{

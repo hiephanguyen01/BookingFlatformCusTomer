@@ -5,7 +5,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Popover, Modal } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import img1 from "../../assets/dao/Frame 180.png";
 import { ReactComponent as Info } from "../../assets/dao/info.svg";
 import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
