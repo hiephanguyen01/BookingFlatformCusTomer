@@ -1,11 +1,12 @@
 @import "../../App.scss";
 .dao {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: $neutral-50;
+  padding-bottom: 12px;
   &__container {
     width: 54%;
-    header,
+    &__header,
     article {
       margin-top: 12px;
       border-radius: 4px;

@@ -1,4 +1,8 @@
-import { CheckCircleTwoTone, StarOutlined } from "@ant-design/icons";
+import {
+  CheckCircleTwoTone,
+  HeartTwoTone,
+  StarOutlined,
+} from "@ant-design/icons";
 import React from "react";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
@@ -8,6 +12,14 @@ const FilterCard = () => {
   return (
     <div className="FilterCard">
       <div className="groupImage">
+        <div className="heard">
+          <HeartTwoTone
+            sizes={30}
+            style={{ padding: "10px", display: "block", fontSize: "25px" }}
+            twoToneColor="#e22828"
+          />
+        </div>
+        <div className="sale">-60% HÔM NAY</div>
         <div className="main">
           <img
             className="main"
@@ -49,6 +61,8 @@ const FilterCard = () => {
           </p>
           <p>Đã đặt 56</p>
         </div>
+        <p className="addition">500,000 đ/h</p>
+        <p className="addition">2,000,000 đ/h</p>
       </div>
     </div>
   );
