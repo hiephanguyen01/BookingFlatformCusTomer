@@ -3,7 +3,7 @@
   width: 100%;
   &__main {
     width: 100%;
-    padding: 10px 10px 0 20px;
+    padding: 10px 20px 0 20px;
     &__info {
       width: 100%;
 
@@ -225,6 +225,27 @@
         font-weight: 400;
         line-height: 22px;
         color: $neutral-700;
+      }
+    }
+  }
+}
+
+.greater-than-four-images-section {
+  .image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .fourth-image-overlay {
+      position: absolute;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #000000, $alpha: 0.4);
+      border-radius: 6px;
+      h1 {
+        color: #fff;
+        margin-bottom: 0%;
       }
     }
   }

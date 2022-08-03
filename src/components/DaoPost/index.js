@@ -15,6 +15,7 @@ import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
 import "./daoPost.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
+import ReportPost from "../ReportPostDao";
 
 const moreOptionOnEachPost = [
   { icon: <Info />, title: "Báo cáo bài viết" },
@@ -30,6 +31,8 @@ const DaoPost = (props) => {
   const [commentsClick, setCommentsClick] = useState(false);
   const [moreOptionModal, setMoreOptionModal] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isReportPostModalVisible, setIsReportPostModalVisible] =
+    useState(false);
   const [imageInModal, setImageInModal] = useState("");
 
   const { item } = props;
@@ -40,7 +43,8 @@ const DaoPost = (props) => {
     TotalLikes,
     Tags,
     TotalComments,
-    comments,
+    Image,
+    // comments,
     CreatationTime,
   } = item;
 
@@ -57,65 +61,98 @@ const DaoPost = (props) => {
     setIsModalVisible(false);
   };
 
+  const handleMoreOptionClick = () => {
+    setIsModalVisible(false);
+    setIsReportPostModalVisible(true);
+  };
+
   let ImageSection = null;
-  let tempCount = 0;
-  Object.entries(item).forEach((item2, idx) => {
-    if (item2[0].includes("Image")) tempCount++;
-  });
+  let tempCount = Image.length;
+  // Object.entries(item).forEach((item2, idx) => {
+  //   if (item2[0].includes("Image")) tempCount++;
+  // });
   if (tempCount < 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Object.entries(item).map((item2, idx) => {
-          if (item2[0].includes("Image")) {
-            return (
-              <Col
-                key={item2.Id}
-                md={12}
-                xs={24}
-                onClick={() => handleImageModal(item2[1])}
-              >
-                <img key={idx} src={item2[1]} alt="" />
-              </Col>
-            );
-          }
-        })}
+        {Image.map((item, idx) => (
+          <Col
+            key={idx}
+            md={tempCount === 1 ? 24 : 12}
+            xs={24}
+            onClick={() =>
+              handleImageModal(
+                `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+              )
+            }
+          >
+            <img
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "6px",
+              }}
+              key={idx}
+              src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+              alt=""
+            />
+          </Col>
+        ))}
       </Row>
     );
   } else if (tempCount === 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Object.entries(item).map((item2, idx) => {
-          if (item2[0].includes("Image") && idx === 5) {
+        {Image.map((item, idx) => {
+          // console.log(idx);
+          if (idx === 0) {
             //Kiểm tra cái idx này sau khi nhét API vào (Không xóa)
-            // console.log(idx);
             return (
               <Col
-                key={item2.Id}
+                key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(item2[1])}
+                onClick={() =>
+                  handleImageModal(
+                    `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                  )
+                }
               >
                 <img
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "6px",
+                  }}
                   key={idx}
-                  src={item2[1]}
+                  src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
                   alt=""
                 />
               </Col>
             );
-          } else if (item2[0].includes("Image")) {
+          } else {
             // console.log(idx);
             return (
               <Col
-                key={item2.Id}
+                key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item2[1])}
+                onClick={() =>
+                  handleImageModal(
+                    `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                  )
+                }
               >
                 <img
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "6px",
+                  }}
                   key={idx}
-                  src={item2[1]}
+                  src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
                   alt=""
                 />
               </Col>
@@ -125,28 +162,73 @@ const DaoPost = (props) => {
       </Row>
     );
   } else if (tempCount === 4) {
-    // console.log(Object.entries(item));
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Object.entries(item).map((item2, idx) => {
-          if (item2[0].includes("Image")) {
+        {Image.map((item, idx) => (
+          <Col
+            key={idx}
+            md={12}
+            xs={24}
+            onClick={() =>
+              handleImageModal(
+                `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+              )
+            }
+          >
+            <img
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "6px",
+              }}
+              key={idx}
+              src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+              alt=""
+            />
+          </Col>
+        ))}
+      </Row>
+    );
+  } else if (tempCount > 4) {
+    ImageSection = (
+      <Row gutter={[16, 16]}>
+        {Image.map((item, idx) => {
+          if (idx < 4) {
+            //Again, có lý do mà nó là 9 :v đừng xóa comment này
             return (
               <Col
-                key={item2.Id}
+                className="greater-than-four-images-section"
+                key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item2[1])}
+                onClick={() =>
+                  handleImageModal(
+                    `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                  )
+                }
               >
-                <img
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                  key={idx}
-                  src={item2[1]}
-                  alt=""
-                />
+                <div className="image-container">
+                  {idx === 8 && (
+                    <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
+                      <h1>{tempCount - 3}</h1>
+                      <PlusOutlined
+                        style={{ fontSize: "34px", color: "#fff" }}
+                      />
+                    </div>
+                  )}
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "6px",
+                    }}
+                    key={idx}
+                    src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+                    alt=""
+                  />
+                </div>
               </Col>
             );
           }
@@ -171,7 +253,7 @@ const DaoPost = (props) => {
               content={
                 <div className="more-option-modal">
                   {moreOptionOnEachPost.map((item, idx) => (
-                    <li key={idx}>
+                    <li onClick={handleMoreOptionClick} key={idx}>
                       <div className="container d-flex">
                         <div>{item.icon}</div>
                         <p>{item.title}</p>
@@ -186,11 +268,15 @@ const DaoPost = (props) => {
             >
               <MoreOutlined style={{ fontSize: "24px" }} />
             </Popover>
+            <ReportPost
+              isReportPostModalVisible={isReportPostModalVisible}
+              setIsReportPostModalVisible={setIsReportPostModalVisible}
+            />
           </div>
         </header>
         <div className="post__main__content">
           <div className="post__main__content__tags d-flex align-items-center">
-            {Tags.split(",").map((item, idx) => (
+            {Tags?.split(",").map((item, idx) => (
               <li key={idx}>#{item}</li>
             ))}
           </div>
@@ -201,8 +287,7 @@ const DaoPost = (props) => {
             {/* //Post Image đang xử lý */}
             {ImageSection}
             <Modal
-              //   width={"50"}
-              //   height={"100"}
+              width={"80vh"}
               closeIcon={<></>}
               onOk={handleOk}
               onCancel={handleCancel}
@@ -210,12 +295,14 @@ const DaoPost = (props) => {
               visible={isModalVisible}
               className="d-flex justify-content-center align-items-center"
               style={{
-                top: "30%",
-                background: "transparent",
+                top: "20%",
+              }}
+              bodyStyle={{
+                backgroundColor: "transparent",
               }}
             >
               <img
-                style={{ transform: "scale(2)" }}
+                style={{ width: "100%", transform: "scale(1.8)" }}
                 src={imageInModal}
                 alt=""
               />
@@ -278,7 +365,7 @@ const DaoPost = (props) => {
         className={commentsClick ? "post__comments" : "post__comments d-none"}
       >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
-        {comments.map((item, idx) => (
+        {/* {comments.map((item, idx) => (
           <div key={item.Id} className="post__comments__detail">
             {idx !== 0 && (
               <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
@@ -327,7 +414,7 @@ const DaoPost = (props) => {
               </p>
             </div>
           </div>
-        ))}
+        ))} */}
       </section>
     </article>
   );
