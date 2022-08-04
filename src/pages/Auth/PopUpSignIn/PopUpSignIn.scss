@@ -1,0 +1,15 @@
+@import "../../../App.scss";
+.PopUpSignIn {
+  .pop-up-sign-in-button:hover {
+    cursor: pointer;
+  }
+}
+.ant-modal-content {
+  border-radius: 20px !important;
+  .warning {
+    font-size: 20px;
+    font-weight: 700;
+    color: $primary-700;
+    margin-bottom: 20px;
+  }
+}

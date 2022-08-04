@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import vietnam from "../../../assets/imgAuth/vietnam.png";
 import ReactLoading from "react-loading";
 import "./SignUp.scss";
+import { useDispatch } from "react-redux";
+import { phoneNumberAction } from "../../../stores/actions/PhoneNumberAction";
 import { Link, useNavigate } from "react-router-dom";
 import firebase from "../FireBaseSetUp/Firebase";
 import { GoogleSignIn } from "../SignIn/GoogleSignIn/GoogleSignIn";
 import { FacebookSignin } from "../SignIn/FacebookSignIn/FacebookSignin";
 export const SignUp = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,11 +22,11 @@ export const SignUp = () => {
       .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
-       /*  console.log("OTP has been sent"); */
+         console.log("OTP has been sent");
         navigate("/auth/sign-up/phone");
       })
       .catch((error) => {
-       /*  console.log("SMS not sent"); */
+         console.log("SMS not sent");
       });
   };
   const configureCaptcha = () => {
@@ -33,7 +36,6 @@ export const SignUp = () => {
         size: "invisible",
         callback: (response) => {
           handleSendOtp();
-        /*   console.log("Recaptca varified"); */
         },
         defaultCountry: "VN",
       }
@@ -48,8 +50,8 @@ export const SignUp = () => {
         </Link>
       </div>
       <div className="face-google-login">
-        <GoogleSignIn />
-        <FacebookSignin />
+        <GoogleSignIn redirect />
+        <FacebookSignin redirect />
       </div>
       <div className="divine-login">
         <div className="divinve-login-content">hoặc</div>
@@ -87,6 +89,7 @@ export const SignUp = () => {
             onClick={() => {
               handleSendOtp();
               setLoading(true);
+              dispatch(phoneNumberAction(phoneNum));
             }}
           >
             {!loading && <span>Đăng ký</span>}

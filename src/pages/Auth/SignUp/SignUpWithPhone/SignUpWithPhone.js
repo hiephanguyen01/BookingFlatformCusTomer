@@ -5,6 +5,8 @@ import ReactInputVerificationCode from "react-input-verification-code";
 import back from "../../../../assets/imgAuth/back-arrow.png";
 import "./SignUpWithPhone.scss";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux/es/exports";
+import {phoneNumberSelector} from "../../../../stores/selectors/PhoneNumberSelector"
 const StyledReactInputVerificationCode = styled.div`
   display: flex;
   justify-content: center;
@@ -25,7 +27,7 @@ const StyledReactInputVerificationCode = styled.div`
   }
 `;
 export const SignUpWithPhone = ({ backLink, nextLink }) => {
-  const phoneNum = "0965026910";
+  const phoneNum = useSelector(phoneNumberSelector).phoneNumber
   const [code, setCode] = useState("");
   const [flag, setFlag] = useState(true);
   const [isInvalid, setIsInvalid] = useState(true);
@@ -131,4 +133,4 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
       )}
     </div>
   );
-};
+}

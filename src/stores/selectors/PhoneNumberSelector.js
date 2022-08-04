@@ -1,0 +1,1 @@
+export const phoneNumberSelector = (state) => state.phoneNumberReducer

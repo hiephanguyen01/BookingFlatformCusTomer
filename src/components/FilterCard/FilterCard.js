@@ -3,21 +3,24 @@ import {
   HeartTwoTone,
   StarOutlined,
 } from "@ant-design/icons";
-import React from "react";
+import React, { useState } from "react";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
-
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import "./FilterCard.scss";
 const FilterCard = () => {
+  const [like,setLike] = useState(false)
   return (
     <div className="FilterCard">
       <div className="groupImage">
         <div className="heard">
-          <HeartTwoTone
-            sizes={30}
-            style={{ padding: "10px", display: "block", fontSize: "25px" }}
-            twoToneColor="#e22828"
-          />
+          <PopUpSignIn onClick={()=> setLike(!like) }>
+            <HeartTwoTone
+              sizes={30}
+              style={{ padding: "10px", display: "block", fontSize: "25px" ,backgroundColor:like?'red':''}}
+              twoToneColor="#e22828"
+            />
+          </PopUpSignIn>
         </div>
         <div className="sale">-60% HÔM NAY</div>
         <div className="main">

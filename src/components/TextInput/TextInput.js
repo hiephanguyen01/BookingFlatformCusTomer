@@ -1,4 +1,4 @@
-import { InfoCircleOutlined, WarningOutlined } from "@ant-design/icons";
+import {  WarningOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
 import React from "react";
 import "./textInput.scss";

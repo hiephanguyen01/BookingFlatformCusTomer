@@ -6,7 +6,6 @@ import reportWebVitals from "./reportWebVitals";
 import "swiper/css/bundle";
 import "swiper/css";
 import "swiper/css/navigation";
-
 import { BrowserRouter } from "react-router-dom";
 import "antd/dist/antd.less";
 import { Provider } from "react-redux";

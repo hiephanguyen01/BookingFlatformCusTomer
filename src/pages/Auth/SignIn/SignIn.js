@@ -5,18 +5,31 @@ import { Input } from "antd";
 import { Link } from "react-router-dom";
 import { GoogleSignIn } from "./GoogleSignIn/GoogleSignIn";
 import { FacebookSignin } from "./FacebookSignIn/FacebookSignin";
-export const SignIn = () => {
+export const SignIn = ({ header, shouldRedirect }) => {
   return (
     <div className="SignIn">
-      <div style={{ marginBottom: "52px" }}>
-        <Link to="/auth/sign-up">
-          <button className="sign-up-button">Đăng ký</button>
-        </Link>
-        <button className="sign-in-button">Đăng nhập</button>
-      </div>
+      {header === undefined ? (
+        <div style={{ marginBottom: "52px" }}>
+          <Link to="/auth/sign-up">
+            <button className="sign-up-button">Đăng ký</button>
+          </Link>
+          <button className="sign-in-button">Đăng nhập</button>
+        </div>
+      ) : (
+        <>
+          {header && (
+            <div style={{ marginBottom: "52px" }}>
+              <Link to="/auth/sign-up">
+                <button className="sign-up-button">Đăng ký</button>
+              </Link>
+              <button className="sign-in-button">Đăng nhập</button>
+            </div>
+          )}
+        </>
+      )}
       <div className="face-google-login">
-        <GoogleSignIn/>
-        <FacebookSignin />
+        <GoogleSignIn redirect={shouldRedirect ? false : true} />
+        <FacebookSignin redirect={shouldRedirect ? false : true} />
       </div>
       <div className="divine-login">
         <div className="divinve-login-content">hoặc</div>

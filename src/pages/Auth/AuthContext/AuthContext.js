@@ -7,26 +7,26 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 import { auth } from "../FireBaseSetUp/Firebase";
+import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
-
 export const AuthContextProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({});
   ///////////////////////////////////////////////////////////////////////////////
-  const facebookSignIn = () => {
+  const facebookSignIn = async () => {
     const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   };
   ///////////////////////////////////////////////////////////////////////////////
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   };
   const logOut = () => {
     signOut(auth);
   };
   useEffect(() => {
     const getInfo = onAuthStateChanged(auth, (currentUser) => {
-     /*  console.log("User", currentUser); */
       setUser(currentUser);
     });
     return () => {
@@ -34,7 +34,9 @@ export const AuthContextProvider = ({ children }) => {
     };
   }, []);
   return (
-    <AuthContext.Provider value={{ googleSignIn,facebookSignIn, logOut, user }}>
+    <AuthContext.Provider
+      value={{ googleSignIn, facebookSignIn, logOut, user }}
+    >
       {children}
     </AuthContext.Provider>
   );
