@@ -1,11 +1,14 @@
 @import "../../App.scss";
+
 .dao {
   width: 100%;
   min-height: 100vh;
   background-color: $neutral-50;
   padding-bottom: 12px;
+
   &__container {
     width: 54%;
+
     &__header,
     article {
       margin-top: 12px;
@@ -15,15 +18,18 @@
       background-color: #fff;
       box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.04);
     }
+
     &__header {
       h2 {
         margin: 0;
       }
+
       &__button {
         border-radius: 8px;
         background-color: $primary-700;
         padding: 10px 24px 10px 24px;
         border: none;
+
         p {
           color: #fff;
           margin: 0;
@@ -34,27 +40,35 @@
         }
       }
     }
+
     &__tag {
       list-style: none;
+
       &__item {
         padding: 9px 14px 9px 14px;
         border-radius: 12px;
         cursor: pointer;
+
         &:hover {
           background-color: $secondary-50;
+
           p {
             color: $secondary-800;
           }
         }
+
         &:first-child {
           background-color: $secondary-50;
+
           p {
             color: $secondary-800;
           }
         }
+
         svg {
           margin-right: 8px;
         }
+
         p {
           margin: 0;
         }

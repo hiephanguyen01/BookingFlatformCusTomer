@@ -1,4 +1,5 @@
-import { Input } from "antd";
+import { InfoCircleOutlined, WarningOutlined } from "@ant-design/icons";
+import { Input, Tooltip } from "antd";
 import React from "react";
 import "./textInput.scss";
 
@@ -10,6 +11,7 @@ const TextInput = ({
   styleLabel,
   styleContainer,
   isPass = false,
+  error = false,
 }) => {
   return (
     <div
@@ -48,6 +50,11 @@ const TextInput = ({
         <Input
           placeholder={placeholder}
           onChange={onChange}
+          suffix={
+            <Tooltip title="Extra information">
+              {error && <WarningOutlined style={{ color: "red" }} />}
+            </Tooltip>
+          }
           style={{
             width: "100%",
             height: "50px",

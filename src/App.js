@@ -2,6 +2,7 @@ import "./App.scss";
 import { AuthPage } from "./pages/Auth/AuthPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import UserAccount from "./pages/UserAccount";
+import BookStudio from "./pages/BookStudio";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import Dao from "./pages/Dao";
 import { CustomerLayout } from "./pages/CustomerLayout";
@@ -19,11 +20,12 @@ function App() {
             <Route path="user/:id/*" element={<UserAccount />}></Route>
             <Route path="filter" element={<FilterPage />}></Route>
             <Route path="dao" element={<Dao />} />
+            <Route path="studio/book" element={<BookStudio />} />
           </Route>
         </Routes>
       </AuthContextProvider>
     </div>
   );
 }
-  // Warning  Add <ProtectedRouter> <YourElement/> </ProtectedRouter> when create Route //
+// Warning  Add <ProtectedRouter> <YourElement/> </ProtectedRouter> when create Route //
 export default App;
