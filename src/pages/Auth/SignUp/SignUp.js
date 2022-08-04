@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ggLogo from "../../../assets/imgAuth/google.png";
-import fbLogo from "../../../assets/imgAuth/facebook.png";
 import vietnam from "../../../assets/imgAuth/vietnam.png";
 import ReactLoading from "react-loading";
 import "./SignUp.scss";
 import { Link, useNavigate } from "react-router-dom";
 import firebase from "../FireBaseSetUp/Firebase";
+import { GoogleSignIn } from "../SignIn/GoogleSignIn/GoogleSignIn";
+import { FacebookSignin } from "../SignIn/FacebookSignIn/FacebookSignin";
 export const SignUp = () => {
   const navigate = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
@@ -19,11 +19,11 @@ export const SignUp = () => {
       .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
-        console.log("OTP has been sent");
+       /*  console.log("OTP has been sent"); */
         navigate("/auth/sign-up/phone");
       })
       .catch((error) => {
-        console.log("SMS not sent");
+       /*  console.log("SMS not sent"); */
       });
   };
   const configureCaptcha = () => {
@@ -33,7 +33,7 @@ export const SignUp = () => {
         size: "invisible",
         callback: (response) => {
           handleSendOtp();
-          console.log("Recaptca varified");
+        /*   console.log("Recaptca varified"); */
         },
         defaultCountry: "VN",
       }
@@ -48,14 +48,8 @@ export const SignUp = () => {
         </Link>
       </div>
       <div className="face-google-login">
-        <button className="google-button">
-          <img alt="google" src={ggLogo} className="gg-logo"></img>
-          Tiếp tục với Google
-        </button>
-        <button className="facebook-button">
-          <img alt="google" src={fbLogo} className="fb-logo"></img>
-          Tiếp tục với Facebook
-        </button>
+        <GoogleSignIn />
+        <FacebookSignin />
       </div>
       <div className="divine-login">
         <div className="divinve-login-content">hoặc</div>
@@ -92,15 +86,20 @@ export const SignUp = () => {
             className="confirm-sign-up"
             onClick={() => {
               handleSendOtp();
-              setLoading(true)
+              setLoading(true);
             }}
           >
-          {!loading && <span>Đăng ký</span>}
-          {loading && (
-            <>
-            <ReactLoading type='cylon' color="#fff" className="loadingEffect"/> <span>Đăng ký</span>
-            </>
-          )}
+            {!loading && <span>Đăng ký</span>}
+            {loading && (
+              <>
+                <ReactLoading
+                  type="cylon"
+                  color="#fff"
+                  className="loadingEffect"
+                />{" "}
+                <span>Đăng ký</span>
+              </>
+            )}
           </button>
         </>
       ) : (

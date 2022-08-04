@@ -81,7 +81,7 @@ const DaoPost = (props) => {
             xs={24}
             onClick={() =>
               handleImageModal(
-                `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                `${item}`
               )
             }
           >
@@ -93,7 +93,7 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+              src={`${item}`}
               alt=""
             />
           </Col>
@@ -114,7 +114,7 @@ const DaoPost = (props) => {
                 xs={24}
                 onClick={() =>
                   handleImageModal(
-                    `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                    `${item}`
                   )
                 }
               >
@@ -126,7 +126,7 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+                  src={`${item}`}
                   alt=""
                 />
               </Col>
@@ -140,7 +140,7 @@ const DaoPost = (props) => {
                 xs={24}
                 onClick={() =>
                   handleImageModal(
-                    `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                    `${item}`
                   )
                 }
               >
@@ -152,7 +152,7 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+                  src={`${item}`}
                   alt=""
                 />
               </Col>
@@ -171,7 +171,7 @@ const DaoPost = (props) => {
             xs={24}
             onClick={() =>
               handleImageModal(
-                `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                `${item}`
               )
             }
           >
@@ -183,7 +183,7 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+              src={`${item}`}
               alt=""
             />
           </Col>
@@ -204,7 +204,7 @@ const DaoPost = (props) => {
                 xs={24}
                 onClick={() =>
                   handleImageModal(
-                    `${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`
+                    `${item}`
                   )
                 }
               >
@@ -225,7 +225,7 @@ const DaoPost = (props) => {
                       borderRadius: "6px",
                     }}
                     key={idx}
-                    src={`${process.env.REACT_APP_DB_BASE_URL}/api/image/${item}`}
+                    src={`${item}`}
                     alt=""
                   />
                 </div>

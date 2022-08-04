@@ -30,46 +30,46 @@ const Dao = (props) => {
   useEffect(() => {
     getData(loadMore);
     setLoadMore(false);
-  }, [loadMore]);
-
-  useEffect(() => {
-    const list = document.getElementById("infinity-list-post-dao");
-    if (props.scrollable) {
-      // list has fixed height
-      list.addEventListener("scroll", (e) => {
-        const el = e.target;
-        if (el.scrollTop + el.clientHeight === el.scrollHeight) {
-          setLoadMore(true);
-        }
-      });
-    } else {
-      // list has auto height
-      window.addEventListener("scroll", () => {
-        let win = window.scrollY + window.innerHeight;
-        let listHeight = list.clientHeight + list.offsetTop;
-        // console.log(win + " " + listHeight + " " + list.clientHeight);
-        if (
-          window.scrollY + window.innerHeight ===
-            list.clientHeight + list.offsetTop ||
-          (win - listHeight < 50 && win - listHeight > 0)
-        ) {
-          setLoadMore(true);
-        }
-      });
-    }
   }, []);
 
-  useEffect(() => {
-    const list = document.getElementById("infinity-list-post-dao");
-    window.addEventListener("scroll", () => {
-      if (
-        window.scrollY + window.innerHeight ===
-        list.clientHeight + list.offsetTop
-      ) {
-        setLoadMore(true);
-      }
-    });
-  }, [listPost]);
+  // useEffect(() => {
+  //   const list = document.getElementById("infinity-list-post-dao");
+  //   if (props.scrollable) {
+  //     // list has fixed height
+  //     list.addEventListener("scroll", (e) => {
+  //       const el = e.target;
+  //       if (el.scrollTop + el.clientHeight === el.scrollHeight) {
+  //         setLoadMore(true);
+  //       }
+  //     });
+  //   } else {
+  //     // list has auto height
+  //     window.addEventListener("scroll", () => {
+  //       let win = window.scrollY + window.innerHeight;
+  //       let listHeight = list.clientHeight + list.offsetTop;
+  //       // console.log(win + " " + listHeight + " " + list.clientHeight);
+  //       if (
+  //         window.scrollY + window.innerHeight ===
+  //           list.clientHeight + list.offsetTop ||
+  //         (win - listHeight < 50 && win - listHeight > 0)
+  //       ) {
+  //         setLoadMore(true);
+  //       }
+  //     });
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   const list = document.getElementById("infinity-list-post-dao");
+  //   window.addEventListener("scroll", () => {
+  //     if (
+  //       window.scrollY + window.innerHeight ===
+  //       list.clientHeight + list.offsetTop
+  //     ) {
+  //       setLoadMore(true);
+  //     }
+  //   });
+  // }, [listPost]);
 
   const getData = (loadMore) => {
     if (loadMore && nextPage) {
