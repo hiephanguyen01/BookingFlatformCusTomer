@@ -6,7 +6,6 @@ import FilterPage from "./pages/FilterPage/FilterPage";
 import Dao from "./pages/Dao";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import { AuthContextProvider } from "./pages/Auth/AuthContext/AuthContext";
-import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 
 function App() {
   // Warning  Add <ProtectedRouter></ProtectedRouter> when create Route //
@@ -16,13 +15,12 @@ function App() {
         <Routes>
           <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
           <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
-          <Route path="/" element={<CustomerLayout />}>
-            <Route path="/user/:id/*" element={<UserAccount />}></Route>
-            <Route path="/filter" element={<FilterPage />}></Route>
-            <Route path="/dao" element={<Dao />} />
+          <Route path="home" element={<CustomerLayout />}>
+            <Route path="user/:id/*" element={<UserAccount />}></Route>
+            <Route path="filter" element={<FilterPage />}></Route>
+            <Route path="dao" element={<Dao />} />
           </Route>
         </Routes>
-       
       </AuthContextProvider>
     </div>
   );

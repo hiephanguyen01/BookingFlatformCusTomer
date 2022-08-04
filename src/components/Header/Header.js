@@ -132,7 +132,7 @@ const Header = () => {
   });
   const onFinish = (values) => {
     console.log("Success:", values);
-    navigate("/filter");
+    navigate("/home/filter");
     setVisible(false);
   };
   const handleSignOut = async () => {

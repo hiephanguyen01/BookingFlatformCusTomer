@@ -15,7 +15,7 @@ export const GoogleSignIn = () => {
   };
   useEffect(() => {
     if (user != null) {
-      navigate("/");
+      navigate("/home/dao");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
