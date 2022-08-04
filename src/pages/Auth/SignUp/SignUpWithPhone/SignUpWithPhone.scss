@@ -1,0 +1,67 @@
+.SignUpWithPhone {
+  .header {
+    font-size: 20px;
+    font-weight: 600;
+    .back-button-sign-up {
+      border: none;
+      background-color: #fff;
+      transform: translateY(-2px);
+      margin-right: 10px;
+      &:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+      }
+    }
+  }
+
+  .noti-sign-up {
+    margin-top: 31px;
+    font-size: 18px;
+    width: 370px;
+  }
+  .verify-code-sign-up {
+    margin-top: 32px;
+    margin-bottom: 30px;
+  }
+
+  .invalid-code {
+    color: #e22828;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  .stop-sign-up {
+    margin-top: 67px;
+    width: 100%;
+    border: none;
+    padding: 13px;
+    font-weight: 700;
+    color: #828282;
+    background-color: #e7e7e7;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  .continue-sign-up {
+    margin-top: 67px;
+    width: 100%;
+    border: none;
+    padding: 13px;
+    font-weight: 700;
+    color: #fff;
+    background-color: #e22828;
+    border-radius: 8px;
+    font-size: 16px;
+    &:hover {
+      transform: scale(1.01);
+      cursor: pointer;
+    }
+  }
+  .send-code-again-sign-up {
+    color: #03ac84;
+    border: none;
+    background-color: #fff;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Checkbox, Col, Divider, Form, Layout, Radio, Row, Slider } from "antd";
+import { Checkbox, Col, Divider, Form,  Radio, Row, Slider } from "antd";
 import React from "react";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
