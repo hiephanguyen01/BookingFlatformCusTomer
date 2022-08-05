@@ -2,7 +2,8 @@ import React from "react";
 import logo from "../../../assets/imgAuth/logobooking.png";
 import authPic from "../../../assets/imgAuth/auth-pic.png";
 import "./AuthLayout.scss";
-export const AuthLayout = ({children}) => {
+export const AuthLayout = ({ children }) => {
+  
   return (
     <div className="login-container">
       <div className="header-login">
@@ -11,9 +12,7 @@ export const AuthLayout = ({children}) => {
       <div className="body-login ">
         <div className="body-contain-login">
           <img alt="pic" src={authPic} className="pic-login"></img>
-          <div className="w-50 h-100 login-platform ">
-          {children}
-          </div>
+          <div className="w-50 h-100 login-platform ">{children}</div>
         </div>
       </div>
     </div>

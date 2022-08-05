@@ -11,8 +11,8 @@ export const SetPassword = ({backLink,nextLink,header,submit}) => {
   const [checkUpper, setCheckUpper] = useState(false);
   const [checkInrange, setCheckInrange] = useState(false);
   const handlePass = (value) => {
-    setPass(value);
-    console.log(value);
+    setPass(value.trim());
+   
     if (/[a-z]/.test(value)) {
       setCheckNormal(true);
     } else {
@@ -29,7 +29,6 @@ export const SetPassword = ({backLink,nextLink,header,submit}) => {
       setCheckInrange(false);
     }
   };
-  console.log(pass);
   return (
     <div className="SetPassword">
       <div className="header">
@@ -70,7 +69,7 @@ export const SetPassword = ({backLink,nextLink,header,submit}) => {
         <span className="policy-sign-up">Chính sách bảo mật</span> của chúng
         tôi.
       </div>
-      <Link to={nextLink}>
+      <Link to={checkNormal && checkUpper && checkInrange?nextLink:''}>
       <button
         className={
           checkNormal && checkUpper && checkInrange

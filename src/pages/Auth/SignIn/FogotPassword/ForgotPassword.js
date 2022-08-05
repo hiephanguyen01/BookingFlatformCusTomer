@@ -9,7 +9,7 @@ export const ForgotPassword = () => {
     const navigate = useNavigate()
   const [phoneCheck, setPhoneCheck] = useState("");
   const handleSendSMS  =() => {
-    if(phoneCheck.length >= 7 && phoneCheck.length <= 14){
+    if(phoneCheck.length >= 9 && phoneCheck.length <= 12){
         navigate('/auth/sign-in/forgot-password/phone')
     }
 
@@ -30,7 +30,7 @@ export const ForgotPassword = () => {
       </div>
       <div
         className={
-          phoneCheck.length >= 7 && phoneCheck.length <= 14
+          phoneCheck.length >= 9 && phoneCheck.length <= 12
             ? "phone-zone-forgotpass"
             : "invalid-phone"
         }
@@ -46,7 +46,7 @@ export const ForgotPassword = () => {
           type="number"
         />
         <div className="white-background">
-        {phoneCheck.length >= 7 && phoneCheck.length <= 14 ? (
+        {phoneCheck.length >= 9 && phoneCheck.length <= 12 ? (
             <CheckOutlined className="accepted" />
           ) : (
             <div className='fake'></div>
@@ -54,7 +54,7 @@ export const ForgotPassword = () => {
         </div>
         <div
           className={
-            phoneCheck.length >= 7 && phoneCheck.length <= 14
+            phoneCheck.length >= 9 && phoneCheck.length <= 12
               ? "d-none"
               : "phone-check"
           }
@@ -63,9 +63,9 @@ export const ForgotPassword = () => {
         </div>
       </div>
 
-      {phoneCheck.length >= 7 && phoneCheck.length <= 14 ?(<Link to='/auth/sign-in/forgot-password/phone'><button
+      {phoneCheck.length >= 9 && phoneCheck.length <= 12 ?(<Link to='/auth/sign-in/forgot-password/phone'><button
         className={
-          phoneCheck.length >= 7 && phoneCheck.length <= 14
+          phoneCheck.length >= 9 && phoneCheck.length <= 12
             ? "continue-pass"
             : "stop-pass"
         }
@@ -75,7 +75,7 @@ export const ForgotPassword = () => {
         Gửi qua SMS
       </button></Link>):(<button
         className={
-          phoneCheck.length >= 7 && phoneCheck.length <= 14
+          phoneCheck.length >= 9 && phoneCheck.length <= 12
             ? "continue-pass"
             : "stop-pass"
         }
