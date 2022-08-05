@@ -50,9 +50,50 @@
                     padding: 15px 30px;
 
                     .ant-tabs-content {
-                        .ant-checkbox-wrapper {
-                            .ant-checkbox {
-                                .ant-checkbox-input {}
+
+                        .checkbox_content {
+
+                            .checkbox_label {
+                                font-weight: 600;
+                                font-size: 18px;
+                                line-height: 25px;
+                                color: $neutral-600;
+                            }
+
+                            .checkbox_desc {
+
+                                div {
+                                    font-weight: 400;
+                                    font-size: 14px;
+                                    line-height: 19px;
+                                    color: $neutral-500;
+
+                                    span {
+
+                                        color: $neutral-600;
+                                        margin-left: 12px;
+                                    }
+                                }
+                            }
+
+                            .checkbox_action {
+                                text-align: end;
+
+                                Button {
+                                    font-weight: 400;
+                                    font-size: 16px;
+                                    line-height: 22px;
+                                    color: $secondary-800;
+                                    padding: 0;
+                                    margin-bottom: 34px;
+                                }
+
+                                .price {
+                                    font-weight: 600;
+                                    font-size: 18px;
+                                    line-height: 25px;
+                                    color: $primary-700;
+                                }
                             }
                         }
 
