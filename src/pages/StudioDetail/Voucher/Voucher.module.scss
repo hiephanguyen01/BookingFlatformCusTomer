@@ -1,0 +1,49 @@
+.list-voucher {
+}
+.voucher {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    padding: 20px 0;
+    & + .voucher {
+        border-top: 1px solid #b2b2b2;
+    }
+}
+.close {
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    cursor: pointer;
+}
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        h5 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222222;
+            margin: 0 !important;
+        }
+    }
+    button {
+        padding: 8px 26px;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        background: #1fcba2;
+        border-radius: 4px;
+        color: #ffffff;
+        border: 0;
+        min-width: 79px;
+
+        &.disable {
+            background: #e7e7e7;
+            color: #828282;
+        }
+    }
+}
