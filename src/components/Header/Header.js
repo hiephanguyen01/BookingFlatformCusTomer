@@ -24,7 +24,7 @@ import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 const { Option } = Select;
 const Header = () => {
   const { user, logOut } = UserAuth();
-  const [flag,setFlag] = useState(false)
+  const [flag, setFlag] = useState(false);
   const categories = [
     {
       id: 1,
@@ -138,7 +138,7 @@ const Header = () => {
   const handleSignOut = async () => {
     try {
       await logOut();
-      setFlag(true)
+      setFlag(true);
     } catch (error) {
       console.log(error);
     }
@@ -228,18 +228,18 @@ const Header = () => {
           <img src={FeedIcon} alt="" />
           <p>Dạo</p>
         </div>
-        <div className="tip">
+        <Link to={"cart"} className="tip">
           <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
-          <p>Giỏ hàng</p>
-        </div>
+          <p style={{ color: "#828282" }}>Giỏ hàng</p>
+        </Link>
         {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
-              <Avatar src={user.photoURL?user.photoURL:noBody} />
+              <Avatar src={user.photoURL ? user.photoURL : noBody} />
               <div className="text">
                 <p>Tài khoản</p>
                 <p>
-                  {user.displayName?user.displayName:user.phoneNumber}
+                  {user.displayName ? user.displayName : user.phoneNumber}
                   <DownOutlined
                     style={{ fontSize: "10px", color: "#828282" }}
                   />

@@ -20,54 +20,54 @@ const ITEM_USER_ACCOUNT_ASIDE = [
   {
     icon: <UserOutlined style={{ height: "100%" }} />,
     title: "Thông tin tài khoản",
-    linkTo: "/user/1/accountInfo",
+    linkTo: "accountInfo",
   },
   {
     icon: <ReconciliationOutlined style={{ height: "100%" }} />,
     title: "Lịch sử đơn đặt",
-    linkTo: "/user/1/orderStatus",
+    linkTo: "orderStatus",
   },
   {
     icon: <HeartOutlined style={{ height: "100%" }} />,
     title: "Đã thích",
-    linkTo: "/user/1/liked",
+    linkTo: "liked",
   },
   {
     icon: <CommentOutlined style={{ height: "100%" }} />,
     title: "Đánh giá của tôi",
-    linkTo: "/user/1/rating",
+    linkTo: "rating",
   },
   {
     icon: <FileTextOutlined style={{ height: "100%" }} />,
     title: "Bài viết của tôi",
-    linkTo: "/user/1/posts",
+    linkTo: "posts",
   },
   {
     icon: <SaveOutlined style={{ height: "100%" }} />,
     title: "Bài viết đã lưu",
-    linkTo: "/user/1/post-saved",
+    linkTo: "post-saved",
   },
   {
     icon: <EyeOutlined style={{ height: "100%" }} />,
     title: "Đã xem gần đây",
-    linkTo: "/user/1/recently-viewed",
+    linkTo: "recently-viewed",
   },
 ];
 const ITEM_US_ASIDE = [
   {
     icon: <ReadOutlined style={{ height: "100%" }} />,
     title: "Điều khoản sử dụng",
-    linkTo: "/user/1/clause",
+    linkTo: "clause",
   },
   {
     icon: <SafetyCertificateOutlined style={{ height: "100%" }} />,
     title: "Chính sách an toàn & bảo mật",
-    linkTo: "/user/1/policy",
+    linkTo: "policy",
   },
   {
     icon: <PhoneOutlined style={{ height: "100%" }} />,
     title: "Hỗ trợ",
-    linkTo: "/user/1/support",
+    linkTo: "support",
   },
 ];
 

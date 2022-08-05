@@ -6,6 +6,9 @@ import DaoPost from "../../components/DaoPost";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
+import { Button, Modal, Upload, message } from "antd";
+import TextArea from "antd/lib/input/TextArea";
+import uploadImg from "../../assets/dao/uploadImg.png";
 
 const tagItems = [
   {
@@ -20,12 +23,62 @@ const tagItems = [
   { id: 5, icon: <></>, name: "Trang bị" },
 ];
 
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => resolve(reader.result);
+
+    reader.onerror = (error) => reject(error);
+  });
+
 const Dao = (props) => {
   const [loadMore, setLoadMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const { listPost, nextPage } = useSelector((state) => state.postDaoReducer);
+
+  // create post: start
+  const [visible, setVisible] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([]);
+  const handleCancel = () => setPreviewVisible(false);
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
+  const uploadButton = (
+    <div>
+      <img src={uploadImg} />
+    </div>
+  );
+  const success = () => {
+    message.success({
+      content: "Bài viết của bạn được đăng thành công",
+      className: "custom-class",
+      style: {
+        marginTop: "40vh",
+      },
+      duration: 1,
+    });
+  };
+
+  // create post: end
 
   useEffect(() => {
     getData(loadMore);
@@ -83,7 +136,10 @@ const Dao = (props) => {
       <div className="dao__container d-flex flex-column align-items-center">
         <header className="dao__container__header d-flex justify-content-between align-items">
           <h2>Dạo</h2>
-          <button className="dao__container__header__button d-flex align-items-center">
+          <button
+            className="dao__container__header__button d-flex align-items-center"
+            onClick={() => setVisible(true)}
+          >
             <Pen />
             <p>Tạo bài viết</p>
           </button>
@@ -140,6 +196,85 @@ const Dao = (props) => {
           })}
         </ul>
       </div>
+      <Modal
+        title="Tạo bài viết"
+        centered
+        visible={visible}
+        onOk={() => setVisible(false)}
+        onCancel={() => setVisible(false)}
+        width={696}
+      >
+        <TextArea
+          rows={4}
+          placeholder="Bạn muốn tìm gì"
+          maxLength={6}
+          className="text-area"
+        />
+        <div
+          className="text-medium-re mt-20 mb-16"
+          style={{ color: "#222222" }}
+        >
+          Tải hình ảnh
+        </div>
+        <div className="mb-15">
+          <Upload
+            // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+          >
+            {fileList.length >= 8 ? null : uploadButton}
+          </Upload>
+          <Modal
+            visible={previewVisible}
+            title={previewTitle}
+            footer={null}
+            onCancel={handleCancel}
+          >
+            <img
+              alt="example"
+              style={{
+                width: "100%",
+              }}
+              src={previewImage}
+            />
+          </Modal>
+        </div>
+        <div className="text-medium-re mb-16" style={{ color: "#222222" }}>
+          Chọn danh mục liên quan
+        </div>
+        <ul className="d-flex">
+          {tagItems.map((item, index) => (
+            <li
+              key={index}
+              className={`create_post_tag_item ${index === 0 ? "active" : ""}`}
+            >
+              {item.name}
+            </li>
+          ))}
+        </ul>
+        <div className="d-flex justify-content-end mt-36">
+          <div
+            className="btn btn-huy"
+            onClick={() => {
+              setVisible(false);
+            }}
+          >
+            Hủy
+          </div>
+          <div
+            className="btn btn-dang ms-10"
+            type="primary"
+            onClick={() => {
+              setVisible(false);
+              success();
+            }}
+          >
+            Đăng
+          </div>
+        </div>
+      </Modal>
     </section>
   );
 };

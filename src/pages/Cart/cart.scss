@@ -1,0 +1,71 @@
+@import "../../App.scss";
+
+.cart_container {
+    max-width: 1440px;
+    margin: auto;
+    padding: 18px 70px;
+
+    .cart_row {
+        // background: #FFFFFF;
+        box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.04);
+
+        .cart_col_left {
+
+            .cart_tab_pane {
+
+
+                .ant-tabs-nav {
+                    background-color: white !important;
+                    height: 50px !important;
+                    margin-bottom: 6px;
+
+                    .ant-tabs-nav-wrap {
+
+                        .ant-tabs-nav-list {
+
+                            .ant-tabs-tab {
+                                font-weight: 400;
+                                font-size: 16px;
+                                line-height: 22px;
+                                color: $neutral-600;
+
+                                padding: 0 14px;
+                                // text-transform: capitalize;
+
+                                &.ant-tabs-tab-active {
+                                    font-weight: 700;
+                                    font-size: 16px;
+                                    line-height: 22px;
+                                    color: $primary-700;
+
+                                    // border-bottom: 3px solid red;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .ant-tabs-content-holder {
+                    background: white;
+                    padding: 15px 30px;
+
+                    .ant-tabs-content {
+                        .ant-checkbox-wrapper {
+                            .ant-checkbox {
+                                .ant-checkbox-input {}
+                            }
+                        }
+
+                        .ant-divider {
+                            margin: 14px 0 20px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cart_col_right {
+            padding-left: 12px;
+        }
+    }
+}

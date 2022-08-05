@@ -26,7 +26,7 @@ export const AuthContextProvider = ({ children }) => {
   };
   useEffect(() => {
     const getInfo = onAuthStateChanged(auth, (currentUser) => {
-     /*  console.log("User", currentUser); */
+      /*  console.log("User", currentUser); */
       setUser(currentUser);
     });
     return () => {
@@ -34,7 +34,9 @@ export const AuthContextProvider = ({ children }) => {
     };
   }, []);
   return (
-    <AuthContext.Provider value={{ googleSignIn,facebookSignIn, logOut, user }}>
+    <AuthContext.Provider
+      value={{ googleSignIn, facebookSignIn, logOut, user }}
+    >
       {children}
     </AuthContext.Provider>
   );
