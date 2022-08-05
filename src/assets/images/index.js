@@ -11,6 +11,15 @@ const images = {
   baby: require("./baby.png"),
   address: require("./address.png"),
   detail1: require("./detail1.png"),
+  detail2: require("./detail2.png"),
+  detail3: require("./detail3.png"),
+  detail4: require("./detail4.png"),
+  studio1 : require('./studio1.svg').default,
+  cameraman : require('./camera.svg').default,
+  camera : require('./Group.svg').default,
+  clothes : require('./clothes.svg').default,
+  makeup : require('./makeup.svg').default,
+  model : require('./model.svg').default,
 };
 
 export default images;
