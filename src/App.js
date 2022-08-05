@@ -6,12 +6,31 @@ import BookStudio from "./pages/BookStudio";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import Dao from "./pages/Dao";
 import { CustomerLayout } from "./pages/CustomerLayout";
+import { Home } from "./pages/Home";
+import { BackTop } from "antd";
+import { ArrowUpOutlined } from "@ant-design/icons";
+import {  ModalCustom } from "./components/Modal";
+
 import { AuthContextProvider } from "./pages/Auth/AuthContext/AuthContext";
 
 function App() {
+const style = {
+    height: 40,
+    width: 40,
+    lineHeight: "40px",
+    borderRadius: "50%",
+    backgroundColor: "#E22828",
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 20,
+  };
   // Warning  Add <ProtectedRouter></ProtectedRouter> when create Route //
   return (
     <div className="App">
+      <ModalCustom />
+      <BackTop>
+        <ArrowUpOutlined style={style} />
+      </BackTop>
       <AuthContextProvider>
         <Routes>
           <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
