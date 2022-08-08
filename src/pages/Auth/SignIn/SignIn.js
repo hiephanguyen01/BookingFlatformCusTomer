@@ -5,28 +5,23 @@ import { Input } from "antd";
 import { Link } from "react-router-dom";
 import { GoogleSignIn } from "./GoogleSignIn/GoogleSignIn";
 import { FacebookSignin } from "./FacebookSignIn/FacebookSignin";
-export const SignIn = ({ header, shouldRedirect }) => {
+export const SignIn = ({ shouldRedirect, onClickPop }) => {
   return (
     <div className="SignIn">
-      {header === undefined ? (
-        <div style={{ marginBottom: "52px" }}>
+      <div style={{ marginBottom: "52px" }}>
+        {onClickPop ? (
+          <button className="sign-up-button" onClick={() => onClickPop(5)}>
+            Đăng ký
+          </button>
+        ) : (
           <Link to="/auth/sign-up">
             <button className="sign-up-button">Đăng ký</button>
           </Link>
-          <button className="sign-in-button">Đăng nhập</button>
-        </div>
-      ) : (
-        <>
-          {header && (
-            <div style={{ marginBottom: "52px" }}>
-              <Link to="/auth/sign-up">
-                <button className="sign-up-button">Đăng ký</button>
-              </Link>
-              <button className="sign-in-button">Đăng nhập</button>
-            </div>
-          )}
-        </>
-      )}
+        )}
+
+        <button className="sign-in-button">Đăng nhập</button>
+      </div>
+
       <div className="face-google-login">
         <GoogleSignIn redirect={shouldRedirect ? false : true} />
         <FacebookSignin redirect={shouldRedirect ? false : true} />
@@ -50,9 +45,15 @@ export const SignIn = ({ header, shouldRedirect }) => {
         status="warning"
       />
       <div className="d-flex justify-content-end">
-        <Link to="/auth/sign-in/forgot-password">
-          <button className="forgot-password">Quên mật khẩu</button>
-        </Link>
+        {onClickPop ? (
+          <button className="forgot-password" onClick={() => onClickPop(2)}>
+            Quên mật khẩu
+          </button>
+        ) : (
+          <Link to="/auth/sign-in/forgot-password">
+            <button className="forgot-password">Quên mật khẩu</button>
+          </Link>
+        )}
       </div>
 
       <button className="confirm-sign-in">Đăng nhập</button>
@@ -60,9 +61,18 @@ export const SignIn = ({ header, shouldRedirect }) => {
         <span className="dont-have-account-content">
           Bạn chưa có tài khoản?
         </span>
-        <Link to="/auth/sign-up">
-          <span className="dont-have-account-button">Đăng ký</span>
-        </Link>
+        {onClickPop ? (
+          <span
+            className="dont-have-account-button"
+            onClick={() => onClickPop(5)}
+          >
+            Đăng ký
+          </span>
+        ) : (
+          <Link to="/auth/sign-up">
+            <span className="dont-have-account-button">Đăng ký</span>
+          </Link>
+        )}
       </div>
     </div>
   );

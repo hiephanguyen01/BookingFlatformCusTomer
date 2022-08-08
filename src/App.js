@@ -7,25 +7,38 @@ import FilterPage from "./pages/FilterPage/FilterPage";
 import Dao from "./pages/Dao";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import { AuthContextProvider } from "./pages/Auth/AuthContext/AuthContext";
-
+import { UserAuth } from "./pages/Auth/AuthContext/AuthContext";
+import { useSelector } from "react-redux";
+import { confirmPassSelector } from "./stores/selectors/PhoneNumberSelector";
 function App() {
-  // Warning  Add <ProtectedRouter></ProtectedRouter> when create Route //
+  const selector = useSelector(confirmPassSelector);
   return (
     <div className="App">
       <AuthContextProvider>
-        <Routes>
-          <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
-          <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
-          <Route path="home" element={<CustomerLayout />}>
-            <Route path="user/:id/*" element={<UserAccount />}></Route>
-            <Route path="filter" element={<FilterPage />}></Route>
-            <Route path="dao" element={<Dao />} />
-            <Route path="studio/book" element={<BookStudio />} />
-          </Route>
-        </Routes>
+        {selector ? (
+          <Routes>
+          <Route path="*" element={<Navigate to="/home/dao" />} />
+            <Route path="home" element={<CustomerLayout />}>
+              <Route path="user/:id/*" element={<UserAccount />}></Route>
+              <Route path="filter" element={<FilterPage />}></Route>
+              <Route path="dao" element={<Dao />} />
+              <Route path="studio/book" element={<BookStudio />} />
+            </Route>
+          </Routes>
+        ) : (
+          <Routes>
+            <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
+            <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
+            <Route path="home" element={<CustomerLayout />}>
+              <Route path="user/:id/*" element={<UserAccount />}></Route>
+              <Route path="filter" element={<FilterPage />}></Route>
+              <Route path="dao" element={<Dao />} />
+              <Route path="studio/book" element={<BookStudio />} />
+            </Route>
+          </Routes>
+        )}
       </AuthContextProvider>
     </div>
   );
 }
-// Warning  Add <ProtectedRouter> <YourElement/> </ProtectedRouter> when create Route //
 export default App;

@@ -15,10 +15,12 @@ export const AuthPage = () => {
         <Route
           path="sign-up/phone"
           element={
+           
             <SignUpWithPhone
               backLink="/auth/sign-up"
               nextLink="/auth/sign-up/set-password"
             ></SignUpWithPhone>
+          
           }
         />
         <Route
@@ -42,10 +44,13 @@ export const AuthPage = () => {
         <Route
           path="sign-in/forgot-password/phone"
           element={
+           
             <SignUpWithPhone
-              backLink="/auth/sign-in/forgot-password"
-              nextLink="/auth/sign-in/forgot-password/set-password"
-            ></SignUpWithPhone>
+            backLink="/auth/sign-in/forgot-password"
+            nextLink="/auth/sign-in/forgot-password/set-password"
+          ></SignUpWithPhone>
+          
+           
           }
         />
         <Route

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import vietnam from "../../../assets/imgAuth/vietnam.png";
 import ReactLoading from "react-loading";
 import "./SignUp.scss";
@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import firebase from "../FireBaseSetUp/Firebase";
 import { GoogleSignIn } from "../SignIn/GoogleSignIn/GoogleSignIn";
 import { FacebookSignin } from "../SignIn/FacebookSignIn/FacebookSignin";
-export const SignUp = () => {
+export const SignUp = ({ shouldRedirect, onClickSignUp }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
@@ -22,11 +22,11 @@ export const SignUp = () => {
       .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
-         console.log("OTP has been sent");
-        navigate("/auth/sign-up/phone");
+        console.log("OTP has been sent");
+        {onClickSignUp === undefined ? navigate("/auth/sign-up/phone"):onClickSignUp(6)}
       })
       .catch((error) => {
-         console.log("SMS not sent");
+        console.log("SMS not sent");
       });
   };
   const configureCaptcha = () => {
@@ -45,13 +45,19 @@ export const SignUp = () => {
     <>
       <div style={{ marginBottom: "52px" }}>
         <button className="sign-up-button">Đăng ký</button>
-        <Link to="/auth/sign-in">
-          <button className="sign-in-button">Đăng nhập</button>
-        </Link>
+        {onClickSignUp ? (
+          <button className="sign-in-button" onClick={() => onClickSignUp(1)}>
+            Đăng nhập
+          </button>
+        ) : (
+          <Link to="/auth/sign-in">
+            <button className="sign-in-button">Đăng nhập</button>
+          </Link>
+        )}
       </div>
       <div className="face-google-login">
-        <GoogleSignIn redirect />
-        <FacebookSignin redirect />
+        <GoogleSignIn redirect={shouldRedirect ? false : true} />
+        <FacebookSignin redirect={shouldRedirect ? false : true} />
       </div>
       <div className="divine-login">
         <div className="divinve-login-content">hoặc</div>
@@ -110,9 +116,15 @@ export const SignUp = () => {
       )}
       <div className="have-account">
         <span className="have-account-content">Bạn đã có tài khoản?</span>
-        <Link to="/auth/sign-in">
-          <span className="have-account-button">Đăng nhập</span>
-        </Link>
+        {onClickSignUp ? (
+          <span className="have-account-button" onClick={() => onClickSignUp(1)}>
+            Đăng nhập
+          </span>
+        ) : (
+          <Link to="/auth/sign-in">
+            <span className="have-account-button">Đăng nhập</span>
+          </Link>
+        )}
       </div>
     </>
   );

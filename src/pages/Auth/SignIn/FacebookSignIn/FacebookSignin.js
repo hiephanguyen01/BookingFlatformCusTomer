@@ -3,13 +3,18 @@ import "../SignIn.scss";
 import fbLogo from "../../../../assets/imgAuth/facebook.png";
 import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../../AuthContext/AuthContext";
-export const FacebookSignin = ({redirect}) => {
+import { confirmPassAction } from "../../../../stores/actions/PhoneNumberAction";
+import { useDispatch } from "react-redux";
+export const FacebookSignin = ({ redirect }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { facebookSignIn } = UserAuth();
   const handleFacebookSignIn = async () => {
     try {
       await facebookSignIn();
-      redirect && navigate("/home/dao")
+      redirect && navigate("/home/dao");
+      localStorage.PassConfirm = true;
+      dispatch(confirmPassAction(true));
     } catch (error) {
       console.log(error);
     }

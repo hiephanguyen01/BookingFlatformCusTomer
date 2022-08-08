@@ -1,1 +1,2 @@
 export const PHONE_NUMBER = "PHONE_NUMBER"
+export const CONFIRM_PASS = "CONFIRM_PASS"

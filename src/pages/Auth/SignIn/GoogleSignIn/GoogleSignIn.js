@@ -3,13 +3,18 @@ import "../SignIn.scss";
 import ggLogo from "../../../../assets/imgAuth/google.png";
 import { UserAuth } from "../../AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
-export const GoogleSignIn = ({redirect}) => {
+import { confirmPassAction } from "../../../../stores/actions/PhoneNumberAction";
+import { useDispatch } from "react-redux";
+export const GoogleSignIn = ({ redirect }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { googleSignIn } = UserAuth();
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      redirect && navigate("/home/dao")
+      redirect && navigate("/home/dao");
+      localStorage.PassConfirm = true;
+      dispatch(confirmPassAction(true));
     } catch (error) {
       console.log(error);
     }

@@ -19,12 +19,17 @@ import {
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
+import { useDispatch ,useSelector} from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import { confirmPassAction } from "../../stores/actions/PhoneNumberAction";
+import {confirmPassSelector} from "../../stores/selectors/PhoneNumberSelector"
 const { Option } = Select;
 const Header = () => {
+  const selector=useSelector(confirmPassSelector)
+  const dispatch = useDispatch()
   const { user, logOut } = UserAuth();
-  const [flag,setFlag] = useState(false)
+  const [flag, setFlag] = useState(false);
   const categories = [
     {
       id: 1,
@@ -107,7 +112,11 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}
+              onClick={() => {
+                handleSignOut();
+                localStorage.removeItem('PassConfirm');
+                dispatch(confirmPassAction(false));
+              }}
             >
               Đăng xuất
             </Button>
@@ -138,7 +147,7 @@ const Header = () => {
   const handleSignOut = async () => {
     try {
       await logOut();
-      setFlag(true)
+      setFlag(true);
     } catch (error) {
       console.log(error);
     }
@@ -232,14 +241,14 @@ const Header = () => {
           <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
           <p>Giỏ hàng</p>
         </div>
-        {user ? (
+        {user && selector? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
-              <Avatar src={user.photoURL?user.photoURL:noBody} />
+              <Avatar src={user.photoURL ? user.photoURL : noBody} />
               <div className="text">
                 <p>Tài khoản</p>
                 <p>
-                  {user.displayName?user.displayName:user.phoneNumber}
+                  {user.displayName ? user.displayName : user.phoneNumber}
                   <DownOutlined
                     style={{ fontSize: "10px", color: "#828282" }}
                   />

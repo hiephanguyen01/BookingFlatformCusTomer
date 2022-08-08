@@ -4,15 +4,27 @@ import { Input } from "antd";
 import "./SetPassword.scss";
 import back from "../../../../assets/imgAuth/back-arrow.png";
 import { Link } from "react-router-dom";
-export const SetPassword = ({backLink,nextLink,header,submit}) => {
-  const phoneNum = "0965026910";
+import { useDispatch ,useSelector} from "react-redux";
+import { confirmPassAction } from "../../../../stores/actions/PhoneNumberAction";
+import { phoneNumberSelector } from "../../../../stores/selectors/PhoneNumberSelector";
+export const SetPassword = ({
+  backLink,
+  nextLink,
+  header,
+  submit,
+  onClickPop,
+  onClickSignUp,
+}) => {
+  const dispatch = useDispatch();
+
+  const phoneNum = useSelector(phoneNumberSelector);
   const [pass, setPass] = useState("");
   const [checkNormal, setCheckNormal] = useState(false);
   const [checkUpper, setCheckUpper] = useState(false);
   const [checkInrange, setCheckInrange] = useState(false);
   const handlePass = (value) => {
     setPass(value.trim());
-   
+
     if (/[a-z]/.test(value)) {
       setCheckNormal(true);
     } else {
@@ -29,14 +41,20 @@ export const SetPassword = ({backLink,nextLink,header,submit}) => {
       setCheckInrange(false);
     }
   };
+
   return (
     <div className="SetPassword">
       <div className="header">
-        <Link to={backLink}>
-          <button className="back-button-sign-up">
-            <img alt="back" src={back} style={{ height: "16px" }} />
-          </button>
-        </Link>
+        {onClickPop || onClickSignUp ? (
+          <div></div>
+        ) : (
+          <Link to={backLink}>
+            <button className="back-button-sign-up">
+              <img alt="back" src={back} style={{ height: "16px" }} />
+            </button>
+          </Link>
+        )}
+
         <span>{header}</span>
       </div>
       <div className="noti-sign-up">
@@ -69,16 +87,22 @@ export const SetPassword = ({backLink,nextLink,header,submit}) => {
         <span className="policy-sign-up">Chính sách bảo mật</span> của chúng
         tôi.
       </div>
-      <Link to={checkNormal && checkUpper && checkInrange?nextLink:''}>
-      <button
-        className={
-          checkNormal && checkUpper && checkInrange
-            ? "continue-sign-up"
-            : "stop-sign-up"
-        }
-      >
-        {submit}
-      </button>
+      <Link to={checkNormal && checkUpper && checkInrange ? nextLink : ""}>
+        <button
+          className={
+            checkNormal && checkUpper && checkInrange
+              ? "continue-sign-up"
+              : "stop-sign-up"
+          }
+          onClick={() => {
+            localStorage.PassConfirm = true;
+            dispatch(confirmPassAction(true));
+            onClickPop && onClickPop(0);
+            onClickSignUp && onClickSignUp(0);
+          }}
+        >
+          {submit}
+        </button>
       </Link>
     </div>
   );

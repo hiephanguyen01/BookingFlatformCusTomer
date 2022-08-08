@@ -1,1 +1,2 @@
-export const phoneNumberSelector = (state) => state.phoneNumberReducer
+export const phoneNumberSelector = (state) => state.phoneNumberReducer.phoneNumber
+export const confirmPassSelector = (state) => state.phoneNumberReducer.confirmPass
