@@ -5,6 +5,8 @@ import UserAccount from "./pages/UserAccount";
 import BookStudio from "./pages/BookStudio";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import Cart from "./pages/Cart";
+import CostumeDetails from "./pages/CostumeDetails";
+import DetailCostumeShop from "./pages/DetailCostumeShop";
 import Dao from "./pages/Dao";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import { Home } from "./pages/Home";
@@ -43,6 +45,11 @@ function App() {
             <Route path="studio/book" element={<BookStudio />} />
             <Route path="cart" element={<Cart />} />
             <Route path="home" element={<Home />} />
+            <Route path="costumeDetails" element={<CostumeDetails />} />
+            <Route
+              path="costumeDetails/detailCostumeShop"
+              element={<DetailCostumeShop />}
+            />
           </Route>
         </Routes>
       </AuthContextProvider>
