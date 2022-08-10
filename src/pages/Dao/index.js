@@ -1,11 +1,11 @@
 import "./dao.scss";
 import { CheckOutlined } from "@ant-design/icons";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
-import { posts } from "../../examples_data/DaoPost/daopost";
 import DaoPost from "../../components/DaoPost";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const tagItems = [
   {
@@ -21,62 +21,65 @@ const tagItems = [
 ];
 
 const Dao = (props) => {
-  const [loadMore, setLoadMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-  const { listPost, nextPage } = useSelector((state) => state.postDaoReducer);
+  const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
 
-  useEffect(() => {
-    getData(loadMore);
-    setLoadMore(false);
-  }, [loadMore]);
+  // useEffect(() => {
+  //   getData(loadMore);
+  //   setLoadMore(false);
+  // }, [loadMore]);
 
-  useEffect(() => {
-    const list = document.getElementById("infinity-list-post-dao");
-    if (props.scrollable) {
-      // list has fixed height
-      list.addEventListener("scroll", (e) => {
-        const el = e.target;
-        if (el.scrollTop + el.clientHeight === el.scrollHeight) {
-          setLoadMore(true);
-        }
-      });
-    } else {
-      // list has auto height
-      window.addEventListener("scroll", () => {
-        let win = window.scrollY + window.innerHeight;
-        let listHeight = list.clientHeight + list.offsetTop;
-        // console.log(win + " " + listHeight + " " + list.clientHeight);
-        if (
-          window.scrollY + window.innerHeight ===
-            list.clientHeight + list.offsetTop ||
-          (win - listHeight < 50 && win - listHeight > 0)
-        ) {
-          setLoadMore(true);
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   const list = document.getElementById("infinity-list-post-dao");
+  //   if (props.scrollable) {
+  //     // list has fixed height
+  //     list.addEventListener("scroll", (e) => {
+  //       const el = e.target;
+  //       if (el.scrollTop + el.clientHeight === el.scrollHeight) {
+  //         setLoadMore(true);
+  //       }
+  //     });
+  //   } else {
+  //     // list has auto height
+  //     window.addEventListener("scroll", () => {
+  //       let win = window.scrollY + window.innerHeight;
+  //       let listHeight = list.clientHeight + list.offsetTop;
+  //       // console.log(win + " " + listHeight + " " + list.clientHeight);
+  //       if (
+  //         window.scrollY + window.innerHeight ===
+  //           list.clientHeight + list.offsetTop ||
+  //         (win - listHeight < 50 && win - listHeight > 0)
+  //       ) {
+  //         setLoadMore(true);
+  //       }
+  //     });
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    const list = document.getElementById("infinity-list-post-dao");
-    window.addEventListener("scroll", () => {
-      if (
-        window.scrollY + window.innerHeight ===
-        list.clientHeight + list.offsetTop
-      ) {
-        setLoadMore(true);
-      }
-    });
-  }, [listPost]);
+  // useEffect(() => {
+  //   const list = document.getElementById("infinity-list-post-dao");
+  //   window.addEventListener("scroll", () => {
+  //     if (
+  //       window.scrollY + window.innerHeight ===
+  //       list.clientHeight + list.offsetTop
+  //     ) {
+  //       setLoadMore(true);
+  //     }
+  //   });
+  // }, [listPost]);
 
   const getData = (loadMore) => {
-    if (loadMore && nextPage) {
-      dispatch(getAllPostDaoAction(listPost, 3, page));
-      setPage(() => page + 1);
-    }
+    // if (loadMore && pagination.nextPage) {
+    dispatch(getAllPostDaoAction(listPost, 3, page));
+    setPage(() => page + 1);
+    // }
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <section className="dao d-flex justify-content-center">
@@ -101,43 +104,55 @@ const Dao = (props) => {
           ))}
         </article>
         <ul id="infinity-list-post-dao">
-          {listPost.map((item) => {
-            switch (selectedCategory) {
-              case 1:
-                return (
-                  item.Tags.includes("studio") && (
-                    <DaoPost key={item.Id} item={item} />
-                  )
-                );
-              case 2:
-                return (
-                  item.Tags.includes("nhiepanh") && (
-                    <DaoPost key={item.Id} item={item} />
-                  )
-                );
-              case 3:
-                return (
-                  item.Tags.includes("nguoimau") && (
-                    <DaoPost key={item.Id} item={item} />
-                  )
-                );
-              case 4:
-                return (
-                  item?.Tags.includes("trangphuc") && (
-                    <DaoPost key={item.Id} item={item} />
-                  )
-                );
-              case 5:
-                return (
-                  item?.Tags.includes("trangbi") && (
-                    <DaoPost key={item.Id} item={item} />
-                  )
-                );
-
-              default:
-                return <DaoPost key={item.Id} item={item} />;
+          <InfiniteScroll
+            dataLength={listPost.length} //This is important field to render the next data
+            next={getData}
+            hasMore={pagination.hasNextPage}
+            loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                <b>Yay! You have seen it all</b>
+              </p>
             }
-          })}
+          >
+            {listPost.map((item) => {
+              switch (selectedCategory) {
+                case 1:
+                  return (
+                    item.Tags.includes("studio") && (
+                      <DaoPost key={item.Id} item={item} />
+                    )
+                  );
+                case 2:
+                  return (
+                    item.Tags.includes("nhiepanh") && (
+                      <DaoPost key={item.Id} item={item} />
+                    )
+                  );
+                case 3:
+                  return (
+                    item.Tags.includes("nguoimau") && (
+                      <DaoPost key={item.Id} item={item} />
+                    )
+                  );
+                case 4:
+                  return (
+                    item?.Tags.includes("trangphuc") && (
+                      <DaoPost key={item.Id} item={item} />
+                    )
+                  );
+                case 5:
+                  return (
+                    item?.Tags.includes("trangbi") && (
+                      <DaoPost key={item.Id} item={item} />
+                    )
+                  );
+
+                default:
+                  return <DaoPost key={item.Id} item={item} />;
+              }
+            })}
+          </InfiniteScroll>
         </ul>
       </div>
     </section>

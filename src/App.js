@@ -5,6 +5,7 @@ import UserAccount from "./pages/UserAccount";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import Dao from "./pages/Dao";
 import { CustomerLayout } from "./pages/CustomerLayout";
+import PhotographerDetail from "./pages/PhotographerDetail";
 
 function App() {
   return (
@@ -16,6 +17,10 @@ function App() {
           <Route path="user/:id/*" element={<UserAccount />}></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
+          <Route
+            path="photographer/:photographerId"
+            element={<PhotographerDetail />}
+          />
         </Route>
       </Routes>
     </div>
