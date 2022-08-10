@@ -11,7 +11,6 @@ export const Card = () => {
   const handleChangeLike = () => {
     setLike(!like);
   };
-  console.log(like);
   return (
     <div className={cx("card")}>
       <div className={cx("image")}>

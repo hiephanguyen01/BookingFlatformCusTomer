@@ -11,7 +11,7 @@ export const ListItem = ({ title, data, navigate }) => {
         <a>Xem thêm</a>
       </div>
       <div className={cx("box-container")}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, idx) => {
+        {[1, 2, 3, 4, 5].map((item, idx) => {
           return <Card key={idx} />;
         })}
       </div>

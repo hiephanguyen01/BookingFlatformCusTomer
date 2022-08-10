@@ -3,7 +3,6 @@ import "./Header.scss";
 import logo from "../../assets/img/Logo1.png";
 import noBody from "../../assets/img/no-body.png";
 import FeedIcon from "../../assets/img/FeedIcon.png";
-import { UserAuth } from "../../pages/Auth/AuthContext/AuthContext";
 import {
   Avatar,
   Button,
@@ -22,6 +21,7 @@ import {
 import { useDispatch ,useSelector} from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+<<<<<<< HEAD
 import { confirmPassAction } from "../../stores/actions/PhoneNumberAction";
 import {confirmPassSelector} from "../../stores/selectors/PhoneNumberSelector"
 const { Option } = Select;
@@ -29,6 +29,14 @@ const Header = () => {
   const selector=useSelector(confirmPassSelector)
   const dispatch = useDispatch()
   const { user, logOut } = UserAuth();
+=======
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../stores/actions/autheticateAction";
+const { Option } = Select;
+const Header = () => {
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const dispatch = useDispatch();
+>>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
   const [flag, setFlag] = useState(false);
   const categories = [
     {
@@ -73,8 +81,7 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}
-              >
+                style={{ borderRadius: "5px" }}>
                 Đăng nhập
               </Button>
             </Link>
@@ -112,12 +119,16 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
+<<<<<<< HEAD
               onClick={() => {
                 handleSignOut();
                 localStorage.removeItem('PassConfirm');
                 dispatch(confirmPassAction(false));
               }}
             >
+=======
+              onClick={() => handleSignOut()}>
+>>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
               Đăng xuất
             </Button>
           ),
@@ -144,6 +155,7 @@ const Header = () => {
     navigate("/home/filter");
     setVisible(false);
   };
+<<<<<<< HEAD
   const handleSignOut = async () => {
     try {
       await logOut();
@@ -151,12 +163,11 @@ const Header = () => {
     } catch (error) {
       console.log(error);
     }
+=======
+  const handleSignOut = () => {
+    dispatch(logOut(navigate));
+>>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
   };
-  useEffect(() => {
-    if (flag) {
-      navigate("/auth/sign-in");
-    }
-  }, [user]);
   return (
     <div className="Header">
       <Modal
@@ -164,8 +175,7 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}
-      >
+        footer={[]}>
         <div className="logo">
           <img src={logo} alt="" />
         </div>
@@ -177,8 +187,7 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="location"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
                 <Option value="hcm">Hồ Chí Minh</Option>
@@ -188,8 +197,7 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -216,8 +224,7 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}
-            >
+              style={{ width: "50%" }}>
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -229,7 +236,6 @@ const Header = () => {
         </div>
         <Input
           placeholder="Bạn đang tìm gì?"
-          enterButton
           prefix={<SearchOutlined />}
           onClick={() => setVisible(true)}
         />

@@ -1,14 +1,23 @@
-import "./dao.scss";
 import { CheckOutlined } from "@ant-design/icons";
+<<<<<<< HEAD
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
+=======
+>>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ReactComponent as Pen } from "../../assets/pen.svg";
+import DaoPost from "../../components/DaoPost";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
+<<<<<<< HEAD
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import {
   HeartTwoTone,
 } from "@ant-design/icons";
+=======
+import "./dao.scss";
+
+>>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
 const tagItems = [
   {
     id: 0,
@@ -106,8 +115,7 @@ const Dao = (props) => {
             <li
               className="dao__container__tag__item d-flex align-items-center"
               key={item.id}
-              onClick={() => setSelectedCategory(item.id)}
-            >
+              onClick={() => setSelectedCategory(item.id)}>
               {item.icon}
               <p>{item.name}</p>
             </li>
