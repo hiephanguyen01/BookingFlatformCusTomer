@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import vietnam from "../../../assets/imgAuth/vietnam.png";
 import { handleSendOtp } from "../../../stores/actions/autheticateAction";
@@ -15,6 +15,12 @@ export const SignUp = ({ shouldRedirect, onClickSignUp }) => {
   const handleSendOtpp = () => {
     dispatch(handleSendOtp(phoneNum, navigate, onClickSignUp));
   };
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
+  useEffect(() => {
+    if (user) {
+      navigate("/home/dao");
+    }
+  }, [user]);
   return (
     <>
       <div style={{ marginBottom: "52px" }}>
