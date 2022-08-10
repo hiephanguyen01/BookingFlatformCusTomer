@@ -3,21 +3,25 @@ import {
   HeartTwoTone,
   StarOutlined,
 } from "@ant-design/icons";
-import React from "react";
+import React, { useState } from "react";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
-
+import CurrencyFormat from "react-currency-format";
 import "./FilterCard.scss";
-const FilterCard = () => {
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+const FilterCard = ({ data, category }) => {
+  const [like,setLike] = useState(false)
   return (
     <div className="FilterCard">
       <div className="groupImage">
         <div className="heard">
+          <PopUpSignIn onClick={() => setLike(!like) }>
           <HeartTwoTone
             sizes={30}
-            style={{ padding: "10px", display: "block", fontSize: "25px" }}
+            style={like? { padding: "10px", display: "block", fontSize: "25px" }:{ padding: "10px", display: "block", fontSize: "25px" , backgroundColor:'red'}}
             twoToneColor="#e22828"
           />
+          </PopUpSignIn>
         </div>
         <div className="sale">-60% HÔM NAY</div>
         <div className="main">
@@ -44,12 +48,11 @@ const FilterCard = () => {
       </div>
       <div className="text">
         <p className="title">
-          Studio Mizo Misaki với concept tối giản{" "}
-          <CheckCircleTwoTone twoToneColor="#52c41a" />
+          {data.Name} <CheckCircleTwoTone twoToneColor="#52c41a" />
         </p>
         <div className="d-flex justify-content-between align-items-center">
           <p className="description">
-            <img src={Logo3} alt="" /> Quận 1,TP.HCM
+            <img src={Logo3} alt="" /> {data.Address}
           </p>
           <p>
             5 <StarOutlined twoToneColor="#F8D93A" />
@@ -57,12 +60,21 @@ const FilterCard = () => {
         </div>
         <div className="d-flex justify-content-between align-items-center">
           <p className="description">
-            <img src={Logo2} alt="" /> Studio
+            <img src={Logo2} alt="" /> {category.name}
           </p>
-          <p>Đã đặt 56</p>
+          <p>Đã đặt {data.BookingCount}</p>
         </div>
-        <p className="addition">500,000 đ/h</p>
-        <p className="addition">2,000,000 đ/h</p>
+
+        <CurrencyFormat
+          value={data.Price}
+          displayType={"text"}
+          thousandSeparator={true}
+          renderText={(value) => (
+            <p className="addition">
+              {value} {data.PriceUnit || ""}
+            </p>
+          )}
+        />
       </div>
     </div>
   );

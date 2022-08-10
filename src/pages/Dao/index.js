@@ -1,11 +1,11 @@
-import "./dao.scss";
 import { CheckOutlined } from "@ant-design/icons";
-import { ReactComponent as Pen } from "../../assets/pen.svg";
-import DaoPost from "../../components/DaoPost";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ReactComponent as Pen } from "../../assets/pen.svg";
+import DaoPost from "../../components/DaoPost";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
+import "./dao.scss";
 
 const tagItems = [
   {
@@ -30,6 +30,40 @@ const Dao = (props) => {
   //   getData(loadMore);
   //   setLoadMore(false);
   // }, [loadMore]);
+
+  // useEffect(() => {
+  //   const list = document.getElementById("infinity-list-post-dao");
+  //   if (props.scrollable) {
+  //     // list has fixed height
+  //     list.addEventListener("scroll", (e) => {
+  //       const el = e.target;
+  //       if (el.scrollTop + el.clientHeight === el.scrollHeight) {
+  //         setLoadMore(true);
+  //       }
+  //     });
+  //   } else {
+  //     // list has auto height
+  //     window.addEventListener("scroll", () => {
+  //       let win = window.scrollY + window.innerHeight;
+  //       let listHeight = list.clientHeight + list.offsetTop;
+  //       // console.log(win + " " + listHeight + " " + list.clientHeight);
+  //       if (
+  //         window.scrollY + window.innerHeight ===
+  //           list.clientHeight + list.offsetTop ||
+  //         (win - listHeight < 50 && win - listHeight > 0)
+  //       ) {
+  //         setLoadMore(true);
+  //       }
+  //     });
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   const list = document.getElementById("infinity-list-post-dao");
+  useEffect(() => {
+    getData(loadMore);
+    setLoadMore(false);
+  }, []);
 
   // useEffect(() => {
   //   const list = document.getElementById("infinity-list-post-dao");

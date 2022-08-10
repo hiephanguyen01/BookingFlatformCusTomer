@@ -1,63 +1,108 @@
-import React from "react";
-import "./SignIn.scss";
-import ggLogo from "../../../assets/imgAuth/google.png";
-import fbLogo from "../../../assets/imgAuth/facebook.png";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { Input } from "antd";
-import { Link } from "react-router-dom";
-export const SignIn = () => {
+import { Button, Form, Input } from "antd";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginWithPhoneNumber } from "../../../stores/actions/autheticateAction";
+import { FacebookSignin } from "./FacebookSignIn/FacebookSignin";
+import { GoogleSignIn } from "./GoogleSignIn/GoogleSignIn";
+import "./SignIn.scss";
+export const SignIn = ({onClickPop }) => {
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user) {
+      navigate("/home/dao");
+    }
+  }, [user]);
+  console.log("asdasdasdasdasdasdas");
+  const onFinish = (values) => {
+    dispatch(LoginWithPhoneNumber(values, navigate));
+  };
   return (
     <div className="SignIn">
       <div style={{ marginBottom: "52px" }}>
-        <Link to='/auth/sign-up'>
-        <button className="sign-up-button">Đăng ký</button>
+      {onClickPop ? (
+        <button className="sign-up-button" onClick={() => onClickPop(5)}>
+          Đăng ký
+        </button>
+      ) : (
+        <Link to="/auth/sign-up">
+          <button className="sign-up-button">Đăng ký</button>
         </Link>
+      )}
         <button className="sign-in-button">Đăng nhập</button>
       </div>
       <div className="face-google-login">
-        <button className="google-button">
-          <img alt="google" src={ggLogo} className="gg-logo"></img>
-          Tiếp tục với Google
-        </button>
-        <button className="facebook-button">
-          <img alt="google" src={fbLogo} className="fb-logo"></img>
-          Tiếp tục với Facebook
-        </button>
+        <GoogleSignIn />
+        <FacebookSignin />
       </div>
       <div className="divine-login">
         <div className="divinve-login-content">hoặc</div>
       </div>
-      <div className="phone-zone-sign-in">
-        <input
-          placeholder="Tên đăng nhập/Số điện thoại"
-          className="input-phone"
-        />
-      </div>
+      <Form onFinish={onFinish}>
+        <Form.Item
+          key={1}
+          name="phoneNumber"
+          rules={[{ required: true, message: "Không được bỏ trống" }]}>
+          <Input
+            size="large"
+            className="input-phone"
+            placeholder="Tên đăng nhập/Số điện thoại"
+          />
+        </Form.Item>
+        <Form.Item
+          key={2}
+          name="password"
+          rules={[{ required: true, message: "Không được bỏ trống" }]}>
+          <Input.Password
+            size="large"
+            placeholder="Mật khẩu"
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
+          />
+        </Form.Item>
 
-      <Input.Password
-        placeholder="Mật khẩu"
-        iconRender={(visible) =>
-          visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-        }
-        className="input-password"
-        status="warning"
-      />
-      <div className="d-flex justify-content-end">
-      <Link to='/auth/sign-in/forgot-password'>
-      <button className="forgot-password">Quên mật khẩu</button>
-      </Link>
-       
-      </div>
+        <div className="d-flex justify-content-end">
+        {onClickPop ? (
+          <button className="forgot-password" onClick={() => onClickPop(2)}>
+            Quên mật khẩu
+          </button>
+        ) : (
+          <Link to="/auth/sign-in/forgot-password">
+            <button className="forgot-password">Quên mật khẩu</button>
+          </Link>
+        )}
+        </div>
+        <Form.Item>
+          <Button
+            size="large"
+            style={{ width: "100%" }}
+            type="primary"
+            htmlType="submit">
+            Đăng nhập
+          </Button>
+        </Form.Item>
+      </Form>
 
-      <button className="confirm-sign-in">Đăng nhập</button>
       <div className="dont-have-account">
         <span className="dont-have-account-content">
           Bạn chưa có tài khoản?
         </span>
-        <Link to='/auth/sign-up'>
-        <span className="dont-have-account-button">Đăng ký</span>
-        </Link>
-        
+        {onClickPop ? (
+          <span
+            className="dont-have-account-button"
+            onClick={() => onClickPop(5)}
+          >
+            Đăng ký
+          </span>
+        ) : (
+          <Link to="/auth/sign-up">
+            <span className="dont-have-account-button">Đăng ký</span>
+          </Link>
+        )}
       </div>
     </div>
   );
