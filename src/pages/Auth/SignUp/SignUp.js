@@ -42,8 +42,8 @@ export const SignUp = ({ shouldRedirect, onClickSignUp }) => {
     );
   };
   return (
-    <>
-      <div style={{ marginBottom: "52px" }}>
+    <div className="h-100">
+      <div style={{ marginBottom: "20px" }}>
         <button className="sign-up-button">Đăng ký</button>
         {onClickSignUp ? (
           <button className="sign-in-button" onClick={() => onClickSignUp(1)}>
@@ -126,6 +126,6 @@ export const SignUp = ({ shouldRedirect, onClickSignUp }) => {
           </Link>
         )}
       </div>
-    </>
+    </div>
   );
 };

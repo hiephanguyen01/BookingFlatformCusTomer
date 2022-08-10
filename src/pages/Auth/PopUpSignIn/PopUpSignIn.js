@@ -46,7 +46,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={500}
+              width={400}
             >
               <SignIn
                 shouldRedirect={true}
@@ -60,7 +60,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={500}
+              width={400}
             >
               <ForgotPassword onClickPop={(e) => setPage(e)} />
             </Modal>
@@ -71,7 +71,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={500}
+              width={400}
             >
               <SignUpWithPhone
                 backLink=""
@@ -85,7 +85,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               closable={false}
               visible={visible}
               footer={false}
-              width={500}
+              width={400}
               confirm={true}
             >
               <SetPassword
@@ -105,7 +105,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={500}
+              width={400}
             >
               <SignUp
                 shouldRedirect={true}
@@ -119,7 +119,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={500}
+              width={400}
             >
               <SignUpWithPhone
                 backLink=""
@@ -134,7 +134,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               visible={visible}
               header={false}
               footer={false}
-              width={500}
+              width={400}
               confirm={true}
             >
               <SetPassword

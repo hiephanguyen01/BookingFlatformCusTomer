@@ -1,6 +1,6 @@
 @import "../../../App.scss";
 .SignIn {
-
+height: 100%;
   .sign-up-button {
     border: none;
     background-color: #fff;
@@ -63,10 +63,11 @@
     .divinve-login-content {
       position: absolute;
       background-color: #fff;
-      padding: 10px;
+      padding:  0 10px;
       left: 50%;
       transform: translate(-50%, -50%);
       color: $neutral-500;
+
     }
   }
 
@@ -153,9 +154,19 @@
   input.ant-input::placeholder {
     color: $neutral-400 !important;
   }
-  @media only screen and (max-height: 800px) {
+  @media only screen and (max-height: 700px) {
     .divine-login {
       display: none;
+    }
+  }
+  @media only screen and (max-height: 800px) {
+    .divine-login {
+      margin-top: 30px;
+    margin-bottom: 30px;
+    }
+    .confirm-sign-in {
+      margin-top: 20px;
+      
     }
   }
 }

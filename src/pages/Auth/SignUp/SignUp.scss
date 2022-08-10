@@ -153,8 +153,18 @@
   }
 }
 
-@media only screen and (max-height: 800px) {
+@media only screen and (max-height: 700px) {
   .divine-login {
     display: none;
+  }
+}
+@media only screen and (max-height: 800px) {
+  .divine-login {
+    margin-top: 30px;
+  margin-bottom: 30px;
+  }
+  .confirm-sign-up {
+    margin-top: 70px;
+    
   }
 }

@@ -8,7 +8,7 @@ import { FacebookSignin } from "./FacebookSignIn/FacebookSignin";
 export const SignIn = ({ shouldRedirect, onClickPop }) => {
   return (
     <div className="SignIn">
-      <div style={{ marginBottom: "52px" }}>
+      <div style={{ marginBottom: "20px" }}>
         {onClickPop ? (
           <button className="sign-up-button" onClick={() => onClickPop(5)}>
             Đăng ký
