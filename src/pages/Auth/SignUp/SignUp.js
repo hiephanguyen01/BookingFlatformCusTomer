@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,17 +8,18 @@ import { handleSendOtp } from "../../../stores/actions/autheticateAction";
 import { FacebookSignin } from "../SignIn/FacebookSignIn/FacebookSignin";
 import { GoogleSignIn } from "../SignIn/GoogleSignIn/GoogleSignIn";
 import "./SignUp.scss";
-export const SignUp = ({ shouldRedirect, onClickSignUp }) => {
+export const SignUp = ({ onClickSignUp  }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
   const handleSendOtpp = () => {
     dispatch(handleSendOtp(phoneNum, navigate, onClickSignUp));
   };
-  const user = useSelector((state) => state.authenticateReducer.currentUser);
+
   useEffect(() => {
-    if (user) {
+    if (user ) {
       navigate("/home/dao");
     }
   }, [user]);
@@ -36,8 +38,8 @@ export const SignUp = ({ shouldRedirect, onClickSignUp }) => {
         )}
       </div>
       <div className="face-google-login">
-        <GoogleSignIn redirect={shouldRedirect ? false : true} />
-        <FacebookSignin redirect={shouldRedirect ? false : true} />
+        <GoogleSignIn />
+        <FacebookSignin/>
       </div>
       <div className="divine-login">
         <div className="divinve-login-content">hoặc</div>
@@ -94,9 +96,7 @@ export const SignUp = ({ shouldRedirect, onClickSignUp }) => {
       <div className="have-account">
         <span className="have-account-content">Bạn đã có tài khoản?</span>
         {onClickSignUp ? (
-          <span
-            className="have-account-button"
-            onClick={() => onClickSignUp(1)}>
+          <span className="have-account-button" onClick={() => onClickSignUp(1)}>
             Đăng nhập
           </span>
         ) : (

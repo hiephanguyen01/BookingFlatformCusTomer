@@ -3,24 +3,41 @@ import { useNavigate } from "react-router-dom";
 import "./ForgotPassword.scss";
 import back from "../../../../assets/imgAuth/back-arrow.png";
 import vietnam from "../../../../assets/imgAuth/vietnam.png";
+import { handleSendOtp } from "../../../../stores/actions/autheticateAction";
 import { CheckOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-export const ForgotPassword = () => {
+import firebase from "../../FireBaseSetUp/Firebase";
+import { useDispatch } from "react-redux";
+export const ForgotPassword = ({ onClickPop }) => {
   const navigate = useNavigate();
   const [phoneCheck, setPhoneCheck] = useState("");
   const handleSendSMS = () => {
     if (phoneCheck.length >= 9 && phoneCheck.length <= 12) {
-      navigate("/auth/sign-in/forgot-password/phone");
+      {
+        onClickPop === undefined
+          ? navigate("/auth/sign-in/forgot-password/phone")
+          : onClickPop(3);
+      }
+      handleSendOtp(phoneCheck)
     }
   };
   return (
     <div className="ForgotPass">
       <div className="header">
+      {onClickPop ? (
+        <button
+          className="back-button-forgot-pass"
+          onClick={() => onClickPop(1)}
+        >
+          <img alt="back" src={back} style={{ height: "16px" }} />
+        </button>
+      ) : (
         <Link to="/auth/sign-in">
           <button className="back-button-forgot-pass">
             <img alt="back" src={back} style={{ height: "16px" }} />
           </button>
         </Link>
+      )}
         <span>Xác minh số điện thoại</span>
       </div>
       <div className="noti-forgot-pass">
@@ -60,8 +77,7 @@ export const ForgotPassword = () => {
         </div>
       </div>
 
-      {phoneCheck.length >= 9 && phoneCheck.length <= 12 ? (
-        <Link to="/auth/sign-in/forgot-password/phone">
+     
           <button
             className={
               phoneCheck.length >= 9 && phoneCheck.length <= 12
@@ -71,18 +87,7 @@ export const ForgotPassword = () => {
             onClick={() => handleSendSMS()}>
             Gửi qua SMS
           </button>
-        </Link>
-      ) : (
-        <button
-          className={
-            phoneCheck.length >= 9 && phoneCheck.length <= 12
-              ? "continue-pass"
-              : "stop-pass"
-          }
-          onClick={() => handleSendSMS()}>
-          Gửi qua SMS
-        </button>
-      )}
+     
     </div>
   );
 };
