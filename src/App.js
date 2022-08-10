@@ -9,6 +9,7 @@ import { AuthPage } from "./pages/Auth/AuthPage";
 import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import BookStudio from "./pages/BookStudio";
 import { CustomerLayout } from "./pages/CustomerLayout";
+import PhotographerDetail from "./pages/PhotographerDetail";
 import Dao from "./pages/Dao";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import UserAccount from "./pages/UserAccount";
@@ -49,7 +50,20 @@ function App() {
         <Route path="home" element={<CustomerLayout />}>
           <Route path="user/:id/*" element={<UserAccount />}></Route>
           <Route path="filter" element={<FilterPage />}></Route>
-          <Route path="dao" element={<Dao />} />
+          {/* <Route path="dao" element={<Dao />} /> */}
+          <Route
+            path="photographer/:photographerId"
+            element={<PhotographerDetail />}
+          />
+
+          <Route
+            path="dao"
+            element={
+              <ProtectedRouter>
+                <Dao />
+              </ProtectedRouter>
+            }
+          />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
           <Route path="home" element={<Home />} />

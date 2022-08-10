@@ -21,6 +21,8 @@ import img1 from "../../assets/dao/Frame 180.png";
 import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
 import imgSwiper2 from "../../assets/dao/Frame 164.jpg";
 import ReportPost from "../ReportPostDao";
+import { useDispatch } from "react-redux";
+import { likePost } from "../../stores/actions/PostDaoAction";
 
 const moreOptionOnEachPost = [
   { icon: <Info />, title: "Báo cáo bài viết" },
@@ -30,7 +32,7 @@ const moreOptionOnEachPost = [
 ];
 
 const DaoPost = (props) => {
-  const [numberOfImages, setNumberOfImages] = useState(0);
+  const dispatch = useDispatch();
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
@@ -43,6 +45,7 @@ const DaoPost = (props) => {
 
   const { item } = props;
   const {
+    Id,
     Username,
     Description,
     Avatar,
@@ -81,6 +84,12 @@ const DaoPost = (props) => {
     setIsReportPostModalVisible(true);
   };
 
+  const handleLike = () => {
+    console.log(Id);
+    dispatch(likePost(2, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+    setMouseClickHeart(!mouseClickHeart);
+  };
+
   let ImageSection = null;
   let tempCount = Image.length;
   // Object.entries(item).forEach((item2, idx) => {
@@ -94,7 +103,7 @@ const DaoPost = (props) => {
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(`${item}`)}
+            onClick={() => handleImageModal(item)}
           >
             <img
               style={{
@@ -104,7 +113,7 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={`${item}`}
+              src={item}
               alt=""
             />
           </Col>
@@ -123,7 +132,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(`${item}`)}
+                onClick={() => handleImageModal(item)}
               >
                 <img
                   style={{
@@ -133,7 +142,7 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={`${item}`}
+                  src={item}
                   alt=""
                 />
               </Col>
@@ -145,7 +154,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(`${item}`)}
+
+                onClick={() => handleImageModal(item)}
               >
                 <img
                   style={{
@@ -155,7 +165,7 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={`${item}`}
+                  src={item}
                   alt=""
                 />
               </Col>
@@ -168,12 +178,7 @@ const DaoPost = (props) => {
     ImageSection = (
       <Row gutter={[16, 16]}>
         {Image.map((item, idx) => (
-          <Col
-            key={idx}
-            md={12}
-            xs={24}
-            onClick={() => handleImageModal(`${item}`)}
-          >
+          <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(item)}>
             <img
               style={{
                 width: "100%",
@@ -182,7 +187,7 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={`${item}`}
+              src={item}
               alt=""
             />
           </Col>
@@ -201,7 +206,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(`${item}`)}
+                onClick={() => handleImageModal(item)}
               >
                 <div className="image-container">
                   {idx === 8 && (
@@ -220,7 +225,7 @@ const DaoPost = (props) => {
                       borderRadius: "6px",
                     }}
                     key={idx}
-                    src={`${item}`}
+                    src={item}
                     alt=""
                   />
                 </div>
@@ -691,7 +696,7 @@ const DaoPost = (props) => {
             <div className="post__main__content__like-comment__likes d-flex">
               {mouseOverHeart || mouseClickHeart ? (
                 <HeartFilled
-                  onClick={() => setMouseClickHeart(!mouseClickHeart)}
+                  onClick={handleLike}
                   style={{
                     fontSize: "20px",
                     color: "#E22828",
@@ -701,6 +706,7 @@ const DaoPost = (props) => {
                 />
               ) : (
                 <HeartOutlined
+                  onClick={handleLike}
                   style={{
                     color: "#828282",
                     fontSize: "20px",
