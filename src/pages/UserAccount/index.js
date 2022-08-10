@@ -30,6 +30,7 @@ const Index = () => {
         </Col>
         <Col span={18} style={{ padding: "0 1rem" }}>
           <Routes>
+            {/* <Route path="" element={<AccountInfo />} /> */}
             <Route path="accountInfo" element={<AccountInfo />} />
             <Route path="orderStatus" element={<OrderStatus />} />
             <Route path="liked" element={<Liked />} />

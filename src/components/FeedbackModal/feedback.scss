@@ -1,0 +1,40 @@
+@import "../../App.scss";
+
+.feedback_container {
+    padding-top: 22px;
+
+    .feedback_title {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 27px;
+        color: $neutral-700;
+
+        margin-bottom: 17px;
+    }
+
+    .feedback_content {
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 25px;
+        color: $neutral-500;
+
+        margin-bottom: 30px;
+    }
+
+    .btn_close {
+        padding: 14px 36px;
+        background: #E7E7E7;
+        border-radius: 8px;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .btn_report {
+        padding: 14px 36px;
+        background: #E22828;
+        border-radius: 8px;
+        color: #fff;
+        border: 0;
+        cursor: pointer;
+    }
+}

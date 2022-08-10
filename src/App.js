@@ -13,6 +13,12 @@ import Dao from "./pages/Dao";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import UserAccount from "./pages/UserAccount";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
+import Cart from "./pages/Cart";
+import { Home } from "./pages/Home";
+import PageCostume from "./pages/CostumeDetails/PageCostume";
+import PageDevice from "./pages/DeviceDetails/PageDevice";
+import PageModel from "./pages/ModelDetails/PageModel";
+import PageMakeup from "./pages/MakeupDetails/PageMakeup";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,15 +49,19 @@ function App() {
         <Route path="home" element={<CustomerLayout />}>
           <Route path="user/:id/*" element={<UserAccount />}></Route>
           <Route path="filter" element={<FilterPage />}></Route>
-          <Route
-            path="dao"
-            element={
-              <ProtectedRouter>
-                <Dao />
-              </ProtectedRouter>
-            }
-          />
+          <Route path="dao" element={<Dao />} />
           <Route path="studio/book" element={<BookStudio />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="home" element={<Home />} />
+          <Route path="costumeDetails/*" element={<PageCostume />} />
+          <Route path="deviceDetails/*" element={<PageDevice />} />
+          <Route path="modelDetails/*" element={<PageModel />} />
+          <Route path="makeupDetails/*" element={<PageMakeup />} />
+          {/* <Route
+              path="costumeDetails/detailCostumeShop"
+              element={<DetailCostumeShop />}
+            /> */}
+          {/* <Route path="costumeDetails/order" element={<OrderCostume />} /> */}
         </Route>
       </Routes>
     </div>

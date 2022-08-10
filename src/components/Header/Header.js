@@ -70,7 +70,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -108,7 +109,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -145,7 +147,8 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}>
+        footer={[]}
+      >
         <div className="logo">
           <img src={logo} alt="" />
         </div>
@@ -157,7 +160,8 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="location"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
                 <Option value="hcm">Hồ Chí Minh</Option>
@@ -167,7 +171,8 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -194,7 +199,8 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}>
+              style={{ width: "50%" }}
+            >
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -213,10 +219,10 @@ const Header = () => {
           <img src={FeedIcon} alt="" />
           <p>Dạo</p>
         </div>
-        <div className="tip">
+        <Link to={"cart"} className="tip">
           <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
-          <p>Giỏ hàng</p>
-        </div>
+          <p style={{ color: "#828282" }}>Giỏ hàng</p>
+        </Link>
         {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">

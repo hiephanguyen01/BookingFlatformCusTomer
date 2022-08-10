@@ -1,0 +1,32 @@
+@import "../../App.scss";
+
+.report_container {
+    padding: 22px 0px 0px;
+
+    .report_title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .ant-space-item {
+        margin-bottom: 20px;
+    }
+
+    .btn_close {
+        padding: 14px 36px;
+        background: #E7E7E7;
+        border-radius: 8px;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .btn_report {
+        padding: 14px 36px;
+        background: #E22828;
+        border-radius: 8px;
+        color: #fff;
+        border: 0;
+        cursor: pointer;
+    }
+}
