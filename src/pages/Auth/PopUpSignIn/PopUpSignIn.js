@@ -1,7 +1,6 @@
 import { Modal } from "antd";
 import React, { useState } from "react";
 import { useSelector } from "react-redux/es/exports";
-import { confirmPassSelector } from "../../../stores/selectors/PhoneNumberSelector";
 import { ForgotPassword } from "../SignIn/FogotPassword/ForgotPassword";
 import { SignIn } from "../SignIn/SignIn";
 import { SetPassword } from "../SignUp/SetPassword/SetPassword";
@@ -20,20 +19,19 @@ import "./PopUpSignIn.scss";
 //////////////////////////////////////////////////
 
 const PopUpSignIn = ({ children, className, style, onClick }) => {
-  const selector = useSelector(confirmPassSelector);
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   return (
     <div className="PopUpSignIn">
       <span
-        onClick={user && selector ? () => onClick() : () => setVisible(true)}
+        onClick={user ? () => onClick() : () => setVisible(true)}
         className={className ? className : "pop-up-sign-in-button"}
         style={style}>
         {children}
       </span>
 
-      {user && selector ? (
+      {user ? (
         <div></div>
       ) : (
         <div>
