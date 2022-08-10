@@ -16,6 +16,7 @@ export const SignIn = () => {
       navigate("/home/dao");
     }
   }, [user]);
+  console.log("asdasdasdasdasdasdas");
   const onFinish = (values) => {
     dispatch(LoginWithPhoneNumber(values, navigate));
   };

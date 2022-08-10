@@ -24,6 +24,11 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
+  useEffect(() => {
+    if (user) {
+      navigate("/home/dao");
+    }
+  }, [user]);
   return (
     <div className="PopUpSignIn">
       <span
