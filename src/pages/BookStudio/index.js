@@ -4,6 +4,7 @@ import {
   DatePicker,
   Row,
   TimePicker,
+  TextArea,
   Input,
   Dropdown,
   Space,
@@ -13,6 +14,7 @@ import {
 import React from "react";
 import "./bookStudio.scss";
 import imgStudio from "../../assets/dao/Frame 163.jpg";
+import { Route, Routes } from "react-router-dom";
 import TextInput from "../../components/TextInput/TextInput";
 const Index = () => {
   const onClick = ({ key }) => {
@@ -89,7 +91,6 @@ const Index = () => {
                 <img
                   src={imgStudio}
                   style={{ height: "100%", marginRight: "20px" }}
-                  alt=''
                 />
                 <div>
                   <span className="text-middle">Váy cưới mã 01</span>

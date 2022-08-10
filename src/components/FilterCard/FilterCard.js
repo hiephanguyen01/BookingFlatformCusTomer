@@ -6,26 +6,21 @@ import {
 import React, { useState } from "react";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
-<<<<<<< HEAD
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
-import "./FilterCard.scss";
-const FilterCard = () => {
-  const [like,setLike] = useState(false)
-=======
 import CurrencyFormat from "react-currency-format";
 import "./FilterCard.scss";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 const FilterCard = ({ data, category }) => {
->>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
+  const [like,setLike] = useState(false)
   return (
     <div className="FilterCard">
       <div className="groupImage">
         <div className="heard">
-          <PopUpSignIn onClick={()=> setLike(!like) }>
-            <HeartTwoTone
-              sizes={30}
-              style={{ padding: "10px", display: "block", fontSize: "25px" ,backgroundColor:like?'red':''}}
-              twoToneColor="#e22828"
-            />
+          <PopUpSignIn onClick={() => setLike(!like) }>
+          <HeartTwoTone
+            sizes={30}
+            style={like? { padding: "10px", display: "block", fontSize: "25px" }:{ padding: "10px", display: "block", fontSize: "25px" , backgroundColor:'red'}}
+            twoToneColor="#e22828"
+          />
           </PopUpSignIn>
         </div>
         <div className="sale">-60% HÔM NAY</div>

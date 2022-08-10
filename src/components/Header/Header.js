@@ -18,25 +18,14 @@ import {
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { useDispatch ,useSelector} from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
-<<<<<<< HEAD
-import { confirmPassAction } from "../../stores/actions/PhoneNumberAction";
-import {confirmPassSelector} from "../../stores/selectors/PhoneNumberSelector"
-const { Option } = Select;
-const Header = () => {
-  const selector=useSelector(confirmPassSelector)
-  const dispatch = useDispatch()
-  const { user, logOut } = UserAuth();
-=======
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../stores/actions/autheticateAction";
 const { Option } = Select;
 const Header = () => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const dispatch = useDispatch();
->>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
   const [flag, setFlag] = useState(false);
   const categories = [
     {
@@ -119,16 +108,7 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-<<<<<<< HEAD
-              onClick={() => {
-                handleSignOut();
-                localStorage.removeItem('PassConfirm');
-                dispatch(confirmPassAction(false));
-              }}
-            >
-=======
               onClick={() => handleSignOut()}>
->>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
               Đăng xuất
             </Button>
           ),
@@ -155,18 +135,8 @@ const Header = () => {
     navigate("/home/filter");
     setVisible(false);
   };
-<<<<<<< HEAD
-  const handleSignOut = async () => {
-    try {
-      await logOut();
-      setFlag(true);
-    } catch (error) {
-      console.log(error);
-    }
-=======
   const handleSignOut = () => {
     dispatch(logOut(navigate));
->>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
   };
   return (
     <div className="Header">
@@ -247,7 +217,7 @@ const Header = () => {
           <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
           <p>Giỏ hàng</p>
         </div>
-        {user && selector? (
+        {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
               <Avatar src={user.photoURL ? user.photoURL : noBody} />

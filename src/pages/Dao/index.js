@@ -1,23 +1,11 @@
 import { CheckOutlined } from "@ant-design/icons";
-<<<<<<< HEAD
-import { ReactComponent as Pen } from "../../assets/pen.svg";
-import DaoPost from "../../components/DaoPost";
-=======
->>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
-<<<<<<< HEAD
-import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import {
-  HeartTwoTone,
-} from "@ant-design/icons";
-=======
 import "./dao.scss";
 
->>>>>>> 6cdae3901c1e1a8aa7895d78f81573bfdfa92149
 const tagItems = [
   {
     id: 0,
@@ -37,6 +25,7 @@ const Dao = (props) => {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const { listPost, nextPage } = useSelector((state) => state.postDaoReducer);
+
   useEffect(() => {
     getData(loadMore);
     setLoadMore(false);
@@ -87,24 +76,12 @@ const Dao = (props) => {
       setPage(() => page + 1);
     }
   };
-  // A làm sẵn thích thì lấy ko thích thì lấy :V //
-  const [like,setLike] = useState(false)
 
   return (
     <section className="dao d-flex justify-content-center">
-   
       <div className="dao__container d-flex flex-column align-items-center">
         <header className="dao__container__header d-flex justify-content-between align-items">
           <h2>Dạo</h2>
-          {/* Đây nè */}
-          <PopUpSignIn onClick={()=> setLike(!like) }>
-            <HeartTwoTone
-              sizes={30}
-              style={{ padding: "10px", display: "block", fontSize: "25px" ,backgroundColor:like?'red':''}}
-              twoToneColor="#e22828"
-            />
-          </PopUpSignIn>
-          {/* Hết*/}
           <button className="dao__container__header__button d-flex align-items-center">
             <Pen />
             <p>Tạo bài viết</p>

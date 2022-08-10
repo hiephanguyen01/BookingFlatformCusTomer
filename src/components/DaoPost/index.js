@@ -13,6 +13,8 @@ import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
 import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
 import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
 import "./daoPost.scss";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper";
 import ReportPost from "../ReportPostDao";
 
 const moreOptionOnEachPost = [
@@ -237,7 +239,6 @@ const DaoPost = (props) => {
 
   return (
     <article className="post">
-    
       <section className="post__main d-flex flex-column">
         <header className="post__main__info d-flex justify-content-between align-items-center">
           <div className="d-flex justify-content-between align-items-center">
