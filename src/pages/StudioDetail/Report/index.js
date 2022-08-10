@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import classNames from "classnames/bind";
-import styles from "./Report.module.scss";
 import { Radio, Space } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { useDispatch } from "react-redux";
 import { HIDE_MODAL, SHOW_MODAL } from "../../../stores/types/modalTypes";
 import { Reply } from "../Relay";
 
-const cx = classNames.bind(styles);
-
 export const Report = () => {
   const [value, setValue] = useState(1);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [valueText, setValueText] = useState("");
 
@@ -50,7 +46,7 @@ export const Report = () => {
         }}
       >
         <button
-        onClick={()=> dispatch({type:HIDE_MODAL})}
+          onClick={() => dispatch({ type: HIDE_MODAL })}
           style={{
             padding: "14px 36px",
             background: "#E7E7E7",
@@ -62,7 +58,7 @@ export const Report = () => {
           Huỷ
         </button>
         <button
-        onClick={()=> dispatch({type:SHOW_MODAL, Component:<Reply/>})}
+          onClick={() => dispatch({ type: SHOW_MODAL, Component: <Reply /> })}
           style={{
             padding: "14px 36px",
             background: "#E22828",

@@ -87,26 +87,33 @@ const Index = () => {
     const findId = newChecked.indexOf(id);
     if (findId !== -1) {
       newChecked.splice(findId, 1);
-      if (id === "allCheck") {
-        newChecked = [];
+      if (newChecked.includes("allCheck")) {
+        newChecked.splice("allCheck", 1);
+      } else {
+        if (id === "allCheck") {
+          newChecked = [];
+        }
       }
     } else {
       if (id === "allCheck") {
         newChecked = CART_ITEM_LIST.map((item) => item.id);
       }
       newChecked.unshift(id);
+      if (newChecked.length === CART_ITEM_LIST.length) {
+        newChecked.unshift("allCheck");
+      }
     }
 
     setChecked([...newChecked]);
-    // console.log(123);
   };
+  console.log(checked);
 
   return (
     <div style={{ background: "#f5f5f5" }}>
       <div className="cart_container">
         <h3>Giỏ hàng</h3>
         <Row className="cart_row">
-          <Col span={16} className="cart_col_left">
+          <Col lg={16} sm={24} className="cart_col_left">
             <div className="cart_tab_pane">
               <Tabs defaultActiveKey="1" onChange={onChange}>
                 {TAGS.map((tag, index) => (
@@ -178,7 +185,7 @@ const Index = () => {
               </Tabs>
             </div>
           </Col>
-          <Col span={8} className="cart_col_right">
+          <Col lg={8} sm={24} className="cart_col_right">
             <div
               style={{
                 padding: "25px 25px ",

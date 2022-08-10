@@ -1,38 +1,5 @@
 @import "../../App.scss";
 
-.see-more {
-    height: 120px;
-    overflow: hidden;
-    position: relative;
-}
-
-.see-more::after {
-    position: absolute;
-    content: "Xem thêm";
-    width: 100%;
-    height: 80px;
-    top: 35%;
-    left: 0;
-    // background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%, rgba(255, 255, 255, 0) 100%);
-    background: linear-gradient(rgba(255, 255, 255, 0.7) 0%, #FFFFFF 100%);
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-    color: #03AC84;
-}
-
-.see-more.active {
-    overflow: visible;
-    height: auto;
-}
-
-.see-more.active::after {
-    display: none;
-}
-
 .costume_container {
     max-width: 1300px;
     margin: auto;
@@ -93,19 +60,10 @@
 
     .wrapper_description {
         width: 100%;
-        margin-bottom: 12px;
 
         .desc_col_left {
             padding: 24px 26px;
             background-color: #ffffff;
-
-            .desc_col_left_title {
-                margin-bottom: 6px;
-                font-weight: 700;
-                font-size: 20px;
-                line-height: 27px;
-                color: #3F3F3F;
-            }
         }
 
         .desc_col_right {

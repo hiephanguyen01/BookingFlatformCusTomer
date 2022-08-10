@@ -5,8 +5,10 @@ import UserAccount from "./pages/UserAccount";
 import BookStudio from "./pages/BookStudio";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import Cart from "./pages/Cart";
-import CostumeDetails from "./pages/CostumeDetails";
-import DetailCostumeShop from "./pages/DetailCostumeShop";
+import PageCostume from "./pages/CostumeDetails/PageCostume";
+import PageDevice from "./pages/DeviceDetails/PageDevice";
+import PageModel from "./pages/ModelDetails/PageModel";
+import PageMakeup from "./pages/MakeupDetails/PageMakeup";
 import Dao from "./pages/Dao";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import { Home } from "./pages/Home";
@@ -45,11 +47,15 @@ function App() {
             <Route path="studio/book" element={<BookStudio />} />
             <Route path="cart" element={<Cart />} />
             <Route path="home" element={<Home />} />
-            <Route path="costumeDetails" element={<CostumeDetails />} />
-            <Route
+            <Route path="costumeDetails/*" element={<PageCostume />} />
+            <Route path="deviceDetails/*" element={<PageDevice />} />
+            <Route path="modelDetails/*" element={<PageModel />} />
+            <Route path="makeupDetails/*" element={<PageMakeup />} />
+            {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}
-            />
+            /> */}
+            {/* <Route path="costumeDetails/order" element={<OrderCostume />} /> */}
           </Route>
         </Routes>
       </AuthContextProvider>

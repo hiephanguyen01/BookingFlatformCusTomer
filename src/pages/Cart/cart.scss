@@ -10,6 +10,7 @@
         box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.04);
 
         .cart_col_left {
+            // margin-bottom: 10px;
 
             .cart_tab_pane {
 
@@ -108,5 +109,15 @@
         .cart_col_right {
             padding-left: 12px;
         }
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 992px) {
+    .cart_col_left {
+        margin-bottom: 10px;
+    }
+
+    .cart_col_right {
+        padding-left: 0;
     }
 }

@@ -1,0 +1,18 @@
+.drop-file-input {
+    position: relative;
+
+    &:hover {
+        opacity: 0.6;
+    }
+
+    .input_file {
+        position: absolute;
+        cursor: pointer;
+    }
+}
+
+.drop-file-input {
+    &.dragover {
+        opacity: 0.6;
+    }
+}

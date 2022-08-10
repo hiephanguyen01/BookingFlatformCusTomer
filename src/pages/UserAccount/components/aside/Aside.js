@@ -73,12 +73,16 @@ const ITEM_US_ASIDE = [
 
 const Aside = ({ children }) => {
   const { pathname } = useLocation();
+  // console.log(pathname.split("/")[4]);
+  const newPathname = pathname.split("/")[4];
   const AsideItems = ({ item }) => {
     return (
       <Link
         to={item.linkTo}
         style={
-          pathname === item.linkTo ? { color: "#E22828" } : { color: "#222222" }
+          newPathname === item.linkTo
+            ? { color: "#E22828" }
+            : { color: "#222222" }
         }
       >
         <div
@@ -90,7 +94,7 @@ const Aside = ({ children }) => {
           {item.icon}
           <span
             style={
-              pathname === item.linkTo
+              newPathname === item.linkTo
                 ? {
                     fontSize: "16px",
                     marginLeft: "0.5rem",
