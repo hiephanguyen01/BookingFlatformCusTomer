@@ -6,9 +6,9 @@ import {
 import React from "react";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
-
+import CurrencyFormat from "react-currency-format";
 import "./FilterCard.scss";
-const FilterCard = () => {
+const FilterCard = ({ data, category }) => {
   return (
     <div className="FilterCard">
       <div className="groupImage">
@@ -44,12 +44,11 @@ const FilterCard = () => {
       </div>
       <div className="text">
         <p className="title">
-          Studio Mizo Misaki với concept tối giản{" "}
-          <CheckCircleTwoTone twoToneColor="#52c41a" />
+          {data.Name} <CheckCircleTwoTone twoToneColor="#52c41a" />
         </p>
         <div className="d-flex justify-content-between align-items-center">
           <p className="description">
-            <img src={Logo3} alt="" /> Quận 1,TP.HCM
+            <img src={Logo3} alt="" /> {data.Address}
           </p>
           <p>
             5 <StarOutlined twoToneColor="#F8D93A" />
@@ -57,12 +56,21 @@ const FilterCard = () => {
         </div>
         <div className="d-flex justify-content-between align-items-center">
           <p className="description">
-            <img src={Logo2} alt="" /> Studio
+            <img src={Logo2} alt="" /> {category.name}
           </p>
-          <p>Đã đặt 56</p>
+          <p>Đã đặt {data.BookingCount}</p>
         </div>
-        <p className="addition">500,000 đ/h</p>
-        <p className="addition">2,000,000 đ/h</p>
+
+        <CurrencyFormat
+          value={data.Price}
+          displayType={"text"}
+          thousandSeparator={true}
+          renderText={(value) => (
+            <p className="addition">
+              {value} {data.PriceUnit || ""}
+            </p>
+          )}
+        />
       </div>
     </div>
   );

@@ -11,12 +11,11 @@ const cx = classNames.bind(styles);
 
 export const Report = () => {
   const [value, setValue] = useState(1);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [valueText, setValueText] = useState("");
 
   const onChange = (e) => {
-    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 
@@ -47,22 +46,20 @@ export const Report = () => {
           gap: "10px",
           justifyContent: "flex-end",
           marginTop: "20px",
-        }}
-      >
+        }}>
         <button
-        onClick={()=> dispatch({type:HIDE_MODAL})}
+          onClick={() => dispatch({ type: HIDE_MODAL })}
           style={{
             padding: "14px 36px",
             background: "#E7E7E7",
             borderRadius: "8px",
             border: 0,
             cursor: "pointer",
-          }}
-        >
+          }}>
           Huỷ
         </button>
         <button
-        onClick={()=> dispatch({type:SHOW_MODAL, Component:<Reply/>})}
+          onClick={() => dispatch({ type: SHOW_MODAL, Component: <Reply /> })}
           style={{
             padding: "14px 36px",
             background: "#E22828",
@@ -70,8 +67,7 @@ export const Report = () => {
             color: "#fff",
             border: 0,
             cursor: "pointer",
-          }}
-        >
+          }}>
           Báo cáo
         </button>
       </div>

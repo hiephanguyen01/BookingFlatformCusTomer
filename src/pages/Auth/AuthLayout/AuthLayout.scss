@@ -34,7 +34,8 @@
       align-items: center;
       height: 90%;
       max-height: 702px;
-      width: 1120px;
+      width: 70%;
+      max-width: 1120px;
 
       .pic-login {
         border-bottom-left-radius: 10px;
@@ -67,4 +68,5 @@
       width: 90%;
     }
   }
+  
 }
