@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import classNames from "classnames/bind";
-import styles from "./Report.module.scss";
 import { Radio, Space } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { useDispatch } from "react-redux";
 import { HIDE_MODAL, SHOW_MODAL } from "../../../stores/types/modalTypes";
 import { Reply } from "../Relay";
-
-const cx = classNames.bind(styles);
 
 export const Report = () => {
   const [value, setValue] = useState(1);

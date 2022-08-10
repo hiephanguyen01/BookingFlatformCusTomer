@@ -62,11 +62,11 @@ const AccountInfo = () => {
             borderBottom: "1px solid #CACACA",
           }}
         >
-          <Col span={12}>
+          <Col lg={12} sm={24}>
             <TextInput label="Họ và tên" />
             <TextInput label="Email" />
           </Col>
-          <Col span={12}>
+          <Col lg={12} sm={24}>
             <ImgCrop rotate shape="round" style={{ borderRadius: "50%" }}>
               <Upload
                 // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -87,11 +87,11 @@ const AccountInfo = () => {
             paddingBottom: "1rem",
           }}
         >
-          <Col span={12}>
+          <Col lg={12} sm={24}>
             <TextInput label="Mật khẩu hiện tại" isPass={true} />
             <TextInput label="Mật khẩu mới" isPass={true} />
           </Col>
-          <Col span={12}>
+          <Col lg={12} sm={24}>
             <TextInput label="Nhập lại mật khẩu mới" isPass={true} />
           </Col>
         </Row>

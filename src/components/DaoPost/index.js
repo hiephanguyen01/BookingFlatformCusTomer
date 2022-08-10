@@ -3,18 +3,23 @@ import {
   HeartFilled,
   HeartOutlined,
   PlusOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
-import { Col, Row, Popover, Modal } from "antd";
+import { Col, Row, Popover, Modal, Carousel } from "antd";
 import { useState } from "react";
-import img1 from "../../assets/dao/Frame 180.png";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper";
+import "./daoPost.scss";
+import "swiper/css";
+import "swiper/css/navigation";
 import { ReactComponent as Info } from "../../assets/dao/info.svg";
 import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
 import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
 import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
 import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
-import "./daoPost.scss";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
+import img1 from "../../assets/dao/Frame 180.png";
+import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
+import imgSwiper2 from "../../assets/dao/Frame 164.jpg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";
@@ -33,6 +38,7 @@ const DaoPost = (props) => {
   const [commentsClick, setCommentsClick] = useState(false);
   const [moreOptionModal, setMoreOptionModal] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisibleDetail, setIsModalVisibleDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
@@ -54,6 +60,7 @@ const DaoPost = (props) => {
   const handleImageModal = (url) => {
     setImageInModal(url);
     setIsModalVisible(true);
+    setIsModalVisibleDetail(true);
   };
 
   const handleOk = () => {
@@ -62,6 +69,14 @@ const DaoPost = (props) => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handleOkDetail = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancelDetail = () => {
+    setIsModalVisibleDetail(false);
   };
 
   const handleMoreOptionClick = () => {
@@ -139,6 +154,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
+
                 onClick={() => handleImageModal(item)}
               >
                 <img
@@ -271,25 +287,409 @@ const DaoPost = (props) => {
             {/* //Post Image đang xử lý */}
             {ImageSection}
             <Modal
-              width={"80vh"}
-              closeIcon={<></>}
-              onOk={handleOk}
-              onCancel={handleCancel}
+              // width={"100vh"}
+              closeIcon={<CloseOutlined />}
+              onOk={handleOkDetail}
+              onCancel={handleCancelDetail}
               footer={[]}
-              visible={isModalVisible}
-              className="d-flex justify-content-center align-items-center"
-              style={{
-                top: "20%",
-              }}
+              visible={isModalVisibleDetail}
+              className="d-flex justify-content-center align-items-center post_detail"
+              // style={{
+              //   top: "20%",
+              // }}
               bodyStyle={{
                 backgroundColor: "transparent",
               }}
             >
-              <img
+              <Row>
+                <Col
+                  span={16}
+                  style={{ backgroundColor: "#1D2226", height: "100%" }}
+                >
+                  <Swiper
+                    slidesPerView={1}
+                    spaceBetween={30}
+                    loop={true}
+                    // pagination={{
+                    //   clickable: true,
+                    // }}
+                    navigation={true}
+                    modules={[Pagination, Navigation]}
+                    className="mySwiper"
+                  >
+                    <SwiperSlide
+                      style={{ background: "#1D2226", padding: "90px 0" }}
+                    >
+                      <img
+                        src={imgSwiper1}
+                        className="w-100 h-100"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </SwiperSlide>
+                    <SwiperSlide
+                      style={{ background: "#1D2226", padding: "90px 0" }}
+                    >
+                      <img
+                        src={imgSwiper2}
+                        className="w-100 h-100"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </SwiperSlide>
+                  </Swiper>
+                </Col>
+                <Col
+                  span={8}
+                  className="px-23 py-30"
+                  style={{
+                    overflowY: "scroll",
+                    position: "relative",
+                    height: "100vh",
+                  }}
+                >
+                  <header className="post__main__info d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <img src={Avatar} alt="" />
+                      <div className="post__main__info__nametime">
+                        <p className="post__main__info__nametime__name">
+                          {Username}
+                        </p>
+                        <p>{CreatationTime}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <Popover
+                        content={
+                          <div className="more-option-modal">
+                            {moreOptionOnEachPost.map((item, idx) => (
+                              <li onClick={handleMoreOptionClick} key={idx}>
+                                <div className="container d-flex">
+                                  <div>{item.icon}</div>
+                                  <p>{item.title}</p>
+                                </div>
+                              </li>
+                            ))}
+                          </div>
+                        }
+                        trigger="click"
+                        visible={moreOptionModal}
+                        onVisibleChange={(newVisible) =>
+                          setMoreOptionModal(newVisible)
+                        }
+                      >
+                        <MoreOutlined style={{ fontSize: "24px" }} />
+                      </Popover>
+                      <ReportPost
+                        isReportPostModalVisible={isReportPostModalVisible}
+                        setIsReportPostModalVisible={
+                          setIsReportPostModalVisible
+                        }
+                      />
+                    </div>
+                  </header>
+                  <div className="post__main__content__tags d-flex align-items-center">
+                    {Tags?.split(",").map((item, idx) => (
+                      <li key={idx}>#{item}</li>
+                    ))}
+                  </div>
+                  <div className="post__main__content__description">
+                    <p>{Description}</p>
+                  </div>
+                  <div
+                    className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
+                    style={{ borderBottom: "1px solid #E7E7E7" }}
+                  >
+                    <div className="post__main__content__like-comment__likes d-flex">
+                      {mouseOverHeart || mouseClickHeart ? (
+                        <HeartFilled
+                          onClick={() => setMouseClickHeart(!mouseClickHeart)}
+                          style={{
+                            fontSize: "20px",
+                            color: "#E22828",
+                            marginBottom: "2px",
+                          }}
+                          onMouseLeave={() => setMouseOverHeart(false)}
+                        />
+                      ) : (
+                        <HeartOutlined
+                          style={{
+                            color: "#828282",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            marginBottom: "2px",
+                          }}
+                          onMouseOver={() => setMouseOverHeart(true)}
+                        />
+                      )}
+                      <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+                        {TotalLikes}
+                      </p>
+                    </div>
+                    <div className="post__main__content__like-comment__comments d-flex">
+                      <Comments
+                        onClick={() => setCommentsClick(!commentsClick)}
+                      />
+                      <p>{TotalComments}</p>
+                    </div>
+                  </div>
+                  <section className="post__middle">
+                    <div className="d-flex">
+                      <img src={img1} alt="" />
+                      <div className="post__middle__right-side">
+                        <ul className="d-flex align-items-center">
+                          <li>Bên mình có nhé</li>
+                          <li>Vào trang mình xem thử nhé</li>
+                          <li>Bên mình đang khuyến mãi luôn ạ</li>
+                        </ul>
+                        <div className="post__middle__right-side__choose-service d-flex justify-content-center align-items-center">
+                          <PlusOutlined
+                            style={{ color: "#03AC84", fontSize: "14px" }}
+                          />
+                          <p>Chọn dịch vụ liên quan</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                  <div className="comment_item">
+                    <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <img src={Avatar} alt="" />
+                        <div className="post__main__info__nametime">
+                          <p className="post__main__info__nametime__name">
+                            {Username}
+                          </p>
+                          <p>2 giờ</p>
+                        </div>
+                      </div>
+                    </header>
+                    <div className="post_slider_container">
+                      <Swiper
+                        slidesPerView={"1.4"}
+                        spaceBetween={15}
+                        // pagination={{
+                        //   clickable: true,
+                        // }}
+                        navigation={true}
+                        modules={[Navigation, Pagination]}
+                        className="post_slider"
+                      >
+                        <SwiperSlide className="post_slider_item">
+                          <a href="#">
+                            <div className="d-flex h-100">
+                              <img
+                                src={imgSwiper1}
+                                className="h-100 me-12"
+                                style={{ objectFit: "contain" }}
+                              />
+                              <div className="py-3">
+                                <div className="post_slider_item_name mb-5">
+                                  BOOKINGSTUDIO.VN
+                                </div>
+                                <div className="post_slider_item_description">
+                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                  hình cưới chuyên...
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </SwiperSlide>
+                        <SwiperSlide className="post_slider_item">
+                          <a href="#">
+                            <div className="d-flex h-100">
+                              <img
+                                src={imgSwiper1}
+                                className="h-100 me-12"
+                                style={{ objectFit: "contain" }}
+                              />
+                              <div className="py-3">
+                                <div className="post_slider_item_name mb-5">
+                                  BOOKINGSTUDIO.VN
+                                </div>
+                                <div className="post_slider_item_description">
+                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                  hình cưới chuyên...
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </SwiperSlide>
+                        <SwiperSlide className="post_slider_item">
+                          <a href="#">
+                            <div className="d-flex h-100">
+                              <img
+                                src={imgSwiper1}
+                                className="h-100 me-12"
+                                style={{ objectFit: "contain" }}
+                              />
+                              <div className="py-3">
+                                <div className="post_slider_item_name mb-5">
+                                  BOOKINGSTUDIO.VN
+                                </div>
+                                <div className="post_slider_item_description">
+                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                  hình cưới chuyên...
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </SwiperSlide>
+                      </Swiper>
+                    </div>
+                    <div
+                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
+                      style={{ borderBottom: "1px solid #E7E7E7" }}
+                    >
+                      <div className="post__main__content__like-comment__likes d-flex">
+                        {mouseOverHeart || mouseClickHeart ? (
+                          <HeartFilled
+                            onClick={() => setMouseClickHeart(!mouseClickHeart)}
+                            style={{
+                              fontSize: "20px",
+                              color: "#E22828",
+                              marginBottom: "2px",
+                            }}
+                            onMouseLeave={() => setMouseOverHeart(false)}
+                          />
+                        ) : (
+                          <HeartOutlined
+                            style={{
+                              color: "#828282",
+                              fontSize: "20px",
+                              cursor: "pointer",
+                              marginBottom: "2px",
+                            }}
+                            onMouseOver={() => setMouseOverHeart(true)}
+                          />
+                        )}
+                        <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+                          {TotalLikes}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="comment_item">
+                    <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <img src={Avatar} alt="" />
+                        <div className="post__main__info__nametime">
+                          <p className="post__main__info__nametime__name">
+                            {Username}
+                          </p>
+                          <p>2 giờ</p>
+                        </div>
+                      </div>
+                    </header>
+                    <div className="post_slider_container">
+                      <Swiper
+                        slidesPerView={"1.4"}
+                        spaceBetween={15}
+                        // pagination={{
+                        //   clickable: true,
+                        // }}
+                        navigation={true}
+                        modules={[Navigation, Pagination]}
+                        className="post_slider"
+                      >
+                        <SwiperSlide className="post_slider_item">
+                          <a href="#">
+                            <div className="d-flex h-100">
+                              <img
+                                src={imgSwiper1}
+                                className="h-100 me-12"
+                                style={{ objectFit: "contain" }}
+                              />
+                              <div className="py-3">
+                                <div className="post_slider_item_name mb-5">
+                                  BOOKINGSTUDIO.VN
+                                </div>
+                                <div className="post_slider_item_description">
+                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                  hình cưới chuyên...
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </SwiperSlide>
+                        <SwiperSlide className="post_slider_item">
+                          <a href="#">
+                            <div className="d-flex h-100">
+                              <img
+                                src={imgSwiper1}
+                                className="h-100 me-12"
+                                style={{ objectFit: "contain" }}
+                              />
+                              <div className="py-3">
+                                <div className="post_slider_item_name mb-5">
+                                  BOOKINGSTUDIO.VN
+                                </div>
+                                <div className="post_slider_item_description">
+                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                  hình cưới chuyên...
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </SwiperSlide>
+                        <SwiperSlide className="post_slider_item">
+                          <a href="#">
+                            <div className="d-flex h-100">
+                              <img
+                                src={imgSwiper1}
+                                className="h-100 me-12"
+                                style={{ objectFit: "contain" }}
+                              />
+                              <div className="py-3">
+                                <div className="post_slider_item_name mb-5">
+                                  BOOKINGSTUDIO.VN
+                                </div>
+                                <div className="post_slider_item_description">
+                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                  hình cưới chuyên...
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </SwiperSlide>
+                      </Swiper>
+                    </div>
+                    <div
+                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
+                      style={{ borderBottom: "1px solid #E7E7E7" }}
+                    >
+                      <div className="post__main__content__like-comment__likes d-flex">
+                        {mouseOverHeart || mouseClickHeart ? (
+                          <HeartFilled
+                            onClick={() => setMouseClickHeart(!mouseClickHeart)}
+                            style={{
+                              fontSize: "20px",
+                              color: "#E22828",
+                              marginBottom: "2px",
+                            }}
+                            onMouseLeave={() => setMouseOverHeart(false)}
+                          />
+                        ) : (
+                          <HeartOutlined
+                            style={{
+                              color: "#828282",
+                              fontSize: "20px",
+                              cursor: "pointer",
+                              marginBottom: "2px",
+                            }}
+                            onMouseOver={() => setMouseOverHeart(true)}
+                          />
+                        )}
+                        <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+                          {TotalLikes}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              {/* <img
                 style={{ width: "100%", transform: "scale(1.8)" }}
                 src={imageInModal}
                 alt=""
-              />
+              /> */}
             </Modal>
           </div>
           <div className="post__main__content__like-comment d-flex align-items-center">
