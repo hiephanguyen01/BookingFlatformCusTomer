@@ -60,10 +60,10 @@ const Dao = (props) => {
 
   // useEffect(() => {
   //   const list = document.getElementById("infinity-list-post-dao");
-  useEffect(() => {
-    getData(loadMore);
-    setLoadMore(false);
-  }, []);
+  // useEffect(() => {
+  //   getData(loadMore);
+  //   setLoadMore(false);
+  // }, []);
 
   // useEffect(() => {
   //   const list = document.getElementById("infinity-list-post-dao");
