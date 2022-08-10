@@ -116,8 +116,6 @@ const Dao = (props) => {
 
   // create post: end
 
-
-
   // useEffect(() => {
   //   const list = document.getElementById("infinity-list-post-dao");
   //   if (props.scrollable) {
@@ -249,6 +247,7 @@ const Dao = (props) => {
         title="Tạo bài viết"
         centered
         visible={visible}
+        className="modalDao"
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
         width={696}
