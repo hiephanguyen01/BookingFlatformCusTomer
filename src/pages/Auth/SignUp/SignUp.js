@@ -1,6 +1,7 @@
-import React, { useState,useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import vietnam from "../../../assets/imgAuth/vietnam.png";
 import { handleSendOtp } from "../../../stores/actions/autheticateAction";
@@ -16,7 +17,7 @@ export const SignUp = ({ onClickSignUp  }) => {
   const handleSendOtpp = () => {
     dispatch(handleSendOtp(phoneNum, navigate, onClickSignUp));
   };
-  
+
   useEffect(() => {
     if (user ) {
       navigate("/home/dao");
