@@ -1,11 +1,10 @@
-import "./dao.scss";
 import { CheckOutlined } from "@ant-design/icons";
-import { ReactComponent as Pen } from "../../assets/pen.svg";
-import { posts } from "../../examples_data/DaoPost/daopost";
-import DaoPost from "../../components/DaoPost";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ReactComponent as Pen } from "../../assets/pen.svg";
+import DaoPost from "../../components/DaoPost";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
+import "./dao.scss";
 
 const tagItems = [
   {
@@ -93,8 +92,7 @@ const Dao = (props) => {
             <li
               className="dao__container__tag__item d-flex align-items-center"
               key={item.id}
-              onClick={() => setSelectedCategory(item.id)}
-            >
+              onClick={() => setSelectedCategory(item.id)}>
               {item.icon}
               <p>{item.name}</p>
             </li>

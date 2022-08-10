@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import ReactInputVerificationCode from "react-input-verification-code";
-import back from "../../../../assets/imgAuth/back-arrow.png";
-import "./SignUpWithPhone.scss";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import back from "../../../../assets/imgAuth/back-arrow.png";
+import { SignUpWithPhoneNumber } from "../../../../stores/actions/autheticateAction";
+import "./SignUpWithPhone.scss";
 const StyledReactInputVerificationCode = styled.div`
   display: flex;
   justify-content: center;
@@ -24,8 +25,16 @@ const StyledReactInputVerificationCode = styled.div`
     box-shadow: none;
   }
 `;
-export const SignUpWithPhone = ({ backLink, nextLink }) => {
-  const phoneNum = "0965026910";
+export const SignUpWithPhone = ({
+  backLink,
+  nextLink,
+  onClickPop,
+  onClickSignUp,
+}) => {
+  const dispatch = useDispatch();
+  const phoneNum = useSelector(
+    (state) => state.authenticateReducer.currentUser
+  );
   const [code, setCode] = useState("");
   const [flag, setFlag] = useState(true);
   const [isInvalid, setIsInvalid] = useState(true);
@@ -39,7 +48,14 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
         if (flag) {
           setCode(data);
           setIsInvalid(false);
-          navigate(nextLink);
+          if (onClickPop) {
+            onClickPop(4);
+          } else if (onClickSignUp) {
+            onClickSignUp(7);
+          } else {
+            dispatch(SignUpWithPhoneNumber(result.user.multiFactor.user));
+            navigate(nextLink);
+          }
         } else if (!flag) {
           setCode(data);
           setIsInvalid(false);
@@ -53,30 +69,45 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
       });
   };
   useEffect(() => {
+    if (phoneNum === "1") {
+      navigate("/auth/sign-up");
+    }
+  }, []);
+  useEffect(() => {
     let i = countDown;
     let timerId = setInterval(() => {
       setCountDown((countDown) => countDown - 1);
       --i;
       if (i <= 0) clearInterval(timerId);
     }, 1000);
-
     return () => clearInterval(timerId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="SignUpWithPhone" >
+    <div className="SignUpWithPhone">
       <div className="header">
-        <Link to={backLink}>
-          <button className="back-button-sign-up">
+        {onClickPop ? (
+          <button className="back-button-sign-up" onClick={() => onClickPop(2)}>
             <img alt="back" src={back} style={{ height: "16px" }} />
           </button>
-        </Link>
+        ) : onClickSignUp ? (
+          <button
+            className="back-button-sign-up"
+            onClick={() => onClickSignUp(5)}>
+            <img alt="back" src={back} style={{ height: "16px" }} />
+          </button>
+        ) : (
+          <Link to={backLink}>
+            <button className="back-button-sign-up">
+              <img alt="back" src={back} style={{ height: "16px" }} />
+            </button>
+          </Link>
+        )}
         <span>Xác minh số điện thoại</span>
       </div>
       <div className="noti-sign-up">
         Vui lòng nhập mã mà chúng tôi đã gửi qua tin nhắn SMS tới số{" "}
-        {phoneNum.slice(0, 3)} *** ** {phoneNum.slice(-2)} :{" "}
+        {phoneNum?.slice(0, 3)} *** ** {phoneNum?.slice(-2)} :{" "}
       </div>
       <div className="verify-code-sign-up">
         <StyledReactInputVerificationCode isInvalid={isInvalid}>
@@ -116,16 +147,29 @@ export const SignUpWithPhone = ({ backLink, nextLink }) => {
               }, 1000);
 
               return () => clearInterval(timerId);
-            }}
-          >
+            }}>
             Gửi lại
           </button>
         </div>
       )}
       {code.length === 6 && next ? (
-        <Link to={nextLink}>
-          <button className="continue-sign-up">Tiếp tục</button>
-        </Link>
+        <div>
+          {onClickPop ? (
+            <button className="continue-sign-up" onClick={() => onClickPop(4)}>
+              Tiếp tục
+            </button>
+          ) : onClickSignUp ? (
+            <button
+              className="continue-sign-up"
+              onClick={() => onClickSignUp(7)}>
+              Tiếp tục
+            </button>
+          ) : (
+            <Link to={nextLink}>
+              <button className="continue-sign-up">Tiếp tục</button>
+            </Link>
+          )}
+        </div>
       ) : (
         <button className="stop-sign-up">Tiếp tục</button>
       )}

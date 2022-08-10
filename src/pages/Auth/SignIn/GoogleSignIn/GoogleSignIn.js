@@ -2,23 +2,13 @@ import React, { useEffect } from "react";
 import "../SignIn.scss";
 import ggLogo from "../../../../assets/imgAuth/google.png";
 import { useNavigate } from "react-router-dom";
-import { UserAuth } from "../../AuthContext/AuthContext";
+import { googleSignIn } from "../../../../stores/actions/autheticateAction";
+import { useDispatch, useSelector } from "react-redux";
 export const GoogleSignIn = () => {
-  const navigate = useNavigate();
-  const { googleSignIn, user } = UserAuth();
+  const dispatch = useDispatch();
   const handleGoogleSignIn = async () => {
-    try {
-      await googleSignIn();
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(googleSignIn());
   };
-  useEffect(() => {
-    if (user != null) {
-      navigate("/home/dao");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
   return (
     <button className="google-button" onClick={() => handleGoogleSignIn()}>
       <img alt="google" src={ggLogo} className="gg-logo"></img>

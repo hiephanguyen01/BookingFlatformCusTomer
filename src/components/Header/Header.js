@@ -3,7 +3,6 @@ import "./Header.scss";
 import logo from "../../assets/img/Logo1.png";
 import noBody from "../../assets/img/no-body.png";
 import FeedIcon from "../../assets/img/FeedIcon.png";
-import { UserAuth } from "../../pages/Auth/AuthContext/AuthContext";
 import {
   Avatar,
   Button,
@@ -21,10 +20,13 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../stores/actions/autheticateAction";
 const { Option } = Select;
 const Header = () => {
-  const { user, logOut } = UserAuth();
-  const [flag,setFlag] = useState(false)
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const dispatch = useDispatch();
+  const [flag, setFlag] = useState(false);
   const categories = [
     {
       id: 1,
@@ -68,8 +70,7 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}
-              >
+                style={{ borderRadius: "5px" }}>
                 Đăng nhập
               </Button>
             </Link>
@@ -107,8 +108,7 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}
-            >
+              onClick={() => handleSignOut()}>
               Đăng xuất
             </Button>
           ),
@@ -135,19 +135,9 @@ const Header = () => {
     navigate("/home/filter");
     setVisible(false);
   };
-  const handleSignOut = async () => {
-    try {
-      await logOut();
-      setFlag(true)
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSignOut = () => {
+    dispatch(logOut(navigate));
   };
-  useEffect(() => {
-    if (flag) {
-      navigate("/auth/sign-in");
-    }
-  }, [user]);
   return (
     <div className="Header">
       <Modal
@@ -155,8 +145,7 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}
-      >
+        footer={[]}>
         <div className="logo">
           <img src={logo} alt="" />
         </div>
@@ -168,8 +157,7 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="location"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
                 <Option value="hcm">Hồ Chí Minh</Option>
@@ -179,8 +167,7 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -207,8 +194,7 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}
-            >
+              style={{ width: "50%" }}>
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -220,7 +206,6 @@ const Header = () => {
         </div>
         <Input
           placeholder="Bạn đang tìm gì?"
-          enterButton
           prefix={<SearchOutlined />}
           onClick={() => setVisible(true)}
         />
@@ -235,11 +220,11 @@ const Header = () => {
         {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
-              <Avatar src={user.photoURL?user.photoURL:noBody} />
+              <Avatar src={user.photoURL ? user.photoURL : noBody} />
               <div className="text">
                 <p>Tài khoản</p>
                 <p>
-                  {user.displayName?user.displayName:user.phoneNumber}
+                  {user.displayName ? user.displayName : user.phoneNumber}
                   <DownOutlined
                     style={{ fontSize: "10px", color: "#828282" }}
                   />

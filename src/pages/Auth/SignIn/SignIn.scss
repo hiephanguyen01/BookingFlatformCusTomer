@@ -1,6 +1,5 @@
 @import "../../../App.scss";
 .SignIn {
-
   .sign-up-button {
     border: none;
     background-color: #fff;
@@ -82,7 +81,7 @@
       width: 300px;
     }
   }
-  .input-password {
+  .input {
     padding: 9px 25px;
     border: none;
     margin-top: 30px;
@@ -100,7 +99,7 @@
     border-color: $neutral-300 !important;
     box-shadow: 0 0 0 1px $neutral-300;
   }
-  
+
   .phone-zone-sign-in input:focus {
     outline: none !important;
   }
@@ -145,7 +144,7 @@
       color: $primary-700;
       font-weight: 600;
       &:hover {
-        color:$primary-500 ;
+        color: $primary-500;
         cursor: pointer;
       }
     }
