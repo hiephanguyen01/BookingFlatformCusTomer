@@ -3,7 +3,6 @@ import "./Header.scss";
 import logo from "../../assets/img/Logo1.png";
 import noBody from "../../assets/img/no-body.png";
 import FeedIcon from "../../assets/img/FeedIcon.png";
-import { UserAuth } from "../../pages/Auth/AuthContext/AuthContext";
 import {
   Avatar,
   Button,
@@ -21,9 +20,12 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../stores/actions/autheticateAction";
 const { Option } = Select;
 const Header = () => {
-  const { user, logOut } = UserAuth();
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const dispatch = useDispatch();
   const [flag, setFlag] = useState(false);
   const categories = [
     {
@@ -135,19 +137,9 @@ const Header = () => {
     navigate("/home/filter");
     setVisible(false);
   };
-  const handleSignOut = async () => {
-    try {
-      await logOut();
-      setFlag(true);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSignOut = () => {
+    dispatch(logOut(navigate));
   };
-  useEffect(() => {
-    if (flag) {
-      navigate("/auth/sign-in");
-    }
-  }, [user]);
   return (
     <div className="Header">
       <Modal
@@ -220,7 +212,6 @@ const Header = () => {
         </div>
         <Input
           placeholder="Bạn đang tìm gì?"
-          enterButton
           prefix={<SearchOutlined />}
           onClick={() => setVisible(true)}
         />

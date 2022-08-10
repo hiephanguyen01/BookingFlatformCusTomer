@@ -12,7 +12,6 @@ export const Report = () => {
   const [valueText, setValueText] = useState("");
 
   const onChange = (e) => {
-    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 
@@ -43,8 +42,7 @@ export const Report = () => {
           gap: "10px",
           justifyContent: "flex-end",
           marginTop: "20px",
-        }}
-      >
+        }}>
         <button
           onClick={() => dispatch({ type: HIDE_MODAL })}
           style={{
@@ -53,8 +51,7 @@ export const Report = () => {
             borderRadius: "8px",
             border: 0,
             cursor: "pointer",
-          }}
-        >
+          }}>
           Huỷ
         </button>
         <button
@@ -66,8 +63,7 @@ export const Report = () => {
             color: "#fff",
             border: 0,
             cursor: "pointer",
-          }}
-        >
+          }}>
           Báo cáo
         </button>
       </div>

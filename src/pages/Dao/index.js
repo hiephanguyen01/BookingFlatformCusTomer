@@ -1,14 +1,12 @@
-import "./dao.scss";
 import { CheckOutlined } from "@ant-design/icons";
-import { ReactComponent as Pen } from "../../assets/pen.svg";
-import { posts } from "../../examples_data/DaoPost/daopost";
-import DaoPost from "../../components/DaoPost";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ReactComponent as Pen } from "../../assets/pen.svg";
+import DaoPost from "../../components/DaoPost";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
-import { Button, Modal, Upload, message } from "antd";
-import TextArea from "antd/lib/input/TextArea";
+import { Button, Modal, Upload, message, Input } from "antd";
 import uploadImg from "../../assets/dao/uploadImg.png";
+import "./dao.scss";
 
 const tagItems = [
   {
@@ -204,7 +202,7 @@ const Dao = (props) => {
         onCancel={() => setVisible(false)}
         width={696}
       >
-        <TextArea
+        <Input.TextArea
           rows={4}
           placeholder="Bạn muốn tìm gì"
           maxLength={6}

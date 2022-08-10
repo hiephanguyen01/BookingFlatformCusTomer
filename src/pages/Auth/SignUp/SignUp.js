@@ -1,55 +1,44 @@
-import React, { useState } from "react";
-import vietnam from "../../../assets/imgAuth/vietnam.png";
+import React, { useState,useEffect } from "react";
 import ReactLoading from "react-loading";
-import "./SignUp.scss";
+import { useDispatch,useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import firebase from "../FireBaseSetUp/Firebase";
-import { GoogleSignIn } from "../SignIn/GoogleSignIn/GoogleSignIn";
+import vietnam from "../../../assets/imgAuth/vietnam.png";
+import { handleSendOtp } from "../../../stores/actions/autheticateAction";
 import { FacebookSignin } from "../SignIn/FacebookSignIn/FacebookSignin";
-export const SignUp = () => {
+import { GoogleSignIn } from "../SignIn/GoogleSignIn/GoogleSignIn";
+import "./SignUp.scss";
+export const SignUp = ({ onClickSignUp  }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
   const [loading, setLoading] = useState(false);
-  const handleSendOtp = () => {
-    configureCaptcha();
-    const phoneNumber = "+84" + phoneNum;
-    const appVerifier = window.recaptchaVerifier;
-    firebase
-      .auth()
-      .signInWithPhoneNumber(phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-       /*  console.log("OTP has been sent"); */
-        navigate("/auth/sign-up/phone");
-      })
-      .catch((error) => {
-       /*  console.log("SMS not sent"); */
-      });
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const handleSendOtpp = () => {
+    dispatch(handleSendOtp(phoneNum, navigate, onClickSignUp));
   };
-  const configureCaptcha = () => {
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "sign-in-button",
-      {
-        size: "invisible",
-        callback: (response) => {
-          handleSendOtp();
-        /*   console.log("Recaptca varified"); */
-        },
-        defaultCountry: "VN",
-      }
-    );
-  };
+  
+  useEffect(() => {
+    if (user ) {
+      navigate("/home/dao");
+    }
+  }, [user]);
   return (
     <>
       <div style={{ marginBottom: "52px" }}>
         <button className="sign-up-button">Đăng ký</button>
-        <Link to="/auth/sign-in">
-          <button className="sign-in-button">Đăng nhập</button>
-        </Link>
+        {onClickSignUp ? (
+          <button className="sign-in-button" onClick={() => onClickSignUp(1)}>
+            Đăng nhập
+          </button>
+        ) : (
+          <Link to="/auth/sign-in">
+            <button className="sign-in-button">Đăng nhập</button>
+          </Link>
+        )}
       </div>
       <div className="face-google-login">
         <GoogleSignIn />
-        <FacebookSignin />
+        <FacebookSignin/>
       </div>
       <div className="divine-login">
         <div className="divinve-login-content">hoặc</div>
@@ -72,8 +61,7 @@ export const SignUp = () => {
               phoneNum.length >= 9 && phoneNum.length <= 11
                 ? "d-none"
                 : "invalidPhone"
-            }
-          >
+            }>
             Vui lòng nhập số điện thoại hợp lệ !
           </div>
           <div className="white-hide"></div>
@@ -85,10 +73,9 @@ export const SignUp = () => {
           <button
             className="confirm-sign-up"
             onClick={() => {
-              handleSendOtp();
+              handleSendOtpp();
               setLoading(true);
-            }}
-          >
+            }}>
             {!loading && <span>Đăng ký</span>}
             {loading && (
               <>
@@ -107,9 +94,15 @@ export const SignUp = () => {
       )}
       <div className="have-account">
         <span className="have-account-content">Bạn đã có tài khoản?</span>
-        <Link to="/auth/sign-in">
-          <span className="have-account-button">Đăng nhập</span>
-        </Link>
+        {onClickSignUp ? (
+          <span className="have-account-button" onClick={() => onClickSignUp(1)}>
+            Đăng nhập
+          </span>
+        ) : (
+          <Link to="/auth/sign-in">
+            <span className="have-account-button">Đăng nhập</span>
+          </Link>
+        )}
       </div>
     </>
   );
