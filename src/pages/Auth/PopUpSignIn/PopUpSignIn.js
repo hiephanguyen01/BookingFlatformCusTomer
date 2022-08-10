@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux/es/exports";
 import { ForgotPassword } from "../SignIn/FogotPassword/ForgotPassword";
 import { SignIn } from "../SignIn/SignIn";
@@ -7,6 +7,7 @@ import { SetPassword } from "../SignUp/SetPassword/SetPassword";
 import { SignUp } from "../SignUp/SignUp";
 import { SignUpWithPhone } from "../SignUp/SignUpWithPhone/SignUpWithPhone";
 import "./PopUpSignIn.scss";
+import { useNavigate } from "react-router-dom";
 //Read before Using
 // Warp your Component,Text inside PopUpSignIn
 // Write your logic Onlick in PopUpSignIn component
@@ -22,12 +23,14 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
+
   return (
     <div className="PopUpSignIn">
       <span
         onClick={user ? () => onClick() : () => setVisible(true)}
         className={className ? className : "pop-up-sign-in-button"}
-        style={style}>
+        style={style}
+      >
         {children}
       </span>
 
@@ -42,10 +45,11 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={400}>
+              width={400}
+            >
               <SignIn
-                shouldRedirect={true}
-                onClickPop={(e) => setPage(e)}></SignIn>
+                onClickPop={(e) => setPage(e)}
+              ></SignIn>
             </Modal>
           ) : page === 2 ? (
             <Modal
@@ -54,7 +58,8 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={400}>
+              width={400}
+            >
               <ForgotPassword onClickPop={(e) => setPage(e)} />
             </Modal>
           ) : page === 3 ? (
@@ -64,11 +69,13 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={400}>
+              width={400}
+            >
               <SignUpWithPhone
                 backLink=""
                 nextLink=""
-                onClickPop={(e) => setPage(e)}></SignUpWithPhone>
+                onClickPop={(e) => setPage(e)}
+              ></SignUpWithPhone>
             </Modal>
           ) : page === 4 ? (
             <Modal
@@ -77,7 +84,8 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               visible={visible}
               footer={false}
               width={400}
-              confirm={true}>
+              confirm={true}
+            >
               <SetPassword
                 backLink=""
                 nextLink=""
@@ -85,7 +93,8 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 submit="Đặt lại mật khẩu"
                 onClickPop={(e) => {
                   setPage(e);
-                }}></SetPassword>
+                }}
+              ></SetPassword>
             </Modal>
           ) : page === 5 ? (
             <Modal
@@ -94,10 +103,12 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={400}>
+              width={400}
+            >
               <SignUp
-                shouldRedirect={true}
-                onClickSignUp={(e) => setPage(e)}></SignUp>
+                
+                onClickSignUp={(e) => setPage(e)}
+              ></SignUp>
             </Modal>
           ) : page === 6 ? (
             <Modal
@@ -106,11 +117,13 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
-              width={400}>
+              width={400}
+            >
               <SignUpWithPhone
                 backLink=""
                 nextLink=""
-                onClickSignUp={(e) => setPage(e)}></SignUpWithPhone>
+                onClickSignUp={(e) => setPage(e)}
+              ></SignUpWithPhone>
             </Modal>
           ) : page === 7 ? (
             <Modal
@@ -120,7 +133,8 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               header={false}
               footer={false}
               width={400}
-              confirm={true}>
+              confirm={true}
+            >
               <SetPassword
                 backLink=""
                 nextLink=""
@@ -128,7 +142,8 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 submit="Đăng ký"
                 onClickSignUp={(e) => {
                   setPage(e);
-                }}></SetPassword>
+                }}
+              ></SetPassword>
             </Modal>
           ) : (
             <div></div>
