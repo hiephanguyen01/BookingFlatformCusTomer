@@ -236,7 +236,7 @@ const FilterPage = () => {
                 }}>
                 <div
                   style={{
-                    background: "#fff",
+                    background: "white",
                     width: "fit-content",
                     borderRadius: "50%",
                     padding: "10px",

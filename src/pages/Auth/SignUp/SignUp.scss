@@ -1,4 +1,17 @@
 @import "../../../App.scss";
+
+input[type="number"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.ant-btn {
+  border-radius: 10px !important;
+}
 .sign-up-button {
   border: none;
   background-color: #fff;
@@ -47,34 +60,15 @@
   position: absolute;
 }
 
-.divine-login {
-  height: 1px;
-  width: 100%;
-  background-color: $neutral-200;
-  margin-top: 50px;
-  margin-bottom: 41px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.divinve-login-content {
-  position: absolute;
-  background-color: #fff;
-  padding: 10px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: $neutral-500;
-}
-
 .phone-sign-up {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 40px;
   .phone-zone-sign-up {
     width: 100%;
-    border: 1px solid $neutral-300;
-    padding: 12px 25px;
+    border: 1px solid #d9d9d9;
+    padding: 6.5px 11px;
     display: flex;
     border-radius: 10px;
     margin-top: 15px;
@@ -95,13 +89,6 @@
     .input-phone {
       border: none;
       width: 100%;
-    }
-    .white-hide {
-      padding: 20px;
-      position: absolute;
-      right: 10px;
-      background-color: #fff;
-      top: 5px;
     }
     .d-none {
       display: none;
@@ -161,10 +148,9 @@
 @media only screen and (max-height: 800px) {
   .divine-login {
     margin-top: 30px;
-  margin-bottom: 30px;
+    margin-bottom: 30px;
   }
   .confirm-sign-up {
     margin-top: 70px;
-    
   }
 }
