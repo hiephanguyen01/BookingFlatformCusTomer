@@ -56,9 +56,8 @@ function App() {
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route path="studio/:id" element={<StudioDetail />} />
-
-          <Route path="user/:id/*" element={<UserAccount />}></Route>
-          <Route path="home/filter" element={<FilterPage />}></Route>
+          <Route path="user/:id/*" element={<UserAccount />}/>
+          <Route path="filter" element={<FilterPage />}></Route>
           {/* <Route path="dao" element={<Dao />} /> */}
           <Route
             path="photographer/:photographerId"
