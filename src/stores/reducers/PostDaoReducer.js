@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   listPost: [],
-  nextPage: true,
+  pagination: {},
   postDetail: {},
 };
 
@@ -17,7 +17,7 @@ export const postDaoReducer = (state = initialState, action) => {
     case GET_DETAIL_POST:
       return { ...state, postDetail: action.data };
     case GET_PAGINATE_POSIBILITY:
-      return { ...state, nextPage: action.data };
+      return { ...state, pagination: action.data };
     default:
       return state;
   }

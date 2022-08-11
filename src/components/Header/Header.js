@@ -1,32 +1,36 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./Header.scss";
-import logo from "../../assets/img/Logo1.png";
-import noBody from "../../assets/img/no-body.png";
-import FeedIcon from "../../assets/img/FeedIcon.png";
-import {
-  Avatar,
-  Button,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Dropdown,
-  Menu,
-} from "antd";
 import {
   DownOutlined,
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  Menu,
+  Modal,
+  Select,
+} from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import FeedIcon from "../../assets/img/FeedIcon.png";
+import logo from "../../assets/img/Logo1.png";
+import noBody from "../../assets/img/no-body.png";
+import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
+import { getFilterdStudioPost } from "../../stores/actions/studioPostAction";
+import { SET_FILTER } from "../../stores/types/studioPostType";
+import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import "./Header.scss";
 const { Option } = Select;
 const Header = () => {
+  const [provinces, setProvinces] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const filter = useSelector((state) => state.studioPostReducer.filter);
   const dispatch = useDispatch();
-  const [flag, setFlag] = useState(false);
   const categories = [
     {
       id: 1,
@@ -70,7 +74,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -108,7 +113,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -130,10 +136,24 @@ const Header = () => {
       setVisible(true);
     }
   });
+  useEffect(() => {
+    (async () => {
+      const res = await studioPostService.getAllProvince();
+      setProvinces(res.data);
+    })();
+  }, []);
+
   const onFinish = (values) => {
-    console.log("Success:", values);
-    navigate("/home/filter");
+    const newFilter = {
+      ...filter,
+      category: values.category,
+      provinceIds: [values.province],
+      keyString: values.keyString,
+    };
+    console.log(newFilter);
+    dispatch(getFilterdStudioPost(5, 1, newFilter));
     setVisible(false);
+    navigate("/home/filter");
   };
   const handleSignOut = () => {
     dispatch(logOut(navigate));
@@ -145,7 +165,8 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}>
+        footer={[]}
+      >
         <div className="logo">
           <img src={logo} alt="" />
         </div>
@@ -156,18 +177,21 @@ const Header = () => {
           <p className="filter">LỌC THEO</p>
           <div className="option d-flex justify-content-between">
             <Form.Item
-              name="location"
+              name="province"
               style={{ width: "100%", marginRight: "20px" }}>
+
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
-                <Option value="hcm">Hồ Chí Minh</Option>
-                <Option value="dn">Đà Nẵng</Option>
-                <Option value="hn">Hà Nội</Option>
+                {Boolean(provinces) &&
+                  provinces.map((val) => (
+                    <Option value={val.id}>{val.Name}</Option>
+                  ))}
               </Select>
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -194,7 +218,8 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}>
+              style={{ width: "50%" }}
+            >
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -209,22 +234,22 @@ const Header = () => {
           prefix={<SearchOutlined />}
           onClick={() => setVisible(true)}
         />
-        <div className="tip">
+        <div className="tip" onClick={() => navigate("/home/dao")}>
           <img src={FeedIcon} alt="" />
           <p>Dạo</p>
         </div>
-        <div className="tip">
+        <Link to={"cart"} className="tip">
           <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
-          <p>Giỏ hàng</p>
-        </div>
+          <p style={{ color: "#828282" }}>Giỏ hàng</p>
+        </Link>
         {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
-              <Avatar src={user.photoURL ? user.photoURL : noBody} />
+              <Avatar src={user.Image ? user.Image : noBody} />
               <div className="text">
                 <p>Tài khoản</p>
                 <p>
-                  {user.displayName ? user.displayName : user.phoneNumber}
+                  {user?.Fullname ? user.Fullname : user.Email}
                   <DownOutlined
                     style={{ fontSize: "10px", color: "#828282" }}
                   />
@@ -237,9 +262,9 @@ const Header = () => {
             <div className="user">
               <Avatar src={noBody} />
               <div className="text">
-                <p>Đăng ký/Đăng nhập</p>
+                {!user && <p>Đăng ký/Đăng nhập</p>}
                 <p>
-                  Tài khoản
+                  {user ? user.Fullname : "Tài khoản"}
                   <DownOutlined
                     style={{ fontSize: "10px", color: "#828282" }}
                   />

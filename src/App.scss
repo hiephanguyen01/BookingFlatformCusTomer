@@ -247,6 +247,6 @@ h5 {
   }
 
   .h-#{$i}px {
-    height: $i * 1px;
+    height: $i * 1px !important;
   }
 }

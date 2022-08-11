@@ -1,4 +1,16 @@
-import { Col, Divider, Form, Input, Radio, Row, Select, Slider } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Pagination,
+  Radio,
+  Row,
+  Select,
+  Slider,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
@@ -9,7 +21,10 @@ import "./FilterPage.scss";
 const { Option } = Select;
 const FilterPage = () => {
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
   const filter = useSelector((state) => state.studioPostReducer.filter);
+  const loading = useSelector((state) => state.studioPostReducer.loading);
+  const pagination = useSelector((state) => state.studioPostReducer.pagination);
   const [newFilter, setNewFilter] = useState(filter);
   const [provinces, setProvinces] = useState([]);
   const studioPostList = useSelector(
@@ -83,6 +98,22 @@ const FilterPage = () => {
       price2,
     });
   };
+  const onChangePage = (value) => {
+    console.log(value);
+    dispatch(getFilterdStudioPost(5, value, newFilter));
+  };
+  const handleClearFilter = () => {
+    setNewFilter({
+      keyString: "",
+      category: 1,
+      priceOption: 0,
+      price1: undefined,
+      price2: undefined,
+      provinceIds: [],
+      ratingOption: 1,
+    });
+    form.resetFields();
+  };
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
@@ -98,7 +129,7 @@ const FilterPage = () => {
       <div className="container">
         <Row>
           <Col span={6}>
-            <Form {...layout}>
+            <Form {...layout} onFinish={handleClearFilter} form={form}>
               {/* timefil */}
               <div className="box">
                 <p className="text">Khung giờ bạn muốn đặt</p>
@@ -107,7 +138,17 @@ const FilterPage = () => {
               </div>
               {/* filter */}
               <div className="box">
-                <p className="text">LỌC THEO</p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}>
+                  <p className="text">LỌC THEO</p>
+                  <Button htmlType="submit" type="primary">
+                    Xoá bộ lọc
+                  </Button>
+                </div>
 
                 <Divider />
                 <Form.Item label="Tên" name="keyString">
@@ -186,14 +227,47 @@ const FilterPage = () => {
             </Form>
           </Col>
           <Col span={18}>
-            {studioPostList.map((val) => (
-              <FilterCard
-                data={val}
-                category={
-                  categories.filter((val) => val.id === newFilter.category)[0]
-                }
+            {loading ? (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}>
+                <div
+                  style={{
+                    background: "white",
+                    width: "fit-content",
+                    borderRadius: "50%",
+                    padding: "10px",
+                    margin: "10px",
+                  }}>
+                  <LoadingOutlined style={{ fontSize: "40px" }} />
+                </div>
+              </div>
+            ) : (
+              studioPostList.map((val) => (
+                <FilterCard
+                  data={val}
+                  category={
+                    categories.filter((val) => val.id === newFilter.category)[0]
+                  }
+                />
+              ))
+            )}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "right",
+                padding: "10px 10px",
+              }}>
+              <Pagination
+                pageSize={pagination.limit}
+                defaultCurrent={1}
+                total={pagination.total}
+                onChange={onChangePage}
               />
-            ))}
+            </div>
           </Col>
         </Row>
       </div>

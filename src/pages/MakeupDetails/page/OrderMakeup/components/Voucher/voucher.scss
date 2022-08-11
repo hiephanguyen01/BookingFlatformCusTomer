@@ -1,0 +1,103 @@
+@import "../../../../../../App.scss";
+
+.voucher_container {
+    position: relative;
+    padding: 23px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .close_modal {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        background: $neutral-400;
+
+        top: 25px;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    .header_modal {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 27px;
+        color: $neutral-600;
+
+        margin-bottom: 23px;
+    }
+
+    .voucher_wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #B2B2B2;
+
+        &:last-child {
+            margin-bottom: 0px;
+            border-bottom: none;
+        }
+
+        .voucher_content {
+
+            .voucher_code {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 19px;
+                color: $neutral-500;
+
+                margin-bottom: 12px;
+            }
+
+            .voucher_desc {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 22px;
+                color: $neutral-700;
+
+                margin-bottom: 12px;
+            }
+
+            .voucher_date {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 19px;
+                color: $neutral-500;
+            }
+        }
+
+        .btn_apply {
+            padding: 8px 20px;
+            background: #1FCBA2;
+            color: #fff;
+            border-radius: 4px;
+
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            cursor: pointer;
+        }
+
+        .btn_applied {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            color: $neutral-400;
+
+            background: #E7E7E7;
+            border-radius: 4px;
+            padding: 8px 20px;
+            cursor: pointer;
+        }
+    }
+}
