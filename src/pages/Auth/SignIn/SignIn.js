@@ -79,7 +79,7 @@ export const SignIn = ({ onClickPop }) => {
         <Form.Item>
           <Button
             size="large"
-            style={{ width: "100%" }}
+            style={{ width: "100%", borderRadius: "10px" }}
             type="primary"
             htmlType="submit">
             Đăng nhập

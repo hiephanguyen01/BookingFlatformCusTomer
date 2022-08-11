@@ -67,25 +67,19 @@ export const SignUp = ({ onClickSignUp }) => {
           </div>
         </div>
       </div>
-      {phoneNum.length >= 9 && phoneNum.length <= 11 ? (
-        <>
-          <div id="sign-in-button"></div>
-          <Button
-            size="large"
-            type="primary"
-            loading={loading}
-            onClick={() => {
-              handleSendOtpp();
-              setLoading(true);
-            }}>
-            Đăng ký
-          </Button>
-        </>
-      ) : (
-        <Button size="large" disabled>
-          Đăng ký
-        </Button>
-      )}
+      <div id="sign-in-button"></div>
+      <Button
+        onClick={() => {
+          handleSendOtpp();
+          setLoading(true);
+        }}
+        size="large"
+        type="primary"
+        loading={loading}
+        disabled={phoneNum.length < 9 && phoneNum.length > 11}
+        style={{ borderRadius: "10px" }}>
+        Đăng ký
+      </Button>
       <div className="have-account">
         <span className="have-account-content">Bạn đã có tài khoản?</span>
         {onClickSignUp ? (

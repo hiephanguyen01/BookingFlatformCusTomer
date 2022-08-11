@@ -103,8 +103,7 @@ const DaoPost = (props) => {
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(item)}
-          >
+            onClick={() => handleImageModal(item)}>
             <img
               style={{
                 width: "100%",
@@ -132,8 +131,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(item)}
-              >
+                onClick={() => handleImageModal(item)}>
                 <img
                   style={{
                     width: "100%",
@@ -154,9 +152,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-
-                onClick={() => handleImageModal(item)}
-              >
+                onClick={() => handleImageModal(item)}>
                 <img
                   style={{
                     width: "100%",
@@ -206,8 +202,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item)}
-              >
+                onClick={() => handleImageModal(item)}>
                 <div className="image-container">
                   {idx === 8 && (
                     <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
@@ -264,8 +259,7 @@ const DaoPost = (props) => {
               }
               trigger="click"
               visible={moreOptionModal}
-              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}
-            >
+              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}>
               <MoreOutlined style={{ fontSize: "24px" }} />
             </Popover>
             <ReportPost
@@ -287,25 +281,19 @@ const DaoPost = (props) => {
             {/* //Post Image đang xử lý */}
             {ImageSection}
             <Modal
-              // width={"100vh"}
+              className="popup d-flex justify-content-center align-items-center post_detail"
               closeIcon={<CloseOutlined />}
               onOk={handleOkDetail}
               onCancel={handleCancelDetail}
               footer={[]}
               visible={isModalVisibleDetail}
-              className="d-flex justify-content-center align-items-center post_detail"
-              // style={{
-              //   top: "20%",
-              // }}
               bodyStyle={{
                 backgroundColor: "transparent",
-              }}
-            >
+              }}>
               <Row>
                 <Col
                   span={16}
-                  style={{ backgroundColor: "#1D2226", height: "100%" }}
-                >
+                  style={{ backgroundColor: "#1D2226", height: "100%" }}>
                   <Swiper
                     slidesPerView={1}
                     spaceBetween={30}
@@ -315,11 +303,9 @@ const DaoPost = (props) => {
                     // }}
                     navigation={true}
                     modules={[Pagination, Navigation]}
-                    className="mySwiper"
-                  >
+                    className="mySwiper">
                     <SwiperSlide
-                      style={{ background: "#1D2226", padding: "90px 0" }}
-                    >
+                      style={{ background: "#1D2226", padding: "90px 0" }}>
                       <img
                         src={imgSwiper1}
                         className="w-100 h-100"
@@ -327,8 +313,7 @@ const DaoPost = (props) => {
                       />
                     </SwiperSlide>
                     <SwiperSlide
-                      style={{ background: "#1D2226", padding: "90px 0" }}
-                    >
+                      style={{ background: "#1D2226", padding: "90px 0" }}>
                       <img
                         src={imgSwiper2}
                         className="w-100 h-100"
@@ -344,8 +329,7 @@ const DaoPost = (props) => {
                     overflowY: "scroll",
                     position: "relative",
                     height: "100vh",
-                  }}
-                >
+                  }}>
                   <header className="post__main__info d-flex justify-content-between align-items-center">
                     <div className="d-flex justify-content-between align-items-center">
                       <img src={Avatar} alt="" />
@@ -374,8 +358,7 @@ const DaoPost = (props) => {
                         visible={moreOptionModal}
                         onVisibleChange={(newVisible) =>
                           setMoreOptionModal(newVisible)
-                        }
-                      >
+                        }>
                         <MoreOutlined style={{ fontSize: "24px" }} />
                       </Popover>
                       <ReportPost
@@ -396,8 +379,7 @@ const DaoPost = (props) => {
                   </div>
                   <div
                     className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                    style={{ borderBottom: "1px solid #E7E7E7" }}
-                  >
+                    style={{ borderBottom: "1px solid #E7E7E7" }}>
                     <div className="post__main__content__like-comment__likes d-flex">
                       {mouseOverHeart || mouseClickHeart ? (
                         <HeartFilled
@@ -470,8 +452,7 @@ const DaoPost = (props) => {
                         // }}
                         navigation={true}
                         modules={[Navigation, Pagination]}
-                        className="post_slider"
-                      >
+                        className="post_slider">
                         <SwiperSlide className="post_slider_item">
                           <a href="#">
                             <div className="d-flex h-100">
@@ -536,8 +517,7 @@ const DaoPost = (props) => {
                     </div>
                     <div
                       className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                      style={{ borderBottom: "1px solid #E7E7E7" }}
-                    >
+                      style={{ borderBottom: "1px solid #E7E7E7" }}>
                       <div className="post__main__content__like-comment__likes d-flex">
                         {mouseOverHeart || mouseClickHeart ? (
                           <HeartFilled
@@ -587,8 +567,7 @@ const DaoPost = (props) => {
                         // }}
                         navigation={true}
                         modules={[Navigation, Pagination]}
-                        className="post_slider"
-                      >
+                        className="post_slider">
                         <SwiperSlide className="post_slider_item">
                           <a href="#">
                             <div className="d-flex h-100">
@@ -653,8 +632,7 @@ const DaoPost = (props) => {
                     </div>
                     <div
                       className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                      style={{ borderBottom: "1px solid #E7E7E7" }}
-                    >
+                      style={{ borderBottom: "1px solid #E7E7E7" }}>
                       <div className="post__main__content__like-comment__likes d-flex">
                         {mouseOverHeart || mouseClickHeart ? (
                           <HeartFilled
@@ -728,8 +706,7 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__middle" : "post__middle d-none"}
-      >
+        className={commentsClick ? "post__middle" : "post__middle d-none"}>
         <hr color="#E7E7E7" style={{ marginBottom: "20px" }} />
         <div className="d-flex">
           <img src={img1} alt="" />
@@ -747,8 +724,7 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__comments" : "post__comments d-none"}
-      >
+        className={commentsClick ? "post__comments" : "post__comments d-none"}>
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
         {/* {comments.map((item, idx) => (
           <div key={item.Id} className="post__comments__detail">
