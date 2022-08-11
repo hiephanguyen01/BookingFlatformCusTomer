@@ -1,4 +1,5 @@
 import { CheckOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -46,6 +47,7 @@ export const ForgotPassword = ({ onClickPop }) => {
         đến số điện thoại của quý khách hàng.
       </div>
       <div
+        style={{ marginBottom: "40px" }}
         className={
           phoneCheck.length >= 9 && phoneCheck.length <= 12
             ? "phone-zone-forgotpass"
@@ -61,16 +63,7 @@ export const ForgotPassword = ({ onClickPop }) => {
           onChange={(e) => setPhoneCheck(e.target.value)}
           type="number"
         />
-        <div className="white-background">
-          {phoneCheck.length >= 9 && phoneCheck.length <= 12 ? (
-            <>
-              <div id="sign-in-button"></div>
-              <CheckOutlined className="accepted" />
-            </>
-          ) : (
-            <div className="fake"></div>
-          )}
-        </div>
+        <div id="sign-in-button"></div>
         <div
           className={
             phoneCheck.length >= 9 && phoneCheck.length <= 12
@@ -81,15 +74,14 @@ export const ForgotPassword = ({ onClickPop }) => {
         </div>
       </div>
 
-      <button
-        className={
-          phoneCheck.length >= 9 && phoneCheck.length <= 12
-            ? "continue-pass"
-            : "stop-pass"
-        }
+      <Button
+        style={{ width: "100%" }}
+        size="large"
+        type="primary"
+        disabled={phoneCheck.length < 9 || phoneCheck.length > 12}
         onClick={() => handleSendSMS()}>
         Gửi qua SMS
-      </button>
+      </Button>
     </div>
   );
 };

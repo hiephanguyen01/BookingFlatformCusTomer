@@ -170,13 +170,14 @@ const FilterPage = () => {
                     onChange={onChangeFilterCategory}
                     value={newFilter.category}>
                     <Row>
-                      {categories.map((val) => (
-                        <Col span={24}>
-                          <Radio key={val.id} value={val.id}>
-                            {val.name}
-                          </Radio>
-                        </Col>
-                      ))}
+                      {categories &&
+                        categories.map((val) => (
+                          <Col span={24}>
+                            <Radio key={val.id} value={val.id}>
+                              {val.name}
+                            </Radio>
+                          </Col>
+                        ))}
                     </Row>
                   </Radio.Group>
                 </Form.Item>
@@ -246,7 +247,7 @@ const FilterPage = () => {
                 </div>
               </div>
             ) : (
-              studioPostList.map((val) => (
+              studioPostList?.map((val) => (
                 <FilterCard
                   data={val}
                   category={
