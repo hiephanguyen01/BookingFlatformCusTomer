@@ -1,5 +1,5 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Divider, Form, Input } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,12 +7,12 @@ import { LoginWithPhoneNumber } from "../../../stores/actions/autheticateAction"
 import { FacebookSignin } from "./FacebookSignIn/FacebookSignin";
 import { GoogleSignIn } from "./GoogleSignIn/GoogleSignIn";
 import "./SignIn.scss";
-export const SignIn = ({onClickPop }) => {
+export const SignIn = ({ onClickPop }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    if (user) {
+    if (user?.Email) {
       navigate("/home/dao");
     }
   }, [user]);
@@ -22,25 +22,26 @@ export const SignIn = ({onClickPop }) => {
   return (
     <div className="SignIn">
       <div style={{ marginBottom: "52px" }}>
-      {onClickPop ? (
-        <button className="sign-up-button" onClick={() => onClickPop(5)}>
-          Đăng ký
-        </button>
-      ) : (
-        <Link to="/auth/sign-up">
-          <button className="sign-up-button">Đăng ký</button>
-        </Link>
-      )}
+        {onClickPop ? (
+          <button className="sign-up-button" onClick={() => onClickPop(5)}>
+            Đăng ký
+          </button>
+        ) : (
+          <Link to="/auth/sign-up">
+            <button className="sign-up-button">Đăng ký</button>
+          </Link>
+        )}
         <button className="sign-in-button">Đăng nhập</button>
       </div>
       <div className="face-google-login">
         <GoogleSignIn />
         <FacebookSignin />
       </div>
-      <div className="divine-login">
-        <div className="divinve-login-content">hoặc</div>
-      </div>
+      <Divider />
       <Form onFinish={onFinish}>
+        <div style={{ paddingBottom: "15px" }}>
+          Đăng nhập bằng số điện thoại
+        </div>
         <Form.Item
           key={1}
           name="phoneNumber"
@@ -48,7 +49,7 @@ export const SignIn = ({onClickPop }) => {
           <Input
             size="large"
             className="input-phone"
-            placeholder="Tên đăng nhập/Số điện thoại"
+            placeholder="Số điện thoại"
           />
         </Form.Item>
         <Form.Item
@@ -65,15 +66,15 @@ export const SignIn = ({onClickPop }) => {
         </Form.Item>
 
         <div className="d-flex justify-content-end">
-        {onClickPop ? (
-          <button className="forgot-password" onClick={() => onClickPop(2)}>
-            Quên mật khẩu
-          </button>
-        ) : (
-          <Link to="/auth/sign-in/forgot-password">
-            <button className="forgot-password">Quên mật khẩu</button>
-          </Link>
-        )}
+          {onClickPop ? (
+            <button className="forgot-password" onClick={() => onClickPop(2)}>
+              Quên mật khẩu
+            </button>
+          ) : (
+            <Link to="/auth/sign-in/forgot-password">
+              <button className="forgot-password">Quên mật khẩu</button>
+            </Link>
+          )}
         </div>
         <Form.Item>
           <Button
@@ -93,8 +94,7 @@ export const SignIn = ({onClickPop }) => {
         {onClickPop ? (
           <span
             className="dont-have-account-button"
-            onClick={() => onClickPop(5)}
-          >
+            onClick={() => onClickPop(5)}>
             Đăng ký
           </span>
         ) : (
