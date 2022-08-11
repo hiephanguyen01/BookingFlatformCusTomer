@@ -21,19 +21,20 @@
 
   .body-login {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 80px);
     background-color: #fff;
     margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+
     .body-contain-login {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 90%;
-      width: 70%;
       max-height: 702px;
+      width: 70%;
       max-width: 1120px;
 
       .pic-login {
@@ -62,9 +63,11 @@
     .pic-login {
       display: none;
     }
-
+    
     .login-platform {
       width: 90%;
     }
   }
+  
 }
+
