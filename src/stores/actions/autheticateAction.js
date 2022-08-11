@@ -48,7 +48,7 @@ export const facebookSignIn = () => async (dispatch) => {
     });
     localStorage.setItem("token", resp.data.token);
     setAuthToken(resp.data.token);
-    dispatch({ type: SET_USER, payload: resp.data.user });
+    dispatch({ type: SET_USER, payload: resp.data.data });
   } catch (error) {
     openNotificationWithIcon("error", "Login fail", "please try again");
   }
