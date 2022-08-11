@@ -1,5 +1,11 @@
 @import "../../../App.scss";
 .SignIn {
+  .ant-input {
+    border-radius: 10px !important;
+  }
+  .ant-input-affix-wrapper {
+    border-radius: 10px !important;
+  }
   .sign-up-button {
     border: none;
     background-color: #fff;

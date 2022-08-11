@@ -1,5 +1,5 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Divider, Form, Input } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -37,10 +37,11 @@ export const SignIn = ({ onClickPop }) => {
         <GoogleSignIn />
         <FacebookSignin />
       </div>
-      <div className="divine-login">
-        <div className="divinve-login-content">hoặc</div>
-      </div>
+      <Divider />
       <Form onFinish={onFinish}>
+        <div style={{ paddingBottom: "15px" }}>
+          Đăng nhập bằng số điện thoại
+        </div>
         <Form.Item
           key={1}
           name="phoneNumber"
@@ -49,7 +50,7 @@ export const SignIn = ({ onClickPop }) => {
           <Input
             size="large"
             className="input-phone"
-            placeholder="Tên đăng nhập/Số điện thoại"
+            placeholder="Số điện thoại"
           />
         </Form.Item>
         <Form.Item
@@ -80,7 +81,7 @@ export const SignIn = ({ onClickPop }) => {
         <Form.Item>
           <Button
             size="large"
-            style={{ width: "100%" }}
+            style={{ width: "100%", borderRadius: "10px" }}
             type="primary"
             htmlType="submit"
           >
@@ -96,8 +97,7 @@ export const SignIn = ({ onClickPop }) => {
         {onClickPop ? (
           <span
             className="dont-have-account-button"
-            onClick={() => onClickPop(5)}
-          >
+            onClick={() => onClickPop(5)}>
             Đăng ký
           </span>
         ) : (
