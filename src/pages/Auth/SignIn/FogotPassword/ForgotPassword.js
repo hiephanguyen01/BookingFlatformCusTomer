@@ -75,7 +75,7 @@ export const ForgotPassword = ({ onClickPop }) => {
       </div>
 
       <Button
-        style={{ width: "100%" }}
+        style={{ width: "100%", borderRadius: "10px" }}
         size="large"
         type="primary"
         disabled={phoneCheck.length < 9 || phoneCheck.length > 12}

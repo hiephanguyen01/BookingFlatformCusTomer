@@ -72,9 +72,10 @@
   flex-direction: column;
   width: 100%;
   .phone-zone-sign-up {
+    margin-bottom: 40px;
     width: 100%;
-    border: 1px solid $neutral-300;
-    padding: 12px 25px;
+    border: 1px solid #d9d9d9;
+    padding: 6.5px 11px;
     display: flex;
     border-radius: 10px;
     margin-top: 15px;
@@ -161,10 +162,9 @@
 @media only screen and (max-height: 800px) {
   .divine-login {
     margin-top: 30px;
-  margin-bottom: 30px;
+    margin-bottom: 30px;
   }
   .confirm-sign-up {
     margin-top: 70px;
-    
   }
 }
