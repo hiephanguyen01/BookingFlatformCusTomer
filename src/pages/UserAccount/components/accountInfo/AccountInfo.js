@@ -1,46 +1,34 @@
-import { Col, Row, Upload, Button, Modal, Switch } from "antd";
-import ImgCrop from "antd-img-crop";
+import { Col, Row, Button, Modal, Switch } from "antd";
 import React, { useRef, useState } from "react";
-import TextInput from "../../../../components/TextInput/TextInput";
+
 import "./accountInfo.scss";
+
+import TextInput from "../../../../components/TextInput/TextInput";
+
 import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
 import imgFB from "../../../../assets/img/userAccount/facebook (4) 1facebook.png";
 import imgGG from "../../../../assets/img/userAccount/google 1google.png";
+import { UserOutlined } from "@ant-design/icons";
 
 const AccountInfo = () => {
   const [visible, setVisible] = useState(false);
 
-  const [fileList, setFileList] = useState([]);
+  const [file, setFile] = useState({});
 
-  const imgRef = useRef(null);
-
-  const onChangeFile = ({ fileList: newFileList }) => {
-    // console.log(newFileList);
-    setFileList(newFileList);
+  const onChangeFile = (e) => {
+    const newFile = e.target.files[0];
+    newFile.preview = URL.createObjectURL(newFile);
+    if (newFile.preview !== null) {
+      setFile({ ...newFile });
+    }
   };
 
   const onChangeCheck = (checked) => {
     console.log(`switch to ${checked}`);
   };
 
-  const onPreview = async (file) => {
-    setVisible(true);
-    let src = file.url;
+  const imgRef = useRef(null);
 
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-
-    imgRef.current.src = src;
-
-    // const imgWindow = window.open(src);
-    // imgWindow?.document.write(image.outerHTML);
-  };
   return (
     <>
       <h4 style={{ marginBottom: "8px", fontSize: "16px" }}>
@@ -55,32 +43,78 @@ const AccountInfo = () => {
           padding: "28px 37px",
         }}
       >
-        <Row
+        <div
           style={{
             paddingBottom: "1rem",
             marginBottom: "1.75rem",
             borderBottom: "1px solid #CACACA",
           }}
         >
-          <Col lg={12} sm={24}>
-            <TextInput label="Họ và tên" />
-            <TextInput label="Email" />
-          </Col>
-          <Col lg={12} sm={24}>
-            <ImgCrop rotate shape="round" style={{ borderRadius: "50%" }}>
-              <Upload
-                // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                onChange={onChangeFile}
-                onPreview={onPreview}
-              >
-                {fileList.length < 1 && "+ Upload"}
-              </Upload>
-            </ImgCrop>
-            <TextInput label="Số điện thoai" />
-          </Col>
-        </Row>
+          <Row className="f-flex align-items-center">
+            <Col lg={12} sm={24}>
+              <TextInput label="Họ và tên" />
+            </Col>
+            <Col lg={12} sm={24}>
+              <div className="d-flex align-items-center">
+                <div
+                  className="ms-40 d-flex justify-content-center align-items-center me-10"
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    borderRadius: "50%",
+                    background: "#E7E7E7",
+                    overflow: "hidden",
+                  }}
+                >
+                  {file ? (
+                    <img
+                      src={file.preview}
+                      className="w-100 h-100"
+                      style={{ objectFit: "cover" }}
+                    />
+                  ) : (
+                    <UserOutlined
+                      style={{ fontSize: "24px", color: "#828282" }}
+                    />
+                  )}
+                </div>
+                <div
+                  className="text-medium-re d-flex justify-content-center px-15 py-5"
+                  style={{
+                    cursor: "pointer",
+                    border: "1px solid #E7E7E7",
+                    borderRadius: "4px",
+                    position: "relative",
+                  }}
+                >
+                  Chọn ảnh
+                  <input
+                    type="file"
+                    multiple={false}
+                    value={""}
+                    className="w-100 h-100"
+                    style={{
+                      opacity: "0",
+                      top: "0",
+                      left: "0",
+                      // cursor: "pointer",
+                      position: "absolute",
+                    }}
+                    onChange={(e) => onChangeFile(e)}
+                  />
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row className="f-flex align-items-center">
+            <Col lg={12} sm={24}>
+              <TextInput label="Email" />
+            </Col>
+            <Col lg={12} sm={24}>
+              <TextInput label="Số điện thoai" />
+            </Col>
+          </Row>
+        </div>
         <Row
           style={{
             borderBottom: "1px solid #CACACA",
