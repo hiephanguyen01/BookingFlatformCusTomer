@@ -9,7 +9,7 @@ export const Reply = () => {
   const dispatch = useDispatch();
   return (
     <>
-    <div style={{width:"536px", textAlign:"left"}}>
+    <div style={{ textAlign:"left"}}>
       
         <h4 style={{ fontSize: "20px", fontWeight: "700" }}>
           Cảm ơn bạn đã báo cáo{" "}

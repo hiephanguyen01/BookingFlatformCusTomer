@@ -16,7 +16,7 @@ export const Report = () => {
   };
 
   return (
-    <div style={{width:"536px", textAlign:"left"}}>
+    <div style={{textAlign:"left"}}>
       <h4 style={{ fontSize: "20px", fontWeight: "700" }}>Lý do báo cáo </h4>
       <Radio.Group onChange={onChange} value={value}>
         <Space direction="vertical" style={{display:"flex", flexDirection:"column",alignItems:"flex-start"}}>

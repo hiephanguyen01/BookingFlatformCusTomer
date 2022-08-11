@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 export const Voucher = () => {
   const dispatch = useDispatch();
   return (
-    <div style={{ position: "relative", width: " 536px" }}>
+    <div style={{ position: "relative" }}>
       <h4 style={{ fontSize: "20px", fontWeight: "700", textAlign: "center" }}>
         Mã Khuyến Mãi
       </h4>
