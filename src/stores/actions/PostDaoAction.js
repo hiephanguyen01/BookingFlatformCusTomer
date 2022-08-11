@@ -16,7 +16,7 @@ export const getAllPostDaoAction = (currentListPost, limit, page) => {
       });
       dispatch({
         type: GET_PAGINATE_POSIBILITY,
-        data: data.pagination.hasNextPage,
+        data: data.pagination,
       });
     } catch (error) {
       console.error(error);
@@ -50,6 +50,20 @@ export const deletePostDaoAction = (id) => {
       dispatch({ type: GET_LIST_POST, data: data.data });
     } catch (error) {
       console.error(error);
+    }
+  };
+};
+
+export const likePost = (userId, postId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await postDaoService.createLike({
+        PostId: postId,
+        UserId: userId,
+      });
+      dispatch({ type: "GET_LIKE", data: data.data });
+    } catch (err) {
+      console.error(err);
     }
   };
 };

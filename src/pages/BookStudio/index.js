@@ -318,7 +318,7 @@ const Index = () => {
               type="primary"
               style={{ borderRadius: "8px", height: "45px", width: "270px" }}
             >
-              Lưu thay đổi
+              Hoàn tất đặt
             </Button>
           </div>
         </Col>

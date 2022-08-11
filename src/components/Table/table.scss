@@ -1,0 +1,41 @@
+@import "../../App.scss";
+
+.table {
+    .table-header {
+        background-color: $neutral-50;
+        padding: 14px 0px;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 22px;
+        color: #000000;
+    }
+
+    .table-header-col {
+        padding-left: 0.5rem;
+    }
+
+    .table-row {
+        display: flex;
+
+        .table-col-first {
+            padding: 32px 18px 32px 0;
+            border-bottom: 1px solid #B2B2B2;
+            border-right: 1px solid #B2B2B2;
+        }
+
+        .table-col-last {
+            padding: 32px 18px;
+            border-bottom: 1px solid #B2B2B2;
+        }
+
+        .table-col {
+            padding: 32px 18px;
+            border-bottom: 1px solid #B2B2B2;
+            border-right: 1px solid #B2B2B2;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            color: #222222;
+        }
+    }
+}

@@ -247,6 +247,16 @@ h5 {
   }
 
   .h-#{$i}px {
-    height: $i * 1px;
+    height: $i * 1px !important;
   }
+}
+
+// .ant-modal-wrap {
+//   // text-align: center !important;
+//   .ant-modal {
+//     width: auto !important;
+//   }
+// }
+.swiper-pagination.swiper-pagination-fraction.swiper-pagination-horizontal {
+  color: #fff !important;
 }

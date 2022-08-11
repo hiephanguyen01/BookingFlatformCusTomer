@@ -1,0 +1,271 @@
+@import "../../App.scss";
+
+.see-more {
+    height: 120px;
+    overflow: hidden;
+    position: relative;
+}
+
+.see-more::after {
+    position: absolute;
+    content: "Xem thêm";
+    width: 100%;
+    height: 80px;
+    top: 35%;
+    left: 0;
+    // background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(rgba(255, 255, 255, 0.7) 0%, #FFFFFF 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #03AC84;
+}
+
+.see-more.active {
+    overflow: visible;
+    height: auto;
+}
+
+.see-more.active::after {
+    display: none;
+}
+
+.costume_container {
+    max-width: 1300px;
+    margin: auto;
+
+    .wrapper_banner {
+        padding: 30px;
+        background-color: #ffffff;
+        width: 100%;
+        margin-bottom: 0.75rem;
+
+        .header {
+
+            &_title {
+                font-weight: 800;
+                font-size: 30px;
+                line-height: 41px;
+                color: #222222;
+
+                .icon_check_circle {
+                    height: 100%;
+                    color: green;
+                    margin-left: 0.25rem;
+
+                }
+            }
+
+            .icon_heart {
+                height: 100%;
+                font-size: 25px;
+                color: #E22828;
+                margin-right: 2rem;
+
+            }
+        }
+
+        .location {
+            margin-bottom: 15px;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 25px;
+            color: #828282;
+        }
+
+        .rating {
+            font-size: 15px;
+            padding-right: 10px;
+            border-right: 0.6px solid #B2B2B2;
+        }
+
+        .reserve {
+            margin-top: 3px;
+            font-weight: 400;
+            font-size: 16px;
+            margin-left: 10px;
+            line-height: 22px;
+        }
+    }
+
+    .wrapper_description {
+        width: 100%;
+
+        .desc_col_left {
+            padding: 24px 26px;
+            background-color: #ffffff;
+
+            .desc_col_left_title {
+                margin-bottom: 6px;
+                font-weight: 700;
+                font-size: 20px;
+                line-height: 27px;
+                color: #3F3F3F;
+            }
+        }
+
+        .desc_col_right {
+            padding: 24px 26px;
+            background-color: #ffffff;
+            height: 100%;
+
+            .avatar {
+                height: 60px;
+                width: 60px;
+                object-fit: cover;
+                border-radius: 50%;
+                margin-right: 15px;
+            }
+
+            .desc_col_right_title {
+                margin-bottom: 6px;
+                font-size: 20px;
+                font-weight: 700;
+
+                .icon_check_circle {
+                    color: #03AC84;
+                    font-size: 14px;
+                }
+            }
+
+            .btn_see {
+                width: 100%;
+                height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid $primary-700;
+                border-radius: 8px;
+                color: $primary-700;
+            }
+
+        }
+    }
+
+    .wrapper_list_costume {
+
+        .col_left {
+
+            .choose_size {
+                color: $secondary-800;
+
+
+            }
+
+            .table-header {
+                background-color: $neutral-50;
+                padding: 14px 0px;
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 22px;
+                color: #000000;
+            }
+
+            .table-header-col {
+                padding-left: 0.5rem;
+            }
+
+            .table-col-first {
+                padding: 32px 18px 32px 0;
+                border-bottom: 1px solid #B2B2B2;
+                border-right: 1px solid #B2B2B2;
+            }
+
+            .table-col-last {
+                padding: 32px 18px;
+                border-bottom: 1px solid #B2B2B2;
+            }
+
+            .table-col {
+                padding: 32px 18px;
+                border-bottom: 1px solid #B2B2B2;
+                border-right: 1px solid #B2B2B2;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 22px;
+                color: #222222;
+            }
+        }
+    }
+
+    .album_container {
+        background-color: #ffffff;
+        padding: 26px 24px;
+        margin-bottom: 12px;
+        // max-height: 680px;
+        // overflow: hidden;
+
+        // &::after {
+        //     content: "Xem thêm";
+        //     display: flex;
+        //     justify-content: center;
+        //     cursor: pointer;
+
+        //     font-weight: 500;
+        //     font-size: 16px;
+        //     line-height: 22px;
+        //     color: $secondary-800;
+        // }
+
+        h3 {
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 27px;
+            color: $neutral-600;
+        }
+
+        .btn_see_more {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 22px;
+            color: $secondary-800;
+
+            content: "Xem thêm";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+
+
+            .icon {
+                margin-left: 10px;
+            }
+
+            &.active {}
+        }
+    }
+}
+
+.dropdown {
+    border: 1px solid $neutral-400;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 16px;
+
+    line-height: 22px;
+    color: #222222;
+}
+
+.btn_add {
+    background-color: $neutral-100  !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    line-height: 19px !important;
+    color: #000000 !important;
+    text-transform: uppercase !important;
+}
+
+.btn_order {
+    background-color: $primary-700  !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    line-height: 19px !important;
+    color: #FFFFFF !important;
+    text-transform: uppercase !important;
+}

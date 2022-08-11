@@ -1,9 +1,35 @@
-import { Checkbox, Col, Divider, Form,  Radio, Row, Slider } from "antd";
-import React from "react";
+import { LoadingOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Pagination,
+  Radio,
+  Row,
+  Select,
+  Slider,
+} from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import { studioPostService } from "../../services/StudioPostService";
+import { getFilterdStudioPost } from "../../stores/actions/studioPostAction";
 import "./FilterPage.scss";
+const { Option } = Select;
 const FilterPage = () => {
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const filter = useSelector((state) => state.studioPostReducer.filter);
+  const loading = useSelector((state) => state.studioPostReducer.loading);
+  const pagination = useSelector((state) => state.studioPostReducer.pagination);
+  const [newFilter, setNewFilter] = useState(filter);
+  const [provinces, setProvinces] = useState([]);
+  const studioPostList = useSelector(
+    (state) => state.studioPostReducer.studioPostList
+  );
   const categories = [
     {
       id: 1,
@@ -40,12 +66,70 @@ const FilterPage = () => {
       label: <strong>5tr</strong>,
     },
   };
+  const onChangeFilterCategory = (e) => {
+    setNewFilter({
+      ...newFilter,
+      category: e.target.value,
+    });
+  };
+  const onChangeFilterProvince = (value) => {
+    setNewFilter({
+      ...newFilter,
+      provinceIds: [value],
+    });
+  };
+  const onChangeInput = (e) => {
+    setNewFilter({
+      ...newFilter,
+      keyString: e.target.value,
+    });
+  };
+  const onChangePriceOption = (e) => {
+    setNewFilter({
+      ...newFilter,
+      priceOption: e.target.value,
+    });
+  };
+  const onChangeSlideRange = (val) => {
+    const [price1, price2] = val;
+    setNewFilter({
+      ...newFilter,
+      price1,
+      price2,
+    });
+  };
+  const onChangePage = (value) => {
+    console.log(value);
+    dispatch(getFilterdStudioPost(5, value, newFilter));
+  };
+  const handleClearFilter = () => {
+    setNewFilter({
+      keyString: "",
+      category: 1,
+      priceOption: 0,
+      price1: undefined,
+      price2: undefined,
+      provinceIds: [],
+      ratingOption: 1,
+    });
+    form.resetFields();
+  };
+  useEffect(() => {
+    (async () => {
+      const res = await studioPostService.getAllProvince();
+      setProvinces(res.data);
+    })();
+    if (newFilter) {
+      dispatch(getFilterdStudioPost(5, 1, newFilter));
+    }
+  }, [dispatch, newFilter, filter]);
+
   return (
     <div className="FilterPage">
       <div className="container">
         <Row>
           <Col span={6}>
-            <Form {...layout}>
+            <Form {...layout} onFinish={handleClearFilter} form={form}>
               {/* timefil */}
               <div className="box">
                 <p className="text">Khung giờ bạn muốn đặt</p>
@@ -54,64 +138,62 @@ const FilterPage = () => {
               </div>
               {/* filter */}
               <div className="box">
-                <p className="text">LỌC THEO</p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}>
+                  <p className="text">LỌC THEO</p>
+                  <Button htmlType="submit" type="primary">
+                    Xoá bộ lọc
+                  </Button>
+                </div>
 
                 <Divider />
-                <p className="text">Địa điểm</p>
-                <Form.Item name="location">
-                  <Checkbox.Group>
-                    <Row>
-                      <Col span={24}>
-                        <Checkbox value="A2">AAAAAA</Checkbox>
-                      </Col>
-                      <Col span={24}>
-                        <Checkbox value="B2">BBBBBB</Checkbox>
-                      </Col>
-                      <Col span={24}>
-                        <Checkbox value="C2">CCCCCC</Checkbox>
-                      </Col>
-                      <Col span={24}>
-                        <Checkbox value="D2">DDDDDD</Checkbox>
-                      </Col>
-                      <Col span={24}>
-                        <Checkbox value="E2">EEEEEE</Checkbox>
-                      </Col>
-                    </Row>
-                  </Checkbox.Group>
+                <Form.Item label="Tên" name="keyString">
+                  <Input onChange={onChangeInput} />
+                </Form.Item>
+
+                <Form.Item label="Địa điểm" name="location">
+                  <Select onChange={onChangeFilterProvince}>
+                    {provinces &&
+                      provinces.map((val) => (
+                        <Option value={val.id}>{val.Name}</Option>
+                      ))}
+                  </Select>
                 </Form.Item>
 
                 <Divider />
-                <p className="text">Danh mục</p>
-                <Form.Item name="category">
-                  <Checkbox.Group>
+                <Form.Item label="Danh mục" name="category">
+                  <Radio.Group
+                    onChange={onChangeFilterCategory}
+                    value={newFilter.category}>
                     <Row>
                       {categories.map((val) => (
                         <Col span={24}>
-                          <Checkbox key={val.id} value={val.id}>
+                          <Radio key={val.id} value={val.id}>
                             {val.name}
-                          </Checkbox>
+                          </Radio>
                         </Col>
                       ))}
                     </Row>
-                  </Checkbox.Group>
+                  </Radio.Group>
                 </Form.Item>
 
                 <Divider />
-                <p className="text">Giá</p>
-                <Form.Item name="price">
-                  <Radio.Group>
+                <Form.Item label="Giá" name="price">
+                  <Radio.Group onChange={onChangePriceOption}>
                     <Row>
                       <Col span={24}>
-                        <Radio value="A">Giá cao nhất</Radio>
+                        <Radio value={1}>Giá cao nhất</Radio>
                       </Col>
                       <Col span={24}>
-                        <Radio value="B">Giá thấp nhất </Radio>
-                      </Col>
-                      <Col span={24}>
-                        <Radio value="C">Giảm giá nhiều nhất</Radio>
+                        <Radio value={2}>Giá thấp nhất </Radio>
                       </Col>
                       <Col span={24}>
                         <Slider
+                          onAfterChange={onChangeSlideRange}
                           min={0}
                           max={5000000}
                           step={100000}
@@ -145,13 +227,47 @@ const FilterPage = () => {
             </Form>
           </Col>
           <Col span={18}>
-            <FilterCard />
-            <FilterCard />
-            <FilterCard />
-            <FilterCard />
-            <FilterCard />
-            <FilterCard />
-            <FilterCard />
+            {loading ? (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}>
+                <div
+                  style={{
+                    background: "#fff",
+                    width: "fit-content",
+                    borderRadius: "50%",
+                    padding: "10px",
+                    margin: "10px",
+                  }}>
+                  <LoadingOutlined style={{ fontSize: "40px" }} />
+                </div>
+              </div>
+            ) : (
+              studioPostList.map((val) => (
+                <FilterCard
+                  data={val}
+                  category={
+                    categories.filter((val) => val.id === newFilter.category)[0]
+                  }
+                />
+              ))
+            )}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "right",
+                padding: "10px 10px",
+              }}>
+              <Pagination
+                pageSize={pagination.limit}
+                defaultCurrent={1}
+                total={pagination.total}
+                onChange={onChangePage}
+              />
+            </div>
           </Col>
         </Row>
       </div>

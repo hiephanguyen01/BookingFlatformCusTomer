@@ -1,30 +1,36 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./Header.scss";
-import logo from "../../assets/img/Logo1.png";
-import noBody from "../../assets/img/no-body.png";
-import FeedIcon from "../../assets/img/FeedIcon.png";
-import { UserAuth } from "../../pages/Auth/AuthContext/AuthContext";
-import {
-  Avatar,
-  Button,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Dropdown,
-  Menu,
-} from "antd";
 import {
   DownOutlined,
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  Menu,
+  Modal,
+  Select,
+} from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import FeedIcon from "../../assets/img/FeedIcon.png";
+import logo from "../../assets/img/Logo1.png";
+import noBody from "../../assets/img/no-body.png";
+import { studioPostService } from "../../services/StudioPostService";
+import { logOut } from "../../stores/actions/autheticateAction";
+import { getFilterdStudioPost } from "../../stores/actions/studioPostAction";
+import { SET_FILTER } from "../../stores/types/studioPostType";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import "./Header.scss";
 const { Option } = Select;
 const Header = () => {
-  const { user, logOut } = UserAuth();
-  const [flag,setFlag] = useState(false)
+  const [provinces, setProvinces] = useState([]);
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const filter = useSelector((state) => state.studioPostReducer.filter);
+  const dispatch = useDispatch();
   const categories = [
     {
       id: 1,
@@ -130,24 +136,28 @@ const Header = () => {
       setVisible(true);
     }
   });
-  const onFinish = (values) => {
-    console.log("Success:", values);
-    navigate("/home/filter");
-    setVisible(false);
-  };
-  const handleSignOut = async () => {
-    try {
-      await logOut();
-      setFlag(true)
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
-    if (flag) {
-      navigate("/auth/sign-in");
-    }
-  }, [user]);
+    (async () => {
+      const res = await studioPostService.getAllProvince();
+      setProvinces(res.data);
+    })();
+  }, []);
+
+  const onFinish = (values) => {
+    const newFilter = {
+      ...filter,
+      category: values.category,
+      provinceIds: [values.province],
+      keyString: values.keyString,
+    };
+    console.log(newFilter);
+    dispatch(getFilterdStudioPost(5, 1, newFilter));
+    setVisible(false);
+    navigate("/home/filter");
+  };
+  const handleSignOut = () => {
+    dispatch(logOut(navigate));
+  };
   return (
     <div className="Header">
       <Modal
@@ -157,7 +167,7 @@ const Header = () => {
         visible={visible}
         footer={[]}
       >
-        <div className="logo">
+        <div  className="logo">
           <img src={logo} alt="" />
         </div>
         <Form onFinish={onFinish}>
@@ -167,14 +177,15 @@ const Header = () => {
           <p className="filter">LỌC THEO</p>
           <div className="option d-flex justify-content-between">
             <Form.Item
-              name="location"
+              name="province"
               style={{ width: "100%", marginRight: "20px" }}
             >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
-                <Option value="hcm">Hồ Chí Minh</Option>
-                <Option value="dn">Đà Nẵng</Option>
-                <Option value="hn">Hà Nội</Option>
+                {Boolean(provinces) &&
+                  provinces.map((val) => (
+                    <Option value={val.id}>{val.Name}</Option>
+                  ))}
               </Select>
             </Form.Item>
             <Form.Item
@@ -220,26 +231,25 @@ const Header = () => {
         </div>
         <Input
           placeholder="Bạn đang tìm gì?"
-          enterButton
           prefix={<SearchOutlined />}
           onClick={() => setVisible(true)}
         />
-        <div className="tip">
+        <div className="tip" onClick={() => navigate("/home/dao")}>
           <img src={FeedIcon} alt="" />
           <p>Dạo</p>
         </div>
-        <div className="tip">
+        <Link to={"cart"} className="tip">
           <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
-          <p>Giỏ hàng</p>
-        </div>
+          <p style={{ color: "#828282" }}>Giỏ hàng</p>
+        </Link>
         {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
-              <Avatar src={user.photoURL?user.photoURL:noBody} />
+              <Avatar src={user.Image ? user.Image : noBody} />
               <div className="text">
                 <p>Tài khoản</p>
                 <p>
-                  {user.displayName?user.displayName:user.phoneNumber}
+                  {user?.Fullname ? user.Fullname : user.Email}
                   <DownOutlined
                     style={{ fontSize: "10px", color: "#828282" }}
                   />
@@ -252,9 +262,9 @@ const Header = () => {
             <div className="user">
               <Avatar src={noBody} />
               <div className="text">
-                <p>Đăng ký/Đăng nhập</p>
+                {!user && <p>Đăng ký/Đăng nhập</p>}
                 <p>
-                  Tài khoản
+                  {user ? user.Fullname : "Tài khoản"}
                   <DownOutlined
                     style={{ fontSize: "10px", color: "#828282" }}
                   />

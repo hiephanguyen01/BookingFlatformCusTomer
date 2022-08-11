@@ -14,7 +14,7 @@ const ReadMore = ({ children }) => {
 
   return (
     <div className={cx("text")}>
-      <p> {isReadMore ? text.slice(0, 530) : text}</p>
+      <p> {isReadMore ? text?.slice(0, 530) : text}</p>
       {isReadMore && <div className={cx("bg")}></div>}
       <div onClick={toggleReadMore} className={cx("read-or-hide")}>
         {isReadMore ? (
@@ -65,24 +65,10 @@ const ReadMore = ({ children }) => {
   );
 };
 
-const Content = () => {
+const Content = ({ data }) => {
   return (
     <div className={cx("container")}>
-      <ReadMore>
-        GeeksforGeeks: A Computer Science portal for geeks. It contains well
-        written, well thought and well explained computer science, programming
-        articles and quizzes. It provides a variety of services for you to
-        learn, so thrive and also have fun! Free Tutorials, Millions of
-        Articles, Live, Online and Classroom Courses ,Frequent Coding
-        Competitions, Webinars by Industry Experts, Internship opportunities,
-        and Job Opportunities. Knowledge is power! GeeksforGeeks: A Computer
-        Science portal for geeks. It contains well written, well thought and
-        well explained computer science, programming articles and quizzes. It
-        provides a variety of services for you to learn, so thrive and also have
-        fun! Free Tutorials, Millions of Articles, Live, Online and Classroom
-        Courses ,Frequent Coding Competitions, Webinars by Industry Experts,
-        Internship opportunities, and Job Opportunities. Knowledge is power!
-      </ReadMore>
+      {data?.length > 500 ? <ReadMore>{data}</ReadMore> : data}
     </div>
   );
 };
