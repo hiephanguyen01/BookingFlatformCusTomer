@@ -59,7 +59,7 @@ const messageList1 = [
     createdAt: "2022-07-21T09:35:31.820Z",
   },
   {
-    id: 7,
+    id: 7,    
     Content: "Hello moi nguoi",
     Chatting: {
       id: 15,
