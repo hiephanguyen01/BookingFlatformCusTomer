@@ -9,12 +9,12 @@ import { CustomerLayout } from "./pages/CustomerLayout";
 import { Home } from "./pages/Home";
 import { BackTop } from "antd";
 import { ArrowUpOutlined } from "@ant-design/icons";
-import {  ModalCustom } from "./components/Modal";
+import { ModalCustom } from "./components/Modal";
 
 import { AuthContextProvider } from "./pages/Auth/AuthContext/AuthContext";
 
 function App() {
-const style = {
+  const style = {
     height: 40,
     width: 40,
     lineHeight: "40px",
@@ -36,6 +36,7 @@ const style = {
           <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
           <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
           <Route path="home" element={<CustomerLayout />}>
+            <Route index element={<Home />} />
             <Route path="user/:id/*" element={<UserAccount />}></Route>
             <Route path="filter" element={<FilterPage />}></Route>
             <Route path="dao" element={<Dao />} />

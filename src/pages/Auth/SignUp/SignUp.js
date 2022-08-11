@@ -19,11 +19,11 @@ export const SignUp = () => {
       .signInWithPhoneNumber(phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
-       /*  console.log("OTP has been sent"); */
+        /*  console.log("OTP has been sent"); */
         navigate("/auth/sign-up/phone");
       })
       .catch((error) => {
-       /*  console.log("SMS not sent"); */
+        /*  console.log("SMS not sent"); */
       });
   };
   const configureCaptcha = () => {
@@ -33,7 +33,7 @@ export const SignUp = () => {
         size: "invisible",
         callback: (response) => {
           handleSendOtp();
-        /*   console.log("Recaptca varified"); */
+          /*   console.log("Recaptca varified"); */
         },
         defaultCountry: "VN",
       }
