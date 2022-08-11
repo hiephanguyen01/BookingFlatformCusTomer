@@ -3,6 +3,7 @@ import {
   SET_FILTER,
   SET_POST_PAGINATION,
   LOADING,
+  SET_STUDIO_DETAIL,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
     page: 1,
     limit: 10,
   },
+  studioDetail:[]
 };
 
 export const studioPostReducer = (state = initialState, action) => {
@@ -44,6 +46,11 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         pagination: action.payload,
+      };
+    case SET_STUDIO_DETAIL:
+      return {
+        ...state,
+        studioDetail: action.payload,
       };
 
     default:

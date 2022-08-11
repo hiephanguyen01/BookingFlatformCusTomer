@@ -1,6 +1,6 @@
+import React, { useRef, useEffect, useState } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
-import { BackTop } from "antd";
-import { useEffect } from "react";
+import { BackTop, Modal } from "antd";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
@@ -16,13 +16,17 @@ import UserAccount from "./pages/UserAccount";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
 import Cart from "./pages/Cart";
 import { Home } from "./pages/Home";
+
 import PageCostume from "./pages/CostumeDetails/PageCostume";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
 import PageModel from "./pages/ModelDetails/PageModel";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
+import { ModalImage } from "./pages/StudioDetail/ModalImg";
+import { StudioDetail } from "./pages/StudioDetail";
 
 function App() {
   const dispatch = useDispatch();
+
   const style = {
     height: 40,
     width: 40,
@@ -44,10 +48,15 @@ function App() {
       <BackTop>
         <ArrowUpOutlined style={style} />
       </BackTop>
+
       <Routes>
         <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
-        <Route path="home" element={<CustomerLayout />}>
+
+        <Route element={<CustomerLayout />}>
+          {/* <Route path="/" element={<Home />}></Route> */}
+          {/* <Route path="studio/:id" element={<StudioDetail />} /> */}
+
           <Route path="user/:id/*" element={<UserAccount />}></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           {/* <Route path="dao" element={<Dao />} /> */}

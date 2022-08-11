@@ -12,6 +12,9 @@ class StudioPostService extends BaseService {
       `/api/studio-post?page=${page}&limit=${limit}&category=${category}`
     );
   };
+  getDetailStudio = (id) => {
+    return this.get(`/api/studio-post/byid?id=${id}&category=1`);
+  };
 }
 
 export const studioPostService = new StudioPostService();

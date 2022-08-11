@@ -8,12 +8,13 @@ export const CustomerLayout = () => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    if (window.location.href.split("/")[4].includes("dao")) {
+    if (window.location.href.split("/")[4]?.includes("dao")) {
       setVisible(false);
     } else {
       setVisible(true);
     }
   }, []);
+  console.log(window.location.href.split("/")[4]);
   return (
     <div style={{ position: "relative" }} className="scroll-hide">
       <Chat />
