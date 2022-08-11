@@ -1,8 +1,13 @@
-import { CheckOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseCircleOutlined,
+  PictureOutlined,
+} from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
+import UploadImage from "../../components/UploadImage";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
 import { Button, Modal, Upload, message, Input } from "antd";
 import uploadImg from "../../assets/dao/uploadImg.png";
@@ -35,30 +40,30 @@ const Dao = (props) => {
   const [loadMore, setLoadMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [page, setPage] = useState(1);
+  const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { listPost, nextPage } = useSelector((state) => state.postDaoReducer);
 
   // create post: start
   const [visible, setVisible] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([]);
   const handleCancel = () => setPreviewVisible(false);
 
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  const onChangeFile = (e) => {
+    const newFiles = [...files];
+    const fileList = e.target.files;
+    for (let file of fileList) {
+      file.preview = URL.createObjectURL(file);
+      newFiles.push({ ...file });
     }
-
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
+    setFiles([...newFiles]);
   };
 
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const handleRemoveImage = (index) => {
+    const newFiles = [...files];
+    newFiles.splice(index, 1);
+    setFiles([...newFiles]);
+  };
 
   const uploadButton = (
     <div>
@@ -214,8 +219,40 @@ const Dao = (props) => {
         >
           Tải hình ảnh
         </div>
-        <div className="mb-15">
-          <Upload
+        <div
+          className="mb-15 d-flex "
+          style={{ gap: "10px", flexWrap: "wrap" }}
+        >
+          {files &&
+            files.map((item, index) => (
+              <div style={{ position: "relative" }}>
+                <img
+                  src={item.preview}
+                  className="w-76px h-76px"
+                  style={{
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
+                />
+                <CloseCircleOutlined
+                  className="btn_close"
+                  onClick={() => handleRemoveImage(index)}
+                />
+              </div>
+            ))}
+          <UploadImage
+            onChangeFile={onChangeFile}
+            style={{
+              width: "76px",
+              height: "76px",
+              border: "0.6px dashed #1FCBA2",
+              borderRadius: "10px",
+            }}
+            multiple={false}
+          >
+            <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
+          </UploadImage>
+          {/* <Upload
             // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             listType="picture-card"
             fileList={fileList}
@@ -237,7 +274,7 @@ const Dao = (props) => {
               }}
               src={previewImage}
             />
-          </Modal>
+          </Modal> */}
         </div>
         <div className="text-medium-re mb-16" style={{ color: "#222222" }}>
           Chọn danh mục liên quan

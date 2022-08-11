@@ -34,7 +34,6 @@ const Index = () => {
     <div
       className=""
       style={{
-        maxWidth: "1440px",
         margin: "auto",
         backgroundColor: "rgb(245, 245, 245)",
         padding: "2rem 0",
