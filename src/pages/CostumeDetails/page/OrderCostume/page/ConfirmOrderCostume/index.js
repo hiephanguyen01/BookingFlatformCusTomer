@@ -17,7 +17,7 @@ const Index = () => {
   return (
     <div
       className="py-12"
-      style={{ maxWidth: "1440px", margin: "auto", backgroundColor: "#f2f4f5" }}
+      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
     >
       <div className="confirm_order_container">
         <div className="border_bottom">

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./home.module.scss";
 import images from "../../assets/images";
@@ -10,31 +11,43 @@ const cx = classNames.bind(styles);
 export const Home = () => {
   return (
     <>
+      
+    
       <div className={cx("home")}>
         <div className={cx("filter")}>
           <div className={cx("box")}>
-            <img src={images.studio1} alt="a" />
-            <span>Studio</span>
+            <Link to="#">
+              <img src={images.studio1} alt="a" />
+              <span>Studio</span>
+            </Link>
           </div>
           <div className={cx("box")}>
             <img src={images.cameraman} alt="a" />
             <span>Nhiếp ảnh</span>
           </div>
           <div className={cx("box")}>
-            <img src={images.camera} alt="a" />
-            <span>Thiết bị</span>
+            <Link to="/home/deviceDetails">
+              <img src={images.camera} alt="a" />
+              <span>Thiết bị</span>
+            </Link>
           </div>
           <div className={cx("box")}>
-            <img src={images.clothes} alt="a" />
-            <span>Trang phục</span>
+            <Link to="/home/costumeDetails">
+              <img src={images.clothes} alt="a" />
+              <span>Trang phục</span>
+            </Link>
           </div>
           <div className={cx("box")}>
-            <img src={images.makeup} alt="a" />
-            <span>Make up</span>
+            <Link to="/home/makeupDetails">
+              <img src={images.makeup} alt="a" />
+              <span>Make up</span>
+            </Link>
           </div>
           <div className={cx("box")}>
-            <img src={images.model} alt="a" />
-            <span>Người mẫu</span>
+            <Link to="/home/modelDetails">
+              <img src={images.model} alt="a" />
+              <span>Người mẫu</span>
+            </Link>
           </div>
         </div>
         <div className={cx("banner")}>
@@ -90,7 +103,6 @@ export const Home = () => {
         <ListItem title="Được đặt nhiều nhất" />
         <ListItem title="Đã xem gần đây" />
       </div>
-      <StudioDetail />
     </>
   );
 };

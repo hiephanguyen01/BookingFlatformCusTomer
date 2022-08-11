@@ -1,43 +1,45 @@
+import { CheckOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./ForgotPassword.scss";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import back from "../../../../assets/imgAuth/back-arrow.png";
 import vietnam from "../../../../assets/imgAuth/vietnam.png";
 import { handleSendOtp } from "../../../../stores/actions/autheticateAction";
-import { CheckOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import firebase from "../../FireBaseSetUp/Firebase";
-import { useDispatch } from "react-redux";
+import "./ForgotPassword.scss";
 export const ForgotPassword = ({ onClickPop }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [phoneCheck, setPhoneCheck] = useState("");
   const handleSendSMS = () => {
     if (phoneCheck.length >= 9 && phoneCheck.length <= 12) {
-      {
-        onClickPop === undefined
-          ? navigate("/auth/sign-in/forgot-password/phone")
-          : onClickPop(3);
-      }
-      handleSendOtp(phoneCheck)
+      dispatch(
+        handleSendOtp(
+          phoneCheck,
+          navigate,
+          "/auth/sign-in/forgot-password/phone",
+          onClickPop,
+          3
+        )
+      );
     }
   };
   return (
     <div className="ForgotPass">
       <div className="header">
-      {onClickPop ? (
-        <button
-          className="back-button-forgot-pass"
-          onClick={() => onClickPop(1)}
-        >
-          <img alt="back" src={back} style={{ height: "16px" }} />
-        </button>
-      ) : (
-        <Link to="/auth/sign-in">
-          <button className="back-button-forgot-pass">
+        {onClickPop ? (
+          <button
+            className="back-button-forgot-pass"
+            onClick={() => onClickPop(1)}>
             <img alt="back" src={back} style={{ height: "16px" }} />
           </button>
-        </Link>
-      )}
+        ) : (
+          <Link to="/auth/sign-in">
+            <button className="back-button-forgot-pass">
+              <img alt="back" src={back} style={{ height: "16px" }} />
+            </button>
+          </Link>
+        )}
         <span>Xác minh số điện thoại</span>
       </div>
       <div className="noti-forgot-pass">
@@ -45,6 +47,7 @@ export const ForgotPassword = ({ onClickPop }) => {
         đến số điện thoại của quý khách hàng.
       </div>
       <div
+        style={{ marginBottom: "40px" }}
         className={
           phoneCheck.length >= 9 && phoneCheck.length <= 12
             ? "phone-zone-forgotpass"
@@ -60,13 +63,7 @@ export const ForgotPassword = ({ onClickPop }) => {
           onChange={(e) => setPhoneCheck(e.target.value)}
           type="number"
         />
-        <div className="white-background">
-          {phoneCheck.length >= 9 && phoneCheck.length <= 12 ? (
-            <CheckOutlined className="accepted" />
-          ) : (
-            <div className="fake"></div>
-          )}
-        </div>
+        <div id="sign-in-button"></div>
         <div
           className={
             phoneCheck.length >= 9 && phoneCheck.length <= 12
@@ -77,17 +74,14 @@ export const ForgotPassword = ({ onClickPop }) => {
         </div>
       </div>
 
-     
-          <button
-            className={
-              phoneCheck.length >= 9 && phoneCheck.length <= 12
-                ? "continue-pass"
-                : "stop-pass"
-            }
-            onClick={() => handleSendSMS()}>
-            Gửi qua SMS
-          </button>
-     
+      <Button
+        style={{ width: "100%", borderRadius: "10px" }}
+        size="large"
+        type="primary"
+        disabled={phoneCheck.length < 9 || phoneCheck.length > 12}
+        onClick={() => handleSendSMS()}>
+        Gửi qua SMS
+      </Button>
     </div>
   );
 };

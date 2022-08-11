@@ -80,11 +80,12 @@
 #infinity-list-post-dao {
   min-height: 100vh;
 }
+
 .ant-modal-title {
   font-weight: 700 !important;
   font-size: 20px !important;
   line-height: 27px !important;
-  color: $neutral-600 !important;
+  color: $neutral-600  !important;
 }
 
 .text-area.ant-input {
@@ -94,14 +95,20 @@
   line-height: 22px;
   color: $neutral-500;
 }
+
 .modalDao {
+
   .ant-modal-header,
   .ant-modal-footer {
     border: none !important;
   }
+<<<<<<< HEAD
   .ant-modal-footer {
     display: none;
   }
+=======
+
+>>>>>>> ed3bd9268a6596590460a5156d06f44346074bd4
   .ant-modal-body {
     padding-top: 0 !important;
     // padding-bottom: 10px !important;
@@ -151,7 +158,7 @@
 
 .btn-huy {
   padding: 15px 31px !important;
-  background: $neutral-100 !important;
+  background: $neutral-100  !important;
 }
 
 .btn-dang {
@@ -177,5 +184,16 @@
         display: none;
       }
     }
+  }
+}
+
+.btn_close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.5;
   }
 }

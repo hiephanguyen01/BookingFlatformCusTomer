@@ -2,7 +2,14 @@ import { useRef } from "react";
 
 import "./uploadImage.scss";
 
-const DropFileInput = ({ onChangeFile, children, image, multiple }) => {
+const DropFileInput = ({
+  onChangeFile,
+  children,
+  image,
+  multiple,
+  className,
+  style = {},
+}) => {
   const wrapperRef = useRef(null);
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
   const onDragLeave = () => wrapperRef.current.classList.remove("dragover");
@@ -15,6 +22,7 @@ const DropFileInput = ({ onChangeFile, children, image, multiple }) => {
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
+      style={{ ...style }}
     >
       {/* <i className='fa-solid fa-cloud-arrow-up mb-3 text-primary' style={{fontSize: '100px'}}></i> */}
       {image ? (

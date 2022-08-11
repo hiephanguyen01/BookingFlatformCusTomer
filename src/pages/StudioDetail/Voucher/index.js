@@ -22,7 +22,9 @@ export const Voucher = () => {
       </div>
       <div className={cx("list-voucher")}>
         <div className={cx("voucher")}>
-          <p style={{ color: "#616161", fontSize: "14px" }}>WISTERIA2205</p>
+          <p style={{ color: "#616161", fontSize: "14px", textAlign: "left" }}>
+            WISTERIA2205
+          </p>
           <div className={cx("content")}>
             <div className={cx("left")}>
               <h5>Giảm 200K cho đơn 2.500K </h5>
@@ -32,7 +34,9 @@ export const Voucher = () => {
           </div>
         </div>
         <div className={cx("voucher")}>
-          <p style={{ color: "#616161", fontSize: "14px" }}>WISTERIA2205</p>
+          <p style={{ color: "#616161", fontSize: "14px", textAlign: "left" }}>
+            WISTERIA2205
+          </p>
           <div className={cx("content")}>
             <div className={cx("left")}>
               <h5>Giảm 200K cho đơn 2.500K </h5>
@@ -42,7 +46,9 @@ export const Voucher = () => {
           </div>
         </div>
         <div className={cx("voucher")}>
-          <p style={{ color: "#616161", fontSize: "14px" }}>WISTERIA2205</p>
+          <p style={{ color: "#616161", fontSize: "14px", textAlign: "left" }}>
+            WISTERIA2205
+          </p>
           <div className={cx("content")}>
             <div className={cx("left")}>
               <h5>Giảm 200K cho đơn 2.500K </h5>
@@ -52,13 +58,15 @@ export const Voucher = () => {
           </div>
         </div>
         <div className={cx("voucher")}>
-          <p style={{ color: "#616161", fontSize: "14px" }}>WISTERIA2205</p>
+          <p style={{ color: "#616161", fontSize: "14px", textAlign: "left" }}>
+            WISTERIA2205
+          </p>
           <div className={cx("content")}>
             <div className={cx("left")}>
               <h5>Giảm 200K cho đơn 2.500K </h5>
               <p>HSD: 20/09/2021</p>
             </div>
-            <button>Lưu</button>
+            <button className={cx("disable")}>Đã lưu</button>
           </div>
         </div>
       </div>

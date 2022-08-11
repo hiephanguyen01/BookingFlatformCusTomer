@@ -5,6 +5,7 @@ import "./textInput.scss";
 
 const TextInput = ({
   label,
+  name,
   placeholder,
   onChange,
   styleInput,
@@ -48,6 +49,7 @@ const TextInput = ({
         />
       ) : (
         <Input
+          name={name}
           placeholder={placeholder}
           onChange={onChange}
           suffix={

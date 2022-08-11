@@ -41,19 +41,19 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
           {page === 1 ? (
             <Modal
               centered
-              className="pupmodal"
               visible={visible}
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
               width={400}
             >
-              <SignIn onClickPop={(e) => setPage(e)}></SignIn>
+              <SignIn
+                onClickPop={(e) => setPage(e)}
+              ></SignIn>
             </Modal>
           ) : page === 2 ? (
             <Modal
               centered
-              className="pupmodal"
               visible={visible}
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
@@ -65,7 +65,6 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
           ) : page === 3 ? (
             <Modal
               centered
-              className="pupmodal"
               visible={visible}
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
@@ -81,7 +80,6 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
           ) : page === 4 ? (
             <Modal
               centered
-              className="pupmodal"
               closable={false}
               visible={visible}
               footer={false}
@@ -101,19 +99,20 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
           ) : page === 5 ? (
             <Modal
               centered
-              className="pupmodal"
               visible={visible}
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
               footer={false}
               width={400}
             >
-              <SignUp onClickSignUp={(e) => setPage(e)}></SignUp>
+              <SignUp
+                
+                onClickSignUp={(e) => setPage(e)}
+              ></SignUp>
             </Modal>
           ) : page === 6 ? (
             <Modal
               centered
-              className="pupmodal"
               visible={visible}
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
@@ -129,7 +128,6 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
           ) : page === 7 ? (
             <Modal
               centered
-              className="pupmodal"
               closable={false}
               visible={visible}
               header={false}
@@ -157,3 +155,4 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
 };
 
 export default PopUpSignIn;
+

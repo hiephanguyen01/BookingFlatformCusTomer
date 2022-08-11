@@ -72,7 +72,7 @@ export const googleSignIn = () => async (dispatch) => {
   dispatch({ type: SET_LOADING, payload: false });
 };
 export const handleSendOtp =
-  (phoneNum, navigate, onClickSignUp) => async (dispatch) => {
+  (phoneNum, navigate, to, onClick, num) => async (dispatch) => {
     try {
       configureCaptcha();
       const phoneNumber = "+84" + phoneNum;
@@ -80,14 +80,14 @@ export const handleSendOtp =
       const auth = firebase.auth();
       const res = await auth.signInWithPhoneNumber(phoneNumber, appVerifier);
       window.confirmationResult = res;
-      if (onClickSignUp === undefined) {
-        navigate("/auth/sign-up/phone");
+      if (onClick === undefined) {
         dispatch({ type: SET_USER, payload: phoneNumber });
+        navigate(to);
       } else {
-        onClickSignUp(6);
+        onClick(num);
       }
     } catch (error) {
-      openNotificationWithIcon("error", "Somthing fail", "please try again");
+      openNotificationWithIcon("error", "Something fail", "please try again");
     }
     dispatch({ type: SET_LOADING, payload: false });
   };

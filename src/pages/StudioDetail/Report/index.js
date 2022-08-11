@@ -16,10 +16,10 @@ export const Report = () => {
   };
 
   return (
-    <div>
+    <div style={{textAlign:"left"}}>
       <h4 style={{ fontSize: "20px", fontWeight: "700" }}>Lý do báo cáo </h4>
       <Radio.Group onChange={onChange} value={value}>
-        <Space direction="vertical">
+        <Space direction="vertical" style={{display:"flex", flexDirection:"column",alignItems:"flex-start"}}>
           <Radio value={1}>Nội dung trùng lặp, spam</Radio>
           <Radio value={2}>Thông tin sai sự thật</Radio>
           <Radio value={3}>Lộ thông tin cá nhân, vd: Số điện thoại,...</Radio>

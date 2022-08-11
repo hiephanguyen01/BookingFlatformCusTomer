@@ -3,6 +3,7 @@ import {
   LOADING,
   SET_POST_LIST,
   SET_POST_PAGINATION,
+  SET_STUDIO_DETAIL,
 } from "../types/studioPostType";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
@@ -36,3 +37,14 @@ export const getFilterdStudioPost =
     }
     dispatch({ type: LOADING, payload: false });
   };
+
+export const studioDetailAction = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getDetailStudio(id);
+      dispatch({ type: SET_STUDIO_DETAIL, payload: data.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};

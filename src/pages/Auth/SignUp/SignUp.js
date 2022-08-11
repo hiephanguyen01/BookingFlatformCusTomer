@@ -1,4 +1,5 @@
 
+import { Button, Divider } from "antd";
 import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,18 +9,20 @@ import { handleSendOtp } from "../../../stores/actions/autheticateAction";
 import { FacebookSignin } from "../SignIn/FacebookSignIn/FacebookSignin";
 import { GoogleSignIn } from "../SignIn/GoogleSignIn/GoogleSignIn";
 import "./SignUp.scss";
-export const SignUp = ({ onClickSignUp  }) => {
+export const SignUp = ({ onClickSignUp }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const handleSendOtpp = () => {
-    dispatch(handleSendOtp(phoneNum, navigate, onClickSignUp));
+    dispatch(
+      handleSendOtp(phoneNum, navigate, "/auth/sign-up/phone", onClickSignUp, 6)
+    );
   };
 
   useEffect(() => {
-    if (user ) {
+    if (user?.Email) {
       navigate("/home/dao");
     }
   }, [user]);
@@ -39,11 +42,9 @@ export const SignUp = ({ onClickSignUp  }) => {
       </div>
       <div className="face-google-login">
         <GoogleSignIn />
-        <FacebookSignin/>
+        <FacebookSignin />
       </div>
-      <div className="divine-login">
-        <div className="divinve-login-content">hoặc</div>
-      </div>
+      <Divider />
       <div className="phone-sign-up">
         <div>Đăng ký tài khoản bằng số điện thoại</div>
         <div className="phone-zone-sign-up">
@@ -65,38 +66,27 @@ export const SignUp = ({ onClickSignUp  }) => {
             }>
             Vui lòng nhập số điện thoại hợp lệ !
           </div>
-          <div className="white-hide"></div>
         </div>
       </div>
-      {phoneNum.length >= 9 && phoneNum.length <= 11 ? (
-        <>
-          <div id="sign-in-button"></div>
-          <button
-            className="confirm-sign-up"
-            onClick={() => {
-              handleSendOtpp();
-              setLoading(true);
-            }}>
-            {!loading && <span>Đăng ký</span>}
-            {loading && (
-              <>
-                <ReactLoading
-                  type="cylon"
-                  color="#fff"
-                  className="loadingEffect"
-                />{" "}
-                <span>Đăng ký</span>
-              </>
-            )}
-          </button>
-        </>
-      ) : (
-        <button className="confirm-sign-up">Đăng ký</button>
-      )}
+      <div id="sign-in-button"></div>
+      <Button
+        onClick={() => {
+          handleSendOtpp();
+          setLoading(true);
+        }}
+        size="large"
+        type="primary"
+        loading={loading}
+        disabled={phoneNum.length < 9 && phoneNum.length > 11}
+        style={{ borderRadius: "10px" }}>
+        Đăng ký
+      </Button>
       <div className="have-account">
         <span className="have-account-content">Bạn đã có tài khoản?</span>
         {onClickSignUp ? (
-          <span className="have-account-button" onClick={() => onClickSignUp(1)}>
+          <span
+            className="have-account-button"
+            onClick={() => onClickSignUp(1)}>
             Đăng nhập
           </span>
         ) : (

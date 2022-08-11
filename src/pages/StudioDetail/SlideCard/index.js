@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "../../Home/ListCard/ListCard.module.scss";
+import "./styles.scss";
 import { Card } from "../../../components/Card";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -23,6 +24,7 @@ export const SlideCard = ({ title }) => {
         </div>
         <div>
           <Swiper
+            className="slideDetail"
             slidesPerView={1}
             spaceBetween={8}
             pagination={{
@@ -43,10 +45,8 @@ export const SlideCard = ({ title }) => {
                 slidesPerView: 5,
                 spaceBetween: 10,
               },
-            
             }}
             modules={[Navigation]}
-            className="mySwiper"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => {
               return (

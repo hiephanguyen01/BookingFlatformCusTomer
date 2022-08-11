@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import styles from "./Detail.module.scss";
 import { LightBox } from "react-lightbox-pack"; // <--- Importing LightBox Pack
 import "react-lightbox-pack/dist/index.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CheckCircleOutlined,
   HeartOutlined,
@@ -21,6 +21,9 @@ import { SlideCard } from "./SlideCard";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { Report } from "./Report";
 import { Voucher } from "./Voucher";
+import { ModalImage } from "./ModalImg";
+import { useParams } from "react-router-dom";
+import { studioDetailAction } from "../../stores/actions/studioPostAction";
 
 const cx = classNames.bind(styles);
 const columns = [
@@ -253,17 +256,23 @@ const dataImg = [
 const text = <span>Title</span>;
 
 export const StudioDetail = () => {
+  const { id } = useParams();
   // State
   const [toggle, setToggle] = useState(false);
   const [sIndex, setSIndex] = useState(0);
   const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
+  const { studioDetail } = useSelector((state) => state.studioPostReducer);
+  console.log(studioDetail);
   // Handler
   useEffect(() => {
     setTimeout(() => {
       dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
     }, 5000);
   }, []);
+  useEffect(() => {
+    dispatch(studioDetailAction(id));
+  }, [id]);
   const lightBoxHandler = (state, sIndex) => {
     setToggle(state);
     setSIndex(sIndex);
@@ -279,7 +288,7 @@ export const StudioDetail = () => {
         <div className={cx("box1")}>
           <div className={cx("top")}>
             <div className={cx("title")}>
-              <h3>Studio Wisteria chuyên cung cấp dịch vụ chụp hình cưới </h3>
+              <h3>{studioDetail?.Name} </h3>
               <CheckCircleOutlined
                 style={{ fontSize: "20px", color: "#03AC84" }}
               />
@@ -295,6 +304,7 @@ export const StudioDetail = () => {
                       display: "flex",
                       flexDirection: "column",
                       gap: "10px",
+                      padding: "10px",
                     }}
                   >
                     <div
@@ -321,7 +331,7 @@ export const StudioDetail = () => {
 
           <div className={cx("address")}>
             <img src={images.address} alt="sa" />
-            <span>Quận 1, TPHCM</span>
+            <span>{studioDetail?.Address}</span>
           </div>
           <div className={cx("rate")}>
             <Rate allowHalf value={5}></Rate>
@@ -331,26 +341,32 @@ export const StudioDetail = () => {
             </span>
           </div>
           <div className={cx("container")}>
-            {dataImg.slice(0, 5).map((item, index) => {
+            {studioDetail?.Image?.slice(0, 5).map((item, index) => {
               return index !== 4 ? (
                 <div
                   key={index}
-                  onClick={() => {
-                    lightBoxHandler(true, index);
-                  }}
+                  onClick={() =>
+                    dispatch({
+                      type: "SHOW_MODAL_LIST",
+                      Component: <ModalImage data={studioDetail?.Image} />,
+                    })
+                  }
                   className={cx("item")}
                 >
-                  <img alt="sa" src={item.image} />
+                  <img alt="sa" src={item} />
                 </div>
               ) : (
                 <div
+                  onClick={() =>
+                    dispatch({
+                      type: SHOW_MODAL,
+                      Component: <ModalImage data={studioDetail?.Image} />,
+                    })
+                  }
                   key={index}
-                  onClick={() => {
-                    lightBoxHandler(true, index);
-                  }}
                   className={cx("item")}
                 >
-                  <img src={item.image} alt="as" />
+                  <img src={item} alt="as" />
                   <div className={cx("number")}>{dataImg.length - 5}+</div>
                 </div>
               );
@@ -361,7 +377,7 @@ export const StudioDetail = () => {
           <div className={cx("left")}>
             <div className={cx("description")}>
               <h3>Mô tả</h3>
-              <Content />
+              <Content data={studioDetail?.Description} />
             </div>
             <div className={cx("sale")}>
               <h3>4 Mã khuyến mãi</h3>
@@ -468,8 +484,8 @@ export const StudioDetail = () => {
             <div className={cx("map")}>
               <h3>Xem trên bản đồ</h3>
               <div className={cx("address")}>
-                <img src={images.address} />
-                <span>36, Lý Tự Trọng, Quận 1, TP. Hồ Chí Minh</span>
+                <img src={images.address} alt="" />
+                <span>{studioDetail?.Address}</span>
               </div>
               <div className="mapouter">
                 <div className="gmap_canvas">
@@ -480,7 +496,7 @@ export const StudioDetail = () => {
                     scrolling="no"
                     marginHeight={0}
                     marginWidth={0}
-                    src="https://maps.google.com/maps?width=667&height=255&hl=en&q=thi tran ha lam &t=&z=13&ie=UTF8&iwloc=B&output=embed"
+                    src={`https://www.google.com/maps?q=${studioDetail?.Latitude},${studioDetail?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
                   />
                   <a href="https://embedmapgenerator.com/">
                     embed google maps in website
@@ -527,17 +543,6 @@ export const StudioDetail = () => {
         <SlideCard title="Gần bạn" />
         <SlideCard title="Bạn vừa mới xem" />
       </div>
-      <LightBox
-        state={toggle}
-        event={lightBoxHandler}
-        data={dataImg}
-        imageWidth="100vw"
-        imageHeight="70vh"
-        thumbnailHeight={70}
-        thumbnailWidth={100}
-        setImageIndex={setSIndex}
-        imageIndex={sIndex}
-      />
     </div>
   );
 };

@@ -1,0 +1,90 @@
+@import "../../../../App.scss";
+.ChatContent {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  
+  &__header {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 10px;
+    height: 50px;
+    align-items: center;
+    &__user {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      justify-content: center;
+      padding-left: 10px;
+    }
+  }
+
+  &__conversation{
+    height: 340px;
+    width: 103%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    &__other{
+      padding: 0px 10px;
+      margin: 10px 0;
+      display: flex;
+      &__content{
+        background-color: $secondary-50;
+        padding: 10px 10px;
+        max-width: 350px;
+        border-radius: 8px;
+        
+      }
+    }
+    &__you{
+      padding: 0px 10px;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: row-reverse;
+      &__content{
+        background-color: $neutral-100;
+        padding: 10px 10px;
+        max-width: 350px;
+        border-radius: 8px;
+      }
+    }
+  }
+  &__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px;
+    height: 70px;
+    z-index: 20;
+    box-shadow: 0 -4px 20px 5px rgba(0, 0, 0, 0.1);
+    bottom: 0px;
+    position: relative;
+    &__upload {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    &__current-message {
+      width: 90%;
+      height: 55px;
+      border-radius: 5px;
+      line-height: 20px;
+      padding: 5px 10px;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+/* ::-webkit-scrollbar-track {
+  display: none !important;
+}
+::-webkit-scrollbar-thumb {
+  display: none !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  display: none !important;
+} */
