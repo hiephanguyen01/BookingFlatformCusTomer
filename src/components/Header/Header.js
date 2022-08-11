@@ -167,7 +167,7 @@ const Header = () => {
         visible={visible}
         footer={[]}
       >
-        <div  className="logo">
+        <div className="logo">
           <img src={logo} alt="" />
         </div>
         <Form onFinish={onFinish}>
@@ -178,8 +178,8 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="province"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
+
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&

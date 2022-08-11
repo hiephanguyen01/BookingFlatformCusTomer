@@ -92,8 +92,6 @@ export const Home = () => {
         <ListItem title="Được đặt nhiều nhất" />
         <ListItem title="Đã xem gần đây" />
       </div>
-      <StudioDetail />
-
     </>
   );
 };

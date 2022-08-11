@@ -347,7 +347,7 @@ export const StudioDetail = () => {
                   key={index}
                   onClick={() =>
                     dispatch({
-                      type: SHOW_MODAL,
+                      type: "SHOW_MODAL_LIST",
                       Component: <ModalImage data={studioDetail?.Image} />,
                     })
                   }
@@ -484,8 +484,8 @@ export const StudioDetail = () => {
             <div className={cx("map")}>
               <h3>Xem trên bản đồ</h3>
               <div className={cx("address")}>
-                <img src={images.address} />
-                <span>36, Lý Tự Trọng, Quận 1, TP. Hồ Chí Minh</span>
+                <img src={images.address} alt="" />
+                <span>{studioDetail?.Address}</span>
               </div>
               <div className="mapouter">
                 <div className="gmap_canvas">
@@ -543,17 +543,6 @@ export const StudioDetail = () => {
         <SlideCard title="Gần bạn" />
         <SlideCard title="Bạn vừa mới xem" />
       </div>
-      <LightBox
-        state={toggle}
-        event={lightBoxHandler}
-        data={dataImg}
-        imageWidth="100vw"
-        imageHeight="70vh"
-        thumbnailHeight={70}
-        thumbnailWidth={100}
-        setImageIndex={setSIndex}
-        imageIndex={sIndex}
-      />
     </div>
   );
 };

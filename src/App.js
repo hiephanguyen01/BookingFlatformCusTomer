@@ -53,12 +53,12 @@ function App() {
         <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
 
-        <Route element={<CustomerLayout />}>
-          {/* <Route path="/" element={<Home />}></Route> */}
-          {/* <Route path="studio/:id" element={<StudioDetail />} /> */}
+        <Route path="home" element={<CustomerLayout />}>
+          <Route index element={<Home />}></Route>
+          <Route path="studio/:id" element={<StudioDetail />} />
 
           <Route path="user/:id/*" element={<UserAccount />}></Route>
-          <Route path="filter" element={<FilterPage />}></Route>
+          <Route path="home/filter" element={<FilterPage />}></Route>
           {/* <Route path="dao" element={<Dao />} /> */}
           <Route
             path="photographer/:photographerId"
