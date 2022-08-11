@@ -2,10 +2,12 @@ import {
   GET_LIST_POST,
   GET_DETAIL_POST,
   GET_PAGINATE_POSIBILITY,
+  GET_SEARCH_LIST_POST,
 } from "../types/PostDaoType";
 
 const initialState = {
   listPost: [],
+  listPostForSearching: [],
   pagination: {},
   postDetail: {},
 };
@@ -18,6 +20,8 @@ export const postDaoReducer = (state = initialState, action) => {
       return { ...state, postDetail: action.data };
     case GET_PAGINATE_POSIBILITY:
       return { ...state, pagination: action.data };
+    case GET_SEARCH_LIST_POST:
+      return { ...state, listPostForSearching: action.data };
     default:
       return state;
   }

@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
-import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
+import { getPostDaoAction } from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Button, Modal, Upload, message, Input } from "antd";
 import uploadImg from "../../assets/dao/uploadImg.png";
 import "./dao.scss";
+import DaoPostSearchModal from "../../components/DaoPostSearchModal";
+import { GET_LIST_POST } from "../../stores/types/PostDaoType";
 
 const tagItems = [
   {
@@ -38,45 +40,7 @@ const Dao = (props) => {
   const dispatch = useDispatch();
   const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
 
-  // useEffect(() => {
-  //   getData(loadMore);
-  //   setLoadMore(false);
-  // }, [loadMore]);
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  //   if (props.scrollable) {
-  //     // list has fixed height
-  //     list.addEventListener("scroll", (e) => {
-  //       const el = e.target;
-  //       if (el.scrollTop + el.clientHeight === el.scrollHeight) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   } else {
-  //     // list has auto height
-  //     window.addEventListener("scroll", () => {
-  //       let win = window.scrollY + window.innerHeight;
-  //       let listHeight = list.clientHeight + list.offsetTop;
-  //       // console.log(win + " " + listHeight + " " + list.clientHeight);
-  //       if (
-  //         window.scrollY + window.innerHeight ===
-  //           list.clientHeight + list.offsetTop ||
-  //         (win - listHeight < 50 && win - listHeight > 0)
-  //       ) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  // useEffect(() => {
-  //   getData(loadMore);
-  //   setLoadMore(false);
-  // }, []);
-  // create post: start
+  const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -114,60 +78,25 @@ const Dao = (props) => {
     });
   };
 
-  // create post: end
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  //   if (props.scrollable) {
-  //     // list has fixed height
-  //     list.addEventListener("scroll", (e) => {
-  //       const el = e.target;
-  //       if (el.scrollTop + el.clientHeight === el.scrollHeight) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   } else {
-  //     // list has auto height
-  //     window.addEventListener("scroll", () => {
-  //       let win = window.scrollY + window.innerHeight;
-  //       let listHeight = list.clientHeight + list.offsetTop;
-  //       // console.log(win + " " + listHeight + " " + list.clientHeight);
-  //       if (
-  //         window.scrollY + window.innerHeight ===
-  //           list.clientHeight + list.offsetTop ||
-  //         (win - listHeight < 50 && win - listHeight > 0)
-  //       ) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  //   window.addEventListener("scroll", () => {
-  //     if (
-  //       window.scrollY + window.innerHeight ===
-  //       list.clientHeight + list.offsetTop
-  //     ) {
-  //       setLoadMore(true);
-  //     }
-  //   });
-  // }, [listPost]);
-
   const getData = (loadMore) => {
-    // if (loadMore && pagination.nextPage) {
-    dispatch(getAllPostDaoAction(listPost, 3, page));
+    dispatch(getPostDaoAction(listPost, 3, page));
     setPage(() => page + 1);
-    // }
   };
 
   useEffect(() => {
     getData();
+
+    return () => {
+      dispatch({ type: GET_LIST_POST, data: [] });
+    };
   }, []);
 
   return (
     <section className="dao d-flex justify-content-center">
+      <DaoPostSearchModal
+        searchDaoPostVisible={searchDaoPostVisible}
+        setSearchDaoPostVisible={setSearchDaoPostVisible}
+      />
       <div className="dao__container d-flex flex-column align-items-center">
         <header className="dao__container__header d-flex justify-content-between align-items">
           <h2>Dạo</h2>

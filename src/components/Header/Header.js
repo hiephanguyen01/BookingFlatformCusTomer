@@ -150,7 +150,7 @@ const Header = () => {
       provinceIds: [values.province],
       keyString: values.keyString,
     };
-    console.log(newFilter);
+    // console.log(newFilter);
     dispatch(getFilterdStudioPost(5, 1, newFilter));
     setVisible(false);
     navigate("/home/filter");
@@ -178,8 +178,8 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="province"
-              style={{ width: "100%", marginRight: "20px" }}>
-
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&
@@ -226,7 +226,7 @@ const Header = () => {
         </Form>
       </Modal>
       <div className="container">
-        <div className="img">
+        <div onClick={() => navigate("/home/home")} className="img">
           <img src={logo} alt="" />
         </div>
         <Input

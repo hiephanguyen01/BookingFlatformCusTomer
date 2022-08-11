@@ -50,12 +50,6 @@ function App() {
         <Route path="home" element={<CustomerLayout />}>
           <Route path="user/:id/*" element={<UserAccount />}></Route>
           <Route path="filter" element={<FilterPage />}></Route>
-          {/* <Route path="dao" element={<Dao />} /> */}
-          <Route
-            path="photographer/:photographerId"
-            element={<PhotographerDetail />}
-          />
-
           <Route
             path="dao"
             element={
@@ -63,6 +57,10 @@ function App() {
                 <Dao />
               </ProtectedRouter>
             }
+          />
+          <Route
+            path="photographerDetail/:photographerId"
+            element={<PhotographerDetail />}
           />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
