@@ -12,7 +12,7 @@ import {
   Button,
 } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import "./order.scss";
@@ -24,20 +24,13 @@ import Voucher from "../../pages/CostumeDetails/page/OrderCostume/components/Vou
 import imgStudio from "../../assets/dao/Frame 163.jpg";
 const Index = ({ onClickModal, linkTo = "" }) => {
   const [chooseVoucher, setChooseVoucher] = useState([]);
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
   // console.log(chooseVoucher);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch({
-  //     type: SHOW_MODAL,
-  //     Component: (
-  //       <Voucher
-  //         chooseVoucher={chooseVoucher}
-  //         setChooseVoucher={setChooseVoucher}
-  //       />
-  //     ),
-  //   });
-  // }, [chooseVoucher]);
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   const onChange = (date, dateString) => {
     console.log(date, dateString);

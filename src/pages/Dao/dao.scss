@@ -77,6 +77,10 @@
   }
 }
 
+#infinity-list-post-dao {
+  min-height: 100vh;
+}
+
 .ant-modal-title {
   font-weight: 700 !important;
   font-size: 20px !important;
@@ -92,14 +96,17 @@
   color: $neutral-500;
 }
 
-.ant-modal-header,
-.ant-modal-footer {
-  border: none !important;
-}
+.modalDao {
 
-.ant-modal-body {
-  padding-top: 0 !important;
-  // padding-bottom: 10px !important;
+  .ant-modal-header,
+  .ant-modal-footer {
+    border: none !important;
+  }
+
+  .ant-modal-body {
+    padding-top: 0 !important;
+    // padding-bottom: 10px !important;
+  }
 }
 
 .ant-upload-list-picture-card-container {
@@ -133,7 +140,7 @@
 }
 
 .create_post_tag_item.active {
-  background: #1FCBA2;
+  background: #1fcba2;
 }
 
 .ant-modal-footer {
@@ -167,16 +174,14 @@
 
     line-height: 22px;
     text-align: center;
-    color: #FFFFFF;
+    color: #ffffff;
     width: 200px;
 
     .ant-message-success {
-
       .anticon-check-circle {
         display: none;
       }
     }
-
   }
 }
 

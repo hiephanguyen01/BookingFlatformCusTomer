@@ -16,6 +16,9 @@ class PostDaoService extends BaseService {
   deletePost = (id) => {
     return this.delete(`/api/post-post/${id}`);
   };
+  createLike = (data) => {
+    return this.post("/api/like/", data);
+  };
 }
 
 export const postDaoService = new PostDaoService();

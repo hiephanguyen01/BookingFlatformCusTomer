@@ -122,13 +122,11 @@ export const SignUpWithPhone = ({
           />
         </StyledReactInputVerificationCode>
       </div>
-      {isInvalid && code.length === 6 ? (
+      {isInvalid && code.length === 6 && (
         <div className="invalid-code">
           Rất tiếc, chúng tôi không thể xác minh mã số đó. <br></br> Vui lòng
           đảm bảo bạn nhập đúng mã số.
         </div>
-      ) : (
-        <div></div>
       )}
       {countDown ? (
         <div>Vui lòng chờ {countDown} giây để gửi lại mã</div>
