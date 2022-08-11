@@ -13,7 +13,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import "./order.scss";
 
@@ -22,18 +22,26 @@ import TextInput from "../../components/TextInput/TextInput";
 import Voucher from "../../pages/CostumeDetails/page/OrderCostume/components/Voucher";
 
 import imgStudio from "../../assets/dao/Frame 163.jpg";
+import { handleSendOtp } from "../../stores/actions/autheticateAction";
 const Index = ({ onClickModal, linkTo = "" }) => {
   const [chooseVoucher, setChooseVoucher] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const [phoneNumber, setPhoneNumber] = useState("");
   // console.log(chooseVoucher);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const onChange = (date, dateString) => {
     console.log(date, dateString);
+  };
+
+  const handleOnClickOrder = () => {
+    try {
+      if (user === null) {
+        handleSendOtp(phoneNumber, Navigate, "", {}, null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -214,8 +222,10 @@ const Index = ({ onClickModal, linkTo = "" }) => {
               styleContainer={{ width: "100%" }}
             />
             <TextInput
+              name="SDT"
               placeholder="Số điện thoại"
               styleContainer={{ width: "100%" }}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
             <TextInput placeholder="Email" styleContainer={{ width: "100%" }} />
           </div>
@@ -226,8 +236,10 @@ const Index = ({ onClickModal, linkTo = "" }) => {
             <Button
               type="primary"
               style={{ borderRadius: "8px", height: "45px", width: "270px" }}
+              onClick={() => handleOnClickOrder}
             >
-              <Link to={linkTo}>Hoàn tất đặt</Link>
+              {/* <Link to={linkTo}>Hoàn tất đặt</Link> */}
+              Hoàn tất đặt
             </Button>
           </div>
         </Col>
