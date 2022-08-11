@@ -263,9 +263,9 @@ const FilterPage = () => {
                 padding: "10px 10px",
               }}>
               <Pagination
-                pageSize={pagination.limit}
+                pageSize={pagination?.limit}
                 defaultCurrent={1}
-                total={pagination.total}
+                total={pagination?.total}
                 onChange={onChangePage}
               />
             </div>
