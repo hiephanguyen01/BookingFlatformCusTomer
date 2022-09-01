@@ -23,6 +23,8 @@ import PageModel from "./pages/ModelDetails/PageModel";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
 import { ModalImage } from "./pages/StudioDetail/ModalImg";
 import { StudioDetail } from "./pages/StudioDetail";
+import MetaDecorator from "./components/MetaDecorator/MetaDecorator";
+import logoImg from "../src/assets/img/Logo1.png";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,13 +52,13 @@ function App() {
       </BackTop>
 
       <Routes>
-        <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
+        <Route index path="*" element={<Navigate to="/home" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
 
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route path="studio/:id" element={<StudioDetail />} />
-          <Route path="user/:id/*" element={<UserAccount />}/>
+          <Route path="user/:id/*" element={<UserAccount />} />
           <Route path="filter" element={<FilterPage />}></Route>
           {/* <Route path="dao" element={<Dao />} /> */}
           <Route
@@ -74,7 +76,6 @@ function App() {
           />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="home" element={<Home />} />
           <Route path="costumeDetails/*" element={<PageCostume />} />
           <Route path="deviceDetails/*" element={<PageDevice />} />
           <Route path="modelDetails/*" element={<PageModel />} />

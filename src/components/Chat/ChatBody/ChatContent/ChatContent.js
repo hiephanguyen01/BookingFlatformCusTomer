@@ -2,7 +2,7 @@ import React from "react";
 import "./ChatContent.scss";
 import { useState } from "react";
 import uploadLogo from "../../../../assets/Chat/Upload.png";
-import ScrollToBottom, {useAnimatingToEnd} from "react-scroll-to-bottom";
+import ScrollToBottom, { useAnimatingToEnd } from "react-scroll-to-bottom";
 const messageList1 = [
   {
     id: 1,
@@ -117,18 +117,27 @@ export const ChatContent = ({ chatInfo }) => {
         className="ChatContent__conversation scroll-smooth "
         followButtonClassName="ChatContent__conversation__downbtn"
         initialScrollBehavior="smooth"
-        
-        
       >
         {messageList.map((itm, index) => (
-          <div key={index} className={itm.Chatting.id !== 15 ? "ChatContent__conversation__other" :"ChatContent__conversation__you"}>
-            <div className={itm.Chatting.id !== 15 ? "ChatContent__conversation__other__content" :"ChatContent__conversation__you__content"}>
-            {itm.Content}
+          <div
+            key={index}
+            className={
+              itm.Chatting.id !== 15
+                ? "ChatContent__conversation__other"
+                : "ChatContent__conversation__you"
+            }
+          >
+            <div
+              className={
+                itm.Chatting.id !== 15
+                  ? "ChatContent__conversation__other__content"
+                  : "ChatContent__conversation__you__content"
+              }
+            >
+              {itm.Content}
             </div>
-            
           </div>
         ))}
-        
       </ScrollToBottom>
       <div className="ChatContent__container">
         <div className="ChatContent__container__upload">

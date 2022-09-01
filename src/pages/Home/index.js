@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./home.module.scss";
 import images from "../../assets/images";
 import { ListItem } from "./ListCard";
 import { StudioDetail } from "../StudioDetail";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import logoImg from "../../../src/assets/img/Logo1.png";
 
 const cx = classNames.bind(styles);
 
 export const Home = () => {
   return (
     <>
-      
-    
+      <MetaDecorator
+        title="Trang chủ Booking Studio"
+        description="Chuyên cung cấp các loại dịch vụ"
+        imgUrl={logoImg}
+        type="article"
+        imgAlt="Booking Studio"
+      />
       <div className={cx("home")}>
         <div className={cx("filter")}>
           <div className={cx("box")}>
