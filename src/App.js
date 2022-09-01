@@ -50,7 +50,7 @@ function App() {
       </BackTop>
 
       <Routes>
-        <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
+        <Route index path="*" element={<Navigate to="/home/dao" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
 
         <Route path="home" element={<CustomerLayout />}>
@@ -66,10 +66,10 @@ function App() {
 
           <Route
             path="dao"
-            element={
-              <ProtectedRouter>
-                <Dao />
-              </ProtectedRouter>
+            element={/* 
+              <ProtectedRouter> */
+                <Dao />/* 
+              </ProtectedRouter> */
             }
           />
           <Route

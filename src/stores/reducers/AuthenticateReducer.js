@@ -6,7 +6,6 @@ const initialState = {
   currentUser: null,
   phoneVerify: null,
 };
-
 export const authenticateReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_LOADING:
