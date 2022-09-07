@@ -391,7 +391,7 @@ const Index = () => {
                   </div>
                 </div>
                 <Button className="btn_see">
-                  <Link to="deviceShopDetail">Xem shop</Link>
+                  <Link to="shop">Xem shop</Link>
                   {/* <iframe
                     style={{ width: "100%", height: "100%", border: "0" }}
                     src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
@@ -527,7 +527,7 @@ const Index = () => {
                     Thêm vào giỏ hàng
                   </Button>
                   <Button className="w-38 h-48px d-flex justify-content-center align-items-center btn_order">
-                    <Link to={"orderDevice"}> Đặt ngay</Link>
+                    <Link to={"order"}> Đặt ngay</Link>
                   </Button>
                 </div>
               </div>

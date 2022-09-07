@@ -1,6 +1,6 @@
 import { Rate, Row, Col, Tabs, Pagination } from "antd";
 import React, { useState } from "react";
-import "./detailCostumeShop.scss";
+import "./detailClothesShop.scss";
 
 import ReadMoreDesc from "../../../../components/ReadMoreDesc";
 

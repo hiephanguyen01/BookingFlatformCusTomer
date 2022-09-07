@@ -45,6 +45,7 @@ const Dao = (props) => {
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
+  console.log(listPost);
 
   // useEffect(() => {
   //   getData(loadMore);

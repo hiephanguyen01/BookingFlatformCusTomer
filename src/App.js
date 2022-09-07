@@ -17,7 +17,7 @@ import { getCurrentUser } from "./stores/actions/autheticateAction";
 import Cart from "./pages/Cart";
 import { Home } from "./pages/Home";
 
-import PageCostume from "./pages/CostumeDetails/PageCostume";
+import PageClothes from "./pages/ClothesDetails/PageClothes";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
 import PageModel from "./pages/ModelDetails/PageModel";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
@@ -60,26 +60,22 @@ function App() {
           <Route path="studio/:id" element={<StudioDetail />} />
           <Route path="user/:id/*" element={<UserAccount />} />
           <Route path="filter" element={<FilterPage />}></Route>
-          {/* <Route path="dao" element={<Dao />} /> */}
-          <Route
-            path="photographer/:photographerId"
-            element={<PhotographerDetail />}
-          />
-
-          <Route
+          <Route path="dao" element={<Dao />} />
+          {/* <Route
             path="dao"
             element={
               <ProtectedRouter>
                 <Dao />
               </ProtectedRouter>
             }
-          />
+          /> */}
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="costumeDetails/*" element={<PageCostume />} />
-          <Route path="deviceDetails/*" element={<PageDevice />} />
-          <Route path="modelDetails/*" element={<PageModel />} />
-          <Route path="makeupDetails/*" element={<PageMakeup />} />
+          <Route path="photographer/*" element={<PhotographerDetail />} />
+          <Route path="device/*" element={<PageDevice />} />
+          <Route path="clothes/*" element={<PageClothes />} />
+          <Route path="model/*" element={<PageModel />} />
+          <Route path="makeup/*" element={<PageMakeup />} />
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}
