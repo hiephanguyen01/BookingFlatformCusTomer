@@ -65,10 +65,7 @@ function App() {
           <Route
             path="dao"
             element={
-              /* 
-              <ProtectedRouter> */
-              <Dao /> /* 
-              </ProtectedRouter> */
+                <Dao />
             }
           />
           <Route path="studio/book" element={<BookStudio />} />
