@@ -11,7 +11,8 @@ export const ProtectedRouter = ({ children }) => {
         width: "100%",
         display: "flex",
         justifyContent: "center",
-      }}>
+      }}
+    >
       <div
         style={{
           background: "#fff",
@@ -19,7 +20,8 @@ export const ProtectedRouter = ({ children }) => {
           borderRadius: "50%",
           padding: "10px",
           margin: "10px",
-        }}>
+        }}
+      >
         <LoadingOutlined style={{ fontSize: "40px" }} />
       </div>
     </div>
