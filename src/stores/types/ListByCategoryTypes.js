@@ -1,0 +1,3 @@
+export const GET_LIST_BY_CATEGORY = "GET_LIST_BY_CATEGORY";
+export const SET_CATEGORY = "SET_CATEGORY";
+export const SET_LINK_TO = "SET_LINK_TO";

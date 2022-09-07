@@ -440,7 +440,7 @@ const Index = () => {
                     Thêm vào giỏ hàng
                   </Button>
                   <Button className="w-38 h-48px d-flex justify-content-center align-items-center btn_order">
-                    <Link to={"orderModel"}> Đặt ngay</Link>
+                    <Link to={"order"}> Đặt ngay</Link>
                   </Button>
                 </div>
               </div>

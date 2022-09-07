@@ -67,3 +67,17 @@ export const likePost = (userId, postId) => {
     }
   };
 };
+
+export const createPost = (userId, post) => {
+  return async (dispatch) => {
+    try {
+      // const { data } = await postDaoService.createLike({
+      //   PostId: postId,
+      //   UserId: userId,
+      // });
+      // dispatch({ type: "GET_LIKE", data: data.data });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+};

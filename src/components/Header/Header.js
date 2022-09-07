@@ -192,8 +192,8 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="province"
-              style={{ width: "100%", marginRight: "20px" }}>
-
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="" onChange={handleChange}>
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&
@@ -240,10 +240,12 @@ const Header = () => {
         </Form>
       </Modal>
       <div className="container">
+
         <Link to = '/home' className="link">
         <div className="img">
           <img src={logo} alt="" />
         </div>
+
         </Link>
         <Input
           placeholder="Bạn đang tìm gì?"

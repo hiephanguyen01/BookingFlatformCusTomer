@@ -18,6 +18,8 @@ export const postDaoReducer = (state = initialState, action) => {
       return { ...state, postDetail: action.data };
     case GET_PAGINATE_POSIBILITY:
       return { ...state, pagination: action.data };
+    case GET_LIST_POST:
+      return { ...state, listPost: action.data };
     default:
       return state;
   }
