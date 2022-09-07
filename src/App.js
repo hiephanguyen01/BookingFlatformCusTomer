@@ -52,7 +52,6 @@ function App() {
       <Routes>
         <Route index path="*" element={<Navigate to="/home/dao" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
-
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route path="studio/:id" element={<StudioDetail />} />
@@ -66,6 +65,7 @@ function App() {
 
           <Route
             path="dao"
+
             element={
                 <Dao />
             }
