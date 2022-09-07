@@ -1,0 +1,18 @@
+.btn_one_drive_picker {
+    width: 76px;
+    height: 76px;
+    border: 0.6px dashed #1FCBA2;
+    border-radius: 10px;
+
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.5;
+    }
+
+    .icon_one_drive {
+        color: #65dbbf;
+        font-size: 30px;
+    }
+}

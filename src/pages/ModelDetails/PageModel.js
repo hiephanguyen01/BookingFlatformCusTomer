@@ -7,12 +7,9 @@ import ModelDetails from "./index";
 const PageModel = () => {
   return (
     <Routes>
-      <Route path="" element={<ModelDetails />} />
-      <Route path="orderModel" element={<OrderModel />} />
-      <Route
-        path="orderModel/confirmOrderModel"
-        element={<ConfirmOrderModel />}
-      />
+      <Route path=":id" element={<ModelDetails />} />
+      <Route path=":id/order" element={<OrderModel />} />
+      <Route path=":id/order/confirm" element={<ConfirmOrderModel />} />
     </Routes>
   );
 };

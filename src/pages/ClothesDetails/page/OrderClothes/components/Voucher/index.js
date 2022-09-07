@@ -1,10 +1,7 @@
 import { CloseOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import {
-  HIDE_MODAL,
-  SHOW_MODAL,
-} from "../../../../../../stores/types/modalTypes";
+import { HIDE_MODAL } from "../../../../../../stores/types/modalTypes";
 
 import "./voucher.scss";
 

@@ -1,54 +1,97 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./home.module.scss";
 import images from "../../assets/images";
 import { ListItem } from "./ListCard";
-import { StudioDetail } from "../StudioDetail";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import logoImg from "../../../src/assets/img/Logo1.png";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getListByCategory,
+  setCategory,
+  setLinkTo,
+} from "../../stores/actions/ListByCategoryAction";
 
 const cx = classNames.bind(styles);
 
+const LABELS = [
+  {
+    id: "studio",
+    label: "Studio",
+    img: images.studio1,
+    linkTo: "studio",
+  },
+  {
+    id: "nhiepanh",
+    label: "Nhiếp ảnh",
+    img: images.cameraman,
+    linkTo: "photographer",
+  },
+  {
+    id: "thietbi",
+    label: "Thiết bị",
+    img: images.camera,
+    linkTo: "device",
+  },
+  {
+    id: "trangphuc",
+    label: "Trang phục",
+    img: images.clothes,
+    linkTo: "clothes",
+  },
+  {
+    id: "makeup",
+    label: "Make up",
+    img: images.makeup,
+    linkTo: "makeup",
+  },
+  {
+    id: "nguoimau",
+    label: "Người mẫu",
+    img: images.model,
+    linkTo: "model",
+  },
+];
+
 export const Home = () => {
+  const category = useSelector((state) => state.listByCategoryReducer.category);
+  const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
+  console.log(category, linkTo);
+  const dispatch = useDispatch();
+  const [active, setActive] = useState("studio");
+
+  useEffect(() => {
+    // dispatch(getListByCategory(LABELS[0].label));
+    dispatch(setCategory(LABELS[0].label));
+    dispatch(setLinkTo(LABELS[0].linkTo));
+  }, []);
   return (
     <>
-      
-    
+      {/* <GoogleDrivePicker />
+      <OneDrivePicker /> */}
+      <MetaDecorator
+        title="Trang chủ Booking Studio"
+        description="Chuyên cung cấp các loại dịch vụ"
+        imgUrl={logoImg}
+        type="article"
+        imgAlt="Booking Studio"
+      />
       <div className={cx("home")}>
         <div className={cx("filter")}>
-          <div className={cx("box")}>
-            <Link to="#">
-              <img src={images.studio1} alt="a" />
-              <span>Studio</span>
-            </Link>
-          </div>
-          <div className={cx("box")}>
-            <img src={images.cameraman} alt="a" />
-            <span>Nhiếp ảnh</span>
-          </div>
-          <div className={cx("box")}>
-            <Link to="/home/deviceDetails">
-              <img src={images.camera} alt="a" />
-              <span>Thiết bị</span>
-            </Link>
-          </div>
-          <div className={cx("box")}>
-            <Link to="/home/costumeDetails">
-              <img src={images.clothes} alt="a" />
-              <span>Trang phục</span>
-            </Link>
-          </div>
-          <div className={cx("box")}>
-            <Link to="/home/makeupDetails">
-              <img src={images.makeup} alt="a" />
-              <span>Make up</span>
-            </Link>
-          </div>
-          <div className={cx("box")}>
-            <Link to="/home/modelDetails">
-              <img src={images.model} alt="a" />
-              <span>Người mẫu</span>
-            </Link>
-          </div>
+          {LABELS.map((item) => (
+            <div
+              key={item.id}
+              className={cx("box", `${active === item.id && "active"}`)}
+              onClick={() => {
+                setActive(item.id);
+                dispatch(setCategory(item.id));
+                dispatch(setLinkTo(item.linkTo));
+              }}
+            >
+              <img src={item.img} alt="a" />
+              <span>{item.label}</span>
+            </div>
+          ))}
         </div>
         <div className={cx("banner")}>
           <div className={cx("box-container")}>
@@ -89,7 +132,7 @@ export const Home = () => {
               </div>
             </div>
             <div className={cx("box2", { box: "box" })}>
-              <img src={images.banner2} alt="sasa" />
+              <img src={images.banner2} alt="" />
               <div className={cx("content")}>
                 <h4>CITI’ S BEST </h4>
                 <h4 style={{ color: "#E22828" }}>PROFESSIONAL </h4>
