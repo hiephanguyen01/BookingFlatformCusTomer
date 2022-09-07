@@ -107,6 +107,20 @@ const Header = () => {
       items={[
         {
           className: "w-100",
+          key: "2",
+          label: (
+            <Button
+              type="secondary"
+              className="w-100 "
+              style={{ borderRadius: "5px" }}
+              onClick={() => handleSignOut()}
+            >
+              Thông tin tài khoản
+            </Button>
+          ),
+        },
+        {
+          className: "w-100",
           key: "1",
           label: (
             <Button
@@ -226,10 +240,12 @@ const Header = () => {
         </Form>
       </Modal>
       <div className="container">
-        <Link to="/home">
-          <div className="img">
-            <img src={logo} alt="" />
-          </div>
+
+        <Link to = '/home' className="link">
+        <div className="img">
+          <img src={logo} alt="" />
+        </div>
+
         </Link>
         <Input
           placeholder="Bạn đang tìm gì?"

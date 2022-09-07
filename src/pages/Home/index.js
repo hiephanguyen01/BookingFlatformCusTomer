@@ -67,6 +67,7 @@ export const Home = () => {
   }, []);
   return (
     <>
+
       {/* <GoogleDrivePicker />
       <OneDrivePicker /> */}
       <MetaDecorator
@@ -76,6 +77,7 @@ export const Home = () => {
         type="article"
         imgAlt="Booking Studio"
       />
+
       <div className={cx("home")}>
         <div className={cx("filter")}>
           {LABELS.map((item) => (
