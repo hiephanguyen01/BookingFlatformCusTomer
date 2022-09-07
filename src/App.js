@@ -52,7 +52,6 @@ function App() {
       <Routes>
         <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
-
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route path="studio/:id" element={<StudioDetail />} />
