@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./home.module.scss";
 import images from "../../assets/images";
 import { ListItem } from "./ListCard";
-import { StudioDetail } from "../StudioDetail";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
+import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
+// import GoogleDrivePicker from "../../";
 import logoImg from "../../../src/assets/img/Logo1.png";
 
 const cx = classNames.bind(styles);
@@ -13,6 +15,8 @@ const cx = classNames.bind(styles);
 export const Home = () => {
   return (
     <>
+      <GoogleDrivePicker />
+      <OneDrivePicker />
       <MetaDecorator
         title="Trang chủ Booking Studio"
         description="Chuyên cung cấp các loại dịch vụ"

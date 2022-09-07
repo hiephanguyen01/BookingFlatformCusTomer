@@ -13,6 +13,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Button, Modal, Upload, message, Input } from "antd";
 import uploadImg from "../../assets/dao/uploadImg.png";
 import "./dao.scss";
+import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
+import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
 
 const tagItems = [
   {
@@ -90,6 +92,7 @@ const Dao = (props) => {
   const onChangeFile = (e) => {
     const newFiles = [...files];
     const fileList = e.target.files;
+    console.log(fileList[0]);
     for (let file of fileList) {
       file.preview = URL.createObjectURL(file);
       newFiles.push({ ...file });
@@ -302,6 +305,8 @@ const Dao = (props) => {
           >
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
           </UploadImage>
+          <GoogleDrivePicker />
+          <OneDrivePicker />
           {/* <Upload
             // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             listType="picture-card"
@@ -354,6 +359,7 @@ const Dao = (props) => {
             onClick={() => {
               setVisible(false);
               success();
+              console.log(files);
             }}
           >
             Đăng
