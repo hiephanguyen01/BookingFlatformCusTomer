@@ -50,27 +50,18 @@ function App() {
       </BackTop>
 
       <Routes>
-        <Route index path="*" element={<Navigate to="/auth/sign-up" />} />
+        <Route index path="*" element={<Navigate to="/home/dao" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
 
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route path="studio/:id" element={<StudioDetail />} />
-          <Route path="user/:id/*" element={<UserAccount />}/>
+          <Route path="user/:id/*" element={<UserAccount />} />
           <Route path="filter" element={<FilterPage />}></Route>
-          {/* <Route path="dao" element={<Dao />} /> */}
+          <Route path="dao" element={<Dao />} />
           <Route
             path="photographer/:photographerId"
             element={<PhotographerDetail />}
-          />
-
-          <Route
-            path="dao"
-            element={
-              <ProtectedRouter>
-                <Dao />
-              </ProtectedRouter>
-            }
           />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
