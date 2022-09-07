@@ -57,11 +57,11 @@ function App() {
           <Route path="studio/:id" element={<StudioDetail />} />
           <Route path="user/:id/*" element={<UserAccount />} />
           <Route path="filter" element={<FilterPage />}></Route>
+          <Route path="dao" element={<Dao />} />
           <Route
             path="photographer/:photographerId"
             element={<PhotographerDetail />}
           />
-          <Route path="dao" element={<Dao />} />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
           <Route path="home" element={<Home />} />
