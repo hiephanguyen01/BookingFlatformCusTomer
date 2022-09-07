@@ -11,8 +11,6 @@ const cx = classNames.bind(styles);
 export const Home = () => {
   return (
     <>
-      
-    
       <div className={cx("home")}>
         <div className={cx("filter")}>
           <div className={cx("box")}>

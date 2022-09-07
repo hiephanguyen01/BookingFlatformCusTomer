@@ -3,10 +3,17 @@
   color: #828282;
   padding: 17px 0;
   box-shadow: 4px 4px 10px 1px #00000005;
+  /* position: fixed; */
+  z-index: 1;
+  width: 100%;
+  top: 0;
+  background-color: #fff;
+  /* height: 85px; */
   .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
   }
   .ant-input-affix-wrapper {
     width: 50% !important;
@@ -36,6 +43,8 @@
   .logo {
     text-align: center;
     margin: 20px;
+    cursor: pointer;
+  
   }
   .filter {
     font-weight: 600;
