@@ -15,11 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { REMOVE_RESULT, SELECT_RESULT } from "../../stores/types/PostDaoType";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import logoImg from "../../../src/assets/img/Logo1.png";
-import { useDispatch, useSelector } from "react-redux";
 import {
   getListByCategory,
   setCategory,
-  setLinkTo,
+  setLinkTo
 } from "../../stores/actions/ListByCategoryAction";
 
 const cx = classNames.bind(styles);
@@ -55,125 +54,125 @@ const dataSearch = [
     id: 4,
   },
 ];
-export const Home = () => {
-  const dispatch = useDispatch();
-  const { selectSearch } = useSelector((state) => state.postDaoReducer);
-  console.log(selectSearch);
-  return (
-    <>
-      <Modal
-        style={{ borderRadius: "6px" }}
-        visible={true}
-        closable={false}
-        width="700px"
-        footer={null}
-      >
-        <div className={cx("search-studio")}>
-          <div>
-            <Input
-              size="large"
-              placeholder="Tìm studio, người mẫu,..."
-              spellCheck={false}
-              prefix={<SearchOutlined />}
-            />
-            <p className={cx("number-select")}>
-              {selectSearch.length} bài đăng được chọn
-            </p>
-            <div className={cx("result-filter")}>
-              {selectSearch.map((item) => {
-                return (
-                  <div className={cx("result-item")}>
-                    <span>{item?.title}</span>
-                    <CloseOutlined
-                      onClick={() =>
-                        dispatch({ type: REMOVE_RESULT, payLoad: item })
-                      }
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <div className={cx("search-result")}>
-              {dataSearch.map((item) => {
-                return (
-                  <div className={cx("item")}>
-                    <div className={cx("left")}>
-                      <img src={item.img} alt="sa" />
-                      <div className={cx("content")}>
-                        <h5>{item.title}</h5>
-                        <p>500.000đ / giờ </p>
-                        <div>
-                          <div className={cx("rate")}>
-                            <StarOutlined color="#616161" />
-                            <span>{item.rate}</span>
-                            <span
-                              className={cx("number-order")}
-                              style={{ fontSize: "15px" }}
-                            >
-                              {item.order}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className={cx("right")}>
-                      <Checkbox
-                        checked={
-                          selectSearch.findIndex(
-                            (item1) => item1.id === item.id
-                          ) !== -1
-                            ? true
-                            : false
-                        }
-                        onClick={() =>
-                          dispatch({
-                            type: SELECT_RESULT,
-                            payload: item,
-                          })
-                        }
-                        style={{ fontSize: "16px" }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              justifyContent: "flex-end",
-              marginTop: "auto",
-            }}
-          >
-            <button
-              // onClick={() => dispatch({ type: HIDE_MODAL })}
-              style={{
-                padding: "14px 36px",
-                background: "#E7E7E7",
-                borderRadius: "8px",
-                border: 0,
-                cursor: "pointer",
-              }}
-            >
-              Huỷ
-            </button>
-            <button
-              style={{
-                padding: "14px 36px",
-                background: "#E22828",
-                borderRadius: "8px",
-                color: "#fff",
-                border: 0,
-                cursor: "pointer",
-              }}
-            >
-              Xong
-            </button>
-          </div>
-        </div>
-      </Modal>
+// export const Home = () => {
+//   const dispatch = useDispatch();
+//   const { selectSearch } = useSelector((state) => state.postDaoReducer);
+//   console.log(selectSearch);
+//   return (
+//     <>
+//       <Modal
+//         style={{ borderRadius: "6px" }}
+//         visible={true}
+//         closable={false}
+//         width="700px"
+//         footer={null}
+//       >
+//         <div className={cx("search-studio")}>
+//           <div>
+//             <Input
+//               size="large"
+//               placeholder="Tìm studio, người mẫu,..."
+//               spellCheck={false}
+//               prefix={<SearchOutlined />}
+//             />
+//             <p className={cx("number-select")}>
+//               {selectSearch.length} bài đăng được chọn
+//             </p>
+//             <div className={cx("result-filter")}>
+//               {selectSearch.map((item) => {
+//                 return (
+//                   <div className={cx("result-item")}>
+//                     <span>{item?.title}</span>
+//                     <CloseOutlined
+//                       onClick={() =>
+//                         dispatch({ type: REMOVE_RESULT, payLoad: item })
+//                       }
+//                     />
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//             <div className={cx("search-result")}>
+//               {dataSearch.map((item) => {
+//                 return (
+//                   <div className={cx("item")}>
+//                     <div className={cx("left")}>
+//                       <img src={item.img} alt="sa" />
+//                       <div className={cx("content")}>
+//                         <h5>{item.title}</h5>
+//                         <p>500.000đ / giờ </p>
+//                         <div>
+//                           <div className={cx("rate")}>
+//                             <StarOutlined color="#616161" />
+//                             <span>{item.rate}</span>
+//                             <span
+//                               className={cx("number-order")}
+//                               style={{ fontSize: "15px" }}
+//                             >
+//                               {item.order}
+//                             </span>
+//                           </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                     <div className={cx("right")}>
+//                       <Checkbox
+//                         checked={
+//                           selectSearch.findIndex(
+//                             (item1) => item1.id === item.id
+//                           ) !== -1
+//                             ? true
+//                             : false
+//                         }
+//                         onClick={() =>
+//                           dispatch({
+//                             type: SELECT_RESULT,
+//                             payload: item,
+//                           })
+//                         }
+//                         style={{ fontSize: "16px" }}
+//                       />
+//                     </div>
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//           </div>
+//           <div
+//             style={{
+//               display: "flex",
+//               gap: "10px",
+//               justifyContent: "flex-end",
+//               marginTop: "auto",
+//             }}
+//           >
+//             <button
+//               // onClick={() => dispatch({ type: HIDE_MODAL })}
+//               style={{
+//                 padding: "14px 36px",
+//                 background: "#E7E7E7",
+//                 borderRadius: "8px",
+//                 border: 0,
+//                 cursor: "pointer",
+//               }}
+//             >
+//               Huỷ
+//             </button>
+//             <button
+//               style={{
+//                 padding: "14px 36px",
+//                 background: "#E22828",
+//                 borderRadius: "8px",
+//                 color: "#fff",
+//                 border: 0,
+//                 cursor: "pointer",
+//               }}
+//             >
+//               Xong
+//             </button>
+//           </div>
+//         </div>
+//       </Modal>
 const LABELS = [
   {
     id: "studio",
