@@ -2,6 +2,7 @@
 .Chat {
   position: fixed;
   right: 0;
+  z-index: 1000;
   bottom: 300px;
   background-color: #fff;
   width: 132px;

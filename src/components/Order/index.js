@@ -1,34 +1,21 @@
-import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
-import {
-  Col,
-  DatePicker,
-  Row,
-  TimePicker,
-  TextArea,
-  Input,
-  Dropdown,
-  Space,
-  Menu,
-  Button,
-} from "antd";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { CheckCircleOutlined } from "@ant-design/icons";
+import { Col, DatePicker, Row, TimePicker, Input, Button } from "antd";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Navigate, Link } from "react-router-dom";
 
 import "./order.scss";
 
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import TextInput from "../../components/TextInput/TextInput";
-import Voucher from "../../pages/CostumeDetails/page/OrderCostume/components/Voucher";
 
 import imgStudio from "../../assets/dao/Frame 163.jpg";
 import { handleSendOtp } from "../../stores/actions/autheticateAction";
 const Index = ({ onClickModal, linkTo = "" }) => {
-  const [chooseVoucher, setChooseVoucher] = useState([]);
+  // const [chooseVoucher, setChooseVoucher] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const [phoneNumber, setPhoneNumber] = useState("");
   // console.log(chooseVoucher);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const onChange = (date, dateString) => {
     console.log(date, dateString);
@@ -238,8 +225,7 @@ const Index = ({ onClickModal, linkTo = "" }) => {
               style={{ borderRadius: "8px", height: "45px", width: "270px" }}
               onClick={() => handleOnClickOrder}
             >
-              {/* <Link to={linkTo}>Hoàn tất đặt</Link> */}
-              Hoàn tất đặt
+              <Link to={linkTo}>Hoàn tất đặt</Link>
             </Button>
           </div>
         </Col>

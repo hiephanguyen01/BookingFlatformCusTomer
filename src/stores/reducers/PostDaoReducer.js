@@ -43,6 +43,8 @@ export const postDaoReducer = (state = initialState, action) => {
       selectSearchUpdate.splice(index, 1);
       return { ...state, selectSearch: selectSearchUpdate };
     }
+    case GET_LIST_POST:
+      return { ...state, listPost: action.data };
     default:
       return state;
   }
