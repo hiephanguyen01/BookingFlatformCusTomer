@@ -6,7 +6,6 @@ import { Rate } from "antd";
 import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
