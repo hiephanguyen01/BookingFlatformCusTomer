@@ -3,16 +3,19 @@ import classNames from "classnames/bind";
 import styles from "./Card.module.scss";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
+import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
 
 const cx = classNames.bind(styles);
 export const Card = () => {
+  const navigate = useNavigate();
   const [like, setLike] = useState(false);
   const handleChangeLike = () => {
     setLike(!like);
   };
+
   return (
-    <div className={cx("card")}>
+    <div className={cx("card")} onclick={() => navigate(`/studio/5`)}>
       <div className={cx("image")}>
         <img src={images.baby} />
       </div>
