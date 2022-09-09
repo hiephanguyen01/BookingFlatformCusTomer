@@ -11,6 +11,7 @@
     background-color: #ffff;
     border-radius: 4px;
     cursor: pointer;
+
     .box {
         height: 80px;
         display: inline-flex;
@@ -19,32 +20,41 @@
         border: 1px solid #cacaca;
         border-radius: 9px;
         padding: 18px;
+
         img {
             width: 43px;
             height: 43px;
             object-fit: contain;
+        }
+
+        &.active {
+            border-color: #e22828;
+            color: #e22828;
         }
     }
 }
 
 .banner {
     margin-top: 22px;
+
     .box-container {
         display: flex;
         flex-wrap: wrap;
         flex: 1 1;
         gap: 16px;
     }
+
     .box {
         width: 642px;
         height: 340px;
         display: flex;
         flex: 1 542px;
+
         img {
             width: 40%;
             height: 100%;
         }
-        
+
         .content {
             display: flex;
             flex-grow: 1;
@@ -53,6 +63,7 @@
             align-items: center;
             background-color: #ffff;
             padding-top: 37px;
+
             img {
                 width: 310px;
                 height: 65px;
@@ -61,15 +72,18 @@
             }
         }
     }
+
     .box2 {
         background-color: #ffe5e5;
         padding: 32px 27px 32px 56px;
+
         img {
             width: 261px;
             height: 261px;
             border: 3px solid #e22828;
             border-radius: 50%;
         }
+
         h4 {
             font-size: 34px;
             font-weight: 700;
@@ -77,6 +91,7 @@
             margin: 0 !important;
             line-height: 1.3;
         }
+
         .content {
             background: transparent;
             align-items: flex-end;
@@ -84,10 +99,103 @@
     }
 }
 
-
-@media (max-width:991px) {
+@media (max-width: 991px) {
     .home {
         background-color: #f6f6f6;
         padding: 12px 40px 42px 40px;
+    }
+}
+
+//modal
+
+.search-studio {
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+
+    .number-select {
+        font-size: 16px;
+        font-weight: normal;
+        color: #616161;
+        margin: 10px 0 !important;
+    }
+}
+
+.result-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    .result-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 4px 10px;
+        gap: 10px;
+        border: 1px solid #1fcba2;
+        padding: 4px 10px;
+        border-radius: 6px;
+        span {
+            font-size: 14px;
+            color: #03ac84;
+        }
+    }
+}
+.search-result {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+    height: 300px;
+    overflow-y: scroll;
+    .item {
+        display: flex;
+        justify-content: space-between;
+        padding-right: 20px;
+        & + .item {
+            border-top: 1px solid #b2b2b2;
+            padding-top: 15px;
+        }
+        .left {
+            display: flex;
+            gap: 13px;
+            img {
+                width: 118px;
+                height: 80px;
+                border-radius: 6px;
+                object-fit: cover;
+            }
+            .content {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                h5 {
+                    font-weight: 600;
+                    font-size: 18px;
+                    margin: 0;
+                }
+                p {
+                    font-size: 14px;
+                    color: #3f3f3f;
+                }
+                .number-order {
+                    position: relative;
+                    padding-left: 5px;
+                    margin-left: 5px;
+                    &::before {
+                        content: "";
+                        width: 1px;
+                        height: 100%;
+                        background-color: #b2b2b2;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        z-index: 100;
+                    }
+                }
+            }
+        }
+        .right {
+        }
     }
 }

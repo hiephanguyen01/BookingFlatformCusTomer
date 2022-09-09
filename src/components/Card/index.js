@@ -3,18 +3,27 @@ import classNames from "classnames/bind";
 import styles from "./Card.module.scss";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
+import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
+import { useDispatch, useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
-export const Card = () => {
+
+export const Card = ({ id }) => {
+  const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
+  console.log(`${linkTo}/${id}`);
+  const navigate = useNavigate();
   const [like, setLike] = useState(false);
-  const handleChangeLike = () => {
+  const handleChangeLike = (e) => {
+    e.stopPropagation();
     setLike(!like);
   };
+
   return (
-    <div className={cx("card")}>
+
+    <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id}`)}>
       <div className={cx("image")}>
-        <img src={images.baby} />
+        <img className={cx("thumbnail")} src={images.baby} />
       </div>
 
       <div onClick={handleChangeLike} className={cx("like")}>
@@ -27,7 +36,7 @@ export const Card = () => {
       <div className={cx("content")}>
         <h5>Studio Mizo Misaki với concept tối giản</h5>
         <div className={cx("address")}>
-          <img src={images.address} />
+          <img className={cx("icon-location")} src={images.address} />
           <span>Quận 1, TPHCM</span>
         </div>
         <div className={cx("rate")}>

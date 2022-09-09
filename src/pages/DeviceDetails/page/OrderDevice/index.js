@@ -17,9 +17,7 @@ const Index = () => {
       Component: <Voucher setChooseVoucher={setChooseVoucher} />,
     });
   };
-  return (
-    <Order onClickModal={handleOnClickModal} linkTo="confirmOrderDevice" />
-  );
+  return <Order onClickModal={handleOnClickModal} linkTo="confirm" />;
 };
 
 export default Index;

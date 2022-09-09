@@ -1,23 +1,24 @@
-import React, { useState } from "react";
-import { Drawer} from "antd";
+import React, { useEffect, useState } from "react";
+import { Drawer } from "antd";
 import ChatIcon from "../../assets/Chat/ChatIcon.png";
 import ChatIconNoti from "../../assets/Chat/ChatIconNoti.png";
 import "./Chat.scss";
 import { ChatBody } from "./ChatBody/ChatBody";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";/* 
+import userEvent from "@testing-library/user-event";
+import { socket } from "../ConnectSocket/ConnectSocket"; */
 const Chat = () => {
   const [visible, setVisible] = useState(false);
-  const [notiMessage /* , setNotiMessage */] = useState(10);
-
+  const [notiMessage /* , setNotiMessage */] = useState(0);
   const showLargeDrawer = () => {
     setVisible(true);
   };
-
   const onClose = () => {
     setVisible(false);
   };
   return (
     <div>
-      <div
+      <PopUpSignIn
         onClick={showLargeDrawer}
         className={notiMessage ? "Chat__noti-message Chat" : "Chat"}
       >
@@ -34,7 +35,7 @@ const Chat = () => {
           className="Chat__icon"
         ></img>
         Chat
-      </div>
+      </PopUpSignIn>
       <Drawer placement="right" width={750} onClose={onClose} visible={visible}>
         <div className="Chat__container__header">
           <div className="Chat__container__header__left">
@@ -42,7 +43,9 @@ const Chat = () => {
             Chat
           </div>
         </div>
-        <div className="Chat__container__body"><ChatBody/></div>
+        <div className="Chat__container__body">
+          <ChatBody />
+        </div>
       </Drawer>
     </div>
   );

@@ -24,7 +24,7 @@ export const SlideCard = ({ title }) => {
         </div>
         <div>
           <Swiper
-            className="slideDetail"
+            // className="slideDetail"
             slidesPerView={1}
             spaceBetween={8}
             pagination={{

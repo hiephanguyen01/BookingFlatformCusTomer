@@ -97,7 +97,8 @@ export const SignIn = ({ onClickPop }) => {
         {onClickPop ? (
           <span
             className="dont-have-account-button"
-            onClick={() => onClickPop(5)}>
+            onClick={() => onClickPop(5)}
+          >
             Đăng ký
           </span>
         ) : (
