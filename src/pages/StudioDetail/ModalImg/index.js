@@ -18,7 +18,7 @@ import { CloseOutlined } from "@ant-design/icons";
 export const ModalImage = ({ data }) => {
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  console.log(thumbsSwiper);
+  /* console.log(thumbsSwiper); */
   return (
     <div
       style={{

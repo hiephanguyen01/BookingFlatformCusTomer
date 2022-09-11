@@ -9,7 +9,7 @@ import { SHOW_MODAL } from "../../../../stores/types/modalTypes";
 
 const Index = () => {
   const [chooseVoucher, setChooseVoucher] = useState([]);
-  console.log(chooseVoucher);
+ /*  console.log(chooseVoucher); */
   const dispatch = useDispatch();
   const handleOnClickModal = () => {
     dispatch({
@@ -17,9 +17,7 @@ const Index = () => {
       Component: <Voucher setChooseVoucher={setChooseVoucher} />,
     });
   };
-  return (
-    <Order onClickModal={handleOnClickModal} linkTo="confirmOrderMakeup" />
-  );
+  return <Order onClickModal={handleOnClickModal} linkTo="confirm" />;
 };
 
 export default Index;

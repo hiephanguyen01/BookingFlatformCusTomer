@@ -263,7 +263,7 @@ export const StudioDetail = () => {
   const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
   const { studioDetail } = useSelector((state) => state.studioPostReducer);
-  console.log(studioDetail);
+ /*  console.log(studioDetail); */
   // Handler
   useEffect(() => {
     setTimeout(() => {

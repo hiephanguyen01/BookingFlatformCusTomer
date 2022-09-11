@@ -1,6 +1,6 @@
 import { Rate, Row, Col, Tabs, Pagination } from "antd";
 import React, { useState } from "react";
-import "./detailCostumeShop.scss";
+import "./detailClothesShop.scss";
 
 import ReadMoreDesc from "../../../../components/ReadMoreDesc";
 
@@ -24,7 +24,6 @@ const ASIDE_CATEGORY_ITEM = [
 ];
 
 const onShowSizeChange = (current, pageSize) => {
-  console.log(current, pageSize);
 };
 
 const Index = () => {

@@ -11,7 +11,7 @@ import "./slideCard.scss";
 // import required modules
 import { Navigation } from "swiper";
 
-const Index = ({ title, style = {}, className }) => {
+const Index = ({ title, style = {}, className = "" }) => {
   return (
     <>
       <div className={`listItem ${className}`} style={{ ...style }}>
@@ -42,7 +42,7 @@ const Index = ({ title, style = {}, className }) => {
               },
             }}
             modules={[Navigation]}
-            className="mySwiper"
+            className="swiper_card"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => {
               return (

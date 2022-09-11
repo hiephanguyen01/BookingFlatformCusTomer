@@ -1,20 +1,26 @@
 import "./ChatUserFilter.scss";
-import { Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
 import { Select } from "antd";
 import React, { useState } from "react";
-import { Conversation } from "../ChatBody";
-import { ChatUser } from "../ChatUser/ChatUser";
-
+import { useEffect } from "react";
+import { chatService } from "../../../../services/ChatService";
+import { FilterChatOption } from "./FilterChatOption";
 const { Option } = Select;
 export const ChatUserFilter = () => {
+  const [listChat, setListChat] = useState([]);
   const [value, setValue] = useState(null);
-  const onChange = (value,option) => {
-    setValue(option.children.props.userInfo.Chatter1.Name)
+  const onChange = (value, option) => {
+    console.log(option);
+    setValue(option.children.props.children);
   };
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
+  const onSearch = (value) => {};
+  useEffect(() => {
+    (async () => {
+      const res = await chatService.getConversation(15, 1, 5, 1);
+
+      setListChat(res.data.data);
+    })();
+  }, []);
+  const hehe = [1, 2, 3, 4, 5, 6, 7, 8, 910];
   return (
     <Select
       className="Chat__body__user__search"
@@ -23,19 +29,18 @@ export const ChatUserFilter = () => {
       optionFilterProp="children"
       onChange={onChange}
       onSearch={onSearch}
-      filterOption={(input, option) =>
-        /*  console.log(option) */
-        option.children.props.userInfo.Chatter1.Name.toLowerCase().includes(
+      filterOption={
+        (input, option) => console.log(option)
+        /* option.children.props.userInfo.Chatter1.Name.toLowerCase().includes(
           input.toLowerCase()
-        )
+        ) */
       }
       value={value}
     >
-      {Conversation.map((itm, index) => {
-        console.log(itm.id);
+      {listChat.map((itm, index) => {
         return (
-          <Option value={itm.id.toString()} key={index} onC>
-            <ChatUser userInfo={itm} hideLastMess={true} />
+          <Option value={itm.id.toString()} key={index}>
+            <FilterChatOption  info = {itm}/>
           </Option>
         );
       })}

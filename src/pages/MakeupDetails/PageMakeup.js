@@ -7,12 +7,9 @@ import MakeupDetails from "./index";
 const PageMakeup = () => {
   return (
     <Routes>
-      <Route path="" element={<MakeupDetails />} />
-      <Route path="orderMakeup" element={<OrderMakeup />} />
-      <Route
-        path="orderMakeup/confirmOrderMakeup"
-        element={<ConfirmOrderMakeup />}
-      />
+      <Route path=":id" element={<MakeupDetails />} />
+      <Route path=":id/order" element={<OrderMakeup />} />
+      <Route path=":id/order/confirm" element={<ConfirmOrderMakeup />} />
     </Routes>
   );
 };

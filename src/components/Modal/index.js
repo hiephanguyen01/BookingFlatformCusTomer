@@ -8,7 +8,6 @@ export const ModalCustom = () => {
   const { Component, visible, isListImage } = useSelector(
     (state) => state.modalReducer
   );
-  console.log(isListImage);
   const dispatch = useDispatch();
 
   return (
