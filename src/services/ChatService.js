@@ -24,6 +24,11 @@ class ChatService extends BaseService {
             id
         })
     }
+    readMessageAdmin = (id) => {
+        return this.patch(`/api/chat/message`,{
+            id
+        })
+    }
 
 }
 

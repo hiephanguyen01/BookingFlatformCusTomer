@@ -108,7 +108,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
         setIsTyping(false);
       }
     });
-  }, [socket,id]);
+  }, [socket, id]);
   return (
     <div className="ChatContent">
       <div className="ChatContent__header">
@@ -194,10 +194,10 @@ export const ChatContentAdmin = React.memo(({ info }) => {
               </div>
             </div>
           ))}
-          {isTyping && (
-          <div className="ChatContent__conversation__typing">
-            <div className="stage1">
-              <div className="dot-typing" />
+        {isTyping && (
+          <div >
+            <div className="ChatContent__conversation__typing">
+              <div className="ChatContent__conversation__typing__content">Booking Studio</div> <div className="dot-typing" />
             </div>
           </div>
         )}

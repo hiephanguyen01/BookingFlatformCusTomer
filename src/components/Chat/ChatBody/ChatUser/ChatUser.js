@@ -2,55 +2,53 @@
 import React from "react";
 import "./ChatUser.scss";
 import moment from "moment";
-import { useState, useEffect/* , useRef */ } from "react";
+import { useState, useEffect /* , useRef */ } from "react";
 import { useSelector } from "react-redux";
-import { onlinePartnerSelector,offlinePartnerSelector} from "../../redux/selector/OnlineSelector copy";
+import {
+  onlinePartnerSelector,
+  offlinePartnerSelector,
+} from "../../redux/selector/OnlineSelector copy";
 import { chatService } from "../../../../services/ChatService";
 export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
-  const onlinePartnerList = useSelector(onlinePartnerSelector)
-  const offlinePartnerList = useSelector(offlinePartnerSelector)
+  const onlinePartnerList = useSelector(onlinePartnerSelector);
+  const offlinePartnerList = useSelector(offlinePartnerSelector);
   const [isRead, setIsRead] = useState(false);
-/*   const initMountState = useRef(true); */
   const [isOnline, setIsOnline] = useState(false);
   const [lastMessage, setLastMessage] = useState(
     userInfo.newestMessage ? userInfo.newestMessage : null
   );
   useEffect(() => {
-    /* if (initMountState.current) {
-      initMountState.current = false;
-    } else if (userInfo.newestMessage) {
-      if(userInfo.newestMessage.UserId !== -1){
-        setIsRead(true)
-      } else {
-        setIsRead(true)
-      } */
-      if(userInfo.newestMessage.UserId !== -1){
-        setIsRead(true)
-      } else {
-        setIsRead(userInfo.newestMessage.IsRead)
-      }
-      setLastMessage(userInfo.newestMessage);
-    /* } */
+    if (userInfo.newestMessage.UserId !== -1) {
+      setIsRead(true);
+    } else {
+      setIsRead(userInfo.newestMessage.IsRead);
+    }
+    setLastMessage(userInfo.newestMessage);
   }, [userInfo]);
-  useEffect(() =>{
-    setIsOnline(onlinePartnerList.includes(userInfo.PartnerId.id))
-  },[onlinePartnerList])
-  useEffect(() =>{
-    setIsOnline(offlinePartnerList.includes(userInfo.PartnerId.id))
-  },[offlinePartnerList])
+  useEffect(() => {
+    setIsOnline(onlinePartnerList.includes(userInfo.PartnerId.id));
+  }, [onlinePartnerList]);
+  useEffect(() => {
+    setIsOnline(offlinePartnerList.includes(userInfo.PartnerId.id));
+  }, [offlinePartnerList]);
   return (
     <div
       className={toggleState === userInfo.id ? "User  User__current " : "User "}
       onClick={() => {
         toggleClick(userInfo.id);
         setIsRead(true);
-        if(userInfo.newestMessage.UserId === -1 && userInfo.newestMessage.IsRead=== false){
+        if (
+          userInfo.newestMessage.UserId === -1 &&
+          userInfo.newestMessage.IsRead === false
+        ) {
           console.log(userInfo);
-          (async ()=> {
-            const res = await chatService.readMessage(userInfo.newestMessage.id)
+          (async () => {
+            const res = await chatService.readMessage(
+              userInfo.newestMessage.id
+            );
             console.log(res);
-          })()
-        } 
+          })();
+        }
       }}
     >
       <div className="d-flex flex-row w-100 px-6 align-items-center h-100">

@@ -20,7 +20,6 @@ export const ChatUserFilter = () => {
       setListChat(res.data.data);
     })();
   }, []);
-  const hehe = [1, 2, 3, 4, 5, 6, 7, 8, 910];
   return (
     <Select
       className="Chat__body__user__search"
