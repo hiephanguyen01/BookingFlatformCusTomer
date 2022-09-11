@@ -3,11 +3,12 @@ import classNames from "classnames/bind";
 import styles from "./Card.module.scss";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
+import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
+
 export const Card = ({ id }) => {
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const navigate = useNavigate();
@@ -16,7 +17,9 @@ export const Card = ({ id }) => {
     e.stopPropagation();
     setLike(!like);
   };
+
   return (
+
     <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id}`)}>
       <div className={cx("image")}>
         <img className={cx("thumbnail")} src={images.baby} />
