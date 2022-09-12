@@ -3,19 +3,19 @@ import {
   CloseCircleOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
+import { Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import addNotification from "react-push-notification";
 import { useDispatch, useSelector } from "react-redux";
+import uploadImg from "../../assets/dao/uploadImg.png";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
-import { getPostDaoAction } from "../../stores/actions/PostDaoAction";
-import UploadImage from "../../components/UploadImage";
-import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Button, Modal, Upload, message, Input } from "antd";
-import uploadImg from "../../assets/dao/uploadImg.png";
-import "./dao.scss";
 import DaoPostSearchModal from "../../components/DaoPostSearchModal";
+import UploadImage from "../../components/UploadImage";
+import { getPostDaoAction } from "../../stores/actions/PostDaoAction";
 import { GET_LIST_POST } from "../../stores/types/PostDaoType";
+import "./dao.scss";
 
 const tagItems = [
   {
@@ -50,6 +50,7 @@ const Dao = (props) => {
   const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
+
   const handleCancel = () => setPreviewVisible(false);
 
   const onChangeFile = (e) => {
@@ -89,8 +90,21 @@ const Dao = (props) => {
     setPage(() => page + 1);
   };
 
+  //Intergrate notification
+  function askPermission() {
+    // Notification
+    addNotification({
+      title: "Subcribe successfully", //chỗ này fetch api
+      subtitle: "asdasdadadsadasdasdasds", //also this one
+      native: true,
+    });
+  }
   useEffect(() => {
     getData();
+
+    if (Notification.permission !== "granted") {
+      askPermission();
+    }
 
     return () => {
       dispatch({ type: GET_LIST_POST, data: [] });
