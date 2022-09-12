@@ -7,14 +7,7 @@ import { updateMSelector } from "../../redux/selector/updateMSelector";
 import { useEffect, useRef } from "react";
 import { chatService } from "../../../../services/ChatService";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
-export const UserMe = {
-  id: 5,
-  Username: "3871952632888744",
-  Image: "b953bcbb-96f8-4dc2-8b5d-9f9b895d0def",
-  Email: "anhsaobanga21@gmail.com",
-  Fullname: "Toàn Nguyễn",
-  Phone: "0909005001",
-};
+import { UserMe } from "./ChatContent";
 export const ChatContentAdmin = React.memo(({ info }) => {
   const updateScroll = useSelector(updateMSelector);
   const [messageList, setMessageList] = useState([]);
@@ -156,6 +149,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
           }
         }}
       >
+       {loading?(<>
         {!hasMore && (
           <div className="ChatContent__conversation__no-more">
             Không còn tin nhắn nào nữa !
@@ -200,7 +194,13 @@ export const ChatContentAdmin = React.memo(({ info }) => {
               <div className="ChatContent__conversation__typing__content">Booking Studio</div> <div className="dot-typing" />
             </div>
           </div>
-        )}
+        )}</>):( <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+        <div className="ChatContent__conversation__loadmore">
+            <div className="stage">
+              <div className="dot-pulse" />
+            </div>
+          </div>
+      </div>)}
         <div ref={messageEndRef}></div>
       </div>
       <div className="ChatContent__container">

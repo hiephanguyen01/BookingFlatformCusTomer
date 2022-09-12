@@ -1,9 +1,8 @@
-
-import {NEW_MESS } from "../type/messType";
+import { FIND_CONVERSATION } from "../type/FindConverType";
 
 export const newMessAction = (data) => {
   return {
-    type: NEW_MESS,
+    type: FIND_CONVERSATION,
     payload: data
   };
 };

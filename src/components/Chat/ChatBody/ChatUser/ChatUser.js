@@ -18,12 +18,14 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
     userInfo.newestMessage ? userInfo.newestMessage : null
   );
   useEffect(() => {
+   if(userInfo.newestMessage){
     if (userInfo.newestMessage.UserId !== -1) {
       setIsRead(true);
     } else {
       setIsRead(userInfo.newestMessage.IsRead);
     }
     setLastMessage(userInfo.newestMessage);
+   }
   }, [userInfo]);
   useEffect(() => {
     setIsOnline(onlinePartnerList.includes(userInfo.PartnerId.id));
@@ -41,12 +43,10 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
           userInfo.newestMessage.UserId === -1 &&
           userInfo.newestMessage.IsRead === false
         ) {
-          console.log(userInfo);
           (async () => {
-            const res = await chatService.readMessage(
+             await chatService.readMessage(
               userInfo.newestMessage.id
             );
-            console.log(res);
           })();
         }
       }}
@@ -62,7 +62,10 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
         </div>
         <div className="py-2 h-100 w-100 d-flex flex-column justify-content-between">
           <div className="d-flex justify-content-between align-items-center h-100">
-            <p className="User__name">{userInfo.PartnerId.PartnerName}</p>
+            <p className="User__name">
+            {userInfo.PartnerId.PartnerName.toString().length <= 15
+                    ? userInfo.PartnerId.PartnerName
+                    : `${userInfo.PartnerId.PartnerName.toString().slice(0, 15)}...`}</p>
             {isOnline ? (
               <span className="User__isOnline"></span>
             ) : (

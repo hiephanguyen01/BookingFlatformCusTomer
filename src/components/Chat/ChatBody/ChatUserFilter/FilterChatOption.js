@@ -1,17 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { onlinePartnerSelector,offlinePartnerSelector } from "../../redux/selector/OnlineSelector copy";
+import {
+  onlinePartnerSelector,
+  offlinePartnerSelector,
+} from "../../redux/selector/OnlineSelector copy";
 export const FilterChatOption = ({ info }) => {
-    const onlinePartnerList = useSelector(onlinePartnerSelector)
-    const offlinePartnerList = useSelector(offlinePartnerSelector)
-    const [isOnline, setIsOnline ] = useState()
-    useEffect(() =>{
-        setIsOnline(onlinePartnerList.includes(info.PartnerId.id))
-      },[onlinePartnerList])
-      useEffect(() =>{
-        setIsOnline(offlinePartnerList.includes(info.PartnerId.id))
-      },[offlinePartnerList])
+  const onlinePartnerList = useSelector(onlinePartnerSelector);
+  const offlinePartnerList = useSelector(offlinePartnerSelector);
+  const [isOnline, setIsOnline] = useState();
+  useEffect(() => {
+    setIsOnline(onlinePartnerList.includes(info.id));
+  }, [onlinePartnerList]);
+  useEffect(() => {
+    setIsOnline(offlinePartnerList.includes(info.id));
+  }, [offlinePartnerList]);
   return (
     <div className="User">
       <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
@@ -25,12 +29,12 @@ export const FilterChatOption = ({ info }) => {
         </div>
         <div className="py-2 h-100 w-100 d-flex flex-column justify-content-between">
           <div className="d-flex justify-content-between align-items-center h-100">
-            <p className="User__name">{info.PartnerId.PartnerName}</p>
+            <p className="User__name">{info.PartnerName}</p>
             {isOnline ? (
-                      <span className="User__isOnline"></span>
-                    ) : (
-                      <span className="User__isOffline"></span>
-                    )}
+              <span className="User__isOnline"></span>
+            ) : (
+              <span className="User__isOffline"></span>
+            )}
           </div>
         </div>
       </div>

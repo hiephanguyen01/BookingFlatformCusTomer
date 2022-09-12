@@ -9,13 +9,14 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
   const [isRead, setIsRead] = useState(false);
   const [lastMessage, setLastMessage] = useState();
   useEffect(() => {
-    console.log("info",info);
-    if (info?.newestMessage.CustomerId !== -1) {
-      setIsRead(true);
-    } else {
-      setIsRead(info?.newestMessage.IsRead);
+    if (info?.newestMessage) {
+      if (info?.newestMessage.CustomerId !== -1) {
+        setIsRead(true);
+      } else {
+        setIsRead(info?.newestMessage.IsRead);
+      }
+      setLastMessage(info?.newestMessage);
     }
-    setLastMessage(info?.newestMessage);
   }, [info]);
   useEffect(() => {
     socket.on("receive_message_admin", (data) => {
@@ -27,7 +28,7 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
             ConversationId: data.messageContent.ConversationId,
             CustomerId: -1,
             PartnerId: -1,
-            IsRead:false,
+            IsRead: false,
             createdAt: data.messageContent.createdAt,
             id: data.messageContent.id,
             updatedAt: data.messageContent.createdAt,
@@ -38,7 +39,7 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
             ConversationId: data.messageContent.ConversationId,
             CustomerId: info.Chatter.id,
             PartnerId: -1,
-            IsRead:false,
+            IsRead: false,
             createdAt: data.messageContent.createdAt,
             id: data.messageContent.id,
             updatedAt: data.messageContent.createdAt,
@@ -55,15 +56,9 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
       onClick={() => {
         toggleClick(1000000);
         setIsRead(true);
-        if (
-          lastMessage.CustomerId === -1 &&
-          lastMessage.IsRead === false
-        ) {
-          console.log("send");
+        if (lastMessage.CustomerId === -1 && lastMessage.IsRead === false) {
           (async () => {
-            const res = await chatService.readMessageAdmin(
-              lastMessage.id
-            );
+            const res = await chatService.readMessageAdmin(lastMessage.id);
             console.log("res", res);
           })();
         }

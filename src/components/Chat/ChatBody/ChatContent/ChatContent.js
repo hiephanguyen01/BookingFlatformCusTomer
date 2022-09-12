@@ -145,48 +145,60 @@ export const ChatContent = React.memo(({ chatInfo }) => {
           }
         }}
       >
-        {!hasMore && (
-          <div className="ChatContent__conversation__no-more">
-            Không còn tin nhắn nào nữa !
-          </div>
-        )}
-        {loadMore && (
-          <div className="ChatContent__conversation__loadmore">
-            <div className="stage">
-              <div className="dot-pulse" />
-            </div>
-          </div>
-        )}
-        {messageList
-          .sort((a, b) => {
-            const a1 = /* new Date(a.createdAt) */ a.id;
-            const b1 = /* new Date(b.createdAt) */ b.id;
-            return a1 - b1;
-          })
-          .map((itm, index) => (
-            <div
-              key={index}
-              className={
-                itm.Chatting.PartnerName
-                  ? "ChatContent__conversation__other"
-                  : "ChatContent__conversation__you"
-              }
-            >
-              <div
-                className={
-                  itm.Chatting.PartnerName
-                    ? "ChatContent__conversation__other__content"
-                    : "ChatContent__conversation__you__content"
-                }
-              >
-                {itm.Content}
+        {loading ? (
+          <>
+            {!hasMore && (
+              <div className="ChatContent__conversation__no-more">
+                Không còn tin nhắn nào nữa !
               </div>
-            </div>
-          ))}
-        {isTyping && (
-          <div className="ChatContent__conversation__typing">
-            <div className="stage1">
-              <div className="dot-typing" />
+            )}
+            {loadMore && (
+              <div className="ChatContent__conversation__loadmore">
+                <div className="stage">
+                  <div className="dot-pulse" />
+                </div>
+              </div>
+            )}
+            {messageList
+              .sort((a, b) => {
+                const a1 = /* new Date(a.createdAt) */ a.id;
+                const b1 = /* new Date(b.createdAt) */ b.id;
+                return a1 - b1;
+              })
+              .map((itm, index) => (
+                <div
+                  key={index}
+                  className={
+                    itm.Chatting.PartnerName !== undefined
+                      ? "ChatContent__conversation__other"
+                      : "ChatContent__conversation__you"
+                  }
+                >
+                  <div
+                    className={
+                      itm.Chatting.PartnerName !== undefined
+                        ? "ChatContent__conversation__other__content"
+                        : "ChatContent__conversation__you__content"
+                    }
+                  >
+                    {itm.Content}
+                  </div>
+                </div>
+              ))}
+            {isTyping && (
+              <div className="ChatContent__conversation__typing">
+                <div className="stage1">
+                  <div className="dot-typing" />
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+            <div className="ChatContent__conversation__loadmore">
+              <div className="stage">
+                <div className="dot-pulse" />
+              </div>
             </div>
           </div>
         )}
