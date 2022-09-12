@@ -1,0 +1,1 @@
+export const updateMSelector = (state) => state.UpdateMReducer.update

@@ -8,13 +8,10 @@ import DeviceDetails from "./index";
 const PageDevice = () => {
   return (
     <Routes>
-      <Route path="" element={<DeviceDetails />} />
-      <Route path="deviceShopDetail" element={<DeviceShopDetail />} />
-      <Route path="orderDevice" element={<OrderDevice />} />
-      <Route
-        path="orderDevice/confirmOrderDevice"
-        element={<ConfirmOrderDevice />}
-      />
+      <Route path=":id" element={<DeviceDetails />} />
+      <Route path=":id/shop" element={<DeviceShopDetail />} />
+      <Route path=":id/order" element={<OrderDevice />} />
+      <Route path=":id/order/confirm" element={<ConfirmOrderDevice />} />
     </Routes>
   );
 };

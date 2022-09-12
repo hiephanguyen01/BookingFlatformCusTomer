@@ -25,38 +25,61 @@ const TAGS = [
   { id: "6", value: "Người mẫu" },
 ];
 
-const CART_ITEM_LIST = [
-  {
-    id: 1,
-    name: "Premium Wisteria - phong cách tối giản",
-    image: img,
-    date: "14/02/2021",
-    timeStart: "8:00 AM",
-    timeEnd: "8:30 PM",
-    price: "1500000",
-  },
-  {
-    id: 2,
-    name: "Premium Wisteria - phong cách tối giản",
-    image: img,
-    date: "14/02/2021",
-    timeStart: "8:00 AM",
-    timeEnd: "8:30 PM",
-    price: "1500000",
-  },
-  {
-    id: 3,
-    name: "Premium Wisteria - phong cách tối giản",
-    image: img,
-    date: "14/02/2021",
-    timeStart: "8:00 AM",
-    timeEnd: "8:30 PM",
-    price: "1500000",
-  },
-];
+const CART_ITEM_LIST = {
+  1: [
+    {
+      id: 1,
+      name: "Premium Wisteria - phong cách tối giản",
+      image: img,
+      date: "14/02/2021",
+      timeStart: "8:00 AM",
+      timeEnd: "8:30 PM",
+      price: "1500000",
+    },
+    {
+      id: 2,
+      name: "Premium Wisteria - phong cách tối giản",
+      image: img,
+      date: "14/02/2021",
+      timeStart: "8:00 AM",
+      timeEnd: "8:30 PM",
+      price: "1500000",
+    },
+    {
+      id: 3,
+      name: "Premium Wisteria - phong cách tối giản",
+      image: img,
+      date: "14/02/2021",
+      timeStart: "8:00 AM",
+      timeEnd: "8:30 PM",
+      price: "1500000",
+    },
+  ],
+  2: [
+    {
+      id: 1,
+      name: "Premium Wisteria - phong cách tối giản",
+      image: img,
+      date: "14/02/2021",
+      timeStart: "8:00 AM",
+      timeEnd: "8:30 PM",
+      price: "1500000",
+    },
+    {
+      id: 2,
+      name: "Premium Wisteria - phong cách tối giản",
+      image: img,
+      date: "14/02/2021",
+      timeStart: "8:00 AM",
+      timeEnd: "8:30 PM",
+      price: "1500000",
+    },
+  ],
+};
 
 const Index = () => {
   const [checked, setChecked] = useState([]);
+  const [list, setList] = useState([...CART_ITEM_LIST["1"]]);
 
   const menu = (
     <Menu
@@ -79,7 +102,7 @@ const Index = () => {
   );
 
   const onChange = (key) => {
-    console.log(key);
+    setList([...CART_ITEM_LIST[key]]);
   };
 
   const handleOnChecked = (id) => {
@@ -106,7 +129,6 @@ const Index = () => {
 
     setChecked([...newChecked]);
   };
-  console.log(checked);
 
   return (
     <div style={{ background: "#f5f5f5" }}>
@@ -134,10 +156,10 @@ const Index = () => {
                             color: "#3F3F3F",
                           }}
                         >
-                          Studio Wisteria
+                          {tag.value}
                         </div>
                       </CheckBox>
-                      {CART_ITEM_LIST.map((item, index) => (
+                      {list.map((item, index) => (
                         <CheckBox
                           onClick={() => handleOnChecked(item.id)}
                           key={index}
@@ -172,8 +194,21 @@ const Index = () => {
                                 </div>
                               </div>
                               <div className="checkbox_action">
-                                <Button type="text">Xóa</Button>
-                                <div className="price"> {item.price}</div>
+                                <Button
+                                  type="text"
+                                  onClick={() => {
+                                    const newList = list.filter(
+                                      (val) => val.id !== item.id
+                                    );
+                                    setList([...newList]);
+                                  }}
+                                >
+                                  Xóa
+                                </Button>
+                                <div className="price">
+                                  {" "}
+                                  {formatValue(item.price)}đ
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -224,7 +259,9 @@ const Index = () => {
                       marginBottom: "12px",
                     }}
                   >
-                    1.800.000
+                    {`${formatValue(
+                      list.reduce((total, val) => total + Number(val.price), 0)
+                    )}đ`}
                   </div>
                 </div>
                 <div className="d-flex justify-content-between">
@@ -243,7 +280,9 @@ const Index = () => {
                       fontWeight: "700",
                     }}
                   >
-                    1.500.000
+                    {`${formatValue(
+                      list.reduce((total, val) => total + Number(val.price), 0)
+                    )}đ`}
                   </div>
                 </div>
               </div>
@@ -262,3 +301,13 @@ const Index = () => {
 };
 
 export default Index;
+
+export const formatValue = (num) => {
+  let format;
+  if (num) {
+    format = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  } else {
+    return 0;
+  }
+  return format;
+};

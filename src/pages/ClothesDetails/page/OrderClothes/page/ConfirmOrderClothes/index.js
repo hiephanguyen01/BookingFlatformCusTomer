@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import "./confirmOrderCostume.scss";
+import "./confirmOrderClothes.scss";
 
 import UploadImage from "../../../../../../components/UploadImage";
 import { ExclamationCircleOutlined } from "@ant-design/icons";

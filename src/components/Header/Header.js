@@ -107,6 +107,20 @@ const Header = () => {
       items={[
         {
           className: "w-100",
+          key: "2",
+          label: (
+            <Button
+              type="secondary"
+              className="w-100 "
+              style={{ borderRadius: "5px" }}
+              onClick={() => handleSignOut()}
+            >
+              Thông tin tài khoản
+            </Button>
+          ),
+        },
+        {
+          className: "w-100",
           key: "1",
           label: (
             <Button
@@ -128,9 +142,7 @@ const Header = () => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+  const handleChange = (value) => {};
   useEffect(() => {
     if (document.activeElement === inputRef.current) {
       setVisible(true);
@@ -150,7 +162,6 @@ const Header = () => {
       provinceIds: [values.province],
       keyString: values.keyString,
     };
-    // console.log(newFilter);
     dispatch(getFilterdStudioPost(5, 1, newFilter));
     setVisible(false);
     navigate("/home/filter");
@@ -226,9 +237,11 @@ const Header = () => {
         </Form>
       </Modal>
       <div className="container">
-        <div onClick={() => navigate("/home/home")} className="img">
-          <img src={logo} alt="" />
-        </div>
+        <Link to="/home" className="link">
+          <div className="img">
+            <img src={logo} alt="" />
+          </div>
+        </Link>
         <Input
           placeholder="Bạn đang tìm gì?"
           prefix={<SearchOutlined />}

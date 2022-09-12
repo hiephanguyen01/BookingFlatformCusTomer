@@ -2,104 +2,99 @@ import React from "react";
 import "./ChatContent.scss";
 import { useState } from "react";
 import uploadLogo from "../../../../assets/Chat/Upload.png";
-import ScrollToBottom, {useAnimatingToEnd} from "react-scroll-to-bottom";
-const messageList1 = [
-  {
-    id: 1,
-    Content: "Hello moi nguoi",
-    Chatting: {
-      id: 15,
-      Name: "Quan1",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 2,
-    Content: "Hello moi nguoi lai la quan day ok chua 121234243434",
-    Chatting: {
-      id: 23,
-      Name: "Quan7",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 3,
-    Content: "Hello moi nguoi",
-    Chatting: {
-      id: 23,
-      Name: "Quan7",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 4,
-    Content: "Hello moi nguoi lai la quan day 12283445675643",
-    Chatting: {
-      id: 15,
-      Name: "Quan",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 5,
-    Content: "Hello moi nguoi",
-    Chatting: {
-      id: 23,
-      Name: "Quan7",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 6,
-    Content: "Hello moi nguoi",
-    Chatting: {
-      id: 15,
-      Name: "Quan1",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 7,    
-    Content: "Hello moi nguoi",
-    Chatting: {
-      id: 15,
-      Name: "Quan1",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 8,
-    Content: "Hello moi nguoi lai la quan day 12283445675643",
-    Chatting: {
-      id: 23,
-      Name: "Quan7",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-  {
-    id: 9,
-    Content: "Hello moi nguoi",
-    Chatting: {
-      id: 23,
-      Name: "Quan7",
-    },
-    createdAt: "2022-07-21T09:35:31.820Z",
-  },
-];
-export const ChatContent = ({ chatInfo }) => {
-  const { id, Chatter1 } = chatInfo;
-  const [messageList, setMessageList] = useState(messageList1);
+import { useSelector } from "react-redux";
+import { updateMSelector } from "../../redux/selector/updateMSelector";
+import { useEffect, useRef } from "react";
+import { chatService } from "../../../../services/ChatService";
+import { socket } from "../../../ConnectSocket/ConnectSocket";
+export const UserMe = {
+  id: 5,
+  Username: "3871952632888744",
+  Image: "b953bcbb-96f8-4dc2-8b5d-9f9b895d0def",
+  Email: "anhsaobanga21@gmail.com",
+  Fullname: "Toàn Nguyễn",
+  Phone: "0909005001",
+};
+export const ChatContent = React.memo(({ chatInfo }) => {
+  const updateScroll = useSelector(updateMSelector);
+  const { id } = chatInfo;
+  const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
-  const onInputChange = (event) => {
+  const typingTimeOutRef = useRef(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const messageEndRef = useRef(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadMore, setLoadMore] = useState(false);
+  const [flag, setFlag] = useState(true);
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(() => {
+    if (flag) {
+      scrollToBottom();
+    }
+  }, [messageList, updateScroll, flag]);
+  const onInputChange = async (event) => {
     setMessage(event.target.value);
-    console.log(event.target.value);
+    socket.emit("typing", {
+      ConversationId: id,
+      typing: true,
+    });
+    if (typingTimeOutRef.current) {
+      clearTimeout(typingTimeOutRef.current);
+    }
+    typingTimeOutRef.current = setTimeout(() => {
+      socket.emit("typing", {
+        ConversationId: id,
+        typing: false,
+      });
+    }, 1000);
   };
   const onEnterPress = async (e) => {
     if (e.keyCode === 13 && e.shiftKey === false && message.trim() !== "") {
       e.preventDefault();
-      console.log(message);
+      setMessage("");
+      const res = await chatService.sendMessage({
+        ConversationId: id,
+        Content: message,
+        Partner: false,
+      });
+      socket.emit("send_message", {
+        id: res.data.id,
+        ConversationId: id,
+        createdAt: res.data.createdAt,
+        Content: res.data.Content,
+        Chatting: UserMe,
+      });
     }
   };
+  useEffect(() => {
+    (async () => {
+      const res = await chatService.getMessByConversationId(10, 1, id);
+      setMessageList(res.data.data);
+      setLoading(true);
+      setFlag(true);
+    })();
+  }, []);
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      if (data.ConversationId === id) {
+        setMessageList((list) => [...list, data]);
+        setFlag(true);
+      } else {
+        return false;
+      }
+    });
+    socket.on("isTyping", (data) => {
+      if (data.ConversationId === id && data.typing === true) {
+        setIsTyping(true);
+        scrollToBottom();
+      } else {
+        setIsTyping(false);
+      }
+    });
+  }, [socket]);
   return (
     <div className="ChatContent">
       <div className="ChatContent__header">
@@ -110,26 +105,93 @@ export const ChatContent = ({ chatInfo }) => {
           height={35}
         ></img>
         <div className="ChatContent__header__user">
-          <div>{chatInfo.Chatter1.Name}</div>
+          <div>{chatInfo.PartnerId.PartnerName}</div>
         </div>
       </div>
-      <ScrollToBottom
-        className="ChatContent__conversation scroll-smooth "
-        followButtonClassName="ChatContent__conversation__downbtn"
-        initialScrollBehavior="smooth"
-        
-        
+      <div
+        className="ChatContent__conversation "
+        onScroll={async (e) => {
+          if (e.target.scrollTop === 0 && hasMore) {
+            setLoadMore(true);
+            let { data } = await chatService.getMessByConversationId(
+              10,
+              Math.floor(messageList.length / 10) + 1,
+              id
+            );
+            if (data.data.length !== 0) {
+              let newMessageList = [...messageList];
+              for (let i = 0; i < data.data.length; i++) {
+                let filterMessageList = [...messageList];
+                if (
+                  filterMessageList.filter((itm) => itm.id === data.data[i].id)
+                    .length === 0
+                ) {
+                  newMessageList.push(data.data[i]);
+                }
+              }
+              setMessageList(newMessageList);
+              setLoadMore(false);
+              setFlag(false);
+              if (data.pagination.hasNextPage === false) {
+                setHasMore(false);
+                setLoadMore(false);
+                setFlag(false);
+              }
+            } else {
+              setHasMore(false);
+              setLoadMore(false);
+              setFlag(false);
+            }
+          }
+        }}
       >
-        {messageList.map((itm, index) => (
-          <div key={index} className={itm.Chatting.id !== 15 ? "ChatContent__conversation__other" :"ChatContent__conversation__you"}>
-            <div className={itm.Chatting.id !== 15 ? "ChatContent__conversation__other__content" :"ChatContent__conversation__you__content"}>
-            {itm.Content}
-            </div>
-            
+        {!hasMore && (
+          <div className="ChatContent__conversation__no-more">
+            Không còn tin nhắn nào nữa !
           </div>
-        ))}
-        
-      </ScrollToBottom>
+        )}
+        {loadMore && (
+          <div className="ChatContent__conversation__loadmore">
+            <div className="stage">
+              <div className="dot-pulse" />
+            </div>
+          </div>
+        )}
+        {messageList
+          .sort((a, b) => {
+            const a1 = /* new Date(a.createdAt) */ a.id;
+            const b1 = /* new Date(b.createdAt) */ b.id;
+            return a1 - b1;
+          })
+          .map((itm, index) => (
+            <div
+              key={index}
+              className={
+                itm.Chatting.PartnerName
+                  ? "ChatContent__conversation__other"
+                  : "ChatContent__conversation__you"
+              }
+            >
+              <div
+                className={
+                  itm.Chatting.PartnerName
+                    ? "ChatContent__conversation__other__content"
+                    : "ChatContent__conversation__you__content"
+                }
+              >
+                {itm.Content}
+              </div>
+            </div>
+          ))}
+        {isTyping && (
+          <div className="ChatContent__conversation__typing">
+            <div className="stage1">
+              <div className="dot-typing" />
+            </div>
+          </div>
+        )}
+        <div ref={messageEndRef}></div>
+      </div>
       <div className="ChatContent__container">
         <div className="ChatContent__container__upload">
           <img alt="logochat" src={uploadLogo} width={30} height={30}></img>
@@ -147,4 +209,4 @@ export const ChatContent = ({ chatInfo }) => {
       </div>
     </div>
   );
-};
+});
