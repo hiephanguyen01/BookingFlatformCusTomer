@@ -4,18 +4,45 @@ import moment from "moment";
 import adminLogo from "../../../../assets/Chat/AdminUser.png";
 import { useState, useEffect } from "react";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
+import { chatService } from "../../../../services/ChatService";
 export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
   const [isRead, setIsRead] = useState(false);
   const [lastMessage, setLastMessage] = useState();
   useEffect(() => {
+    console.log("info",info);
+    if (info?.newestMessage.CustomerId !== -1) {
+      setIsRead(true);
+    } else {
+      setIsRead(info?.newestMessage.IsRead);
+    }
     setLastMessage(info?.newestMessage);
   }, [info]);
   useEffect(() => {
     socket.on("receive_message_admin", (data) => {
       if (data.messageContent.ConversationId === info?.id) {
-        setLastMessage(data.messageContent);
         if (data.messageContent.Chatting === "Admin") {
           setIsRead(false);
+          setLastMessage({
+            Content: data.messageContent.Content,
+            ConversationId: data.messageContent.ConversationId,
+            CustomerId: -1,
+            PartnerId: -1,
+            IsRead:false,
+            createdAt: data.messageContent.createdAt,
+            id: data.messageContent.id,
+            updatedAt: data.messageContent.createdAt,
+          });
+        } else {
+          setLastMessage({
+            Content: data.messageContent.Content,
+            ConversationId: data.messageContent.ConversationId,
+            CustomerId: info.Chatter.id,
+            PartnerId: -1,
+            IsRead:false,
+            createdAt: data.messageContent.createdAt,
+            id: data.messageContent.id,
+            updatedAt: data.messageContent.createdAt,
+          });
         }
       } else {
         return false;
@@ -28,6 +55,18 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
       onClick={() => {
         toggleClick(1000000);
         setIsRead(true);
+        if (
+          lastMessage.CustomerId === -1 &&
+          lastMessage.IsRead === false
+        ) {
+          console.log("send");
+          (async () => {
+            const res = await chatService.readMessageAdmin(
+              lastMessage.id
+            );
+            console.log("res", res);
+          })();
+        }
       }}
     >
       <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
@@ -44,7 +83,7 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
             <p className="User__name">Booking Studio</p>
           </div>
           {lastMessage &&
-            (lastMessage.Chatting !== "Admin" ? (
+            (lastMessage.CustomerId !== -1 ? (
               <div
                 className="w-100 d-flex justify-content-between"
                 style={{ color: "#828282", fontSize: "13px" }}
