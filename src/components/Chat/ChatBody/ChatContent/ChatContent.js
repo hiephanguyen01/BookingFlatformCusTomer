@@ -3,7 +3,7 @@ import "./ChatContent.scss";
 import { useState } from "react";
 import uploadLogo from "../../../../assets/Chat/Upload.png";
 import { useSelector } from "react-redux";
-import { updateMSelector } from "../../redux/selector/ChatSelector";
+import { updateMSelector } from "../../../../stores/selector/ChatSelector";
 import { useEffect, useRef } from "react";
 import { chatService } from "../../../../services/ChatService";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
