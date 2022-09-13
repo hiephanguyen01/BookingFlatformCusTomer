@@ -3,11 +3,12 @@ import { Drawer } from "antd";
 import ChatIcon from "../../assets/Chat/ChatIcon.png";
 import ChatIconNoti from "../../assets/Chat/ChatIconNoti.png";
 import "./Chat.scss";
-import { ChatBody } from "./ChatBody/ChatBody";
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
-import { getOnlinePartner,getOfflinePartner } from "./redux/action/OnlineAction";
+import { ChatBody } from "./ChatBody/ChatBody";/* 
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn"; */
+import { getOnlinePartner,getOfflinePartner } from "../../stores/actions/OnlineAction";
 import { socket } from "../ConnectSocket/ConnectSocket";
 import { useDispatch } from "react-redux";
+import { UserMe } from "./ChatBody/ChatContent/ChatContent";
 const Chat = () => {
   const dispatch = useDispatch()
   const [visible, setVisible] = useState(false);
@@ -20,7 +21,7 @@ const Chat = () => {
   };
   useEffect(() => {
     socket.emit("login_user", {
-      userId: 5,
+      userId: UserMe.id,
     });
     socket.on('online_partner', (partner) => {
       dispatch(getOnlinePartner(partner))

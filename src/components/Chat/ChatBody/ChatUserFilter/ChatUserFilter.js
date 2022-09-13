@@ -8,7 +8,8 @@ import { useDispatch } from "react-redux";
 import {
   createConverAction,
   findConverAction,
-} from "../../redux/action/FindConverAction";
+} from "../../../../stores/actions/ChatAction";
+import moment from "moment";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
 import { UserMe } from "../ChatContent/ChatContent";
 const { Option } = Select;
@@ -24,17 +25,11 @@ export const ChatUserFilter = () => {
           option.children.props.info.id,
           UserMe.id
         );
-        const chat = await chatService.sendMessage({
-          ConversationId: create.data.id,
-          Content: "Xin chào chúng tôi có thể giúp được gì cho bạn !",
-          Partner: true,
-        });
-        console.log();
         socket.emit("send_message", {
-          id: chat.data.id,
+          id: Math.random(),
           ConversationId: create.data.id,
-          createdAt: chat.data.createdAt,
-          Content: chat.data.Content,
+          createdAt: moment().toISOString(),
+          Content: "Xin chào chúng tôi có thể giúp được gì cho bạn !",
           Chatting: {
             id: create.data.Partner.id,
             PartnerName: create.data.Partner.PartnerName,

@@ -1,4 +1,4 @@
-import {OFFLINE_PARTNER, OFFLINE_USER, ONLINE_PARTNER, ONLINE_USER} from '../type/OnlineTypes'
+import { ONLINE_USER ,OFFLINE_USER ,ONLINE_PARTNER,OFFLINE_PARTNER} from "../types/OnlineTypes"
 export const getOnlineUser = (data) => {
   return {
     type: ONLINE_USER,

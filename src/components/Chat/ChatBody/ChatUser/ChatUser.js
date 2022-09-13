@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import {
   onlinePartnerSelector,
   offlinePartnerSelector,
-} from "../../redux/selector/OnlineSelector copy";
+} from "../../redux/selector/OnlineSelector";
 import { chatService } from "../../../../services/ChatService";
 export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
   const onlinePartnerList = useSelector(onlinePartnerSelector);

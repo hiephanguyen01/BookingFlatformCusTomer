@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import {
   onlinePartnerSelector,
   offlinePartnerSelector,
-} from "../../redux/selector/OnlineSelector copy";
+} from "../../../../stores/selector/OnlineSelector";
 export const FilterChatOption = ({ info }) => {
   const onlinePartnerList = useSelector(onlinePartnerSelector);
   const offlinePartnerList = useSelector(offlinePartnerSelector);
