@@ -57,7 +57,9 @@ export const ChatUserFilter = () => {
   }, []);
   return (
     <Select
-      notFoundContent={<div className="no-found-search">Không tìm thấy người dùng</div>}
+      notFoundContent={
+        <div className="no-found-search">Không tìm thấy người dùng</div>
+      }
       className="Chat__body__user__search"
       showSearch
       placeholder="Tìm kiếm"
