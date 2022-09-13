@@ -1,20 +1,37 @@
-import React, { useState } from "react";
-import { Drawer} from "antd";
+import React, { useEffect, useState } from "react";
+import { Drawer } from "antd";
 import ChatIcon from "../../assets/Chat/ChatIcon.png";
 import ChatIconNoti from "../../assets/Chat/ChatIconNoti.png";
 import "./Chat.scss";
-import { ChatBody } from "./ChatBody/ChatBody";
+import { ChatBody } from "./ChatBody/ChatBody";/* 
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn"; */
+import { getOnlinePartner,getOfflinePartner } from "../../stores/actions/OnlineAction";
+import { socket } from "../ConnectSocket/ConnectSocket";
+import { useDispatch } from "react-redux";
+import { UserMe } from "./ChatBody/ChatContent/ChatContent";
 const Chat = () => {
+  const dispatch = useDispatch()
   const [visible, setVisible] = useState(false);
-  const [notiMessage /* , setNotiMessage */] = useState(10);
-
+  const [notiMessage /* , setNotiMessage */] = useState(0);
   const showLargeDrawer = () => {
     setVisible(true);
   };
-
   const onClose = () => {
     setVisible(false);
   };
+  useEffect(() => {
+    socket.emit("login_user", {
+      userId: UserMe.id,
+    });
+    socket.on('online_partner', (partner) => {
+      dispatch(getOnlinePartner(partner))
+    })
+    socket.on('offline_partner', (partner) => {
+      dispatch(getOfflinePartner(partner))
+    })
+   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket])
   return (
     <div>
       <div
@@ -42,7 +59,9 @@ const Chat = () => {
             Chat
           </div>
         </div>
-        <div className="Chat__container__body"><ChatBody/></div>
+        <div className="Chat__container__body">
+          <ChatBody />
+        </div>
       </Drawer>
     </div>
   );

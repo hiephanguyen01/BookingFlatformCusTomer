@@ -11,6 +11,7 @@
 
     &__header,
     article {
+      width: 100%;
       margin-top: 12px;
       border-radius: 4px;
       min-width: 100% !important;
@@ -106,6 +107,10 @@
     border: none !important;
   }
 
+  .ant-modal-footer {
+    display: none;
+  }
+
   .ant-modal-body {
     padding-top: 0 !important;
     // padding-bottom: 10px !important;
@@ -144,10 +149,6 @@
 
 .create_post_tag_item.active {
   background: #1fcba2;
-}
-
-.ant-modal-footer {
-  display: none !important;
 }
 
 .btn {

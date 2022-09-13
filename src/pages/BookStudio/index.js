@@ -40,7 +40,6 @@ const Index = () => {
     />
   );
   const onChange = (date, dateString) => {
-    console.log(date, dateString);
   };
 
   return (

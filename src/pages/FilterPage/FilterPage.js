@@ -99,7 +99,7 @@ const FilterPage = () => {
     });
   };
   const onChangePage = (value) => {
-    console.log(value);
+   /*  console.log(value); */
     dispatch(getFilterdStudioPost(5, value, newFilter));
   };
   const handleClearFilter = () => {

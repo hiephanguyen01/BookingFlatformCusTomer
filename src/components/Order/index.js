@@ -25,7 +25,6 @@ const Index = ({ linkTo = "" }) => {
   }, []);
 
   const onChange = (date, dateString) => {
-    console.log(date, dateString);
   };
 
   const handleOnClickOrder = () => {

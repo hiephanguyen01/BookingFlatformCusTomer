@@ -86,7 +86,6 @@ const DaoPost = (props) => {
   };
 
   const handleLike = () => {
-    console.log(Id);
     dispatch(likePost(2, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
     setMouseClickHeart(!mouseClickHeart);
   };

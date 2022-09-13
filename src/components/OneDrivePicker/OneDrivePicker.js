@@ -12,7 +12,6 @@ export default function App() {
         action="share"
         multiSelect={true}
         onSuccess={(result) => {
-          console.log(result.value);
           setData([...data, ...result.value]);
         }}
         // onCancel={(result) => {

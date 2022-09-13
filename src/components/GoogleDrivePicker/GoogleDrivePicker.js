@@ -21,7 +21,6 @@ const GoogleDrivePicker = ({ files, setFiles }) => {
       // customViews: customViewsArray, // custom view
       callbackFunction: (d) => {
         if (d.action === "cancel") {
-          console.log("User clicked cancel/close button");
         }
         if (d.docs !== undefined) {
           const newFiles = d.docs.reduce((newArr, item) => {

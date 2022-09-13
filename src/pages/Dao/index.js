@@ -4,14 +4,18 @@ import {
   PictureOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import addNotification from "react-push-notification";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
+import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Button, Modal, Upload, message, Input, Descriptions } from "antd";
 import uploadImg from "../../assets/dao/uploadImg.png";
+import { getPostDaoAction } from "../../stores/actions/PostDaoAction";
+import { GET_LIST_POST } from "../../stores/types/PostDaoType";
 import "./dao.scss";
 import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
 import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
@@ -72,47 +76,10 @@ const Dao = (props) => {
   const dispatch = useDispatch();
   const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
 
-  // useEffect(() => {
-  //   getData(loadMore);
-  //   setLoadMore(false);
-  // }, [loadMore]);
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  //   if (props.scrollable) {
-  //     // list has fixed height
-  //     list.addEventListener("scroll", (e) => {
-  //       const el = e.target;
-  //       if (el.scrollTop + el.clientHeight === el.scrollHeight) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   } else {
-  //     // list has auto height
-  //     window.addEventListener("scroll", () => {
-  //       let win = window.scrollY + window.innerHeight;
-  //       let listHeight = list.clientHeight + list.offsetTop;
-  //       // console.log(win + " " + listHeight + " " + list.clientHeight);
-  //       if (
-  //         window.scrollY + window.innerHeight ===
-  //           list.clientHeight + list.offsetTop ||
-  //         (win - listHeight < 50 && win - listHeight > 0)
-  //       ) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  // useEffect(() => {
-  //   getData(loadMore);
-  //   setLoadMore(false);
-  // }, []);
-  // create post: start
+  const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
+
   const handleCancel = () => setPreviewVisible(false);
 
   const onChangeFile = (e) => {
@@ -274,6 +241,15 @@ const Dao = (props) => {
   //   getData();
   // }, []);
 
+  //Intergrate notification
+  function askPermission() {
+    // Notification
+    addNotification({
+      title: "Subcribe successfully", //chỗ này fetch api
+      subtitle: "asdasdadadsadasdasdasds", //also this one
+      native: true,
+    });
+  }
   useEffect(() => {
     // const newFilter = { ...filter, page: filter.page !== 1 ? };
     dispatch(getAllPostDaoAction(listPost, filter));
@@ -285,8 +261,24 @@ const Dao = (props) => {
     dispatch(getAllPostDaoAction(listPost, newFilter));
   }, [filter.tags.length]);
 
+  useEffect(() => {
+    getData();
+
+    if (Notification.permission !== "granted") {
+      askPermission();
+    }
+
+    return () => {
+      dispatch({ type: GET_LIST_POST, data: [] });
+    };
+  }, []);
+
   return (
     <section className="dao d-flex justify-content-center">
+      <DaoPostSearchModal
+        searchDaoPostVisible={searchDaoPostVisible}
+        setSearchDaoPostVisible={setSearchDaoPostVisible}
+      />
       <div className="dao__container d-flex flex-column align-items-center">
         <header className="dao__container__header d-flex justify-content-between align-items">
           <h2>Dạo</h2>

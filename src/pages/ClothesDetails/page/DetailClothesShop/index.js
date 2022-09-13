@@ -24,7 +24,6 @@ const ASIDE_CATEGORY_ITEM = [
 ];
 
 const onShowSizeChange = (current, pageSize) => {
-  console.log(current, pageSize);
 };
 
 const Index = () => {

@@ -36,6 +36,24 @@ export const getAllPostDaoAction = (currentListPost, filter) => {
     }
   };
 };
+export const getPostDaoAction = (currentListPost, limit, page) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await postDaoService.getAllPost(limit, page);
+      let temp = [...currentListPost, ...data.data];
+      dispatch({
+        type: GET_LIST_POST,
+        data: temp,
+      });
+      dispatch({
+        type: GET_PAGINATE_POSIBILITY,
+        data: data.pagination,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
 export const getPostDaoByIdAction = (id) => {
   return async (dispatch) => {
     try {

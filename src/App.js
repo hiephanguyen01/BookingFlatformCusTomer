@@ -50,9 +50,7 @@ function App() {
       <BackTop>
         <ArrowUpOutlined style={style} />
       </BackTop>
-
       <Routes>
-
         <Route index path="*" element={<Navigate to="/home" />} />
 
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
