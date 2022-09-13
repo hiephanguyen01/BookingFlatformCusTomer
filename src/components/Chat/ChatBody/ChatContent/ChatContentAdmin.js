@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react";
 import { chatService } from "../../../../services/ChatService";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
 import { UserMe } from "./ChatContent";
+import adminLogo from "../../../../assets/Chat/AdminUser.png";
 import moment from "moment";
 export const ChatContentAdmin = React.memo(({ info }) => {
   const updateScroll = useSelector(updateMSelector);
@@ -102,14 +103,9 @@ export const ChatContentAdmin = React.memo(({ info }) => {
   return (
     <div className="ChatContent">
       <div className="ChatContent__header">
-        <img
-          alt="user"
-          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-          width={35}
-          height={35}
-        ></img>
+        <img alt="user" src={adminLogo} width={35} height={35}></img>
         <div className="ChatContent__header__user">
-          {/* <div>{chatInfo.PartnerId.PartnerName}</div> */}
+          Booking Studio
         </div>
       </div>
       <div
@@ -187,14 +183,19 @@ export const ChatContentAdmin = React.memo(({ info }) => {
                 </div>
               ))}
             {isTyping && (
-              <div>
-                <div className="ChatContent__conversation__typing">
-                  <div className="ChatContent__conversation__typing__content">
-                    Booking Studio
-                  </div>{" "}
-                  <div className="dot-typing" />
+              <>
+                <div style={{ height: "20px", color: "#fff" }}>typing</div>
+                <div>
+                  <div style={{ position: "fixed", bottom: "65px" }}>
+                    <div className="ChatContent__conversation__typing">
+                      <div className="ChatContent__conversation__typing__content">
+                        Booking Studio
+                      </div>{" "}
+                      <div className="dot-typing" />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </>
         ) : (

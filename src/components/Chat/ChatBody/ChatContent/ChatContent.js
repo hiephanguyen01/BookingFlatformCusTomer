@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import "./ChatContent.scss";
 import { useState } from "react";
@@ -96,9 +97,10 @@ export const ChatContent = React.memo(({ chatInfo }) => {
         scrollToBottom();
       } else {
         setIsTyping(false);
+        scrollToBottom();
       }
     });
-  }, [socket]);
+  }, []);
   return (
     <div className="ChatContent">
       <div className="ChatContent__header">
@@ -190,11 +192,17 @@ export const ChatContent = React.memo(({ chatInfo }) => {
                 </div>
               ))}
             {isTyping && (
-              <div className="ChatContent__conversation__typing">
-                <div className="stage1">
-                  <div className="dot-typing" />
+              <>
+                <div style={{ height: "20px", color: "#fff" }}>typing</div>
+                <div style={{ position: "fixed", bottom: "65px" }}>
+                  <div className="ChatContent__conversation__typing">
+                    <div className="ChatContent__conversation__typing__content">
+                      {chatInfo.PartnerId.PartnerName}
+                    </div>{" "}
+                    <div className="dot-typing" />
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </>
         ) : (
