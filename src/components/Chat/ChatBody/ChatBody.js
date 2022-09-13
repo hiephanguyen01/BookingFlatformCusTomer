@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createConverFlagSelector,
   findConverSelector,
-} from "../redux/selector/ChatSelector";
+} from "../../../stores/selector/ChatSelector";
 import { updateMAction } from "../../../stores/actions/ChatAction";
 export const ChatBody = React.memo(() => {
   const updateConversation = useSelector(findConverSelector);
