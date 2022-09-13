@@ -16,7 +16,7 @@
   color: $primary-700;
   font-weight: 600;
   z-index: 1000;
-  
+
   &__icon {
     margin-right: 15px;
   }
@@ -81,6 +81,19 @@
       width: 100%;
       height: 344px;
       overflow-y: scroll;
+      &__no-more {
+        display: flex;
+        justify-content: center;
+        color: $primary-700;
+        font-size: 14;
+        font-weight: 700;
+      }
+      &__loadmore {
+        position: relative;
+        background: transparent;
+        width: 100%;
+        background-color: transparent;
+      }
       &::-webkit-scrollbar {
         width: 4px;
       }

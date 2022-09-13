@@ -9,6 +9,7 @@ import {
   offlinePartnerSelector,
 } from "../../../../stores/selector/OnlineSelector";
 import { chatService } from "../../../../services/ChatService";
+import { HandleImg } from "../../../HandleImg/HandleImg";
 export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
   const onlinePartnerList = useSelector(onlinePartnerSelector);
   const offlinePartnerList = useSelector(offlinePartnerSelector);
@@ -53,12 +54,13 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
     >
       <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
         <div className="d-flex align-items-center h-100">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-            alt="avatar"
-            className="d-flex align-self-center me-10"
-            width={40}
-          />
+        <HandleImg
+          Name={userInfo.PartnerId.PartnerName}
+          src={''}
+          width={34}
+          className="d-flex align-self-center me-10"
+        />
+          
         </div>
         <div className="py-2 h-100 w-100 d-flex flex-column justify-content-between">
           <div className="d-flex justify-content-between align-items-center h-100">
