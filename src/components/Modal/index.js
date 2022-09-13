@@ -8,7 +8,6 @@ export const ModalCustom = () => {
   const { Component, visible, isListImage } = useSelector(
     (state) => state.modalReducer
   );
-  console.log(isListImage);
   const dispatch = useDispatch();
 
   return (
@@ -20,6 +19,7 @@ export const ModalCustom = () => {
         closable={false}
         footer={null}
         onCancel={() => dispatch({ type: HIDE_MODAL })}
+        centered
       >
         {Component}
       </Modal>

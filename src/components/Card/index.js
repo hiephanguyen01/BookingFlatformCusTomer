@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 export const Card = ({ id }) => {
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
-  console.log(`${linkTo}/${id}`);
   const navigate = useNavigate();
   const [like, setLike] = useState(false);
   const handleChangeLike = (e) => {

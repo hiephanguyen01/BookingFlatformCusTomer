@@ -56,7 +56,6 @@ const LABELS = [
 export const Home = () => {
   const category = useSelector((state) => state.listByCategoryReducer.category);
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
-  console.log(category, linkTo);
   const dispatch = useDispatch();
   const [active, setActive] = useState("studio");
 

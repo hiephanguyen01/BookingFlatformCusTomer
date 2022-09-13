@@ -8,9 +8,9 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Collapse, Dropdown, Menu, Rate, Row, Space } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import "./clothesDetails.scss";
 
@@ -25,6 +25,7 @@ import imgPost from "../../assets/dao/Frame 163.jpg";
 import ImagePost from "../../components/imagePost/ImagePost";
 import images from "../../assets/images";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 
 const values = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 const data = [
@@ -62,6 +63,7 @@ const Index = () => {
   const [choose, setChoose] = useState(false);
   const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
+
   const menu = (
     <Menu
       items={[

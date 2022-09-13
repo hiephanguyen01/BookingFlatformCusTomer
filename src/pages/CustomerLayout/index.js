@@ -14,7 +14,6 @@ export const CustomerLayout = () => {
       setVisible(true);
     }
   }, []);
-  console.log(window.location.href.split("/")[4]);
   return (
     <div style={{ position: "relative" }} className="scroll-hide">
       <Chat />
