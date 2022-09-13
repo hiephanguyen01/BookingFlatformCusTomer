@@ -3,11 +3,12 @@ import "./ChatContent.scss";
 import { useState } from "react";
 import uploadLogo from "../../../../assets/Chat/Upload.png";
 import { useSelector } from "react-redux";
-import { updateMSelector } from "../../redux/selector/updateMSelector";
+import { updateMSelector } from "../../../../stores/selector/ChatSelector";
 import { useEffect, useRef } from "react";
 import { chatService } from "../../../../services/ChatService";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
 import { UserMe } from "./ChatContent";
+import moment from "moment";
 export const ChatContentAdmin = React.memo(({ info }) => {
   const updateScroll = useSelector(updateMSelector);
   const [messageList, setMessageList] = useState([]);
@@ -58,17 +59,13 @@ export const ChatContentAdmin = React.memo(({ info }) => {
     if (e.keyCode === 13 && e.shiftKey === false && message.trim() !== "") {
       e.preventDefault();
       setMessage("");
-      const res = await chatService.sendMessageAdmin({
-        ConversationId: id,
-        Content: message,
-        Admin: false,
-      });
+
       socket.emit("send_message_admin", {
         messageContent: {
-          id: res.data.id,
+          id: Math.random(),
           ConversationId: id,
-          createdAt: res.data.createdAt,
-          Content: res.data.Content,
+          createdAt: moment().toISOString(),
+          Content: message,
           Chatting: UserMe,
         },
         with: "user",
@@ -149,58 +146,66 @@ export const ChatContentAdmin = React.memo(({ info }) => {
           }
         }}
       >
-       {loading?(<>
-        {!hasMore && (
-          <div className="ChatContent__conversation__no-more">
-            Không còn tin nhắn nào nữa !
-          </div>
-        )}
-        {loadMore && (
-          <div className="ChatContent__conversation__loadmore">
-            <div className="stage">
-              <div className="dot-pulse" />
-            </div>
-          </div>
-        )}
-        {messageList
-          .sort((a, b) => {
-            const a1 = /* new Date(a.createdAt) */ a.id;
-            const b1 = /* new Date(b.createdAt) */ b.id;
-            return a1 - b1;
-          })
-          .map((itm, index) => (
-            <div
-              key={index}
-              className={
-                itm.Chatting === "Admin"
-                  ? "ChatContent__conversation__other"
-                  : "ChatContent__conversation__you"
-              }
-            >
-              <div
-                className={
-                  itm.Chatting === "Admin"
-                    ? "ChatContent__conversation__other__content"
-                    : "ChatContent__conversation__you__content"
-                }
-              >
-                {itm.Content}
+        {loading ? (
+          <>
+            {!hasMore && (
+              <div className="ChatContent__conversation__no-more">
+                Không còn tin nhắn nào nữa !
+              </div>
+            )}
+            {loadMore && (
+              <div className="ChatContent__conversation__loadmore">
+                <div className="stage">
+                  <div className="dot-pulse" />
+                </div>
+              </div>
+            )}
+            {messageList
+              .sort((a, b) => {
+                const a1 = /* new Date(a.createdAt) */ a.id;
+                const b1 = /* new Date(b.createdAt) */ b.id;
+                return a1 - b1;
+              })
+              .map((itm, index) => (
+                <div
+                  key={index}
+                  className={
+                    itm.Chatting === "Admin"
+                      ? "ChatContent__conversation__other"
+                      : "ChatContent__conversation__you"
+                  }
+                >
+                  <div
+                    className={
+                      itm.Chatting === "Admin"
+                        ? "ChatContent__conversation__other__content"
+                        : "ChatContent__conversation__you__content"
+                    }
+                  >
+                    {itm.Content}
+                  </div>
+                </div>
+              ))}
+            {isTyping && (
+              <div>
+                <div className="ChatContent__conversation__typing">
+                  <div className="ChatContent__conversation__typing__content">
+                    Booking Studio
+                  </div>{" "}
+                  <div className="dot-typing" />
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+            <div className="ChatContent__conversation__loadmore">
+              <div className="stage">
+                <div className="dot-pulse" />
               </div>
             </div>
-          ))}
-        {isTyping && (
-          <div >
-            <div className="ChatContent__conversation__typing">
-              <div className="ChatContent__conversation__typing__content">Booking Studio</div> <div className="dot-typing" />
-            </div>
           </div>
-        )}</>):( <div className="w-100 h-100 d-flex justify-content-center align-items-center">
-        <div className="ChatContent__conversation__loadmore">
-            <div className="stage">
-              <div className="dot-pulse" />
-            </div>
-          </div>
-      </div>)}
+        )}
         <div ref={messageEndRef}></div>
       </div>
       <div className="ChatContent__container">

@@ -3,10 +3,11 @@ import "./ChatContent.scss";
 import { useState } from "react";
 import uploadLogo from "../../../../assets/Chat/Upload.png";
 import { useSelector } from "react-redux";
-import { updateMSelector } from "../../redux/selector/updateMSelector";
+import { updateMSelector } from "../../../../stores/selector/ChatSelector";
 import { useEffect, useRef } from "react";
 import { chatService } from "../../../../services/ChatService";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
+import moment from "moment";
 export const UserMe = {
   id: 5,
   Username: "3871952632888744",
@@ -15,6 +16,14 @@ export const UserMe = {
   Fullname: "Toàn Nguyễn",
   Phone: "0909005001",
 };
+/* export const UserMe = {
+  id: 6,
+  Username: "hoanganhnguyen96kt@gmail.com",
+  Image: "15bc1346-7c8b-4844-b9b6-9d39cba1a7f4",
+  Email: "anhsaobanga21@gmail.com",
+  Fullname: "Nguyeh Hoanganh",
+  Phone: "",
+}; */
 export const ChatContent = React.memo(({ chatInfo }) => {
   const updateScroll = useSelector(updateMSelector);
   const { id } = chatInfo;
@@ -55,16 +64,11 @@ export const ChatContent = React.memo(({ chatInfo }) => {
     if (e.keyCode === 13 && e.shiftKey === false && message.trim() !== "") {
       e.preventDefault();
       setMessage("");
-      const res = await chatService.sendMessage({
-        ConversationId: id,
-        Content: message,
-        Partner: false,
-      });
       socket.emit("send_message", {
-        id: res.data.id,
+        id: Math.random(),
         ConversationId: id,
-        createdAt: res.data.createdAt,
-        Content: res.data.Content,
+        createdAt: moment().toISOString(),
+        Content: message,
         Chatting: UserMe,
       });
     }

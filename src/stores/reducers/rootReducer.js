@@ -4,18 +4,18 @@ import { modalReducer } from "./ModalReducer";
 import { postDaoReducer } from "./PostDaoReducer";
 import { studioPostReducer } from "./StudioPostReducer";
 import { listByCategoryReducer } from "./ListByCategoryReducer";
-import { UpdateMReducer } from "../../components/Chat/redux/reducer/updateMReducer";
-import { OnlineReducer } from "../../components/Chat/redux/reducer/OnlineReducer";
-import { findConverReducer } from "../../components/Chat/redux/reducer/FindConverReducer";
+
+import {OnlineReducer} from "./OnlineReducer"
+import { chatReducer } from "./ChatReducer";
 const rootReducer = combineReducers({
   postDaoReducer,
   modalReducer,
   authenticateReducer,
   studioPostReducer,
   listByCategoryReducer,
-  UpdateMReducer,
   OnlineReducer,
-  findConverReducer,
+  chatReducer
+
 });
 
 export default rootReducer;
