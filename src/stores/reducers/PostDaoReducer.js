@@ -7,6 +7,7 @@ import {
 } from "../types/PostDaoType";
 const initialState = {
   listPost: [],
+  listPostForSearching: [],
   pagination: {},
   postDetail: {},
   selectSearch: [],
@@ -47,4 +48,3 @@ export const postDaoReducer = (state = initialState, action) => {
       return state;
   }
 };
-

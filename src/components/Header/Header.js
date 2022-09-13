@@ -142,8 +142,7 @@ const Header = () => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleChange = (value) => {
-  };
+  const handleChange = (value) => {};
   useEffect(() => {
     if (document.activeElement === inputRef.current) {
       setVisible(true);
@@ -238,12 +237,10 @@ const Header = () => {
         </Form>
       </Modal>
       <div className="container">
-
-        <Link to = '/home' className="link">
-        <div className="img">
-          <img src={logo} alt="" />
-        </div>
-
+        <Link to="/home" className="link">
+          <div className="img">
+            <img src={logo} alt="" />
+          </div>
         </Link>
         <Input
           placeholder="Bạn đang tìm gì?"

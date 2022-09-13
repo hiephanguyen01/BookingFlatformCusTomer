@@ -11,6 +11,7 @@
 
     &__header,
     article {
+      width: 100%;
       margin-top: 12px;
       border-radius: 4px;
       min-width: 100% !important;
@@ -85,7 +86,7 @@
   font-weight: 700 !important;
   font-size: 20px !important;
   line-height: 27px !important;
-  color: $neutral-600  !important;
+  color: $neutral-600 !important;
 }
 
 .text-area.ant-input {
@@ -97,12 +98,13 @@
 }
 
 .modalDao {
-
   .ant-modal-header,
   .ant-modal-footer {
     border: none !important;
   }
-
+  .ant-modal-footer {
+    display: none;
+  }
   .ant-modal-body {
     padding-top: 0 !important;
     // padding-bottom: 10px !important;
@@ -143,10 +145,6 @@
   background: #1fcba2;
 }
 
-.ant-modal-footer {
-  display: none !important;
-}
-
 .btn {
   display: flex;
   justify-content: center;
@@ -156,7 +154,7 @@
 
 .btn-huy {
   padding: 15px 31px !important;
-  background: $neutral-100  !important;
+  background: $neutral-100 !important;
 }
 
 .btn-dang {
