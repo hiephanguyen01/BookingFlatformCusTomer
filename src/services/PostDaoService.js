@@ -1,14 +1,17 @@
 import { BaseService } from "./baseService";
 
 class PostDaoService extends BaseService {
-  getAllPost = (limit, page) => {
-    return this.get(`/api/post-post?limit=${limit}&page=${page}`);
+  getAllPost = (limit, page, tags) => {
+    return this.get(`/api/post-post?limit=${limit}&page=${page}&tags=${tags}`);
   };
   getPostById = (id) => {
     return this.get(`/api/post-post/${id}`);
   };
   getImage = (url) => {
     return this.get(`/image/${url}`);
+  };
+  createPost = (userId, data) => {
+    return this.post(`/api/post-post?userId=${userId}`, data);
   };
   updatePost = (id, data) => {
     return this.post(`/api/post-post/${id}`, data);

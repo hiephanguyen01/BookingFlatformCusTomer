@@ -23,6 +23,7 @@ import imgSwiper2 from "../../assets/dao/Frame 164.jpg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";
+import { convertTime } from "../../utils/convert";
 
 const moreOptionOnEachPost = [
   { icon: <Info />, title: "Báo cáo bài viết" },
@@ -54,7 +55,7 @@ const DaoPost = (props) => {
     TotalComments,
     Image,
     // comments,
-    CreatationTime,
+    CreationTime,
   } = item;
 
   const handleImageModal = (url) => {
@@ -102,7 +103,8 @@ const DaoPost = (props) => {
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(item)}>
+            onClick={() => handleImageModal(item)}
+          >
             <img
               style={{
                 width: "100%",
@@ -130,7 +132,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(item)}>
+                onClick={() => handleImageModal(item)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -151,7 +154,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item)}>
+                onClick={() => handleImageModal(item)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -201,7 +205,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item)}>
+                onClick={() => handleImageModal(item)}
+              >
                 <div className="image-container">
                   {idx === 8 && (
                     <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
@@ -236,14 +241,15 @@ const DaoPost = (props) => {
       <section className="post__main d-flex flex-column">
         <header className="post__main__info d-flex justify-content-between align-items-center">
           <div className="d-flex justify-content-between align-items-center">
-            <img src={Avatar} alt="" />
+            <img src={`http://localhost:3003/api/image/${Avatar}`} alt="" />
             <div className="post__main__info__nametime">
               <p className="post__main__info__nametime__name">{Username}</p>
-              <p>{CreatationTime}</p>
+              <p>{convertTime(CreationTime)}</p>
             </div>
           </div>
           <div>
             <Popover
+              placement="leftTop"
               content={
                 <div className="more-option-modal">
                   {moreOptionOnEachPost.map((item, idx) => (
@@ -258,7 +264,8 @@ const DaoPost = (props) => {
               }
               trigger="click"
               visible={moreOptionModal}
-              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}>
+              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}
+            >
               <MoreOutlined style={{ fontSize: "24px" }} />
             </Popover>
             <ReportPost
@@ -288,11 +295,13 @@ const DaoPost = (props) => {
               visible={isModalVisibleDetail}
               bodyStyle={{
                 backgroundColor: "transparent",
-              }}>
+              }}
+            >
               <Row>
                 <Col
                   span={16}
-                  style={{ backgroundColor: "#1D2226", height: "100%" }}>
+                  style={{ backgroundColor: "#1D2226", height: "100%" }}
+                >
                   <Swiper
                     slidesPerView={1}
                     spaceBetween={30}
@@ -302,23 +311,20 @@ const DaoPost = (props) => {
                     // }}
                     navigation={true}
                     modules={[Pagination, Navigation]}
-                    className="mySwiper">
-                    <SwiperSlide
-                      style={{ background: "#1D2226", padding: "90px 0" }}>
-                      <img
-                        src={imgSwiper1}
-                        className="w-100 h-100"
-                        style={{ objectFit: "contain" }}
-                      />
-                    </SwiperSlide>
-                    <SwiperSlide
-                      style={{ background: "#1D2226", padding: "90px 0" }}>
-                      <img
-                        src={imgSwiper2}
-                        className="w-100 h-100"
-                        style={{ objectFit: "contain" }}
-                      />
-                    </SwiperSlide>
+                    className="swiperPostDetail"
+                  >
+                    {Image.map((img, index) => (
+                      <SwiperSlide
+                        key={index}
+                        style={{ background: "#1D2226", padding: "90px 0" }}
+                      >
+                        <img
+                          src={img}
+                          className="w-100 h-100"
+                          style={{ objectFit: "contain" }}
+                        />
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                 </Col>
                 <Col
@@ -328,19 +334,24 @@ const DaoPost = (props) => {
                     overflowY: "scroll",
                     position: "relative",
                     height: "100vh",
-                  }}>
+                  }}
+                >
                   <header className="post__main__info d-flex justify-content-between align-items-center">
                     <div className="d-flex justify-content-between align-items-center">
-                      <img src={Avatar} alt="" />
+                      <img
+                        src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
+                        alt=""
+                      />
                       <div className="post__main__info__nametime">
                         <p className="post__main__info__nametime__name">
                           {Username}
                         </p>
-                        <p>{CreatationTime}</p>
+                        <p>{CreationTime}</p>
                       </div>
                     </div>
                     <div>
                       <Popover
+                        placement="leftTop"
                         content={
                           <div className="more-option-modal">
                             {moreOptionOnEachPost.map((item, idx) => (
@@ -357,7 +368,8 @@ const DaoPost = (props) => {
                         visible={moreOptionModal}
                         onVisibleChange={(newVisible) =>
                           setMoreOptionModal(newVisible)
-                        }>
+                        }
+                      >
                         <MoreOutlined style={{ fontSize: "24px" }} />
                       </Popover>
                       <ReportPost
@@ -378,7 +390,8 @@ const DaoPost = (props) => {
                   </div>
                   <div
                     className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                    style={{ borderBottom: "1px solid #E7E7E7" }}>
+                    style={{ borderBottom: "1px solid #E7E7E7" }}
+                  >
                     <div className="post__main__content__like-comment__likes d-flex">
                       {mouseOverHeart || mouseClickHeart ? (
                         <HeartFilled
@@ -433,7 +446,10 @@ const DaoPost = (props) => {
                   <div className="comment_item">
                     <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
                       <div className="d-flex justify-content-between align-items-center">
-                        <img src={Avatar} alt="" />
+                        <img
+                          src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
+                          alt=""
+                        />
                         <div className="post__main__info__nametime">
                           <p className="post__main__info__nametime__name">
                             {Username}
@@ -451,7 +467,8 @@ const DaoPost = (props) => {
                         // }}
                         navigation={true}
                         modules={[Navigation, Pagination]}
-                        className="post_slider">
+                        className="post_slider"
+                      >
                         <SwiperSlide className="post_slider_item">
                           <a href="#">
                             <div className="d-flex h-100">
@@ -516,7 +533,8 @@ const DaoPost = (props) => {
                     </div>
                     <div
                       className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                      style={{ borderBottom: "1px solid #E7E7E7" }}>
+                      style={{ borderBottom: "1px solid #E7E7E7" }}
+                    >
                       <div className="post__main__content__like-comment__likes d-flex">
                         {mouseOverHeart || mouseClickHeart ? (
                           <HeartFilled
@@ -548,7 +566,10 @@ const DaoPost = (props) => {
                   <div className="comment_item">
                     <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
                       <div className="d-flex justify-content-between align-items-center">
-                        <img src={Avatar} alt="" />
+                        <img
+                          src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
+                          alt=""
+                        />
                         <div className="post__main__info__nametime">
                           <p className="post__main__info__nametime__name">
                             {Username}
@@ -566,7 +587,8 @@ const DaoPost = (props) => {
                         // }}
                         navigation={true}
                         modules={[Navigation, Pagination]}
-                        className="post_slider">
+                        className="post_slider"
+                      >
                         <SwiperSlide className="post_slider_item">
                           <a href="#">
                             <div className="d-flex h-100">
@@ -631,7 +653,8 @@ const DaoPost = (props) => {
                     </div>
                     <div
                       className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                      style={{ borderBottom: "1px solid #E7E7E7" }}>
+                      style={{ borderBottom: "1px solid #E7E7E7" }}
+                    >
                       <div className="post__main__content__like-comment__likes d-flex">
                         {mouseOverHeart || mouseClickHeart ? (
                           <HeartFilled
@@ -705,7 +728,8 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__middle" : "post__middle d-none"}>
+        className={commentsClick ? "post__middle" : "post__middle d-none"}
+      >
         <hr color="#E7E7E7" style={{ marginBottom: "20px" }} />
         <div className="d-flex">
           <img src={img1} alt="" />
@@ -723,7 +747,8 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__comments" : "post__comments d-none"}>
+        className={commentsClick ? "post__comments" : "post__comments d-none"}
+      >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
         {/* {comments.map((item, idx) => (
           <div key={item.Id} className="post__comments__detail">
@@ -739,7 +764,7 @@ const DaoPost = (props) => {
                 <p className="post__comments__detail__info__nametime__name">
                   {item.Username}
                 </p>
-                <p>{item.CreatationTime}</p>
+                <p>{item.CreationTime}</p>
               </div>
             </div>
             <Swiper

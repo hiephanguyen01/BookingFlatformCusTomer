@@ -58,7 +58,7 @@
           }
         }
 
-        &:first-child {
+        &.active {
           background-color: $secondary-50;
 
           p {
@@ -80,13 +80,14 @@
 
 #infinity-list-post-dao {
   min-height: 100vh;
+  min-width: 100%;
 }
 
 .ant-modal-title {
   font-weight: 700 !important;
   font-size: 20px !important;
   line-height: 27px !important;
-  color: $neutral-600 !important;
+  color: $neutral-600  !important;
 }
 
 .text-area.ant-input {
@@ -98,13 +99,18 @@
 }
 
 .modalDao {
+  max-width: 700px !important;
+  width: 700px !important;
+
   .ant-modal-header,
   .ant-modal-footer {
     border: none !important;
   }
+
   .ant-modal-footer {
     display: none;
   }
+
   .ant-modal-body {
     padding-top: 0 !important;
     // padding-bottom: 10px !important;
@@ -150,11 +156,12 @@
   justify-content: center;
   align-items: center;
   border-radius: 8px !important;
+  cursor: pointer;
 }
 
 .btn-huy {
   padding: 15px 31px !important;
-  background: $neutral-100 !important;
+  background: $neutral-100  !important;
 }
 
 .btn-dang {

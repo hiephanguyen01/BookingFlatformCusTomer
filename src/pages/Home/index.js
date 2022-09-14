@@ -18,7 +18,7 @@ import logoImg from "../../../src/assets/img/Logo1.png";
 import {
   getListByCategory,
   setCategory,
-  setLinkTo
+  setLinkTo,
 } from "../../stores/actions/ListByCategoryAction";
 
 const cx = classNames.bind(styles);
@@ -215,18 +215,15 @@ const LABELS = [
 export const Home = () => {
   const category = useSelector((state) => state.listByCategoryReducer.category);
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
-  /* console.log(category, linkTo); */
   const dispatch = useDispatch();
   const [active, setActive] = useState("studio");
 
   useEffect(() => {
-    // dispatch(getListByCategory(LABELS[0].label));
     dispatch(setCategory(LABELS[0].label));
     dispatch(setLinkTo(LABELS[0].linkTo));
   }, []);
   return (
     <>
-
       {/* <GoogleDrivePicker />
       <OneDrivePicker /> */}
       <MetaDecorator

@@ -4,19 +4,12 @@ import { useDispatch } from "react-redux";
 import "./orderClothes.scss";
 
 import Order from "../../../../components/Order";
+import Promotion from "../../../../components/Promotion";
 import Voucher from "./components/Voucher";
 import { SHOW_MODAL } from "../../../../stores/types/modalTypes";
 
 const Index = () => {
-  const [chooseVoucher, setChooseVoucher] = useState([]);
-  const dispatch = useDispatch();
-  const handleOnClickModal = () => {
-    dispatch({
-      type: SHOW_MODAL,
-      Component: <Voucher setChooseVoucher={setChooseVoucher} />,
-    });
-  };
-  return <Order onClickModal={handleOnClickModal} linkTo="confirm" />;
+  return <Order linkTo="confirm" />;
 };
 
 export default Index;

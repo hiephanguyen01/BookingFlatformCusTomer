@@ -5,15 +5,28 @@ import {
 } from "../types/PostDaoType";
 import { postDaoService } from "../../services/PostDaoService";
 
-export const getAllPostDaoAction = (currentListPost, limit, page) => {
+export const getAllPostDaoAction = (currentListPost, filter) => {
   return async (dispatch) => {
     try {
-      const { data } = await postDaoService.getAllPost(limit, page);
-      let temp = [...currentListPost, ...data.data];
-      dispatch({
-        type: GET_LIST_POST,
-        data: temp,
-      });
+      const { data } = await postDaoService.getAllPost(
+        filter.limit,
+        filter.page,
+        filter.tags.join(",")
+      );
+      if (filter.page === 1) {
+        let temp = [...data.data];
+        dispatch({
+          type: GET_LIST_POST,
+          data: temp,
+        });
+      } else {
+        let temp = [...currentListPost, ...data.data];
+        dispatch({
+          type: GET_LIST_POST,
+          data: temp,
+        });
+      }
+
       dispatch({
         type: GET_PAGINATE_POSIBILITY,
         data: data.pagination,
@@ -80,20 +93,6 @@ export const likePost = (userId, postId) => {
         UserId: userId,
       });
       dispatch({ type: "GET_LIKE", data: data.data });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-};
-
-export const createPost = (userId, post) => {
-  return async (dispatch) => {
-    try {
-      // const { data } = await postDaoService.createLike({
-      //   PostId: postId,
-      //   UserId: userId,
-      // });
-      // dispatch({ type: "GET_LIKE", data: data.data });
     } catch (err) {
       console.error(err);
     }
