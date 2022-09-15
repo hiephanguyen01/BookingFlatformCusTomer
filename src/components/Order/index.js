@@ -91,6 +91,7 @@ const Index = ({ linkTo = "" }) => {
                 <img
                   src={imgStudio}
                   style={{ height: "100%", marginRight: "20px" }}
+                  alt=''
                 />
                 <div>
                   <span className="text-middle">Váy cưới mã 01</span>

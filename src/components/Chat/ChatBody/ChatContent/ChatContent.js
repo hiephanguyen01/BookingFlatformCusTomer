@@ -329,7 +329,6 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             style={{
               width: "30px",
               height: "30px",
-              borderRadius: "10px",
             }}
             multiple={true}
           >
