@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
 import "../ReportPostDao/reportPostDao.scss";
-import { GET_SEARCH_LIST_POST } from "../../stores/types/PostDaoType";
 
 const DaoPostSearchModal = (props) => {
   const [keyword, setKeyword] = useState("");

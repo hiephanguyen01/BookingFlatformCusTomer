@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../SignIn.scss";
 import ggLogo from "../../../../assets/imgAuth/google.png";
-import { useNavigate } from "react-router-dom";
 import { googleSignIn } from "../../../../stores/actions/autheticateAction";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 export const GoogleSignIn = () => {
   const dispatch = useDispatch();
   const handleGoogleSignIn = async () => {

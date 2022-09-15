@@ -34,7 +34,6 @@ export const getPromoCodeByStudioPostAction = (studioPostId) => {
       const { data } = await promoCodeService.getPromoCodeByStudioPost(
         studioPostId
       );
-      console.log(data);
       dispatch({ type: GET_PROMO_BY_STUDIO_POST, data: data });
     } catch (error) {
       console.error(error);

@@ -1,15 +1,5 @@
-import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Checkbox,
-  Col,
-  Divider,
-  Dropdown,
-  Menu,
-  Row,
-  Space,
-  Tabs,
-} from "antd";
+import { RightOutlined } from "@ant-design/icons";
+import { Button, Col, Dropdown, Menu, Row, Space, Tabs } from "antd";
 import React, { useState } from "react";
 import CheckBox from "../../components/CheckBox";
 import "./cart.scss";

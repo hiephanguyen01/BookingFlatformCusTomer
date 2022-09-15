@@ -1,11 +1,18 @@
-.home {
+.home_container {
     background-color: #f6f6f6;
-    padding: 12px 70px 52px 70px;
+    padding: 12px 0px 52px;
+
+
+    .home {
+        max-width: 1200px;
+        margin: auto;
+    }
 }
+
 
 .filter {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 18px;
     padding: 29px;
     background-color: #ffff;
@@ -125,6 +132,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+
     .result-item {
         display: flex;
         flex-direction: row;
@@ -135,12 +143,14 @@
         border: 1px solid #1fcba2;
         padding: 4px 10px;
         border-radius: 6px;
+
         span {
             font-size: 14px;
             color: #03ac84;
         }
     }
 }
+
 .search-result {
     display: flex;
     flex-direction: column;
@@ -148,40 +158,49 @@
     margin-top: 15px;
     height: 300px;
     overflow-y: scroll;
+
     .item {
         display: flex;
         justify-content: space-between;
         padding-right: 20px;
-        & + .item {
+
+        &+.item {
             border-top: 1px solid #b2b2b2;
             padding-top: 15px;
         }
+
         .left {
             display: flex;
             gap: 13px;
+
             img {
                 width: 118px;
                 height: 80px;
                 border-radius: 6px;
                 object-fit: cover;
             }
+
             .content {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
+
                 h5 {
                     font-weight: 600;
                     font-size: 18px;
                     margin: 0;
                 }
+
                 p {
                     font-size: 14px;
                     color: #3f3f3f;
                 }
+
                 .number-order {
                     position: relative;
                     padding-left: 5px;
                     margin-left: 5px;
+
                     &::before {
                         content: "";
                         width: 1px;
@@ -195,7 +214,19 @@
                 }
             }
         }
-        .right {
-        }
+
+        .right {}
+    }
+}
+
+@media (max-width: 1400px) {
+    .home {
+        padding: 0 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .home {
+        padding: 0 0;
     }
 }

@@ -5,7 +5,7 @@ import {
   PlusOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Col, Row, Popover, Modal, Carousel } from "antd";
+import { Col, Row, Popover, Modal } from "antd";
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
@@ -19,7 +19,6 @@ import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
 import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
 import img1 from "../../assets/dao/Frame 180.png";
 import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
-import imgSwiper2 from "../../assets/dao/Frame 164.jpg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";

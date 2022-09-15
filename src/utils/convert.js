@@ -13,3 +13,13 @@ export const convertTime = (time) => {
     return TimeFormat;
   }
 };
+
+export const convertPrice = (price) => {
+  let format;
+  if (price) {
+    format = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  } else {
+    return 0;
+  }
+  return format;
+};

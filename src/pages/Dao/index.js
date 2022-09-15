@@ -12,13 +12,12 @@ import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Button, Modal, Upload, message, Input, Descriptions } from "antd";
-import uploadImg from "../../assets/dao/uploadImg.png";
-import { getPostDaoAction } from "../../stores/actions/PostDaoAction";
+import { Modal, message, Input } from "antd";
+// import uploadImg from "../../assets/dao/uploadImg.png";
 import { GET_LIST_POST } from "../../stores/types/PostDaoType";
 import "./dao.scss";
 import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
-import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
+// import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
 import { postDaoService } from "../../services/PostDaoService";
 
 const tagItems = [
@@ -49,19 +48,17 @@ const tagItems = [
   },
 ];
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+// const getBase64 = (file) =>
+//   new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(file);
 
-    reader.onload = () => resolve(reader.result);
+//     reader.onload = () => resolve(reader.result);
 
-    reader.onerror = (error) => reject(error);
-  });
+//     reader.onerror = (error) => reject(error);
+//   });
 
 const Dao = (props) => {
-  const [selectedCategory, setSelectedCategory] = useState(0);
-  const [page, setPage] = useState(1);
   const [files, setFiles] = useState([]);
   const [filesDrive, setFilesDrive] = useState([]);
   const [filter, setFilter] = useState({
@@ -78,9 +75,9 @@ const Dao = (props) => {
 
   const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [previewVisible, setPreviewVisible] = useState(false);
+  // const [previewVisible, setPreviewVisible] = useState(false);
 
-  const handleCancel = () => setPreviewVisible(false);
+  // const handleCancel = () => setPreviewVisible(false);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];
@@ -111,11 +108,11 @@ const Dao = (props) => {
     setFilesDrive([...newFiles]);
   };
 
-  const uploadButton = (
-    <div>
-      <img src={uploadImg} />
-    </div>
-  );
+  // const uploadButton = (
+  //   <div>
+  //     <img src={uploadImg} />
+  //   </div>
+  // );
   const success = () => {
     message.success({
       content: "Bài viết của bạn được đăng thành công",
@@ -180,7 +177,7 @@ const Dao = (props) => {
           formData.append("imageDrive", newImgDrive.join(","));
         }
 
-        const response = await postDaoService.createPost("", formData);
+        await postDaoService.createPost("", formData);
         setVisible(false);
         success();
         setFiles([]);

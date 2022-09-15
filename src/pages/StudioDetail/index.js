@@ -1,7 +1,6 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./Detail.module.scss";
-import { LightBox } from "react-lightbox-pack"; // <--- Importing LightBox Pack
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,12 +11,11 @@ import {
   StarFilled,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Pagination, Popover, Table } from "antd";
+import { Pagination, Popover, Table } from "antd";
 import { Helmet } from "react-helmet";
 import images from "../../assets/images";
 import { Rate } from "antd";
 import Content from "../../components/ReadMore";
-import { ListItem } from "../Home/ListCard";
 import { SlideCard } from "./SlideCard";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { Report } from "./Report";
@@ -33,7 +31,7 @@ const columns = [
     dataIndex: "name",
     key: "name",
     width: "30%",
-    render: (text) => {
+    render: () => {
       return (
         <div style={{ textAlign: "center" }}>
           <img
@@ -105,7 +103,7 @@ const columns = [
     title: "Mô tả",
     dataIndex: "age",
     key: "age",
-    render: (text) => {
+    render: () => {
       return (
         <p>
           Contrary to popular belief, Lorem Ipsum is not simply random text. It
@@ -254,25 +252,25 @@ const dataImg = [
   },
 ];
 
-const text = <span>Title</span>;
-
 export const StudioDetail = () => {
   const { id } = useParams();
-  const {pathname}= useLocation()
+  const { pathname } = useLocation();
   // State
   const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
   const { studioDetail } = useSelector((state) => state.studioPostReducer);
- /*  console.log(studioDetail); */
+  /*  console.log(studioDetail); */
   // Handler
   useEffect(() => {
     setTimeout(() => {
       dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
     }, 5000);
   }, []);
+
   useEffect(() => {
     dispatch(studioDetailAction(id));
   }, [id]);
+
   const values = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
   const handleReport = () => {
@@ -283,14 +281,29 @@ export const StudioDetail = () => {
       <Helmet>
         <title>{studioDetail?.Name}</title>
         <meta name="description" content={studioDetail?.Description}></meta>
-        <meta property="og:url" itemprop="url" content={`${process.env.REACT_APP_DB_BASE_URL}${pathname}`}></meta>
-        <meta property="og:description" content={studioDetail?.Description}></meta>
-        <meta content={studioDetail?.Image?.slice(0,1)} property="og:image" itemprop="thumbnailUrl"></meta>
+        <meta
+          property="og:url"
+          itemprop="url"
+          content={`${process.env.REACT_APP_DB_BASE_URL}${pathname}`}
+        ></meta>
+        <meta
+          property="og:description"
+          content={studioDetail?.Description}
+        ></meta>
+        <meta
+          content={studioDetail?.Image?.slice(0, 1)}
+          property="og:image"
+          itemprop="thumbnailUrl"
+        ></meta>
         <meta property="og:image:width" content="740"></meta>
         <meta property="og:image:height" content="555"></meta>
         <meta property="og:locale" content="vi_VN"></meta>
         <meta property="og:site_name" content="Booking Studio"></meta>
-        <meta property="og:title" itemprop="name" content={studioDetail?.Name}></meta>
+        <meta
+          property="og:title"
+          itemprop="name"
+          content={studioDetail?.Name}
+        ></meta>
       </Helmet>
       <div className={cx("wrapper")}>
         <div className={cx("studioDetail")}>

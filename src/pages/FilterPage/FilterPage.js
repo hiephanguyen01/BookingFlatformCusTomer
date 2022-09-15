@@ -16,43 +16,48 @@ import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import { studioPostService } from "../../services/StudioPostService";
-import { getFilterdStudioPost } from "../../stores/actions/studioPostAction";
+import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import "./FilterPage.scss";
 const { Option } = Select;
 const FilterPage = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const filter = useSelector((state) => state.studioPostReducer.filter);
-  const loading = useSelector((state) => state.studioPostReducer.loading);
-  const pagination = useSelector((state) => state.studioPostReducer.pagination);
+  const { filter, loading, pagination, studioPostList } = useSelector(
+    (state) => state.studioPostReducer
+  );
+  console.log(studioPostList);
+
   const [newFilter, setNewFilter] = useState(filter);
   const [provinces, setProvinces] = useState([]);
-  const studioPostList = useSelector(
-    (state) => state.studioPostReducer.studioPostList
-  );
   const categories = [
     {
       id: 1,
+      value: "studio",
       name: "Studio",
     },
     {
       id: 2,
+      value: "photographer",
       name: "Nhiếp ảnh",
     },
     {
       id: 3,
+      value: "clothes",
       name: "Trang phục",
     },
     {
       id: 4,
+      value: "makeup",
       name: "Make up",
     },
     {
       id: 5,
+      value: "model",
       name: "Người mẫu",
     },
     {
       id: 6,
+      value: "device",
       name: "Thiết bị",
     },
   ];
@@ -99,8 +104,8 @@ const FilterPage = () => {
     });
   };
   const onChangePage = (value) => {
-   /*  console.log(value); */
-    dispatch(getFilterdStudioPost(5, value, newFilter));
+    /*  console.log(value); */
+    dispatch(getFilterStudioPost(5, value, newFilter));
   };
   const handleClearFilter = () => {
     setNewFilter({
@@ -120,7 +125,7 @@ const FilterPage = () => {
       setProvinces(res.data);
     })();
     if (newFilter) {
-      dispatch(getFilterdStudioPost(5, 1, newFilter));
+      dispatch(getFilterStudioPost(5, 1, newFilter));
     }
   }, [dispatch, newFilter, filter]);
 
@@ -143,7 +148,8 @@ const FilterPage = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   <p className="text">LỌC THEO</p>
                   <Button htmlType="submit" type="primary">
                     Xoá bộ lọc
@@ -168,7 +174,8 @@ const FilterPage = () => {
                 <Form.Item label="Danh mục" name="category">
                   <Radio.Group
                     onChange={onChangeFilterCategory}
-                    value={newFilter.category}>
+                    value={newFilter.category}
+                  >
                     <Row>
                       {categories &&
                         categories.map((val) => (
@@ -234,7 +241,8 @@ const FilterPage = () => {
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
-                }}>
+                }}
+              >
                 <div
                   style={{
                     background: "white",
@@ -242,7 +250,8 @@ const FilterPage = () => {
                     borderRadius: "50%",
                     padding: "10px",
                     margin: "10px",
-                  }}>
+                  }}
+                >
                   <LoadingOutlined style={{ fontSize: "40px" }} />
                 </div>
               </div>
@@ -261,7 +270,8 @@ const FilterPage = () => {
                 display: "flex",
                 justifyContent: "right",
                 padding: "10px 10px",
-              }}>
+              }}
+            >
               <Pagination
                 pageSize={pagination?.limit}
                 defaultCurrent={1}

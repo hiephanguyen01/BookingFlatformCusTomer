@@ -12,7 +12,7 @@ import "swiper/css/pagination";
 // import required modules
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
 import { useDispatch } from "react-redux";
-import { HIDE_MODAL } from "../../../stores/types/modalTypes";
+import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import { CloseOutlined } from "@ant-design/icons";
 export const ModalImage = ({ data }) => {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ export const ModalImage = ({ data }) => {
           }}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Navigation, Pagination, Thumbs]}
-          className="mySwiper2"
+          className="swiperModalImg"
         >
           {data?.map((item, idx) => {
             return (
@@ -73,7 +73,7 @@ export const ModalImage = ({ data }) => {
           //   freeMode={true}
           watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Thumbs]}
-          className="mySwiper"
+          className="swiperThumb"
         >
           {data?.map((item, idx) => {
             return (

@@ -1,4 +1,3 @@
-import { listByCategory } from "../../services/ListByCategory";
 import {
   GET_LIST_BY_CATEGORY,
   SET_CATEGORY,
@@ -8,7 +7,7 @@ import {
 export const getListByCategory = (category) => {
   return async (dispatch) => {
     try {
-      const { data } = await listByCategory.getListByCategory("");
+      // const { data } = await listByCategory.getListByCategory("");
       let temp = [];
       dispatch({
         type: GET_LIST_BY_CATEGORY,
