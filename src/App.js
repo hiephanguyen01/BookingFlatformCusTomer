@@ -52,7 +52,6 @@ function App() {
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
-
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>

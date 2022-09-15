@@ -7,9 +7,11 @@ import { ChatBody } from "./ChatBody/ChatBody";/*
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn"; */
 import { getOnlinePartner,getOfflinePartner } from "../../stores/actions/OnlineAction";
 import { socket } from "../ConnectSocket/ConnectSocket";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserMe } from "./ChatBody/ChatContent/ChatContent";
+import { closeConversationSelector } from "../../stores/selector/ChatSelector";
 const Chat = () => {
+  const closeConversation = useSelector(closeConversationSelector)
   const dispatch = useDispatch()
   const [visible, setVisible] = useState(false);
   const [notiMessage /* , setNotiMessage */] = useState(0);
@@ -32,6 +34,9 @@ const Chat = () => {
    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket])
+  useEffect(()=>{
+    setVisible(false);
+  },[closeConversation])
   return (
     <div>
       <div
