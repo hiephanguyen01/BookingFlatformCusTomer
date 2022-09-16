@@ -58,7 +58,7 @@
   }
   &__comming {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     height: 100%;
     &__cancel {
@@ -94,7 +94,7 @@
   }
   &__complete {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     height: 100%;
     &__modal {
@@ -171,7 +171,7 @@
         &__confirm{
             display: flex;
             width: 100%;
-            justify-content: end;
+            justify-content: flex-end;
             &__1{
                 width: 80px;
                 padding: 8px;
@@ -235,7 +235,7 @@
   }
   &__cancel {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     height: 100%;
     &__order {
