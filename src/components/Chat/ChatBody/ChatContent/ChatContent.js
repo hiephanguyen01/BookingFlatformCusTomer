@@ -366,7 +366,6 @@ export const ChatContent = React.memo(({ chatInfo }) => {
               ))}
           </div>
           <textarea
-            className="ChatContent__container__send__current-message"
             rows={1}
             cols={1}
             data-kt-element="input"
