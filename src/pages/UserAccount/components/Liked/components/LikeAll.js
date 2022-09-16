@@ -1,0 +1,18 @@
+import React from "react";
+import { Card } from "../../../../../components/Card";
+import "../liked.scss";
+export const LikeAll = () => {
+  const Layout = ({ children }) => (
+    <div className="Like__Layout">{children}</div>
+  );
+  const ok = () => {
+    return Array.apply(null, { length: 12 }).map(() => {
+      return (
+        <div style={{ width: "24%", marginBottom: "10px" }}>
+          <Card />
+        </div>
+      );
+    });
+  };
+  return <Layout>{ok()}</Layout>;
+};

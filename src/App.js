@@ -16,15 +16,12 @@ import UserAccount from "./pages/UserAccount";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
 import Cart from "./pages/Cart";
 import { Home } from "./pages/Home";
-
 import PageClothes from "./pages/ClothesDetails/PageClothes";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
 import PageModel from "./pages/ModelDetails/PageModel";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
-import { ModalImage } from "./pages/StudioDetail/ModalImg";
 import { StudioDetail } from "./pages/StudioDetail";
-import MetaDecorator from "./components/MetaDecorator/MetaDecorator";
-import logoImg from "../src/assets/img/Logo1.png";
+import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +63,7 @@ function App() {
           <Route path="clothes/*" element={<PageClothes />} />
           <Route path="model/*" element={<PageModel />} />
           <Route path="makeup/*" element={<PageMakeup />} />
+          <Route path="confirm-order/*" element={<UpdateConfirm />} />
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}
