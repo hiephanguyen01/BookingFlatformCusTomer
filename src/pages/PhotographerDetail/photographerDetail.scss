@@ -1,9 +1,12 @@
 @import "../../App.scss";
+
 .photographer-detail {
   min-height: 100vh;
   background-color: #f5f5f5;
   padding-top: 12px;
+
   &__container {
+
     // margin-bottom: 10px;
     &__description,
     &__map,
@@ -13,19 +16,24 @@
       padding: 26px 24px 24px 24px;
       background-color: #fff;
     }
+
     &__header {
       width: 100%;
       margin-bottom: 12px;
       padding: 28px;
       background-color: #fff;
+
       &__info {
         width: 100%;
+
         &__right-side {
           &__locate {
             margin: 12px 0 12px 0;
+
             svg {
               margin-right: 7px;
             }
+
             p {
               font-size: 18px;
               font-weight: 400;
@@ -33,10 +41,12 @@
               color: $neutral-400;
             }
           }
+
           &__name {
             svg {
               margin-left: 10px;
             }
+
             p {
               font-size: 30px;
               font-weight: 800;
@@ -47,6 +57,7 @@
           &__rating {
             .has-booked {
               padding-left: 10px;
+
               p {
                 font-size: 16px;
                 font-weight: 400;
@@ -54,9 +65,11 @@
                 color: $neutral-600;
               }
             }
+
             .stars {
               padding-right: 10px;
               position: relative;
+
               &::after {
                 position: absolute;
                 content: "";
@@ -66,6 +79,7 @@
                 height: 100%;
                 background-color: $neutral-300;
               }
+
               .star-number {
                 font-size: 16px;
                 font-weight: 400;
@@ -75,6 +89,10 @@
             }
           }
         }
+      }
+
+      &__image {
+        width: 100%;
       }
     }
 
@@ -101,30 +119,39 @@
     }
 
     &__map {
+      height: 350px;
+
       p {
         font-size: 16px;
         font-weight: 400;
         color: $neutral-400;
         line-height: 22px;
       }
+
+      .mapouter {
+        height: 75%;
+
+        .gmap_canvas {
+          height: 100%;
+
+          .gmap_iframe {
+            height: 100% !important;
+          }
+        }
+      }
     }
+
     &__services {
-      &__table {
-        // padding: 26px;
-      }
-      th.ant-table-cell {
-        font-weight: 700 !important;
-        font-size: 16px;
-      }
-      td.ant-table-cell {
-        height: 100px !important;
-      }
+      min-height: 165px !important;
+
     }
+
     &__chosen-services {
       width: 100%;
       height: fit-content;
       padding: 28px 25px 28px 25px;
       background-color: #fff;
+
       &__header {
         p {
           &:first-child {
@@ -133,6 +160,7 @@
             color: $neutral-700;
             line-height: 25px;
           }
+
           &:nth-child(2) {
             font-weight: 400;
             font-size: 16px;
@@ -154,11 +182,14 @@
 .image-section {
   width: 100%;
   margin-top: 20px;
+
   .second-image-section {
     width: 45%;
   }
+
   .first-image {
     width: 54%;
+
     // height: 100%;
     img {
       width: 100%;
@@ -167,10 +198,16 @@
     }
   }
 }
+
 .album_container {
   background-color: #ffffff;
   padding: 26px 24px;
   margin: 18px 0 12px 0;
+
+  .swiper-wrapper {
+    height: 130px;
+  }
+
   h3 {
     font-weight: 700;
     font-size: 20px;

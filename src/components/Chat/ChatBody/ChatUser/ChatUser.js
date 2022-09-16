@@ -19,14 +19,14 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
     userInfo.newestMessage ? userInfo.newestMessage : null
   );
   useEffect(() => {
-   if(userInfo.newestMessage){
-    if (userInfo.newestMessage.UserId !== -1) {
-      setIsRead(true);
-    } else {
-      setIsRead(userInfo.newestMessage.IsRead);
+    if (userInfo.newestMessage) {
+      if (userInfo.newestMessage.UserId !== -1) {
+        setIsRead(true);
+      } else {
+        setIsRead(userInfo.newestMessage.IsRead);
+      }
+      setLastMessage(userInfo.newestMessage);
     }
-    setLastMessage(userInfo.newestMessage);
-   }
   }, [userInfo]);
   useEffect(() => {
     setIsOnline(onlinePartnerList.includes(userInfo.PartnerId.id));
@@ -45,29 +45,30 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
           userInfo.newestMessage.IsRead === false
         ) {
           (async () => {
-             await chatService.readMessage(
-              userInfo.newestMessage.id
-            );
+            await chatService.readMessage(userInfo.newestMessage.id);
           })();
         }
       }}
     >
       <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
         <div className="d-flex align-items-center h-100">
-        <HandleImg
-          Name={userInfo.PartnerId.PartnerName}
-          src={''}
-          width={34}
-          className="d-flex align-self-center me-10"
-        />
-          
+          <HandleImg
+            Name={userInfo.PartnerId.PartnerName}
+            src={""}
+            width={34}
+            className="d-flex align-self-center me-10"
+          />
         </div>
         <div className="py-2 h-100 w-100 d-flex flex-column justify-content-between">
           <div className="d-flex justify-content-between align-items-center h-100">
             <p className="User__name">
-            {userInfo.PartnerId.PartnerName.toString().length <= 15
-                    ? userInfo.PartnerId.PartnerName
-                    : `${userInfo.PartnerId.PartnerName.toString().slice(0, 15)}...`}</p>
+              {userInfo.PartnerId.PartnerName.toString().length <= 15
+                ? userInfo.PartnerId.PartnerName
+                : `${userInfo.PartnerId.PartnerName.toString().slice(
+                    0,
+                    15
+                  )}...`}
+            </p>
             {isOnline ? (
               <span className="User__isOnline"></span>
             ) : (

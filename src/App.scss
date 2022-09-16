@@ -173,6 +173,7 @@ h5 {
   color: $neutral-600;
 }
 
+
 /////////////////////////////////////////////////////
 @for $i from 1 to 201 {
   .w-#{$i} {
@@ -267,6 +268,7 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

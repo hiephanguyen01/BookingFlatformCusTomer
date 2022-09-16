@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { BackTop, Modal } from "antd";
 import { useDispatch } from "react-redux";
@@ -6,7 +6,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import { ModalCustom } from "./components/Modal";
 import { AuthPage } from "./pages/Auth/AuthPage";
-import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import BookStudio from "./pages/BookStudio";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import PhotographerDetail from "./pages/PhotographerDetail";
@@ -58,7 +57,7 @@ function App() {
           <Route path="dao" element={<Dao />} />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="photographer/*" element={<PhotographerDetail />} />
+          <Route path="photographer/:id" element={<PhotographerDetail />} />
           <Route path="device/*" element={<PageDevice />} />
           <Route path="clothes/*" element={<PageClothes />} />
           <Route path="model/*" element={<PageModel />} />

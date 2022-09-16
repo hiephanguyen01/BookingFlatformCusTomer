@@ -1,59 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./home.module.scss";
 import images from "../../assets/images";
+import logo from "../../assets/img/Logo1.png";
 import { ListItem } from "./ListCard";
-import { StudioDetail } from "../StudioDetail";
-import { AutoComplete, Modal, Input, Checkbox, Rate } from "antd";
-import {
-  CloseOutlined,
-  SearchOutlined,
-  StarOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { AutoComplete, Modal, Input, Form, Select, Button } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { REMOVE_RESULT, SELECT_RESULT } from "../../stores/types/PostDaoType";
+import { studioPostService } from "../../services/StudioPostService";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import logoImg from "../../../src/assets/img/Logo1.png";
-import {
-  getListByCategory,
-  setCategory,
-  setLinkTo,
-} from "../../stores/actions/ListByCategoryAction";
+import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 
 const cx = classNames.bind(styles);
 const { Option } = AutoComplete;
 
-const dataSearch = [
-  {
-    img: "https://picsum.photos/200/300",
-    title: "Studio Wisteria chuyên chụp ảnh cưới",
-    rate: "5",
-    order: "30",
-    id: 1,
-  },
-  {
-    img: "https://picsum.photos/200/300",
-    title: "Studio Wisteria chuyên chụp ảnh cưới 1",
-    rate: "5",
-    order: "30",
-    id: 2,
-  },
-  {
-    img: "https://picsum.photos/200/300",
-    title: "Studio Wisteria chuyên chụp ảnh cưới 2",
-    rate: "5",
-    order: "30",
-    id: 3,
-  },
-  {
-    img: "https://picsum.photos/200/300",
-    title: "Studio Wisteria chuyên chụp ảnh cưới 3",
-    rate: "5",
-    order: "30",
-    id: 4,
-  },
-];
 // export const Home = () => {
 //   const dispatch = useDispatch();
 //   const { selectSearch } = useSelector((state) => state.postDaoReducer);
@@ -173,39 +136,40 @@ const dataSearch = [
 //           </div>
 //         </div>
 //       </Modal>
-const LABELS = [
+
+const CATEGORIES = [
   {
-    id: "studio",
+    id: 1,
     label: "Studio",
     img: images.studio1,
     linkTo: "studio",
   },
   {
-    id: "nhiepanh",
+    id: 2,
     label: "Nhiếp ảnh",
     img: images.cameraman,
     linkTo: "photographer",
   },
   {
-    id: "thietbi",
+    id: 6,
     label: "Thiết bị",
     img: images.camera,
     linkTo: "device",
   },
   {
-    id: "trangphuc",
+    id: 3,
     label: "Trang phục",
     img: images.clothes,
     linkTo: "clothes",
   },
   {
-    id: "makeup",
+    id: 4,
     label: "Make up",
     img: images.makeup,
     linkTo: "makeup",
   },
   {
-    id: "nguoimau",
+    id: 5,
     label: "Người mẫu",
     img: images.model,
     linkTo: "model",
@@ -213,19 +177,37 @@ const LABELS = [
 ];
 
 export const Home = () => {
-  const category = useSelector((state) => state.listByCategoryReducer.category);
-  const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
+  // const category = useSelector((state) => state.listByCategoryReducer.category);
+  // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
+  const { filter, laoding } = useSelector((state) => state.studioPostReducer);
+
   const dispatch = useDispatch();
-  const [active, setActive] = useState("studio");
+  const [chooseCate, setChooseCate] = useState();
+  const [visible, setVisible] = useState(false);
+  const [provinces, setProvinces] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(setCategory(LABELS[0].label));
-    dispatch(setLinkTo(LABELS[0].linkTo));
+    (async () => {
+      const res = await studioPostService.getAllProvince();
+      setProvinces(res.data);
+    })();
   }, []);
+
+  const handleClickCategory = (categoryId) => {
+    const newFilter = {
+      ...filter,
+      category: categoryId,
+    };
+    dispatch(getFilterStudioPost(5, 1, newFilter));
+    navigate("/home/filter");
+  };
+
+  const handleChange = (value) => {};
+
   return (
-    <>
-      {/* <GoogleDrivePicker />
-      <OneDrivePicker /> */}
+    <div className={cx("home_container")}>
       <MetaDecorator
         title="Trang chủ Booking Studio"
         description="Chuyên cung cấp các loại dịch vụ"
@@ -233,17 +215,15 @@ export const Home = () => {
         type="article"
         imgAlt="Booking Studio"
       />
-
       <div className={cx("home")}>
         <div className={cx("filter")}>
-          {LABELS.map((item) => (
+          {CATEGORIES.map((item) => (
             <div
               key={item.id}
-              className={cx("box", `${active === item.id && "active"}`)}
+              className={cx("box", `${chooseCate === item.id && "active"}`)}
               onClick={() => {
-                setActive(item.id);
-                dispatch(setCategory(item.id));
-                dispatch(setLinkTo(item.linkTo));
+                setChooseCate(item.id);
+                handleClickCategory(item.id);
               }}
             >
               <img src={item.img} alt="a" />
@@ -304,6 +284,6 @@ export const Home = () => {
         <ListItem title="Được đặt nhiều nhất" />
         <ListItem title="Đã xem gần đây" />
       </div>
-    </>
+    </div>
   );
 };

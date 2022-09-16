@@ -21,7 +21,7 @@ import logo from "../../assets/img/Logo1.png";
 import noBody from "../../assets/img/no-body.png";
 import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
-import { getFilterdStudioPost } from "../../stores/actions/studioPostAction";
+import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { SET_FILTER } from "../../stores/types/studioPostType";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import "./Header.scss";
@@ -162,7 +162,7 @@ const Header = () => {
       provinceIds: [values.province],
       keyString: values.keyString,
     };
-    dispatch(getFilterdStudioPost(5, 1, newFilter));
+    dispatch(getFilterStudioPost(5, 1, newFilter));
     setVisible(false);
     navigate("/home/filter");
   };

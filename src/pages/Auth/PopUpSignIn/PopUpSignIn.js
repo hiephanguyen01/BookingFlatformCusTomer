@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux/es/exports";
 import { ForgotPassword } from "../SignIn/FogotPassword/ForgotPassword";
 import { SignIn } from "../SignIn/SignIn";
@@ -7,7 +7,6 @@ import { SetPassword } from "../SignUp/SetPassword/SetPassword";
 import { SignUp } from "../SignUp/SignUp";
 import { SignUpWithPhone } from "../SignUp/SignUpWithPhone/SignUpWithPhone";
 import "./PopUpSignIn.scss";
-import { useNavigate } from "react-router-dom";
 //Read before Using
 // Warp your Component,Text inside PopUpSignIn
 // Write your logic Onlick in PopUpSignIn component
@@ -47,9 +46,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               footer={false}
               width={400}
             >
-              <SignIn
-                onClickPop={(e) => setPage(e)}
-              ></SignIn>
+              <SignIn onClickPop={(e) => setPage(e)}></SignIn>
             </Modal>
           ) : page === 2 ? (
             <Modal
@@ -105,10 +102,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               footer={false}
               width={400}
             >
-              <SignUp
-                
-                onClickSignUp={(e) => setPage(e)}
-              ></SignUp>
+              <SignUp onClickSignUp={(e) => setPage(e)}></SignUp>
             </Modal>
           ) : page === 6 ? (
             <Modal
@@ -155,4 +149,3 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
 };
 
 export default PopUpSignIn;
-

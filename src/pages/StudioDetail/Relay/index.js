@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames/bind";
 import { HIDE_MODAL } from "../../../stores/types/modalTypes";
 import { useDispatch } from "react-redux";
 // import styles from "./Report.module.scss"
@@ -9,8 +8,7 @@ export const Reply = () => {
   const dispatch = useDispatch();
   return (
     <>
-    <div style={{ textAlign:"left"}}>
-      
+      <div style={{ textAlign: "left" }}>
         <h4 style={{ fontSize: "20px", fontWeight: "700" }}>
           Cảm ơn bạn đã báo cáo{" "}
         </h4>
@@ -47,7 +45,7 @@ export const Reply = () => {
             Xong
           </button>
         </div>
-    </div>
+      </div>
     </>
   );
 };

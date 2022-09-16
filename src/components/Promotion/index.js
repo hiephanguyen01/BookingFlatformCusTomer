@@ -1,6 +1,5 @@
 import { CloseOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPromoCodeByStudioPostAction } from "../../stores/actions/promoCodeAction";
 import { HIDE_MODAL } from "../../stores/types/modalTypes";
@@ -17,8 +16,6 @@ const Index = () => {
   useEffect(() => {
     dispatch(getPromoCodeByStudioPostAction(studioPostId));
   }, []);
-  console.log(promoCodeByStudio);
-  console.log(convertTime(new Date().toISOString()));
 
   const handleChooseVoucher = (id) => {
     const newChoose = [...choose];

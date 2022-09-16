@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import "./Modal.scss";
