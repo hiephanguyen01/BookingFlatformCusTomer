@@ -85,7 +85,7 @@ const Index = () => {
   const location = useLocation();
   const cate =
     location.pathname.split("/").filter((item) => item !== "")[1] === "clothes"
-      ? 4
+      ? 3
       : undefined;
 
   const [choose, setChoose] = useState(false);
@@ -542,12 +542,7 @@ const Index = () => {
                 </Col>
               </Row>
             </div>
-            <CommentRating
-              data={values}
-              activeId={activeId}
-              setActiveId={setActiveId}
-              className="mb-43"
-            />
+            <CommentRating data={[]} className="mb-43" />
             <SlideCard title="Trang phục tương tự" />
           </div>
         </div>

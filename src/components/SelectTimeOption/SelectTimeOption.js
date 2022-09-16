@@ -9,13 +9,19 @@ const Option = ({ option }) => {
           <Form.Item
             name="date"
             label="Chọn ngày"
-            style={{ width: "100%", marginRight: "20px" }}>
+            style={{
+              width: "100%",
+              marginRight: "20px",
+              marginBottom: "8px",
+            }}
+          >
             <DatePicker />
           </Form.Item>
           <Form.Item
             name="time"
             label="Chọn giờ:"
-            style={{ width: "100%", marginRight: "20px" }}>
+            style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
+          >
             <TimePicker.RangePicker />
           </Form.Item>
         </div>
@@ -26,7 +32,8 @@ const Option = ({ option }) => {
           <Form.Item
             name="time"
             label="Chọn ngày"
-            style={{ width: "100%", marginRight: "20px" }}>
+            style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
+          >
             <DatePicker.RangePicker />
           </Form.Item>
         </div>
@@ -43,7 +50,8 @@ const SelectTimeOption = () => {
       <Radio.Group
         name="radiogroup"
         onChange={(e) => setSelection(e.target.value)}
-        style={{ padding: "0 0 20px" }}>
+        style={{ padding: "0 0 20px" }}
+      >
         <Space direction="vertical">
           <Radio value={1}>Đặt theo giờ</Radio>
           <Radio value={2}>Đặt theo ngày</Radio>

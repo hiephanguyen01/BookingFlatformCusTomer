@@ -52,6 +52,7 @@ export const studioDetailAction = (id, category) => {
           service: data.service,
           album: data.album,
           shop: data.shop,
+          rating: data.rating,
         },
       });
     } catch (error) {

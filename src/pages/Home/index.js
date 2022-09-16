@@ -151,25 +151,25 @@ const CATEGORIES = [
     linkTo: "photographer",
   },
   {
-    id: 3,
+    id: 6,
     label: "Thiết bị",
     img: images.camera,
     linkTo: "device",
   },
   {
-    id: 4,
+    id: 3,
     label: "Trang phục",
     img: images.clothes,
     linkTo: "clothes",
   },
   {
-    id: 5,
+    id: 4,
     label: "Make up",
     img: images.makeup,
     linkTo: "makeup",
   },
   {
-    id: 6,
+    id: 5,
     label: "Người mẫu",
     img: images.model,
     linkTo: "model",
@@ -179,7 +179,7 @@ const CATEGORIES = [
 export const Home = () => {
   // const category = useSelector((state) => state.listByCategoryReducer.category);
   // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
-  const filter = useSelector((state) => state.studioPostReducer.filter);
+  const { filter, laoding } = useSelector((state) => state.studioPostReducer);
 
   const dispatch = useDispatch();
   const [chooseCate, setChooseCate] = useState();
@@ -195,19 +195,12 @@ export const Home = () => {
     })();
   }, []);
 
-  const handleCancel = () => {
-    setVisible(false);
-  };
-
-  const onFinish = (values) => {
+  const handleClickCategory = (categoryId) => {
     const newFilter = {
       ...filter,
-      category: chooseCate,
-      provinceIds: [values.province],
-      keyString: values.keyString,
+      category: categoryId,
     };
     dispatch(getFilterStudioPost(5, 1, newFilter));
-    setVisible(false);
     navigate("/home/filter");
   };
 
@@ -222,58 +215,6 @@ export const Home = () => {
         type="article"
         imgAlt="Booking Studio"
       />
-      <Modal
-        onCancel={handleCancel}
-        className="search-modal"
-        width={"700px"}
-        visible={visible}
-        footer={[]}
-      >
-        <div className="logo">
-          <img src={logo} alt="" />
-        </div>
-        <Form onFinish={onFinish}>
-          <Form.Item name="keyString">
-            <Input placeholder="Bạn đang tìm gì?" prefix={<SearchOutlined />} />
-          </Form.Item>
-          <p className="filter">LỌC THEO</p>
-          <div className="option d-flex justify-content-between">
-            <Form.Item
-              name="province"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
-              <Select defaultValue="" onChange={handleChange}>
-                <Option value="">Địa điểm</Option>
-                {Boolean(provinces) &&
-                  provinces.map((val) => (
-                    <Option value={val.id}>{val.Name}</Option>
-                  ))}
-              </Select>
-            </Form.Item>
-            <Form.Item name="price" style={{ width: "100%" }}>
-              <Select defaultValue="" onChange={handleChange}>
-                <Option value="">Giá</Option>
-                <Option value="0">1.000.000</Option>
-                <Option value="1">2.000.000</Option>
-                <Option value="2">3.000.000</Option>
-              </Select>
-            </Form.Item>
-          </div>
-          <p className="time">Khung giờ bạn muốn đặt</p>
-
-          <SelectTimeOption />
-          <Form.Item style={{ textAlign: "center", width: "100%" }}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              size="large"
-              style={{ width: "50%" }}
-            >
-              Tìm kiếm
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
       <div className={cx("home")}>
         <div className={cx("filter")}>
           {CATEGORIES.map((item) => (
@@ -282,7 +223,7 @@ export const Home = () => {
               className={cx("box", `${chooseCate === item.id && "active"}`)}
               onClick={() => {
                 setChooseCate(item.id);
-                setVisible(true);
+                handleClickCategory(item.id);
               }}
             >
               <img src={item.img} alt="a" />

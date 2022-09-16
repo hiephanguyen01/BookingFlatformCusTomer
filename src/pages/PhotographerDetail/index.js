@@ -41,6 +41,7 @@ const PhotographerDetail = () => {
   const { studioDetail, filter, laoding } = useSelector(
     (state) => state.studioPostReducer
   );
+  console.log(studioDetail);
   const { id } = useParams();
   const location = useLocation();
   const cate =
@@ -51,7 +52,6 @@ const PhotographerDetail = () => {
 
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
-  const [activeId, setActiveId] = useState(5);
 
   const dispatch = useDispatch();
 
@@ -411,7 +411,7 @@ const PhotographerDetail = () => {
                         chooseService?.reduce(
                           (total, item) => total + item.Sales,
                           0
-                        ) + 50000
+                        )
                       )}`}
                       đ
                     </div>
@@ -462,9 +462,7 @@ const PhotographerDetail = () => {
             <Row gutter={[18, 18]}>
               <Col md={16}>
                 <CommentRating
-                  data={values}
-                  activeId={activeId}
-                  setActiveId={setActiveId}
+                  data={studioDetail.rating}
                   className="mb-43 mt-12"
                 />
               </Col>
