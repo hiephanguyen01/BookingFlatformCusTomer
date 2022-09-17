@@ -21,7 +21,7 @@ import logo from "../../assets/img/Logo1.png";
 import noBody from "../../assets/img/no-body.png";
 import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
-import { getFilterdStudioPost } from "../../stores/actions/studioPostAction";
+import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { SET_FILTER } from "../../stores/types/studioPostType";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import "./Header.scss";
@@ -142,9 +142,7 @@ const Header = () => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+  const handleChange = (value) => {};
   useEffect(() => {
     if (document.activeElement === inputRef.current) {
       setVisible(true);
@@ -164,8 +162,7 @@ const Header = () => {
       provinceIds: [values.province],
       keyString: values.keyString,
     };
-    console.log(newFilter);
-    dispatch(getFilterdStudioPost(5, 1, newFilter));
+    dispatch(getFilterStudioPost(5, 1, newFilter));
     setVisible(false);
     navigate("/home/filter");
   };
@@ -240,12 +237,10 @@ const Header = () => {
         </Form>
       </Modal>
       <div className="container">
-
-        <Link to = '/home' className="link">
-        <div className="img">
-          <img src={logo} alt="" />
-        </div>
-
+        <Link to="/home" className="link">
+          <div className="img">
+            <img src={logo} alt="" />
+          </div>
         </Link>
         <Input
           placeholder="Bạn đang tìm gì?"

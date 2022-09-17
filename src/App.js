@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { BackTop, Modal } from "antd";
 import { useDispatch } from "react-redux";
@@ -6,7 +6,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import { ModalCustom } from "./components/Modal";
 import { AuthPage } from "./pages/Auth/AuthPage";
-import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import BookStudio from "./pages/BookStudio";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import PhotographerDetail from "./pages/PhotographerDetail";
@@ -16,15 +15,12 @@ import UserAccount from "./pages/UserAccount";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
 import Cart from "./pages/Cart";
 import { Home } from "./pages/Home";
-
 import PageClothes from "./pages/ClothesDetails/PageClothes";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
 import PageModel from "./pages/ModelDetails/PageModel";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
-import { ModalImage } from "./pages/StudioDetail/ModalImg";
 import { StudioDetail } from "./pages/StudioDetail";
-import MetaDecorator from "./components/MetaDecorator/MetaDecorator";
-import logoImg from "../src/assets/img/Logo1.png";
+import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
 
 function App() {
   const dispatch = useDispatch();
@@ -52,7 +48,6 @@ function App() {
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
-
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
@@ -62,11 +57,12 @@ function App() {
           <Route path="dao" element={<Dao />} />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="photographer/*" element={<PhotographerDetail />} />
+          <Route path="photographer/:id" element={<PhotographerDetail />} />
           <Route path="device/*" element={<PageDevice />} />
           <Route path="clothes/*" element={<PageClothes />} />
           <Route path="model/*" element={<PageModel />} />
           <Route path="makeup/*" element={<PageMakeup />} />
+          <Route path="confirm-order/*" element={<UpdateConfirm />} />
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}

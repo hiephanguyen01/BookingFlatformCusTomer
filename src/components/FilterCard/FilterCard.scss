@@ -1,9 +1,20 @@
 .FilterCard {
   background-color: white;
   display: flex;
-  margin: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  max-height: 190px;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   .groupImage {
     position: relative;
+
     .heard {
       position: absolute;
       background-color: #fff;
@@ -13,7 +24,9 @@
       right: 5px;
       top: 15px;
       border-radius: 50%;
+      overflow: hidden;
     }
+
     .sale {
       position: absolute;
       background-color: #e22828;
@@ -29,40 +42,61 @@
       padding: 3px 3px 4px 5px;
       border-radius: 0px 4px 4px 0px;
     }
-    img {
-      padding: 10px 0 10px 10px;
-      width: 100%;
-      display: block;
-      object-fit: cover;
-    }
-    display: flex;
-    width: 400;
+
     .main {
       overflow: hidden;
       width: 269px;
       height: 189px;
+      margin-right: 8px;
+
+      img {
+        width: 100%;
+        display: block;
+        object-fit: cover;
+      }
     }
-    .sub {
-      overflow: hidden;
+
+    display: flex;
+    width: 400;
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
       width: 128px;
-      height: 90px;
+
+      .sub {
+        height: 48%;
+        width: 100%;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
     }
   }
+
   p.title {
-    padding: 17px;
+    padding: 17px 17px 10px 17px;
     font-weight: 700;
     font-size: 20px;
   }
+
   p.description {
     padding: 5px 0 0 17px;
     font-weight: 400;
     font-size: 14px;
   }
+
   .addition {
     color: #e22828;
     text-align: right;
     font-weight: 600;
   }
+
   .text {
     width: 100%;
     padding-right: 10px;

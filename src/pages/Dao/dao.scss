@@ -11,6 +11,7 @@
 
     &__header,
     article {
+      width: 100%;
       margin-top: 12px;
       border-radius: 4px;
       min-width: 100% !important;
@@ -57,7 +58,7 @@
           }
         }
 
-        &:first-child {
+        &.active {
           background-color: $secondary-50;
 
           p {
@@ -79,6 +80,7 @@
 
 #infinity-list-post-dao {
   min-height: 100vh;
+  min-width: 100%;
 }
 
 .ant-modal-title {
@@ -97,10 +99,16 @@
 }
 
 .modalDao {
+  max-width: 700px !important;
+  width: 700px !important;
 
   .ant-modal-header,
   .ant-modal-footer {
     border: none !important;
+  }
+
+  .ant-modal-footer {
+    display: none;
   }
 
   .ant-modal-body {
@@ -143,15 +151,12 @@
   background: #1fcba2;
 }
 
-.ant-modal-footer {
-  display: none !important;
-}
-
 .btn {
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px !important;
+  cursor: pointer;
 }
 
 .btn-huy {

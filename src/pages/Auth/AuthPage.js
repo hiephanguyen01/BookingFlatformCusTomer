@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthLayout } from "./AuthLayout/AuthLayout";
 import { SetPassword } from "./SignUp/SetPassword/SetPassword";
 import { SignUp } from "./SignUp/SignUp";
@@ -11,6 +11,7 @@ export const AuthPage = () => {
   return (
     <AuthLayout>
       <Routes>
+        <Route path = "*" element={<Navigate to="sign-up"/>} />
         <Route path="sign-up" element={<SignUp></SignUp>}></Route>
         <Route
           path="sign-up/phone"

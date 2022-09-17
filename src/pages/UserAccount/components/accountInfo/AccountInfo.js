@@ -24,7 +24,7 @@ const AccountInfo = () => {
   };
 
   const onChangeCheck = (checked) => {
-    console.log(`switch to ${checked}`);
+    /* console.log(`switch to ${checked}`); */
   };
 
   const imgRef = useRef(null);

@@ -3,7 +3,7 @@ import { useState } from "react";
 import useDrivePicker from "react-google-drive-picker";
 import "./googleDrivePicker.scss";
 
-const GoogleDrivePicker = () => {
+const GoogleDrivePicker = ({ files, setFiles }) => {
   const [openPicker, authResponse] = useDrivePicker();
   const [data, setData] = useState([]);
   // const customViewsArray = [new google.picker.DocsView()]; // custom view
@@ -21,10 +21,23 @@ const GoogleDrivePicker = () => {
       // customViews: customViewsArray, // custom view
       callbackFunction: (d) => {
         if (d.action === "cancel") {
-          console.log("User clicked cancel/close button");
         }
-        console.log(d.docs);
-        setData([...data, ...d.docs]);
+        if (d.docs !== undefined) {
+          const newFiles = d.docs.reduce((newArr, item) => {
+            if (item.mimeType.split("/")[0] === "image") {
+              return [
+                ...newArr,
+                {
+                  ...item,
+                  preview: `https://drive.google.com/uc?export=view&id=${item.id}`,
+                },
+              ];
+            }
+            return [...newArr];
+          }, []);
+          console.log(newFiles);
+          setFiles([...files, ...newFiles]);
+        }
       },
     });
   };
@@ -34,13 +47,13 @@ const GoogleDrivePicker = () => {
       <button className="btn_google_picker" onClick={() => handleOpenPicker()}>
         <FolderOpenOutlined className="icon_google_drive" />
       </button>
-      {data.map((item) => (
+      {/* {data.map((item) => (
         <img
           key={item.id}
           src={`https://drive.google.com/uc?export=view&id=${item.id}`}
           style={{ width: "100px", height: "100px", objectFit: "contain" }}
         />
-      ))}
+      ))} */}
     </div>
   );
 };

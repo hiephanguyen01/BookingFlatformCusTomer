@@ -13,4 +13,74 @@
     padding: 20px;
     margin: 10px;
   }
+
+  .container {
+    .ant-form-item-label {
+
+      label {
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 22px;
+        color: #3F3F3F;
+      }
+    }
+
+    .category_radio_group {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 22px;
+      /* identical to box height */
+
+
+      /* Neutral/Grey 600 */
+
+      color: #3F3F3F;
+
+      .ant-radio-wrapper {
+        width: 100%;
+        margin: 5px 0;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #3F3F3F;
+      }
+    }
+
+    .filter_price_container {
+
+      .ant-radio-wrapper {
+        width: 100%;
+        margin: 5px 0;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #3F3F3F;
+      }
+
+      .ant-slider {
+
+        &-mark {
+
+          &-text {
+
+            &:last-child {
+              transform: translateX(-90%) !important;
+            }
+          }
+        }
+      }
+    }
+
+    .filter_rating_container {
+
+      .ant-radio-wrapper {
+        width: 100%;
+        margin: 5px 0;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #3F3F3F;
+      }
+    }
+  }
 }

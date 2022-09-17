@@ -9,6 +9,7 @@ const DropFileInput = ({
   multiple,
   className,
   style = {},
+  accept,
 }) => {
   const wrapperRef = useRef(null);
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
@@ -43,6 +44,7 @@ const DropFileInput = ({
         className="w-100 h-100 input_file"
         style={{ opacity: "0", top: "0", left: "0" }}
         onChange={(e) => onChangeFile(e)}
+        accept={accept? accept:"image/png, image/jpeg , image/jpg ,video/mp4,video/x-m4v,video/* "}
       />
     </div>
   );

@@ -16,114 +16,111 @@ import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import { studioPostService } from "../../services/StudioPostService";
-import { getFilterdStudioPost } from "../../stores/actions/studioPostAction";
+import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import { convertPrice } from "../../utils/convert";
 import "./FilterPage.scss";
 const { Option } = Select;
+const categories = [
+  {
+    id: 1,
+    value: "studio",
+    name: "Studio",
+  },
+  {
+    id: 2,
+    value: "photographer",
+    name: "Nhiếp ảnh",
+  },
+  {
+    id: 3,
+    value: "clothes",
+    name: "Trang phục",
+  },
+  {
+    id: 4,
+    value: "makeup",
+    name: "Make up",
+  },
+  {
+    id: 5,
+    value: "model",
+    name: "Người mẫu",
+  },
+  {
+    id: 6,
+    value: "device",
+    name: "Thiết bị",
+  },
+];
 const FilterPage = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const filter = useSelector((state) => state.studioPostReducer.filter);
-  const loading = useSelector((state) => state.studioPostReducer.loading);
-  const pagination = useSelector((state) => state.studioPostReducer.pagination);
-  const [newFilter, setNewFilter] = useState(filter);
-  const [provinces, setProvinces] = useState([]);
-  const studioPostList = useSelector(
-    (state) => state.studioPostReducer.studioPostList
+  const { filter, loading, pagination, studioPostList } = useSelector(
+    (state) => state.studioPostReducer
   );
-  const categories = [
-    {
-      id: 1,
-      name: "Studio",
-    },
-    {
-      id: 2,
-      name: "Nhiếp ảnh",
-    },
-    {
-      id: 3,
-      name: "Trang phục",
-    },
-    {
-      id: 4,
-      name: "Make up",
-    },
-    {
-      id: 5,
-      name: "Người mẫu",
-    },
-    {
-      id: 6,
-      name: "Thiết bị",
-    },
-  ];
-  const layout = {
-    labelCol: { span: 24 },
-    wrapperCol: { span: 24 },
-  };
-  const marks = {
-    0: "0",
-    5000000: {
-      label: <strong>5tr</strong>,
-    },
-  };
-  const onChangeFilterCategory = (e) => {
-    setNewFilter({
-      ...newFilter,
-      category: e.target.value,
-    });
-  };
-  const onChangeFilterProvince = (value) => {
-    setNewFilter({
-      ...newFilter,
-      provinceIds: [value],
-    });
-  };
-  const onChangeInput = (e) => {
-    setNewFilter({
-      ...newFilter,
-      keyString: e.target.value,
-    });
-  };
-  const onChangePriceOption = (e) => {
-    setNewFilter({
-      ...newFilter,
-      priceOption: e.target.value,
-    });
-  };
-  const onChangeSlideRange = (val) => {
-    const [price1, price2] = val;
-    setNewFilter({
-      ...newFilter,
-      price1,
-      price2,
-    });
-  };
-  const onChangePage = (value) => {
-    console.log(value);
-    dispatch(getFilterdStudioPost(5, value, newFilter));
-  };
-  const handleClearFilter = () => {
-    setNewFilter({
-      keyString: "",
-      category: 1,
-      priceOption: 0,
-      price1: undefined,
-      price2: undefined,
-      provinceIds: [],
-      ratingOption: 1,
-    });
-    form.resetFields();
-  };
+  const [provinces, setProvinces] = useState([]);
+
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
-    if (newFilter) {
-      dispatch(getFilterdStudioPost(5, 1, newFilter));
-    }
-  }, [dispatch, newFilter, filter]);
+  }, []);
 
+  const initState = () => {
+    dispatch(
+      getFilterStudioPost(5, 1, {
+        keyString: "",
+        category: 1,
+        priceOption: 0,
+        price1: undefined,
+        price2: undefined,
+        provinceIds: [],
+        ratingOption: 1,
+      })
+    );
+  };
+
+  const layout = {
+    labelCol: { span: 24 },
+    wrapperCol: { span: 24 },
+  };
+  const marks = {
+    0: convertPrice(0),
+    5000000: {
+      label: <strong>{convertPrice(5000000)}đ</strong>,
+    },
+  };
+  const onChangeFilterCategory = (e) => {
+    dispatch(
+      getFilterStudioPost(5, 1, { ...filter, category: e.target.value })
+    );
+  };
+  const onChangeFilterProvince = (value) => {
+    dispatch(getFilterStudioPost(5, 1, { ...filter, provinceIds: [value] }));
+  };
+  const onChangeInput = (e) => {
+    dispatch(
+      getFilterStudioPost(5, 1, { ...filter, keyString: e.target.value })
+    );
+  };
+  const onChangePriceOption = (e) => {
+    dispatch(
+      getFilterStudioPost(5, 1, { ...filter, priceOption: e.target.value })
+    );
+  };
+  const onChangeSlideRange = (val) => {
+    const [price1, price2] = val;
+    dispatch(getFilterStudioPost(5, 1, { ...filter, price1, price2 }));
+  };
+  const onChangePage = (value) => {
+    dispatch(getFilterStudioPost(5, value, filter));
+  };
+  const handleClearFilter = () => {
+    initState();
+    form.resetFields();
+  };
+  const formatter = (value) => `${value}%`;
   return (
     <div className="FilterPage">
       <div className="container">
@@ -143,7 +140,8 @@ const FilterPage = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   <p className="text">LỌC THEO</p>
                   <Button htmlType="submit" type="primary">
                     Xoá bộ lọc
@@ -166,75 +164,82 @@ const FilterPage = () => {
 
                 <Divider />
                 <Form.Item label="Danh mục" name="category">
-                  <Radio.Group
-                    onChange={onChangeFilterCategory}
-                    value={newFilter.category}>
-                    <Row>
+                  <div className="category_radio_group">
+                    <Radio.Group
+                      onChange={onChangeFilterCategory}
+                      value={filter.category}
+                    >
                       {categories &&
                         categories.map((val) => (
-                          <Col span={24}>
-                            <Radio key={val.id} value={val.id}>
-                              {val.name}
-                            </Radio>
-                          </Col>
+                          <Radio key={val.id} value={val.id}>
+                            {val.name}
+                          </Radio>
                         ))}
-                    </Row>
-                  </Radio.Group>
+                    </Radio.Group>
+                  </div>
                 </Form.Item>
 
                 <Divider />
                 <Form.Item label="Giá" name="price">
-                  <Radio.Group onChange={onChangePriceOption}>
-                    <Row>
-                      <Col span={24}>
-                        <Radio value={1}>Giá cao nhất</Radio>
-                      </Col>
-                      <Col span={24}>
-                        <Radio value={2}>Giá thấp nhất </Radio>
-                      </Col>
-                      <Col span={24}>
-                        <Slider
-                          onAfterChange={onChangeSlideRange}
-                          min={0}
-                          max={5000000}
-                          step={100000}
-                          range
-                          defaultValue={[0, 2500000]}
-                          marks={marks}
-                        />
-                      </Col>
-                    </Row>
-                  </Radio.Group>
+                  <div className="filter_price_container">
+                    <Radio.Group onChange={onChangePriceOption}>
+                      <Row>
+                        <Col span={24}>
+                          <Radio value={2}>Giá cao nhất</Radio>
+                        </Col>
+                        <Col span={24}>
+                          <Radio value={1}>Giá thấp nhất </Radio>
+                        </Col>
+                        <Col span={24}>
+                          <Radio value={3}>Giảm giá nhiều nhất </Radio>
+                        </Col>
+                        <Col span={24}>
+                          <Slider
+                            onAfterChange={onChangeSlideRange}
+                            min={0}
+                            max={5000000}
+                            step={100000}
+                            range
+                            defaultValue={[0, 2500000]}
+                            marks={marks}
+                          />
+                        </Col>
+                      </Row>
+                    </Radio.Group>
+                  </div>
                 </Form.Item>
 
                 <Divider />
                 <p className="text">Đánh giá</p>
                 <Form.Item name="rating">
-                  <Radio.Group>
-                    <Row>
-                      <Col span={24}>
-                        <Radio value="A3">Đánh giá nhiều nhất </Radio>
-                      </Col>
-                      <Col span={24}>
-                        <Radio value="B3">Đánh giá cao nhất </Radio>
-                      </Col>
-                      <Col span={24}>
-                        <Radio value="C3">Đặt nhiều nhất</Radio>
-                      </Col>
-                    </Row>
-                  </Radio.Group>
+                  <div className="filter_rating_container">
+                    <Radio.Group>
+                      <Row>
+                        <Col span={24}>
+                          <Radio value="A3">Đánh giá nhiều nhất </Radio>
+                        </Col>
+                        <Col span={24}>
+                          <Radio value="B3">Đánh giá cao nhất </Radio>
+                        </Col>
+                        <Col span={24}>
+                          <Radio value="C3">Đặt nhiều nhất</Radio>
+                        </Col>
+                      </Row>
+                    </Radio.Group>
+                  </div>
                 </Form.Item>
               </div>
             </Form>
           </Col>
-          <Col span={18}>
+          <Col span={18} className="p-10">
             {loading ? (
               <div
                 style={{
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
-                }}>
+                }}
+              >
                 <div
                   style={{
                     background: "white",
@@ -242,26 +247,30 @@ const FilterPage = () => {
                     borderRadius: "50%",
                     padding: "10px",
                     margin: "10px",
-                  }}>
+                  }}
+                >
                   <LoadingOutlined style={{ fontSize: "40px" }} />
                 </div>
               </div>
             ) : (
-              studioPostList?.map((val) => (
-                <FilterCard
-                  data={val}
-                  category={
-                    categories.filter((val) => val.id === newFilter.category)[0]
-                  }
-                />
-              ))
+              <div style={{ backgroundColor: "#fff" }} className="px-15 py-20">
+                {studioPostList?.map((val) => (
+                  <FilterCard
+                    data={val}
+                    category={
+                      categories.filter((val) => val.id === filter.category)[0]
+                    }
+                  />
+                ))}
+              </div>
             )}
             <div
               style={{
                 display: "flex",
                 justifyContent: "right",
                 padding: "10px 10px",
-              }}>
+              }}
+            >
               <Pagination
                 pageSize={pagination?.limit}
                 defaultCurrent={1}

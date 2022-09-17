@@ -23,7 +23,7 @@ const Index = () => {
         padding: "2rem 0",
       }}
     >
-      <div style={{ maxWidth: "1300px", margin: "auto" }}>
+      <div style={{ maxWidth: "1200px", margin: "auto" }}>
         <Row>
           <Col span={6}>
             <Aside />
