@@ -28,8 +28,8 @@ import deviceImg from "../../assets/images/deviceImg.png";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
-const values = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 const COLUMN = [
   { title: "Loại sản phẩm", size: 5 },
   { title: "Size", size: 4 },
@@ -37,36 +37,6 @@ const COLUMN = [
   { title: "Số lượng", size: 3 },
   { title: "Đơn giá cho thuê", size: 4 },
   { title: "Chọn sản phẩm", size: 4 },
-];
-const data = [
-  {
-    id: 1,
-    image: deviceImg,
-  },
-  {
-    id: 2,
-    image: deviceImg,
-  },
-  {
-    id: 3,
-    image: deviceImg,
-  },
-  {
-    id: 4,
-    image: deviceImg,
-  },
-  {
-    id: 5,
-    image: deviceImg,
-  },
-  {
-    id: 6,
-    image: deviceImg,
-  },
-  {
-    id: 7,
-    image: deviceImg,
-  },
 ];
 const menu_size = (
   <Menu
@@ -124,7 +94,7 @@ const menu_amount = (
 );
 
 const Index = () => {
-  const { studioDetail, filter, laoding } = useSelector(
+  const { studioDetail, filter, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -173,155 +143,151 @@ const Index = () => {
     />
   );
 
-  const dataSource = [
-    {
-      id: "01",
-      title: "Thiết bị mã",
-      size: 10,
-      color: "red",
-      amount: 10,
-      hire: "10 gio",
-      choose: "true",
-    },
-  ];
-
-  const ROW = (dataSource) =>
-    dataSource.map((data, index) => [
-      {
-        render: () => (
-          <>
-            <img
-              src={data.Image[0]}
-              style={{ width: "100%", marginBottom: "20px" }}
-            />
-            <div className="text-medium-se">{`${data.Name}`}</div>
-          </>
-        ),
-      },
-      {
-        render: () => (
-          <>
-            <Dropdown overlay={menu_size} trigger={["click"]}>
+  const ROW = (dataSource = []) => {
+    if (dataSource.length > 0) {
+      return dataSource?.map((data, index) => [
+        {
+          render: () => (
+            <>
+              <img
+                src={`${
+                  data?.Image[0]?.includes("https://drive.google.com/")
+                    ? data?.Image[0]
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                }`}
+                style={{ width: "100%", marginBottom: "20px" }}
+              />
+              <div className="text-medium-se">{`${data.Name}`}</div>
+            </>
+          ),
+        },
+        {
+          render: () => (
+            <>
+              <Dropdown overlay={menu_size} trigger={["click"]}>
+                <a onClick={(e) => e.preventDefault()}>
+                  <Space className="d-flex justify-content-between px-10 py-8 dropdown">
+                    S
+                    <DownOutlined className="ms-15" />
+                  </Space>
+                </a>
+              </Dropdown>
+            </>
+          ),
+        },
+        {
+          title: "Màu sắc",
+          render: () => (
+            <Dropdown overlay={menu_color} trigger={["click"]}>
               <a onClick={(e) => e.preventDefault()}>
                 <Space className="d-flex justify-content-between px-10 py-8 dropdown">
-                  S
+                  Trắng
                   <DownOutlined className="ms-15" />
                 </Space>
               </a>
             </Dropdown>
-          </>
-        ),
-      },
-      {
-        title: "Màu sắc",
-        render: () => (
-          <Dropdown overlay={menu_color} trigger={["click"]}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space className="d-flex justify-content-between px-10 py-8 dropdown">
-                Trắng
-                <DownOutlined className="ms-15" />
-              </Space>
-            </a>
-          </Dropdown>
-        ),
-      },
-      {
-        title: "Số lượng",
-        render: () => (
-          <Dropdown overlay={menu_amount} trigger={["click"]}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space className="d-flex justify-content-between px-10 py-8 dropdown">
-                1
-                <DownOutlined className="ms-15" />
-              </Space>
-            </a>
-          </Dropdown>
-        ),
-      },
-      {
-        title: "Đơn giá cho thuê",
-        render: () => (
-          <>
-            {" "}
-            <div
-              style={{
-                fontWeight: "400",
-                fontSize: "12px",
-                lineHeight: "16px",
-                color: "#828282",
-                textDecoration: "line-through",
-              }}
-            >
-              {convertPrice(data.Sales)}đ
-            </div>
-            <h4
-              style={{
-                marginBottom: "12px",
-                color: "#E22828",
-              }}
-            >
-              {convertPrice(data.Price)}đ
-            </h4>
-            <span
-              className="text-medium-se"
-              style={{
-                background: "#E22828",
-                borderRadius: "4px",
-                padding: "3px 10px",
-                color: "#ffffff",
-              }}
-            >
-              Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
-            </span>
-          </>
-        ),
-      },
-      {
-        title: "Chọn sản phẩm",
-        render: () => (
-          <>
-            {chooseService.filter((item) => item.id === data.id).length > 0 ? (
-              <span
-                onClick={() => handleChooseService(data)}
+          ),
+        },
+        {
+          title: "Số lượng",
+          render: () => (
+            <Dropdown overlay={menu_amount} trigger={["click"]}>
+              <a onClick={(e) => e.preventDefault()}>
+                <Space className="d-flex justify-content-between px-10 py-8 dropdown">
+                  1
+                  <DownOutlined className="ms-15" />
+                </Space>
+              </a>
+            </Dropdown>
+          ),
+        },
+        {
+          title: "Đơn giá cho thuê",
+          render: () => (
+            <>
+              {" "}
+              <div
                 style={{
-                  backgroundColor: "#E7E7E7",
-                  padding: "15px 15px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  lineHeight: "19px",
-                  textTransform: "uppercase",
+                  fontWeight: "400",
+                  fontSize: "12px",
+                  lineHeight: "16px",
+                  color: "#828282",
+                  textDecoration: "line-through",
                 }}
               >
-                Bỏ chọn
-              </span>
-            ) : (
-              <span
-                onClick={() => handleChooseService(data)}
+                {convertPrice(data.Sales)}đ
+              </div>
+              <h4
                 style={{
-                  border: "1px solid #E22828",
+                  marginBottom: "12px",
                   color: "#E22828",
-                  padding: "13px 25px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  lineHeight: "19px",
-                  textTransform: "uppercase",
                 }}
               >
-                Chọn
+                {convertPrice(data.Price)}đ
+              </h4>
+              <span
+                className="text-medium-se"
+                style={{
+                  background: "#E22828",
+                  borderRadius: "4px",
+                  padding: "3px 10px",
+                  color: "#ffffff",
+                }}
+              >
+                Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
-            )}
-          </>
-        ),
-      },
-    ]);
+            </>
+          ),
+        },
+        {
+          title: "Chọn sản phẩm",
+          render: () => (
+            <>
+              {chooseService.filter((item) => item.id === data.id).length >
+              0 ? (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    backgroundColor: "#E7E7E7",
+                    padding: "15px 15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Bỏ chọn
+                </span>
+              ) : (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    border: "1px solid #E22828",
+                    color: "#E22828",
+                    padding: "13px 25px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Chọn
+                </span>
+              )}
+            </>
+          ),
+        },
+      ]);
+    }
+  };
 
   return (
     <>
-      {Object.keys(studioDetail).length <= 0 ? (
+      {loading ? (
         <div
           style={{
             width: "100%",
@@ -357,7 +323,7 @@ const Index = () => {
                 style={{ marginBottom: "11px" }}
               >
                 <div className="header_title">
-                  {studioDetail.data.Name}
+                  {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
@@ -378,7 +344,7 @@ const Index = () => {
               </div>
               <div className="location">
                 <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
-                {studioDetail.data.Address}
+                {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
                 <Rate
@@ -388,10 +354,10 @@ const Index = () => {
                   className="rating"
                 />
                 <span className="reserve">
-                  Đã đặt {studioDetail.data.BookingCount}
+                  Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
               </div>
-              <ImagePost data={studioDetail.data.Image} />
+              <ImagePost data={studioDetail?.data?.Image} />
             </div>
             <div className="wrapper_description">
               <Row style={{ height: "100%" }}>
@@ -403,11 +369,11 @@ const Index = () => {
                 >
                   <div className="desc_col_left">
                     <ReadMoreDesc title="Mô tả">
-                      {studioDetail.data.Description}
+                      {studioDetail?.data?.Description}
                     </ReadMoreDesc>
                   </div>
                 </Col>
-                {Object.keys(studioDetail.shop).length > 0 && (
+                {studioDetail?.shop && (
                   <Col
                     lg={8}
                     sm={24}
@@ -419,7 +385,7 @@ const Index = () => {
                         <img src={imgPost} className="avatar" />
                         <div className="">
                           <div className="desc_col_right_title">
-                            {studioDetail.shop.Name}
+                            {studioDetail?.shop?.Name}
                             <CheckCircleOutlined className="icon_check_circle" />
                           </div>
                           <div
@@ -430,7 +396,7 @@ const Index = () => {
                               src={svgLocation}
                               style={{ marginRight: "6px" }}
                             />
-                            {studioDetail.shop.Address}
+                            {studioDetail?.shop?.Address}
                           </div>
                         </div>
                       </div>
@@ -513,7 +479,7 @@ const Index = () => {
                         <RightOutlined style={{ color: "#1FCBA2" }} />
                       </Link>
                     </div>
-                    <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
                 <Col lg={8} sm={24} style={{ paddingLeft: "0.25rem" }}>

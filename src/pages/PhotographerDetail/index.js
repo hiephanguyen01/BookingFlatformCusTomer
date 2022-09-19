@@ -21,6 +21,7 @@ import SlideCard from "../../components/SlideCard";
 import ImagePost from "../../components/imagePost/ImagePost";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const values = [
   { id: 1, title: "Album hóa trang theo yêu cầu của khách" },
@@ -38,7 +39,7 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, filter, laoding } = useSelector(
+  const { studioDetail, filter, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   console.log(studioDetail);
@@ -68,116 +69,124 @@ const PhotographerDetail = () => {
     }
     setChooseService(newChooseService);
   };
-  const ROW = (dataSource = []) =>
-    dataSource?.map((data, index) => [
-      {
-        render: () => (
-          <>
-            <img
-              src={data.Image[0]}
-              style={{ width: "100%", marginBottom: "20px" }}
-            />
-            <div className="text-medium-se">{`${data.Name}`}</div>
-          </>
-        ),
-      },
-      {
-        render: () => <p>{data.Description}</p>,
-      },
-      {
-        render: () => (
-          <>
-            <div className="d-flex align-items-center">
-              <h4
-                className="me-10"
-                style={{
-                  marginBottom: "0",
-                  color: "#E22828",
-                }}
-              >
-                {convertPrice(data.Sales)}đ
-              </h4>
+  const ROW = (dataSource = []) => {
+    if (dataSource.length > 0) {
+      return dataSource?.map((data, index) => [
+        {
+          render: () => (
+            <>
+              <img
+                src={`${
+                  data?.Image[0]?.includes("https://drive.google.com/")
+                    ? data?.Image[0]
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                }`}
+                style={{ width: "100%", marginBottom: "20px" }}
+              />
+              <div className="text-medium-se">{`${data.Name}`}</div>
+            </>
+          ),
+        },
+        {
+          render: () => <p>{data.Description}</p>,
+        },
+        {
+          render: () => (
+            <>
+              <div className="d-flex align-items-center">
+                <h4
+                  className="me-10"
+                  style={{
+                    marginBottom: "0",
+                    color: "#E22828",
+                  }}
+                >
+                  {convertPrice(data.Sales)}đ
+                </h4>
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "12px",
+                    lineHeight: "16px",
+                    color: "#828282",
+                    textDecoration: "line-through",
+                  }}
+                >
+                  {convertPrice(data.Price)}đ
+                </div>
+              </div>
               <div
+                className="mb-8 mt-4"
                 style={{
                   fontWeight: "400",
                   fontSize: "12px",
                   lineHeight: "16px",
                   color: "#828282",
-                  textDecoration: "line-through",
                 }}
               >
-                {convertPrice(data.Price)}đ
+                Bao gồm 50.000đ thuế và phí
               </div>
-            </div>
-            <div
-              className="mb-8 mt-4"
-              style={{
-                fontWeight: "400",
-                fontSize: "12px",
-                lineHeight: "16px",
-                color: "#828282",
-              }}
-            >
-              Bao gồm 50.000đ thuế và phí
-            </div>
-            <span
-              className="text-medium-se"
-              style={{
-                background: "#E22828",
-                borderRadius: "4px",
-                padding: "3px 10px",
-                color: "#ffffff",
-              }}
-            >
-              Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
-            </span>
-          </>
-        ),
-      },
-      {
-        render: () => (
-          <>
-            {chooseService.filter((item) => item.id === data.id).length > 0 ? (
               <span
-                onClick={() => handleChooseService(data)}
+                className="text-medium-se"
                 style={{
-                  backgroundColor: "#E7E7E7",
-                  padding: "15px 15px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  lineHeight: "19px",
-                  textTransform: "uppercase",
+                  background: "#E22828",
+                  borderRadius: "4px",
+                  padding: "3px 10px",
+                  color: "#ffffff",
                 }}
               >
-                Bỏ chọn
+                Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
-            ) : (
-              <span
-                onClick={() => handleChooseService(data)}
-                style={{
-                  border: "1px solid #E22828",
-                  color: "#E22828",
-                  padding: "13px 25px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  lineHeight: "19px",
-                  textTransform: "uppercase",
-                }}
-              >
-                Chọn
-              </span>
-            )}
-          </>
-        ),
-      },
-    ]);
+            </>
+          ),
+        },
+        {
+          render: () => (
+            <>
+              {chooseService.filter((item) => item.id === data.id).length >
+              0 ? (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    backgroundColor: "#E7E7E7",
+                    padding: "15px 15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Bỏ chọn
+                </span>
+              ) : (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    border: "1px solid #E22828",
+                    color: "#E22828",
+                    padding: "13px 25px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Chọn
+                </span>
+              )}
+            </>
+          ),
+        },
+      ]);
+    }
+  };
   return (
     <>
-      {Object.keys(studioDetail).length <= 0 ? (
+      {loading ? (
         <div
           style={{
             width: "100%",
@@ -302,7 +311,7 @@ const PhotographerDetail = () => {
                   <EnvironmentOutlined
                     style={{ fontSize: "16px", color: "#828282" }}
                   />{" "}
-                  {studioDetail.data.Address}
+                  {studioDetail?.data?.Address}
                 </p>
                 <div className="mapouter mt-10">
                   <div className="gmap_canvas">
@@ -428,7 +437,7 @@ const PhotographerDetail = () => {
                 </div>
               </Col>
             </Row>
-            {studioDetail.album.length > 0 && (
+            {studioDetail?.album?.length > 0 && (
               <Row gutter={[18]}>
                 <Col md={16}>
                   <div className="album_container">
@@ -462,7 +471,7 @@ const PhotographerDetail = () => {
             <Row gutter={[18, 18]}>
               <Col md={16}>
                 <CommentRating
-                  data={studioDetail.rating}
+                  data={studioDetail?.rating}
                   className="mb-43 mt-12"
                 />
               </Col>

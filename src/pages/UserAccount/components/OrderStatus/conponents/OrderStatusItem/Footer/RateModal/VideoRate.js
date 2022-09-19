@@ -1,20 +1,19 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState } from "react";
 import UploadImage from "../../../../../../../../components/UploadImage";
 import { VideoCameraOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 export const VideoRate = () => {
   const [files, setFiles] = useState([]);
-  const [srccc,setSrc]  = useState()
+  const [srccc, setSrc] = useState();
   const onChangeFile = async (e) => {
     if (files.length <= 1) {
       const newFiles = [...files];
       const fileList = e.target.files;
       for (let file of fileList) {
         if (file.type === "video/mp4" || file.type === "video/x-m4v") {
-            const [file] = e.target.files;
-            const fileUrl = URL.createObjectURL(file);
-            const thumbUrl = await getThumbnailForVideo(fileUrl);
-            setSrc(thumbUrl)
+          const [file] = e.target.files;
+          const fileUrl = URL.createObjectURL(file);
+          const thumbUrl = await getThumbnailForVideo(fileUrl);
+          setSrc(thumbUrl);
           newFiles.push(file);
         }
       }
@@ -31,7 +30,7 @@ export const VideoRate = () => {
     const canvas = document.createElement("canvas");
     video.style.display = "none";
     canvas.style.display = "none";
-  
+
     // Trigger video load
     await new Promise((resolve, reject) => {
       video.addEventListener("loadedmetadata", () => {
@@ -45,7 +44,7 @@ export const VideoRate = () => {
       video.addEventListener("seeked", () => resolve());
       video.src = videoUrl;
     });
-  
+
     // Draw the thumbnailz
     canvas
       .getContext("2d")
@@ -66,7 +65,7 @@ export const VideoRate = () => {
         multiple={false}
         accept="video/mp4,video/x-m4v,video/*"
       >
-        <VideoCameraOutlined style={{ color: "#1FCBA2", fontSize: "25px" }}/>
+        <VideoCameraOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
       </UploadImage>
       {files &&
         files.map((item, index) => (
@@ -78,13 +77,16 @@ export const VideoRate = () => {
               top: 0,
             }}
           >
-            <img alt="" className="w-80px h-80px"
-            src={srccc}
+            <img
+              alt=""
+              className="w-80px h-80px"
+              src={srccc}
               style={{
                 objectFit: "cover",
                 borderRadius: "10px",
-              }}></img>
-            
+              }}
+            ></img>
+
             <CloseCircleOutlined
               className="btn_close"
               style={{
