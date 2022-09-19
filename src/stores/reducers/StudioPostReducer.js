@@ -8,7 +8,7 @@ import {
 } from "../types/studioPostType";
 
 const initialState = {
-  laoding: false,
+  loading: false,
   studioPostList: [],
   filter: {
     keyString: "",
@@ -25,6 +25,7 @@ const initialState = {
   },
   studioDetail: [],
   studioNear: [],
+  //studioDetail: {},
 };
 
 export const studioPostReducer = (state = initialState, action) => {

@@ -4,99 +4,95 @@ import {
   PictureOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import addNotification from "react-push-notification";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
+import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
 import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Button, Modal, Upload, message, Input } from "antd";
-import uploadImg from "../../assets/dao/uploadImg.png";
+import { Modal, message, Input } from "antd";
+// import uploadImg from "../../assets/dao/uploadImg.png";
+import { GET_LIST_POST } from "../../stores/types/PostDaoType";
 import "./dao.scss";
 import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
-import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
+// import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
+import { postDaoService } from "../../services/PostDaoService";
 
 const tagItems = [
   {
-    id: 0,
+    id: "studio",
     icon: <CheckOutlined style={{ color: "#03AC84" }} />,
-    name: "Tất cả",
+    name: "Studio",
   },
-  { id: 1, icon: <></>, name: "Studio" },
-  { id: 2, icon: <></>, name: "Nhiếp ảnh" },
-  { id: 3, icon: <></>, name: "Người mẫu" },
-  { id: 4, icon: <></>, name: "Trang phục" },
-  { id: 5, icon: <></>, name: "Trang bị" },
+  {
+    id: "nhiepanh",
+    icon: <CheckOutlined style={{ color: "#03AC84" }} />,
+    name: "Nhiếp ảnh",
+  },
+  {
+    id: "nguoimau",
+    icon: <CheckOutlined style={{ color: "#03AC84" }} />,
+    name: "Người mẫu",
+  },
+  {
+    id: "trangphuc",
+    icon: <CheckOutlined style={{ color: "#03AC84" }} />,
+    name: "Trang phục",
+  },
+  {
+    id: "thietbi",
+    icon: <CheckOutlined style={{ color: "#03AC84" }} />,
+    name: "Thiết bị",
+  },
 ];
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+// const getBase64 = (file) =>
+//   new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(file);
 
-    reader.onload = () => resolve(reader.result);
+//     reader.onload = () => resolve(reader.result);
 
-    reader.onerror = (error) => reject(error);
-  });
+//     reader.onerror = (error) => reject(error);
+//   });
 
 const Dao = (props) => {
-  const [selectedCategory, setSelectedCategory] = useState(0);
-  const [page, setPage] = useState(1);
   const [files, setFiles] = useState([]);
+  const [filesDrive, setFilesDrive] = useState([]);
+  const [filter, setFilter] = useState({
+    page: 1,
+    limit: 3,
+    tags: [],
+  });
+  const [post, setPost] = useState({
+    tags: [],
+    description: "",
+  });
   const dispatch = useDispatch();
   const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
-  console.log(listPost);
 
-  // useEffect(() => {
-  //   getData(loadMore);
-  //   setLoadMore(false);
-  // }, [loadMore]);
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  //   if (props.scrollable) {
-  //     // list has fixed height
-  //     list.addEventListener("scroll", (e) => {
-  //       const el = e.target;
-  //       if (el.scrollTop + el.clientHeight === el.scrollHeight) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   } else {
-  //     // list has auto height
-  //     window.addEventListener("scroll", () => {
-  //       let win = window.scrollY + window.innerHeight;
-  //       let listHeight = list.clientHeight + list.offsetTop;
-  //       // console.log(win + " " + listHeight + " " + list.clientHeight);
-  //       if (
-  //         window.scrollY + window.innerHeight ===
-  //           list.clientHeight + list.offsetTop ||
-  //         (win - listHeight < 50 && win - listHeight > 0)
-  //       ) {
-  //         setLoadMore(true);
-  //       }
-  //     });
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const list = document.getElementById("infinity-list-post-dao");
-  // useEffect(() => {
-  //   getData(loadMore);
-  //   setLoadMore(false);
-  // }, []);
-  // create post: start
+  const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const handleCancel = () => setPreviewVisible(false);
+  // const [previewVisible, setPreviewVisible] = useState(false);
+
+  // const handleCancel = () => setPreviewVisible(false);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];
     const fileList = e.target.files;
-    console.log(fileList[0]);
     for (let file of fileList) {
-      file.preview = URL.createObjectURL(file);
-      newFiles.push({ ...file });
+      if (
+        file.type === "image/png" ||
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "video/mp4" ||
+        file.type === "video/x-m4v"
+      ) {
+        file.preview = URL.createObjectURL(file);
+        newFiles.push(file);
+      }
     }
     setFiles([...newFiles]);
   };
@@ -106,12 +102,17 @@ const Dao = (props) => {
     newFiles.splice(index, 1);
     setFiles([...newFiles]);
   };
+  const handleRemoveImageDrive = (index) => {
+    const newFiles = [...filesDrive];
+    newFiles.splice(index, 1);
+    setFilesDrive([...newFiles]);
+  };
 
-  const uploadButton = (
-    <div>
-      <img src={uploadImg} />
-    </div>
-  );
+  // const uploadButton = (
+  //   <div>
+  //     <img src={uploadImg} />
+  //   </div>
+  // );
   const success = () => {
     message.success({
       content: "Bài viết của bạn được đăng thành công",
@@ -121,6 +122,71 @@ const Dao = (props) => {
       },
       duration: 1,
     });
+  };
+
+  const errorMess = () => {
+    message.error({
+      content: "Đăng bài viết thất bại!",
+      className: "custom-class",
+      style: {
+        marginTop: "40vh",
+      },
+      duration: 1,
+    });
+  };
+
+  const warning = () => {
+    let mess = "";
+    if (post.tags.length === 0 && post.description === "") {
+      mess = "Vui lòng nhập mô tả bài viết và chọn hashtag!";
+    } else if (post.description === "") {
+      mess = "Vui lòng nhập mô tả bài viết!";
+    } else if (post.tags.length === 0) {
+      mess = "Vui lòng chọn hashtag!";
+    }
+    if (mess) {
+      message.warning({
+        content: mess,
+        className: "custom-class",
+        style: {
+          marginTop: "40vh",
+        },
+        duration: 1,
+      });
+      return 1;
+    }
+    return 0;
+  };
+
+  const handleCreatePost = async () => {
+    try {
+      if (warning() === 0) {
+        const newPost = { ...post };
+        const formData = new FormData();
+        for (let file of files) {
+          delete file.preview;
+          formData.append("image", file);
+        }
+        formData.append("Description", newPost.description);
+        formData.append("Tags", newPost.tags.join(","));
+        if (filesDrive.length > 0) {
+          const newImgDrive = filesDrive.reduce(
+            (newImgs, img) => [...newImgs, img.preview],
+            []
+          );
+          formData.append("imageDrive", newImgDrive.join(","));
+        }
+
+        await postDaoService.createPost("", formData);
+        setVisible(false);
+        success();
+        setFiles([]);
+        setPost({ tags: [], description: "" });
+        dispatch(getAllPostDaoAction([], { ...filter, page: 1, tags: [] }));
+      }
+    } catch (error) {
+      errorMess();
+    }
   };
 
   // create post: end
@@ -165,18 +231,51 @@ const Dao = (props) => {
   // }, [listPost]);
 
   const getData = (loadMore) => {
-    // if (loadMore && pagination.nextPage) {
-    dispatch(getAllPostDaoAction(listPost, 3, page));
-    setPage(() => page + 1);
-    // }
+    setFilter({ ...filter, page: filter.page + 1 });
+    // setPage(() => page + 1);
   };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+  //Intergrate notification
+  function askPermission() {
+    // Notification
+    addNotification({
+      title: "Subcribe successfully", //chỗ này fetch api
+      subtitle: "asdasdadadsadasdasdasds", //also this one
+      native: true,
+    });
+  }
+  useEffect(() => {
+    // const newFilter = { ...filter, page: filter.page !== 1 ? };
+    dispatch(getAllPostDaoAction(listPost, filter));
+  }, [filter.page]);
+
+  useEffect(() => {
+    const newFilter = { ...filter, page: 1 };
+    setFilter(newFilter);
+    dispatch(getAllPostDaoAction(listPost, newFilter));
+  }, [filter.tags.length]);
 
   useEffect(() => {
     getData();
+
+    if (Notification.permission !== "granted") {
+      askPermission();
+    }
+
+    return () => {
+      dispatch({ type: GET_LIST_POST, data: [] });
+    };
   }, []);
 
   return (
     <section className="dao d-flex justify-content-center">
+      <DaoPostSearchModal
+        searchDaoPostVisible={searchDaoPostVisible}
+        setSearchDaoPostVisible={setSearchDaoPostVisible}
+      />
       <div className="dao__container d-flex flex-column align-items-center">
         <header className="dao__container__header d-flex justify-content-between align-items">
           <h2>Dạo</h2>
@@ -189,13 +288,43 @@ const Dao = (props) => {
           </button>
         </header>
         <article className="dao__container__tag d-flex align-items-center justify-content-evenly">
+          <li
+            className={`dao__container__tag__item d-flex align-items-center ${
+              filter.tags.length > 0 && filter.tags.length !== tagItems.length
+                ? ""
+                : "active"
+            }`}
+            onClick={() => {
+              setFilter({ ...filter, tags: [] });
+            }}
+          >
+            {filter.tags.length > 0 &&
+            filter.tags.length !== tagItems.length ? (
+              ""
+            ) : (
+              <CheckOutlined style={{ color: "#03AC84" }} />
+            )}
+            <p>Tất cả</p>
+          </li>
           {tagItems.map((item, idx) => (
             <li
-              className="dao__container__tag__item d-flex align-items-center"
+              className={`dao__container__tag__item d-flex align-items-center ${
+                filter.tags.includes(item.id) ? "active" : ""
+              }`}
               key={item.id}
-              onClick={() => setSelectedCategory(item.id)}
+              onClick={() => {
+                let newFilter = { ...filter };
+                if (newFilter.tags.includes(item.id)) {
+                  newFilter.tags = newFilter.tags.filter(
+                    (val) => val !== item.id
+                  );
+                } else {
+                  newFilter.tags.push(item.id);
+                }
+                setFilter(newFilter);
+              }}
             >
-              {item.icon}
+              {filter.tags.includes(item.id) ? item.icon : ""}
               <p>{item.name}</p>
             </li>
           ))}
@@ -212,43 +341,9 @@ const Dao = (props) => {
               </p>
             }
           >
-            {listPost.map((item) => {
-              switch (selectedCategory) {
-                case 1:
-                  return (
-                    item.Tags.includes("studio") && (
-                      <DaoPost key={item.Id} item={item} />
-                    )
-                  );
-                case 2:
-                  return (
-                    item.Tags.includes("nhiepanh") && (
-                      <DaoPost key={item.Id} item={item} />
-                    )
-                  );
-                case 3:
-                  return (
-                    item.Tags.includes("nguoimau") && (
-                      <DaoPost key={item.Id} item={item} />
-                    )
-                  );
-                case 4:
-                  return (
-                    item?.Tags.includes("trangphuc") && (
-                      <DaoPost key={item.Id} item={item} />
-                    )
-                  );
-                case 5:
-                  return (
-                    item?.Tags.includes("trangbi") && (
-                      <DaoPost key={item.Id} item={item} />
-                    )
-                  );
-
-                default:
-                  return <DaoPost key={item.Id} item={item} />;
-              }
-            })}
+            {listPost.map((item) => (
+              <DaoPost key={item.Id} item={item} />
+            ))}
           </InfiniteScroll>
         </ul>
       </div>
@@ -259,13 +354,15 @@ const Dao = (props) => {
         className="modalDao"
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
-        width={696}
+        width={""}
       >
         <Input.TextArea
           rows={4}
           placeholder="Bạn muốn tìm gì"
-          maxLength={6}
           className="text-area"
+          style={{ resize: "none" }}
+          value={post.description}
+          onChange={(e) => setPost({ ...post, description: e.target.value })}
         />
         <div
           className="text-medium-re mt-20 mb-16"
@@ -277,9 +374,22 @@ const Dao = (props) => {
           className="mb-15 d-flex "
           style={{ gap: "10px", flexWrap: "wrap" }}
         >
+          <UploadImage
+            onChangeFile={onChangeFile}
+            style={{
+              width: "76px",
+              height: "76px",
+              border: "0.6px dashed #1FCBA2",
+              borderRadius: "10px",
+            }}
+            multiple={false}
+          >
+            <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
+          </UploadImage>
+          <GoogleDrivePicker files={filesDrive} setFiles={setFilesDrive} />
           {files &&
             files.map((item, index) => (
-              <div style={{ position: "relative" }}>
+              <div key={index} style={{ position: "relative" }}>
                 <img
                   src={item.preview}
                   className="w-76px h-76px"
@@ -294,43 +404,24 @@ const Dao = (props) => {
                 />
               </div>
             ))}
-          <UploadImage
-            onChangeFile={onChangeFile}
-            style={{
-              width: "76px",
-              height: "76px",
-              border: "0.6px dashed #1FCBA2",
-              borderRadius: "10px",
-            }}
-            multiple={false}
-          >
-            <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
-          </UploadImage>
-          <GoogleDrivePicker />
-          <OneDrivePicker />
-          {/* <Upload
-            // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleChange}
-          >
-            {fileList.length >= 8 ? null : uploadButton}
-          </Upload>
-          <Modal
-            visible={previewVisible}
-            title={previewTitle}
-            footer={null}
-            onCancel={handleCancel}
-          >
-            <img
-              alt="example"
-              style={{
-                width: "100%",
-              }}
-              src={previewImage}
-            />
-          </Modal> */}
+          {filesDrive &&
+            filesDrive.map((item, index) => (
+              <div key={index} style={{ position: "relative" }}>
+                <img
+                  src={item.preview}
+                  className="w-76px h-76px"
+                  style={{
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
+                />
+                <CloseCircleOutlined
+                  className="btn_close"
+                  onClick={() => handleRemoveImageDrive(index)}
+                />
+              </div>
+            ))}
+          {/* <OneDrivePicker /> */}
         </div>
         <div className="text-medium-re mb-16" style={{ color: "#222222" }}>
           Chọn danh mục liên quan
@@ -339,7 +430,18 @@ const Dao = (props) => {
           {tagItems.map((item, index) => (
             <li
               key={index}
-              className={`create_post_tag_item ${index === 0 ? "active" : ""}`}
+              className={`create_post_tag_item ${
+                post.tags.includes(item.id) ? "active" : ""
+              }`}
+              onClick={() => {
+                let newPost = { ...post };
+                if (newPost.tags.includes(item.id)) {
+                  newPost.tags = newPost.tags.filter((val) => val !== item.id);
+                } else {
+                  newPost.tags.push(item.id);
+                }
+                setPost(newPost);
+              }}
             >
               {item.name}
             </li>
@@ -358,9 +460,7 @@ const Dao = (props) => {
             className="btn btn-dang ms-10"
             type="primary"
             onClick={() => {
-              setVisible(false);
-              success();
-              console.log(files);
+              handleCreatePost();
             }}
           >
             Đăng

@@ -1,181 +1,38 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ChatUser } from "../ChatBody/ChatUser/ChatUser";
 import { ChatContent } from "./ChatContent/ChatContent";
 import { ChatUserFilter } from "./ChatUserFilter/ChatUserFilter";
-export const Conversation = [
-  {
-    id: 1,
-    Chatter1: {
-      id: 10,
-      Name: "Quan",
-    },
-    Chatter2: {
-      id: 15,
-      Name: "Quan1",
-    },
-    newestMessage: {
-      id: 1,
-      Content: "Hello moi nguoi",
-      Chatting: {
-        id: 15,
-        Name: "Quan1",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-  {
-    id: 2,
-    Chatter1: {
-      id: 20,
-      Name: "Quan4",
-    },
-    Chatter2: {
-      id: 15,
-      Name: "Quan1",
-    },
-    newestMessage: {
-      id: 2,
-      Content: "Hello moi nguoi lai la Quan day",
-      Chatting: {
-        id: 12,
-        Name: "Quan2",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-  {
-    id: 3,
-    Chatter1: {
-      id: 21,
-      Name: "Quan5",
-    },
-    Chatter2: {
-      id: 15,
-      Name: "Quan1",
-    },
-    newestMessage: {
-      id: 2,
-      Content: "Hello moi nguoi lai la Quan day",
-      Chatting: {
-        id: 15,
-        Name: "Quan1",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-  {
-    id: 4,
-    Chatter1: {
-      id: 22,
-      Name: "Quan6",
-    },
-    Chatter2: {
-      id: 15,
-      Name: "Quan1",
-    },
-    newestMessage: {
-      id: 2,
-      Content: "Hello moi nguoi lai la Quan day",
-      Chatting: {
-        id: 15,
-        Name: "Quan1",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-  {
-    id: 5,
-    Chatter1: {
-      id: 23,
-      Name: "Quan7",
-    },
-    Chatter2: {
-      id: 15,
-      Name: "Quan1",
-    },
-    newestMessage: {
-      id: 2,
-      Content: "Hello moi nguoi lai la Quan day",
-      Chatting: {
-        id: 23,
-        Name: "Quan7",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-  {
-    id: 6,
-    Chatter1: {
-      id: 24,
-      Name: "Quan8",
-    },
-    Chatter2: {
-      id: 15,
-      Name: "Quan1",
-    },
-    newestMessage: {
-      id: 2,
-      Content: "Hello moi nguoi lai la Quan day",
-      Chatting: {
-        id: 15,
-        Name: "Quan1",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-  {
-    id: 7,
-    Chatter1: {
-      id: 25,
-      Name: "Quan9",
-    },
-    Chatter2: {
-      id: 15,
-      Name: "Quan1",
-    },
-    newestMessage: {
-      id: 2,
-      Content: "Hello moi nguoi lai la Quan day",
-      Chatting: {
-        id: 25,
-        Name: "Quan9",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-  {
-    id: 8,
-    Chatter1: {
-      id: 26,
-      Name: "Quan10",
-    },
-    Chatter2: {
-      id: 26,
-      Name: "Quan10",
-    },
-    newestMessage: {
-      id: 2,
-      Content: "Hello moi nguoi lai la Quan day",
-      Chatting: {
-        id: 15,
-        Name: "Quan1",
-      },
-      createdAt: "2022-07-21T09:35:31.820Z",
-    },
-  },
-];
-export const ChatBody = () => {
+import { chatService } from "../../../services/ChatService";
+import { socket } from "../../ConnectSocket/ConnectSocket";
+import { ChatAdmin } from "./ChatAdmin/ChatAdmin";
+import { UserMe } from "./ChatContent/ChatContent";
+import { ChatContentAdmin } from "./ChatContent/ChatContentAdmin";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createConverFlagSelector,
+  findConverSelector,
+} from "../../../stores/selector/ChatSelector";
+import { updateMAction } from "../../../stores/actions/ChatAction";
+export const ChatBody = React.memo(() => {
+  const updateConversation = useSelector(findConverSelector);
+  const flagCreateConver = useSelector(createConverFlagSelector);
+  const dispatch = useDispatch();
   const [toggleState, setToggleState] = useState(1);
- 
-  const [conversation/* , setConversation */] = useState(Conversation);
+  const initMountStateUser = useRef([]);
+  const [infoChatAdmin, setInfoChatAdmin] = useState();
+  const [conversation, setConversation] = useState(initMountStateUser.current);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadMore, setLoadMore] = useState(false);
   const userChat = () => {
     return conversation.map((chat) => (
       <ChatUser
         key={chat.id}
         userInfo={chat}
         toggleState={toggleState}
-        toggleClick={(e) => setToggleState(e)}
+        toggleClick={(e) => {
+          setToggleState(e);
+          dispatch(updateMAction());
+        }}
       />
     ));
   };
@@ -189,14 +46,156 @@ export const ChatBody = () => {
       </div>
     ));
   };
+  useEffect(() => {
+    (async () => {
+      const res = await chatService.getConversation(8, 1, UserMe.id, 1);
+      initMountStateUser.current = res.data.data;
+      setConversation(res.data.data);
+      setToggleState(res.data.data[0].id);
+    })();
+  }, []);
+  useEffect(() => {
+    if (flagCreateConver) setToggleState(flagCreateConver);
+  }, [flagCreateConver]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await chatService.getConversationVsAdmin(UserMe.id, 0);
+      setInfoChatAdmin(res.data.data);
+    })();
+  }, []);
+  useEffect(() => {
+    if (updateConversation) {
+      (async () => {
+        try {
+          const { data } = await chatService.getConversationById(
+            updateConversation
+          );
+          let newConversationUser = [...initMountStateUser.current];
+          if (
+            newConversationUser.findIndex((i) => i.id === data.data.id) !== -1
+          ) {
+            var indexOf = newConversationUser.findIndex(
+              (i) => i.id === data.data.id
+            );
+            newConversationUser.splice(indexOf, 1);
+            initMountStateUser.current = [data.data, ...newConversationUser];
+            setConversation(initMountStateUser.current);
+            setToggleState(data.data.id);
+          } else {
+            initMountStateUser.current = [data.data, ...newConversationUser];
+            setConversation(initMountStateUser.current);
+            setToggleState(data.data.id);
+          }
+        } catch (error) {
+          console.log("ko ton tai ", error);
+        }
+      })();
+    }
+  }, [updateConversation]);
+  useEffect(() => {
+    socket.on("receive_message", () => {
+      (async () => {
+        const { data } = await chatService.getConversation(1, 1, UserMe.id, 1);
+        let newConversationUser = [...initMountStateUser.current];
+        if (
+          newConversationUser.findIndex((i) => i.id === data.data[0].id) !== -1
+        ) {
+          var indexofff = newConversationUser.reduce(function (a, e, i) {
+            if (e.id === data.data[0].id) a.push(i);
+            return a;
+          }, []);
+          for (const itm of indexofff) {
+            newConversationUser.splice(itm, 1);
+          }
+          initMountStateUser.current = [data.data[0], ...newConversationUser];
+          setConversation(initMountStateUser.current);
+        } else {
+          initMountStateUser.current = [data.data[0], ...newConversationUser];
+          setConversation(initMountStateUser.current);
+        }
+      })();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="Chat__body">
       <div className="Chat__body__user">
         <ChatUserFilter />
-        <div className="Chat__body__userlist">{userChat()}</div>
+        <ChatAdmin
+          info={infoChatAdmin}
+          toggleState={toggleState}
+          toggleClick={(e) => {
+            setToggleState(e);
+            dispatch(updateMAction());
+          }}
+        />
+        <div
+          className="Chat__body__userlist"
+          onScroll={async (e) => {
+            if (
+              e.target.scrollHeight - e.target.scrollTop ===
+                e.target.offsetHeight &&
+              hasMore
+            ) {
+              setLoadMore(true);
+              const { data } = await chatService.getConversation(
+                8,
+                Math.floor(conversation.length / 8) + 1,
+                UserMe.id,
+                1
+              );
+
+              if (data.data.length !== 0) {
+                let newListConversation = [...conversation];
+                for (let i = 0; i < data.data.length; i++) {
+                  let filterConversation = [...conversation];
+                  if (
+                    filterConversation.filter(
+                      (itm) => itm.id === data.data[i].id
+                    ).length === 0
+                  ) {
+                    newListConversation.push(data.data[i]);
+                  }
+                }
+                initMountStateUser.current = newListConversation;
+                setConversation(newListConversation);
+                if (data.pagination.hasNextPage === false) {
+                  console.log("last page");
+                  setHasMore(false);
+                  setLoadMore(false);
+                }
+              } else {
+                console.log("het");
+                setHasMore(false);
+                setLoadMore(false);
+              }
+            }
+          }}
+        >
+          {userChat()}
+          {!hasMore && (
+            <div className="Chat__body__userlist__no-more">
+              That all your conversation !
+            </div>
+          )}
+          {loadMore && (
+            <div className="Chat__body__userlist__loadmore">
+              <div className="stage">
+                <div className="dot-pulse" />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <div className="Chat__body__divider"></div>
+      <div
+        className={toggleState === 1000000 ? "Chat__body__content" : "d-none"}
+        key={1000000}
+      >
+        <ChatContentAdmin info={infoChatAdmin} />
+      </div>
       {contentChat()}
     </div>
   );
-};
+});

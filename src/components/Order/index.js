@@ -1,24 +1,30 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { Col, DatePicker, Row, TimePicker, Input, Button } from "antd";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Navigate, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, Link, useParams } from "react-router-dom";
 
 import "./order.scss";
 
 import TextInput from "../../components/TextInput/TextInput";
+import Promotion from "../../components/Promotion";
 
 import imgStudio from "../../assets/dao/Frame 163.jpg";
 import { handleSendOtp } from "../../stores/actions/autheticateAction";
-const Index = ({ onClickModal, linkTo = "" }) => {
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
+const Index = ({ linkTo = "" }) => {
   // const [chooseVoucher, setChooseVoucher] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const [phoneNumber, setPhoneNumber] = useState("");
-  // console.log(chooseVoucher);
-  // const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setStudioPostIdAction(id));
+  }, []);
 
   const onChange = (date, dateString) => {
-    console.log(date, dateString);
   };
 
   const handleOnClickOrder = () => {
@@ -29,6 +35,13 @@ const Index = ({ onClickModal, linkTo = "" }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onClickModal = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <Promotion />,
+    });
   };
 
   return (
@@ -78,6 +91,7 @@ const Index = ({ onClickModal, linkTo = "" }) => {
                 <img
                   src={imgStudio}
                   style={{ height: "100%", marginRight: "20px" }}
+                  alt=''
                 />
                 <div>
                   <span className="text-middle">Váy cưới mã 01</span>

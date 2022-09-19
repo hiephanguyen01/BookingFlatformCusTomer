@@ -5,7 +5,7 @@ import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
 import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +18,8 @@ export const Card = ({ id, value }) => {
     setLike(!like);
   };
   return (
-    <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id}`)}>
+
+    <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id }`)}>
       <div className={cx("image")}>
         <img
           className={cx("thumbnail")}

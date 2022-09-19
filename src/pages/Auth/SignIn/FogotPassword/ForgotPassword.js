@@ -1,4 +1,3 @@
-import { CheckOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -30,7 +29,8 @@ export const ForgotPassword = ({ onClickPop }) => {
         {onClickPop ? (
           <button
             className="back-button-forgot-pass"
-            onClick={() => onClickPop(1)}>
+            onClick={() => onClickPop(1)}
+          >
             <img alt="back" src={back} style={{ height: "16px" }} />
           </button>
         ) : (
@@ -52,7 +52,8 @@ export const ForgotPassword = ({ onClickPop }) => {
           phoneCheck.length >= 9 && phoneCheck.length <= 12
             ? "phone-zone-forgotpass"
             : "invalid-phone"
-        }>
+        }
+      >
         <div className="d-flex align-items-center">
           <img alt="" src={vietnam}></img>
           <div className="code-vn-login">+84</div>
@@ -69,7 +70,8 @@ export const ForgotPassword = ({ onClickPop }) => {
             phoneCheck.length >= 9 && phoneCheck.length <= 12
               ? "d-none"
               : "phone-check"
-          }>
+          }
+        >
           Xin vui lòng nhập một số điện thoại hợp lệ.
         </div>
       </div>
@@ -79,7 +81,8 @@ export const ForgotPassword = ({ onClickPop }) => {
         size="large"
         type="primary"
         disabled={phoneCheck.length < 9 || phoneCheck.length > 12}
-        onClick={() => handleSendSMS()}>
+        onClick={() => handleSendSMS()}
+      >
         Gửi qua SMS
       </Button>
     </div>

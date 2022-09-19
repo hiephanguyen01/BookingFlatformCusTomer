@@ -1,2 +1,2 @@
 import io from 'socket.io-client'
-export const socket = io('http://localhost:3003')
+export const socket = io(process.env.REACT_APP_DB_BASE_URL)

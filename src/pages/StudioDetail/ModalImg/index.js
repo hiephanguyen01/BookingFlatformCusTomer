@@ -11,14 +11,13 @@ import "swiper/css/pagination";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
-import { Modal } from "antd";
 import { useDispatch } from "react-redux";
 import { HIDE_MODAL } from "../../../stores/types/modalTypes";
 import { CloseOutlined } from "@ant-design/icons";
 export const ModalImage = ({ data }) => {
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  console.log(thumbsSwiper);
+  /* console.log(thumbsSwiper); */
   return (
     <div
       style={{

@@ -12,8 +12,8 @@ class StudioPostService extends BaseService {
       `/api/studio-post?page=${page}&limit=${limit}&category=${category}`
     );
   };
-  getDetailStudio = (id) => {
-    return this.get(`/api/studio-post/byid?id=${id}&category=1`);
+  getDetailStudio = (id, category) => {
+    return this.get(`/api/studio-post/byid?id=${id}&category=${category}`);
   };
   getStudioNear = (lat, lng) => {
     return this.get(`/api/studio-post/distance?lat=${lat}&lng=${lng}`);

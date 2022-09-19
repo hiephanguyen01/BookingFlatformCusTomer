@@ -18,7 +18,6 @@ const Index = ({ setChooseVoucher }) => {
     }
     setChoose([...newChoose]);
   };
-  console.log(choose);
   return (
     <div className="voucher_container">
       <div

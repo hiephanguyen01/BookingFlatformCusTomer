@@ -5,14 +5,13 @@ import {
   SELECT_RESULT,
   REMOVE_RESULT,
 } from "../types/PostDaoType";
-
 const initialState = {
   listPost: [],
+  listPostForSearching: [],
   pagination: {},
   postDetail: {},
   selectSearch: [],
 };
-
 export const postDaoReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_LIST_POST:

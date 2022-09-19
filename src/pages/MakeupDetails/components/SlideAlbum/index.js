@@ -5,14 +5,13 @@ import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./slideAlbum.scss";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 
-import modelImg from "../../../../assets/images/modelImg.png";
-
-const Index = ({ title, style = {}, className = "" }) => {
+const Index = ({ data, style = {}, className = "" }) => {
   return (
     <>
       <div className={`list_item_album ${className}`} style={{ ...style }}>
-        <div className="title">{title}</div>
+        <div className="title">{data?.Name}</div>
         <div>
           <Swiper
             slidesPerView={4}
@@ -37,12 +36,19 @@ const Index = ({ title, style = {}, className = "" }) => {
               },
             }}
             modules={[Navigation]}
-            className="mySwiper"
+            className="swiperMakeup"
           >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => {
+            {data?.Image?.map((item, idx) => {
               return (
                 <SwiperSlide key={idx}>
-                  <img src={modelImg} style={{ height: "100%" }} />
+                  <img
+                    src={`${
+                      item.includes("https://drive.google.com/")
+                        ? item
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    }`}
+                    style={{ height: "100%" }}
+                  />
                 </SwiperSlide>
               );
             })}

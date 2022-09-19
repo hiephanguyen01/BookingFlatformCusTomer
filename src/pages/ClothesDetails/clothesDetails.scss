@@ -41,6 +41,9 @@
             font-size: 18px;
             line-height: 25px;
             color: #828282;
+
+            display: flex;
+            align-items: center;
         }
 
         .rating {
@@ -84,9 +87,13 @@
                 font-size: 20px;
                 font-weight: 700;
 
+                display: flex;
+                align-items: center;
+
                 .icon_check_circle {
                     color: #03AC84;
                     font-size: 14px;
+                    margin-left: 5px;
                 }
             }
 
@@ -105,8 +112,10 @@
     }
 
     .wrapper_list_costume {
+        min-height: 186px;
 
         .col_left {
+            min-height: 186px;
 
             .choose_size {
                 color: $secondary-800;

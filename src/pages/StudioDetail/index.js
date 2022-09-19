@@ -1,3 +1,7 @@
+import React, { useEffect, useState } from "react";
+import classNames from "classnames/bind";
+import "react-lightbox-pack/dist/index.css";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CheckCircleOutlined,
   HeartOutlined,
@@ -8,7 +12,8 @@ import {
 } from "@ant-design/icons";
 import { Pagination, Popover, Rate, Table } from "antd";
 import classNames from "classnames/bind";
-import React, { useEffect, useState } from "react";
+
+import { Pagination, Popover, Table } from "antd";
 import { Helmet } from "react-helmet";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +29,7 @@ import {
   getAllStudioPost,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
+import { SlideCard } from "./SlideCard";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
 import styles from "./Detail.module.scss";
@@ -33,6 +39,180 @@ import { SlideCard } from "./SlideCard";
 import { Voucher } from "./Voucher";
 
 const cx = classNames.bind(styles);
+const columns = [
+  {
+    title: "Loại phòng",
+    dataIndex: "name",
+    key: "name",
+    width: "30%",
+    render: () => {
+      return (
+        <div style={{ textAlign: "center" }}>
+          <img
+            style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
+            src={images.baby}
+          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "10px",
+            }}
+          >
+            <span
+              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
+            >
+              Phòng
+            </span>
+            <span
+              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
+            >
+              Deluxe
+            </span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "10px",
+            }}
+          >
+            <span
+              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
+            >
+              Diện tích
+            </span>
+            <span
+              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
+            >
+              100m2
+            </span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "10px",
+            }}
+          >
+            <span
+              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
+            >
+              Phong cách
+            </span>
+            <span
+              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
+            >
+              Châu Âu
+            </span>
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    title: "Mô tả",
+    dataIndex: "age",
+    key: "age",
+    render: () => {
+      return (
+        <p>
+          Contrary to popular belief, Lorem Ipsum is not simply random text. It
+          has roots in a piece of classical Latin literature from 45 BC, making
+          it over 2000 years old. Richard McClintock, a Latin professor at Hamp
+          den-Sydney{" "}
+        </p>
+      );
+    },
+  },
+  {
+    title: "Giá cho thời gian bạn đã chọn ",
+    dataIndex: "address",
+    key: "address",
+    render: () => {
+      return (
+        <div>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <span
+              style={{ color: "#E22828", fontSize: "20px", fontWeight: "700" }}
+            >
+              1.200.000đ{" "}
+            </span>
+            <span
+              style={{
+                color: "#828282",
+                textDecoration: "line-through",
+                fontSize: "14px",
+                fontWeight: "400",
+              }}
+            >
+              1.200.000đ{" "}
+            </span>
+          </div>
+          <p style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}>
+            Bao gồm 50.000đ thuế và phí{" "}
+          </p>
+          <button
+            style={{
+              padding: "3px 21px",
+              background: "#E22828",
+              color: "#ffff",
+              border: " 1px solid #E22828",
+              borderRadius: " 8px",
+            }}
+          >
+            Giảm 50%{" "}
+          </button>
+        </div>
+      );
+    },
+  },
+  {
+    title: "Chọn phòng",
+    key: "action",
+    render: (_, record) => (
+      <div>
+        <button
+          style={{
+            padding: "15px 30px",
+            background: "#fff",
+            color: "#E22828",
+            border: " 1px solid #E22828",
+            borderRadius: " 8px",
+          }}
+        >
+          Chọn
+        </button>
+      </div>
+    ),
+  },
+];
+const data = [
+  {
+    key: "1",
+    name: "John Brown",
+    age: 32,
+    address: "New York No. 1 Lake Park",
+    tags: ["nice", "developer"],
+  },
+  {
+    key: "2",
+    name: "Jim Green",
+    age: 42,
+    address: "London No. 1 Lake Park",
+    tags: ["loser"],
+  },
+  {
+    key: "3",
+    name: "Joe Black",
+    age: 32,
+    address: "Sidney No. 1 Lake Park",
+    tags: ["cool", "teacher"],
+  },
+];
 
 const dataImg = [
   {
@@ -104,12 +284,15 @@ export const StudioDetail = () => {
   // console.log("studioNear", studioNear);
   // console.log("studioPostList", studioPostList);
   console.log(ratingStudioPostDetai, numberRating.reverse());
+  const { studioDetail } = useSelector((state) => state.studioPostReducer);
+  /*  console.log(studioDetail); */
   // Handler
   useEffect(() => {
     setTimeout(() => {
       dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
     }, 5000);
   }, []);
+
   useEffect(() => {
     dispatch(studioDetailAction(id));
     dispatch(getDetailRoomAction(id));
@@ -117,6 +300,7 @@ export const StudioDetail = () => {
     dispatch(getAllRatingStudioByIdAction(id, 5));
     dispatch(getNumberRateStudioByIdAction(id));
   }, [id]);
+
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
