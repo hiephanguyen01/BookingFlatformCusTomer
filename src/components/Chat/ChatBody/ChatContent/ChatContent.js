@@ -329,6 +329,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             style={{
               width: "30px",
               height: "30px",
+              borderRadius: "10px",
             }}
             multiple={true}
           >
@@ -366,6 +367,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
               ))}
           </div>
           <textarea
+          className="ChatContent__container__send__current-message"
             rows={1}
             cols={1}
             data-kt-element="input"

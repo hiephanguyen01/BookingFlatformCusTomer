@@ -42,7 +42,6 @@ const DaoPost = (props) => {
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
-
   const { item } = props;
   const {
     Id,
@@ -56,7 +55,6 @@ const DaoPost = (props) => {
     // comments,
     CreationTime,
   } = item;
-
   const handleImageModal = (url) => {
     setImageInModal(url);
     setIsModalVisible(true);
