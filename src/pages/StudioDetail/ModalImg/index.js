@@ -53,7 +53,7 @@ export const ModalImage = ({ data }) => {
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
-                <img src={`${item}`} alt="" />
+                <img src={`${process.env.REACT_APP_API_URL_IMG}${item}`} alt="" />
               </SwiperSlide>
             );
           })}
@@ -88,7 +88,7 @@ export const ModalImage = ({ data }) => {
                     height: "108px",
                     objectFit: "cover",
                   }}
-                  src={`${item}`}
+                  src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
                   alt=""
                 />
               </SwiperSlide>

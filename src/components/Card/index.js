@@ -11,7 +11,6 @@ const cx = classNames.bind(styles);
 
 export const Card = ({ id, value }) => {
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
-  console.log(`${linkTo}/${id}`);
   const navigate = useNavigate();
   const [like, setLike] = useState(false);
   const handleChangeLike = (e) => {
@@ -24,11 +23,9 @@ export const Card = ({ id, value }) => {
         <img
           className={cx("thumbnail")}
           alt=""
-          src={
-            value
-              ? `${process.env.REACT_APP_API_URL_IMG}${value?.Image1}`
-              : images.baby
-          }
+          src={`${process.env.REACT_APP_API_URL_IMG}${
+            value.Image[0] || value.Image
+          }`}
         />
       </div>
 

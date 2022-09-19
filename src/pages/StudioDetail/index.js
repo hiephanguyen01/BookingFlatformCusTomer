@@ -1,9 +1,3 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
-import classNames from "classnames/bind";
-import styles from "./Detail.module.scss";
-import { LightBox } from "react-lightbox-pack"; // <--- Importing LightBox Pack
-import "react-lightbox-pack/dist/index.css";
-import { useDispatch, useSelector } from "react-redux";
 import {
   CheckCircleOutlined,
   HeartOutlined,
@@ -12,24 +6,31 @@ import {
   StarFilled,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Pagination, Popover, Table } from "antd";
+import { Pagination, Popover, Rate, Table } from "antd";
+import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import images from "../../assets/images";
-import { Rate } from "antd";
-import Content from "../../components/ReadMore";
-import { ListItem } from "../Home/ListCard";
-import { SlideCard } from "./SlideCard";
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { Report } from "./Report";
-import { Voucher } from "./Voucher";
-import { ModalImage } from "./ModalImg";
+import "react-lightbox-pack/dist/index.css";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
+import images from "../../assets/images";
+import Content from "../../components/ReadMore";
+import {
+  getAllRatingStudioByIdAction,
+  getNumberRateStudioByIdAction,
+} from "../../stores/actions/RatingAcion";
+import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
-import { getDetailRoomAction } from "../../stores/actions/roomAction";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
+import styles from "./Detail.module.scss";
+import { ModalImage } from "./ModalImg";
+import { Report } from "./Report";
+import { SlideCard } from "./SlideCard";
+import { Voucher } from "./Voucher";
 
 const cx = classNames.bind(styles);
 
@@ -95,10 +96,14 @@ export const StudioDetail = () => {
     (state) => state.studioPostReducer
   );
   const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
-  console.log("studioDetail", studioDetail);
-  console.log("roomDetail", roomDetail);
-  console.log("studioNear", studioNear);
-  console.log("studioPostList", studioPostList);
+  const { ratingStudioPostDetai, numberRating } = useSelector(
+    (state) => state.ratingReducer
+  );
+  // console.log("studioDetail", studioDetail);
+  // console.log("roomDetail", roomDetail);
+  // console.log("studioNear", studioNear);
+  // console.log("studioPostList", studioPostList);
+  console.log(ratingStudioPostDetai, numberRating.reverse());
   // Handler
   useEffect(() => {
     setTimeout(() => {
@@ -109,8 +114,9 @@ export const StudioDetail = () => {
     dispatch(studioDetailAction(id));
     dispatch(getDetailRoomAction(id));
     dispatch(getAllStudioPost(10, 1, 1));
+    dispatch(getAllRatingStudioByIdAction(id, 5));
+    dispatch(getNumberRateStudioByIdAction(id));
   }, [id]);
-  const values = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
@@ -120,13 +126,12 @@ export const StudioDetail = () => {
       title: "Loại phòng",
       width: "30%",
       render: (text) => {
-        console.log("text", text);
         return (
           <div style={{ textAlign: "center" }}>
             <img
               alt="as"
               style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
-              src={`${text.Image[0]}`}
+              src={`${process.env.REACT_APP_API_URL_IMG}${text.Image[0]}`}
             />
             <div
               style={{
@@ -411,7 +416,7 @@ export const StudioDetail = () => {
                     }
                     className={cx("item")}
                   >
-                    <img alt="sa" src={`${item}`} />
+                    <img alt="sa" src={`${process.env.REACT_APP_API_URL_IMG}${item}`} />
                   </div>
                 ) : (
                   <div
@@ -425,7 +430,7 @@ export const StudioDetail = () => {
                     key={index}
                     className={cx("item")}
                   >
-                    <img src={`${item}`} alt="as" />
+                    <img src={`${process.env.REACT_APP_API_URL_IMG}${item}`} alt="as" />
                     <div className={cx("number")}>
                       {studioDetail?.Image.length - 5}+
                     </div>
@@ -474,10 +479,13 @@ export const StudioDetail = () => {
                   <StarFilled style={{ color: "#F8D93A" }} />
                   <span>(24)</span>
                 </div> */}
-                  {values.reverse().map((item) => {
+                  {numberRating?.reverse().map((item) => {
                     return (
                       <div
-                        onClick={() => setActiveId(item.id)}
+                        onClick={() => {
+                          setActiveId(item.id);
+                          dispatch(getAllRatingStudioByIdAction(id,item.id))
+                        }}
                         key={item.id}
                         className={cx(
                           `${activeId === item.id ? "active" : ""}`
@@ -485,62 +493,132 @@ export const StudioDetail = () => {
                       >
                         <span>{item.id}</span>
                         <StarFilled style={{ color: "#F8D93A" }} />
-                        <span>(24)</span>
+                        <span>{`(${item.total})`}</span>
                       </div>
                     );
                   })}
                 </div>
-                <div className={cx("descriptionRate")}>
-                  <div className={cx("info-user")}>
-                    <img src={images.banner2} />
-                    <div className={cx("info")}>
-                      <h3>Mai Anh</h3>
-                      <Rate allowHalf value={5}></Rate>
+                {ratingStudioPostDetai.length > 0 ? (
+                  <>
+                    {ratingStudioPostDetai.map((item, idx) => {
+                      return (
+                        <>
+                          <div className={cx("descriptionRate")}>
+                            <div className={cx("info-user")}>
+                              <img
+                                alt="sasa"
+                                src={`${process.env.REACT_APP_API_URL_IMG}${item.BookingUser.Image}`}
+                              />
+                              <div className={cx("info")}>
+                                <h3>{item.BookingUser.Fullname}</h3>
+                                <Rate allowHalf value={item.Rate}></Rate>
+                              </div>
+                            </div>
+                            {item.Description && (
+                              <div className={cx("description")}>
+                                {item.Description}
+                              </div>
+                            )}
+                            {item.VideoThumb.length > 0 &&
+                            item.Image.length > 0 ? (
+                              <>
+                                <div className={cx("listImages")}>
+                                  {item?.VideoThumb &&
+                                    item.VideoThumb.map((item1, idx) => (
+                                      <div
+                                        key={idx}
+                                        className={cx("item-video")}
+                                      >
+                                        <img alt="video" src={`${process.env.REACT_APP_API_URL_IMG}${item1}`} />
+                                        <PlayCircleOutlined
+                                          className={cx("play")}
+                                        />
+                                      </div>
+                                    ))}
+                                  {ratingStudioPostDetai?.Image &&
+                                    ratingStudioPostDetai.Image.map(
+                                      (item, idx) => (
+                                        <div
+                                          key={idx}
+                                          className={cx("item-image")}
+                                        >
+                                          <img alt="anh" src={`${process.env.REACT_APP_API_URL_IMG}${item}`} />
+                                        </div>
+                                      )
+                                    )}
+                                </div>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+
+                            <p style={{ color: "#828282" }}>
+                              Phòng : Wisteria Premium{" "}
+                            </p>
+                          </div>
+                        </>
+                      );
+                    })}
+                    <div className={cx("descriptionRate")}>
+                      <div className={cx("info-user")}>
+                        <img alt="sasa" src={images.banner2} />
+                        <div className={cx("info")}>
+                          <h3>Mai Anh</h3>
+                          <Rate allowHalf value={5}></Rate>
+                        </div>
+                      </div>
+                      {/* {ratingStudioPostDetai && } */}
+                      <div className={cx("description")}>
+                        Studio rất đẹp, phục vụ nhiệt tình. Giá cả cũng hợp lý.
+                        Mình và chồng đều hài lòng. Chỉ có điều vị trí hơi khó
+                        tìm một chút, vì studio nằm trong hẻm khá sâu nên hơi
+                        khó tìm. Còn lại mọi thứ đều ổn.
+                      </div>
+                      <p style={{ color: "#828282" }}>
+                        Phòng : Wisteria Premium{" "}
+                      </p>
                     </div>
-                  </div>
-                  <div className={cx("description")}>
-                    Studio rất đẹp, phục vụ nhiệt tình. Giá cả cũng hợp lý. Mình
-                    và chồng đều hài lòng. Chỉ có điều vị trí hơi khó tìm một
-                    chút, vì studio nằm trong hẻm khá sâu nên hơi khó tìm. Còn
-                    lại mọi thứ đều ổn.
-                  </div>
-                  <p style={{ color: "#828282" }}>Phòng : Wisteria Premium </p>
-                </div>
-                <div className={cx("descriptionRate")}>
-                  <div className={cx("info-user")}>
-                    <img src={images.banner2} />
-                    <div className={cx("info")}>
-                      <h3>Mai Anh</h3>
-                      <Rate allowHalf value={5}></Rate>
+                    <div className={cx("descriptionRate")}>
+                      <div className={cx("info-user")}>
+                        <img alt="sa" src={images.banner2} />
+                        <div className={cx("info")}>
+                          <h3>Mai Anh</h3>
+                          <Rate allowHalf value={5}></Rate>
+                        </div>
+                      </div>
+                      <div className={cx("description")}>
+                        Studio rất đẹp, phục vụ nhiệt tình. Giá cả cũng hợp lý.
+                        Mình và chồng đều hài lòng. Chỉ có điều vị trí hơi khó
+                        tìm một chút, vì studio nằm trong hẻm khá sâu nên hơi
+                        khó tìm. Còn lại mọi thứ đều ổn.
+                      </div>
+                      <div className={cx("listImages")}>
+                        <div className={cx("item-video")}>
+                          <img alt="video" src={images.detail1} />
+                          <PlayCircleOutlined className={cx("play")} />
+                        </div>
+                        <div className={cx("item-image")}>
+                          <img alt="anh" src={images.detail1} />
+                        </div>
+                        <div className={cx("item-image")}>
+                          <img alt="anh1" src={images.detail1} />
+                        </div>
+                      </div>
+                      <p style={{ color: "#828282" }}>
+                        Phòng : Wisteria Premium{" "}
+                      </p>
                     </div>
-                  </div>
-                  <div className={cx("description")}>
-                    Studio rất đẹp, phục vụ nhiệt tình. Giá cả cũng hợp lý. Mình
-                    và chồng đều hài lòng. Chỉ có điều vị trí hơi khó tìm một
-                    chút, vì studio nằm trong hẻm khá sâu nên hơi khó tìm. Còn
-                    lại mọi thứ đều ổn.
-                  </div>
-                  <div className={cx("listImages")}>
-                    <div className={cx("item-video")}>
-                      <img src={images.detail1} />
-                      <PlayCircleOutlined className={cx("play")} />
+                    <div className={cx("pagination-ds")}>
+                      <Pagination
+                        className={cx("pagination-ds")}
+                        defaultCurrent={1}
+                        total={50}
+                      />
                     </div>
-                    <div className={cx("item-image")}>
-                      <img src={images.detail1} />
-                    </div>
-                    <div className={cx("item-image")}>
-                      <img src={images.detail1} />
-                    </div>
-                  </div>
-                  <p style={{ color: "#828282" }}>Phòng : Wisteria Premium </p>
-                </div>
-                <div className={cx("pagination-ds")}>
-                  <Pagination
-                    className={cx("pagination-ds")}
-                    defaultCurrent={1}
-                    total={50}
-                  />
-                </div>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
             <div className={cx("right")}>
@@ -645,7 +723,7 @@ export const StudioDetail = () => {
             title="Studio tương tự"
           />
           <SlideCard data={studioNear ?? studioNear} title="Gần bạn" />
-          <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" />
+          {/* <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" /> */}
         </div>
       </div>
     </>
