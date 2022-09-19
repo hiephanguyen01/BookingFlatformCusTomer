@@ -26,7 +26,7 @@ export const ModalImage = ({ data }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-between",
-        position: "relative"
+        position: "relative",
       }}
     >
       <h3>ALBUM CHỤP PHONG CẢNH</h3>
@@ -53,7 +53,7 @@ export const ModalImage = ({ data }) => {
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
-                <img src={item} alt="" />
+                <img src={`${item}`} alt="" />
               </SwiperSlide>
             );
           })}
@@ -88,7 +88,7 @@ export const ModalImage = ({ data }) => {
                     height: "108px",
                     objectFit: "cover",
                   }}
-                  src={item}
+                  src={`${item}`}
                   alt=""
                 />
               </SwiperSlide>

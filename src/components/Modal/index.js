@@ -5,7 +5,7 @@ import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import "./Modal.scss";
 
 export const ModalCustom = () => {
-  const { Component, visible, isListImage } = useSelector(
+  const { Component, visible, isListImage, width } = useSelector(
     (state) => state.modalReducer
   );
   console.log(isListImage);
@@ -19,6 +19,7 @@ export const ModalCustom = () => {
         visible={visible}
         closable={false}
         footer={null}
+        // width
         onCancel={() => dispatch({ type: HIDE_MODAL })}
       >
         {Component}

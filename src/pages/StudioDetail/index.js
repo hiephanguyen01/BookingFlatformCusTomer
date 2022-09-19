@@ -24,183 +24,14 @@ import { Report } from "./Report";
 import { Voucher } from "./Voucher";
 import { ModalImage } from "./ModalImg";
 import { useLocation, useParams } from "react-router-dom";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import {
+  getAllStudioPost,
+  studioDetailAction,
+} from "../../stores/actions/studioPostAction";
+import { getDetailRoomAction } from "../../stores/actions/roomAction";
+import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
 
 const cx = classNames.bind(styles);
-const columns = [
-  {
-    title: "Loại phòng",
-    dataIndex: "name",
-    key: "name",
-    width: "30%",
-    render: (text) => {
-      return (
-        <div style={{ textAlign: "center" }}>
-          <img
-            style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
-            src={images.baby}
-          />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <span
-              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
-            >
-              Phòng
-            </span>
-            <span
-              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
-            >
-              Deluxe
-            </span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <span
-              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
-            >
-              Diện tích
-            </span>
-            <span
-              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
-            >
-              100m2
-            </span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <span
-              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
-            >
-              Phong cách
-            </span>
-            <span
-              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
-            >
-              Châu Âu
-            </span>
-          </div>
-        </div>
-      );
-    },
-  },
-  {
-    title: "Mô tả",
-    dataIndex: "age",
-    key: "age",
-    render: (text) => {
-      return (
-        <p>
-          Contrary to popular belief, Lorem Ipsum is not simply random text. It
-          has roots in a piece of classical Latin literature from 45 BC, making
-          it over 2000 years old. Richard McClintock, a Latin professor at Hamp
-          den-Sydney{" "}
-        </p>
-      );
-    },
-  },
-  {
-    title: "Giá cho thời gian bạn đã chọn ",
-    dataIndex: "address",
-    key: "address",
-    render: () => {
-      return (
-        <div>
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <span
-              style={{ color: "#E22828", fontSize: "20px", fontWeight: "700" }}
-            >
-              1.200.000đ{" "}
-            </span>
-            <span
-              style={{
-                color: "#828282",
-                textDecoration: "line-through",
-                fontSize: "14px",
-                fontWeight: "400",
-              }}
-            >
-              1.200.000đ{" "}
-            </span>
-          </div>
-          <p style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}>
-            Bao gồm 50.000đ thuế và phí{" "}
-          </p>
-          <button
-            style={{
-              padding: "3px 21px",
-              background: "#E22828",
-              color: "#ffff",
-              border: " 1px solid #E22828",
-              borderRadius: " 8px",
-            }}
-          >
-            Giảm 50%{" "}
-          </button>
-        </div>
-      );
-    },
-  },
-  {
-    title: "Chọn phòng",
-    key: "action",
-    render: (_, record) => (
-      <div>
-        <button
-          style={{
-            padding: "15px 30px",
-            background: "#fff",
-            color: "#E22828",
-            border: " 1px solid #E22828",
-            borderRadius: " 8px",
-          }}
-        >
-          Chọn
-        </button>
-      </div>
-    ),
-  },
-];
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
 
 const dataImg = [
   {
@@ -254,16 +85,20 @@ const dataImg = [
   },
 ];
 
-const text = <span>Title</span>;
-
 export const StudioDetail = () => {
   const { id } = useParams();
-  const {pathname}= useLocation()
+  const { pathname } = useLocation();
   // State
   const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
-  const { studioDetail } = useSelector((state) => state.studioPostReducer);
-  console.log(studioDetail);
+  const { studioDetail, studioNear, studioPostList } = useSelector(
+    (state) => state.studioPostReducer
+  );
+  const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
+  console.log("studioDetail", studioDetail);
+  console.log("roomDetail", roomDetail);
+  console.log("studioNear", studioNear);
+  console.log("studioPostList", studioPostList);
   // Handler
   useEffect(() => {
     setTimeout(() => {
@@ -272,25 +107,238 @@ export const StudioDetail = () => {
   }, []);
   useEffect(() => {
     dispatch(studioDetailAction(id));
+    dispatch(getDetailRoomAction(id));
+    dispatch(getAllStudioPost(10, 1, 1));
   }, [id]);
   const values = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
   };
+  const columns = [
+    {
+      title: "Loại phòng",
+      width: "30%",
+      render: (text) => {
+        console.log("text", text);
+        return (
+          <div style={{ textAlign: "center" }}>
+            <img
+              alt="as"
+              style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
+              src={`${text.Image[0]}`}
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "10px",
+              }}
+            >
+              <span
+                style={{
+                  color: "#616161",
+                  fontSize: "16px",
+                  fontWeight: "400",
+                }}
+              >
+                Phòng
+              </span>
+              <span
+                style={{
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                {text.Name}
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "10px",
+              }}
+            >
+              <span
+                style={{
+                  color: "#616161",
+                  fontSize: "16px",
+                  fontWeight: "400",
+                }}
+              >
+                Diện tích
+              </span>
+              <span
+                style={{
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                {text.Area}
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "10px",
+              }}
+            >
+              <span
+                style={{
+                  color: "#616161",
+                  fontSize: "16px",
+                  fontWeight: "400",
+                }}
+              >
+                Phong cách
+              </span>
+              <span
+                style={{
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                {text.Style}
+              </span>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "Description",
+      key: "Description",
+      render: (text) => {
+        return <p>{text}</p>;
+      },
+    },
+    {
+      title: "Giá cho thời gian bạn đã chọn ",
+      render: (text) => {
+        return (
+          <div>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <span
+                style={{
+                  color: "#E22828",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                {text.PriceByDate.toLocaleString("it-IT", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </span>
+              <span
+                style={{
+                  color: "#828282",
+                  textDecoration: "line-through",
+                  fontSize: "14px",
+                  fontWeight: "400",
+                }}
+              >
+                {text.PriceByHour.toLocaleString("it-IT", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </span>
+            </div>
+            <p
+              style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}
+            >
+              {text.PriceNote}
+            </p>
+            <button
+              style={{
+                padding: "3px 21px",
+                background: "#E22828",
+                color: "#ffff",
+                border: " 1px solid #E22828",
+                borderRadius: " 8px",
+              }}
+            >
+              Giảm 50%{" "}
+            </button>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Chọn phòng",
+      key: "action",
+      width: "17%",
+      render: (text) => (
+        <div style={{ textAlign: "center" }}>
+          {roomSelect?.findIndex((item1) => item1.id === text.id) !== -1 ? (
+            <button
+              style={{
+                padding: "15px 30px",
+                background: "#E7E7E7",
+                color: "#3F3F3F",
+                border: " 1px solid transparent",
+                borderRadius: " 8px",
+              }}
+              onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
+            >
+              Bỏ chọn
+            </button>
+          ) : (
+            <button
+              style={{
+                padding: "15px 30px",
+                background: "#fff",
+                color: "#E22828",
+                border: " 1px solid #E22828",
+                borderRadius: " 8px",
+              }}
+              onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
+            >
+              Chọn
+            </button>
+          )}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <Helmet>
         <title>{studioDetail?.Name}</title>
         <meta name="description" content={studioDetail?.Description}></meta>
-        <meta property="og:url" itemprop="url" content={`${process.env.REACT_APP_DB_BASE_URL}${pathname}`}></meta>
-        <meta property="og:description" content={studioDetail?.Description}></meta>
-        <meta content={studioDetail?.Image?.slice(0,1)} property="og:image" itemprop="thumbnailUrl"></meta>
+        <meta
+          property="og:url"
+          itemprop="url"
+          content={`${process.env.REACT_APP_DB_BASE_URL}${pathname}`}
+        ></meta>
+        <meta
+          property="og:description"
+          content={studioDetail?.Description}
+        ></meta>
+        <meta
+          content={studioDetail?.Image?.slice(0, 1)}
+          property="og:image"
+          itemprop="thumbnailUrl"
+        ></meta>
         <meta property="og:image:width" content="740"></meta>
         <meta property="og:image:height" content="555"></meta>
         <meta property="og:locale" content="vi_VN"></meta>
         <meta property="og:site_name" content="Booking Studio"></meta>
-        <meta property="og:title" itemprop="name" content={studioDetail?.Name}></meta>
+        <meta
+          property="og:title"
+          itemprop="name"
+          content={studioDetail?.Name}
+        ></meta>
       </Helmet>
       <div className={cx("wrapper")}>
         <div className={cx("studioDetail")}>
@@ -358,11 +406,12 @@ export const StudioDetail = () => {
                       dispatch({
                         type: "SHOW_MODAL_LIST",
                         Component: <ModalImage data={studioDetail?.Image} />,
+                        width: "1169px",
                       })
                     }
                     className={cx("item")}
                   >
-                    <img alt="sa" src={item} />
+                    <img alt="sa" src={`${item}`} />
                   </div>
                 ) : (
                   <div
@@ -370,13 +419,16 @@ export const StudioDetail = () => {
                       dispatch({
                         type: SHOW_MODAL,
                         Component: <ModalImage data={studioDetail?.Image} />,
+                        width: "1169px",
                       })
                     }
                     key={index}
                     className={cx("item")}
                   >
-                    <img src={item} alt="as" />
-                    <div className={cx("number")}>{dataImg.length - 5}+</div>
+                    <img src={`${item}`} alt="as" />
+                    <div className={cx("number")}>
+                      {studioDetail?.Image.length - 5}+
+                    </div>
                   </div>
                 );
               })}
@@ -399,7 +451,7 @@ export const StudioDetail = () => {
                 <Table
                   className={cx("table-ant")}
                   columns={columns}
-                  dataSource={data}
+                  dataSource={roomDetail ?? roomDetail}
                   pagination={{
                     defaultPageSize: 5,
                     showSizeChanger: true,
@@ -547,12 +599,53 @@ export const StudioDetail = () => {
                     1.500.000đ{" "}
                   </span>
                 </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    justifyContent: "space-between",
+                    marginTop: "20px",
+                  }}
+                >
+                  <button
+                    style={{
+                      flex: "2.5",
+                      padding: "14px 36px",
+                      background: "#E7E7E7",
+                      borderRadius: "8px",
+                      border: 0,
+                      cursor: "pointer",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Thêm vào giỏ hàng
+                  </button>
+                  <button
+                    style={{
+                      flex: "1",
+                      padding: "14px 36px",
+                      background: "#E22828",
+                      borderRadius: "8px",
+                      color: "#fff",
+                      border: 0,
+                      cursor: "pointer",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Đặt ngay
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-          <SlideCard title="Studio tương tự" />
-          <SlideCard title="Gần bạn" />
-          <SlideCard title="Bạn vừa mới xem" />
+          <SlideCard
+            data={
+              studioPostList ?? studioPostList.filter((item) => item.id !== id)
+            }
+            title="Studio tương tự"
+          />
+          <SlideCard data={studioNear ?? studioNear} title="Gần bạn" />
+          <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" />
         </div>
       </div>
     </>

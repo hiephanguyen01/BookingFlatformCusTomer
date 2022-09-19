@@ -8,12 +8,15 @@ class StudioPostService extends BaseService {
     return this.get(`/api/provinces`);
   };
   getAllStudioPost = (limit, page, category) => {
-    return this.post(
+    return this.get(
       `/api/studio-post?page=${page}&limit=${limit}&category=${category}`
     );
   };
   getDetailStudio = (id) => {
     return this.get(`/api/studio-post/byid?id=${id}&category=1`);
+  };
+  getStudioNear = (lat, lng) => {
+    return this.get(`/api/studio-post/distance?lat=${lat}&lng=${lng}`);
   };
 }
 
