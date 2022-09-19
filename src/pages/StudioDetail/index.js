@@ -1,7 +1,3 @@
-import React, { useEffect, useState } from "react";
-import classNames from "classnames/bind";
-import "react-lightbox-pack/dist/index.css";
-import { useDispatch, useSelector } from "react-redux";
 import {
   CheckCircleOutlined,
   HeartOutlined,
@@ -11,8 +7,11 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 import { Pagination, Popover, Rate, Table } from "antd";
+import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import "react-lightbox-pack/dist/index.css";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import images from "../../assets/images";
 import Content from "../../components/ReadMore";
@@ -24,259 +23,33 @@ import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
   studioDetailAction,
+  studioDetailAction1,
 } from "../../stores/actions/studioPostAction";
-import { SlideCard } from "./SlideCard";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
 import styles from "./Detail.module.scss";
 import { ModalImage } from "./ModalImg";
 import { Report } from "./Report";
+import { SlideCard } from "./SlideCard";
 import { Voucher } from "./Voucher";
 
 const cx = classNames.bind(styles);
-const columns = [
-  {
-    title: "Loại phòng",
-    dataIndex: "name",
-    key: "name",
-    width: "30%",
-    render: () => {
-      return (
-        <div style={{ textAlign: "center" }}>
-          <img
-            style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
-            src={images.baby}
-          />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <span
-              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
-            >
-              Phòng
-            </span>
-            <span
-              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
-            >
-              Deluxe
-            </span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <span
-              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
-            >
-              Diện tích
-            </span>
-            <span
-              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
-            >
-              100m2
-            </span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "10px",
-            }}
-          >
-            <span
-              style={{ color: "#616161", fontSize: "16px", fontWeight: "400" }}
-            >
-              Phong cách
-            </span>
-            <span
-              style={{ color: "#3F3F3F", fontSize: "16px", fontWeight: "700" }}
-            >
-              Châu Âu
-            </span>
-          </div>
-        </div>
-      );
-    },
-  },
-  {
-    title: "Mô tả",
-    dataIndex: "age",
-    key: "age",
-    render: () => {
-      return (
-        <p>
-          Contrary to popular belief, Lorem Ipsum is not simply random text. It
-          has roots in a piece of classical Latin literature from 45 BC, making
-          it over 2000 years old. Richard McClintock, a Latin professor at Hamp
-          den-Sydney{" "}
-        </p>
-      );
-    },
-  },
-  {
-    title: "Giá cho thời gian bạn đã chọn ",
-    dataIndex: "address",
-    key: "address",
-    render: () => {
-      return (
-        <div>
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <span
-              style={{ color: "#E22828", fontSize: "20px", fontWeight: "700" }}
-            >
-              1.200.000đ{" "}
-            </span>
-            <span
-              style={{
-                color: "#828282",
-                textDecoration: "line-through",
-                fontSize: "14px",
-                fontWeight: "400",
-              }}
-            >
-              1.200.000đ{" "}
-            </span>
-          </div>
-          <p style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}>
-            Bao gồm 50.000đ thuế và phí{" "}
-          </p>
-          <button
-            style={{
-              padding: "3px 21px",
-              background: "#E22828",
-              color: "#ffff",
-              border: " 1px solid #E22828",
-              borderRadius: " 8px",
-            }}
-          >
-            Giảm 50%{" "}
-          </button>
-        </div>
-      );
-    },
-  },
-  {
-    title: "Chọn phòng",
-    key: "action",
-    render: (_, record) => (
-      <div>
-        <button
-          style={{
-            padding: "15px 30px",
-            background: "#fff",
-            color: "#E22828",
-            border: " 1px solid #E22828",
-            borderRadius: " 8px",
-          }}
-        >
-          Chọn
-        </button>
-      </div>
-    ),
-  },
-];
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
-
-const dataImg = [
-  {
-    id: 1,
-    image: `${images.detail1}`,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos assumenda, velit explicabo non at consequuntur accusamus hic optio alias error nisi sunt sint veniam aperiam similique dolor fugit itaque minima!",
-  },
-  {
-    id: 2,
-    image: `${images.detail2}`,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos assumenda, velit explicabo non at consequuntur accusamus hic optio alias error nisi sunt sint veniam aperiam similique dolor fugit itaque minima!",
-  },
-  {
-    id: 3,
-    image: `${images.detail3}`,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos assumenda, velit explicabo non at consequuntur accusamus hic optio alias error nisi sunt sint veniam aperiam similique dolor fugit itaque minima!",
-  },
-  {
-    id: 4,
-    image: `${images.detail4}`,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos assumenda, velit explicabo non at consequuntur accusamus hic optio alias error nisi sunt sint veniam aperiam similique dolor fugit itaque minima!",
-  },
-  {
-    id: 5,
-    image: `${images.detail1}`,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos assumenda, velit explicabo non at consequuntur accusamus hic optio alias error nisi sunt sint veniam aperiam similique dolor fugit itaque minima!",
-  },
-  {
-    id: 5,
-    image: `${images.detail1}`,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos assumenda, velit explicabo non at consequuntur accusamus hic optio alias error nisi sunt sint veniam aperiam similique dolor fugit itaque minima!",
-  },
-  {
-    id: 5,
-    image: `${images.detail1}`,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos assumenda, velit explicabo non at consequuntur accusamus hic optio alias error nisi sunt sint veniam aperiam similique dolor fugit itaque minima!",
-  },
-];
-
 export const StudioDetail = () => {
   const { id } = useParams();
   const { pathname } = useLocation();
   // State
   const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
-  const { studioDetail, studioNear, studioPostList } = useSelector(
+  const { studioDetail1, studioNear, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
   const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
-  // console.log("studioDetail", studioDetail);
+  console.log("studioDetail", studioDetail1);
   // console.log("roomDetail", roomDetail);
-  // console.log("studioNear", studioNear);
+  console.log("studioNear", studioNear);
   // console.log("studioPostList", studioPostList);
   console.log(ratingStudioPostDetai, numberRating.reverse());
   /*  console.log(studioDetail); */
@@ -288,7 +61,7 @@ export const StudioDetail = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(studioDetailAction(id));
+    dispatch(studioDetailAction1(id, 1));
     dispatch(getDetailRoomAction(id));
     dispatch(getAllStudioPost(10, 1, 1));
     dispatch(getAllRatingStudioByIdAction(id, 5));
@@ -496,8 +269,8 @@ export const StudioDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{studioDetail?.Name}</title>
-        <meta name="description" content={studioDetail?.Description}></meta>
+        <title>{studioDetail1?.Name}</title>
+        <meta name="description" content={studioDetail1?.Description}></meta>
         <meta
           property="og:url"
           itemprop="url"
@@ -505,10 +278,10 @@ export const StudioDetail = () => {
         ></meta>
         <meta
           property="og:description"
-          content={studioDetail?.Description}
+          content={studioDetail1?.Description}
         ></meta>
         <meta
-          content={studioDetail?.Image?.slice(0, 1)}
+          content={studioDetail1?.Image?.slice(0, 1)}
           property="og:image"
           itemprop="thumbnailUrl"
         ></meta>
@@ -519,7 +292,7 @@ export const StudioDetail = () => {
         <meta
           property="og:title"
           itemprop="name"
-          content={studioDetail?.Name}
+          content={studioDetail1?.Name}
         ></meta>
       </Helmet>
       <div className={cx("wrapper")}>
@@ -527,7 +300,7 @@ export const StudioDetail = () => {
           <div className={cx("box1")}>
             <div className={cx("top")}>
               <div className={cx("title")}>
-                <h3>{studioDetail?.Name} </h3>
+                <h3>{studioDetail1?.Name} </h3>
                 <CheckCircleOutlined
                   style={{ fontSize: "20px", color: "#03AC84" }}
                 />
@@ -570,7 +343,7 @@ export const StudioDetail = () => {
 
             <div className={cx("address")}>
               <img src={images.address} alt="sa" />
-              <span>{studioDetail?.Address}</span>
+              <span>{studioDetail1?.Address}</span>
             </div>
             <div className={cx("rate")}>
               <Rate allowHalf value={5}></Rate>
@@ -580,14 +353,14 @@ export const StudioDetail = () => {
               </span>
             </div>
             <div className={cx("container")}>
-              {studioDetail?.Image?.slice(0, 5).map((item, index) => {
+              {studioDetail1?.Image?.slice(0, 5).map((item, index) => {
                 return index !== 4 ? (
                   <div
                     key={index}
                     onClick={() =>
                       dispatch({
                         type: "SHOW_MODAL_LIST",
-                        Component: <ModalImage data={studioDetail?.Image} />,
+                        Component: <ModalImage data={studioDetail1?.Image} />,
                         width: "1169px",
                       })
                     }
@@ -603,7 +376,7 @@ export const StudioDetail = () => {
                     onClick={() =>
                       dispatch({
                         type: SHOW_MODAL,
-                        Component: <ModalImage data={studioDetail?.Image} />,
+                        Component: <ModalImage data={studioDetail1?.Image} />,
                         width: "1169px",
                       })
                     }
@@ -615,7 +388,7 @@ export const StudioDetail = () => {
                       alt="as"
                     />
                     <div className={cx("number")}>
-                      {studioDetail?.Image.length - 5}+
+                      {studioDetail1?.Image.length - 5}+
                     </div>
                   </div>
                 );
@@ -626,7 +399,7 @@ export const StudioDetail = () => {
             <div className={cx("left")}>
               <div className={cx("description")}>
                 <h3>Mô tả</h3>
-                <Content data={studioDetail?.Description} />
+                <Content data={studioDetail1?.Description} />
               </div>
               <div className={cx("sale")}>
                 <h3>4 Mã khuyến mãi</h3>
@@ -815,7 +588,7 @@ export const StudioDetail = () => {
                 <h3>Xem trên bản đồ</h3>
                 <div className={cx("address")}>
                   <img src={images.address} alt="" />
-                  <span>{studioDetail?.Address}</span>
+                  <span>{studioDetail1?.Address}</span>
                 </div>
                 <div className="mapouter">
                   <div className="gmap_canvas">
@@ -826,7 +599,7 @@ export const StudioDetail = () => {
                       scrolling="no"
                       marginHeight={0}
                       marginWidth={0}
-                      src={`https://www.google.com/maps?q=${studioDetail?.Latitude},${studioDetail?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                      src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
                     />
                     <a href="https://embedmapgenerator.com/">
                       embed google maps in website
