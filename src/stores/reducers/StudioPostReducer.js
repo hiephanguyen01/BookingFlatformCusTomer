@@ -5,6 +5,7 @@ import {
   LOADING,
   SET_STUDIO_DETAIL,
   SET_STUDIO_NEAR,
+  SET_STUDIO_DETAIL1,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -23,7 +24,7 @@ const initialState = {
     page: 1,
     limit: 10,
   },
-  // studioDetail: [],
+  studioDetail1: [],
   studioNear: [],
   studioDetail: {},
 };
@@ -54,6 +55,11 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         studioDetail: action.payload,
+      };
+    case SET_STUDIO_DETAIL1:
+      return {
+        ...state,
+        studioDetail1: action.payload,
       };
 
     case SET_STUDIO_NEAR:
