@@ -94,7 +94,7 @@ const Index = () => {
     />
   );
 
-  const ROW = (dataSource) => {
+  const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
         {

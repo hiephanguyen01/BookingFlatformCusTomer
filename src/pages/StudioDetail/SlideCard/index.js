@@ -15,7 +15,7 @@ import "./styles.scss";
 import { Navigation } from "swiper";
 const cx = classNames.bind(styles);
 
-export const SlideCard = ({ title }) => {
+export const SlideCard = ({ title, data }) => {
   return (
     <>
       <div className={cx("ListItem")}>
@@ -48,10 +48,10 @@ export const SlideCard = ({ title }) => {
             }}
             modules={[Navigation]}
           >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => {
+            {data.map((item, idx) => {
               return (
                 <SwiperSlide key={idx}>
-                  <Card />
+                  <Card value={item} />
                 </SwiperSlide>
               );
             })}
