@@ -61,8 +61,10 @@
 
     .address {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        line-height: 1.2;
         gap: 6px;
+        margin-bottom: 8px;
 
         .icon-location {
             width: 10px;
@@ -73,6 +75,7 @@
         span {
             font-size: 14px;
             color: #828282;
+            text-align: left;
         }
     }
 
@@ -90,12 +93,12 @@
 
 @media (min-width: 1450px) {
     .card {
-
         // height: 300px;
         image {
             height: 300px;
         }
 
-        img {}
+        img {
+        }
     }
 }

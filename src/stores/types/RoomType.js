@@ -1,0 +1,2 @@
+export const  GET_DETAIL_ROOM = "GET_DETAIL_ROOM";
+export const  SET_SELECT_ROOM = "SET_SELECT_ROOM";
