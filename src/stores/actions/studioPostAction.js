@@ -47,9 +47,9 @@ export const studioDetailAction = (id, category) => {
   return async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
-      const { data1 } = await studioPostService.getDetailStudio(id);
-      dispatch({ type: SET_STUDIO_DETAIL, payload: data.data1 });
-      dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
+      // const { data1 } = await studioPostService.getDetailStudio(id);
+      // dispatch({ type: SET_STUDIO_DETAIL, payload: data.data1 });
+      // dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
       const { data } = await studioPostService.getDetailStudio(id, category);
       dispatch({
         type: SET_STUDIO_DETAIL,

@@ -51,6 +51,8 @@ const PhotographerDetail = () => {
       ? 2
       : undefined;
 
+  console.log("cate", cate);
+
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
 

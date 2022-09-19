@@ -18,14 +18,13 @@ export const Card = ({ id, value }) => {
     setLike(!like);
   };
   return (
-
-    <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id }`)}>
+    <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id}`)}>
       <div className={cx("image")}>
         <img
           className={cx("thumbnail")}
           alt=""
           src={`${process.env.REACT_APP_API_URL_IMG}${
-            value.Image[0] || value.Image
+            value?.Image[0] || value?.Image
           }`}
         />
       </div>

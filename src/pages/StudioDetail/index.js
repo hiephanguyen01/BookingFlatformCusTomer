@@ -11,12 +11,8 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 import { Pagination, Popover, Rate, Table } from "antd";
-import classNames from "classnames/bind";
-
-import { Pagination, Popover, Table } from "antd";
 import { Helmet } from "react-helmet";
 import "react-lightbox-pack/dist/index.css";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import images from "../../assets/images";
 import Content from "../../components/ReadMore";
@@ -35,7 +31,6 @@ import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
 import styles from "./Detail.module.scss";
 import { ModalImage } from "./ModalImg";
 import { Report } from "./Report";
-import { SlideCard } from "./SlideCard";
 import { Voucher } from "./Voucher";
 
 const cx = classNames.bind(styles);
@@ -284,7 +279,6 @@ export const StudioDetail = () => {
   // console.log("studioNear", studioNear);
   // console.log("studioPostList", studioPostList);
   console.log(ratingStudioPostDetai, numberRating.reverse());
-  const { studioDetail } = useSelector((state) => state.studioPostReducer);
   /*  console.log(studioDetail); */
   // Handler
   useEffect(() => {
@@ -300,7 +294,6 @@ export const StudioDetail = () => {
     dispatch(getAllRatingStudioByIdAction(id, 5));
     dispatch(getNumberRateStudioByIdAction(id));
   }, [id]);
-
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
@@ -600,7 +593,10 @@ export const StudioDetail = () => {
                     }
                     className={cx("item")}
                   >
-                    <img alt="sa" src={`${process.env.REACT_APP_API_URL_IMG}${item}`} />
+                    <img
+                      alt="sa"
+                      src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
+                    />
                   </div>
                 ) : (
                   <div
@@ -614,7 +610,10 @@ export const StudioDetail = () => {
                     key={index}
                     className={cx("item")}
                   >
-                    <img src={`${process.env.REACT_APP_API_URL_IMG}${item}`} alt="as" />
+                    <img
+                      src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
+                      alt="as"
+                    />
                     <div className={cx("number")}>
                       {studioDetail?.Image.length - 5}+
                     </div>
@@ -668,7 +667,7 @@ export const StudioDetail = () => {
                       <div
                         onClick={() => {
                           setActiveId(item.id);
-                          dispatch(getAllRatingStudioByIdAction(id,item.id))
+                          dispatch(getAllRatingStudioByIdAction(id, item.id));
                         }}
                         key={item.id}
                         className={cx(
@@ -713,7 +712,10 @@ export const StudioDetail = () => {
                                         key={idx}
                                         className={cx("item-video")}
                                       >
-                                        <img alt="video" src={`${process.env.REACT_APP_API_URL_IMG}${item1}`} />
+                                        <img
+                                          alt="video"
+                                          src={`${process.env.REACT_APP_API_URL_IMG}${item1}`}
+                                        />
                                         <PlayCircleOutlined
                                           className={cx("play")}
                                         />
@@ -726,7 +728,10 @@ export const StudioDetail = () => {
                                           key={idx}
                                           className={cx("item-image")}
                                         >
-                                          <img alt="anh" src={`${process.env.REACT_APP_API_URL_IMG}${item}`} />
+                                          <img
+                                            alt="anh"
+                                            src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
+                                          />
                                         </div>
                                       )
                                     )}
