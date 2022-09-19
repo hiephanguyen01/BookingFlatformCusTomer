@@ -19,7 +19,7 @@ export const Card = ({ id }) => {
   };
 
   return (
-    <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id}`)}>
+    <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id }`)}>
       <div className={cx("image")}>
         <img className={cx("thumbnail")} src={images.baby} />
       </div>

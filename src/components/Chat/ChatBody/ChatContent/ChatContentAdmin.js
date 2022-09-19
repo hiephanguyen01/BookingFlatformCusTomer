@@ -243,7 +243,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
             style={{
               width: "30px",
               height: "30px",
-              borderRadius: "10px",
+              
             }}
             multiple={true}
           >
