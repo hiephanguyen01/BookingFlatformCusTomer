@@ -50,9 +50,13 @@ const ImagePost = ({ data = [] }) => {
                   className={`image_item ${data?.length > 5 ? "img_more" : ""}`}
                 >
                   <img
-                    src={item}
+                    src={`${
+                      item.includes("https://drive.google.com/")
+                        ? item
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    }`}
                     alt=""
-                    onError={(e) => e.target.classList.add("d-none")}
+                    // onError={(e) => e.target.classList.add("d-none")}
                   />
                   <div className="number">
                     {data?.length - 5 > 0 ? `${data?.length - 5}+` : ""}
@@ -63,17 +67,6 @@ const ImagePost = ({ data = [] }) => {
           </div>
         </Row>
       )}
-      {/* <LightBox
-        state={toggle}
-        event={lightBoxHandler}
-        data={data}
-        imageWidth="100vw"
-        imageHeight="100vh"
-        thumbnailHeight={70}
-        thumbnailWidth={100}
-        setImageIndex={setSIndex}
-        imageIndex={sIndex}
-      /> */}
     </>
   );
 };

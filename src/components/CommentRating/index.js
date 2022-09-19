@@ -11,6 +11,7 @@ import "./commentRating.scss";
 import images from "../../assets/images";
 import imgCmt from "../../assets/images/deviceImg.png";
 import { convertTime } from "../../utils/convert";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const STAR_LIST = [
   { id: 0, label: "Tất cả" },
@@ -85,7 +86,7 @@ const Index = ({ data = [], className }) => {
                           <div className="d-flex">
                             <div className="w-36px h-36px">
                               <img
-                                src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
+                                src={`${REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
                                 className="img_avatar"
                               />
                             </div>
@@ -104,7 +105,14 @@ const Index = ({ data = [], className }) => {
                           </li>
                           {item.Image.map((img, index) => (
                             <li key={index} className="item-image">
-                              <img src={img} alt="" />
+                              <img
+                                src={`${
+                                  img.includes("https://drive.google.com/")
+                                    ? img
+                                    : REACT_APP_DB_BASE_URL_IMG + "/" + img
+                                }`}
+                                alt=""
+                              />
                             </li>
                           ))}
                         </ul>
@@ -150,34 +158,35 @@ const Index = ({ data = [], className }) => {
                           <div className="d-flex">
                             <div className="w-36px h-36px">
                               <img
-                                src={images.banner2}
+                                src={`${REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
                                 className="img_avatar"
                               />
                             </div>
                             <div className="info ms-10">
-                              <h3>Mai Anh</h3>
+                              <h3>{item.BookingUser.Username}</h3>
                               <Rate disabled allowHalf value={item.Rate}></Rate>
                             </div>
                           </div>
-                          <span>1 tuần trước</span>
+                          <span>{convertTime(item.CreationTime)}</span>
                         </div>
-                        <div className="description">
-                          Studio rất đẹp, phục vụ nhiệt tình. Giá cả cũng hợp
-                          lý. Mình và chồng đều hài lòng. Chỉ có điều vị trí hơi
-                          khó tìm một chút, vì studio nằm trong hẻm khá sâu nên
-                          hơi khó tìm. Còn lại mọi thứ đều ổn.
-                        </div>
+                        <div className="description">{item.Description}</div>
                         <ul className="listImages">
                           <li className="item-video">
                             <img src={imgCmt} />
                             <PlayCircleOutlined className="play" />
                           </li>
-                          <li className="item-image">
-                            <img src={imgCmt} />
-                          </li>
-                          <li className="item-image">
-                            <img src={imgCmt} />
-                          </li>
+                          {item.Image.map((img, index) => (
+                            <li key={index} className="item-image">
+                              <img
+                                src={`${
+                                  img.includes("https://drive.google.com/")
+                                    ? img
+                                    : REACT_APP_DB_BASE_URL_IMG + "/" + img
+                                }`}
+                                alt=""
+                              />
+                            </li>
+                          ))}
                         </ul>
                         <div
                           className="mt-16 mb-25 text-medium-re"

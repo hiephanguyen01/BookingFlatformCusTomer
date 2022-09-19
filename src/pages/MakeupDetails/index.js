@@ -28,6 +28,7 @@ import modelImg from "../../assets/images/modelImg.png";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const values = [
   { id: 1, title: "Album hóa trang theo yêu cầu của khách" },
@@ -43,7 +44,7 @@ const COLUMN = [
   { title: "Chọn dịch vụ", size: 4 },
 ];
 const Index = () => {
-  const { studioDetail, filter, laoding } = useSelector(
+  const { studioDetail, filter, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -93,118 +94,126 @@ const Index = () => {
     />
   );
 
-  const ROW = (dataSource) =>
-    dataSource.map((data, index) => [
-      {
-        render: () => (
-          <>
-            <img
-              src={data.Image[0]}
-              style={{ width: "100%", marginBottom: "20px" }}
-              alt=""
-            />
-            <div className="text-medium-se">{`${data.Name}`}</div>
-          </>
-        ),
-      },
-      {
-        render: () => <p>{data.Description}</p>,
-      },
-      {
-        render: () => (
-          <>
-            <div className="d-flex align-items-center">
-              <h4
-                className="me-10"
-                style={{
-                  marginBottom: "0",
-                  color: "#E22828",
-                }}
-              >
-                {convertPrice(data.Sales)}đ
-              </h4>
+  const ROW = (dataSource) => {
+    if (dataSource.length > 0) {
+      return dataSource?.map((data, index) => [
+        {
+          render: () => (
+            <>
+              <img
+                src={`${
+                  data?.Image[0]?.includes("https://drive.google.com/")
+                    ? data?.Image[0]
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                }`}
+                style={{ width: "100%", marginBottom: "20px" }}
+                alt=""
+              />
+              <div className="text-medium-se">{`${data.Name}`}</div>
+            </>
+          ),
+        },
+        {
+          render: () => <p>{data.Description}</p>,
+        },
+        {
+          render: () => (
+            <>
+              <div className="d-flex align-items-center">
+                <h4
+                  className="me-10"
+                  style={{
+                    marginBottom: "0",
+                    color: "#E22828",
+                  }}
+                >
+                  {convertPrice(data.Sales)}đ
+                </h4>
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "12px",
+                    lineHeight: "16px",
+                    color: "#828282",
+                    textDecoration: "line-through",
+                  }}
+                >
+                  {convertPrice(data.Price)}đ
+                </div>
+              </div>
               <div
+                className="mb-8 mt-4"
                 style={{
                   fontWeight: "400",
                   fontSize: "12px",
                   lineHeight: "16px",
                   color: "#828282",
-                  textDecoration: "line-through",
                 }}
               >
-                {convertPrice(data.Price)}đ
+                Bao gồm 50.000đ thuế và phí{" "}
               </div>
-            </div>
-            <div
-              className="mb-8 mt-4"
-              style={{
-                fontWeight: "400",
-                fontSize: "12px",
-                lineHeight: "16px",
-                color: "#828282",
-              }}
-            >
-              Bao gồm 50.000đ thuế và phí{" "}
-            </div>
-            <span
-              className="text-medium-se"
-              style={{
-                background: "#E22828",
-                borderRadius: "4px",
-                padding: "3px 10px",
-                color: "#ffffff",
-              }}
-            >
-              Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
-            </span>
-          </>
-        ),
-      },
-      {
-        render: () => (
-          <>
-            {chooseService.filter((item) => item.id === data.id).length > 0 ? (
               <span
-                onClick={() => handleChooseService(data)}
+                className="text-medium-se"
                 style={{
-                  backgroundColor: "#E7E7E7",
-                  padding: "15px 15px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  lineHeight: "19px",
-                  textTransform: "uppercase",
+                  background: "#E22828",
+                  borderRadius: "4px",
+                  padding: "3px 10px",
+                  color: "#ffffff",
                 }}
               >
-                Bỏ chọn
+                Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
-            ) : (
-              <span
-                onClick={() => handleChooseService(data)}
-                style={{
-                  border: "1px solid #E22828",
-                  color: "#E22828",
-                  padding: "13px 25px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  lineHeight: "19px",
-                  textTransform: "uppercase",
-                }}
-              >
-                Chọn
-              </span>
-            )}
-          </>
-        ),
-      },
-    ]);
+            </>
+          ),
+        },
+        {
+          render: () => (
+            <>
+              {chooseService.filter((item) => item.id === data.id).length >
+              0 ? (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    backgroundColor: "#E7E7E7",
+                    padding: "15px 15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Bỏ chọn
+                </span>
+              ) : (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    border: "1px solid #E22828",
+                    color: "#E22828",
+                    padding: "13px 25px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Chọn
+                </span>
+              )}
+            </>
+          ),
+        },
+      ]);
+    }
+  };
 
   return (
     <>
-      {Object.keys(studioDetail).length > 0 ? (
+      {!loading ? (
         <div
           className=""
           style={{
@@ -220,7 +229,7 @@ const Index = () => {
                 style={{ marginBottom: "11px" }}
               >
                 <div className="header_title">
-                  {studioDetail.data.Name}
+                  {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
@@ -241,7 +250,7 @@ const Index = () => {
               </div>
               <div className="location">
                 <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
-                {studioDetail.data.Address}
+                {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
                 <Rate
@@ -251,10 +260,10 @@ const Index = () => {
                   className="rating"
                 />
                 <span className="reserve">
-                  Đã đặt {studioDetail.data.BookingCount}
+                  Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
               </div>
-              <ImagePost data={studioDetail.data.Image} />
+              <ImagePost data={studioDetail?.data?.Image} />
             </div>
             <div className="wrapper_description">
               <Row style={{ height: "100%" }}>
@@ -266,7 +275,7 @@ const Index = () => {
                 >
                   <div className="desc_col_left mb-12">
                     <ReadMoreDesc title="Mô tả">
-                      {studioDetail.data.Description}
+                      {studioDetail?.data?.Description}
                     </ReadMoreDesc>
                   </div>
                   <div
@@ -327,7 +336,7 @@ const Index = () => {
                         style={{ marginBottom: "15px" }}
                       >
                         <img src={svgLocation} style={{ marginRight: "6px" }} />
-                        {studioDetail.data.Address}
+                        {studioDetail?.data?.Address}
                       </div>
                     </div>
                     <iframe
@@ -354,7 +363,7 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
                 <Col lg={8} sm={24} style={{ paddingLeft: "0.25rem" }}>
@@ -434,27 +443,27 @@ const Index = () => {
                 </Col>
               </Row>
             </div>
-            {studioDetail.album.length > 0 && (
+            {studioDetail?.album?.length > 0 && (
               <Row>
                 <Col lg={16} md={24}>
                   <div className="album_container">
                     <h3>Các album</h3>
                     {toggleSeeMore ? (
-                      studioDetail.album
+                      studioDetail?.album
                         .sort((a, b) => a.id - b.id)
                         .map((item, index) => (
                           <SlideAlbum key={index} title={item.title} />
                         ))
                     ) : (
                       <>
-                        {studioDetail.album
+                        {studioDetail?.album
                           .sort((a, b) => a.id - b.id)
                           .slice(0, 3)
                           .map((item, index) => (
                             <SlideAlbum key={index} title={item.title} />
                           ))}
 
-                        {studioDetail.album.length > 3 && (
+                        {studioDetail?.album?.length > 3 && (
                           <div
                             className="btn_see_more"
                             onClick={() => setToggleSeeMore(true)}

@@ -47,7 +47,7 @@ const QUANTITY = [
 ];
 
 const Index = () => {
-  const { studioDetail, filter, laoding } = useSelector(
+  const { studioDetail, filter, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -117,12 +117,11 @@ const Index = () => {
           render: () => (
             <>
               <img
-                src={`${data.Image}`}
-                // src={`${
-                //   data?.Image[0].includes("https://drive.google.com/")
-                //     ? data?.Image[0]
-                //     : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
-                // }`}
+                src={`${
+                  data?.Image[0]?.includes("https://drive.google.com/")
+                    ? data?.Image[0]
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                }`}
                 style={{ width: "100%", marginBottom: "20px" }}
                 alt=""
                 // onError={(e) => e.target.classList.add("d-none")}
@@ -262,12 +261,11 @@ const Index = () => {
         },
       ]);
     }
-    console.log(123);
   };
 
   return (
     <>
-      {Object.keys(studioDetail).length > 0 ? (
+      {!loading ? (
         <div
           className=""
           style={{
@@ -283,7 +281,7 @@ const Index = () => {
                 style={{ marginBottom: "11px" }}
               >
                 <div className="header_title">
-                  {studioDetail.data.Name}
+                  {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
@@ -304,7 +302,7 @@ const Index = () => {
               </div>
               <div className="location">
                 <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
-                {studioDetail.data.Address}
+                {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
                 <Rate
@@ -314,10 +312,10 @@ const Index = () => {
                   className="rating"
                 />
                 <span className="reserve">
-                  Đã đặt {studioDetail.data.BookingCount}
+                  Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
               </div>
-              <ImagePost data={studioDetail.data.Image} />
+              <ImagePost data={studioDetail?.data?.Image} />
             </div>
             <div className="wrapper_description">
               <Row style={{ height: "100%" }}>
@@ -329,11 +327,11 @@ const Index = () => {
                 >
                   <div className="desc_col_left">
                     <ReadMoreDesc title="Chi tiết sản phẩm">
-                      {studioDetail.data.Description}
+                      {studioDetail?.data?.Description}
                     </ReadMoreDesc>
                   </div>
                 </Col>
-                {studioDetail.shop !== null && (
+                {studioDetail?.shop !== null && (
                   <Col
                     lg={8}
                     sm={24}
@@ -352,7 +350,7 @@ const Index = () => {
                         />
                         <div className="">
                           <div className="desc_col_right_title">
-                            {studioDetail.shop.Name}
+                            {studioDetail?.shop?.Name}
                             <CheckCircleOutlined className="icon_check_circle" />
                           </div>
                           <div className="text-medium-re">
@@ -360,7 +358,7 @@ const Index = () => {
                               src={svgLocation}
                               style={{ marginRight: "6px" }}
                             />
-                            {studioDetail.shop.Address}
+                            {studioDetail?.shop?.Address}
                           </div>
                         </div>
                       </div>
@@ -443,7 +441,7 @@ const Index = () => {
                         <RightOutlined style={{ color: "#1FCBA2" }} />
                       </Link>
                     </div>
-                    <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
                 <Col lg={8} sm={24} style={{ paddingLeft: "0.25rem" }}>
