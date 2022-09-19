@@ -23,6 +23,7 @@ import ReportPost from "../ReportPostDao";
 import { useDispatch } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const moreOptionOnEachPost = [
   { icon: <Info />, title: "Báo cáo bài viết" },
@@ -112,7 +113,11 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={item}
+              src={`${
+                item.includes("https://drive.google.com/")
+                  ? item
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+              }`}
               alt=""
             />
           </Col>
@@ -141,7 +146,11 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={item}
+                  src={`${
+                    item.includes("https://drive.google.com/")
+                      ? item
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                  }`}
                   alt=""
                 />
               </Col>
@@ -163,7 +172,11 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={item}
+                  src={`${
+                    item.includes("https://drive.google.com/")
+                      ? item
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                  }`}
                   alt=""
                 />
               </Col>
@@ -185,7 +198,11 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={item}
+              src={`${
+                item.includes("https://drive.google.com/")
+                  ? item
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+              }`}
               alt=""
             />
           </Col>
@@ -223,7 +240,11 @@ const DaoPost = (props) => {
                       borderRadius: "6px",
                     }}
                     key={idx}
-                    src={item}
+                    src={`${
+                      item.includes("https://drive.google.com/")
+                        ? item
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    }`}
                     alt=""
                   />
                 </div>
@@ -318,7 +339,11 @@ const DaoPost = (props) => {
                         style={{ background: "#1D2226", padding: "90px 0" }}
                       >
                         <img
-                          src={img}
+                          src={`${
+                            img.includes("https://drive.google.com/")
+                              ? img
+                              : REACT_APP_DB_BASE_URL_IMG + "/" + img
+                          }`}
                           className="w-100 h-100"
                           style={{ objectFit: "contain" }}
                         />

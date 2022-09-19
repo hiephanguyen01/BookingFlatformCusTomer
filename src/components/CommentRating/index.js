@@ -140,6 +140,10 @@ const Index = ({ data = [], className }) => {
                     ))
                 : data
                     .filter((d) => d.Rate === chooseRating)
+                    .slice(
+                      (page - 1 > 0 ? page - 1 : 0) * limit,
+                      (page - 1 > 0 ? page - 1 : 0) * limit + limit
+                    )
                     .map((item) => (
                       <div key={item.id} className="rating_wrapper">
                         <div className="info-user">
@@ -152,7 +156,7 @@ const Index = ({ data = [], className }) => {
                             </div>
                             <div className="info ms-10">
                               <h3>Mai Anh</h3>
-                              <Rate disabled allowHalf value={5}></Rate>
+                              <Rate disabled allowHalf value={item.Rate}></Rate>
                             </div>
                           </div>
                           <span>1 tuần trước</span>

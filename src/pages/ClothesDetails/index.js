@@ -27,38 +27,7 @@ import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
-
-const values = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-const data = [
-  {
-    id: 1,
-    image: imgPost,
-  },
-  {
-    id: 2,
-    image: imgPost,
-  },
-  {
-    id: 3,
-    image: imgPost,
-  },
-  {
-    id: 4,
-    image: imgPost,
-  },
-  {
-    id: 5,
-    image: imgPost,
-  },
-  {
-    id: 6,
-    image: imgPost,
-  },
-  {
-    id: 7,
-    image: imgPost,
-  },
-];
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -88,9 +57,7 @@ const Index = () => {
       ? 3
       : undefined;
 
-  const [choose, setChoose] = useState(false);
   const [chooseService, setChooseService] = useState([]);
-  const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
 
   const { Option } = Select;
@@ -150,8 +117,15 @@ const Index = () => {
           render: () => (
             <>
               <img
-                src={data.Image[0]}
+                src={`${data.Image}`}
+                // src={`${
+                //   data?.Image[0].includes("https://drive.google.com/")
+                //     ? data?.Image[0]
+                //     : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                // }`}
                 style={{ width: "100%", marginBottom: "20px" }}
+                alt=""
+                // onError={(e) => e.target.classList.add("d-none")}
               />
               <div className="text-medium-se">{data.Name}</div>
             </>
@@ -368,7 +342,14 @@ const Index = () => {
                   >
                     <div className="desc_col_right">
                       <div className="d-flex mb-25" style={{}}>
-                        <img src={imgPost} className="avatar" />
+                        <img
+                          src={`${
+                            imgPost.includes("https://drive.google.com/")
+                              ? imgPost
+                              : REACT_APP_DB_BASE_URL_IMG + "/" + imgPost
+                          }`}
+                          className="avatar"
+                        />
                         <div className="">
                           <div className="desc_col_right_title">
                             {studioDetail.shop.Name}

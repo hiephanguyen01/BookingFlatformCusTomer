@@ -5,6 +5,7 @@ import { LightBox } from "react-lightbox-pack";
 
 import "./imagePost.scss";
 import { ModalImage } from "../ModalImg";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const ImagePost = ({ data = [] }) => {
   // const [toggle, setToggle] = useState(false);
@@ -28,7 +29,14 @@ const ImagePost = ({ data = [] }) => {
                   }
                   className="image_item"
                 >
-                  <img alt="" src={item || ""} />
+                  <img
+                    alt=""
+                    src={`${
+                      item.includes("https://drive.google.com/")
+                        ? item
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    }`}
+                  />
                 </div>
               ) : (
                 <div
