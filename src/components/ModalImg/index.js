@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./ModalImage.scss";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -14,6 +15,7 @@ import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
 import { useDispatch } from "react-redux";
 import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import { CloseOutlined } from "@ant-design/icons";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 export const ModalImage = ({ data }) => {
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -52,7 +54,11 @@ export const ModalImage = ({ data }) => {
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
-                <img src={item} alt="" />
+                <img src={`${
+                  item.includes("https://drive.google.com/")
+                    ? item
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                }`} alt="" />
               </SwiperSlide>
             );
           })}
@@ -87,7 +93,11 @@ export const ModalImage = ({ data }) => {
                     height: "108px",
                     objectFit: "cover",
                   }}
-                  src={item}
+                  src={`${
+                    item.includes("https://drive.google.com/")
+                      ? item
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                  }`}
                   alt=""
                 />
               </SwiperSlide>
