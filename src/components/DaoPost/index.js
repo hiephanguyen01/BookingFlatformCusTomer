@@ -23,6 +23,7 @@ import ReportPost from "../ReportPostDao";
 import { useDispatch } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const moreOptionOnEachPost = [
   { icon: <Info />, title: "Báo cáo bài viết" },
@@ -112,7 +113,11 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={item}
+              src={`${
+                item.includes("https://drive.google.com/")
+                  ? item
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+              }`}
               alt=""
             />
           </Col>
@@ -141,7 +146,11 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={item}
+                  src={`${
+                    item.includes("https://drive.google.com/")
+                      ? item
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                  }`}
                   alt=""
                 />
               </Col>
@@ -163,7 +172,11 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={item}
+                  src={`${
+                    item.includes("https://drive.google.com/")
+                      ? item
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                  }`}
                   alt=""
                 />
               </Col>
@@ -185,7 +198,11 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={item}
+              src={`${
+                item.includes("https://drive.google.com/")
+                  ? item
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+              }`}
               alt=""
             />
           </Col>
@@ -223,7 +240,11 @@ const DaoPost = (props) => {
                       borderRadius: "6px",
                     }}
                     key={idx}
-                    src={item}
+                    src={`${
+                      item.includes("https://drive.google.com/")
+                        ? item
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    }`}
                     alt=""
                   />
                 </div>
@@ -240,10 +261,7 @@ const DaoPost = (props) => {
       <section className="post__main d-flex flex-column">
         <header className="post__main__info d-flex justify-content-between align-items-center">
           <div className="d-flex justify-content-between align-items-center">
-            <img
-               src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
-               alt=""
-            />
+            <img src={`${REACT_APP_DB_BASE_URL_IMG}/${Avatar}`} alt="" />
             <div className="post__main__info__nametime">
               <p className="post__main__info__nametime__name">{Username}</p>
               <p>{convertTime(CreationTime)}</p>
@@ -321,7 +339,11 @@ const DaoPost = (props) => {
                         style={{ background: "#1D2226", padding: "90px 0" }}
                       >
                         <img
-                          src={img}
+                          src={`${
+                            img.includes("https://drive.google.com/")
+                              ? img
+                              : REACT_APP_DB_BASE_URL_IMG + "/" + img
+                          }`}
                           className="w-100 h-100"
                           style={{ objectFit: "contain" }}
                         />

@@ -7,7 +7,7 @@ import {
 } from "../types/studioPostType";
 
 const initialState = {
-  laoding: false,
+  loading: false,
   studioPostList: [],
   filter: {
     keyString: "",

@@ -27,38 +27,7 @@ import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
-
-const values = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-const data = [
-  {
-    id: 1,
-    image: imgPost,
-  },
-  {
-    id: 2,
-    image: imgPost,
-  },
-  {
-    id: 3,
-    image: imgPost,
-  },
-  {
-    id: 4,
-    image: imgPost,
-  },
-  {
-    id: 5,
-    image: imgPost,
-  },
-  {
-    id: 6,
-    image: imgPost,
-  },
-  {
-    id: 7,
-    image: imgPost,
-  },
-];
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -78,7 +47,7 @@ const QUANTITY = [
 ];
 
 const Index = () => {
-  const { studioDetail, filter, laoding } = useSelector(
+  const { studioDetail, filter, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -88,9 +57,7 @@ const Index = () => {
       ? 3
       : undefined;
 
-  const [choose, setChoose] = useState(false);
   const [chooseService, setChooseService] = useState([]);
-  const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
 
   const { Option } = Select;
@@ -150,8 +117,14 @@ const Index = () => {
           render: () => (
             <>
               <img
-                src={data.Image[0]}
+                src={`${
+                  data?.Image[0]?.includes("https://drive.google.com/")
+                    ? data?.Image[0]
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                }`}
                 style={{ width: "100%", marginBottom: "20px" }}
+                alt=""
+                // onError={(e) => e.target.classList.add("d-none")}
               />
               <div className="text-medium-se">{data.Name}</div>
             </>
@@ -288,12 +261,11 @@ const Index = () => {
         },
       ]);
     }
-    console.log(123);
   };
 
   return (
     <>
-      {Object.keys(studioDetail).length > 0 ? (
+      {!loading ? (
         <div
           className=""
           style={{
@@ -309,7 +281,7 @@ const Index = () => {
                 style={{ marginBottom: "11px" }}
               >
                 <div className="header_title">
-                  {studioDetail.data.Name}
+                  {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
@@ -330,7 +302,7 @@ const Index = () => {
               </div>
               <div className="location">
                 <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
-                {studioDetail.data.Address}
+                {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
                 <Rate
@@ -340,10 +312,10 @@ const Index = () => {
                   className="rating"
                 />
                 <span className="reserve">
-                  Đã đặt {studioDetail.data.BookingCount}
+                  Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
               </div>
-              <ImagePost data={studioDetail.data.Image} />
+              <ImagePost data={studioDetail?.data?.Image} />
             </div>
             <div className="wrapper_description">
               <Row style={{ height: "100%" }}>
@@ -355,11 +327,11 @@ const Index = () => {
                 >
                   <div className="desc_col_left">
                     <ReadMoreDesc title="Chi tiết sản phẩm">
-                      {studioDetail.data.Description}
+                      {studioDetail?.data?.Description}
                     </ReadMoreDesc>
                   </div>
                 </Col>
-                {studioDetail.shop !== null && (
+                {studioDetail?.shop !== null && (
                   <Col
                     lg={8}
                     sm={24}
@@ -368,10 +340,17 @@ const Index = () => {
                   >
                     <div className="desc_col_right">
                       <div className="d-flex mb-25" style={{}}>
-                        <img src={imgPost} className="avatar" />
+                        <img
+                          src={`${
+                            imgPost.includes("https://drive.google.com/")
+                              ? imgPost
+                              : REACT_APP_DB_BASE_URL_IMG + "/" + imgPost
+                          }`}
+                          className="avatar"
+                        />
                         <div className="">
                           <div className="desc_col_right_title">
-                            {studioDetail.shop.Name}
+                            {studioDetail?.shop?.Name}
                             <CheckCircleOutlined className="icon_check_circle" />
                           </div>
                           <div className="text-medium-re">
@@ -379,7 +358,7 @@ const Index = () => {
                               src={svgLocation}
                               style={{ marginRight: "6px" }}
                             />
-                            {studioDetail.shop.Address}
+                            {studioDetail?.shop?.Address}
                           </div>
                         </div>
                       </div>
@@ -462,7 +441,7 @@ const Index = () => {
                         <RightOutlined style={{ color: "#1FCBA2" }} />
                       </Link>
                     </div>
-                    <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
                 <Col lg={8} sm={24} style={{ paddingLeft: "0.25rem" }}>
