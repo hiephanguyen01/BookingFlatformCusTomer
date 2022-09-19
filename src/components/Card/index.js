@@ -23,9 +23,10 @@ export const Card = ({ id, value }) => {
         <img
           className={cx("thumbnail")}
           alt=""
-          src={`${process.env.REACT_APP_API_URL_IMG}${
+          /* src={`${process.env.REACT_APP_API_URL_IMG}${
             value?.Image[0] || value?.Image
-          }`}
+          }`} */
+          src={images.baby}
         />
       </div>
 
