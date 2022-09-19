@@ -240,7 +240,10 @@ const DaoPost = (props) => {
       <section className="post__main d-flex flex-column">
         <header className="post__main__info d-flex justify-content-between align-items-center">
           <div className="d-flex justify-content-between align-items-center">
-            <img src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar} alt="" />
+            <img
+               src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
+               alt=""
+            />
             <div className="post__main__info__nametime">
               <p className="post__main__info__nametime__name">{Username}</p>
               <p>{convertTime(CreationTime)}</p>
