@@ -5,6 +5,7 @@ import {
   SET_POST_LIST,
   SET_POST_PAGINATION,
   SET_STUDIO_DETAIL,
+  SET_STUDIO_DETAIL1,
   SET_STUDIO_NEAR,
 } from "../types/studioPostType";
 
@@ -74,4 +75,19 @@ export const studioNearAction = (lat, lng) => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const studioDetailAction1 = (id, category) => {
+  return async (dispatch) => {
+    dispatch({ type: LOADING, payload: true });
+    try {
+      const { data } = await studioPostService.getDetailStudio(id, category);
+      console.log(data);
+      dispatch({ type: SET_STUDIO_DETAIL1, payload: data.data });
+      dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch({ type: LOADING, payload: false });
+  };
 };
