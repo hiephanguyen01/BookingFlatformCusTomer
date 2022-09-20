@@ -12,7 +12,7 @@ import "swiper/css/navigation";
 import "./styles.scss";
 
 // import required modules
-import { Navigation } from "swiper";
+import { Navigation, Autoplay } from "swiper";
 const cx = classNames.bind(styles);
 
 export const SlideCard = ({ title, data }) => {
@@ -24,13 +24,14 @@ export const SlideCard = ({ title, data }) => {
         </div>
         <div>
           <Swiper
-            // className="slideDetail"
+            className="slideDetail"
             slidesPerView={1}
             spaceBetween={8}
-            pagination={{
-              clickable: true,
+            grabCursor={true}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
             }}
-            autoplay={true}
             navigation={true}
             breakpoints={{
               640: {
@@ -46,9 +47,9 @@ export const SlideCard = ({ title, data }) => {
                 spaceBetween: 10,
               },
             }}
-            modules={[Navigation]}
+            modules={[Navigation, Autoplay]}
           >
-            {data.map((item, idx) => {
+            {data?.map((item, idx) => {
               return (
                 <SwiperSlide key={idx}>
                   <Card value={item} />

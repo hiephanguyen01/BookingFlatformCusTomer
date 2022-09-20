@@ -81,7 +81,7 @@ export const StudioDetail = () => {
             <img
               alt="as"
               style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
-              src={`${process.env.REACT_APP_API_URL_IMG}${text.Image[0]}`}
+              src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${text.Image[0]}`}
             />
             <div
               style={{
@@ -368,7 +368,7 @@ export const StudioDetail = () => {
                   >
                     <img
                       alt="sa"
-                      src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
+                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
                     />
                   </div>
                 ) : (
@@ -384,7 +384,7 @@ export const StudioDetail = () => {
                     className={cx("item")}
                   >
                     <img
-                      src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
+                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
                       alt="as"
                     />
                     <div className={cx("number")}>
