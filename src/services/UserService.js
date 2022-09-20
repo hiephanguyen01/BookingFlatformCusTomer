@@ -19,7 +19,10 @@ class UserService extends BaseService {
     });
   };
   infoUser = (id)=> {
-    return this.get(`/api/booking-user/${id}`,);
+    return this.get(`/api/booking-user/${id}`);
+  }
+  getListRatings = (id)=> {
+    return this.get(`/api/my-ratings/${id}`);
   }
 }
 
