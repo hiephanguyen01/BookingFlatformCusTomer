@@ -31,6 +31,7 @@ const Header = () => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const filter = useSelector((state) => state.studioPostReducer.filter);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const categories = [
     {
       id: 1,
@@ -113,7 +114,7 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}
+              onClick ={()=> navigate('/home/user/1')}
             >
               Thông tin tài khoản
             </Button>
@@ -136,7 +137,6 @@ const Header = () => {
       ]}
     />
   );
-  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const inputRef = useRef();
   const handleCancel = () => {
