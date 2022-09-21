@@ -36,6 +36,7 @@ export const ChatUserFilter = () => {
             Phone: create.data.Partner.Phone ? create.data.Partner.Phone : "",
             Email: create.data.Partner.Email ? create.data.Partner.Email : "",
           },
+          type:"text"
         });
         dispatch(createConverAction(create.data.id));
       } catch (error) {
