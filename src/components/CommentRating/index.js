@@ -31,7 +31,6 @@ const Index = ({ data = [], className }) => {
     (
       data?.reduce((starTotal, star) => starTotal + star.Rate, 0) / data.length
     ).toFixed(2) | 0;
-  console.log(totalStart);
 
   const handleChangePage = (p) => {
     setPage(p);

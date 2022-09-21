@@ -54,11 +54,14 @@ export const ModalImage = ({ data }) => {
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
-                <img src={`${
-                  item.includes("https://drive.google.com/")
-                    ? item
-                    : REACT_APP_DB_BASE_URL_IMG + "/" + item
-                }`} alt="" />
+                <img
+                  src={`${
+                    item.includes("https://drive.google.com/")
+                      ? item
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                  }`}
+                  alt=""
+                />
               </SwiperSlide>
             );
           })}

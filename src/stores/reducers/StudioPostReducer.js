@@ -26,7 +26,7 @@ const initialState = {
   },
   studioDetail1: [],
   studioNear: [],
-  studioDetail: {},
+  studioDetail: [],
 };
 
 export const studioPostReducer = (state = initialState, action) => {

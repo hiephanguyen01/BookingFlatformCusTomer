@@ -1,7 +1,7 @@
 import {
   GET_ALL_PROMO_CODE,
   GET_PROMO_BY_STUDIO_POST,
-  GET_PAGINATE_POSIBILITY,
+  GET_PAGINATE_POSSIBILITY,
   SET_STUDIO_POST_ID,
 } from "../types/promoCodeType";
 
@@ -18,7 +18,7 @@ export const promoCodeReducer = (state = initialState, action) => {
       return { ...state, promoCodeList: action.data };
     case GET_PROMO_BY_STUDIO_POST:
       return { ...state, promoCodeByStudio: action.data };
-    case GET_PAGINATE_POSIBILITY:
+    case GET_PAGINATE_POSSIBILITY:
       return { ...state, pagination: action.data };
     case SET_STUDIO_POST_ID:
       return { ...state, studioPostId: action.data };

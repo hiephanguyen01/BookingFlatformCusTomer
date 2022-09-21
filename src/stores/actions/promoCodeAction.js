@@ -1,6 +1,6 @@
 import {
   GET_ALL_PROMO_CODE,
-  GET_PAGINATE_POSIBILITY,
+  GET_PAGINATE_POSSIBILITY,
   GET_PROMO_BY_STUDIO_POST,
   SET_STUDIO_POST_ID,
 } from "../types/promoCodeType";
@@ -19,7 +19,7 @@ export const getAllPromoCodeAction = (currentListPost, filter) => {
         data: temp,
       });
       dispatch({
-        type: GET_PAGINATE_POSIBILITY,
+        type: GET_PAGINATE_POSSIBILITY,
         data: data.pagination,
       });
     } catch (error) {

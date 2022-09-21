@@ -13,10 +13,10 @@ const Index = () => {
   const handleOnClickModal = () => {
     dispatch({
       type: SHOW_MODAL,
-      Component: <Voucher setChooseVoucher={setChooseVoucher} />,
+      Component: <Voucher />,
     });
   };
-  return <Order onClickModal={handleOnClickModal} linkTo="confirm" />;
+  return <Order linkTo="confirm" />;
 };
 
 export default Index;

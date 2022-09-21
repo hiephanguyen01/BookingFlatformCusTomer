@@ -14,7 +14,6 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG
 const FilterCard = ({ data, category }) => {
   const [like, setLike] = useState(false);
   const navigate = useNavigate();
-  console.log("cate", category);
   return (
     <>
       {data && (

@@ -8,7 +8,6 @@ import { ModalCustom } from "./components/Modal";
 import { AuthPage } from "./pages/Auth/AuthPage";
 import BookStudio from "./pages/BookStudio";
 import { CustomerLayout } from "./pages/CustomerLayout";
-import PhotographerDetail from "./pages/PhotographerDetail";
 import Dao from "./pages/Dao";
 import FilterPage from "./pages/FilterPage/FilterPage";
 import UserAccount from "./pages/UserAccount";
@@ -16,10 +15,11 @@ import { getCurrentUser } from "./stores/actions/autheticateAction";
 import Cart from "./pages/Cart";
 import { Home } from "./pages/Home";
 import PageClothes from "./pages/ClothesDetails/PageClothes";
+import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
 import PageModel from "./pages/ModelDetails/PageModel";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
-import { StudioDetail } from "./pages/StudioDetail";
+import PageStudio from "./pages/StudioDetail/PageStudio";
 import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
 
 function App() {
@@ -51,13 +51,13 @@ function App() {
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
-          <Route path="studio/:id" element={<StudioDetail />} />
           <Route path="user/:id/*" element={<UserAccount />} />
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="photographer/:id" element={<PhotographerDetail />} />
+          <Route path="studio/*" element={<PageStudio />} />
+          <Route path="photographer/*" element={<PagePhotographer />} />
           <Route path="device/*" element={<PageDevice />} />
           <Route path="clothes/*" element={<PageClothes />} />
           <Route path="model/*" element={<PageModel />} />

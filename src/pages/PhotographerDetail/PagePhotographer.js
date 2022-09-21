@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import PhotographerDetail from "./index";
 import Order from "../../components/Order";
 import ConfirmOrder from "../../components/ConfirmOrder";
 import OrderSuccess from "../../components/OrderSuccess";
-import MakeupDetails from "./index";
 
-const PageMakeup = () => {
+const PagePhotographer = () => {
   return (
     <Routes>
-      <Route path=":id" element={<MakeupDetails />} />
+      <Route path=":id" element={<PhotographerDetail />} />
       <Route path=":id/order" element={<Order />} />
       <Route path=":id/order/confirm" element={<ConfirmOrder />} />
       <Route path=":id/order/confirm/orderSuccess" element={<OrderSuccess />} />
@@ -16,4 +16,4 @@ const PageMakeup = () => {
   );
 };
 
-export default PageMakeup;
+export default PagePhotographer;
