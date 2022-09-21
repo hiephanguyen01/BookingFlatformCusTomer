@@ -3,7 +3,7 @@ import React from "react";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { convertTime } from "../../../../../utils/convert";
 import "./RatingItm.scss";
-import { CheckCircleOutlined} from "@ant-design/icons";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import { UserMe } from "../../../../../components/Chat/ChatBody/ChatContent/ChatContent";
 export const RatingStudio = ({ info }) => {
   console.log(info);
@@ -48,9 +48,8 @@ export const RatingStudio = ({ info }) => {
       </div>
       {info.ReplyComment && (
         <div className="d-flex">
-          {/* cái hình này xài đỡ thôi chứ lấy hình studio nhá */}
           <img
-            src={`${REACT_APP_DB_BASE_URL_IMG}/${UserMe.Image}`}
+            src={`${REACT_APP_DB_BASE_URL_IMG}/${info.StudioPost.Image1}`}
             className="rating_wrapper__info-user__avatar  me-15"
             alt=""
           />
@@ -58,7 +57,6 @@ export const RatingStudio = ({ info }) => {
             <div>
               <div className="name_reply text-medium-se">
                 <span>{info.StudioPost.Name}</span>
-                {/* cái này lấy tên studio ms đúng*/}
                 <CheckCircleOutlined
                   className="w-14px h-14px"
                   style={{ color: "#03AC84" }}

@@ -6,7 +6,28 @@ import { convertTime } from "../../../../../utils/convert";
 import { UserMe } from "../../../../../components/Chat/ChatBody/ChatContent/ChatContent";
 import "./RatingItm.scss";
 export const RatingOther = ({ info }) => {
-  console.log("other", info);
+  const Name = info.PhotographerPost
+    ? info.PhotographerPost.Name
+    : info.DevicePost
+    ? info.DevicePost.Name
+    : info.ModelPost
+    ? info.ModelPost.Name
+    : info.ClothesPost
+    ? info.ClothesPost.Name
+    : info.MakeupPost
+    ? info.MakeupPost.Name
+    : " ";
+  const IMG_ME = info.PhotographerPost
+    ? info.PhotographerPost.Image1
+    : info.DevicePost
+    ? info.DevicePost.Image1
+    : info.ModelPost
+    ? info.ModelPost.Image1
+    : info.ClothesPost
+    ? info.ClothesPost.Image1
+    : info.MakeupPost
+    ? info.MakeupPost.Image1
+    : " ";
   return (
     <div className="rating_wrapper">
       <div className="rating_wrapper__info-user">
@@ -42,23 +63,18 @@ export const RatingOther = ({ info }) => {
           />
         ))}
       </div>
-      <div className="rating_wrapper__room  text-medium-re">
-        {info.PhotographerPostId}
-        {/* cái này để v thôi chứ lấy tên phòng thằng mình cần ms đúng nha */}
-      </div>
+      <div className="rating_wrapper__room  text-medium-re">{Name}</div>
       {info.ReplyComment && (
         <div className="d-flex">
-          {/* cái hình này xài đỡ thôi chứ lấy hình của thằng mình cần nhá */}
           <img
-            src={`${REACT_APP_DB_BASE_URL_IMG}/${UserMe.Image}`}
+            src={`${REACT_APP_DB_BASE_URL_IMG}/${IMG_ME}`}
             className="rating_wrapper__info-user__avatar  me-15"
             alt=""
           />
           <div className="rating_wrapper__room__cmt_reply_container">
             <div>
               <div className="name_reply text-medium-se">
-                <span>{info.PhotographerPostId}</span>
-                {/* cái này lấy tên của cái thằng mình cần ms đúng*/}
+                <span>{Name}</span>
                 <CheckCircleOutlined
                   className="w-14px h-14px"
                   style={{ color: "#03AC84" }}
