@@ -6,8 +6,7 @@ export class BaseService {
       method: "PUT",
       data: model,
       headers: {
-        Authorization:
-          "Bearer " + localStorage.getItem(process.env.REACT_APP_TOKEN),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       }, //JWT
     });
   };
@@ -17,8 +16,7 @@ export class BaseService {
       method: "PATCH",
       data: model,
       headers: {
-        Authorization:
-          "Bearer " + localStorage.getItem(process.env.REACT_APP_TOKEN),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       }, //JWT
     });
   };
@@ -29,8 +27,7 @@ export class BaseService {
       method: "POST",
       data: model,
       headers: {
-        Authorization:
-          "Bearer " + localStorage.getItem(process.env.REACT_APP_TOKEN),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       }, //JWT
     });
   };
@@ -40,8 +37,7 @@ export class BaseService {
       url: `${process.env.REACT_APP_DB_BASE_URL}${url}`,
       method: "GET",
       headers: {
-        Authorization:
-          "Bearer " + localStorage.getItem(process.env.REACT_APP_TOKEN),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       }, //token yêu cầu từ backend chứng minh user đã đăng nhập rồi
     });
   };
@@ -51,8 +47,7 @@ export class BaseService {
       url: `${process.env.REACT_APP_DB_BASE_URL}${url}`,
       method: "DELETE",
       headers: {
-        Authorization:
-          "Bearer " + localStorage.getItem(process.env.REACT_APP_TOKEN),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       }, //token yêu cầu từ backend chứng minh user đã đăng nhập rồi
     });
   };

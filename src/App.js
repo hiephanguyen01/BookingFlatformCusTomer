@@ -36,8 +36,7 @@ function App() {
     fontSize: 20,
   };
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    dispatch(getCurrentUser(token));
+    dispatch(getCurrentUser());
   }, []);
   // Warning  Add <ProtectedRouter></ProtectedRouter> when create Route //
   return (

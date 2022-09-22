@@ -305,6 +305,7 @@ export const StudioDetail = () => {
     }
   };
 
+
   // const columns = [
   //   {
   //     title: "Loại phòng",
@@ -503,6 +504,7 @@ export const StudioDetail = () => {
   //   },
   // ];
 
+
   const [chooseService, setChooseService] = useState([]);
 
   const handleChooseService = (data) => {
@@ -627,7 +629,49 @@ export const StudioDetail = () => {
                 60 đã đặt{" "}
               </span>
             </div>
-            <ImagePost data={studioDetail?.data?.Image} />
+            <div className={cx("container")}>
+              {studioDetail1?.Image?.slice(0, 5).map((item, index) => {
+                return index !== 4 ? (
+                  <div
+                    key={index}
+                    onClick={() =>
+                      dispatch({
+                        type: "SHOW_MODAL_LIST",
+                        Component: <ModalImage data={studioDetail1?.Image} />,
+                        width: "1169px",
+                      })
+                    }
+                    className={cx("item")}
+                  >
+                    <img
+                      alt="sa"
+                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    onClick={() =>
+                      dispatch({
+                        type: SHOW_MODAL,
+                        Component: <ModalImage data={studioDetail1?.Image} />,
+                        width: "1169px",
+                      })
+                    }
+                    key={index}
+                    className={cx("item")}
+                  >
+                    <img
+                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
+                      alt="as"
+                    />
+                    <div className={cx("number")}>
+                      {studioDetail1?.Image.length - 5}+
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+           // <ImagePost data={studioDetail?.data?.Image} />
           </div>
           <div className={cx("box2")}>
             <div className={cx("left")}>

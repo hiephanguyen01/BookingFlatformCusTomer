@@ -1,22 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { AutoComplete } from "antd";
 import classNames from "classnames/bind";
-import styles from "./home.module.scss";
-import images from "../../assets/images";
-import logo from "../../assets/img/Logo1.png";
-import { ListItem } from "./ListCard";
-import { AutoComplete, Modal, Input, Form, Select, Button } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { studioPostService } from "../../services/StudioPostService";
-import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { useNavigate } from "react-router-dom";
 import logoImg from "../../../src/assets/img/Logo1.png";
+import images from "../../assets/images";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import {
+  getTop10OrderClothesAction,
+  getTop10OrderDeviceAction,
+  getTop10OrderMakeupAction,
+  getTop10OrderModelAction,
+  getTop10OrderPhotographerAction,
+  getTop10OrderStudioPostAction,
+} from "../../stores/actions/TopOrderCategoryAction";
+import { SlideCard } from "../StudioDetail/SlideCard";
+import styles from "./home.module.scss";
+import { ListItem } from "./ListCard";
 
 const cx = classNames.bind(styles);
 const { Option } = AutoComplete;
 
+// ----------------------đừng xoá nhé ---------------------------------
 // export const Home = () => {
 //   const dispatch = useDispatch();
 //   const { selectSearch } = useSelector((state) => state.postDaoReducer);
@@ -187,12 +194,26 @@ export const Home = () => {
   const [provinces, setProvinces] = useState([]);
 
   const navigate = useNavigate();
+  const {
+    listOustandingStudioPost,
+    listOustandingModelPost,
+    listOustandingDevicePost,
+    listOustandingClothesPost,
+    listOustandingMakeupPost,
+    listOustandingPhotographerPost,
+  } = useSelector((state) => state.topOrderCategoryReducer);
 
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
+    dispatch(getTop10OrderStudioPostAction());
+    dispatch(getTop10OrderClothesAction());
+    dispatch(getTop10OrderDeviceAction());
+    dispatch(getTop10OrderMakeupAction());
+    dispatch(getTop10OrderModelAction());
+    dispatch(getTop10OrderPhotographerAction());
   }, []);
 
   const handleClickCategory = (categoryId) => {
@@ -281,8 +302,29 @@ export const Home = () => {
           </div>
         </div>
 
-        <ListItem title="Được đặt nhiều nhất" />
-        <ListItem title="Đã xem gần đây" />
+        {/* <ListItem title="Được đặt nhiều nhất" />
+        <ListItem title="Đã xem gần đây" /> */}
+        <SlideCard
+          data={listOustandingStudioPost}
+          title="Top 10 Most Booked Studios"
+        />
+        <SlideCard data={listOustandingModelPost} title="Top 10 Most Models" />
+        <SlideCard
+          data={listOustandingClothesPost}
+          title="Top 10 Most Clothes"
+        />
+        <SlideCard
+          data={listOustandingPhotographerPost}
+          title="Top 10 Most Photographer"
+        />
+        <SlideCard
+          data={listOustandingDevicePost}
+          title="Top 10 Most Devices"
+        />
+        <SlideCard
+          data={listOustandingMakeupPost}
+          title="Top 10 Most Makeups"
+        />
       </div>
     </div>
   );

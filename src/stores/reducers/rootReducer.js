@@ -7,6 +7,9 @@ import { listByCategoryReducer } from "./ListByCategoryReducer";
 import { roomReducer } from "./RoomReducer";
 import { ratingReducer } from "./RatingReducer";
 import { promoCodeReducer } from "./PromoCodeReducer";
+import { topOrderCategoryReducer } from "./TopOrderCategotyReducer";
+
+
 import { OnlineReducer } from "./OnlineReducer";
 import { chatReducer } from "./ChatReducer";
 import { OrderReducer } from "./OrderReducer";
@@ -21,6 +24,7 @@ const rootReducer = combineReducers({
   promoCodeReducer,
   OnlineReducer,
   chatReducer,
+  topOrderCategoryReducer,
   OrderReducer,
 });
 

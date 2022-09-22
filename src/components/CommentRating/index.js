@@ -87,6 +87,7 @@ const Index = ({ data = [], className }) => {
                               <img
                                 src={`${REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
                                 className="img_avatar"
+                                alt=""
                               />
                             </div>
                             <div className="info ms-10">
