@@ -19,6 +19,7 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import toastMessage from "../../components/ToastMessage";
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 
 import {
   addOrder,
@@ -43,6 +44,7 @@ import { ModalImage } from "./ModalImg";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 import { Voucher } from "./Voucher";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -58,9 +60,8 @@ export const StudioDetail = () => {
   // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { studioDetail1, studioDetail, studioNear, studioPostList } =
+  const { studioDetail1, studioDetail, studioNear, studioPostList, filter } =
     useSelector((state) => state.studioPostReducer);
-  // console.log(studioDetail);
   const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
@@ -96,7 +97,12 @@ export const StudioDetail = () => {
               <img
                 alt="as"
                 style={{ width: "100%", borderRadius: " 6px" }}
-                src={`${REACT_APP_DB_BASE_URL_IMG}/${data.Image[0]}`}
+                src={`${
+                  data?.Image?.length > 0 &&
+                  data?.Image[0]?.includes("https://drive.google.com/")
+                    ? data?.Image[0]
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                }`}
               />
               <div
                 style={{
@@ -199,10 +205,16 @@ export const StudioDetail = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {data.PriceByDate.toLocaleString("it-IT", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
+                    {filter.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {filter.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
                   </span>
                   <span
                     style={{
@@ -212,10 +224,16 @@ export const StudioDetail = () => {
                       fontWeight: "400",
                     }}
                   >
-                    {data.PriceByHour.toLocaleString("it-IT", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
+                    {filter.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {filter.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
                   </span>
                 </div>
                 <p
@@ -287,203 +305,203 @@ export const StudioDetail = () => {
     }
   };
 
-  const columns = [
-    {
-      title: "Loại phòng",
-      width: "30%",
-      render: (text) => {
-        return (
-          <div style={{ textAlign: "center" }}>
-            <img
-              alt="as"
-              style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
-              src={`${REACT_APP_DB_BASE_URL_IMG}${text.Image[0]}`}
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                Phòng
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                {text.Name}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                Diện tích
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                {text.Area}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                Phong cách
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                {text.Style}
-              </span>
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Mô tả",
-      dataIndex: "Description",
-      key: "Description",
-      render: (text) => {
-        return <p>{text}</p>;
-      },
-    },
-    {
-      title: "Giá cho thời gian bạn đã chọn ",
-      render: (text) => {
-        return (
-          <div>
-            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <span
-                style={{
-                  color: "#E22828",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                {text.PriceByDate.toLocaleString("it-IT", {
-                  style: "currency",
-                  currency: "VND",
-                })}
-              </span>
-              <span
-                style={{
-                  color: "#828282",
-                  textDecoration: "line-through",
-                  fontSize: "14px",
-                  fontWeight: "400",
-                }}
-              >
-                {text.PriceByHour.toLocaleString("it-IT", {
-                  style: "currency",
-                  currency: "VND",
-                })}
-              </span>
-            </div>
-            <p
-              style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}
-            >
-              {text.PriceNote}
-            </p>
-            <button
-              style={{
-                padding: "3px 21px",
-                background: "#E22828",
-                color: "#ffff",
-                border: " 1px solid #E22828",
-                borderRadius: " 8px",
-              }}
-            >
-              Giảm 50%{" "}
-            </button>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Chọn phòng",
-      key: "action",
-      width: "17%",
-      render: (text) => (
-        <div style={{ textAlign: "center" }}>
-          {roomSelect?.findIndex((item1) => item1.id === text.id) !== -1 ? (
-            <button
-              style={{
-                padding: "15px 30px",
-                background: "#E7E7E7",
-                color: "#3F3F3F",
-                border: " 1px solid transparent",
-                borderRadius: " 8px",
-              }}
-              onClick={() => {
-                dispatch({ type: SET_SELECT_ROOM, data: text });
-                handleChooseService();
-              }}
-            >
-              Bỏ chọn
-            </button>
-          ) : (
-            <button
-              style={{
-                padding: "15px 30px",
-                background: "#fff",
-                color: "#E22828",
-                border: " 1px solid #E22828",
-                borderRadius: " 8px",
-              }}
-              onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
-            >
-              Chọn
-            </button>
-          )}
-        </div>
-      ),
-    },
-  ];
+  // const columns = [
+  //   {
+  //     title: "Loại phòng",
+  //     width: "30%",
+  //     render: (text) => {
+  //       return (
+  //         <div style={{ textAlign: "center" }}>
+  //           <img
+  //             alt="as"
+  //             style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
+  //             src={`${REACT_APP_DB_BASE_URL_IMG}${text.Image[0]}`}
+  //           />
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "space-between",
+  //               alignItems: "center",
+  //               marginTop: "10px",
+  //             }}
+  //           >
+  //             <span
+  //               style={{
+  //                 color: "#616161",
+  //                 fontSize: "16px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               Phòng
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#3F3F3F",
+  //                 fontSize: "16px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.Name}
+  //             </span>
+  //           </div>
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "space-between",
+  //               alignItems: "center",
+  //               marginTop: "10px",
+  //             }}
+  //           >
+  //             <span
+  //               style={{
+  //                 color: "#616161",
+  //                 fontSize: "16px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               Diện tích
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#3F3F3F",
+  //                 fontSize: "16px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.Area}
+  //             </span>
+  //           </div>
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "space-between",
+  //               alignItems: "center",
+  //               marginTop: "10px",
+  //             }}
+  //           >
+  //             <span
+  //               style={{
+  //                 color: "#616161",
+  //                 fontSize: "16px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               Phong cách
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#3F3F3F",
+  //                 fontSize: "16px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.Style}
+  //             </span>
+  //           </div>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     title: "Mô tả",
+  //     dataIndex: "Description",
+  //     key: "Description",
+  //     render: (text) => {
+  //       return <p>{text}</p>;
+  //     },
+  //   },
+  //   {
+  //     title: "Giá cho thời gian bạn đã chọn ",
+  //     render: (text) => {
+  //       return (
+  //         <div>
+  //           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+  //             <span
+  //               style={{
+  //                 color: "#E22828",
+  //                 fontSize: "20px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.PriceByDate.toLocaleString("it-IT", {
+  //                 style: "currency",
+  //                 currency: "VND",
+  //               })}
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#828282",
+  //                 textDecoration: "line-through",
+  //                 fontSize: "14px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               {text.PriceByHour.toLocaleString("it-IT", {
+  //                 style: "currency",
+  //                 currency: "VND",
+  //               })}
+  //             </span>
+  //           </div>
+  //           <p
+  //             style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}
+  //           >
+  //             {text.PriceNote}
+  //           </p>
+  //           <button
+  //             style={{
+  //               padding: "3px 21px",
+  //               background: "#E22828",
+  //               color: "#ffff",
+  //               border: " 1px solid #E22828",
+  //               borderRadius: " 8px",
+  //             }}
+  //           >
+  //             Giảm 50%{" "}
+  //           </button>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     title: "Chọn phòng",
+  //     key: "action",
+  //     width: "17%",
+  //     render: (text) => (
+  //       <div style={{ textAlign: "center" }}>
+  //         {roomSelect?.findIndex((item1) => item1.id === text.id) !== -1 ? (
+  //           <button
+  //             style={{
+  //               padding: "15px 30px",
+  //               background: "#E7E7E7",
+  //               color: "#3F3F3F",
+  //               border: " 1px solid transparent",
+  //               borderRadius: " 8px",
+  //             }}
+  //             onClick={() => {
+  //               dispatch({ type: SET_SELECT_ROOM, data: text });
+  //               handleChooseService();
+  //             }}
+  //           >
+  //             Bỏ chọn
+  //           </button>
+  //         ) : (
+  //           <button
+  //             style={{
+  //               padding: "15px 30px",
+  //               background: "#fff",
+  //               color: "#E22828",
+  //               border: " 1px solid #E22828",
+  //               borderRadius: " 8px",
+  //             }}
+  //             onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
+  //           >
+  //             Chọn
+  //           </button>
+  //         )}
+  //       </div>
+  //     ),
+  //   },
+  // ];
 
   const [chooseService, setChooseService] = useState([]);
 
@@ -557,7 +575,13 @@ export const StudioDetail = () => {
                 />
               </div>
               <div className={cx("icons")}>
-                <HeartOutlined className={cx("item")} />
+                <PopUpSignIn
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <HeartOutlined className={cx("item")} />
+                </PopUpSignIn>
                 <Popover
                   placement="bottomRight"
                   content={
@@ -620,6 +644,9 @@ export const StudioDetail = () => {
                 </div>
               </div>
               <div className={cx("table")}>
+                <div className="ms-20">
+                  <SelectTimeOption />
+                </div>
                 <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                 {/* <Table
                   className={cx("table-ant")}

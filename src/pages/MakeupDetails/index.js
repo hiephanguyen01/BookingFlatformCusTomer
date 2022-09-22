@@ -34,6 +34,8 @@ import {
   chooseServiceAction,
 } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
 const values = [
   { id: 1, title: "Album hóa trang theo yêu cầu của khách" },
@@ -257,7 +259,13 @@ const Index = () => {
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
-                  <HeartOutlined className="icon_heart" />
+                  <PopUpSignIn
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <HeartOutlined className="icon_heart" />
+                  </PopUpSignIn>
                   <Dropdown overlay={menu_report} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
@@ -387,6 +395,9 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
+                    <div className="ms-24 pt-20">
+                      <SelectTimeOption />
+                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>

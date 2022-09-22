@@ -25,6 +25,9 @@
       top: 15px;
       border-radius: 50%;
       overflow: hidden;
+      z-index: 1;
+
+      &:hover {}
     }
 
     .sale {

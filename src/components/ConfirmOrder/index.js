@@ -67,6 +67,7 @@ const Index = () => {
   };
 
   const handleClickBtnUpdate = async () => {
+    console.log(file);
     try {
       if (Object.keys(file).length > 0) {
         const formData = new FormData();
@@ -75,10 +76,13 @@ const Index = () => {
         formData.append("EvidenceImage", newImage);
         formData.append("Category", cate);
 
-        const response = await orderService.updateOrder(
-          formData,
-          location.state.IdentifyCode
-        );
+        const IdentifyCode = [...location.state.IdentifyCode];
+        for (let i = 0; i < IdentifyCode.length; i++) {
+          const response = await orderService.updateOrder(
+            formData,
+            IdentifyCode[i]
+          );
+        }
         navigate("orderSuccess");
       } else {
         toastMessage("Vui lòng chọn ảnh minh chứng!", "warn");
@@ -105,12 +109,12 @@ const Index = () => {
         <div className="border_bottom">
           <div className="d-flex justify-content-between mb-12">
             <div className="booking_code text-medium-re">
-              Mã Booking:{" "}
+              Mã Booking:
               <span className="text-medium-se">
                 {location?.state?.IdentifyCode &&
-                location?.state?.IdentifyCode?.length > 30
-                  ? `${location.state.IdentifyCode.slice(0, 30)}...`
-                  : location.state.IdentifyCode}
+                location?.state?.IdentifyCode?.join(", ").length > 30
+                  ? `${location.state.IdentifyCode.join(", ").slice(0, 30)}...`
+                  : location.state.IdentifyCode.join(", ")}
               </span>
             </div>
             <div className="text-medium-re" style={{ color: "#03AC84" }}>
@@ -198,9 +202,9 @@ const Index = () => {
               }}
             >
               {location?.state?.IdentifyCode &&
-              location?.state?.IdentifyCode?.length > 30
-                ? `${location.state.IdentifyCode.slice(0, 30)}...`
-                : location.state.IdentifyCode}
+              location?.state?.IdentifyCode?.join(", ").length > 30
+                ? `${location.state.IdentifyCode.join(", ").slice(0, 30)}...`
+                : location.state.IdentifyCode.join(", ")}
             </div>
           </div>
         </div>
