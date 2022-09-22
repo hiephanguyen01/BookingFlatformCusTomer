@@ -1,22 +1,50 @@
-.text-title {
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 25px;
+.order_container {
+    margin: auto;
+    background-color: rgb(245, 245, 245);
+    padding: 2rem 0;
 
-    color: #222222;
+    .right_col {
+        padding: 20px 25px 30px;
+        margin-bottom: 0.5rem;
+        background-color: #FFFFFF;
+
+        .text-title {
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 25px;
+
+            color: #222222;
+            margin-bottom: 1rem;
+        }
+
+        .text-description {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            color: #222222;
+            margin-bottom: 14px;
+        }
+
+        .img_service {
+            height: 100%;
+            width: 130px;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+    }
 }
+
+
 
 .text-middle {
     font-weight: 600;
     font-size: 18px;
     line-height: 25px;
+    color: #E22828;
 }
 
-.text-description {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 22px;
-}
+
+
 
 .border-bottom {
     padding-bottom: 25px;

@@ -1,9 +1,8 @@
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import {
   EnvironmentOutlined,
   HeartOutlined,
   MoreOutlined,
-  PlusOutlined,
   ShoppingCartOutlined,
   DownOutlined,
   LoadingOutlined,
@@ -22,14 +21,11 @@ import ImagePost from "../../components/imagePost/ImagePost";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-
-const values = [
-  { id: 1, title: "Album hóa trang theo yêu cầu của khách" },
-  { id: 2, title: "Album make up cô dâu" },
-  { id: 3, title: "Album make up chụp hình kỉ yếu" },
-  { id: 4, title: "Album hóa trang theo yêu cầu của khách" },
-  { id: 5, title: "Album make up chụp hình kỉ yếu" },
-];
+import toastMessage from "../../components/ToastMessage";
+import {
+  addOrder,
+  chooseServiceAction,
+} from "../../stores/actions/OrderAction";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -39,19 +35,17 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, loading } = useSelector(
     (state) => state.studioPostReducer
   );
-  console.log(studioDetail);
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const cate =
     location.pathname.split("/").filter((item) => item !== "")[1] ===
     "photographer"
       ? 2
       : undefined;
-
-  console.log("cate", cate);
 
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
@@ -71,6 +65,7 @@ const PhotographerDetail = () => {
     }
     setChooseService(newChooseService);
   };
+
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
@@ -79,6 +74,7 @@ const PhotographerDetail = () => {
             <>
               <img
                 src={`${
+                  data.Image.length > 0 &&
                   data?.Image[0]?.includes("https://drive.google.com/")
                     ? data?.Image[0]
                     : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
@@ -186,6 +182,23 @@ const PhotographerDetail = () => {
       ]);
     }
   };
+
+  const handleBook = () => {
+    if (chooseService.length > 0) {
+      dispatch(chooseServiceAction(chooseService));
+      navigate("order");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
+  const handleAddCart = () => {
+    if (chooseService.length > 0) {
+      dispatch(addOrder(cate, chooseService));
+      toastMessage("Đã thêm vào giỏ hàng!", "success");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
   return (
     <>
       {loading ? (
@@ -260,16 +273,11 @@ const PhotographerDetail = () => {
                 <ImagePost data={studioDetail?.data?.Image} />
               </div>
             </header>
-            {/* <section className="photographer-detail__container__description"> */}
             <Row
               style={{ marginRight: "0", marginLeft: "0" }}
               gutter={[24, 24]}
             >
               <Col style={{ paddingLeft: "0" }} md={16}>
-                {/* <div className="photographer-detail__container__description">
-           {" "}
-           kljhasdkjhasdkjahsdkjh
-         </div> */}
                 <Row className="photographer-detail__container__description">
                   <Col md={24}>
                     <ReadMoreDesc title="Chi tiết sản phẩm">
@@ -338,16 +346,6 @@ const PhotographerDetail = () => {
                     }}
                   />
                 </div>
-                {/* <img
-           style={{
-             width: "100%",
-             height: "210px",
-             objectFit: "cover",
-             marginTop: "15px",
-           }}
-           src={map}
-           alt=""
-         /> */}
               </Col>
             </Row>
             <Row
@@ -428,12 +426,18 @@ const PhotographerDetail = () => {
                     </div>
                   </div>
                   <div className="w-100 d-flex justify-content-between">
-                    <Button className="w-60 h-48px d-flex justify-content-center align-items-center btn_add">
+                    <Button
+                      className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                      onClick={handleAddCart}
+                    >
                       <ShoppingCartOutlined />
                       Thêm vào giỏ hàng
                     </Button>
-                    <Button className="w-38 h-48px d-flex justify-content-center align-items-center btn_order">
-                      <Link to={"orderMakeup"}> Đặt ngay</Link>
+                    <Button
+                      className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                      onClick={handleBook}
+                    >
+                      Đặt ngay
                     </Button>
                   </div>
                 </div>

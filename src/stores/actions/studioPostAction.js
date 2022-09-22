@@ -10,7 +10,6 @@ import {
 } from "../types/studioPostType";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
-  console.log(limit, page, category);
   dispatch({ type: LOADING, payload: true });
   try {
     const { data } = await studioPostService.getAllStudioPost(
@@ -18,7 +17,6 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
       page,
       category
     );
-    console.log("lítđâtts", data);
     dispatch({ type: SET_POST_LIST, payload: data.data });
     dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
   } catch (error) {
@@ -48,10 +46,8 @@ export const studioDetailAction = (id, category) => {
   return async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
-      // const { data1 } = await studioPostService.getDetailStudio(id);
-      // dispatch({ type: SET_STUDIO_DETAIL, payload: data.data1 });
-      // dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
       const { data } = await studioPostService.getDetailStudio(id, category);
+      console.log(data);
       dispatch({
         type: SET_STUDIO_DETAIL,
         payload: {

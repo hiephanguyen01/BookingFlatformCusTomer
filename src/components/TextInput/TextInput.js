@@ -13,6 +13,7 @@ const TextInput = ({
   styleContainer,
   isPass = false,
   error = false,
+  value,
 }) => {
   return (
     <div
@@ -34,6 +35,8 @@ const TextInput = ({
       {isPass ? (
         <Input.Password
           placeholder=""
+          name={name}
+          value={value}
           onChange={onChange}
           style={{
             width: "100%",
@@ -50,6 +53,7 @@ const TextInput = ({
       ) : (
         <Input
           name={name}
+          value={value}
           placeholder={placeholder}
           onChange={onChange}
           suffix={
