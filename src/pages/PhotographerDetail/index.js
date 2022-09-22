@@ -26,6 +26,8 @@ import {
   addOrder,
   chooseServiceAction,
 } from "../../stores/actions/OrderAction";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -238,6 +240,7 @@ const PhotographerDetail = () => {
                         color: "#828282",
                       }}
                     />
+
                     <p>{studioDetail?.data?.Address}</p>
                   </div>
                   <div className="photographer-detail__container__header__info__right-side__rating d-flex align-items-center">
@@ -255,13 +258,19 @@ const PhotographerDetail = () => {
                   </div>
                 </div>
                 <div className="photographer-detail__container__header__info__left-side d-flex align-items-start">
-                  <HeartOutlined
-                    style={{
-                      fontSize: "25px",
-                      color: "#E22828",
-                      marginRight: "10px",
+                  <PopUpSignIn
+                    onClick={(e) => {
+                      e.stopPropagation();
                     }}
-                  />
+                  >
+                    <HeartOutlined
+                      style={{
+                        fontSize: "25px",
+                        color: "#E22828",
+                        marginRight: "10px",
+                      }}
+                    />
+                  </PopUpSignIn>
                   <MoreOutlined
                     style={{
                       fontSize: "25px",
@@ -358,6 +367,9 @@ const PhotographerDetail = () => {
                 className="photographer-detail__container__services"
               >
                 <div className="h-100" style={{ backgroundColor: "#fff" }}>
+                  <div className="ms-24 pt-20">
+                    <SelectTimeOption />
+                  </div>
                   <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                 </div>
               </Col>

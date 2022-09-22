@@ -189,8 +189,12 @@
         }
 
         .table {
-            padding: 26px;
+            padding-top: 24px;
             background-color: #fff;
+
+            .selectOption {
+                margin-left: 20px;
+            }
 
             .table-ant {
                 td {
