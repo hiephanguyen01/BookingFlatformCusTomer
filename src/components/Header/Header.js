@@ -23,12 +23,14 @@ import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { SET_FILTER } from "../../stores/types/studioPostType";
+import { ImageDetect } from "../ImageDetect/ImageDetect";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import "./Header.scss";
 const { Option } = Select;
 const Header = () => {
   const [provinces, setProvinces] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
+  const img = ImageDetect(user)
   const filter = useSelector((state) => state.studioPostReducer.filter);
   const dispatch = useDispatch();
   const navigate = useNavigate()
@@ -114,7 +116,7 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick ={()=> navigate('/home/user/1')}
+              onClick ={()=> navigate('/home/user/')}
             >
               Thông tin tài khoản
             </Button>
@@ -258,7 +260,7 @@ const Header = () => {
         {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
-              <Avatar src={user.Image ? user.Image : noBody} />
+              <Avatar src={user.Image ? img: noBody} />
               <div className="text">
                 <p>Tài khoản</p>
                 <p>

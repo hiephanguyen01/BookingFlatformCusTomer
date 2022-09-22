@@ -3,16 +3,19 @@ import { Drawer } from "antd";
 import ChatIcon from "../../assets/Chat/ChatIcon.png";
 import ChatIconNoti from "../../assets/Chat/ChatIconNoti.png";
 import "./Chat.scss";
-import { ChatBody } from "./ChatBody/ChatBody";/* 
+import { ChatBody } from "./ChatBody/ChatBody"; /* 
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn"; */
-import { getOnlinePartner,getOfflinePartner } from "../../stores/actions/OnlineAction";
+import {
+  getOnlinePartner,
+  getOfflinePartner,
+} from "../../stores/actions/OnlineAction";
 import { socket } from "../ConnectSocket/ConnectSocket";
 import { useDispatch, useSelector } from "react-redux";
-import { UserMe } from "./ChatBody/ChatContent/ChatContent";
 import { closeConversationSelector } from "../../stores/selector/ChatSelector";
 const Chat = () => {
-  const closeConversation = useSelector(closeConversationSelector)
-  const dispatch = useDispatch()
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const closeConversation = useSelector(closeConversationSelector);
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [notiMessage /* , setNotiMessage */] = useState(0);
   const showLargeDrawer = () => {
@@ -25,18 +28,18 @@ const Chat = () => {
     socket.emit("login_user", {
       userId: UserMe.id,
     });
-    socket.on('online_partner', (partner) => {
-      dispatch(getOnlinePartner(partner))
-    })
-    socket.on('offline_partner', (partner) => {
-      dispatch(getOfflinePartner(partner))
-    })
-   
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket])
-  useEffect(()=>{
+    socket.on("online_partner", (partner) => {
+      dispatch(getOnlinePartner(partner));
+    });
+    socket.on("offline_partner", (partner) => {
+      dispatch(getOfflinePartner(partner));
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
+  useEffect(() => {
     setVisible(false);
-  },[closeConversation])
+  }, [closeConversation]);
   return (
     <div>
       <div

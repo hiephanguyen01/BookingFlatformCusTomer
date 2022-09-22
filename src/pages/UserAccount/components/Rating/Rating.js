@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { Rate, Pagination, Divider } from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { userService } from "../../../../services/UserService";
-import { UserMe } from "../../../../components/Chat/ChatBody/ChatContent/ChatContent";
 import "./rating.scss";
 import { RatingStudio } from "./components/RatingStudio";
 import { RatingOther } from "./components/RatingOther";
+import { useSelector } from "react-redux";
 const STAR_LIST = [
   { id: 5, label: "5" },
   { id: 4, label: "4" },
@@ -15,6 +15,8 @@ const STAR_LIST = [
   { id: 1, label: "1" },
 ];
 const Rating = () => {
+  const UserMe = useSelector((state)=> state.authenticateReducer.currentUser )
+  
   const [myRatings, setMyRatings] = useState([]);
   const [chooseRating, setChooseRating] = useState(5);
   useEffect(() => {

@@ -10,17 +10,24 @@ import EditText from "../../../../components/TextInput/EditText";
 import { useEffect } from "react";
 import { userService } from "../../../../services/UserService";
 import { ClipLoader } from "react-spinners";
-import { UserMe } from "../../../../components/Chat/ChatBody/ChatContent/ChatContent";
+import { useDispatch, useSelector } from "react-redux";
+import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
+import { getCurrentUser, logOut } from "../../../../stores/actions/autheticateAction";
+import { useNavigate } from "react-router-dom";
 const AccountInfo = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const myImg = ImageDetect(UserMe);
   const [visible, setVisible] = useState(false);
-  const [infoUser, setInfoUser] = useState();
+  const [infoUser, setInfoUser] = useState(UserMe);
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState({});
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
     if (newFile.preview !== null) {
-      setFile({ ...newFile });
+      setFile(newFile);
     }
   };
   const onChangeCheck = (checked) => {
@@ -29,7 +36,9 @@ const AccountInfo = () => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    await userService.deleteMe(UserMe.id)
+    dispatch(logOut(navigate));
     setVisible(false);
   };
   const handleChangeValue = (name, value) => {
@@ -38,20 +47,24 @@ const AccountInfo = () => {
   const saveChange = async () => {
     setLoading(true);
     try {
-      const { data } = await userService.infoUser(UserMe.id);
-      console.log(data);
+      const formData = new FormData();
+      delete file.preview;
+      console.log("file", file);
+      for (let key in infoUser) {
+        if (key !== "Image") {
+          formData.append(key, infoUser[key]);
+        } else {
+          formData.append("Image", file);
+        }
+      }
+      await userService.saveInfo(UserMe.id, formData);
+      dispatch(getCurrentUser());
       setLoading(false);
     } catch (error) {
+      console.log("fail");
       setLoading(false);
     }
   };
-  useEffect(() => {
-    (async () => {
-      const { data } = await userService.infoUser(UserMe.id);
-      setInfoUser(data);
-    })();
-  }, []);
-
   return (
     <>
       <h4 style={{ marginBottom: "8px", fontSize: "16px" }}>
@@ -76,13 +89,7 @@ const AccountInfo = () => {
                 <div className="ms-40 d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
                   {file ? (
                     <img
-                      src={
-                        file.preview !== undefined
-                          ? file.preview
-                          : `http://localhost:3003/api/image/${
-                              infoUser ? infoUser.Image : ""
-                            }`
-                      }
+                      src={file.preview ? file.preview : myImg}
                       className="w-100 h-100"
                       style={{ objectFit: "cover" }}
                       alt=""
