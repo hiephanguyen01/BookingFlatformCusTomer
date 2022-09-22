@@ -1,4 +1,3 @@
-import { Avatar } from "antd";
 import React, { useEffect, useState } from "react";
 import { UserMe } from "../../../../components/Chat/ChatBody/ChatContent/ChatContent";
 import DaoPost from "../../../../components/DaoPost";

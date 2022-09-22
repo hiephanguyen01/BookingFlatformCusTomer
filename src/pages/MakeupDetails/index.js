@@ -11,7 +11,7 @@ import {
 import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "./makeupDetails.scss";
 
@@ -29,6 +29,11 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import {
+  addOrder,
+  chooseServiceAction,
+} from "../../stores/actions/OrderAction";
+import toastMessage from "../../components/ToastMessage";
 
 const values = [
   { id: 1, title: "Album hóa trang theo yêu cầu của khách" },
@@ -49,14 +54,15 @@ const Index = () => {
   );
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const cate =
     location.pathname.split("/").filter((item) => item !== "")[1] === "makeup"
       ? 4
       : undefined;
 
   const [chooseService, setChooseService] = useState([]);
-  const [activeId, setActiveId] = useState(5);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -102,6 +108,7 @@ const Index = () => {
             <>
               <img
                 src={`${
+                  data?.Image?.length > 0 &&
                   data?.Image[0]?.includes("https://drive.google.com/")
                     ? data?.Image[0]
                     : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
@@ -208,6 +215,23 @@ const Index = () => {
           ),
         },
       ]);
+    }
+  };
+
+  const handleBook = () => {
+    if (chooseService.length > 0) {
+      dispatch(chooseServiceAction(chooseService));
+      navigate("order");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
+  const handleAddCart = () => {
+    if (chooseService.length > 0) {
+      dispatch(addOrder(cate, chooseService));
+      toastMessage("Đã thêm vào giỏ hàng!", "success");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
 
@@ -431,12 +455,18 @@ const Index = () => {
                       </div>
                     </div>
                     <div className="w-100 d-flex justify-content-between">
-                      <Button className="w-60 h-48px d-flex justify-content-center align-items-center btn_add">
+                      <Button
+                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                        onClick={handleAddCart}
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
-                      <Button className="w-38 h-48px d-flex justify-content-center align-items-center btn_order">
-                        <Link to={"order"}> Đặt ngay</Link>
+                      <Button
+                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                        onClick={handleBook}
+                      >
+                        Đặt ngay
                       </Button>
                     </div>
                   </div>

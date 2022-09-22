@@ -1,5 +1,5 @@
-import { Col, Row, Button, Modal, Switch,Spin  } from "antd";
-import React, {  useState } from "react";
+import { Col, Row, Button, Modal, Switch } from "antd";
+import React, { useState } from "react";
 import "./accountInfo.scss";
 import TextInput from "../../../../components/TextInput/TextInput";
 import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
@@ -14,7 +14,7 @@ import { UserMe } from "../../../../components/Chat/ChatBody/ChatContent/ChatCon
 const AccountInfo = () => {
   const [visible, setVisible] = useState(false);
   const [infoUser, setInfoUser] = useState();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState({});
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
@@ -35,23 +35,23 @@ const AccountInfo = () => {
   const handleChangeValue = (name, value) => {
     setInfoUser({ ...infoUser, [name]: value });
   };
-  const saveChange = async() => {
-    setLoading(true)
-   try{
-    const { data } = await userService.infoUser(UserMe.id);
-    console.log(data);;
-    setLoading(false)
-   } catch (error){
-    setLoading(false)
-   }
-  }
+  const saveChange = async () => {
+    setLoading(true);
+    try {
+      const { data } = await userService.infoUser(UserMe.id);
+      console.log(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     (async () => {
       const { data } = await userService.infoUser(UserMe.id);
       setInfoUser(data);
     })();
   }, []);
-    
+
   return (
     <>
       <h4 style={{ marginBottom: "8px", fontSize: "16px" }}>
@@ -230,8 +230,12 @@ const AccountInfo = () => {
         </div>
 
         <div className="d-flex justify-content-center">
-          <Button type="primary" className="AccountInfo__save" onClick={saveChange}>
-          {loading &&<ClipLoader color="#fff" size={20} />} Lưu thay đổi
+          <Button
+            type="primary"
+            className="AccountInfo__save"
+            onClick={saveChange}
+          >
+            {loading && <ClipLoader color="#fff" size={20} />} Lưu thay đổi
           </Button>
         </div>
       </div>
