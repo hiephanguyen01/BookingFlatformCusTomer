@@ -10,6 +10,10 @@ import { useSelector } from "react-redux";
 const cx = classNames.bind(styles);
 
 export const Card = ({ id, value }) => {
+  const img =
+    `${process.env.REACT_APP_DB_BASE_URL_IMG}/${
+      value?.Image[0] || value?.Image
+    }` || images.baby;
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const navigate = useNavigate();
   const [like, setLike] = useState(false);
@@ -20,14 +24,7 @@ export const Card = ({ id, value }) => {
   return (
     <div className={cx("card")} onClick={() => navigate(`${linkTo}/${id}`)}>
       <div className={cx("image")}>
-        <img
-          className={cx("thumbnail")}
-          alt=""
-          /* src={`${process.env.REACT_APP_API_URL_IMG}${
-            value?.Image[0] || value?.Image
-          }`} */
-          src={images.baby}
-        />
+        <img className={cx("thumbnail")} alt="" src={img} />
       </div>
 
       <div onClick={handleChangeLike} className={cx("like")}>
@@ -46,7 +43,7 @@ export const Card = ({ id, value }) => {
         <div className={cx("rate")}>
           <Rate allowHalf value={3} />
           <span style={{ color: "828282", fontSize: "12px" }}>
-            {value?.BookingCount || "60 đã đặt"}{" "}
+            {value?.BookingCount || "60"} đã đặt
           </span>
         </div>
       </div>
