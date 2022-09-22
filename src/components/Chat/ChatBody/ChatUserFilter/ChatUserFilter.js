@@ -4,16 +4,16 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { chatService } from "../../../../services/ChatService";
 import { FilterChatOption } from "./FilterChatOption";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import {
   createConverAction,
   findConverAction,
 } from "../../../../stores/actions/ChatAction";
 import moment from "moment";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
-import { UserMe } from "../ChatContent/ChatContent";
 const { Option } = Select;
 export const ChatUserFilter = () => {
+  const UserMe = useSelector((state)=> state.authenticateReducer.currentUser )
   const dispatch = useDispatch();
   const [listChat, setListChat] = useState([]);
   const [value, setValue] = useState(null);
@@ -36,7 +36,7 @@ export const ChatUserFilter = () => {
             Phone: create.data.Partner.Phone ? create.data.Partner.Phone : "",
             Email: create.data.Partner.Email ? create.data.Partner.Email : "",
           },
-          type:"text"
+          Type:"text"
         });
         dispatch(createConverAction(create.data.id));
       } catch (error) {

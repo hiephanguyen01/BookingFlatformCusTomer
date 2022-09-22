@@ -21,6 +21,7 @@ import PageModel from "./pages/ModelDetails/PageModel";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
 import PageStudio from "./pages/StudioDetail/PageStudio";
 import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
+import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ function App() {
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
-          <Route path="user/:id/*" element={<UserAccount />} />
+          <Route path="user/*" element={<ProtectedRouter><UserAccount /></ProtectedRouter>} />
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="studio/book" element={<BookStudio />} />

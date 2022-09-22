@@ -32,6 +32,7 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
             createdAt: data.messageContent.createdAt,
             id: data.messageContent.id,
             updatedAt: data.messageContent.createdAt,
+            Type: data.messageContent.Type,
           });
         } else {
           setLastMessage({
@@ -43,6 +44,7 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
             createdAt: data.messageContent.createdAt,
             id: data.messageContent.id,
             updatedAt: data.messageContent.createdAt,
+            Type: data.messageContent.Type,
           });
         }
       } else {
@@ -85,9 +87,15 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
               >
                 <div>
                   Bạn:{" "}
-                  {lastMessage.Content.toString().length <= 9
-                    ? lastMessage.Content
-                    : `${lastMessage.Content.toString().slice(0, 9)}...`}
+                  {lastMessage.Type === "text" ? (
+                    <>
+                      {lastMessage.Content.toString().length <= 9
+                        ? lastMessage.Content
+                        : `${lastMessage.Content.toString().slice(0, 9)}...`}
+                    </>
+                  ) : (
+                    <>Ảnh</>
+                  )}
                 </div>
                 <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
               </div>
@@ -101,9 +109,15 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
                 }}
               >
                 <div>
-                  {lastMessage.Content.toString().length <= 12
-                    ? lastMessage.Content
-                    : `${lastMessage.Content.toString().slice(0, 12)}...`}
+                  {lastMessage.Type === "text" ? (
+                    <>
+                      {lastMessage.Content.toString().length <= 12
+                        ? lastMessage.Content
+                        : `${lastMessage.Content.toString().slice(0, 12)}...`}
+                    </>
+                  ) : (
+                    <>Ảnh</>
+                  )}
                 </div>
                 <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
               </div>

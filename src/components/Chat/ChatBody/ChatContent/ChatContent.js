@@ -14,14 +14,15 @@ import { closeConversationAction } from "../../../../stores/actions/ChatAction";
 import UploadImage from "../../../../components/UploadImage";
 import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
-export const UserMe = {
+
+/* export const UserMe = {
   id: 5,
   Username: "3871952632888744",
   Image: "b953bcbb-96f8-4dc2-8b5d-9f9b895d0def",
   Email: "anhsaobanga21@gmail.com",
   Fullname: "Toàn Nguyễn",
   Phone: "0909005001",
-};
+}; */
 /* export const UserMe = {
   id: 6,
   Username: "hoanganhnguyen96kt@gmail.com",
@@ -31,6 +32,8 @@ export const UserMe = {
   Phone: "",
 }; */
 export const ChatContent = React.memo(({ chatInfo }) => {
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const updateScroll = useSelector(updateMSelector);
@@ -88,32 +91,30 @@ export const ChatContent = React.memo(({ chatInfo }) => {
     }, 1000);
   };
   const onEnterPress = async (e) => {
+    const messText = {
+      id: Math.random(),
+      ConversationId: id,
+      createdAt: moment().toISOString(),
+      Content: message,
+      Chatting: UserMe,
+      Type: "text",
+    };
     if (
       e.keyCode === 13 &&
       e.shiftKey === false &&
       message.trim() !== "" &&
       files.length === 0
     ) {
-      console.log("case1");
       e.preventDefault();
       setMessage("");
-      socket.emit("send_message", {
-        id: Math.random(),
-        ConversationId: id,
-        createdAt: moment().toISOString(),
-        Content: message,
-        Chatting: UserMe,
-        Type: "text",
-      });
+      socket.emit("send_message", messText);
     } else if (
       e.keyCode === 13 &&
       e.shiftKey === false &&
       message.trim() === "" &&
       files.length !== 0
     ) {
-      console.log("case2");
       e.preventDefault();
-      /* const formData = new FormData(); */
       for (let file of files) {
         delete file.preview;
         socket.emit("send_message", {
@@ -126,13 +127,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
           Content: file,
           Chatting: UserMe,
         });
-        /* formData.append("image", file); */
       }
-      /* formData.append("Description", newPost.description);
-      formData.append("Tags", newPost.tags.join(",")); */
-      /* const hehe = formData.getAll("image");
-      console.log("formData", hehe); */
-
       setFiles([]);
     } else if (
       e.keyCode === 13 &&
@@ -143,23 +138,20 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       console.log("case3");
       e.preventDefault();
       setMessage("");
-      const formData = new FormData();
+      socket.emit("send_message", messText);
       for (let file of files) {
         delete file.preview;
-        formData.append("image", file);
+        socket.emit("send_message", {
+          id: Math.random(),
+          ConversationId: id,
+          createdAt: moment().toISOString(),
+          Type: "file",
+          mineType: file.type,
+          fileName: file.name,
+          Content: file,
+          Chatting: UserMe,
+        });
       }
-      /* formData.append("Description", newPost.description);
-      formData.append("Tags", newPost.tags.join(",")); */
-      const hehe = formData.getAll("image");
-      console.log("formData", hehe);
-      socket.emit("send_message", {
-        id: Math.random(),
-        ConversationId: id,
-        createdAt: moment().toISOString(),
-        Content: message,
-        Chatting: UserMe,
-        Type: "text",
-      });
       setFiles([]);
     }
   };
@@ -201,6 +193,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
     if (itm.Type !== "text") {
       return (
         <img
+          onLoad={() => scrollToBottom()}
           style={{
             width: 200,
             height: "auto",
@@ -211,9 +204,6 @@ export const ChatContent = React.memo(({ chatInfo }) => {
           alt={itm.fileName}
         />
       );
-
-      /* const blob = new Blob([itm.Content], { type: itm.Type });
-      return <ImageOfMe fileName={itm.fileName} blob={blob} />; */
     } else {
       return <>{itm.Content}</>;
     }
@@ -417,6 +407,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
+            maxLength={2000}
           ></textarea>
         </div>
       </div>

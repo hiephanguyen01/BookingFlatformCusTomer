@@ -3,9 +3,11 @@ import React from "react";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { convertTime } from "../../../../../utils/convert";
-import { UserMe } from "../../../../../components/Chat/ChatBody/ChatContent/ChatContent";
 import "./RatingItm.scss";
+import { useSelector } from "react-redux";
+import { ImageDetect } from "../../../../../components/ImageDetect/ImageDetect";
 export const RatingOther = ({ info }) => {
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const Name = info.PhotographerPost
     ? info.PhotographerPost.Name
     : info.DevicePost
@@ -28,12 +30,13 @@ export const RatingOther = ({ info }) => {
     : info.MakeupPost
     ? info.MakeupPost.Image1
     : " ";
+  const myImg = ImageDetect(UserMe);
   return (
     <div className="rating_wrapper">
       <div className="rating_wrapper__info-user">
         <div className="d-flex">
           <img
-            src={`${REACT_APP_DB_BASE_URL_IMG}/${UserMe.Image}`}
+            src={myImg}
             className="rating_wrapper__info-user__avatar"
             alt=""
           />

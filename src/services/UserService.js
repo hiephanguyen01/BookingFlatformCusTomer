@@ -24,6 +24,12 @@ class UserService extends BaseService {
   getListRatings = (id)=> {
     return this.get(`/api/my-ratings/${id}`);
   }
+  saveInfo = (id,data)=> {
+    return this.patch(`/api/booking-user/updateMe/${id}`,data);
+  }
+  deleteMe = (id) => {
+    return this.patch(`/api/booking-user/deleteMe/${id}`)
+  }
 }
 
 export const userService = new UserService();

@@ -7,12 +7,13 @@ import { updateMSelector } from "../../../../stores/selector/ChatSelector";
 import { useEffect, useRef } from "react";
 import { chatService } from "../../../../services/ChatService";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
-import { UserMe } from "./ChatContent";
 import adminLogo from "../../../../assets/Chat/AdminUser.png";
 import moment from "moment";
 import UploadImage from "../../../../components/UploadImage";
 import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 export const ChatContentAdmin = React.memo(({ info }) => {
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const updateScroll = useSelector(updateMSelector);
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
@@ -30,19 +31,77 @@ export const ChatContentAdmin = React.memo(({ info }) => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   const onEnterPress = async (e) => {
-    if (e.keyCode === 13 && e.shiftKey === false && message.trim() !== "") {
+    const messText = {
+      messageContent: {
+        id: Math.random(),
+        ConversationId: id,
+        createdAt: moment().toISOString(),
+        Content: message,
+        Chatting: UserMe,
+        Type: "text",
+      },
+      with: "user",
+    };
+    if (
+      e.keyCode === 13 &&
+      e.shiftKey === false &&
+      message.trim() !== "" &&
+      files.length === 0
+    ) {
       e.preventDefault();
       setMessage("");
-      socket.emit("send_message_admin", {
-        messageContent: {
-          id: Math.random(),
-          ConversationId: id,
-          createdAt: moment().toISOString(),
-          Content: message,
-          Chatting: UserMe,
-        },
-        with: "user",
-      });
+      socket.emit("send_message_admin", messText);
+    } else if (
+      e.keyCode === 13 &&
+      e.shiftKey === false &&
+      message.trim() === "" &&
+      files.length !== 0
+    ) {
+      e.preventDefault();
+      for (let file of files) {
+        delete file.preview;
+        socket.emit("send_message_admin", {
+          messageContent: {
+            id: Math.random(),
+            ConversationId: id,
+            createdAt: moment().toISOString(),
+            Content: file,
+            Chatting: UserMe,
+            Type: "file",
+            mineType: file.type,
+            fileName: file.name,
+          },
+          with: "user",
+        });
+      }
+      setFiles([]);
+    } else if (
+      e.keyCode === 13 &&
+      e.shiftKey === false &&
+      message.trim() !== "" &&
+      files.length !== 0
+    ) {
+      console.log("case3");
+      e.preventDefault();
+      setMessage("");
+      socket.emit("send_message_admin", messText);
+      for (let file of files) {
+        delete file.preview;
+        socket.emit("send_message_admin", {
+          messageContent: {
+            id: Math.random(),
+            ConversationId: id,
+            createdAt: moment().toISOString(),
+            Content: file,
+            Chatting: UserMe,
+            Type: "file",
+            mineType: file.type,
+            fileName: file.name,
+          },
+          with: "user",
+        });
+      }
+      setFiles([]);
     }
   };
   const onChangeFile = (e) => {
@@ -52,9 +111,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
       if (
         file.type === "image/png" ||
         file.type === "image/jpeg" ||
-        file.type === "image/jpg" ||
-        file.type === "video/mp4" ||
-        file.type === "video/x-m4v"
+        file.type === "image/jpg"
       ) {
         file.preview = URL.createObjectURL(file);
         newFiles.push(file);
@@ -118,7 +175,6 @@ export const ChatContentAdmin = React.memo(({ info }) => {
         return false;
       }
     });
-
     socket.on("isTyping_admin", (data) => {
       if (data.ConversationId === id && data.typing === true) {
         scrollToBottom();
@@ -128,6 +184,26 @@ export const ChatContentAdmin = React.memo(({ info }) => {
       }
     });
   }, [socket, id]);
+  const renderMess = (itm) => {
+    if (itm.Type !== "text") {
+      console.log(itm);
+      return (
+        <img
+          onLoad={() => scrollToBottom()}
+          style={{
+            width: 200,
+            height: "auto",
+            borderRadius: "10px",
+            color: "#fff !important",
+          }}
+          src={`${REACT_APP_DB_BASE_URL_IMG}/${itm.Content}`}
+          alt={itm.fileName}
+        />
+      );
+    } else {
+      return <>{itm.Content}</>;
+    }
+  };
   return (
     <div className="ChatContent">
       <div className="ChatContent__header">
@@ -202,12 +278,22 @@ export const ChatContentAdmin = React.memo(({ info }) => {
                 >
                   <div
                     className={
+                      itm.Chatting === "Admin" && itm.Type === "text"
+                        ? "ChatContent__conversation__other__content"
+                        : itm.Chatting === "Admin" && itm.Type !== "text"
+                        ? "ChatContent__conversation__other__img"
+                        : itm.Chatting !== "Admin" &&
+                          itm.Type === "text"
+                        ? "ChatContent__conversation__you__content"
+                        : "ChatContent__conversation__you__img"
+                    }
+                    /*  className={
                       itm.Chatting === "Admin"
                         ? "ChatContent__conversation__other__content"
                         : "ChatContent__conversation__you__content"
-                    }
+                    } */
                   >
-                    {itm.Content}
+                    {renderMess(itm)}
                   </div>
                 </div>
               ))}
@@ -243,7 +329,6 @@ export const ChatContentAdmin = React.memo(({ info }) => {
             style={{
               width: "30px",
               height: "30px",
-              
             }}
             multiple={true}
           >
@@ -289,6 +374,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
+            maxLength={2000}
           ></textarea>
         </div>
       </div>

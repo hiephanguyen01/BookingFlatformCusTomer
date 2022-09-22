@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { UserMe } from "../../../../components/Chat/ChatBody/ChatContent/ChatContent";
+import { useSelector } from "react-redux";
 import DaoPost from "../../../../components/DaoPost";
 import { userService } from "../../../../services/UserService";
 import "./postSaved.scss";
 const PostSaved = () => {
+  const UserMe = useSelector((state)=> state.authenticateReducer.currentUser )
   const [postSaved, setPostSaved] = useState([]);
 
   useEffect(() => {
