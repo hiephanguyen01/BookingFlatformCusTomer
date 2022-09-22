@@ -5,11 +5,43 @@
     font-size: 16px;
   }
   &__body {
+    .ant-rate {
+      font-size: 20px !important;
+    }
     background-color: #fff;
     box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.04);
     padding: 25px 25px;
     margin-bottom: 12px;
     border-radius: 5px;
+    &__list-rate{
+      display: flex;
+        gap: 8px;
+        
+        margin-top: 20px;
+
+        &__rate_item {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 10px 12px 10px 17px;
+          border: 1px solid transparent;
+          border-radius: 10px;
+          background-color: #f6f6f6;
+          transition: 0.2s linear;
+          cursor: pointer;
+          &__active {
+              border: 1px solid #e22828;
+              background-color: #fff;
+              color: #e22828;
+          }
+
+          &:hover {
+              border: 1px solid #e22828;
+              background-color: #fff;
+              color: #e22828;
+          }
+      }
+    }
     &__star {
       font-size: 18px;
       margin-left: 10px;
@@ -19,8 +51,8 @@
         color: $neutral-400;
       }
     }
+    
   }
+  
 }
-.ant-rate {
-  font-size: 20px !important;
-}
+

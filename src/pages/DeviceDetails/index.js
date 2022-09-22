@@ -156,6 +156,7 @@ const Index = () => {
                     : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
                 }`}
                 style={{ width: "100%", marginBottom: "20px" }}
+                alt=''
               />
               <div className="text-medium-se">{`${data.Name}`}</div>
             </>

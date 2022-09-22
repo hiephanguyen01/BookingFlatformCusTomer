@@ -117,11 +117,7 @@ const Index = () => {
           render: () => (
             <>
               <img
-                src={`${
-                  data?.Image[0]?.includes("https://drive.google.com/")
-                    ? data?.Image[0]
-                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
-                }`}
+                src={``}
                 style={{ width: "100%", marginBottom: "20px" }}
                 alt=""
                 // onError={(e) => e.target.classList.add("d-none")}

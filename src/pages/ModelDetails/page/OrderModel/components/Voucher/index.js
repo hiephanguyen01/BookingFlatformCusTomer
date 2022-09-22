@@ -18,14 +18,13 @@ const Index = ({ setChooseVoucher }) => {
     }
     setChoose([...newChoose]);
   };
- /*  console.log(choose); */
+  /*  console.log(choose); */
   return (
     <div className="voucher_container">
       <div
         className="close_modal"
         onClick={() => {
           dispatch({ type: HIDE_MODAL });
-          setChooseVoucher([...choose]);
         }}
       >
         <CloseOutlined />

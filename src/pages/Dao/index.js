@@ -37,6 +37,11 @@ const tagItems = [
     name: "Người mẫu",
   },
   {
+    id: "makeup",
+    icon: <CheckOutlined style={{ color: "#03AC84" }} />,
+    name: "Make up",
+  },
+  {
     id: "trangphuc",
     icon: <CheckOutlined style={{ color: "#03AC84" }} />,
     name: "Trang phục",

@@ -115,6 +115,10 @@
         border-radius: 8px;
         overflow-wrap: break-word;
       }
+      &__img{
+        border-radius: 8px;
+        box-shadow: 0 -4px 20px 5px rgba(0, 0, 0, 0.1);
+      }
     }
     &__you {
       padding: 0px 10px;
@@ -127,6 +131,10 @@
         max-width: 350px;
         border-radius: 8px;
         overflow-wrap: break-word;
+      }
+      &__img{
+        border-radius: 8px;
+        box-shadow: 0 -4px 20px 5px rgba(0, 0, 0, 0.1);
       }
     }
   }
