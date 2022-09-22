@@ -417,6 +417,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
+            maxLength={2000}
           ></textarea>
         </div>
       </div>

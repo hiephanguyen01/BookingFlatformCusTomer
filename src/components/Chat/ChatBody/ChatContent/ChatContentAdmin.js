@@ -289,6 +289,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
+            maxLength={2000}
           ></textarea>
         </div>
       </div>
