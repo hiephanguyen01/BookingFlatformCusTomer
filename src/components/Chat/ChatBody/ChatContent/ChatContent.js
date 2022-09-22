@@ -13,7 +13,7 @@ import demopic1 from "../../../../assets/Chat/demo1.png";
 import { closeConversationAction } from "../../../../stores/actions/ChatAction";
 import UploadImage from "../../../../components/UploadImage";
 import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { ImageOfMe } from "./ImageOfMe";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 export const UserMe = {
   id: 5,
   Username: "3871952632888744",
@@ -179,6 +179,8 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   useEffect(() => {
     socket.on("receive_message", (data) => {
       if (data.ConversationId === id) {
+        console.log("Content", data.Content);
+
         setMessageList((list) => [...list, data]);
         setFlag(true);
       } else {
@@ -197,8 +199,21 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   }, []);
   const renderMess = (itm) => {
     if (itm.Type !== "text") {
-      const blob = new Blob([itm.Content], { type: itm.Type });
-      return <ImageOfMe fileName={itm.fileName} blob={blob} />;
+      return (
+        <img
+          style={{
+            width: 200,
+            height: "auto",
+            borderRadius: "10px",
+            color: "#fff !important",
+          }}
+          src={`${REACT_APP_DB_BASE_URL_IMG}/${itm.Content}`}
+          alt={itm.fileName}
+        />
+      );
+
+      /* const blob = new Blob([itm.Content], { type: itm.Type });
+      return <ImageOfMe fileName={itm.fileName} blob={blob} />; */
     } else {
       return <>{itm.Content}</>;
     }
