@@ -151,12 +151,13 @@ export const changePassword = (data) => async (dispatch) => {
   }
   dispatch({ type: SET_LOADING, payload: false });
 };
-export const getCurrentUser = (token) => async (dispatch) => {
+export const getCurrentUser = () => async (dispatch) => {
   try {
     dispatch({ type: AUTHING, payload: true });
-    setAuthToken(token);
-    const res = await authenticateService.me();
-    dispatch({ type: SET_USER, payload: res.data.user });
+    if (localStorage.getItem("token")) {
+      const res = await authenticateService.me();
+      dispatch({ type: SET_USER, payload: res.data.user });
+    }
   } catch (error) {
     setAuthToken(false);
   }
