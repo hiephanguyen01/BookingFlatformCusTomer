@@ -623,7 +623,7 @@ export const StudioDetail = () => {
                 60 đã đặt{" "}
               </span>
             </div>
-            <div className={cx("container")}>
+            {/* <div className={cx("container")}>
               {studioDetail1?.Image?.slice(0, 5).map((item, index) => {
                 return index !== 4 ? (
                   <div
@@ -664,8 +664,8 @@ export const StudioDetail = () => {
                   </div>
                 );
               })}
-            </div>
-            // <ImagePost data={studioDetail?.data?.Image} />
+            </div> */}
+            <ImagePost data={studioDetail?.data?.Image} />
           </div>
           <div className={cx("box2")}>
             <div className={cx("left")}>

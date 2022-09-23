@@ -18,7 +18,7 @@ const PostSaved = () => {
     // eslint-disable-next-line array-callback-return
     return postSaved.map((itm, index) => (
       <div key={index} className="PostSaved__body">
-        <DaoPost item={itm.savedPost} />
+        <DaoPost item={itm.savedPost} type="save-post" />
       </div>
     ));
   };

@@ -104,8 +104,10 @@ export const likePost = (userId, postId) => {
         UserId: userId,
       });
       dispatch({ type: "GET_LIKE", data: data.data });
+      const res = await postDaoService.getLike(userId);
+      dispatch({ type: "GET_LIKE_POST_LIST", data: res.data.data });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
 };

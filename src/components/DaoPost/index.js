@@ -26,20 +26,18 @@ import { convertTime } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
-
-const moreOptionOnEachPost = [
-  { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
-  { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
-  { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
-  { icon: <PostSave />, title: "Lưu bài viết", id: 4 },
-];
+import { ImageDetect } from "../ImageDetect/ImageDetect";
+import { convertImage } from "../../utils/convertImage";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
   const currentUser = useSelector(
     (state) => state.authenticateReducer.currentUser
   );
+  const { item, likePostList, type = "post" } = props;
   console.log(currentUser);
+  const [post, setPost] = useState(item);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
@@ -50,7 +48,6 @@ const DaoPost = (props) => {
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
-  const { item, likePostList } = props;
 
   const {
     Id,
@@ -63,7 +60,19 @@ const DaoPost = (props) => {
     Image,
     // comments,
     CreationTime,
-  } = item;
+  } = post;
+
+  const moreOptionOnEachPost = [
+    { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
+    { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
+    { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
+    {
+      icon: <PostSave />,
+      title: type === "post" ? "Lưu bài viết" : "Hủy lưu",
+      id: 4,
+    },
+  ];
+
   const handleImageModal = (url) => {
     setImageInModal(url);
     setIsModalVisibleDetail(true);
@@ -82,9 +91,11 @@ const DaoPost = (props) => {
       if (checkLikePost()) {
         dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
         setMouseClickHeart(false);
+        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
       } else {
         dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
         setMouseClickHeart(true);
+        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
       }
     }
   };
@@ -104,9 +115,12 @@ const DaoPost = (props) => {
         break;
       case 4:
         try {
-          await userService.savePost(currentUser.id, Id);
-          message.success("Lưu bài viết thành công");
-          setMoreOptionModal(false);
+          if (type !== "post") {
+          } else {
+            await userService.savePost(currentUser.id, Id);
+            message.success("Lưu bài viết thành công");
+            setMoreOptionModal(false);
+          }
         } catch (error) {
           message.success("Lưu bài viết thất bại");
           setMoreOptionModal(false);
@@ -120,22 +134,22 @@ const DaoPost = (props) => {
   };
 
   const checkLikePost = () =>
-    likePostList.filter((itm) => itm.PostId === Id).length > 0;
+    likePostList?.filter((itm) => itm.PostId === Id).length > 0;
 
   let ImageSection = null;
   let tempCount = Image.length;
-  // Object.entries(item).forEach((item2, idx) => {
-  //   if (item2[0].includes("Image")) tempCount++;
+  // Object.entries(post).forEach((post2, idx) => {
+  //   if (post2[0].includes("Image")) tempCount++;
   // });
   if (tempCount < 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => (
+        {Image.map((post, idx) => (
           <Col
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(item)}
+            onClick={() => handleImageModal(post)}
           >
             <img
               style={{
@@ -146,9 +160,9 @@ const DaoPost = (props) => {
               }}
               key={idx}
               src={`${
-                item.includes("https://drive.google.com/")
-                  ? item
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                post.includes("https://drive.google.com/")
+                  ? post
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + post
               }`}
               alt=""
             />
@@ -159,7 +173,7 @@ const DaoPost = (props) => {
   } else if (tempCount === 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => {
+        {Image.map((post, idx) => {
           // console.log(idx);
           if (idx === 0) {
             //Kiểm tra cái idx này sau khi nhét API vào (Không xóa)
@@ -168,7 +182,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(item)}
+                onClick={() => handleImageModal(post)}
               >
                 <img
                   style={{
@@ -179,9 +193,9 @@ const DaoPost = (props) => {
                   }}
                   key={idx}
                   src={`${
-                    item.includes("https://drive.google.com/")
-                      ? item
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    post.includes("https://drive.google.com/")
+                      ? post
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + post
                   }`}
                   alt=""
                 />
@@ -194,7 +208,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item)}
+                onClick={() => handleImageModal(post)}
               >
                 <img
                   style={{
@@ -205,9 +219,9 @@ const DaoPost = (props) => {
                   }}
                   key={idx}
                   src={`${
-                    item.includes("https://drive.google.com/")
-                      ? item
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    post.includes("https://drive.google.com/")
+                      ? post
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + post
                   }`}
                   alt=""
                 />
@@ -220,8 +234,8 @@ const DaoPost = (props) => {
   } else if (tempCount === 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => (
-          <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(item)}>
+        {Image.map((post, idx) => (
+          <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(post)}>
             <img
               style={{
                 width: "100%",
@@ -231,9 +245,9 @@ const DaoPost = (props) => {
               }}
               key={idx}
               src={`${
-                item.includes("https://drive.google.com/")
-                  ? item
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                post.includes("https://drive.google.com/")
+                  ? post
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + post
               }`}
               alt=""
             />
@@ -244,7 +258,7 @@ const DaoPost = (props) => {
   } else if (tempCount > 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => {
+        {Image.map((post, idx) => {
           if (idx < 4) {
             //Again, có lý do mà nó là 9 :v đừng xóa comment này
             return (
@@ -253,11 +267,11 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item)}
+                onClick={() => handleImageModal(post)}
               >
                 <div className="image-container">
                   {idx === 8 && (
-                    <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
+                    <div className="fourth-image-overlay d-flex justify-content-center align-posts-center">
                       <h1>{tempCount - 3}</h1>
                       <PlusOutlined
                         style={{ fontSize: "34px", color: "#fff" }}
@@ -273,9 +287,9 @@ const DaoPost = (props) => {
                     }}
                     key={idx}
                     src={`${
-                      item.includes("https://drive.google.com/")
-                        ? item
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                      post.includes("https://drive.google.com/")
+                        ? post
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + post
                     }`}
                     alt=""
                   />
@@ -291,9 +305,9 @@ const DaoPost = (props) => {
   return (
     <article className="post">
       <section className="post__main d-flex flex-column">
-        <header className="post__main__info d-flex justify-content-between align-items-center">
-          <div className="d-flex justify-content-between align-items-center">
-            <img src={`${REACT_APP_DB_BASE_URL_IMG}/${Avatar}`} alt="" />
+        <header className="post__main__info d-flex justify-content-between align-posts-center">
+          <div className="d-flex justify-content-between align-posts-center">
+            <img src={convertImage(Avatar)} alt="" />
             <div className="post__main__info__nametime">
               <p className="post__main__info__nametime__name">{Username}</p>
               <p>{convertTime(CreationTime)}</p>
@@ -304,12 +318,17 @@ const DaoPost = (props) => {
               placement="leftTop"
               content={
                 <div className="more-option-modal">
-                  {moreOptionOnEachPost.map((item, idx) => (
-                    <li onClick={() => handleMoreOptionClick(item)} key={idx}>
-                      <div className="container d-flex">
-                        <div>{item.icon}</div>
-                        <p>{item.title}</p>
-                      </div>
+                  {moreOptionOnEachPost.map((itm, idx) => (
+                    <li onClick={() => handleMoreOptionClick(itm)} key={idx}>
+                      <CopyToClipboard
+                        onCopy={() => {}}
+                        text={`${window.location.href}/posts/${Id}`}
+                      >
+                        <div className="container d-flex">
+                          <div>{itm.icon}</div>
+                          <p>{itm.title}</p>
+                        </div>
+                      </CopyToClipboard>
                     </li>
                   ))}
                 </div>
@@ -327,9 +346,9 @@ const DaoPost = (props) => {
           </div>
         </header>
         <div className="post__main__content">
-          <div className="post__main__content__tags d-flex align-items-center">
-            {Tags?.split(",").map((item, idx) => (
-              <li key={idx}>#{item}</li>
+          <div className="post__main__content__tags d-flex align-posts-center">
+            {Tags?.split(",").map((post, idx) => (
+              <li key={idx}>#{post}</li>
             ))}
           </div>
           <div className="post__main__content__description">
@@ -339,7 +358,7 @@ const DaoPost = (props) => {
             {/* //Post Image đang xử lý */}
             {ImageSection}
             <Modal
-              className="popup d-flex justify-content-center align-items-center post_detail"
+              className="popup d-flex justify-content-center align-posts-center post_detail"
               closeIcon={<CloseOutlined />}
               onOk={handleOkDetail}
               onCancel={handleCancelDetail}
@@ -371,11 +390,7 @@ const DaoPost = (props) => {
                         style={{ background: "#1D2226", padding: "90px 0" }}
                       >
                         <img
-                          src={`${
-                            img.includes("https://drive.google.com/")
-                              ? img
-                              : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                          }`}
+                          src={convertImage(img)}
                           className="w-100 h-100"
                           style={{ objectFit: "contain" }}
                         />
@@ -392,12 +407,9 @@ const DaoPost = (props) => {
                     height: "100vh",
                   }}
                 >
-                  <header className="post__main__info d-flex justify-content-between align-items-center">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <img
-                        src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
-                        alt=""
-                      />
+                  <header className="post__main__info d-flex justify-content-between align-posts-center">
+                    <div className="d-flex justify-content-between align-posts-center">
+                      <img src={convertImage(Avatar)} alt="" />
                       <div className="post__main__info__nametime">
                         <p className="post__main__info__nametime__name">
                           {Username}
@@ -410,11 +422,11 @@ const DaoPost = (props) => {
                         placement="leftTop"
                         content={
                           <div className="more-option-modal">
-                            {moreOptionOnEachPost.map((item, idx) => (
+                            {moreOptionOnEachPost.map((itm, idx) => (
                               <li onClick={handleMoreOptionClick} key={idx}>
                                 <div className="container d-flex">
-                                  <div>{item.icon}</div>
-                                  <p>{item.title}</p>
+                                  <div>{itm.icon}</div>
+                                  <p>{itm.title}</p>
                                 </div>
                               </li>
                             ))}
@@ -436,16 +448,16 @@ const DaoPost = (props) => {
                       />
                     </div>
                   </header>
-                  <div className="post__main__content__tags d-flex align-items-center">
-                    {Tags?.split(",").map((item, idx) => (
-                      <li key={idx}>#{item}</li>
+                  <div className="post__main__content__tags d-flex align-posts-center">
+                    {Tags?.split(",").map((post, idx) => (
+                      <li key={idx}>#{post}</li>
                     ))}
                   </div>
                   <div className="post__main__content__description">
                     <p>{Description}</p>
                   </div>
                   <div
-                    className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
+                    className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
                     style={{ borderBottom: "1px solid #E7E7E7" }}
                   >
                     <div className="post__main__content__like-comment__likes d-flex">
@@ -454,15 +466,17 @@ const DaoPost = (props) => {
                           e.stopPropagation();
                         }}
                       >
-                        {true ? (
+                        {mouseOverHeart ||
+                        checkLikePost() ||
+                        mouseClickHeart ? (
                           <HeartFilled
-                            // onClick={handleOnClickLikePost}
+                            onClick={likePost}
                             style={{
                               fontSize: "20px",
                               color: "#E22828",
                               marginBottom: "2px",
                             }}
-                            // onMouseLeave={() => setMouseOverHeart(false)}
+                            onMouseLeave={() => setMouseOverHeart(false)}
                           />
                         ) : (
                           <HeartOutlined
@@ -472,7 +486,7 @@ const DaoPost = (props) => {
                               cursor: "pointer",
                               marginBottom: "2px",
                             }}
-                            // onMouseOver={() => setMouseOverHeart(true)}
+                            onMouseOver={() => setMouseOverHeart(true)}
                           />
                         )}
                       </PopUpSignIn>
@@ -485,24 +499,28 @@ const DaoPost = (props) => {
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                          setCommentsClick(!commentsClick);
                         }}
                       >
-                        <Comments />
+                        <Comments
+                          className="active"
+                          style={{ color: "#E22828" }}
+                        />
                       </PopUpSignIn>
-                      <p>{TotalComments}</p>
+                      <p className={`${commentsClick ? "active" : ""}`}>
+                        {TotalComments}
+                      </p>
                     </div>
                   </div>
                   <section className="post__middle">
                     <div className="d-flex">
                       <img src={img1} alt="" />
                       <div className="post__middle__right-side">
-                        <ul className="d-flex align-items-center">
+                        <ul className="d-flex align-posts-center">
                           <li>Bên mình có nhé</li>
                           <li>Vào trang mình xem thử nhé</li>
                           <li>Bên mình đang khuyến mãi luôn ạ</li>
                         </ul>
-                        <div className="post__middle__right-side__choose-service d-flex justify-content-center align-items-center">
+                        <div className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center">
                           <PlusOutlined
                             style={{ color: "#03AC84", fontSize: "14px" }}
                           />
@@ -511,13 +529,10 @@ const DaoPost = (props) => {
                       </div>
                     </div>
                   </section>
-                  <div className="comment_item">
-                    <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <img
-                          src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
-                          alt=""
-                        />
+                  <div className="comment_post">
+                    <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
+                      <div className="d-flex justify-content-between align-posts-center">
+                        <img src={convertImage(Avatar)} alt="" />
                         <div className="post__main__info__nametime">
                           <p className="post__main__info__nametime__name">
                             {Username}
@@ -537,7 +552,7 @@ const DaoPost = (props) => {
                         modules={[Navigation, Pagination]}
                         className="post_slider"
                       >
-                        <SwiperSlide className="post_slider_item">
+                        <SwiperSlide className="post_slider_post">
                           <a href="#">
                             <div className="d-flex h-100">
                               <img
@@ -546,10 +561,10 @@ const DaoPost = (props) => {
                                 style={{ objectFit: "contain" }}
                               />
                               <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
+                                <div className="post_slider_post_name mb-5">
                                   BOOKINGSTUDIO.VN
                                 </div>
-                                <div className="post_slider_item_description">
+                                <div className="post_slider_post_description">
                                   Studio Wisteria chuyên cung cấp dịch vụ chụp
                                   hình cưới chuyên...
                                 </div>
@@ -557,7 +572,7 @@ const DaoPost = (props) => {
                             </div>
                           </a>
                         </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
+                        <SwiperSlide className="post_slider_post">
                           <a href="#">
                             <div className="d-flex h-100">
                               <img
@@ -566,10 +581,10 @@ const DaoPost = (props) => {
                                 style={{ objectFit: "contain" }}
                               />
                               <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
+                                <div className="post_slider_post_name mb-5">
                                   BOOKINGSTUDIO.VN
                                 </div>
-                                <div className="post_slider_item_description">
+                                <div className="post_slider_post_description">
                                   Studio Wisteria chuyên cung cấp dịch vụ chụp
                                   hình cưới chuyên...
                                 </div>
@@ -577,7 +592,7 @@ const DaoPost = (props) => {
                             </div>
                           </a>
                         </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
+                        <SwiperSlide className="post_slider_post">
                           <a href="#">
                             <div className="d-flex h-100">
                               <img
@@ -586,10 +601,10 @@ const DaoPost = (props) => {
                                 style={{ objectFit: "contain" }}
                               />
                               <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
+                                <div className="post_slider_post_name mb-5">
                                   BOOKINGSTUDIO.VN
                                 </div>
-                                <div className="post_slider_item_description">
+                                <div className="post_slider_post_description">
                                   Studio Wisteria chuyên cung cấp dịch vụ chụp
                                   hình cưới chuyên...
                                 </div>
@@ -600,7 +615,7 @@ const DaoPost = (props) => {
                       </Swiper>
                     </div>
                     <div
-                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
+                      className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
                       style={{ borderBottom: "1px solid #E7E7E7" }}
                     >
                       <div
@@ -642,13 +657,10 @@ const DaoPost = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="comment_item">
-                    <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <img
-                          src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
-                          alt=""
-                        />
+                  <div className="comment_post">
+                    <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
+                      <div className="d-flex justify-content-between align-posts-center">
+                        <img src={convertImage(Avatar)} alt="" />
                         <div className="post__main__info__nametime">
                           <p className="post__main__info__nametime__name">
                             {Username}
@@ -668,7 +680,7 @@ const DaoPost = (props) => {
                         modules={[Navigation, Pagination]}
                         className="post_slider"
                       >
-                        <SwiperSlide className="post_slider_item">
+                        <SwiperSlide className="post_slider_post">
                           <a href="#">
                             <div className="d-flex h-100">
                               <img
@@ -677,10 +689,10 @@ const DaoPost = (props) => {
                                 style={{ objectFit: "contain" }}
                               />
                               <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
+                                <div className="post_slider_post_name mb-5">
                                   BOOKINGSTUDIO.VN
                                 </div>
-                                <div className="post_slider_item_description">
+                                <div className="post_slider_post_description">
                                   Studio Wisteria chuyên cung cấp dịch vụ chụp
                                   hình cưới chuyên...
                                 </div>
@@ -688,7 +700,7 @@ const DaoPost = (props) => {
                             </div>
                           </a>
                         </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
+                        <SwiperSlide className="post_slider_post">
                           <a href="#">
                             <div className="d-flex h-100">
                               <img
@@ -697,10 +709,10 @@ const DaoPost = (props) => {
                                 style={{ objectFit: "contain" }}
                               />
                               <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
+                                <div className="post_slider_post_name mb-5">
                                   BOOKINGSTUDIO.VN
                                 </div>
-                                <div className="post_slider_item_description">
+                                <div className="post_slider_post_description">
                                   Studio Wisteria chuyên cung cấp dịch vụ chụp
                                   hình cưới chuyên...
                                 </div>
@@ -708,7 +720,7 @@ const DaoPost = (props) => {
                             </div>
                           </a>
                         </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
+                        <SwiperSlide className="post_slider_post">
                           <a href="#">
                             <div className="d-flex h-100">
                               <img
@@ -717,10 +729,10 @@ const DaoPost = (props) => {
                                 style={{ objectFit: "contain" }}
                               />
                               <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
+                                <div className="post_slider_post_name mb-5">
                                   BOOKINGSTUDIO.VN
                                 </div>
-                                <div className="post_slider_item_description">
+                                <div className="post_slider_post_description">
                                   Studio Wisteria chuyên cung cấp dịch vụ chụp
                                   hình cưới chuyên...
                                 </div>
@@ -731,7 +743,7 @@ const DaoPost = (props) => {
                       </Swiper>
                     </div>
                     <div
-                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
+                      className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
                       style={{ borderBottom: "1px solid #E7E7E7" }}
                     >
                       <div className="post__main__content__like-comment__likes d-flex">
@@ -779,7 +791,7 @@ const DaoPost = (props) => {
               /> */}
             </Modal>
           </div>
-          <div className="post__main__content__like-comment d-flex align-items-center">
+          <div className="post__main__content__like-comment d-flex align-posts-center">
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn
                 onClick={(e) => {
@@ -817,12 +829,17 @@ const DaoPost = (props) => {
               <PopUpSignIn
                 onClick={(e) => {
                   e.stopPropagation();
-                  setCommentsClick(!commentsClick);
                 }}
               >
-                <Comments />
+                <Comments
+                  onClick={() => setCommentsClick(!commentsClick)}
+                  className={`${commentsClick ? "active" : ""}`}
+                  style={commentsClick ? { color: "#E22828" } : {}}
+                />
               </PopUpSignIn>
-              <p>{TotalComments}</p>
+              <p className={`${commentsClick ? "active" : ""}`}>
+                {TotalComments}
+              </p>
             </div>
           </div>
         </div>
@@ -834,12 +851,12 @@ const DaoPost = (props) => {
         <div className="d-flex">
           <img src={img1} alt="" />
           <div className="post__middle__right-side">
-            <ul className="d-flex align-items-center">
+            <ul className="d-flex align-posts-center">
               <li>Bên mình có nhé</li>
               <li>Vào trang mình xem thử nhé</li>
               <li>Bên mình đang khuyến mãi luôn ạ</li>
             </ul>
-            <div className="post__middle__right-side__choose-service d-flex justify-content-center align-items-center">
+            <div className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center">
               <PlusOutlined style={{ color: "#03AC84", fontSize: "14px" }} />
               <p>Chọn dịch vụ liên quan</p>
             </div>
@@ -850,21 +867,21 @@ const DaoPost = (props) => {
         className={commentsClick ? "post__comments" : "post__comments d-none"}
       >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
-        {/* {comments.map((item, idx) => (
-          <div key={item.Id} className="post__comments__detail">
+        {/* {comments.map((post, idx) => (
+          <div key={post.Id} className="post__comments__detail">
             {idx !== 0 && (
               <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
             )}
-            <div className="post__comments__detail__info d-flex align-items-center">
-              <img src={item.Avatar} alt="" />
+            <div className="post__comments__detail__info d-flex align-posts-center">
+              <img src={post.Avatar} alt="" />
               <div
                 style={{ marginLeft: "10px" }}
                 className="pos__comments__detail__info__nametime"
               >
                 <p className="post__comments__detail__info__nametime__name">
-                  {item.Username}
+                  {post.Username}
                 </p>
-                <p>{item.CreationTime}</p>
+                <p>{post.CreationTime}</p>
               </div>
             </div>
             <Swiper
@@ -876,12 +893,12 @@ const DaoPost = (props) => {
               slidesPerGroup={1}
               loopFillGroupWithBlank={true}
             >
-              {item.services.map((item2, idx) => (
-                <SwiperSlide key={item2.Id}>
-                  <img src={item2.image} />
+              {post.services.map((post2, idx) => (
+                <SwiperSlide key={post2.Id}>
+                  <img src={post2.image} />
                   <div className="post__comments__detail__slide-content d-flex flex-column">
-                    <p>{item2.link}</p>
-                    <p>{item2.content}</p>
+                    <p>{post2.link}</p>
+                    <p>{post2.content}</p>
                   </div>
                 </SwiperSlide>
               ))}
@@ -895,7 +912,7 @@ const DaoPost = (props) => {
                 }}
               />
               <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                {item.TotalLikes}
+                {post.TotalLikes}
               </p>
             </div>
           </div>

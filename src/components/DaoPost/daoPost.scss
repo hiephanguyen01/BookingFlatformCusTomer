@@ -78,6 +78,15 @@
             cursor: pointer;
             margin-right: 5px;
           }
+
+          .active {
+            color: $primary-700;
+
+            path {
+
+              fill: $primary-700;
+            }
+          }
         }
 
         &__likes {
@@ -347,6 +356,10 @@
       .post__middle {
         padding-bottom: 18px;
         border-bottom: 1px solid #E7E7E7;
+
+        &.active {
+          color: "#E22828",
+        }
 
         .post__middle__right-side {
           width: auto;
