@@ -42,7 +42,7 @@ const Index = ({ title, style = {}, className = "" }) => {
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => {
               return (
                 <SwiperSlide key={idx}>
-                  <img src={modelImg} style={{ height: "100%" }} />
+                  <img src={modelImg} style={{ height: "100%" }} alt="" />
                 </SwiperSlide>
               );
             })}

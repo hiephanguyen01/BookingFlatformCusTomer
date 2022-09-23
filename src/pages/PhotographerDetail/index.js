@@ -82,6 +82,7 @@ const PhotographerDetail = () => {
                     : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
                 }`}
                 style={{ width: "100%", marginBottom: "20px" }}
+                alt=""
               />
               <div className="text-medium-se">{`${data.Name}`}</div>
             </>
@@ -335,6 +336,7 @@ const PhotographerDetail = () => {
                 <div className="mapouter mt-10">
                   <div className="gmap_canvas">
                     <iframe
+                      key={"aefwr"}
                       className="gmap_iframe"
                       width="380px"
                       height=""

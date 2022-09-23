@@ -10,7 +10,10 @@ import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
 import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
-import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
+import {
+  getAllPostDaoAction,
+  getLikePostList,
+} from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Modal, message, Input } from "antd";
 // import uploadImg from "../../assets/dao/uploadImg.png";
@@ -76,14 +79,14 @@ const Dao = (props) => {
     tags: [],
     description: "",
   });
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-  const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
+  const { listPost, pagination, likePostList } = useSelector(
+    (state) => state.postDaoReducer
+  );
 
   const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  // const [previewVisible, setPreviewVisible] = useState(false);
-
-  // const handleCancel = () => setPreviewVisible(false);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];
@@ -183,7 +186,7 @@ const Dao = (props) => {
           formData.append("imageDrive", newImgDrive.join(","));
         }
 
-        await postDaoService.createPost("", formData);
+        await postDaoService.createPost(currentUser.id, formData);
         setVisible(false);
         success();
         setFiles([]);
@@ -266,6 +269,7 @@ const Dao = (props) => {
 
   useEffect(() => {
     getData();
+    dispatch(getLikePostList(currentUser?.id)); // 1 là user id
 
     if (Notification.permission !== "granted") {
       askPermission();
@@ -274,7 +278,7 @@ const Dao = (props) => {
     return () => {
       dispatch({ type: GET_LIST_POST, data: [] });
     };
-  }, []);
+  }, [currentUser]);
 
   return (
     <section className="dao d-flex justify-content-center">
@@ -347,7 +351,7 @@ const Dao = (props) => {
             }
           >
             {listPost.map((item) => (
-              <DaoPost key={item.Id} item={item} />
+              <DaoPost key={item.Id} item={item} likePostList={likePostList} />
             ))}
           </InfiniteScroll>
         </ul>

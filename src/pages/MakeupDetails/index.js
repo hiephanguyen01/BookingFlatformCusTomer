@@ -11,7 +11,7 @@ import {
 import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "./makeupDetails.scss";
 
@@ -24,7 +24,6 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 
 import svgLocation from "../../assets/svg/location.svg";
 import ImagePost from "../../components/imagePost/ImagePost";
-import modelImg from "../../assets/images/modelImg.png";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
@@ -36,14 +35,6 @@ import {
 import toastMessage from "../../components/ToastMessage";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-
-const values = [
-  { id: 1, title: "Album hóa trang theo yêu cầu của khách" },
-  { id: 2, title: "Album make up cô dâu" },
-  { id: 3, title: "Album make up chụp hình kỉ yếu" },
-  { id: 4, title: "Album hóa trang theo yêu cầu của khách" },
-  { id: 5, title: "Album make up chụp hình kỉ yếu" },
-];
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
   { title: "Mô tả", size: 8 },
@@ -51,7 +42,7 @@ const COLUMN = [
   { title: "Chọn dịch vụ", size: 4 },
 ];
 const Index = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -267,7 +258,7 @@ const Index = () => {
                     <HeartOutlined className="icon_heart" />
                   </PopUpSignIn>
                   <Dropdown overlay={menu_report} trigger={["click"]}>
-                    <a onClick={(e) => e.preventDefault()}>
+                    <a onClick={(e) => e.preventDefault()} href="#">
                       <Space>
                         <MoreOutlined
                           style={{
@@ -281,7 +272,11 @@ const Index = () => {
                 </div>
               </div>
               <div className="location">
-                <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
+                <img
+                  src={svgLocation}
+                  style={{ marginRight: "0.5rem" }}
+                  alt=""
+                />
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
@@ -367,7 +362,11 @@ const Index = () => {
                         className="text-medium-re"
                         style={{ marginBottom: "15px" }}
                       >
-                        <img src={svgLocation} style={{ marginRight: "6px" }} />
+                        <img
+                          src={svgLocation}
+                          style={{ marginRight: "6px" }}
+                          alt=""
+                        />
                         {studioDetail?.data?.Address}
                       </div>
                     </div>

@@ -11,7 +11,7 @@ import {
 import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "./modelDetails.scss";
 
@@ -23,7 +23,6 @@ import Report from "../../components/ReportModal";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
 import svgLocation from "../../assets/svg/location.svg";
-import imgPost from "../../assets/dao/Frame 163.jpg";
 import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
@@ -42,7 +41,7 @@ const COLUMN = [
 ];
 
 const Index = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();

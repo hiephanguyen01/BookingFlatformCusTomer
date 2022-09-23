@@ -2,8 +2,6 @@ import {
   CheckCircleOutlined,
   HeartOutlined,
   MoreOutlined,
-  PlayCircleOutlined,
-  StarFilled,
   WarningOutlined,
 } from "@ant-design/icons";
 import { Pagination, Popover, Rate } from "antd";
@@ -25,25 +23,24 @@ import {
   addOrder,
   chooseServiceAction,
 } from "../../stores/actions/OrderAction";
-import {
-  getAllRatingStudioByIdAction,
-  getNumberRateStudioByIdAction,
-} from "../../stores/actions/RatingAcion";
+// import {
+//   getAllRatingStudioByIdAction,
+//   getNumberRateStudioByIdAction,
+// } from "../../stores/actions/RatingAcion";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
   studioDetailAction,
-  studioDetailAction1,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
+// import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import styles from "./Detail.module.scss";
 import { ModalImage } from "./ModalImg";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
-import { Voucher } from "./Voucher";
+// import { Voucher } from "./Voucher";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
 const COLUMN = [
@@ -62,7 +59,7 @@ export const StudioDetail = () => {
   const navigate = useNavigate();
   const { studioDetail1, studioDetail, studioNear, studioPostList, filter } =
     useSelector((state) => state.studioPostReducer);
-  const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
+  // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
@@ -305,7 +302,6 @@ export const StudioDetail = () => {
     }
   };
 
-
   // const columns = [
   //   {
   //     title: "Loại phòng",
@@ -504,7 +500,6 @@ export const StudioDetail = () => {
   //   },
   // ];
 
-
   const [chooseService, setChooseService] = useState([]);
 
   const handleChooseService = (data) => {
@@ -617,7 +612,6 @@ export const StudioDetail = () => {
                 </Popover>
               </div>
             </div>
-
             <div className={cx("address")}>
               <img src={images.address} alt="sa" />
               <span>{studioDetail?.data?.Address}</span>
@@ -671,7 +665,7 @@ export const StudioDetail = () => {
                 );
               })}
             </div>
-           // <ImagePost data={studioDetail?.data?.Image} />
+            // <ImagePost data={studioDetail?.data?.Image} />
           </div>
           <div className={cx("box2")}>
             <div className={cx("left")}>

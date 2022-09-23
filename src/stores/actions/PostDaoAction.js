@@ -85,6 +85,17 @@ export const deletePostDaoAction = (id) => {
   };
 };
 
+export const getLikePostList = (userId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await postDaoService.getLike(userId);
+      dispatch({ type: "GET_LIKE_POST_LIST", data: data.data });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+};
+
 export const likePost = (userId, postId) => {
   return async (dispatch) => {
     try {
