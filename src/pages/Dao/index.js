@@ -79,6 +79,7 @@ const Dao = (props) => {
     tags: [],
     description: "",
   });
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   const { listPost, pagination, likePostList } = useSelector(
     (state) => state.postDaoReducer
@@ -185,7 +186,7 @@ const Dao = (props) => {
           formData.append("imageDrive", newImgDrive.join(","));
         }
 
-        await postDaoService.createPost("", formData);
+        await postDaoService.createPost(currentUser.id, formData);
         setVisible(false);
         success();
         setFiles([]);
@@ -268,7 +269,7 @@ const Dao = (props) => {
 
   useEffect(() => {
     getData();
-    dispatch(getLikePostList(1)); // 1 là user id
+    dispatch(getLikePostList(currentUser?.id)); // 1 là user id
 
     if (Notification.permission !== "granted") {
       askPermission();
@@ -277,7 +278,7 @@ const Dao = (props) => {
     return () => {
       dispatch({ type: GET_LIST_POST, data: [] });
     };
-  }, []);
+  }, [currentUser]);
 
   return (
     <section className="dao d-flex justify-content-center">

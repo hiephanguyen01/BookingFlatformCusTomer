@@ -45,8 +45,8 @@ const DaoPost = (props) => {
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
-  const { item } = props;
-  const [likePostList, setLikePostList] = useState(props.likePostList);
+  const { item, likePostList } = props;
+
   const {
     Id,
     Username,
@@ -81,19 +81,18 @@ const DaoPost = (props) => {
 
   const handleLike = () => {
     if (currentUser) {
-      dispatch(likePost(2, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
-      setMouseClickHeart(!mouseClickHeart);
+      if (checkLikePost()) {
+        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(false);
+      } else {
+        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(true);
+      }
     }
   };
 
-  const checkLikePost = (postId) => {
-    return likePostList.filter((itm) => itm.PostId === postId).length > 0;
-  };
-  const handleOnClickLikePost = () => {
-    if (checkLikePost()) {
-      // setMouseClickHeart();
-    } else {
-    }
+  const checkLikePost = () => {
+    return likePostList.filter((itm) => itm.PostId === Id).length > 0;
   };
 
   let ImageSection = null;
@@ -767,7 +766,7 @@ const DaoPost = (props) => {
                   e.stopPropagation();
                 }}
               >
-                {mouseOverHeart || checkLikePost(item.Id) ? (
+                {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
                   <HeartFilled
                     onClick={handleLike}
                     style={{
