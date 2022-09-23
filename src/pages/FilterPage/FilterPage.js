@@ -17,7 +17,7 @@ import FilterCard from "../../components/FilterCard/FilterCard";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
-import { convertPrice } from "../../utils/convert";
+import { convertDateSendToDB, convertPrice } from "../../utils/convert";
 import "./FilterPage.scss";
 const { Option } = Select;
 const categories = [
@@ -58,6 +58,8 @@ const FilterPage = () => {
   const { filter, loading, pagination, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
+  console.log(filter);
+
   const [provinces, setProvinces] = useState([]);
 
   useEffect(() => {
@@ -70,7 +72,19 @@ const FilterPage = () => {
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
+        // keyString: "",
+        // category: 1,
+        // priceOption: 0,
+        // price1: undefined,
+        // price2: undefined,
+        // provinceIds: [],
+        // ratingOption: 1,
         keyString: "",
+        OrderByTime: -1,
+        OrderByTimeFrom: convertDateSendToDB(new Date()),
+        OrderByTimeTo: convertDateSendToDB(new Date()),
+        OrderByDateFrom: convertDateSendToDB(new Date()),
+        OrderByDateTo: convertDateSendToDB(new Date()),
         category: 1,
         priceOption: 0,
         price1: undefined,

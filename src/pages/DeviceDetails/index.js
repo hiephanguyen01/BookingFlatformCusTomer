@@ -11,7 +11,7 @@ import {
 import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "./deviceDetails.scss";
 
@@ -29,6 +29,10 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import toastMessage from "../../components/ToastMessage";
 
 const COLUMN = [
   { title: "Loại sản phẩm", size: 5 },
@@ -99,6 +103,7 @@ const Index = () => {
   );
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const cate =
     location.pathname.split("/").filter((item) => item !== "")[1] === "device"
       ? 6
@@ -286,6 +291,14 @@ const Index = () => {
     }
   };
 
+  const handleBook = () => {
+    if (chooseService.length > 0) {
+      dispatch(chooseServiceAction(chooseService));
+      navigate("order");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
   return (
     <>
       {loading ? (
@@ -328,7 +341,13 @@ const Index = () => {
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
-                  <HeartOutlined className="icon_heart" />
+                  <PopUpSignIn
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <HeartOutlined className="icon_heart" />
+                  </PopUpSignIn>
                   <Dropdown overlay={menu_report} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
@@ -474,11 +493,8 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    <div className=" px-24">
-                      <Link to="#" className="choose_size text-medium-se ">
-                        Hướng dẫn chọn size{" "}
-                        <RightOutlined style={{ color: "#1FCBA2" }} />
-                      </Link>
+                    <div className="ms-24 pt-20">
+                      <SelectTimeOption />
                     </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
@@ -552,8 +568,11 @@ const Index = () => {
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
-                      <Button className="w-38 h-48px d-flex justify-content-center align-items-center btn_order">
-                        <Link to={"order"}> Đặt ngay</Link>
+                      <Button
+                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                        onClick={handleBook}
+                      >
+                        Đặt ngay
                       </Button>
                     </div>
                   </div>

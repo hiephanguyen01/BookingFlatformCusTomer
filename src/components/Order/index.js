@@ -17,10 +17,14 @@ import { convertDateSendToDB, convertPrice } from "../../utils/convert";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import { orderService } from "../../services/OrderService";
 import toastMessage from "../ToastMessage";
+import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
-  const { studioDetail } = useSelector((state) => state.studioPostReducer);
+  const { studioDetail, filter } = useSelector(
+    (state) => state.studioPostReducer
+  );
   const [infoUser, setInfoUser] = useState({
     name: "ok",
     phoneNumber: "0987654321",
@@ -97,27 +101,28 @@ const Index = ({ linkTo = "" }) => {
     dispatch(chooseServiceAction(newListService));
   };
 
-  const handleOnClickOrder = () => {
+  const handleOnClickOrder = async () => {
     try {
       if (user === null) {
         // handleSendOtp(phoneNumber, Navigate, "", null, null);
       }
       if (isEmpty() === 1) {
-        chooseServiceList.map(async (item) => {
-          if (
-            (item.orderDate !== "" && item.orderDate !== undefined) ||
-            (item.orderHours !== "" && item.orderHours !== undefined)
-          ) {
+        let IdentifyCode = [],
+          TenantId;
+        if (filter.OrderByTime === 0) {
+          for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 1,
-              OrderByTimeFrom:
-                convertDateSendToDB(item.orderDate).slice(0, 11) +
-                item.orderHours[0] +
-                ".000Z",
-              OrderByTimeTo:
-                convertDateSendToDB(item.orderDate).slice(0, 11) +
-                item.orderHours[1] +
-                ".000Z",
+              // OrderByTimeFrom:
+              //   convertDateSendToDB(item.orderDate).slice(0, 11) +
+              //   item.orderHours[0] +
+              //   ":00.000Z",
+              // OrderByTimeTo:
+              //   convertDateSendToDB(item.orderDate).slice(0, 11) +
+              //   item.orderHours[1] +
+              //   ":00.000Z",
+              OrderByTimeFrom: filter.OrderByTimeFrom,
+              OrderByTimeTo: filter.OrderByTimeTo,
               PaymentType: 0,
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
@@ -125,18 +130,40 @@ const Index = ({ linkTo = "" }) => {
               BookingEmail: infoUser.email,
               BookingUserId: 1,
               CreatorUserId: 1,
-              ProductId: item.id,
+              ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue: item.Sales,
+              BookingValue: chooseServiceList[i].Sales,
             };
             const response = await orderService.addOrder(newData);
-            navigate("confirm", {
-              state: response.data,
-            });
-          } else {
-            toastMessage("Vui lòng chọn ngày, giờ!", "warn");
+            IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
+            TenantId = response.data.TenantId;
           }
+        } else if (filter.OrderByTime === 1) {
+          for (let i = 0; i < chooseServiceList.length; i++) {
+            const newData = {
+              OrderByTime: 0,
+              OrderByDateFrom: filter.OrderByDateFrom,
+              OrderByDateTo: filter.OrderByDateTo,
+              PaymentType: 0,
+              OrderNote: infoUser.message,
+              BookingUserName: infoUser.name,
+              BookingPhone: infoUser.phoneNumber,
+              BookingEmail: infoUser.email,
+              BookingUserId: 1,
+              CreatorUserId: 1,
+              ProductId: chooseServiceList[i].id,
+              Category: cate,
+              IsPayDeposit: 1,
+              BookingValue: chooseServiceList[i].Sales,
+            };
+            const response = await orderService.addOrder(newData);
+            IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
+            TenantId = response.data.TenantId;
+          }
+        }
+        navigate("confirm", {
+          state: { IdentifyCode, TenantId },
         });
       } else {
         toastMessage("Vui lòng điền đầy đủ thông tin!", "warn");
@@ -209,7 +236,11 @@ const Index = ({ linkTo = "" }) => {
                           Trắng, size S, Số lượng 1
                         </div>
                         <div className="text-middle">
-                          {convertPrice(item.Sales)}đ
+                          {filter.OrderByTime === 0 &&
+                            convertPrice(item.Sales || item.PriceByHour)}
+                          {filter.OrderByTime === 1 &&
+                            convertPrice(item.Sales || item.PriceByDate)}
+                          đ
                         </div>
                       </div>
                     </div>
@@ -221,7 +252,8 @@ const Index = ({ linkTo = "" }) => {
                     >
                       Khung giờ bạn muốn đặt
                     </div>
-                    <div
+                    <SelectTimeOption disabled="true" />
+                    {/* <div
                       className="text-description d-flex align-items-center"
                       style={{ marginBottom: "12px" }}
                     >
@@ -244,7 +276,7 @@ const Index = ({ linkTo = "" }) => {
                           onChangeHour(time, timeString, item.id)
                         }
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </>
               ))}
@@ -302,12 +334,22 @@ const Index = ({ linkTo = "" }) => {
                       marginBottom: "12px",
                     }}
                   >
-                    {convertPrice(
-                      chooseServiceList.reduce(
-                        (total, service) => total + service.Price,
-                        0
-                      )
-                    )}
+                    {filter.OrderByTime === 0 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByHour),
+                          0
+                        )
+                      )}
+                    {filter.OrderByTime === 1 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByDate),
+                          0
+                        )
+                      )}
                     đ
                   </div>
                 </div>
@@ -327,12 +369,22 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}
                   >
-                    {convertPrice(
-                      chooseServiceList.reduce(
-                        (total, service) => total + service.Sales,
-                        0
-                      )
-                    )}
+                    {filter.OrderByTime === 0 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByHour),
+                          0
+                        )
+                      )}
+                    {filter.OrderByTime === 1 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByDate),
+                          0
+                        )
+                      )}
                     đ
                   </div>
                 </div>
@@ -384,13 +436,19 @@ const Index = ({ linkTo = "" }) => {
             className="d-flex justify-content-end"
             style={{ marginTop: "35px" }}
           >
-            <Button
-              type="primary"
-              style={{ borderRadius: "8px", height: "45px", width: "270px" }}
-              onClick={() => handleOnClickOrder()}
+            <PopUpSignIn
+              onClick={(e) => {
+                handleOnClickOrder();
+                e.stopPropagation();
+              }}
             >
-              Hoàn tất đặt
-            </Button>
+              <Button
+                type="primary"
+                style={{ borderRadius: "8px", height: "45px", width: "270px" }}
+              >
+                Hoàn tất đặt
+              </Button>
+            </PopUpSignIn>
           </div>
         </Col>
       </Row>

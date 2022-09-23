@@ -19,6 +19,7 @@ import "./dao.scss";
 import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
 // import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
 import { postDaoService } from "../../services/PostDaoService";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
 const tagItems = [
   {
@@ -284,13 +285,12 @@ const Dao = (props) => {
       <div className="dao__container d-flex flex-column align-items-center">
         <header className="dao__container__header d-flex justify-content-between align-items">
           <h2>Dạo</h2>
-          <button
-            className="dao__container__header__button d-flex align-items-center"
-            onClick={() => setVisible(true)}
-          >
-            <Pen />
-            <p>Tạo bài viết</p>
-          </button>
+          <PopUpSignIn onClick={() => setVisible(true)}>
+            <button className="dao__container__header__button d-flex align-items-center">
+              <Pen />
+              <p>Tạo bài viết</p>
+            </button>
+          </PopUpSignIn>
         </header>
         <article className="dao__container__tag d-flex align-items-center justify-content-evenly">
           <li
