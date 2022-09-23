@@ -5,7 +5,7 @@ import {
 } from "@ant-design/icons";
 import { Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+// import InfiniteScroll from "react-infinite-scroll-component";
 import addNotification from "react-push-notification";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
@@ -17,7 +17,7 @@ import {
   getLikePostList,
 } from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Modal, message, Input } from "antd";
+// import { Modal, message, Input } from "antd";
 // import uploadImg from "../../assets/dao/uploadImg.png";
 import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
 import { GET_LIST_POST } from "../../stores/types/PostDaoType";
