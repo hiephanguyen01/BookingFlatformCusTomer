@@ -5,7 +5,7 @@ import {
   PlusOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Col, Row, Popover, Modal } from "antd";
+import { Col, Row, Popover, Modal, message } from "antd";
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
@@ -24,22 +24,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 
 const moreOptionOnEachPost = [
-  { icon: <Info />, title: "Báo cáo bài viết" },
-  { icon: <Bell />, title: "Bật thông báo về bài viết này " },
-  { icon: <LinkCopy />, title: "Sao chép liên kết" },
-  { icon: <PostSave />, title: "Lưu bài viết" },
+  { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
+  { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
+  { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
+  { icon: <PostSave />, title: "Lưu bài viết", id: 4 },
 ];
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.authenticateReducer);
+  const currentUser = useSelector(
+    (state) => state.authenticateReducer.currentUser
+  );
+  console.log(currentUser);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
-  const [isModalOption, setIsModalOption] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [moreOptionModal, setMoreOptionModal] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
   const [isModalVisibleDetail, setIsModalVisibleDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
@@ -50,7 +55,6 @@ const DaoPost = (props) => {
   const {
     Id,
     Username,
-    Fullname,
     Description,
     Avatar,
     TotalLikes,
@@ -73,12 +77,6 @@ const DaoPost = (props) => {
     setIsModalVisibleDetail(false);
   };
 
-  const handleMoreOptionClick = () => {
-    setIsModalOption(false);
-    setIsModalOptionDetail(false);
-    setIsReportPostModalVisible(true);
-  };
-
   const handleLike = () => {
     if (currentUser) {
       if (checkLikePost()) {
@@ -90,10 +88,39 @@ const DaoPost = (props) => {
       }
     }
   };
+  const handleMoreOptionClick = async (itm) => {
+    switch (itm.id) {
+      case 1:
+        setIsReportPostModalVisible(true);
+        setMoreOptionModal(false);
+        break;
+      case 2:
+        message.success("Đã bật thông báo về bài viết này");
+        setMoreOptionModal(false);
+        break;
+      case 3:
+        message.success("Đã sao chép liên kết");
+        setMoreOptionModal(false);
+        break;
+      case 4:
+        try {
+          await userService.savePost(currentUser.id, Id);
+          message.success("Lưu bài viết thành công");
+          setMoreOptionModal(false);
+        } catch (error) {
+          message.success("Lưu bài viết thất bại");
+          setMoreOptionModal(false);
+        }
+        break;
+      default:
+        break;
+    }
 
-  const checkLikePost = () => {
-    return likePostList.filter((itm) => itm.PostId === Id).length > 0;
+    setIsModalVisible(false);
   };
+
+  const checkLikePost = () =>
+    likePostList.filter((itm) => itm.PostId === Id).length > 0;
 
   let ImageSection = null;
   let tempCount = Image.length;
@@ -266,16 +293,9 @@ const DaoPost = (props) => {
       <section className="post__main d-flex flex-column">
         <header className="post__main__info d-flex justify-content-between align-items-center">
           <div className="d-flex justify-content-between align-items-center">
-            <img
-              src={
-                !Avatar.includes("https")
-                  ? `${REACT_APP_DB_BASE_URL_IMG}/${Avatar}`
-                  : Avatar
-              }
-              alt=""
-            />
+            <img src={`${REACT_APP_DB_BASE_URL_IMG}/${Avatar}`} alt="" />
             <div className="post__main__info__nametime">
-              <p className="post__main__info__nametime__name">{Fullname}</p>
+              <p className="post__main__info__nametime__name">{Username}</p>
               <p>{convertTime(CreationTime)}</p>
             </div>
           </div>
@@ -285,7 +305,7 @@ const DaoPost = (props) => {
               content={
                 <div className="more-option-modal">
                   {moreOptionOnEachPost.map((item, idx) => (
-                    <li onClick={handleMoreOptionClick} key={idx}>
+                    <li onClick={() => handleMoreOptionClick(item)} key={idx}>
                       <div className="container d-flex">
                         <div>{item.icon}</div>
                         <p>{item.title}</p>
@@ -295,8 +315,8 @@ const DaoPost = (props) => {
                 </div>
               }
               trigger="click"
-              visible={isModalOption}
-              onVisibleChange={(visible) => setIsModalOption(visible)}
+              visible={moreOptionModal}
+              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}
             >
               <MoreOutlined style={{ fontSize: "24px" }} />
             </Popover>

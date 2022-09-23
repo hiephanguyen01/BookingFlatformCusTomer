@@ -105,7 +105,7 @@ export const likePost = (userId, postId) => {
       });
       dispatch({ type: "GET_LIKE", data: data.data });
     } catch (err) {
-      console.error(err);
+      console.log(err)
     }
   };
 };
