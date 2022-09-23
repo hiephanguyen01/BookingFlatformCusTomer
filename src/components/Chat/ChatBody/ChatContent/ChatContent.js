@@ -13,14 +13,16 @@ import demopic1 from "../../../../assets/Chat/demo1.png";
 import { closeConversationAction } from "../../../../stores/actions/ChatAction";
 import UploadImage from "../../../../components/UploadImage";
 import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
-export const UserMe = {
+import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+
+/* export const UserMe = {
   id: 5,
   Username: "3871952632888744",
   Image: "b953bcbb-96f8-4dc2-8b5d-9f9b895d0def",
   Email: "anhsaobanga21@gmail.com",
   Fullname: "Toàn Nguyễn",
   Phone: "0909005001",
-};
+}; */
 /* export const UserMe = {
   id: 6,
   Username: "hoanganhnguyen96kt@gmail.com",
@@ -30,6 +32,8 @@ export const UserMe = {
   Phone: "",
 }; */
 export const ChatContent = React.memo(({ chatInfo }) => {
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const updateScroll = useSelector(updateMSelector);
@@ -45,6 +49,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   const [flag, setFlag] = useState(true);
   const [hasOrder, setHasOrder] = useState(true);
   const [files, setFiles] = useState([]);
+
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -55,9 +60,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       if (
         file.type === "image/png" ||
         file.type === "image/jpeg" ||
-        file.type === "image/jpg" ||
-        file.type === "video/mp4" ||
-        file.type === "video/x-m4v"
+        file.type === "image/jpg"
       ) {
         file.preview = URL.createObjectURL(file);
         newFiles.push(file);
@@ -88,40 +91,43 @@ export const ChatContent = React.memo(({ chatInfo }) => {
     }, 1000);
   };
   const onEnterPress = async (e) => {
+    const messText = {
+      id: Math.random(),
+      ConversationId: id,
+      createdAt: moment().toISOString(),
+      Content: message,
+      Chatting: UserMe,
+      Type: "text",
+    };
     if (
       e.keyCode === 13 &&
       e.shiftKey === false &&
       message.trim() !== "" &&
       files.length === 0
     ) {
-      console.log("case1");
       e.preventDefault();
       setMessage("");
-      socket.emit("send_message", {
-        id: Math.random(),
-        ConversationId: id,
-        createdAt: moment().toISOString(),
-        Content: message,
-        Chatting: UserMe,
-      });
+      socket.emit("send_message", messText);
     } else if (
       e.keyCode === 13 &&
       e.shiftKey === false &&
       message.trim() === "" &&
       files.length !== 0
     ) {
-      console.log("case2");
       e.preventDefault();
-      const formData = new FormData();
       for (let file of files) {
         delete file.preview;
-        formData.append("image", file);
+        socket.emit("send_message", {
+          id: Math.random(),
+          ConversationId: id,
+          createdAt: moment().toISOString(),
+          Type: "file",
+          mineType: file.type,
+          fileName: file.name,
+          Content: file,
+          Chatting: UserMe,
+        });
       }
-      /* formData.append("Description", newPost.description);
-      formData.append("Tags", newPost.tags.join(",")); */
-      const hehe = formData.getAll("image");
-      console.log("formData", hehe);
-
       setFiles([]);
     } else if (
       e.keyCode === 13 &&
@@ -132,22 +138,20 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       console.log("case3");
       e.preventDefault();
       setMessage("");
-      const formData = new FormData();
+      socket.emit("send_message", messText);
       for (let file of files) {
         delete file.preview;
-        formData.append("image", file);
+        socket.emit("send_message", {
+          id: Math.random(),
+          ConversationId: id,
+          createdAt: moment().toISOString(),
+          Type: "file",
+          mineType: file.type,
+          fileName: file.name,
+          Content: file,
+          Chatting: UserMe,
+        });
       }
-      /* formData.append("Description", newPost.description);
-      formData.append("Tags", newPost.tags.join(",")); */
-      const hehe = formData.getAll("image");
-      console.log("formData", hehe);
-      socket.emit("send_message", {
-        id: Math.random(),
-        ConversationId: id,
-        createdAt: moment().toISOString(),
-        Content: message,
-        Chatting: UserMe,
-      });
       setFiles([]);
     }
   };
@@ -167,6 +171,8 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   useEffect(() => {
     socket.on("receive_message", (data) => {
       if (data.ConversationId === id) {
+        console.log("Content", data.Content);
+
         setMessageList((list) => [...list, data]);
         setFlag(true);
       } else {
@@ -183,6 +189,25 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       }
     });
   }, []);
+  const renderMess = (itm) => {
+    if (itm.Type !== "text") {
+      return (
+        <img
+          onLoad={() => scrollToBottom()}
+          style={{
+            width: 200,
+            height: "auto",
+            borderRadius: "10px",
+            color: "#fff !important",
+          }}
+          src={`${REACT_APP_DB_BASE_URL_IMG}/${itm.Content}`}
+          alt={itm.fileName}
+        />
+      );
+    } else {
+      return <>{itm.Content}</>;
+    }
+  };
   return (
     <div className="ChatContent">
       <div className="ChatContent__header">
@@ -290,12 +315,19 @@ export const ChatContent = React.memo(({ chatInfo }) => {
                 >
                   <div
                     className={
-                      itm.Chatting.PartnerName !== undefined
+                      itm.Chatting.PartnerName !== undefined &&
+                      itm.Type === "text"
                         ? "ChatContent__conversation__other__content"
-                        : "ChatContent__conversation__you__content"
+                        : itm.Chatting.PartnerName !== undefined &&
+                          itm.Type !== "text"
+                        ? "ChatContent__conversation__other__img"
+                        : itm.Chatting.PartnerName === undefined &&
+                          itm.Type === "text"
+                        ? "ChatContent__conversation__you__content"
+                        : "ChatContent__conversation__you__img"
                     }
                   >
-                    {itm.Content}
+                    {renderMess(itm)}
                   </div>
                 </div>
               ))}
@@ -367,7 +399,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
               ))}
           </div>
           <textarea
-          className="ChatContent__container__send__current-message"
+            className="ChatContent__container__send__current-message"
             rows={1}
             cols={1}
             data-kt-element="input"
@@ -375,6 +407,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
+            maxLength={2000}
           ></textarea>
         </div>
       </div>

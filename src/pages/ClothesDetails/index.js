@@ -11,7 +11,7 @@ import {
 import { Button, Col, Dropdown, Menu, Rate, Row, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "./clothesDetails.scss";
 
@@ -28,6 +28,10 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import toastMessage from "../../components/ToastMessage";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -52,6 +56,7 @@ const Index = () => {
   );
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const cate =
     location.pathname.split("/").filter((item) => item !== "")[1] === "clothes"
       ? 3
@@ -111,17 +116,13 @@ const Index = () => {
   ];
 
   const ROW = (dataSource = []) => {
-    if (dataSource.length > 0) {
+    if (dataSource?.length > 0) {
       return dataSource?.map((data, index) => [
         {
           render: () => (
             <>
               <img
-                src={`${
-                  data?.Image[0]?.includes("https://drive.google.com/")
-                    ? data?.Image[0]
-                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
-                }`}
+                src={``}
                 style={{ width: "100%", marginBottom: "20px" }}
                 alt=""
                 // onError={(e) => e.target.classList.add("d-none")}
@@ -263,6 +264,15 @@ const Index = () => {
     }
   };
 
+  const handleBook = () => {
+    if (chooseService.length > 0) {
+      dispatch(chooseServiceAction(chooseService));
+      navigate("order");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
+
   return (
     <>
       {!loading ? (
@@ -285,7 +295,13 @@ const Index = () => {
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
-                  <HeartOutlined className="icon_heart" />
+                  <PopUpSignIn
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <HeartOutlined className="icon_heart" />
+                  </PopUpSignIn>
                   <Dropdown overlay={menu} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
@@ -441,6 +457,9 @@ const Index = () => {
                         <RightOutlined style={{ color: "#1FCBA2" }} />
                       </Link>
                     </div>
+                    <div className="ms-24 pt-20">
+                      <SelectTimeOption />
+                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
@@ -513,8 +532,11 @@ const Index = () => {
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
-                      <Button className="w-38 h-48px d-flex justify-content-center align-items-center btn_order">
-                        <Link to={"order"}> Đặt ngay</Link>
+                      <Button
+                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                        onClick={handleBook}
+                      >
+                        Đặt ngay
                       </Button>
                     </div>
                   </div>

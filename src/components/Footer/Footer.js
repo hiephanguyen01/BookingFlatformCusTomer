@@ -1,14 +1,14 @@
-import { Col, Row} from "antd";
-import Andriod from "../../assets/footer/android.png";
-import { ReactComponent as Ios } from "../../assets/footer/ios.svg";
-import { ReactComponent as Facebook } from "../../assets/footer/facebook.svg";
-import { ReactComponent as Insta } from "../../assets/footer/instagram.svg";
-import { ReactComponent as LinkedIn } from "../../assets/footer/linkedin.svg";
+import { Col, Row } from "antd";
 import { ReactComponent as BCTVN } from "../../assets/footer/bctvn.svg";
 import { ReactComponent as Enter } from "../../assets/footer/enterprise.svg";
+import { ReactComponent as Facebook } from "../../assets/footer/facebook.svg";
+import Android from "../../assets/footer/google-play-badge.png";
+import { ReactComponent as Insta } from "../../assets/footer/instagram.svg";
+import { ReactComponent as Ios } from "../../assets/footer/ios.svg";
+import { ReactComponent as LinkedIn } from "../../assets/footer/linkedin.svg";
 
-import "./Footer.scss";
 import { CopyrightOutlined } from "@ant-design/icons";
+import "./Footer.scss";
 const Footer = () => {
   return (
     <div className="Footer">
@@ -17,7 +17,7 @@ const Footer = () => {
           <Col span={6}>
             <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
             <div className="logo">
-              <img src={Andriod} alt="" />
+              <img src={Android} alt="" />
               <Ios />
             </div>
             <p className="item">Theo dõi chúng tôi trên</p>

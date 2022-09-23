@@ -14,10 +14,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
+import EmptyPage from "../../components/layouts/EmptyPage";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
-import { convertPrice } from "../../utils/convert";
+import { convertDateSendToDB, convertPrice } from "../../utils/convert";
 import "./FilterPage.scss";
 const { Option } = Select;
 const categories = [
@@ -58,6 +59,8 @@ const FilterPage = () => {
   const { filter, loading, pagination, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
+  console.log(filter);
+
   const [provinces, setProvinces] = useState([]);
 
   useEffect(() => {
@@ -70,7 +73,19 @@ const FilterPage = () => {
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
+        // keyString: "",
+        // category: 1,
+        // priceOption: 0,
+        // price1: undefined,
+        // price2: undefined,
+        // provinceIds: [],
+        // ratingOption: 1,
         keyString: "",
+        OrderByTime: -1,
+        OrderByTimeFrom: convertDateSendToDB(new Date()),
+        OrderByTimeTo: convertDateSendToDB(new Date()),
+        OrderByDateFrom: convertDateSendToDB(new Date()),
+        OrderByDateTo: convertDateSendToDB(new Date()),
         category: 1,
         priceOption: 0,
         price1: undefined,
@@ -123,164 +138,173 @@ const FilterPage = () => {
   const formatter = (value) => `${value}%`;
   return (
     <div className="FilterPage">
-      <div className="container">
-        <Row>
-          <Col span={6}>
-            <Form {...layout} onFinish={handleClearFilter} form={form}>
-              {/* timefil */}
-              <div className="box">
-                <p className="text">Khung giờ bạn muốn đặt</p>
-                <Divider />
-                <SelectTimeOption />
-              </div>
-              {/* filter */}
-              <div className="box">
+      {studioPostList.length < 1 ? (
+        <EmptyPage />
+      ) : (
+        <div className="container">
+          <Row>
+            <Col span={6}>
+              <Form {...layout} onFinish={handleClearFilter} form={form}>
+                {/* timefil */}
+                <div className="box">
+                  <p className="text">Khung giờ bạn muốn đặt</p>
+                  <Divider />
+                  <SelectTimeOption />
+                </div>
+                {/* filter */}
+                <div className="box">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p className="text">LỌC THEO</p>
+                    <Button htmlType="submit" type="primary">
+                      Xoá bộ lọc
+                    </Button>
+                  </div>
+
+                  <Divider />
+                  <Form.Item label="Tên" name="keyString">
+                    <Input onChange={onChangeInput} />
+                  </Form.Item>
+
+                  <Form.Item label="Địa điểm" name="location">
+                    <Select onChange={onChangeFilterProvince}>
+                      {provinces &&
+                        provinces.map((val) => (
+                          <Option value={val.id}>{val.Name}</Option>
+                        ))}
+                    </Select>
+                  </Form.Item>
+
+                  <Divider />
+                  <Form.Item label="Danh mục" name="category">
+                    <div className="category_radio_group">
+                      <Radio.Group
+                        onChange={onChangeFilterCategory}
+                        value={filter.category}
+                      >
+                        {categories &&
+                          categories.map((val) => (
+                            <Radio key={val.id} value={val.id}>
+                              {val.name}
+                            </Radio>
+                          ))}
+                      </Radio.Group>
+                    </div>
+                  </Form.Item>
+
+                  <Divider />
+                  <Form.Item label="Giá" name="price">
+                    <div className="filter_price_container">
+                      <Radio.Group onChange={onChangePriceOption}>
+                        <Row>
+                          <Col span={24}>
+                            <Radio value={2}>Giá cao nhất</Radio>
+                          </Col>
+                          <Col span={24}>
+                            <Radio value={1}>Giá thấp nhất </Radio>
+                          </Col>
+                          <Col span={24}>
+                            <Radio value={3}>Giảm giá nhiều nhất </Radio>
+                          </Col>
+                          <Col span={24}>
+                            <Slider
+                              onAfterChange={onChangeSlideRange}
+                              min={0}
+                              max={5000000}
+                              step={100000}
+                              range
+                              defaultValue={[0, 2500000]}
+                              marks={marks}
+                            />
+                          </Col>
+                        </Row>
+                      </Radio.Group>
+                    </div>
+                  </Form.Item>
+
+                  <Divider />
+                  <p className="text">Đánh giá</p>
+                  <Form.Item name="rating">
+                    <div className="filter_rating_container">
+                      <Radio.Group>
+                        <Row>
+                          <Col span={24}>
+                            <Radio value="A3">Đánh giá nhiều nhất </Radio>
+                          </Col>
+                          <Col span={24}>
+                            <Radio value="B3">Đánh giá cao nhất </Radio>
+                          </Col>
+                          <Col span={24}>
+                            <Radio value="C3">Đặt nhiều nhất</Radio>
+                          </Col>
+                        </Row>
+                      </Radio.Group>
+                    </div>
+                  </Form.Item>
+                </div>
+              </Form>
+            </Col>
+            <Col span={18} className="p-10">
+              {loading ? (
                 <div
                   style={{
+                    width: "100%",
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  <p className="text">LỌC THEO</p>
-                  <Button htmlType="submit" type="primary">
-                    Xoá bộ lọc
-                  </Button>
+                  <div
+                    style={{
+                      background: "white",
+                      width: "fit-content",
+                      borderRadius: "50%",
+                      padding: "10px",
+                      margin: "10px",
+                    }}
+                  >
+                    <LoadingOutlined style={{ fontSize: "40px" }} />
+                  </div>
                 </div>
-
-                <Divider />
-                <Form.Item label="Tên" name="keyString">
-                  <Input onChange={onChangeInput} />
-                </Form.Item>
-
-                <Form.Item label="Địa điểm" name="location">
-                  <Select onChange={onChangeFilterProvince}>
-                    {provinces &&
-                      provinces.map((val) => (
-                        <Option value={val.id}>{val.Name}</Option>
-                      ))}
-                  </Select>
-                </Form.Item>
-
-                <Divider />
-                <Form.Item label="Danh mục" name="category">
-                  <div className="category_radio_group">
-                    <Radio.Group
-                      onChange={onChangeFilterCategory}
-                      value={filter.category}
-                    >
-                      {categories &&
-                        categories.map((val) => (
-                          <Radio key={val.id} value={val.id}>
-                            {val.name}
-                          </Radio>
-                        ))}
-                    </Radio.Group>
-                  </div>
-                </Form.Item>
-
-                <Divider />
-                <Form.Item label="Giá" name="price">
-                  <div className="filter_price_container">
-                    <Radio.Group onChange={onChangePriceOption}>
-                      <Row>
-                        <Col span={24}>
-                          <Radio value={2}>Giá cao nhất</Radio>
-                        </Col>
-                        <Col span={24}>
-                          <Radio value={1}>Giá thấp nhất </Radio>
-                        </Col>
-                        <Col span={24}>
-                          <Radio value={3}>Giảm giá nhiều nhất </Radio>
-                        </Col>
-                        <Col span={24}>
-                          <Slider
-                            onAfterChange={onChangeSlideRange}
-                            min={0}
-                            max={5000000}
-                            step={100000}
-                            range
-                            defaultValue={[0, 2500000]}
-                            marks={marks}
-                          />
-                        </Col>
-                      </Row>
-                    </Radio.Group>
-                  </div>
-                </Form.Item>
-
-                <Divider />
-                <p className="text">Đánh giá</p>
-                <Form.Item name="rating">
-                  <div className="filter_rating_container">
-                    <Radio.Group>
-                      <Row>
-                        <Col span={24}>
-                          <Radio value="A3">Đánh giá nhiều nhất </Radio>
-                        </Col>
-                        <Col span={24}>
-                          <Radio value="B3">Đánh giá cao nhất </Radio>
-                        </Col>
-                        <Col span={24}>
-                          <Radio value="C3">Đặt nhiều nhất</Radio>
-                        </Col>
-                      </Row>
-                    </Radio.Group>
-                  </div>
-                </Form.Item>
-              </div>
-            </Form>
-          </Col>
-          <Col span={18} className="p-10">
-            {loading ? (
+              ) : (
+                <div
+                  style={{ backgroundColor: "#fff" }}
+                  className="px-15 py-20"
+                >
+                  {studioPostList?.map((val) => (
+                    <FilterCard
+                      data={val}
+                      category={
+                        categories.filter(
+                          (val) => val.id === filter.category
+                        )[0]
+                      }
+                    />
+                  ))}
+                </div>
+              )}
               <div
                 style={{
-                  width: "100%",
                   display: "flex",
-                  justifyContent: "center",
+                  justifyContent: "right",
+                  padding: "10px 10px",
                 }}
               >
-                <div
-                  style={{
-                    background: "white",
-                    width: "fit-content",
-                    borderRadius: "50%",
-                    padding: "10px",
-                    margin: "10px",
-                  }}
-                >
-                  <LoadingOutlined style={{ fontSize: "40px" }} />
-                </div>
+                <Pagination
+                  pageSize={pagination?.limit}
+                  defaultCurrent={1}
+                  total={pagination?.total}
+                  onChange={onChangePage}
+                />
               </div>
-            ) : (
-              <div style={{ backgroundColor: "#fff" }} className="px-15 py-20">
-                {studioPostList?.map((val) => (
-                  <FilterCard
-                    data={val}
-                    category={
-                      categories.filter((val) => val.id === filter.category)[0]
-                    }
-                  />
-                ))}
-              </div>
-            )}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "right",
-                padding: "10px 10px",
-              }}
-            >
-              <Pagination
-                pageSize={pagination?.limit}
-                defaultCurrent={1}
-                total={pagination?.total}
-                onChange={onChangePage}
-              />
-            </div>
-          </Col>
-        </Row>
-      </div>
+            </Col>
+          </Row>
+        </div>
+      )}
     </div>
   );
 };

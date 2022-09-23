@@ -11,7 +11,7 @@ import {
 import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "./makeupDetails.scss";
 
@@ -24,19 +24,17 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 
 import svgLocation from "../../assets/svg/location.svg";
 import ImagePost from "../../components/imagePost/ImagePost";
-import modelImg from "../../assets/images/modelImg.png";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-
-const values = [
-  { id: 1, title: "Album hóa trang theo yêu cầu của khách" },
-  { id: 2, title: "Album make up cô dâu" },
-  { id: 3, title: "Album make up chụp hình kỉ yếu" },
-  { id: 4, title: "Album hóa trang theo yêu cầu của khách" },
-  { id: 5, title: "Album make up chụp hình kỉ yếu" },
-];
+import {
+  addOrder,
+  chooseServiceAction,
+} from "../../stores/actions/OrderAction";
+import toastMessage from "../../components/ToastMessage";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
   { title: "Mô tả", size: 8 },
@@ -44,19 +42,20 @@ const COLUMN = [
   { title: "Chọn dịch vụ", size: 4 },
 ];
 const Index = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, loading } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const cate =
     location.pathname.split("/").filter((item) => item !== "")[1] === "makeup"
       ? 4
       : undefined;
 
   const [chooseService, setChooseService] = useState([]);
-  const [activeId, setActiveId] = useState(5);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -102,6 +101,7 @@ const Index = () => {
             <>
               <img
                 src={`${
+                  data?.Image?.length > 0 &&
                   data?.Image[0]?.includes("https://drive.google.com/")
                     ? data?.Image[0]
                     : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
@@ -211,6 +211,23 @@ const Index = () => {
     }
   };
 
+  const handleBook = () => {
+    if (chooseService.length > 0) {
+      dispatch(chooseServiceAction(chooseService));
+      navigate("order");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
+  const handleAddCart = () => {
+    if (chooseService.length > 0) {
+      dispatch(addOrder(cate, chooseService));
+      toastMessage("Đã thêm vào giỏ hàng!", "success");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
+
   return (
     <>
       {!loading ? (
@@ -233,9 +250,15 @@ const Index = () => {
                   <CheckCircleOutlined className="icon_check_circle" />
                 </div>
                 <div className="d-flex align-items-center">
-                  <HeartOutlined className="icon_heart" />
+                  <PopUpSignIn
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <HeartOutlined className="icon_heart" />
+                  </PopUpSignIn>
                   <Dropdown overlay={menu_report} trigger={["click"]}>
-                    <a onClick={(e) => e.preventDefault()}>
+                    <a onClick={(e) => e.preventDefault()} href="#">
                       <Space>
                         <MoreOutlined
                           style={{
@@ -249,7 +272,11 @@ const Index = () => {
                 </div>
               </div>
               <div className="location">
-                <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
+                <img
+                  src={svgLocation}
+                  style={{ marginRight: "0.5rem" }}
+                  alt=""
+                />
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
@@ -335,7 +362,11 @@ const Index = () => {
                         className="text-medium-re"
                         style={{ marginBottom: "15px" }}
                       >
-                        <img src={svgLocation} style={{ marginRight: "6px" }} />
+                        <img
+                          src={svgLocation}
+                          style={{ marginRight: "6px" }}
+                          alt=""
+                        />
                         {studioDetail?.data?.Address}
                       </div>
                     </div>
@@ -363,6 +394,9 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
+                    <div className="ms-24 pt-20">
+                      <SelectTimeOption />
+                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
@@ -431,12 +465,18 @@ const Index = () => {
                       </div>
                     </div>
                     <div className="w-100 d-flex justify-content-between">
-                      <Button className="w-60 h-48px d-flex justify-content-center align-items-center btn_add">
+                      <Button
+                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                        onClick={handleAddCart}
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
-                      <Button className="w-38 h-48px d-flex justify-content-center align-items-center btn_order">
-                        <Link to={"order"}> Đặt ngay</Link>
+                      <Button
+                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                        onClick={handleBook}
+                      >
+                        Đặt ngay
                       </Button>
                     </div>
                   </div>

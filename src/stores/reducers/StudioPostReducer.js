@@ -1,3 +1,4 @@
+import { convertDateSendToDB } from "../../utils/convert";
 import {
   SET_POST_LIST,
   SET_FILTER,
@@ -13,6 +14,11 @@ const initialState = {
   studioPostList: [],
   filter: {
     keyString: "",
+    OrderByTime: -1,
+    OrderByTimeFrom: convertDateSendToDB(new Date()),
+    OrderByTimeTo: convertDateSendToDB(new Date()),
+    OrderByDateFrom: convertDateSendToDB(new Date()),
+    OrderByDateTo: convertDateSendToDB(new Date()),
     category: 1,
     priceOption: 0,
     price1: undefined,
@@ -26,7 +32,7 @@ const initialState = {
   },
   studioDetail1: [],
   studioNear: [],
-  studioDetail: {},
+  studioDetail: [],
 };
 
 export const studioPostReducer = (state = initialState, action) => {

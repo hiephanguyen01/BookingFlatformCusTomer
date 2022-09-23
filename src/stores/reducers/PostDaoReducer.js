@@ -4,8 +4,10 @@ import {
   GET_PAGINATE_POSIBILITY,
   SELECT_RESULT,
   REMOVE_RESULT,
+  GET_LIKE_POST_LIST,
 } from "../types/PostDaoType";
 const initialState = {
+  likePostList: [],
   listPost: [],
   listPostForSearching: [],
   pagination: {},
@@ -42,8 +44,9 @@ export const postDaoReducer = (state = initialState, action) => {
       selectSearchUpdate.splice(index, 1);
       return { ...state, selectSearch: selectSearchUpdate };
     }
-    case GET_LIST_POST:
-      return { ...state, listPost: action.data };
+    case GET_LIKE_POST_LIST: {
+      return { ...state, likePostList: action.data };
+    }
     default:
       return state;
   }

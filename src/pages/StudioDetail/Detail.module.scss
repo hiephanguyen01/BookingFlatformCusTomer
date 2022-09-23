@@ -1,5 +1,4 @@
-.wrapper {
-}
+.wrapper {}
 
 .studioDetail {
     padding: 12px 70px 54px 70px;
@@ -190,8 +189,12 @@
         }
 
         .table {
-            padding: 26px;
+            padding-top: 24px;
             background-color: #fff;
+
+            .selectOption {
+                margin-left: 20px;
+            }
 
             .table-ant {
                 td {

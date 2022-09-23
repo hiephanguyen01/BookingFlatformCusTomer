@@ -3,22 +3,28 @@ import {
   CloseCircleOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
+import { Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
+// import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroll-component";
 import addNotification from "react-push-notification";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
 import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
-import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Modal, message, Input } from "antd";
+import {
+  getAllPostDaoAction,
+  getLikePostList,
+} from "../../stores/actions/PostDaoAction";
+// import { Modal, message, Input } from "antd";
 // import uploadImg from "../../assets/dao/uploadImg.png";
+import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
 import { GET_LIST_POST } from "../../stores/types/PostDaoType";
 import "./dao.scss";
-import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
 // import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
 import { postDaoService } from "../../services/PostDaoService";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
 const tagItems = [
   {
@@ -35,6 +41,11 @@ const tagItems = [
     id: "nguoimau",
     icon: <CheckOutlined style={{ color: "#03AC84" }} />,
     name: "Người mẫu",
+  },
+  {
+    id: "makeup",
+    icon: <CheckOutlined style={{ color: "#03AC84" }} />,
+    name: "Make up",
   },
   {
     id: "trangphuc",
@@ -58,7 +69,7 @@ const tagItems = [
 //     reader.onerror = (error) => reject(error);
 //   });
 
-const Dao = (props) => {
+const Dao = () => {
   const [files, setFiles] = useState([]);
   const [filesDrive, setFilesDrive] = useState([]);
   const [filter, setFilter] = useState({
@@ -70,17 +81,18 @@ const Dao = (props) => {
     tags: [],
     description: "",
   });
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-  const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
+  const { listPost, pagination, likePostList } = useSelector(
+    (state) => state.postDaoReducer
+  );
 
   const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  // const [previewVisible, setPreviewVisible] = useState(false);
-
-  // const handleCancel = () => setPreviewVisible(false);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];
+    if (newFiles.length === 6) return null;
     const fileList = e.target.files;
     for (let file of fileList) {
       if (
@@ -177,7 +189,7 @@ const Dao = (props) => {
           formData.append("imageDrive", newImgDrive.join(","));
         }
 
-        await postDaoService.createPost("", formData);
+        await postDaoService.createPost(currentUser.id, formData);
         setVisible(false);
         success();
         setFiles([]);
@@ -260,6 +272,7 @@ const Dao = (props) => {
 
   useEffect(() => {
     getData();
+    dispatch(getLikePostList(currentUser?.id)); // 1 là user id
 
     if (Notification.permission !== "granted") {
       askPermission();
@@ -268,7 +281,7 @@ const Dao = (props) => {
     return () => {
       dispatch({ type: GET_LIST_POST, data: [] });
     };
-  }, []);
+  }, [currentUser]);
 
   return (
     <section className="dao d-flex justify-content-center">
@@ -279,13 +292,12 @@ const Dao = (props) => {
       <div className="dao__container d-flex flex-column align-items-center">
         <header className="dao__container__header d-flex justify-content-between align-items">
           <h2>Dạo</h2>
-          <button
-            className="dao__container__header__button d-flex align-items-center"
-            onClick={() => setVisible(true)}
-          >
-            <Pen />
-            <p>Tạo bài viết</p>
-          </button>
+          <PopUpSignIn onClick={() => setVisible(true)}>
+            <button className="dao__container__header__button d-flex align-items-center">
+              <Pen />
+              <p>Tạo bài viết</p>
+            </button>
+          </PopUpSignIn>
         </header>
         <article className="dao__container__tag d-flex align-items-center justify-content-evenly">
           <li
@@ -342,7 +354,7 @@ const Dao = (props) => {
             }
           >
             {listPost.map((item) => (
-              <DaoPost key={item.Id} item={item} />
+              <DaoPost key={item.Id} item={item} likePostList={likePostList} />
             ))}
           </InfiniteScroll>
         </ul>

@@ -15,6 +15,8 @@ import { Button } from "antd";
 import React from "react";
 import ImgDefaultUser from "../../../../assets/img/userAccount/default-user-image.png";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
 
 const ITEM_USER_ACCOUNT_ASIDE = [
   {
@@ -72,6 +74,7 @@ const ITEM_US_ASIDE = [
 ];
 
 const Aside = ({ children }) => {
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const { pathname } = useLocation();
   // console.log(pathname.split("/")[4]);
   const newPathname = pathname.split("/")[4];
@@ -126,15 +129,17 @@ const Aside = ({ children }) => {
           }}
         >
           <img
-            src={ImgDefaultUser}
+            src={UserMe ?ImageDetect(UserMe)  : ImgDefaultUser}
             alt=""
-            style={{ height: "100%", borderRadius: "50%" }}
+            width={60}
+            height={60}
+            style={{ borderRadius: "50%" }}
           />
         </div>
         <div>
           <span>Thông tin tài khoản</span>
           <div className="d-flex justify-content-center align-items-center">
-            <h5 style={{ marginBottom: "0" }}>Nguyễn Hoàng Minh</h5>
+            <h5 style={{ marginBottom: "0" }}>{UserMe.Fullname}</h5>
             <Button type="text">
               <EditOutlined style={{ color: "#03AC84" }} />
             </Button>

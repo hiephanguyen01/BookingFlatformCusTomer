@@ -18,12 +18,18 @@ class UserService extends BaseService {
       PostId,
     });
   };
-  infoUser = (id)=> {
+  infoUser = (id) => {
     return this.get(`/api/booking-user/${id}`);
-  }
-  getListRatings = (id)=> {
+  };
+  getListRatings = (id) => {
     return this.get(`/api/my-ratings/${id}`);
-  }
+  };
+  saveInfo = (id, data) => {
+    return this.patch(`/api/booking-user/updateMe/${id}`, data);
+  };
+  deleteMe = () => {
+    return this.patch(`/api/booking-user/deleteMe`);
+  };
 }
 
 export const userService = new UserService();

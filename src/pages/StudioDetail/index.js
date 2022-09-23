@@ -2,286 +2,552 @@ import {
   CheckCircleOutlined,
   HeartOutlined,
   MoreOutlined,
-  PlayCircleOutlined,
-  StarFilled,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Pagination, Popover, Rate, Table } from "antd";
+import { Pagination, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import images from "../../assets/images";
-import Content from "../../components/ReadMore";
+import ImagePost from "../../components/imagePost/ImagePost";
+import ReadMoreDesc from "../../components/ReadMoreDesc";
+import toastMessage from "../../components/ToastMessage";
+import Table from "../../components/Table";
+import CommentRating from "../../components/CommentRating";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+
 import {
-  getAllRatingStudioByIdAction,
-  getNumberRateStudioByIdAction,
-} from "../../stores/actions/RatingAcion";
+  addOrder,
+  chooseServiceAction,
+} from "../../stores/actions/OrderAction";
+// import {
+//   getAllRatingStudioByIdAction,
+//   getNumberRateStudioByIdAction,
+// } from "../../stores/actions/RatingAcion";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
   studioDetailAction,
-  studioDetailAction1,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
+// import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
+import { convertPrice } from "../../utils/convert";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import styles from "./Detail.module.scss";
 import { ModalImage } from "./ModalImg";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
-import { Voucher } from "./Voucher";
+// import { Voucher } from "./Voucher";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+
+const COLUMN = [
+  { title: "Loại phòng", size: 6 },
+  { title: "Mô tả", size: 7 },
+  { title: "Giá cho thời gian bạn đã chọn ", size: 7 },
+  { title: "Chọn dịch vụ", size: 4 },
+];
 
 const cx = classNames.bind(styles);
 export const StudioDetail = () => {
   const { id } = useParams();
   const { pathname } = useLocation();
   // State
-  const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
-  const { studioDetail1, studioNear, studioPostList } = useSelector(
-    (state) => state.studioPostReducer
-  );
-  const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
+  const navigate = useNavigate();
+  const { studioDetail1, studioDetail, studioNear, studioPostList, filter } =
+    useSelector((state) => state.studioPostReducer);
+  // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
-  console.log("studioDetail", studioDetail1);
-  // console.log("roomDetail", roomDetail);
-  console.log("studioNear", studioNear);
-  // console.log("studioPostList", studioPostList);
-  console.log(ratingStudioPostDetai, numberRating.reverse());
-  /*  console.log(studioDetail); */
-  // Handler
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
-    }, 5000);
-  }, []);
+  const cate =
+    pathname.split("/").filter((item) => item !== "")[1] === "studio"
+      ? 1
+      : undefined;
 
   useEffect(() => {
-    dispatch(studioDetailAction1(id, 1));
+    // setTimeout(() => {
+    //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+    // }, 5000);
+  }, []);
+  useEffect(() => {
+    dispatch(studioDetailAction(id, cate));
     dispatch(getDetailRoomAction(id));
     dispatch(getAllStudioPost(10, 1, 1));
-    dispatch(getAllRatingStudioByIdAction(id, 5));
-    dispatch(getNumberRateStudioByIdAction(id));
+    // dispatch(getAllRatingStudioByIdAction(id, 5));
+    // dispatch(getNumberRateStudioByIdAction(id));
   }, [id]);
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
   };
-  const columns = [
-    {
-      title: "Loại phòng",
-      width: "30%",
-      render: (text) => {
-        return (
-          <div style={{ textAlign: "center" }}>
-            <img
-              alt="as"
-              style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
-              src={`${process.env.REACT_APP_API_URL_IMG}${text.Image[0]}`}
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
+
+  const ROW = (dataSource = []) => {
+    if (dataSource.length > 0) {
+      return dataSource?.map((data, index) => [
+        {
+          render: () => (
+            <div style={{ textAlign: "center" }}>
+              <img
+                alt="as"
+                style={{ width: "100%", borderRadius: " 6px" }}
+                src={`${
+                  data?.Image?.length > 0 &&
+                  data?.Image[0]?.includes("https://drive.google.com/")
+                    ? data?.Image[0]
+                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                }`}
+              />
+              <div
                 style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: "10px",
                 }}
               >
-                Phòng
-              </span>
-              <span
+                <span
+                  style={{
+                    color: "#616161",
+                    fontSize: "16px",
+                    fontWeight: "400",
+                  }}
+                >
+                  Phòng
+                </span>
+                <span
+                  style={{
+                    color: "#3F3F3F",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {data.Name}
+                </span>
+              </div>
+              <div
                 style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: "10px",
                 }}
               >
-                {text.Name}
-              </span>
+                <span
+                  style={{
+                    color: "#616161",
+                    fontSize: "16px",
+                    fontWeight: "400",
+                  }}
+                >
+                  Diện tích
+                </span>
+                <span
+                  style={{
+                    color: "#3F3F3F",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {data.Area}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: "10px",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#616161",
+                    fontSize: "16px",
+                    fontWeight: "400",
+                  }}
+                >
+                  Phong cách
+                </span>
+                <span
+                  style={{
+                    color: "#3F3F3F",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {data.Style}
+                </span>
+              </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                Diện tích
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                {text.Area}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                Phong cách
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                {text.Style}
-              </span>
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Mô tả",
-      dataIndex: "Description",
-      key: "Description",
-      render: (text) => {
-        return <p>{text}</p>;
-      },
-    },
-    {
-      title: "Giá cho thời gian bạn đã chọn ",
-      render: (text) => {
-        return (
-          <div>
-            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <span
-                style={{
-                  color: "#E22828",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                {text.PriceByDate.toLocaleString("it-IT", {
-                  style: "currency",
-                  currency: "VND",
-                })}
-              </span>
-              <span
-                style={{
-                  color: "#828282",
-                  textDecoration: "line-through",
-                  fontSize: "14px",
-                  fontWeight: "400",
-                }}
-              >
-                {text.PriceByHour.toLocaleString("it-IT", {
-                  style: "currency",
-                  currency: "VND",
-                })}
-              </span>
-            </div>
-            <p
-              style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}
-            >
-              {text.PriceNote}
-            </p>
-            <button
-              style={{
-                padding: "3px 21px",
-                background: "#E22828",
-                color: "#ffff",
-                border: " 1px solid #E22828",
-                borderRadius: " 8px",
-              }}
-            >
-              Giảm 50%{" "}
-            </button>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Chọn phòng",
-      key: "action",
-      width: "17%",
-      render: (text) => (
-        <div style={{ textAlign: "center" }}>
-          {roomSelect?.findIndex((item1) => item1.id === text.id) !== -1 ? (
-            <button
-              style={{
-                padding: "15px 30px",
-                background: "#E7E7E7",
-                color: "#3F3F3F",
-                border: " 1px solid transparent",
-                borderRadius: " 8px",
-              }}
-              onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
-            >
-              Bỏ chọn
-            </button>
-          ) : (
-            <button
-              style={{
-                padding: "15px 30px",
-                background: "#fff",
-                color: "#E22828",
-                border: " 1px solid #E22828",
-                borderRadius: " 8px",
-              }}
-              onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
-            >
-              Chọn
-            </button>
-          )}
-        </div>
-      ),
-    },
-  ];
+          ),
+        },
+        {
+          render: () => <p>{data.Description}</p>,
+        },
+        {
+          render: () => (
+            <>
+              <div>
+                <div
+                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
+                >
+                  <span
+                    style={{
+                      color: "#E22828",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {filter.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {filter.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </span>
+                  <span
+                    style={{
+                      color: "#828282",
+                      textDecoration: "line-through",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    {filter.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {filter.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </span>
+                </div>
+                <p
+                  style={{
+                    color: "#828282",
+                    fontSize: "14px",
+                    fontWeight: "400",
+                  }}
+                >
+                  {data.PriceNote}
+                </p>
+                <button
+                  style={{
+                    padding: "3px 21px",
+                    background: "#E22828",
+                    color: "#ffff",
+                    border: " 1px solid #E22828",
+                    borderRadius: " 8px",
+                  }}
+                >
+                  Giảm 50%{" "}
+                </button>
+              </div>
+            </>
+          ),
+        },
+        {
+          render: () => (
+            <>
+              {chooseService.filter((item) => item.id === data.id).length >
+              0 ? (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    backgroundColor: "#E7E7E7",
+                    padding: "15px 15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Bỏ chọn
+                </span>
+              ) : (
+                <span
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    border: "1px solid #E22828",
+                    color: "#E22828",
+                    padding: "13px 25px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Chọn
+                </span>
+              )}
+            </>
+          ),
+        },
+      ]);
+    }
+  };
+
+  // const columns = [
+  //   {
+  //     title: "Loại phòng",
+  //     width: "30%",
+  //     render: (text) => {
+  //       return (
+  //         <div style={{ textAlign: "center" }}>
+  //           <img
+  //             alt="as"
+  //             style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
+  //             src={`${REACT_APP_DB_BASE_URL_IMG}${text.Image[0]}`}
+  //           />
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "space-between",
+  //               alignItems: "center",
+  //               marginTop: "10px",
+  //             }}
+  //           >
+  //             <span
+  //               style={{
+  //                 color: "#616161",
+  //                 fontSize: "16px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               Phòng
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#3F3F3F",
+  //                 fontSize: "16px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.Name}
+  //             </span>
+  //           </div>
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "space-between",
+  //               alignItems: "center",
+  //               marginTop: "10px",
+  //             }}
+  //           >
+  //             <span
+  //               style={{
+  //                 color: "#616161",
+  //                 fontSize: "16px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               Diện tích
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#3F3F3F",
+  //                 fontSize: "16px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.Area}
+  //             </span>
+  //           </div>
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               justifyContent: "space-between",
+  //               alignItems: "center",
+  //               marginTop: "10px",
+  //             }}
+  //           >
+  //             <span
+  //               style={{
+  //                 color: "#616161",
+  //                 fontSize: "16px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               Phong cách
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#3F3F3F",
+  //                 fontSize: "16px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.Style}
+  //             </span>
+  //           </div>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     title: "Mô tả",
+  //     dataIndex: "Description",
+  //     key: "Description",
+  //     render: (text) => {
+  //       return <p>{text}</p>;
+  //     },
+  //   },
+  //   {
+  //     title: "Giá cho thời gian bạn đã chọn ",
+  //     render: (text) => {
+  //       return (
+  //         <div>
+  //           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+  //             <span
+  //               style={{
+  //                 color: "#E22828",
+  //                 fontSize: "20px",
+  //                 fontWeight: "700",
+  //               }}
+  //             >
+  //               {text.PriceByDate.toLocaleString("it-IT", {
+  //                 style: "currency",
+  //                 currency: "VND",
+  //               })}
+  //             </span>
+  //             <span
+  //               style={{
+  //                 color: "#828282",
+  //                 textDecoration: "line-through",
+  //                 fontSize: "14px",
+  //                 fontWeight: "400",
+  //               }}
+  //             >
+  //               {text.PriceByHour.toLocaleString("it-IT", {
+  //                 style: "currency",
+  //                 currency: "VND",
+  //               })}
+  //             </span>
+  //           </div>
+  //           <p
+  //             style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}
+  //           >
+  //             {text.PriceNote}
+  //           </p>
+  //           <button
+  //             style={{
+  //               padding: "3px 21px",
+  //               background: "#E22828",
+  //               color: "#ffff",
+  //               border: " 1px solid #E22828",
+  //               borderRadius: " 8px",
+  //             }}
+  //           >
+  //             Giảm 50%{" "}
+  //           </button>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     title: "Chọn phòng",
+  //     key: "action",
+  //     width: "17%",
+  //     render: (text) => (
+  //       <div style={{ textAlign: "center" }}>
+  //         {roomSelect?.findIndex((item1) => item1.id === text.id) !== -1 ? (
+  //           <button
+  //             style={{
+  //               padding: "15px 30px",
+  //               background: "#E7E7E7",
+  //               color: "#3F3F3F",
+  //               border: " 1px solid transparent",
+  //               borderRadius: " 8px",
+  //             }}
+  //             onClick={() => {
+  //               dispatch({ type: SET_SELECT_ROOM, data: text });
+  //               handleChooseService();
+  //             }}
+  //           >
+  //             Bỏ chọn
+  //           </button>
+  //         ) : (
+  //           <button
+  //             style={{
+  //               padding: "15px 30px",
+  //               background: "#fff",
+  //               color: "#E22828",
+  //               border: " 1px solid #E22828",
+  //               borderRadius: " 8px",
+  //             }}
+  //             onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
+  //           >
+  //             Chọn
+  //           </button>
+  //         )}
+  //       </div>
+  //     ),
+  //   },
+  // ];
+
+  const [chooseService, setChooseService] = useState([]);
+
+  const handleChooseService = (data) => {
+    let newChooseService = [...chooseService];
+    if (newChooseService.filter((item) => item.id === data.id).length > 0) {
+      newChooseService = newChooseService.filter((item) => item.id !== data.id);
+    } else {
+      newChooseService.push(data);
+    }
+    setChooseService(newChooseService);
+  };
+
+  const handleBook = () => {
+    if (chooseService.length > 0) {
+      dispatch(chooseServiceAction(chooseService));
+      navigate("order");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
+  const handleAddCart = () => {
+    if (chooseService.length > 0) {
+      dispatch(addOrder(cate, chooseService));
+      toastMessage("Đã thêm vào giỏ hàng!", "success");
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
+  };
 
   return (
     <>
       <Helmet>
-        <title>{studioDetail1?.Name}</title>
-        <meta name="description" content={studioDetail1?.Description}></meta>
+        <title>{studioDetail?.data?.Name}</title>
+        <meta
+          name="description"
+          content={studioDetail?.data?.Description}
+        ></meta>
         <meta
           property="og:url"
           itemprop="url"
-          content={`${process.env.REACT_APP_DB_BASE_URL}${pathname}`}
+          content={`${REACT_APP_DB_BASE_URL_IMG}${pathname}`}
         ></meta>
         <meta
           property="og:description"
-          content={studioDetail1?.Description}
+          content={studioDetail?.data?.Description}
         ></meta>
         <meta
-          content={studioDetail1?.Image?.slice(0, 1)}
+          content={studioDetail?.data?.Image?.slice(0, 1)}
           property="og:image"
           itemprop="thumbnailUrl"
         ></meta>
@@ -292,7 +558,7 @@ export const StudioDetail = () => {
         <meta
           property="og:title"
           itemprop="name"
-          content={studioDetail1?.Name}
+          content={studioDetail?.data?.Name}
         ></meta>
       </Helmet>
       <div className={cx("wrapper")}>
@@ -300,13 +566,19 @@ export const StudioDetail = () => {
           <div className={cx("box1")}>
             <div className={cx("top")}>
               <div className={cx("title")}>
-                <h3>{studioDetail1?.Name} </h3>
+                <h3>{studioDetail?.data?.Name} </h3>
                 <CheckCircleOutlined
                   style={{ fontSize: "20px", color: "#03AC84" }}
                 />
               </div>
               <div className={cx("icons")}>
-                <HeartOutlined className={cx("item")} />
+                <PopUpSignIn
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <HeartOutlined className={cx("item")} />
+                </PopUpSignIn>
                 <Popover
                   placement="bottomRight"
                   content={
@@ -340,13 +612,12 @@ export const StudioDetail = () => {
                 </Popover>
               </div>
             </div>
-
             <div className={cx("address")}>
               <img src={images.address} alt="sa" />
-              <span>{studioDetail1?.Address}</span>
+              <span>{studioDetail?.data?.Address}</span>
             </div>
             <div className={cx("rate")}>
-              <Rate allowHalf value={5}></Rate>
+              <Rate disabled allowHalf value={5}></Rate>
               <span>5</span>
               <span className={cx("number-order")} style={{ fontSize: "15px" }}>
                 60 đã đặt{" "}
@@ -368,7 +639,7 @@ export const StudioDetail = () => {
                   >
                     <img
                       alt="sa"
-                      src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
+                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
                     />
                   </div>
                 ) : (
@@ -384,7 +655,7 @@ export const StudioDetail = () => {
                     className={cx("item")}
                   >
                     <img
-                      src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
+                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
                       alt="as"
                     />
                     <div className={cx("number")}>
@@ -394,12 +665,14 @@ export const StudioDetail = () => {
                 );
               })}
             </div>
+            // <ImagePost data={studioDetail?.data?.Image} />
           </div>
           <div className={cx("box2")}>
             <div className={cx("left")}>
               <div className={cx("description")}>
-                <h3>Mô tả</h3>
-                <Content data={studioDetail1?.Description} />
+                <ReadMoreDesc title="Chi tiết sản phẩm">
+                  {studioDetail?.data?.Description}
+                </ReadMoreDesc>
               </div>
               <div className={cx("sale")}>
                 <h3>4 Mã khuyến mãi</h3>
@@ -409,7 +682,11 @@ export const StudioDetail = () => {
                 </div>
               </div>
               <div className={cx("table")}>
-                <Table
+                <div className="ms-20">
+                  <SelectTimeOption />
+                </div>
+                <Table column={COLUMN} row={ROW(studioDetail?.service)} />
+                {/* <Table
                   className={cx("table-ant")}
                   columns={columns}
                   dataSource={roomDetail ?? roomDetail}
@@ -420,167 +697,14 @@ export const StudioDetail = () => {
                     style: { marginTop: "16px!important" },
                     className: cx("paginate"),
                   }}
-                />
+                /> */}
               </div>
 
               <div className={cx("rating")}>
-                <h3>Đánh giá</h3>
-                <div className={cx("rate")}>
-                  <Rate allowHalf value={5} style={{ fontSize: "10px" }}></Rate>
-                  <span>5 ( 30 đánh giá)</span>
-                </div>
-                <div className={cx("listRates")}>
-                  {/* <div className={cx("active")}>
-                  <span>5</span>
-                  <StarFilled style={{ color: "#F8D93A" }} />
-                  <span>(24)</span>
-                </div> */}
-                  {numberRating?.reverse().map((item) => {
-                    return (
-                      <div
-                        onClick={() => {
-                          setActiveId(item.id);
-                          dispatch(getAllRatingStudioByIdAction(id, item.id));
-                        }}
-                        key={item.id}
-                        className={cx(
-                          `${activeId === item.id ? "active" : ""}`
-                        )}
-                      >
-                        <span>{item.id}</span>
-                        <StarFilled style={{ color: "#F8D93A" }} />
-                        <span>{`(${item.total})`}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-                {ratingStudioPostDetai.length > 0 ? (
-                  <>
-                    {ratingStudioPostDetai.map((item, idx) => {
-                      return (
-                        <>
-                          <div className={cx("descriptionRate")}>
-                            <div className={cx("info-user")}>
-                              <img
-                                alt="sasa"
-                                src={`${process.env.REACT_APP_API_URL_IMG}${item.BookingUser.Image}`}
-                              />
-                              <div className={cx("info")}>
-                                <h3>{item.BookingUser.Fullname}</h3>
-                                <Rate allowHalf value={item.Rate}></Rate>
-                              </div>
-                            </div>
-                            {item.Description && (
-                              <div className={cx("description")}>
-                                {item.Description}
-                              </div>
-                            )}
-                            {item.VideoThumb.length > 0 &&
-                            item.Image.length > 0 ? (
-                              <>
-                                <div className={cx("listImages")}>
-                                  {item?.VideoThumb &&
-                                    item.VideoThumb.map((item1, idx) => (
-                                      <div
-                                        key={idx}
-                                        className={cx("item-video")}
-                                      >
-                                        <img
-                                          alt="video"
-                                          src={`${process.env.REACT_APP_API_URL_IMG}${item1}`}
-                                        />
-                                        <PlayCircleOutlined
-                                          className={cx("play")}
-                                        />
-                                      </div>
-                                    ))}
-                                  {ratingStudioPostDetai?.Image &&
-                                    ratingStudioPostDetai.Image.map(
-                                      (item, idx) => (
-                                        <div
-                                          key={idx}
-                                          className={cx("item-image")}
-                                        >
-                                          <img
-                                            alt="anh"
-                                            src={`${process.env.REACT_APP_API_URL_IMG}${item}`}
-                                          />
-                                        </div>
-                                      )
-                                    )}
-                                </div>
-                              </>
-                            ) : (
-                              <></>
-                            )}
-
-                            <p style={{ color: "#828282" }}>
-                              Phòng : Wisteria Premium{" "}
-                            </p>
-                          </div>
-                        </>
-                      );
-                    })}
-                    <div className={cx("descriptionRate")}>
-                      <div className={cx("info-user")}>
-                        <img alt="sasa" src={images.banner2} />
-                        <div className={cx("info")}>
-                          <h3>Mai Anh</h3>
-                          <Rate allowHalf value={5}></Rate>
-                        </div>
-                      </div>
-                      {/* {ratingStudioPostDetai && } */}
-                      <div className={cx("description")}>
-                        Studio rất đẹp, phục vụ nhiệt tình. Giá cả cũng hợp lý.
-                        Mình và chồng đều hài lòng. Chỉ có điều vị trí hơi khó
-                        tìm một chút, vì studio nằm trong hẻm khá sâu nên hơi
-                        khó tìm. Còn lại mọi thứ đều ổn.
-                      </div>
-                      <p style={{ color: "#828282" }}>
-                        Phòng : Wisteria Premium{" "}
-                      </p>
-                    </div>
-                    <div className={cx("descriptionRate")}>
-                      <div className={cx("info-user")}>
-                        <img alt="sa" src={images.banner2} />
-                        <div className={cx("info")}>
-                          <h3>Mai Anh</h3>
-                          <Rate allowHalf value={5}></Rate>
-                        </div>
-                      </div>
-                      <div className={cx("description")}>
-                        Studio rất đẹp, phục vụ nhiệt tình. Giá cả cũng hợp lý.
-                        Mình và chồng đều hài lòng. Chỉ có điều vị trí hơi khó
-                        tìm một chút, vì studio nằm trong hẻm khá sâu nên hơi
-                        khó tìm. Còn lại mọi thứ đều ổn.
-                      </div>
-                      <div className={cx("listImages")}>
-                        <div className={cx("item-video")}>
-                          <img alt="video" src={images.detail1} />
-                          <PlayCircleOutlined className={cx("play")} />
-                        </div>
-                        <div className={cx("item-image")}>
-                          <img alt="anh" src={images.detail1} />
-                        </div>
-                        <div className={cx("item-image")}>
-                          <img alt="anh1" src={images.detail1} />
-                        </div>
-                      </div>
-                      <p style={{ color: "#828282" }}>
-                        Phòng : Wisteria Premium{" "}
-                      </p>
-                    </div>
-                    <div className={cx("pagination-ds")}>
-                      <Pagination
-                        className={cx("pagination-ds")}
-                        defaultCurrent={1}
-                        total={50}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <></>
-                )}
+                <CommentRating
+                  data={studioDetail?.rating}
+                  className="mb-43 mt-12"
+                />
               </div>
             </div>
             <div className={cx("right")}>
@@ -588,7 +712,7 @@ export const StudioDetail = () => {
                 <h3>Xem trên bản đồ</h3>
                 <div className={cx("address")}>
                   <img src={images.address} alt="" />
-                  <span>{studioDetail1?.Address}</span>
+                  <span>{studioDetail?.data?.Address}</span>
                 </div>
                 <div className="mapouter">
                   <div className="gmap_canvas">
@@ -614,18 +738,26 @@ export const StudioDetail = () => {
                 </div>
               </div>
               <div className={cx("order")}>
-                <h3>Đã chọn 1 phòng</h3>
+                <h3>Đã chọn {chooseService.length} phòng</h3>
                 <div className={cx("item")}>
                   <span>Giá gốc</span>
-                  <span
-                    style={{
-                      textDecoration: "line-through",
-                      fontSize: " 16px",
-                      color: "#828282",
-                    }}
-                  >
-                    1.800.000đ
-                  </span>
+                  {chooseService.length > 0 && (
+                    <span
+                      style={{
+                        textDecoration: "line-through",
+                        fontSize: " 16px",
+                        color: "#828282",
+                      }}
+                    >
+                      {`${convertPrice(
+                        chooseService?.reduce(
+                          (total, item) => total + item.PriceByDate,
+                          0
+                        )
+                      )}`}
+                      đ
+                    </span>
+                  )}
                 </div>
                 <div className={cx("item")}>
                   <span>Bao gồm 50.000đ thuế và phí </span>
@@ -636,7 +768,13 @@ export const StudioDetail = () => {
                       fontWeight: "700",
                     }}
                   >
-                    1.500.000đ{" "}
+                    {`${convertPrice(
+                      chooseService?.reduce(
+                        (total, item) => total + item.PriceByDate,
+                        0
+                      )
+                    )}`}
+                    đ
                   </span>
                 </div>
                 <div
@@ -671,6 +809,7 @@ export const StudioDetail = () => {
                       cursor: "pointer",
                       fontWeight: "700",
                     }}
+                    onClick={handleBook}
                   >
                     Đặt ngay
                   </button>

@@ -1,5 +1,5 @@
-import { Col, Row, Button, Modal, Switch,Spin  } from "antd";
-import React, {  useState } from "react";
+import { Col, Row, Button, Modal, Switch } from "antd";
+import React, { useState } from "react";
 import "./accountInfo.scss";
 import TextInput from "../../../../components/TextInput/TextInput";
 import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
@@ -10,17 +10,27 @@ import EditText from "../../../../components/TextInput/EditText";
 import { useEffect } from "react";
 import { userService } from "../../../../services/UserService";
 import { ClipLoader } from "react-spinners";
-import { UserMe } from "../../../../components/Chat/ChatBody/ChatContent/ChatContent";
+import { useDispatch, useSelector } from "react-redux";
+import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
+import {
+  getCurrentUser,
+  logOut,
+} from "../../../../stores/actions/autheticateAction";
+import { useNavigate } from "react-router-dom";
 const AccountInfo = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const myImg = ImageDetect(UserMe);
   const [visible, setVisible] = useState(false);
-  const [infoUser, setInfoUser] = useState();
-  const [loading, setLoading] = useState(false)
+  const [infoUser, setInfoUser] = useState(UserMe);
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState({});
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
     if (newFile.preview !== null) {
-      setFile({ ...newFile });
+      setFile(newFile);
     }
   };
   const onChangeCheck = (checked) => {
@@ -29,29 +39,35 @@ const AccountInfo = () => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    await userService.deleteMe();
+    dispatch(logOut(navigate));
     setVisible(false);
   };
   const handleChangeValue = (name, value) => {
     setInfoUser({ ...infoUser, [name]: value });
   };
-  const saveChange = async() => {
-    setLoading(true)
-   try{
-    const { data } = await userService.infoUser(UserMe.id);
-    console.log(data);;
-    setLoading(false)
-   } catch (error){
-    setLoading(false)
-   }
-  }
-  useEffect(() => {
-    (async () => {
-      const { data } = await userService.infoUser(UserMe.id);
-      setInfoUser(data);
-    })();
-  }, []);
-    
+  const saveChange = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      delete file.preview;
+      console.log("file", file);
+      for (let key in infoUser) {
+        if (key !== "Image") {
+          formData.append(key, infoUser[key]);
+        } else {
+          formData.append("Image", file);
+        }
+      }
+      await userService.saveInfo(UserMe.id, formData);
+      dispatch(getCurrentUser());
+      setLoading(false);
+    } catch (error) {
+      console.log("fail");
+      setLoading(false);
+    }
+  };
   return (
     <>
       <h4 style={{ marginBottom: "8px", fontSize: "16px" }}>
@@ -76,13 +92,7 @@ const AccountInfo = () => {
                 <div className="ms-40 d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
                   {file ? (
                     <img
-                      src={
-                        file.preview !== undefined
-                          ? file.preview
-                          : `http://localhost:3003/api/image/${
-                              infoUser ? infoUser.Image : ""
-                            }`
-                      }
+                      src={file.preview ? file.preview : myImg}
                       className="w-100 h-100"
                       style={{ objectFit: "cover" }}
                       alt=""
@@ -137,8 +147,7 @@ const AccountInfo = () => {
           style={{
             borderBottom: "1px solid #CACACA",
             paddingBottom: "1rem",
-          }}
-        >
+          }}>
           <Col lg={12} sm={24}>
             <EditText label="Mật khẩu hiện tại" isPass={true} />
             <TextInput label="Mật khẩu mới" isPass={true} />
@@ -153,8 +162,7 @@ const AccountInfo = () => {
             style={{
               borderBottom: "1px solid #CACACA",
               paddingBottom: "2rem",
-            }}
-          >
+            }}>
             <Col span={12}>
               <div className="d-flex container justify-content-center align-items-center mb-30">
                 <img
@@ -164,8 +172,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết Zalo
                   </span>
@@ -174,8 +181,7 @@ const AccountInfo = () => {
               </div>
               <div
                 className="d-flex container justify-content-center align-items-center"
-                style={{ marginBottom: "30px" }}
-              >
+                style={{ marginBottom: "30px" }}>
                 <img
                   src={imgFB}
                   alt=""
@@ -183,8 +189,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết facebook
                   </span>
@@ -199,8 +204,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết google
                   </span>
@@ -222,16 +226,18 @@ const AccountInfo = () => {
               type="primary"
               ghost
               className="AccountInfo__delete__container__button"
-              onClick={() => setVisible(true)}
-            >
+              onClick={() => setVisible(true)}>
               <span>Xóa tài khoản</span>
             </Button>
           </div>
         </div>
 
         <div className="d-flex justify-content-center">
-          <Button type="primary" className="AccountInfo__save" onClick={saveChange}>
-          {loading &&<ClipLoader color="#fff" size={20} />} Lưu thay đổi
+          <Button
+            type="primary"
+            className="AccountInfo__save"
+            onClick={saveChange}>
+            {loading && <ClipLoader color="#fff" size={20} />} Lưu thay đổi
           </Button>
         </div>
       </div>
@@ -244,8 +250,7 @@ const AccountInfo = () => {
         height={400}
         closable={false}
         className="AccountInfo__delete__modal"
-        footer={false}
-      >
+        footer={false}>
         <div className="AccountInfo__delete__modal__header">
           Bạn có chắc muốn xóa tài khoản này?
         </div>
@@ -256,14 +261,12 @@ const AccountInfo = () => {
         <div className="AccountInfo__delete__modal__group__btn">
           <button
             className="AccountInfo__delete__modal__group__btn__cancel"
-            onClick={handleCancel}
-          >
+            onClick={handleCancel}>
             Hủy
           </button>
           <button
             className="AccountInfo__delete__modal__group__btn__delete"
-            onClick={handleDelete}
-          >
+            onClick={handleDelete}>
             Xóa
           </button>
         </div>

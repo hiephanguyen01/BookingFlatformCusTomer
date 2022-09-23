@@ -23,3 +23,21 @@ export const convertPrice = (price) => {
   }
   return format;
 };
+
+export const convertDateSendToDB = (date) => {
+  const convertDate = new Date(date);
+  const stringMoment = convertDate.toISOString();
+  const thisMoment = new Date(`${stringMoment.slice(0, 23)}-07:00`);
+  const modify = `${thisMoment.toISOString()}`;
+  return modify;
+};
+
+export const convertTimeSendDB = (time) => {
+  const splitTime = time.split(":");
+  console.log(splitTime);
+  return `${
+    parseInt(splitTime[0]).toString().length > 1
+      ? parseInt(splitTime[0])
+      : `0${parseInt(splitTime[0]) - 7}`
+  }:${splitTime[1]}`;
+};

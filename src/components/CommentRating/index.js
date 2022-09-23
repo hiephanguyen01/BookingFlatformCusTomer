@@ -87,6 +87,7 @@ const Index = ({ data = [], className }) => {
                               <img
                                 src={`${REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
                                 className="img_avatar"
+                                alt=""
                               />
                             </div>
                             <div className="info ms-10">
@@ -99,7 +100,7 @@ const Index = ({ data = [], className }) => {
                         <div className="description">{item.Description}</div>
                         <ul className="listImages">
                           <li className="item-video">
-                            <img src={imgCmt} />
+                            <img src={imgCmt} alt="" />
                             <PlayCircleOutlined className="play" />
                           </li>
                           {item.Image.map((img, index) => (
@@ -123,7 +124,11 @@ const Index = ({ data = [], className }) => {
                         </div>
                         <div className="d-flex">
                           <div className="w-28px h-28px me-15">
-                            <img src={images.banner2} className="img_avatar" />
+                            <img
+                              src={images.banner2}
+                              className="img_avatar"
+                              alt=""
+                            />
                           </div>
                           <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
                             <div>
@@ -159,6 +164,7 @@ const Index = ({ data = [], className }) => {
                               <img
                                 src={`${REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
                                 className="img_avatar"
+                                alt=""
                               />
                             </div>
                             <div className="info ms-10">
@@ -171,7 +177,7 @@ const Index = ({ data = [], className }) => {
                         <div className="description">{item.Description}</div>
                         <ul className="listImages">
                           <li className="item-video">
-                            <img src={imgCmt} />
+                            <img src={imgCmt} alt="" />
                             <PlayCircleOutlined className="play" />
                           </li>
                           {item.Image.map((img, index) => (
@@ -195,7 +201,11 @@ const Index = ({ data = [], className }) => {
                         </div>
                         <div className="d-flex">
                           <div className="w-28px h-28px me-15">
-                            <img src={images.banner2} className="img_avatar" />
+                            <img
+                              src={images.banner2}
+                              className="img_avatar"
+                              alt=""
+                            />
                           </div>
                           <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
                             <div>

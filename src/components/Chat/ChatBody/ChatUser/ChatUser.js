@@ -83,9 +83,15 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
               >
                 <div>
                   Bạn:{" "}
-                  {lastMessage.Content.toString().length <= 9
-                    ? lastMessage.Content
-                    : `${lastMessage.Content.toString().slice(0, 9)}...`}
+                  {lastMessage.Type === "text" ? (
+                    <>
+                      {lastMessage.Content.toString().length <= 9
+                        ? lastMessage.Content
+                        : `${lastMessage.Content.toString().slice(0, 9)}...`}
+                    </>
+                  ) : (
+                    <>Ảnh</>
+                  )}
                 </div>
                 <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
               </div>
@@ -99,9 +105,15 @@ export const ChatUser = React.memo(({ userInfo, toggleState, toggleClick }) => {
                 }}
               >
                 <div>
-                  {lastMessage.Content.toString().length <= 12
-                    ? lastMessage.Content
-                    : `${lastMessage.Content.toString().slice(0, 12)}...`}
+                  {lastMessage.Type === "text" ? (
+                    <>
+                      {lastMessage.Content.toString().length <= 12
+                        ? lastMessage.Content
+                        : `${lastMessage.Content.toString().slice(0, 12)}...`}
+                    </>
+                  ) : (
+                    <>Ảnh</>
+                  )}
                 </div>
                 <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
               </div>

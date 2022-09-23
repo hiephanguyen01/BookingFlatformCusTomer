@@ -5,7 +5,6 @@ import { ChatUserFilter } from "./ChatUserFilter/ChatUserFilter";
 import { chatService } from "../../../services/ChatService";
 import { socket } from "../../ConnectSocket/ConnectSocket";
 import { ChatAdmin } from "./ChatAdmin/ChatAdmin";
-import { UserMe } from "./ChatContent/ChatContent";
 import { ChatContentAdmin } from "./ChatContent/ChatContentAdmin";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,6 +13,7 @@ import {
 } from "../../../stores/selector/ChatSelector";
 import { updateMAction } from "../../../stores/actions/ChatAction";
 export const ChatBody = React.memo(() => {
+  const UserMe = useSelector((state)=> state.authenticateReducer.currentUser )
   const updateConversation = useSelector(findConverSelector);
   const flagCreateConver = useSelector(createConverFlagSelector);
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ export const ChatBody = React.memo(() => {
   useEffect(() => {
     (async () => {
       const res = await chatService.getConversation(8, 1, UserMe.id, 1);
+      
       initMountStateUser.current = res.data.data;
       setConversation(res.data.data);
       setToggleState(res.data.data[0].id);
@@ -161,12 +162,10 @@ export const ChatBody = React.memo(() => {
                 initMountStateUser.current = newListConversation;
                 setConversation(newListConversation);
                 if (data.pagination.hasNextPage === false) {
-                  console.log("last page");
                   setHasMore(false);
                   setLoadMore(false);
                 }
               } else {
-                console.log("het");
                 setHasMore(false);
                 setLoadMore(false);
               }

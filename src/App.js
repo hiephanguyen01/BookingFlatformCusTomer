@@ -1,26 +1,28 @@
-import React, { useEffect } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
-import { BackTop, Modal } from "antd";
+import { BackTop } from "antd";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import { ModalCustom } from "./components/Modal";
 import { AuthPage } from "./pages/Auth/AuthPage";
+import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import BookStudio from "./pages/BookStudio";
-import { CustomerLayout } from "./pages/CustomerLayout";
-import PhotographerDetail from "./pages/PhotographerDetail";
-import Dao from "./pages/Dao";
-import FilterPage from "./pages/FilterPage/FilterPage";
-import UserAccount from "./pages/UserAccount";
-import { getCurrentUser } from "./stores/actions/autheticateAction";
 import Cart from "./pages/Cart";
-import { Home } from "./pages/Home";
 import PageClothes from "./pages/ClothesDetails/PageClothes";
+import { CustomerLayout } from "./pages/CustomerLayout";
+import Dao from "./pages/Dao";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
-import PageModel from "./pages/ModelDetails/PageModel";
+import FilterPage from "./pages/FilterPage/FilterPage";
+import { Home } from "./pages/Home";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
-import { StudioDetail } from "./pages/StudioDetail";
+import PageModel from "./pages/ModelDetails/PageModel";
+import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
+import PageStudio from "./pages/StudioDetail/PageStudio";
+import UserAccount from "./pages/UserAccount";
 import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
+import { getCurrentUser } from "./stores/actions/autheticateAction";
+import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,28 +38,36 @@ function App() {
     fontSize: 20,
   };
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    dispatch(getCurrentUser(token));
+    dispatch(getCurrentUser());
   }, []);
   // Warning  Add <ProtectedRouter></ProtectedRouter> when create Route //
   return (
     <div className="App">
       <ModalCustom />
       <BackTop>
-        <ArrowUpOutlined style={style} />
+        {/* <ArrowUpOutlined style={style} /> */}
+        {/* <BackTopIcon /> */}
+        <BackTopIcon />
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
-          <Route path="studio/:id" element={<StudioDetail />} />
-          <Route path="user/:id/*" element={<UserAccount />} />
+          <Route
+            path="user/*"
+            element={
+              <ProtectedRouter>
+                <UserAccount />
+              </ProtectedRouter>
+            }
+          />
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="photographer/:id" element={<PhotographerDetail />} />
+          <Route path="studio/*" element={<PageStudio />} />
+          <Route path="photographer/*" element={<PagePhotographer />} />
           <Route path="device/*" element={<PageDevice />} />
           <Route path="clothes/*" element={<PageClothes />} />
           <Route path="model/*" element={<PageModel />} />

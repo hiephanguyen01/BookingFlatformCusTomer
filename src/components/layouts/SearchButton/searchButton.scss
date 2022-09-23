@@ -1,0 +1,13 @@
+@import "../../../App.scss";
+
+.search-button {
+  padding: 12px 30px;
+  border-radius: 8px;
+  background-color: $primary-700;
+
+  svg {
+    path {
+      fill: #fff !important;
+    }
+  }
+}

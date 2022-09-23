@@ -2,35 +2,171 @@ import { CheckCircleOutlined } from "@ant-design/icons";
 import { Col, DatePicker, Row, TimePicker, Input, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Link, useParams } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 import "./order.scss";
 
 import TextInput from "../../components/TextInput/TextInput";
 import Promotion from "../../components/Promotion";
 
-import imgStudio from "../../assets/dao/Frame 163.jpg";
-import { handleSendOtp } from "../../stores/actions/autheticateAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
+import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { convertDateSendToDB, convertPrice } from "../../utils/convert";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import { orderService } from "../../services/OrderService";
+import toastMessage from "../ToastMessage";
+import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 const Index = ({ linkTo = "" }) => {
-  // const [chooseVoucher, setChooseVoucher] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { studioDetail, filter } = useSelector(
+    (state) => state.studioPostReducer
+  );
+  const [infoUser, setInfoUser] = useState({
+    name: "ok",
+    phoneNumber: "0987654321",
+    email: "ok",
+    message: "ok",
+  });
   const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  let cate;
 
+  const nameCategory = location.pathname
+    .split("/")
+    .filter((item) => item !== "")[1];
+  switch (nameCategory) {
+    case "studio":
+      cate = 1;
+      break;
+    case "photographer":
+      cate = 2;
+      break;
+    case "clothes":
+      cate = 3;
+      break;
+    case "makeup":
+      cate = 4;
+      break;
+    case "model":
+      cate = 5;
+      break;
+    case "device":
+      cate = 6;
+      break;
+
+    default:
+      break;
+  }
+  console.log(cate);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setStudioPostIdAction(id));
+    dispatch(studioDetailAction(id, cate));
   }, []);
 
-  const onChange = (date, dateString) => {
+  const isEmpty = () => {
+    if (
+      infoUser.name === "" ||
+      infoUser.phoneNumber === "" ||
+      infoUser.email === "" ||
+      infoUser.message === ""
+    ) {
+      return 0;
+    }
+    return 1;
   };
 
-  const handleOnClickOrder = () => {
+  const onChangeDate = (date, dateString, serviceId) => {
+    const newListService = chooseServiceList.map((item) => {
+      if (item.id === Number(serviceId)) {
+        return { ...item, orderDate: dateString };
+      }
+      return item;
+    });
+    dispatch(chooseServiceAction(newListService));
+  };
+
+  const onChangeHour = (times, timeString, serviceId) => {
+    const newListService = chooseServiceList.map((item) => {
+      if (item.id === Number(serviceId)) {
+        return { ...item, orderHours: timeString };
+      }
+      return item;
+    });
+    dispatch(chooseServiceAction(newListService));
+  };
+
+  const handleOnClickOrder = async () => {
     try {
       if (user === null) {
-        handleSendOtp(phoneNumber, Navigate, "", {}, null);
+        // handleSendOtp(phoneNumber, Navigate, "", null, null);
+      }
+      if (isEmpty() === 1) {
+        let IdentifyCode = [],
+          TenantId;
+        if (filter.OrderByTime === 0) {
+          for (let i = 0; i < chooseServiceList.length; i++) {
+            const newData = {
+              OrderByTime: 1,
+              // OrderByTimeFrom:
+              //   convertDateSendToDB(item.orderDate).slice(0, 11) +
+              //   item.orderHours[0] +
+              //   ":00.000Z",
+              // OrderByTimeTo:
+              //   convertDateSendToDB(item.orderDate).slice(0, 11) +
+              //   item.orderHours[1] +
+              //   ":00.000Z",
+              OrderByTimeFrom: filter.OrderByTimeFrom,
+              OrderByTimeTo: filter.OrderByTimeTo,
+              PaymentType: 0,
+              OrderNote: infoUser.message,
+              BookingUserName: infoUser.name,
+              BookingPhone: infoUser.phoneNumber,
+              BookingEmail: infoUser.email,
+              BookingUserId: 1,
+              CreatorUserId: 1,
+              ProductId: chooseServiceList[i].id,
+              Category: cate,
+              IsPayDeposit: 1,
+              BookingValue: chooseServiceList[i].Sales,
+            };
+            const response = await orderService.addOrder(newData);
+            IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
+            TenantId = response.data.TenantId;
+          }
+        } else if (filter.OrderByTime === 1) {
+          for (let i = 0; i < chooseServiceList.length; i++) {
+            const newData = {
+              OrderByTime: 0,
+              OrderByDateFrom: filter.OrderByDateFrom,
+              OrderByDateTo: filter.OrderByDateTo,
+              PaymentType: 0,
+              OrderNote: infoUser.message,
+              BookingUserName: infoUser.name,
+              BookingPhone: infoUser.phoneNumber,
+              BookingEmail: infoUser.email,
+              BookingUserId: 1,
+              CreatorUserId: 1,
+              ProductId: chooseServiceList[i].id,
+              Category: cate,
+              IsPayDeposit: 1,
+              BookingValue: chooseServiceList[i].Sales,
+            };
+            const response = await orderService.addOrder(newData);
+            IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
+            TenantId = response.data.TenantId;
+          }
+        }
+        navigate("confirm", {
+          state: { IdentifyCode, TenantId },
+        });
+      } else {
+        toastMessage("Vui lòng điền đầy đủ thông tin!", "warn");
       }
     } catch (error) {
       console.log(error);
@@ -44,15 +180,12 @@ const Index = ({ linkTo = "" }) => {
     });
   };
 
+  const handleOnChangeText = (e) => {
+    setInfoUser({ ...infoUser, [e.target.name]: e.target.value });
+  };
+
   return (
-    <div
-      className=""
-      style={{
-        margin: "auto",
-        backgroundColor: "rgb(245, 245, 245)",
-        padding: "2rem 0",
-      }}
-    >
+    <div className="order_container">
       <Row
         style={{
           maxWidth: "1300px",
@@ -60,69 +193,93 @@ const Index = ({ linkTo = "" }) => {
         }}
       >
         <Col lg={9} sm={24}>
-          <div
-            style={{
-              padding: "20px 25px 30px",
-              marginBottom: "0.5rem",
-              backgroundColor: "#FFFFFF",
-            }}
-          >
-            <div className="text-title" style={{ marginBottom: "1rem" }}>
-              Bạn đã chọn
+          <div className="right_col">
+            <div className="text-title">Bạn đã chọn</div>
+            <div className="text-description">
+              {studioDetail?.data?.Name}
+              <CheckCircleOutlined
+                style={{
+                  height: "100%",
+                  color: "green",
+                  marginLeft: "0.25rem",
+                }}
+              />
             </div>
-            <div className="border-bottom">
-              <div
-                className="text-description"
-                style={{ color: "#222222", marginBottom: "14px" }}
-              >
-                Cho thuê trang phục Flux
-                <CheckCircleOutlined
-                  style={{
-                    height: "100%",
-                    color: "green",
-                    marginLeft: "0.25rem",
-                  }}
-                />
-              </div>
-              <div
-                className="d-flex"
-                style={{ height: "88px", marginRight: "0.5rem" }}
-              >
-                <img
-                  src={imgStudio}
-                  style={{ height: "100%", marginRight: "20px" }}
-                  alt=''
-                />
-                <div>
-                  <span className="text-middle">Váy cưới mã 01</span>
-                  <div
-                    className="text-description"
-                    style={{ color: "#3F3F3F", margin: "6px 0 8px" }}
-                  >
-                    Trắng, size S, Số lượng 1
+            {chooseServiceList.length > 0 &&
+              chooseServiceList.map((item) => (
+                <>
+                  <div className="border-bottom">
+                    <div
+                      className="d-flex"
+                      style={{ height: "88px", marginRight: "0.5rem" }}
+                    >
+                      <img
+                        src={`${
+                          item.Image.length > 0 &&
+                          item.Image[0].includes("https://drive.google.com/")
+                            ? item.Image[0]
+                            : REACT_APP_DB_BASE_URL_IMG + "/" + item.Image[0]
+                        }`}
+                        className="img_service"
+                        alt=""
+                      />
+                      <div>
+                        <span className="text-middle">
+                          {item.Name.length > 30
+                            ? `${item.Name.slice(0, 30)}...`
+                            : item.Name}
+                        </span>
+                        <div
+                          className="text-description mt-6 mb-8"
+                          style={{ color: "#3F3F3F" }}
+                        >
+                          Trắng, size S, Số lượng 1
+                        </div>
+                        <div className="text-middle">
+                          {filter.OrderByTime === 0 &&
+                            convertPrice(item.Sales || item.PriceByHour)}
+                          {filter.OrderByTime === 1 &&
+                            convertPrice(item.Sales || item.PriceByDate)}
+                          đ
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-middle" style={{ color: "#3F3F3F" }}>
-                    1.500.000
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="border-bottom">
-              <div className="text-title" style={{ marginBottom: "16px" }}>
-                Khung giờ bạn muốn đặt
-              </div>
-              <div
-                className="text-description d-flex align-items-center"
-                style={{ marginBottom: "12px" }}
-              >
-                <div style={{ color: "#616161", width: "50px" }}>Ngày</div>
-                <DatePicker onChange={onChange} style={{ color: "#3F3F3F" }} />
-              </div>
-              <div className="text-description d-flex align-items-center">
-                <div style={{ color: "#616161", width: "50px" }}>Giờ</div>
-                <TimePicker.RangePicker style={{ color: "#3F3F3F" }} />
-              </div>
-            </div>
+                  <div className="border-bottom">
+                    <div
+                      className="text-title"
+                      style={{ marginBottom: "16px" }}
+                    >
+                      Khung giờ bạn muốn đặt
+                    </div>
+                    <SelectTimeOption disabled="true" />
+                    {/* <div
+                      className="text-description d-flex align-items-center"
+                      style={{ marginBottom: "12px" }}
+                    >
+                      <div style={{ color: "#616161", width: "50px" }}>
+                        Ngày
+                      </div>
+                      <DatePicker
+                        onChange={(date, dateString) =>
+                          onChangeDate(date, dateString, item.id)
+                        }
+                        style={{ color: "#3F3F3F" }}
+                        format="YYYY-MM-DD"
+                      />
+                    </div>
+                    <div className="text-description d-flex align-items-center">
+                      <div style={{ color: "#616161", width: "50px" }}>Giờ</div>
+                      <TimePicker.RangePicker
+                        style={{ color: "#3F3F3F" }}
+                        onChange={(time, timeString) =>
+                          onChangeHour(time, timeString, item.id)
+                        }
+                      />
+                    </div> */}
+                  </div>
+                </>
+              ))}
             <div className="border-bottom">
               <div className="text-title" style={{ marginBottom: "8px" }}>
                 Phương thức thanh toán
@@ -138,9 +295,12 @@ const Index = ({ linkTo = "" }) => {
               <Input.TextArea
                 showCount
                 maxLength={100}
-                onChange={onChange}
+                onChange={handleOnChangeText}
                 placeholder="Gửi lời nhắn cho shop"
                 className="text-area"
+                name="message"
+                value={infoUser.message}
+                onResize={false}
               />
             </div>
             <div
@@ -164,7 +324,7 @@ const Index = ({ linkTo = "" }) => {
               <div style={{ backgroundColor: "#E3FAF4", padding: "16px 15px" }}>
                 <div className="d-flex justify-content-between">
                   <div className="text-middle" style={{ color: "#222222" }}>
-                    Đã chọn 2 dịch vụ
+                    Đã chọn {chooseServiceList.length} dịch vụ
                   </div>
                   <div
                     className="text-description "
@@ -174,7 +334,23 @@ const Index = ({ linkTo = "" }) => {
                       marginBottom: "12px",
                     }}
                   >
-                    1.800.000
+                    {filter.OrderByTime === 0 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByHour),
+                          0
+                        )
+                      )}
+                    {filter.OrderByTime === 1 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByDate),
+                          0
+                        )
+                      )}
+                    đ
                   </div>
                 </div>
                 <div className="d-flex justify-content-between">
@@ -193,7 +369,23 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}
                   >
-                    1.500.000
+                    {filter.OrderByTime === 0 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByHour),
+                          0
+                        )
+                      )}
+                    {filter.OrderByTime === 1 &&
+                      convertPrice(
+                        chooseServiceList.reduce(
+                          (total, service) =>
+                            total + (service.Sales || service.PriceByDate),
+                          0
+                        )
+                      )}
+                    đ
                   </div>
                 </div>
               </div>
@@ -221,26 +413,42 @@ const Index = ({ linkTo = "" }) => {
             <TextInput
               placeholder="Tên khách hàng"
               styleContainer={{ width: "100%" }}
+              name="name"
+              onChange={(e) => handleOnChangeText(e)}
+              value={infoUser.name}
             />
             <TextInput
-              name="SDT"
+              name="phoneNumber"
               placeholder="Số điện thoại"
               styleContainer={{ width: "100%" }}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={(e) => handleOnChangeText(e)}
+              value={infoUser.phoneNumber}
             />
-            <TextInput placeholder="Email" styleContainer={{ width: "100%" }} />
+            <TextInput
+              name="email"
+              placeholder="Email"
+              styleContainer={{ width: "100%" }}
+              onChange={(e) => handleOnChangeText(e)}
+              value={infoUser.email}
+            />
           </div>
           <div
             className="d-flex justify-content-end"
             style={{ marginTop: "35px" }}
           >
-            <Button
-              type="primary"
-              style={{ borderRadius: "8px", height: "45px", width: "270px" }}
-              onClick={() => handleOnClickOrder}
+            <PopUpSignIn
+              onClick={(e) => {
+                handleOnClickOrder();
+                e.stopPropagation();
+              }}
             >
-              <Link to={linkTo}>Hoàn tất đặt</Link>
-            </Button>
+              <Button
+                type="primary"
+                style={{ borderRadius: "8px", height: "45px", width: "270px" }}
+              >
+                Hoàn tất đặt
+              </Button>
+            </PopUpSignIn>
           </div>
         </Col>
       </Row>
