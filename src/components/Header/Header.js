@@ -16,24 +16,25 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import FeedIcon from "../../assets/img/FeedIcon.png";
-import logo from "../../assets/img/Logo1.png";
+import DaoIcon from "../../assets/header/DaoIcon.svg";
+import Logo from "../../assets/header/Logo.svg";
+import { ReactComponent as SearchIcon } from "../../assets/header/SearchIcon.svg";
 import noBody from "../../assets/img/no-body.png";
 import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
-import { SET_FILTER } from "../../stores/types/studioPostType";
 import { ImageDetect } from "../ImageDetect/ImageDetect";
+import SearchButton from "../layouts/SearchButton";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import "./Header.scss";
 const { Option } = Select;
 const Header = () => {
   const [provinces, setProvinces] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
-  const img = ImageDetect(user)
+  const img = ImageDetect(user);
   const filter = useSelector((state) => state.studioPostReducer.filter);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const categories = [
     {
       id: 1,
@@ -116,7 +117,7 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick ={()=> navigate('/home/user/')}
+              onClick={() => navigate("/home/user/")}
             >
               Thông tin tài khoản
             </Button>
@@ -181,7 +182,7 @@ const Header = () => {
         footer={[]}
       >
         <div className="logo">
-          <img src={logo} alt="" />
+          <img src={Logo} alt="" />
         </div>
         <Form onFinish={onFinish}>
           <Form.Item name="keyString">
@@ -241,16 +242,18 @@ const Header = () => {
       <div className="container">
         <Link to="/home" className="link">
           <div className="img">
-            <img src={logo} alt="" />
+            <img src={Logo} alt="" />
           </div>
         </Link>
         <Input
+          className="container__input"
           placeholder="Bạn đang tìm gì?"
-          prefix={<SearchOutlined />}
+          prefix={<SearchIcon />}
+          suffix={<SearchButton />}
           onClick={() => setVisible(true)}
         />
         <div className="tip" onClick={() => navigate("/home/dao")}>
-          <img src={FeedIcon} alt="" />
+          <img src={DaoIcon} alt="" />
           <p>Dạo</p>
         </div>
         <Link to={"cart"} className="tip">
@@ -260,7 +263,7 @@ const Header = () => {
         {user ? (
           <Dropdown overlay={menuSignOut} placement="topRight" arrow>
             <div className="user">
-              <Avatar src={user.Image ? img: noBody} />
+              <Avatar src={user.Image ? img : noBody} />
               <div className="text">
                 <p>Tài khoản</p>
                 <p>

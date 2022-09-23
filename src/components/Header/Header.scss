@@ -1,3 +1,5 @@
+@import "../../App.scss";
+
 .Header {
   font-size: 15px;
   color: #828282;
@@ -13,7 +15,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+    .ant-input-affix-wrapper {
+      padding: 3px 3px !important;
+      .ant-input-prefix {
+        padding: 10px 0 10px 13px !important;
+      }
+    }
+    &__input {
+      border-radius: 8px;
+      // padding: 12px;
+      background-color: $neutral-50;
+      svg {
+        path {
+          fill: $neutral-500;
+        }
+      }
+      input {
+        margin-left: 11px;
+        background-color: $neutral-50;
+        &::placeholder {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 22px;
+        }
+      }
+    }
   }
   .ant-input-affix-wrapper {
     width: 50% !important;
@@ -47,7 +73,6 @@
     text-align: center;
     margin: 20px;
     cursor: pointer;
-  
   }
   .filter {
     font-weight: 600;
