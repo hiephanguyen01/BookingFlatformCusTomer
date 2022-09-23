@@ -191,7 +191,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
         <img
           onLoad={() => scrollToBottom()}
           style={{
-            width: 200,
+            maxWidth:"200px",
             height: "auto",
             borderRadius: "10px",
             color: "#fff !important",
