@@ -22,7 +22,7 @@ const Rating = () => {
   useEffect(() => {
     (async () => {
       //truyen id cua thang user vo
-      const { data } = await userService.getListRatings(UserMe.id);
+      const { data } = await userService.getListRatings(5);
       console.log(data);
       setMyRatings(data);
     })();
