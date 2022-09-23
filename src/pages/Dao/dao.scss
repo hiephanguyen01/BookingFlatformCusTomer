@@ -87,11 +87,12 @@
   font-weight: 700 !important;
   font-size: 20px !important;
   line-height: 27px !important;
-  color: $neutral-600  !important;
+  color: $neutral-600 !important;
 }
 
 .text-area.ant-input {
   padding: 10px 14px;
+  border-radius: 8px;
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
@@ -161,7 +162,7 @@
 
 .btn-huy {
   padding: 15px 31px !important;
-  background: $neutral-100  !important;
+  background: $neutral-100 !important;
 }
 
 .btn-dang {
