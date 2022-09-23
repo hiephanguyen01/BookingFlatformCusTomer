@@ -48,6 +48,7 @@ const Index = ({ data, style = {}, className = "" }) => {
                         : REACT_APP_DB_BASE_URL_IMG + "/" + item
                     }`}
                     style={{ height: "100%" }}
+                    alt=""
                   />
                 </SwiperSlide>
               );

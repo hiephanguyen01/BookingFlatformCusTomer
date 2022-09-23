@@ -5,7 +5,7 @@ import {
   PlusOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Col, Row, Popover, Modal } from "antd";
+import { Col, Row, Popover, Modal, message } from "antd";
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
@@ -24,28 +24,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 
 const moreOptionOnEachPost = [
-  { icon: <Info />, title: "Báo cáo bài viết" },
-  { icon: <Bell />, title: "Bật thông báo về bài viết này " },
-  { icon: <LinkCopy />, title: "Sao chép liên kết" },
-  { icon: <PostSave />, title: "Lưu bài viết" },
+  { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
+  { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
+  { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
+  { icon: <PostSave />, title: "Lưu bài viết", id: 4 },
 ];
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.authenticateReducer);
+  const currentUser = useSelector(
+    (state) => state.authenticateReducer.currentUser
+  );
+  console.log(currentUser);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
-  const [moreOptionModal, setMoreOptionModal] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [moreOptionModal, setMoreOptionModal] = useState(false);
+  const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
   const [isModalVisibleDetail, setIsModalVisibleDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
-  const { item } = props;
+  const { item, likePostList } = props;
+
   const {
     Id,
     Username,
@@ -59,40 +65,63 @@ const DaoPost = (props) => {
     // comments,
     CreationTime,
   } = item;
-  console.log(item);
   const handleImageModal = (url) => {
     setImageInModal(url);
-    setIsModalVisible(true);
     setIsModalVisibleDetail(true);
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   const handleOkDetail = () => {
-    setIsModalVisible(false);
+    setIsModalVisibleDetail(false);
   };
 
   const handleCancelDetail = () => {
     setIsModalVisibleDetail(false);
   };
 
-  const handleMoreOptionClick = () => {
-    setIsModalVisible(false);
-    setIsReportPostModalVisible(true);
-  };
-
   const handleLike = () => {
     if (currentUser) {
-      dispatch(likePost(2, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
-      setMouseClickHeart(!mouseClickHeart);
+      if (checkLikePost()) {
+        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(false);
+      } else {
+        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(true);
+      }
     }
   };
+  const handleMoreOptionClick = async (itm) => {
+    switch (itm.id) {
+      case 1:
+        setIsReportPostModalVisible(true);
+        setMoreOptionModal(false);
+        break;
+      case 2:
+        message.success("Đã bật thông báo về bài viết này");
+        setMoreOptionModal(false);
+        break;
+      case 3:
+        message.success("Đã sao chép liên kết");
+        setMoreOptionModal(false);
+        break;
+      case 4:
+        try {
+          await userService.savePost(currentUser.id, Id);
+          message.success("Lưu bài viết thành công");
+          setMoreOptionModal(false);
+        } catch (error) {
+          message.success("Lưu bài viết thất bại");
+          setMoreOptionModal(false);
+        }
+        break;
+      default:
+        break;
+    }
+
+    setIsModalVisible(false);
+  };
+
+  const checkLikePost = () =>
+    likePostList.filter((itm) => itm.PostId === Id).length > 0;
 
   let ImageSection = null;
   let tempCount = Image.length;
@@ -280,7 +309,7 @@ const DaoPost = (props) => {
               content={
                 <div className="more-option-modal">
                   {moreOptionOnEachPost.map((item, idx) => (
-                    <li onClick={handleMoreOptionClick} key={idx}>
+                    <li onClick={() => handleMoreOptionClick(item)} key={idx}>
                       <div className="container d-flex">
                         <div>{item.icon}</div>
                         <p>{item.title}</p>
@@ -390,9 +419,9 @@ const DaoPost = (props) => {
                           </div>
                         }
                         trigger="click"
-                        visible={moreOptionModal}
+                        visible={isModalOptionDetail}
                         onVisibleChange={(newVisible) =>
-                          setMoreOptionModal(newVisible)
+                          setIsModalOptionDetail(newVisible)
                         }>
                         <MoreOutlined style={{ fontSize: "24px" }} />
                       </Popover>
@@ -415,22 +444,20 @@ const DaoPost = (props) => {
                   <div
                     className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
                     style={{ borderBottom: "1px solid #E7E7E7" }}>
-                    <div
-                      className="post__main__content__like-comment__likes d-flex"
-                      onClick={() => console.log(12345)}>
+                    <div className="post__main__content__like-comment__likes d-flex">
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
                         }}>
-                        {mouseOverHeart || mouseClickHeart ? (
+                        {true ? (
                           <HeartFilled
-                            onClick={() => setMouseClickHeart(!mouseClickHeart)}
+                            // onClick={handleOnClickLikePost}
                             style={{
                               fontSize: "20px",
                               color: "#E22828",
                               marginBottom: "2px",
                             }}
-                            onMouseLeave={() => setMouseOverHeart(false)}
+                            // onMouseLeave={() => setMouseOverHeart(false)}
                           />
                         ) : (
                           <HeartOutlined
@@ -440,7 +467,7 @@ const DaoPost = (props) => {
                               cursor: "pointer",
                               marginBottom: "2px",
                             }}
-                            onMouseOver={() => setMouseOverHeart(true)}
+                            // onMouseOver={() => setMouseOverHeart(true)}
                           />
                         )}
                       </PopUpSignIn>
@@ -704,7 +731,6 @@ const DaoPost = (props) => {
                             <HeartFilled
                               onClick={() => {
                                 setMouseClickHeart(!mouseClickHeart);
-                                console.log(123);
                               }}
                               style={{
                                 fontSize: "20px",
@@ -741,14 +767,12 @@ const DaoPost = (props) => {
             </Modal>
           </div>
           <div className="post__main__content__like-comment d-flex align-items-center">
-            <div
-              className="post__main__content__like-comment__likes d-flex"
-              onClick={console.log(123)}>
+            <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn
                 onClick={(e) => {
                   e.stopPropagation();
                 }}>
-                {mouseOverHeart || mouseClickHeart ? (
+                {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
                   <HeartFilled
                     onClick={handleLike}
                     style={{

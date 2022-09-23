@@ -1,4 +1,3 @@
-import { orderService } from "../../services/OrderService";
 import {
   LOADING,
   SET_CHOOSE_SERVICE,
@@ -11,7 +10,7 @@ import {
 export const getAllOrder = () => async (dispatch) => {
   dispatch({ type: LOADING, payload: true });
   try {
-    const { data } = await orderService.getAllOrder();
+    // const { data } = await orderService.getAllOrder();
     // dispatch({ type: SET_POST_LIST, payload: data.data });
   } catch (error) {
     console.error(error);
@@ -22,7 +21,7 @@ export const getAllOrder = () => async (dispatch) => {
 export const getAllOrderByUserId = () => async (dispatch) => {
   dispatch({ type: LOADING, payload: true });
   try {
-    const { data } = await orderService.getAllOrderByUserId();
+    // const { data } = await orderService.getAllOrderByUserId();
     // dispatch({ type: SET_POST_LIST, payload: data.data });
   } catch (error) {
     console.error(error);

@@ -5,7 +5,6 @@ import {
   ADD_ORDER,
   DELETE_ORDER,
   UPDATE_ORDER,
-  UPDATE_CHOOSE_SERVICE,
 } from "../types/OrderType";
 
 const initialState = {
