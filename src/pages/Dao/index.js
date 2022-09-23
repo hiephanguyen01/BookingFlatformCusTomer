@@ -10,7 +10,10 @@ import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
 import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
-import { getAllPostDaoAction } from "../../stores/actions/PostDaoAction";
+import {
+  getAllPostDaoAction,
+  getLikePostList,
+} from "../../stores/actions/PostDaoAction";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Modal, message, Input } from "antd";
 // import uploadImg from "../../assets/dao/uploadImg.png";
@@ -77,13 +80,12 @@ const Dao = (props) => {
     description: "",
   });
   const dispatch = useDispatch();
-  const { listPost, pagination } = useSelector((state) => state.postDaoReducer);
+  const { listPost, pagination, likePostList } = useSelector(
+    (state) => state.postDaoReducer
+  );
 
   const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  // const [previewVisible, setPreviewVisible] = useState(false);
-
-  // const handleCancel = () => setPreviewVisible(false);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];
@@ -266,6 +268,7 @@ const Dao = (props) => {
 
   useEffect(() => {
     getData();
+    dispatch(getLikePostList(1)); // 1 là user id
 
     if (Notification.permission !== "granted") {
       askPermission();
@@ -347,7 +350,7 @@ const Dao = (props) => {
             }
           >
             {listPost.map((item) => (
-              <DaoPost key={item.Id} item={item} />
+              <DaoPost key={item.Id} item={item} likePostList={likePostList} />
             ))}
           </InfiniteScroll>
         </ul>

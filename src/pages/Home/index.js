@@ -190,7 +190,6 @@ export const Home = () => {
 
   const dispatch = useDispatch();
   const [chooseCate, setChooseCate] = useState();
-  const [visible, setVisible] = useState(false);
   const [provinces, setProvinces] = useState([]);
 
   const navigate = useNavigate();
