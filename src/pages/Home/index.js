@@ -7,7 +7,10 @@ import logoImg from "../../../src/assets/img/Logo1.png";
 import images from "../../assets/images";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { studioPostService } from "../../services/StudioPostService";
-import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import {
+  getAllStudioLikedAction,
+  getFilterStudioPost,
+} from "../../stores/actions/studioPostAction";
 import {
   getTop10OrderClothesAction,
   getTop10OrderDeviceAction,
@@ -207,12 +210,12 @@ export const Home = () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
-    dispatch(getTop10OrderStudioPostAction());
-    dispatch(getTop10OrderClothesAction());
-    dispatch(getTop10OrderDeviceAction());
-    dispatch(getTop10OrderMakeupAction());
-    dispatch(getTop10OrderModelAction());
-    dispatch(getTop10OrderPhotographerAction());
+    dispatch(getTop10OrderStudioPostAction(1));
+    dispatch(getTop10OrderPhotographerAction(2));
+    dispatch(getTop10OrderClothesAction(3));
+    dispatch(getTop10OrderMakeupAction(4));
+    dispatch(getTop10OrderDeviceAction(5));
+    dispatch(getTop10OrderModelAction(6));
   }, []);
 
   const handleClickCategory = (categoryId) => {
@@ -304,23 +307,32 @@ export const Home = () => {
         {/* <ListItem title="Được đặt nhiều nhất" />
         <ListItem title="Đã xem gần đây" /> */}
         <SlideCard
+          category={{ name: "studio", id: 1 }}
           data={listOustandingStudioPost}
           title="Top 10 Most Booked Studios"
         />
-        <SlideCard data={listOustandingModelPost} title="Top 10 Most Models" />
+        <SlideCard
+          data={listOustandingModelPost}
+          category={{ name: "model", id: 6 }}
+          title="Top 10 Most Models"
+        />
         <SlideCard
           data={listOustandingClothesPost}
+          category={{ name: "clothes", id: 3 }}
           title="Top 10 Most Clothes"
         />
         <SlideCard
           data={listOustandingPhotographerPost}
+          category={{ name: "photographer", id: 2 }}
           title="Top 10 Most Photographer"
         />
         <SlideCard
           data={listOustandingDevicePost}
+          category={{ name: "device", id: 5 }}
           title="Top 10 Most Devices"
         />
         <SlideCard
+          category={{ name: "makeup", id: 4 }}
           data={listOustandingMakeupPost}
           title="Top 10 Most Makeups"
         />
