@@ -25,10 +25,12 @@ import {
 } from "../../stores/actions/PostDaoAction";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import ReportPost from "../../components/ReportPostDao";
+import { convertTime } from "../../utils/convert";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const PostDetail = () => {
   const { postId } = useParams();
-  console.log(postId);
   const dispatch = useDispatch();
 
   const { postDetail, likePostList } = useSelector(
@@ -37,7 +39,6 @@ const PostDetail = () => {
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
-  const [isModalVisibleDetail, setIsModalVisibleDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
@@ -45,6 +46,10 @@ const PostDetail = () => {
   console.log(postDetail);
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
+
+    return () => {
+      dispatch({ type: "DELETE_DETAIL_POST", data: {} });
+    };
   }, []);
 
   const checkLikePost = () =>
@@ -62,6 +67,16 @@ const PostDetail = () => {
   //   ];
   return (
     <div className="postDetail">
+      <MetaDecorator
+        // title={`${postDetail?.Tags?.split(",").join(" - ").toUpperCase()}`}
+        title={`${postDetail.Fullname} - ${postDetail?.Tags?.split(",")
+          .join(",")
+          .toUpperCase()}`}
+        description={postDetail.Description}
+        imgUrl={
+          REACT_APP_DB_BASE_URL_IMG + `/${postDetail?.Image?.slice(0, 1)}`
+        }
+      />
       <Row>
         <Col span={16} style={{ backgroundColor: "#1D2226", height: "100%" }}>
           <Swiper
@@ -95,9 +110,9 @@ const PostDetail = () => {
               <img src={convertImage(postDetail?.Avatar)} alt="" />
               <div className="post__main__info__nametime">
                 <p className="post__main__info__nametime__name">
-                  {postDetail?.Username}
+                  {postDetail?.Fullname}
                 </p>
-                <p>{postDetail?.CreationTime}</p>
+                <p>{convertTime(postDetail?.CreationTime)}</p>
               </div>
             </div>
             <div>
@@ -211,7 +226,7 @@ const PostDetail = () => {
                 <img src={convertImage(postDetail?.Avatar)} alt="" />
                 <div className="post__main__info__nametime">
                   <p className="post__main__info__nametime__name">
-                    {postDetail?.Username}
+                    {postDetail?.Fullname}
                   </p>
                   <p>2 giờ</p>
                 </div>
@@ -228,66 +243,28 @@ const PostDetail = () => {
                 modules={[Navigation, Pagination]}
                 className="post_slider"
               >
-                <SwiperSlide className="post_slider_post">
-                  <a href="#">
-                    <div className="d-flex h-100">
-                      <img
-                        src={imgSwiper1}
-                        className="h-100 me-12"
-                        style={{ objectFit: "contain" }}
-                      />
-                      <div className="py-3">
-                        <div className="post_slider_post_name mb-5">
-                          BOOKINGSTUDIO.VN
-                        </div>
-                        <div className="post_slider_post_description">
-                          Studio Wisteria chuyên cung cấp dịch vụ chụp hình cưới
-                          chuyên...
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </SwiperSlide>
-                <SwiperSlide className="post_slider_post">
-                  <a href="#">
-                    <div className="d-flex h-100">
-                      <img
-                        src={imgSwiper1}
-                        className="h-100 me-12"
-                        style={{ objectFit: "contain" }}
-                      />
-                      <div className="py-3">
-                        <div className="post_slider_post_name mb-5">
-                          BOOKINGSTUDIO.VN
-                        </div>
-                        <div className="post_slider_post_description">
-                          Studio Wisteria chuyên cung cấp dịch vụ chụp hình cưới
-                          chuyên...
+                {[0, 1, 2].map((item) => (
+                  <SwiperSlide key={item} className="post_slider_item">
+                    <a href="#" className="h-100">
+                      <div className="d-flex h-100">
+                        <img
+                          src={imgSwiper1}
+                          className="me-12"
+                          style={{ width: "100px", objectFit: "cover" }}
+                        />
+                        <div className="py-5 ">
+                          <div className="post_slider_item_name mb-5">
+                            BOOKINGSTUDIO.VN
+                          </div>
+                          <div className="post_slider_item_description">
+                            Studio Wisteria chuyên cung cấp dịch vụ chụp hình
+                            cưới...
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </a>
-                </SwiperSlide>
-                <SwiperSlide className="post_slider_post">
-                  <a href="#">
-                    <div className="d-flex h-100">
-                      <img
-                        src={imgSwiper1}
-                        className="h-100 me-12"
-                        style={{ objectFit: "contain" }}
-                      />
-                      <div className="py-3">
-                        <div className="post_slider_post_name mb-5">
-                          BOOKINGSTUDIO.VN
-                        </div>
-                        <div className="post_slider_post_description">
-                          Studio Wisteria chuyên cung cấp dịch vụ chụp hình cưới
-                          chuyên...
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </SwiperSlide>
+                    </a>
+                  </SwiperSlide>
+                ))}
               </Swiper>
             </div>
             <div
@@ -337,7 +314,7 @@ const PostDetail = () => {
                 <img src={convertImage(postDetail?.Avatar)} alt="" />
                 <div className="post__main__info__nametime">
                   <p className="post__main__info__nametime__name">
-                    {postDetail?.Username}
+                    {postDetail?.Fullname}
                   </p>
                   <p>2 giờ</p>
                 </div>

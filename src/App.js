@@ -1,28 +1,29 @@
-import React, { useEffect } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
-import { BackTop, Modal } from "antd";
+import { BackTop } from "antd";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import { ModalCustom } from "./components/Modal";
 import { AuthPage } from "./pages/Auth/AuthPage";
 import BookStudio from "./pages/BookStudio";
+import Cart from "./pages/Cart";
+import PageClothes from "./pages/ClothesDetails/PageClothes";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import Dao from "./pages/Dao";
-import FilterPage from "./pages/FilterPage/FilterPage";
-import UserAccount from "./pages/UserAccount";
-import { getCurrentUser } from "./stores/actions/autheticateAction";
-import Cart from "./pages/Cart";
-import { Home } from "./pages/Home";
-import PageClothes from "./pages/ClothesDetails/PageClothes";
-import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
-import PageModel from "./pages/ModelDetails/PageModel";
+import FilterPage from "./pages/FilterPage/FilterPage";
+import { Home } from "./pages/Home";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
+import PageModel from "./pages/ModelDetails/PageModel";
+import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
 import PageStudio from "./pages/StudioDetail/PageStudio";
+import UserAccount from "./pages/UserAccount";
 import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
 import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import PostDetail from "./pages/PostDetail/PostDetail";
+import { getCurrentUser } from "./stores/actions/autheticateAction";
+import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
 
 function App() {
   const dispatch = useDispatch();
@@ -45,7 +46,9 @@ function App() {
     <div className="App">
       <ModalCustom />
       <BackTop>
-        <ArrowUpOutlined style={style} />
+        {/* <ArrowUpOutlined style={style} /> */}
+        {/* <BackTopIcon /> */}
+        <BackTopIcon />
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />

@@ -51,6 +51,7 @@ const DaoPost = (props) => {
   const {
     Id,
     Username,
+    Fullname,
     Description,
     Avatar,
     TotalLikes,
@@ -308,7 +309,7 @@ const DaoPost = (props) => {
           <div className="d-flex justify-content-between align-posts-center">
             <img src={convertImage(Avatar)} alt="" />
             <div className="post__main__info__nametime">
-              <p className="post__main__info__nametime__name">{Username}</p>
+              <p className="post__main__info__nametime__name">{Fullname}</p>
               <p>{convertTime(CreationTime)}</p>
             </div>
           </div>
@@ -411,9 +412,9 @@ const DaoPost = (props) => {
                       <img src={convertImage(Avatar)} alt="" />
                       <div className="post__main__info__nametime">
                         <p className="post__main__info__nametime__name">
-                          {Username}
+                          {Fullname}
                         </p>
-                        <p>{CreationTime}</p>
+                        <p>{convertTime(CreationTime)}</p>
                       </div>
                     </div>
                     <div>
@@ -551,70 +552,32 @@ const DaoPost = (props) => {
                         modules={[Navigation, Pagination]}
                         className="post_slider"
                       >
-                        <SwiperSlide className="post_slider_post">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_post_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_post_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_post">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_post_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_post_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
+                        {[0, 1, 2].map((item) => (
+                          <SwiperSlide key={item} className="post_slider_item">
+                            <a href="#" className="h-100">
+                              <div className="d-flex h-100">
+                                <img
+                                  src={imgSwiper1}
+                                  className="me-12"
+                                  style={{ width: "100px", objectFit: "cover" }}
+                                />
+                                <div className="py-5 ">
+                                  <div className="post_slider_item_name mb-5">
+                                    BOOKINGSTUDIO.VN
+                                  </div>
+                                  <div className="post_slider_item_description">
+                                    Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                    hình cưới...
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_post">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_post_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_post_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
+                            </a>
+                          </SwiperSlide>
+                        ))}
                       </Swiper>
                     </div>
                     <div
-                      className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
+                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
                       style={{ borderBottom: "1px solid #E7E7E7" }}
                     >
                       <div
@@ -679,7 +642,7 @@ const DaoPost = (props) => {
                         modules={[Navigation, Pagination]}
                         className="post_slider"
                       >
-                        <SwiperSlide className="post_slider_post">
+                        <SwiperSlide className="post_slider_item">
                           <a href="#">
                             <div className="d-flex h-100">
                               <img
@@ -742,7 +705,7 @@ const DaoPost = (props) => {
                       </Swiper>
                     </div>
                     <div
-                      className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
+                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
                       style={{ borderBottom: "1px solid #E7E7E7" }}
                     >
                       <div className="post__main__content__like-comment__likes d-flex">

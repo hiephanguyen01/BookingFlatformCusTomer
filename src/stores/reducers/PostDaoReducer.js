@@ -5,6 +5,7 @@ import {
   SELECT_RESULT,
   REMOVE_RESULT,
   GET_LIKE_POST_LIST,
+  DELETE_DETAIL_POST,
 } from "../types/PostDaoType";
 const initialState = {
   likePostList: [],
@@ -20,6 +21,8 @@ export const postDaoReducer = (state = initialState, action) => {
       return { ...state, listPost: action.data };
     case GET_DETAIL_POST:
       return { ...state, postDetail: action.data };
+    case DELETE_DETAIL_POST:
+      return { ...state, postDetail: {} };
     case GET_PAGINATE_POSIBILITY:
       return { ...state, pagination: action.data };
     case SELECT_RESULT:

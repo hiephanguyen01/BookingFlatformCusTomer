@@ -27,5 +27,85 @@
         height: 90vh;
         overflow-Y: scroll;
         position: relative;
+
+        .post__middle {
+            padding-bottom: 18px;
+            border-bottom: 1px solid #E7E7E7;
+
+            &.active {
+                color: "#E22828",
+            }
+
+            .post__middle__right-side {
+                width: auto;
+
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    li {
+                        padding: 8px 11px;
+                        // margin-bottom: 10px;
+                        display: inline-block;
+                        margin: 0 0 10px 10px;
+                        cursor: pointer;
+                    }
+
+                }
+
+                .post__middle__right-side__choose-service {
+                    margin-top: 8px;
+                }
+            }
+        }
+
+        .post_slider_container {
+            margin-top: 20px;
+            height: 80px;
+
+            .post_slider {
+                height: 100%;
+
+                .post_slider_item {
+                    height: 100%;
+                    border: 1px solid #E7E7E7;
+                    border-radius: 8px;
+                    overflow: hidden;
+
+                    text-align: start;
+
+                    // cursor: pointer;
+
+                    &_name {
+                        font-weight: 400;
+                        font-size: 12px;
+                        line-height: 16px;
+                        color: $neutral-500;
+                    }
+
+                    &_description {
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 19px;
+                        color: $neutral-700;
+                    }
+                }
+
+                .swiper-button-prev,
+                .swiper-button-next {
+                    width: 36px;
+                    height: 36px;
+                    background: #FFFFFF;
+                    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.18);
+                    border-radius: 50%;
+
+                    &::after {
+                        font-size: 18px;
+                        color: #000000;
+                        font-weight: 900;
+                    }
+                }
+            }
+        }
     }
 }

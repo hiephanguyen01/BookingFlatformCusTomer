@@ -1,123 +1,116 @@
 @import "../../App.scss";
 
 .cart_container {
-    max-width: 1440px;
-    margin: auto;
-    padding: 18px 70px;
+  max-width: 1440px;
+  min-height: 100vh;
+  margin: auto;
+  padding: 18px 70px;
 
-    .cart_row {
-        // background: #FFFFFF;
-        box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.04);
+  .cart_row {
+    // background: #FFFFFF;
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.04);
 
-        .cart_col_left {
-            // margin-bottom: 10px;
-
-            .cart_tab_pane {
-
-
-                .ant-tabs-nav {
-                    background-color: white !important;
-                    height: 50px !important;
-                    margin-bottom: 6px;
-
-                    .ant-tabs-nav-wrap {
-
-                        .ant-tabs-nav-list {
-
-                            .ant-tabs-tab {
-                                font-weight: 400;
-                                font-size: 16px;
-                                line-height: 22px;
-                                color: $neutral-600;
-
-                                padding: 0 14px;
-                                // text-transform: capitalize;
-
-                                &.ant-tabs-tab-active {
-                                    font-weight: 700;
-                                    font-size: 16px;
-                                    line-height: 22px;
-                                    color: $primary-700;
-
-                                    // border-bottom: 3px solid red;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                .ant-tabs-content-holder {
-                    background: white;
-                    padding: 15px 30px;
-
-                    .ant-tabs-content {
-
-                        .checkbox_content {
-
-                            .checkbox_label {
-                                font-weight: 600;
-                                font-size: 18px;
-                                line-height: 25px;
-                                color: $neutral-600;
-                            }
-
-                            .checkbox_desc {
-
-                                div {
-                                    font-weight: 400;
-                                    font-size: 14px;
-                                    line-height: 19px;
-                                    color: $neutral-500;
-
-                                    span {
-
-                                        color: $neutral-600;
-                                        margin-left: 12px;
-                                    }
-                                }
-                            }
-
-                            .checkbox_action {
-                                text-align: end;
-
-                                Button {
-                                    font-weight: 400;
-                                    font-size: 16px;
-                                    line-height: 22px;
-                                    color: $secondary-800;
-                                    padding: 0;
-                                    margin-bottom: 34px;
-                                }
-
-                                .price {
-                                    font-weight: 600;
-                                    font-size: 18px;
-                                    line-height: 25px;
-                                    color: $primary-700;
-                                }
-                            }
-                        }
-
-                        .ant-divider {
-                            margin: 14px 0 20px;
-                        }
-                    }
-                }
-            }
-        }
-
-        .cart_col_right {
-            padding-left: 12px;
-        }
-    }
-}
-
-@media only screen and (min-width: 576px) and (max-width: 992px) {
     .cart_col_left {
-        margin-bottom: 10px;
+      // margin-bottom: 10px;
+
+      .cart_tab_pane {
+        .ant-tabs-nav {
+          background-color: white !important;
+          height: 50px !important;
+          margin-bottom: 6px;
+
+          .ant-tabs-nav-wrap {
+            .ant-tabs-nav-list {
+              .ant-tabs-tab {
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 22px;
+                color: $neutral-600;
+
+                padding: 0 14px;
+                // text-transform: capitalize;
+
+                &.ant-tabs-tab-active {
+                  font-weight: 700;
+                  font-size: 16px;
+                  line-height: 22px;
+                  color: $primary-700;
+
+                  // border-bottom: 3px solid red;
+                }
+              }
+            }
+          }
+        }
+
+        .ant-tabs-content-holder {
+          background: white;
+          padding: 15px 30px;
+
+          .ant-tabs-content {
+            .checkbox_content {
+              .checkbox_label {
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 25px;
+                color: $neutral-600;
+              }
+
+              .checkbox_desc {
+                div {
+                  font-weight: 400;
+                  font-size: 14px;
+                  line-height: 19px;
+                  color: $neutral-500;
+
+                  span {
+                    color: $neutral-600;
+                    margin-left: 12px;
+                  }
+                }
+              }
+
+              .checkbox_action {
+                text-align: end;
+
+                Button {
+                  font-weight: 400;
+                  font-size: 16px;
+                  line-height: 22px;
+                  color: $secondary-800;
+                  padding: 0;
+                  margin-bottom: 34px;
+                }
+
+                .price {
+                  font-weight: 600;
+                  font-size: 18px;
+                  line-height: 25px;
+                  color: $primary-700;
+                }
+              }
+            }
+
+            .ant-divider {
+              margin: 14px 0 20px;
+            }
+          }
+        }
+      }
     }
 
     .cart_col_right {
-        padding-left: 0;
+      padding-left: 12px;
     }
+  }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 992px) {
+  .cart_col_left {
+    margin-bottom: 10px;
+  }
+
+  .cart_col_right {
+    padding-left: 0;
+  }
 }
