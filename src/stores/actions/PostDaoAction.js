@@ -58,7 +58,7 @@ export const getPostDaoByIdAction = (id) => {
   return async (dispatch) => {
     try {
       const { data } = await postDaoService.getPostById(id);
-      dispatch({ type: GET_DETAIL_POST, data: data.data });
+      dispatch({ type: GET_DETAIL_POST, data: data });
     } catch (error) {
       console.error(error);
     }

@@ -26,7 +26,6 @@ import { convertTime } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
-import { ImageDetect } from "../ImageDetect/ImageDetect";
 import { convertImage } from "../../utils/convertImage";
 import CopyToClipboard from "react-copy-to-clipboard";
 
