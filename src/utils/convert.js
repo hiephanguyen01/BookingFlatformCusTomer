@@ -45,3 +45,22 @@ export const numberWithDot = (x) => {
   console.log(x);
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
+
+export const timeStructure = (date) => {
+  return (
+    ("0" + date.getHours()).slice(-2) +
+    ":" +
+    ("0" + date.getMinutes()).slice(-2) +
+    " " +
+    date.getDate() +
+    "/" +
+    (date.getMonth() + 1) +
+    "/" +
+    date.getFullYear()
+  );
+};
+export const dateStructure = (date) => {
+  return (
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+  );
+};

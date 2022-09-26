@@ -1,13 +1,23 @@
 import { Divider } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./OrderStatusItem.scss";
 import demo from "../../../../../../assets/Chat/demo.png";
 import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
-import { numberWithDot } from "../../../../../../utils/convert";
+import {
+  dateStructure,
+  numberWithDot,
+  timeStructure,
+} from "../../../../../../utils/convert";
+import { studioPostService } from "../../../../../../services/StudioPostService";
+import { CheckCircleTwoTone } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 const OrderStatusItem = ({ item }) => {
+  const [post, setPost] = useState();
+  const navigate = useNavigate();
   let {
+    TenantId,
     BookingStatus,
     IdentifyCode,
     StudioRoom,
@@ -24,32 +34,36 @@ const OrderStatusItem = ({ item }) => {
   OrderByTimeTo = new Date(OrderByTimeTo);
   OrderByDateFrom = new Date(OrderByDateFrom);
   OrderByDateTo = new Date(OrderByDateTo);
-  function dateStructure(date) {
-    return (
-      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
-    );
-  }
-  function timeStructure(date) {
-    return (
-      ("0" + date.getHours()).slice(-2) +
-      ":" +
-      ("0" + date.getMinutes()).slice(-2) +
-      " " +
-      date.getDate() +
-      "/" +
-      (date.getMonth() + 1) +
-      "/" +
-      date.getFullYear()
-    );
-  }
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await studioPostService.getPostByTenantId({
+          TenantId,
+          category: 1,
+        });
+        setPost(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [TenantId]);
+
+  const navigateToDetail = () => {
+    navigate(`/home/studio/${post.id}`);
+  };
   return (
     <>
       <DividerCustom />
       <div className="OrderStatusItem">
         <div className="OrderStatusItem__header">
-          <div className="OrderStatusItem__header__name">
-            {/* {StudioRoom.Name}
-            <span>{StudioRoom.Style}</span> */}
+          <div
+            className="OrderStatusItem__header__name"
+            onClick={navigateToDetail}>
+            {post?.Name}
+            <CheckCircleTwoTone
+              style={{ padding: "10px" }}
+              twoToneColor="#52c41a"
+            />
           </div>
           <div className="OrderStatusItem__header__code">
             Mã booking: <span>{IdentifyCode}</span>

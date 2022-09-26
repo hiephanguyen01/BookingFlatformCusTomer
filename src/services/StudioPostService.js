@@ -7,6 +7,9 @@ class StudioPostService extends BaseService {
   getAllProvince = () => {
     return this.get(`/api/provinces`);
   };
+  getPostByTenantId = (params) => {
+    return this.get(`/api/studio-post/tenant-id`, { ...params });
+  };
   getAllStudioPost = (limit, page, category) => {
     return this.get(
       `/api/studio-post?page=${page}&limit=${limit}&category=${category}`

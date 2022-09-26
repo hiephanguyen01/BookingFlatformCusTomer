@@ -11,11 +11,14 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: 10px;
+    cursor: pointer;
     &__name {
       display: flex;
-      & span {
-        color: $primary-700;
-        margin-left: 5px;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
@@ -83,10 +86,9 @@
   & .style-divider {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
-  } 
- 
+  }
 }
 .ant-tabs-top > .ant-tabs-nav {
-    margin: 0 !important;
-    padding: 0 20px !important;
+  margin: 0 !important;
+  padding: 0 20px !important;
 }
