@@ -4,18 +4,55 @@ import "./OrderStatusItem.scss";
 import demo from "../../../../../../assets/Chat/demo.png";
 import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
-const OrderStatusItem = ({ status }) => {
+import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { numberWithDot } from "../../../../../../utils/convert";
+const OrderStatusItem = ({ item }) => {
+  let {
+    BookingStatus,
+    IdentifyCode,
+    StudioRoom,
+    CreationTime,
+    OrderByTimeFrom,
+    OrderByTimeTo,
+    OrderByDateFrom,
+    OrderByDateTo,
+    DepositValue,
+    BookingValue,
+  } = item;
+  const orderDate = new Date(CreationTime);
+  OrderByTimeFrom = new Date(OrderByTimeFrom);
+  OrderByTimeTo = new Date(OrderByTimeTo);
+  OrderByDateFrom = new Date(OrderByDateFrom);
+  OrderByDateTo = new Date(OrderByDateTo);
+  function dateStructure(date) {
+    return (
+      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    );
+  }
+  function timeStructure(date) {
+    return (
+      ("0" + date.getHours()).slice(-2) +
+      ":" +
+      ("0" + date.getMinutes()).slice(-2) +
+      " " +
+      date.getDate() +
+      "/" +
+      (date.getMonth() + 1) +
+      "/" +
+      date.getFullYear()
+    );
+  }
   return (
     <>
       <DividerCustom />
       <div className="OrderStatusItem">
         <div className="OrderStatusItem__header">
           <div className="OrderStatusItem__header__name">
-            Studio Wisteria chuyên cung cấp dịch vụ chụp...
-            <span>hehe</span>
+            {/* {StudioRoom.Name}
+            <span>{StudioRoom.Style}</span> */}
           </div>
           <div className="OrderStatusItem__header__code">
-            Mã booking <span>233355542</span>
+            Mã booking: <span>{IdentifyCode}</span>
           </div>
         </div>
         <Divider className="style-divider" />
@@ -24,47 +61,55 @@ const OrderStatusItem = ({ status }) => {
             <img
               alt=""
               className="OrderStatusItem__body__info__pic"
-              src={demo}
+              src={
+                StudioRoom.Image1
+                  ? `${REACT_APP_DB_BASE_URL_IMG}/${StudioRoom.Image1}`
+                  : demo
+              }
             />
             <div className="OrderStatusItem__body__info__content">
               <div className="OrderStatusItem__body__info__content__title">
-                Premium Wisteria - Phòng chụp ảnh cưới
+                {StudioRoom.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">
-                Ngày <span>14/02/2021 </span>
+                Ngày tạo: <span>{dateStructure(orderDate)}</span>
               </div>
               <div className="OrderStatusItem__body__info__content__time">
-                Giờ <span>8:00</span> AM - <span>8:30</span> PM
+                Đặt từ{" "}
+                <span>{timeStructure(OrderByTimeFrom || OrderByDateFrom)}</span>{" "}
+                đến <span>{timeStructure(OrderByTimeTo || OrderByDateTo)}</span>{" "}
               </div>
             </div>
           </div>
           <div className="OrderStatusItem__body__price">
             <div className="OrderStatusItem__body__price__total">
-              {status !== 1 ? (
+              {BookingStatus !== 1 ? (
                 <>
-                  Tiền cọc <span>250.000đ</span>
+                  Tiền cọc <span>{numberWithDot(DepositValue) || "0"}đ</span>
                 </>
               ) : (
                 <>
-                  Tổng thanh toán <span>2.500.000đ</span>
+                  Tổng thanh toán{" "}
+                  <span>{numberWithDot(BookingValue) || "0"}đ</span>
                 </>
               )}
             </div>
             <div className="OrderStatusItem__body__price__deposit">
-              {status !== 1 ? (
+              {BookingStatus !== 1 ? (
                 <>
-                  Tổng thanh toán <span>2.500.000đ</span>
+                  Tổng thanh toán{" "}
+                  <span>{numberWithDot(BookingValue) || "0"}đ</span>
                 </>
               ) : (
                 <>
-                  Tiền cọc <span>250.000đ</span>
+                  Tiền cọc <span>{numberWithDot(DepositValue) || "0"}đ</span>
                 </>
               )}
             </div>
           </div>
         </div>
         <Divider className="style-divider" />
-        <Footer status={status} />
+        <Footer status={BookingStatus} />
       </div>
     </>
   );

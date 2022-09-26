@@ -32,9 +32,10 @@ export class BaseService {
     });
   };
 
-  get = (url) => {
+  get = (url, params) => {
     return axios({
       url: `${process.env.REACT_APP_DB_BASE_URL}${url}`,
+      params: { ...params } || null,
       method: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),

@@ -41,3 +41,7 @@ export const convertTimeSendDB = (time) => {
       : `0${parseInt(splitTime[0]) - 7}`
   }:${splitTime[1]}`;
 };
+export const numberWithDot = (x) => {
+  console.log(x);
+  return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
