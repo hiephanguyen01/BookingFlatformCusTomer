@@ -7,7 +7,10 @@ import logoImg from "../../../src/assets/img/Logo1.png";
 import images from "../../assets/images";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { studioPostService } from "../../services/StudioPostService";
-import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import {
+  getAllStudioLikedAction,
+  getFilterStudioPost,
+} from "../../stores/actions/studioPostAction";
 import {
   getTop10OrderClothesAction,
   getTop10OrderDeviceAction,
@@ -16,6 +19,7 @@ import {
   getTop10OrderPhotographerAction,
   getTop10OrderStudioPostAction,
 } from "../../stores/actions/TopOrderCategoryAction";
+import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import styles from "./home.module.scss";
 import { ListItem } from "./ListCard";
@@ -144,50 +148,11 @@ const { Option } = AutoComplete;
 //         </div>
 //       </Modal>
 
-const CATEGORIES = [
-  {
-    id: 1,
-    label: "Studio",
-    img: images.studio1,
-    linkTo: "studio",
-  },
-  {
-    id: 2,
-    label: "Nhiếp ảnh",
-    img: images.cameraman,
-    linkTo: "photographer",
-  },
-  {
-    id: 6,
-    label: "Thiết bị",
-    img: images.camera,
-    linkTo: "device",
-  },
-  {
-    id: 3,
-    label: "Trang phục",
-    img: images.clothes,
-    linkTo: "clothes",
-  },
-  {
-    id: 4,
-    label: "Make up",
-    img: images.makeup,
-    linkTo: "makeup",
-  },
-  {
-    id: 5,
-    label: "Người mẫu",
-    img: images.model,
-    linkTo: "model",
-  },
-];
-
 export const Home = () => {
   // const category = useSelector((state) => state.listByCategoryReducer.category);
   // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { filter, laoding } = useSelector((state) => state.studioPostReducer);
-
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   const [chooseCate, setChooseCate] = useState();
   const [provinces, setProvinces] = useState([]);
@@ -207,13 +172,13 @@ export const Home = () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
-    dispatch(getTop10OrderStudioPostAction());
-    dispatch(getTop10OrderClothesAction());
-    dispatch(getTop10OrderDeviceAction());
-    dispatch(getTop10OrderMakeupAction());
-    dispatch(getTop10OrderModelAction());
-    dispatch(getTop10OrderPhotographerAction());
-  }, []);
+    dispatch(getTop10OrderStudioPostAction(1,currentUser));
+    dispatch(getTop10OrderPhotographerAction(2,currentUser));
+    dispatch(getTop10OrderClothesAction(3,currentUser));
+    dispatch(getTop10OrderMakeupAction(4,currentUser));
+    dispatch(getTop10OrderDeviceAction(5,currentUser));
+    dispatch(getTop10OrderModelAction(6,currentUser));
+  }, [currentUser,dispatch]);
 
   const handleClickCategory = (categoryId) => {
     const newFilter = {
@@ -244,8 +209,7 @@ export const Home = () => {
               onClick={() => {
                 setChooseCate(item.id);
                 handleClickCategory(item.id);
-              }}
-            >
+              }}>
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>
@@ -262,8 +226,7 @@ export const Home = () => {
                     color: "#616161",
                     padding: "0",
                     margin: "0",
-                  }}
-                >
+                  }}>
                   ART STUDIO{" "}
                 </h3>
                 <img src={images.special} />
@@ -274,8 +237,7 @@ export const Home = () => {
                     fontWeight: "600",
                     padding: "0",
                     margin: "0",
-                  }}
-                >
+                  }}>
                   -1.000.000 vnd{" "}
                 </h5>
                 <p
@@ -283,8 +245,7 @@ export const Home = () => {
                     fontSize: "22px",
                     color: "#616161",
                     marginTop: "28px",
-                  }}
-                >
+                  }}>
                   Khi đăng ký trước 1 tháng{" "}
                 </p>
               </div>
@@ -304,23 +265,32 @@ export const Home = () => {
         {/* <ListItem title="Được đặt nhiều nhất" />
         <ListItem title="Đã xem gần đây" /> */}
         <SlideCard
+          category={{ name: "studio", id: 1 }}
           data={listOustandingStudioPost}
           title="Top 10 Most Booked Studios"
         />
-        <SlideCard data={listOustandingModelPost} title="Top 10 Most Models" />
+        <SlideCard
+          data={listOustandingModelPost}
+          category={{ name: "model", id: 6 }}
+          title="Top 10 Most Models"
+        />
         <SlideCard
           data={listOustandingClothesPost}
+          category={{ name: "clothes", id: 3 }}
           title="Top 10 Most Clothes"
         />
         <SlideCard
           data={listOustandingPhotographerPost}
+          category={{ name: "photographer", id: 2 }}
           title="Top 10 Most Photographer"
         />
         <SlideCard
           data={listOustandingDevicePost}
+          category={{ name: "device", id: 5 }}
           title="Top 10 Most Devices"
         />
         <SlideCard
+          category={{ name: "makeup", id: 4 }}
           data={listOustandingMakeupPost}
           title="Top 10 Most Makeups"
         />

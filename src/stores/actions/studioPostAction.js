@@ -25,7 +25,7 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: false });
 };
 export const getFilterStudioPost =
-  (limit, page, filter) => async (dispatch) => {
+  (limit, page, filter,user) => async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getFilterStudioPost(
@@ -36,6 +36,9 @@ export const getFilterStudioPost =
       dispatch({ type: SET_POST_LIST, payload: data.data });
       dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
       dispatch({ type: SET_FILTER, payload: filter });
+      if (user !== null) {
+        dispatch(getAllStudioLikedAction1(filter.category));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +50,7 @@ export const studioDetailAction = (id, category) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getDetailStudio(id, category);
-      console.log(data);
+
       dispatch({
         type: SET_STUDIO_DETAIL,
         payload: {
@@ -78,12 +81,123 @@ export const studioDetailAction1 = (id, category) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getDetailStudio(id, category);
-      console.log(data);
+
       dispatch({ type: SET_STUDIO_DETAIL1, payload: data.data });
       dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
     } catch (error) {
       console.log(error);
     }
     dispatch({ type: LOADING, payload: false });
+  };
+};
+
+export const getLikeStudioPostAction = (postId, category) => {
+  return async (dispatch) => {
+    try {
+      await studioPostService.getLikeStudioPost({
+        PostId: postId,
+        CategoryId: category,
+      });
+      dispatch(getAllStudioLikedAction1(category));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction6 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction5 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction4 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getAllStudioLikedAction1 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getAllStudioLikedAction2 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction3 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };

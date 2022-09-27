@@ -7,8 +7,8 @@ import { CheckCircleOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { ImageDetect } from "../../../../../components/ImageDetect/ImageDetect";
 export const RatingStudio = ({ info }) => {
-  const UserMe = useSelector((state)=> state.authenticateReducer.currentUser )
-  const myImg = ImageDetect(UserMe)
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const myImg = ImageDetect(UserMe);
   return (
     <div className="rating_wrapper">
       <div className="rating_wrapper__info-user">

@@ -13,7 +13,8 @@ const GoogleDrivePicker = ({ files, setFiles }) => {
         "1082256084414-9h6v2ndvh6782nhbrhg7nf4i2jotglj8.apps.googleusercontent.com",
       developerKey: "AIzaSyCkcQ9mQMakZutniH3f4dAUGYpXIrzxpys",
       viewId: "DOCS",
-      // token: token, // pass oauth token in case you already have one
+      token:
+        "ya29.a0Aa4xrXOW5SXFPnOHbAguW6b3lJzLj3fQoYp4-HZDrnh1MCaNOFM4q836GM10-T3U4Mi24m1kxt0czNof7XnO67bQG4OztcOGpQ5Zzsgt-IYC-bMbOTDG8gJNRUsNafVez2oKtFzuWVjRyE-lftlzsQDmwUNCaCgYKATASARESFQEjDvL9rZ-Bnou8CMUMgY8pGhhqvg0163", // pass oauth token in case you already have one
       showUploadView: false,
       showUploadFolders: false,
       supportDrives: true,
@@ -23,13 +24,14 @@ const GoogleDrivePicker = ({ files, setFiles }) => {
         if (d.action === "cancel") {
         }
         if (d.docs !== undefined) {
+          console.log(d);
           const newFiles = d.docs.reduce((newArr, item) => {
             if (item.mimeType.split("/")[0] === "image") {
               return [
                 ...newArr,
                 {
                   ...item,
-                  preview: `https://drive.google.com/uc?export=view&id=${item.id}`,
+                  preview: `https://drive.google.com/uc?export=view&id=${item.id}`, // `https://drive.google.com/file/d/${item.id}/view`
                 },
               ];
             }

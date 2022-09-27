@@ -6,7 +6,7 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Popover, Modal, message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
 import "./daoPost.scss";
@@ -26,20 +26,19 @@ import { convertTime } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
-
-const moreOptionOnEachPost = [
-  { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
-  { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
-  { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
-  { icon: <PostSave />, title: "Lưu bài viết", id: 4 },
-];
+import { convertImage } from "../../utils/convertImage";
+import CopyToClipboard from "react-copy-to-clipboard";
+import toastMessage from "../ToastMessage";
+import { cancelSavePost } from "../../stores/actions/userAction";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
   const currentUser = useSelector(
     (state) => state.authenticateReducer.currentUser
   );
-  console.log(currentUser);
+  const { item, likePostList, type = "post" } = props;
+  const [post, setPost] = useState({ ...item });
+  const [likeCmt, setLikeCmt] = useState([]);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
@@ -50,8 +49,9 @@ const DaoPost = (props) => {
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
-  const { item, likePostList } = props;
-
+  useEffect(() => {
+    setPost({ ...item });
+  }, [item]);
   const {
     Id,
     Username,
@@ -64,7 +64,19 @@ const DaoPost = (props) => {
     Image,
     // comments,
     CreationTime,
-  } = item;
+  } = post;
+
+  const moreOptionOnEachPost = [
+    { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
+    { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
+    { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
+    {
+      icon: <PostSave />,
+      title: type === "post" ? "Lưu bài viết" : "Hủy lưu",
+      id: 4,
+    },
+  ];
+
   const handleImageModal = (url) => {
     setImageInModal(url);
     setIsModalVisibleDetail(true);
@@ -83,12 +95,29 @@ const DaoPost = (props) => {
       if (checkLikePost()) {
         dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
         setMouseClickHeart(false);
+        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
       } else {
         dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
         setMouseClickHeart(true);
+        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
       }
     }
   };
+
+  const handleLikeCmt = () => {
+    if (currentUser) {
+      if (checkLikePost()) {
+        // dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(false);
+        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
+      } else {
+        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(true);
+        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+      }
+    }
+  };
+
   const handleMoreOptionClick = async (itm) => {
     switch (itm.id) {
       case 1:
@@ -105,11 +134,16 @@ const DaoPost = (props) => {
         break;
       case 4:
         try {
-          await userService.savePost(currentUser.id, Id);
-          message.success("Lưu bài viết thành công");
+          if (type !== "post") {
+            dispatch(cancelSavePost(currentUser?.id, Id));
+            toastMessage("Hủy lưu bài viết thành công!", "success");
+          } else {
+            await userService.savePost(currentUser.id, Id);
+            toastMessage("Lưu bài viết thành công!", "success");
+          }
           setMoreOptionModal(false);
         } catch (error) {
-          message.success("Lưu bài viết thất bại");
+          toastMessage(error.response.data.message, "warn");
           setMoreOptionModal(false);
         }
         break;
@@ -121,22 +155,23 @@ const DaoPost = (props) => {
   };
 
   const checkLikePost = () =>
-    likePostList.filter((itm) => itm.PostId === Id).length > 0;
+    likePostList?.filter((itm) => itm.PostId === Id).length > 0;
 
   let ImageSection = null;
   let tempCount = Image.length;
-  // Object.entries(item).forEach((item2, idx) => {
-  //   if (item2[0].includes("Image")) tempCount++;
+  // Object.entries(post).forEach((post2, idx) => {
+  //   if (post2[0].includes("Image")) tempCount++;
   // });
   if (tempCount < 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => (
+        {Image.map((img, idx) => (
           <Col
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(item)}>
+            onClick={() => handleImageModal(img)}
+          >
             <img
               style={{
                 width: "100%",
@@ -146,9 +181,9 @@ const DaoPost = (props) => {
               }}
               key={idx}
               src={`${
-                item.includes("https://drive.google.com/")
-                  ? item
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                img.includes("https://drive.google.com/")
+                  ? img
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
               }`}
               alt=""
             />
@@ -159,7 +194,7 @@ const DaoPost = (props) => {
   } else if (tempCount === 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => {
+        {Image.map((img, idx) => {
           // console.log(idx);
           if (idx === 0) {
             //Kiểm tra cái idx này sau khi nhét API vào (Không xóa)
@@ -168,7 +203,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(item)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -178,9 +214,9 @@ const DaoPost = (props) => {
                   }}
                   key={idx}
                   src={`${
-                    item.includes("https://drive.google.com/")
-                      ? item
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    img.includes("https://drive.google.com/")
+                      ? img
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
                   }`}
                   alt=""
                 />
@@ -193,7 +229,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -203,9 +240,9 @@ const DaoPost = (props) => {
                   }}
                   key={idx}
                   src={`${
-                    item.includes("https://drive.google.com/")
-                      ? item
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                    img.includes("https://drive.google.com/")
+                      ? img
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
                   }`}
                   alt=""
                 />
@@ -218,8 +255,8 @@ const DaoPost = (props) => {
   } else if (tempCount === 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => (
-          <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(item)}>
+        {Image.map((img, idx) => (
+          <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(img)}>
             <img
               style={{
                 width: "100%",
@@ -229,9 +266,9 @@ const DaoPost = (props) => {
               }}
               key={idx}
               src={`${
-                item.includes("https://drive.google.com/")
-                  ? item
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                img.includes("https://drive.google.com/")
+                  ? img
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
               }`}
               alt=""
             />
@@ -242,7 +279,7 @@ const DaoPost = (props) => {
   } else if (tempCount > 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((item, idx) => {
+        {Image.map((img, idx) => {
           if (idx < 4) {
             //Again, có lý do mà nó là 9 :v đừng xóa comment này
             return (
@@ -251,10 +288,11 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(item)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <div className="image-container">
                   {idx === 8 && (
-                    <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
+                    <div className="fourth-image-overlay d-flex justify-content-center align-posts-center">
                       <h1>{tempCount - 3}</h1>
                       <PlusOutlined
                         style={{ fontSize: "34px", color: "#fff" }}
@@ -270,9 +308,9 @@ const DaoPost = (props) => {
                     }}
                     key={idx}
                     src={`${
-                      item.includes("https://drive.google.com/")
-                        ? item
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                      img.includes("https://drive.google.com/")
+                        ? img
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + img
                     }`}
                     alt=""
                   />
@@ -288,16 +326,9 @@ const DaoPost = (props) => {
   return (
     <article className="post">
       <section className="post__main d-flex flex-column">
-        <header className="post__main__info d-flex justify-content-between align-items-center">
-          <div className="d-flex justify-content-between align-items-center">
-            <img
-              src={
-                !Avatar.includes("https")
-                  ? `${REACT_APP_DB_BASE_URL_IMG}/${Avatar}`
-                  : Avatar
-              }
-              alt=""
-            />
+        <header className="post__main__info d-flex justify-content-between align-posts-center">
+          <div className="d-flex justify-content-between align-posts-center">
+            <img src={convertImage(Avatar)} alt="" />
             <div className="post__main__info__nametime">
               <p className="post__main__info__nametime__name">{Fullname}</p>
               <p>{convertTime(CreationTime)}</p>
@@ -308,19 +339,25 @@ const DaoPost = (props) => {
               placement="leftTop"
               content={
                 <div className="more-option-modal">
-                  {moreOptionOnEachPost.map((item, idx) => (
-                    <li onClick={() => handleMoreOptionClick(item)} key={idx}>
-                      <div className="container d-flex">
-                        <div>{item.icon}</div>
-                        <p>{item.title}</p>
-                      </div>
+                  {moreOptionOnEachPost.map((itm, idx) => (
+                    <li onClick={() => handleMoreOptionClick(itm)} key={idx}>
+                      <CopyToClipboard
+                        onCopy={() => {}}
+                        text={`${window.location.href}/posts/${Id}`}
+                      >
+                        <div className="container d-flex">
+                          <div>{itm.icon}</div>
+                          <p>{itm.title}</p>
+                        </div>
+                      </CopyToClipboard>
                     </li>
                   ))}
                 </div>
               }
               trigger="click"
               visible={moreOptionModal}
-              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}>
+              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}
+            >
               <MoreOutlined style={{ fontSize: "24px" }} />
             </Popover>
             <ReportPost
@@ -330,9 +367,9 @@ const DaoPost = (props) => {
           </div>
         </header>
         <div className="post__main__content">
-          <div className="post__main__content__tags d-flex align-items-center">
-            {Tags?.split(",").map((item, idx) => (
-              <li key={idx}>#{item}</li>
+          <div className="post__main__content__tags d-flex align-posts-center">
+            {Tags?.split(",").map((post, idx) => (
+              <li key={idx}>#{post}</li>
             ))}
           </div>
           <div className="post__main__content__description">
@@ -342,7 +379,7 @@ const DaoPost = (props) => {
             {/* //Post Image đang xử lý */}
             {ImageSection}
             <Modal
-              className="popup d-flex justify-content-center align-items-center post_detail"
+              className="popup d-flex justify-content-center align-posts-center post_detail"
               closeIcon={<CloseOutlined />}
               onOk={handleOkDetail}
               onCancel={handleCancelDetail}
@@ -350,11 +387,13 @@ const DaoPost = (props) => {
               visible={isModalVisibleDetail}
               bodyStyle={{
                 backgroundColor: "transparent",
-              }}>
+              }}
+            >
               <Row>
                 <Col
                   span={16}
-                  style={{ backgroundColor: "#1D2226", height: "100%" }}>
+                  style={{ backgroundColor: "#1D2226", height: "100%" }}
+                >
                   <Swiper
                     slidesPerView={1}
                     spaceBetween={30}
@@ -364,17 +403,15 @@ const DaoPost = (props) => {
                     // }}
                     navigation={true}
                     modules={[Pagination, Navigation]}
-                    className="swiperPostDetail">
+                    className="swiperPostDetail"
+                  >
                     {Image.map((img, index) => (
                       <SwiperSlide
                         key={index}
-                        style={{ background: "#1D2226", padding: "90px 0" }}>
+                        style={{ background: "#1D2226", padding: "90px 0" }}
+                      >
                         <img
-                          src={`${
-                            img.includes("https://drive.google.com/")
-                              ? img
-                              : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                          }`}
+                          src={convertImage(img)}
                           className="w-100 h-100"
                           style={{ objectFit: "contain" }}
                         />
@@ -389,18 +426,16 @@ const DaoPost = (props) => {
                     overflowY: "scroll",
                     position: "relative",
                     height: "100vh",
-                  }}>
-                  <header className="post__main__info d-flex justify-content-between align-items-center">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <img
-                        src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
-                        alt=""
-                      />
+                  }}
+                >
+                  <header className="post__main__info d-flex justify-content-between align-posts-center">
+                    <div className="d-flex justify-content-between align-posts-center">
+                      <img src={convertImage(Avatar)} alt="" />
                       <div className="post__main__info__nametime">
                         <p className="post__main__info__nametime__name">
-                          {Username}
+                          {Fullname}
                         </p>
-                        <p>{CreationTime}</p>
+                        <p>{convertTime(CreationTime)}</p>
                       </div>
                     </div>
                     <div>
@@ -408,11 +443,11 @@ const DaoPost = (props) => {
                         placement="leftTop"
                         content={
                           <div className="more-option-modal">
-                            {moreOptionOnEachPost.map((item, idx) => (
+                            {moreOptionOnEachPost.map((itm, idx) => (
                               <li onClick={handleMoreOptionClick} key={idx}>
                                 <div className="container d-flex">
-                                  <div>{item.icon}</div>
-                                  <p>{item.title}</p>
+                                  <div>{itm.icon}</div>
+                                  <p>{itm.title}</p>
                                 </div>
                               </li>
                             ))}
@@ -422,7 +457,8 @@ const DaoPost = (props) => {
                         visible={isModalOptionDetail}
                         onVisibleChange={(newVisible) =>
                           setIsModalOptionDetail(newVisible)
-                        }>
+                        }
+                      >
                         <MoreOutlined style={{ fontSize: "24px" }} />
                       </Popover>
                       <ReportPost
@@ -433,31 +469,35 @@ const DaoPost = (props) => {
                       />
                     </div>
                   </header>
-                  <div className="post__main__content__tags d-flex align-items-center">
-                    {Tags?.split(",").map((item, idx) => (
-                      <li key={idx}>#{item}</li>
+                  <div className="post__main__content__tags d-flex align-posts-center">
+                    {Tags?.split(",").map((post, idx) => (
+                      <li key={idx}>#{post}</li>
                     ))}
                   </div>
                   <div className="post__main__content__description">
                     <p>{Description}</p>
                   </div>
                   <div
-                    className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                    style={{ borderBottom: "1px solid #E7E7E7" }}>
+                    className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
+                    style={{ borderBottom: "1px solid #E7E7E7" }}
+                  >
                     <div className="post__main__content__like-comment__likes d-flex">
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                        }}>
-                        {true ? (
+                        }}
+                      >
+                        {mouseOverHeart ||
+                        checkLikePost() ||
+                        mouseClickHeart ? (
                           <HeartFilled
-                            // onClick={handleOnClickLikePost}
+                            onClick={likePost}
                             style={{
                               fontSize: "20px",
                               color: "#E22828",
                               marginBottom: "2px",
                             }}
-                            // onMouseLeave={() => setMouseOverHeart(false)}
+                            onMouseLeave={() => setMouseOverHeart(false)}
                           />
                         ) : (
                           <HeartOutlined
@@ -467,7 +507,7 @@ const DaoPost = (props) => {
                               cursor: "pointer",
                               marginBottom: "2px",
                             }}
-                            // onMouseOver={() => setMouseOverHeart(true)}
+                            onMouseOver={() => setMouseOverHeart(true)}
                           />
                         )}
                       </PopUpSignIn>
@@ -480,23 +520,28 @@ const DaoPost = (props) => {
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                          setCommentsClick(!commentsClick);
-                        }}>
-                        <Comments />
+                        }}
+                      >
+                        <Comments
+                          className="active"
+                          style={{ color: "#E22828" }}
+                        />
                       </PopUpSignIn>
-                      <p>{TotalComments}</p>
+                      <p className={`${commentsClick ? "active" : ""}`}>
+                        {TotalComments}
+                      </p>
                     </div>
                   </div>
                   <section className="post__middle">
                     <div className="d-flex">
                       <img src={img1} alt="" />
                       <div className="post__middle__right-side">
-                        <ul className="d-flex align-items-center">
+                        <ul className="d-flex align-posts-center">
                           <li>Bên mình có nhé</li>
                           <li>Vào trang mình xem thử nhé</li>
                           <li>Bên mình đang khuyến mãi luôn ạ</li>
                         </ul>
-                        <div className="post__middle__right-side__choose-service d-flex justify-content-center align-items-center">
+                        <div className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center">
                           <PlusOutlined
                             style={{ color: "#03AC84", fontSize: "14px" }}
                           />
@@ -505,16 +550,13 @@ const DaoPost = (props) => {
                       </div>
                     </div>
                   </section>
-                  <div className="comment_item">
-                    <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <img
-                          src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
-                          alt=""
-                        />
+                  <div className="comment_post">
+                    <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
+                      <div className="d-flex justify-content-between align-posts-center">
+                        <img src={convertImage(Avatar)} alt="" />
                         <div className="post__main__info__nametime">
                           <p className="post__main__info__nametime__name">
-                            {Username}
+                            {Fullname}
                           </p>
                           <p>2 giờ</p>
                         </div>
@@ -529,90 +571,56 @@ const DaoPost = (props) => {
                         // }}
                         navigation={true}
                         modules={[Navigation, Pagination]}
-                        className="post_slider">
-                        <SwiperSlide className="post_slider_item">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_item_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_item_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
+                        className="post_slider"
+                      >
+                        {[0, 1, 2].map((item) => (
+                          <SwiperSlide key={item} className="post_slider_item">
+                            <a href="#" className="h-100">
+                              <div className="d-flex h-100">
+                                <img
+                                  src={imgSwiper1}
+                                  className="me-12"
+                                  style={{ width: "100px", objectFit: "cover" }}
+                                />
+                                <div className="py-5 ">
+                                  <div className="post_slider_item_name mb-5">
+                                    BOOKINGSTUDIO.VN
+                                  </div>
+                                  <div className="post_slider_item_description">
+                                    Studio Wisteria chuyên cung cấp dịch vụ chụp
+                                    hình cưới...
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_item_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
+                            </a>
+                          </SwiperSlide>
+                        ))}
                       </Swiper>
                     </div>
                     <div
                       className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                      style={{ borderBottom: "1px solid #E7E7E7" }}>
+                      style={{ borderBottom: "1px solid #E7E7E7" }}
+                    >
                       <div
                         className="post__main__content__like-comment__likes d-flex"
-                        onClick={() => console.log(123)}>
+                        onClick={() => console.log(123)}
+                      >
                         <PopUpSignIn
                           onClick={(e) => {
                             e.stopPropagation();
-                          }}>
-                          {mouseOverHeart || mouseClickHeart ? (
+                          }}
+                        >
+                          {false ? (
                             <HeartFilled
-                              onClick={() =>
-                                setMouseClickHeart(!mouseClickHeart)
-                              }
+                              // onClick={() =>
+                              //   setMouseClickHeart(!mouseClickHeart)
+                              // }
                               style={{
                                 fontSize: "20px",
                                 color: "#E22828",
                                 marginBottom: "2px",
                               }}
-                              onMouseLeave={() => setMouseOverHeart(false)}
+                              // onMouseLeave={() => setMouseOverHeart(false)}
                             />
                           ) : (
                             <HeartOutlined
@@ -622,132 +630,7 @@ const DaoPost = (props) => {
                                 cursor: "pointer",
                                 marginBottom: "2px",
                               }}
-                              onMouseOver={() => setMouseOverHeart(true)}
-                            />
-                          )}
-                        </PopUpSignIn>
-                        <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
-                          {TotalLikes}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="comment_item">
-                    <header className="post__main__info d-flex justify-content-between align-items-center mt-18">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <img
-                          src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${Avatar}`}
-                          alt=""
-                        />
-                        <div className="post__main__info__nametime">
-                          <p className="post__main__info__nametime__name">
-                            {Username}
-                          </p>
-                          <p>2 giờ</p>
-                        </div>
-                      </div>
-                    </header>
-                    <div className="post_slider_container">
-                      <Swiper
-                        slidesPerView={"1.4"}
-                        spaceBetween={15}
-                        // pagination={{
-                        //   clickable: true,
-                        // }}
-                        navigation={true}
-                        modules={[Navigation, Pagination]}
-                        className="post_slider">
-                        <SwiperSlide className="post_slider_item">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_item_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_item_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_item">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_item_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_item_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                      </Swiper>
-                    </div>
-                    <div
-                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                      style={{ borderBottom: "1px solid #E7E7E7" }}>
-                      <div className="post__main__content__like-comment__likes d-flex">
-                        <PopUpSignIn
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}>
-                          {mouseOverHeart || mouseClickHeart ? (
-                            <HeartFilled
-                              onClick={() => {
-                                setMouseClickHeart(!mouseClickHeart);
-                              }}
-                              style={{
-                                fontSize: "20px",
-                                color: "#E22828",
-                                marginBottom: "2px",
-                              }}
-                              onMouseLeave={() => setMouseOverHeart(false)}
-                            />
-                          ) : (
-                            <HeartOutlined
-                              style={{
-                                color: "#828282",
-                                fontSize: "20px",
-                                cursor: "pointer",
-                                marginBottom: "2px",
-                              }}
-                              onMouseOver={() => setMouseOverHeart(true)}
+                              // onMouseOver={() => setMouseOverHeart(true)}
                             />
                           )}
                         </PopUpSignIn>
@@ -766,12 +649,13 @@ const DaoPost = (props) => {
               /> */}
             </Modal>
           </div>
-          <div className="post__main__content__like-comment d-flex align-items-center">
+          <div className="post__main__content__like-comment d-flex align-posts-center">
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn
                 onClick={(e) => {
                   e.stopPropagation();
-                }}>
+                }}
+              >
                 {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
                   <HeartFilled
                     onClick={handleLike}
@@ -803,27 +687,34 @@ const DaoPost = (props) => {
               <PopUpSignIn
                 onClick={(e) => {
                   e.stopPropagation();
-                  setCommentsClick(!commentsClick);
-                }}>
-                <Comments />
+                }}
+              >
+                <Comments
+                  onClick={() => setCommentsClick(!commentsClick)}
+                  className={`${commentsClick ? "active" : ""}`}
+                  style={commentsClick ? { color: "#E22828" } : {}}
+                />
               </PopUpSignIn>
-              <p>{TotalComments}</p>
+              <p className={`${commentsClick ? "active" : ""}`}>
+                {TotalComments}
+              </p>
             </div>
           </div>
         </div>
       </section>
       <section
-        className={commentsClick ? "post__middle" : "post__middle d-none"}>
+        className={commentsClick ? "post__middle" : "post__middle d-none"}
+      >
         <hr color="#E7E7E7" style={{ marginBottom: "20px" }} />
         <div className="d-flex">
           <img src={img1} alt="" />
           <div className="post__middle__right-side">
-            <ul className="d-flex align-items-center">
+            <ul className="d-flex align-posts-center">
               <li>Bên mình có nhé</li>
               <li>Vào trang mình xem thử nhé</li>
               <li>Bên mình đang khuyến mãi luôn ạ</li>
             </ul>
-            <div className="post__middle__right-side__choose-service d-flex justify-content-center align-items-center">
+            <div className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center">
               <PlusOutlined style={{ color: "#03AC84", fontSize: "14px" }} />
               <p>Chọn dịch vụ liên quan</p>
             </div>
@@ -831,23 +722,24 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__comments" : "post__comments d-none"}>
+        className={commentsClick ? "post__comments" : "post__comments d-none"}
+      >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
-        {/* {comments.map((item, idx) => (
-          <div key={item.Id} className="post__comments__detail">
+        {/* {comments.map((post, idx) => (
+          <div key={post.Id} className="post__comments__detail">
             {idx !== 0 && (
               <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
             )}
-            <div className="post__comments__detail__info d-flex align-items-center">
-              <img src={item.Avatar} alt="" />
+            <div className="post__comments__detail__info d-flex align-posts-center">
+              <img src={post.Avatar} alt="" />
               <div
                 style={{ marginLeft: "10px" }}
                 className="pos__comments__detail__info__nametime"
               >
                 <p className="post__comments__detail__info__nametime__name">
-                  {item.Username}
+                  {post.Username}
                 </p>
-                <p>{item.CreationTime}</p>
+                <p>{post.CreationTime}</p>
               </div>
             </div>
             <Swiper
@@ -859,12 +751,12 @@ const DaoPost = (props) => {
               slidesPerGroup={1}
               loopFillGroupWithBlank={true}
             >
-              {item.services.map((item2, idx) => (
-                <SwiperSlide key={item2.Id}>
-                  <img src={item2.image} />
+              {post.services.map((post2, idx) => (
+                <SwiperSlide key={post2.Id}>
+                  <img src={post2.image} />
                   <div className="post__comments__detail__slide-content d-flex flex-column">
-                    <p>{item2.link}</p>
-                    <p>{item2.content}</p>
+                    <p>{post2.link}</p>
+                    <p>{post2.content}</p>
                   </div>
                 </SwiperSlide>
               ))}
@@ -878,7 +770,7 @@ const DaoPost = (props) => {
                 }}
               />
               <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                {item.TotalLikes}
+                {post.TotalLikes}
               </p>
             </div>
           </div>

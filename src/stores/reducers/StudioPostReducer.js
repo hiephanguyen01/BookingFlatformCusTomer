@@ -7,6 +7,12 @@ import {
   SET_STUDIO_DETAIL,
   SET_STUDIO_NEAR,
   SET_STUDIO_DETAIL1,
+  SET_LIST_LIKED_CATEGORY_1,
+  SET_LIST_LIKED_CATEGORY_2,
+  SET_LIST_LIKED_CATEGORY_3,
+  SET_LIST_LIKED_CATEGORY_4,
+  SET_LIST_LIKED_CATEGORY_5,
+  SET_LIST_LIKED_CATEGORY_6,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -33,6 +39,12 @@ const initialState = {
   studioDetail1: [],
   studioNear: [],
   studioDetail: [],
+  listLikedCategory1: [],
+  listLikedCategory3: [],
+  listLikedCategory2: [],
+  listLikedCategory4: [],
+  listLikedCategory5: [],
+  listLikedCategory6: [],
 };
 
 export const studioPostReducer = (state = initialState, action) => {
@@ -72,6 +84,36 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         studioNear: action.payload,
+      };
+    case SET_LIST_LIKED_CATEGORY_1:
+      return {
+        ...state,
+        listLikedCategory1: action.data,
+      };
+    case SET_LIST_LIKED_CATEGORY_2:
+      return {
+        ...state,
+        listLikedCategory2: action.data,
+      };
+    case SET_LIST_LIKED_CATEGORY_3:
+      return {
+        ...state,
+        listLikedCategory3: action.data,
+      };
+    case SET_LIST_LIKED_CATEGORY_4:
+      return {
+        ...state,
+        listLikedCategory4: action.data,
+      };
+    case SET_LIST_LIKED_CATEGORY_5:
+      return {
+        ...state,
+        listLikedCategory5: action.data,
+      };
+    case SET_LIST_LIKED_CATEGORY_6:
+      return {
+        ...state,
+        listLikedCategory6: action.data,
       };
 
     default:

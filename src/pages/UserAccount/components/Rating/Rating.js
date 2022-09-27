@@ -1,12 +1,10 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { Rate, Pagination, Divider } from "antd";
 import { StarFilled } from "@ant-design/icons";
+import { Divider, Rate } from "antd";
+import React, { useEffect, useState } from "react";
 import { userService } from "../../../../services/UserService";
-import "./rating.scss";
-import { RatingStudio } from "./components/RatingStudio";
 import { RatingOther } from "./components/RatingOther";
-import { useSelector } from "react-redux";
+import { RatingStudio } from "./components/RatingStudio";
+import "./rating.scss";
 const STAR_LIST = [
   { id: 5, label: "5" },
   { id: 4, label: "4" },
@@ -15,8 +13,6 @@ const STAR_LIST = [
   { id: 1, label: "1" },
 ];
 const Rating = () => {
-  const UserMe = useSelector((state)=> state.authenticateReducer.currentUser )
-  
   const [myRatings, setMyRatings] = useState([]);
   const [chooseRating, setChooseRating] = useState(5);
   useEffect(() => {
@@ -54,8 +50,7 @@ const Rating = () => {
             allowHalf
             value={Number(totalStart)}
             style={{ fontSize: "10px" }}
-            disabled
-          ></Rate>
+            disabled></Rate>
           <div className="pt-3  Rating__body__star">
             {totalStart} <span>({myRatings.length} đánh giá)</span>
           </div>
@@ -70,8 +65,7 @@ const Rating = () => {
                   chooseRating === star.id
                     ? "Rating__body__list-rate__rate_item__active"
                     : ""
-                }`}
-              >
+                }`}>
                 <span>{star.label}</span>
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>

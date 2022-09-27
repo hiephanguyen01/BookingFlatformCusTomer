@@ -1,9 +1,11 @@
 import {
   CheckCircleTwoTone,
+  HeartFilled,
+  HeartOutlined,
   HeartTwoTone,
   StarOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
@@ -11,9 +13,59 @@ import CurrencyFormat from "react-currency-format";
 import "./FilterCard.scss";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { useDispatch, useSelector } from "react-redux";
+import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
 const FilterCard = ({ data, category }) => {
   const [like, setLike] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
+  const {
+    listLikedCategory1,
+    listLikedCategory2,
+    listLikedCategory3,
+    listLikedCategory4,
+    listLikedCategory5,
+    listLikedCategory6,
+  } = useSelector((state) => state.studioPostReducer);
+  const [value, setValue] = useState([]);
+  useEffect(() => {
+    switch (category?.id) {
+      case 1:
+        setValue(listLikedCategory1);
+        break;
+      case 2:
+        setValue(listLikedCategory2);
+        break;
+      case 3:
+        setValue(listLikedCategory3);
+        break;
+      case 4:
+        setValue(listLikedCategory4);
+        break;
+      case 5:
+        setValue(listLikedCategory5);
+        break;
+      case 6:
+        setValue(listLikedCategory6);
+        break;
+      default:
+        break;
+    }
+  }, [
+    category?.id,
+    listLikedCategory1,
+    listLikedCategory2,
+    listLikedCategory3,
+    listLikedCategory4,
+    listLikedCategory5,
+    listLikedCategory6,
+  ]);
+  const handleChangeLike = (e) => {
+    e.stopPropagation();
+    if (!currentUser) navigate("/auth/sign-in");
+    dispatch(getLikeStudioPostAction(data.id, category.id));
+  };
   return (
     <>
       {data && (
@@ -22,8 +74,15 @@ const FilterCard = ({ data, category }) => {
           onClick={() => navigate(`/home/${category.value}/${data.id}`)}
         >
           <div className="groupImage">
+            <div onClick={handleChangeLike} className={"like"}>
+              {value?.findIndex((item) => item.id === data.id) > -1 ? (
+                <HeartFilled style={{ color: "red", fontSize: "20px" }} />
+              ) : (
+                <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
+              )}
+            </div>
             <div className="heard" onClick={(e) => e.stopPropagation()}>
-              <PopUpSignIn
+              {/* <PopUpSignIn
                 onClick={(e) => {
                   setLike(!like);
                   e.stopPropagation();
@@ -42,7 +101,7 @@ const FilterCard = ({ data, category }) => {
                   }
                   twoToneColor="#e22828"
                 />
-              </PopUpSignIn>
+              </PopUpSignIn> */}
             </div>
             <div className="sale">-60% HÔM NAY</div>
             <div className="main">

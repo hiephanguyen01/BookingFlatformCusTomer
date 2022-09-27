@@ -32,9 +32,10 @@ export class BaseService {
     });
   };
 
-  get = (url) => {
+  get = (url, params) => {
     return axios({
       url: `${process.env.REACT_APP_DB_BASE_URL}${url}`,
+      params: { ...params } || null,
       method: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -42,10 +43,11 @@ export class BaseService {
     });
   };
 
-  delete = (url) => {
+  delete = (url, model = {}) => {
     return axios({
       url: `${process.env.REACT_APP_DB_BASE_URL}${url}`,
       method: "DELETE",
+      data: model,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       }, //token yêu cầu từ backend chứng minh user đã đăng nhập rồi

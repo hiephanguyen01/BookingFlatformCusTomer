@@ -1,7 +1,6 @@
 import Moment from "moment";
-
 export const convertTime = (time) => {
-  if (time !== null) {
+  if (time) {
     const thisMoment = new Date(`${time.slice(0, 23)}-07:00`);
     const modify = thisMoment.toISOString();
     Moment.locale("en");
@@ -40,4 +39,27 @@ export const convertTimeSendDB = (time) => {
       ? parseInt(splitTime[0])
       : `0${parseInt(splitTime[0]) - 7}`
   }:${splitTime[1]}`;
+};
+export const numberWithDot = (x) => {
+  console.log(x);
+  return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
+export const timeStructure = (date) => {
+  return (
+    ("0" + date.getHours()).slice(-2) +
+    ":" +
+    ("0" + date.getMinutes()).slice(-2) +
+    " " +
+    date.getDate() +
+    "/" +
+    (date.getMonth() + 1) +
+    "/" +
+    date.getFullYear()
+  );
+};
+export const dateStructure = (date) => {
+  return (
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+  );
 };

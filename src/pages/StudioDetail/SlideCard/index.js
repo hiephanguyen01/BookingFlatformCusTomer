@@ -15,7 +15,7 @@ import "./styles.scss";
 import { Navigation, Autoplay } from "swiper";
 const cx = classNames.bind(styles);
 
-export const SlideCard = ({ title, data }) => {
+export const SlideCard = ({ title, data, category }) => {
   return (
     <>
       <div className={cx("ListItem")}>
@@ -52,7 +52,7 @@ export const SlideCard = ({ title, data }) => {
             {data?.map((item, idx) => {
               return (
                 <SwiperSlide key={idx}>
-                  <Card value={item} />
+                  <Card category={category} value={item} />
                 </SwiperSlide>
               );
             })}

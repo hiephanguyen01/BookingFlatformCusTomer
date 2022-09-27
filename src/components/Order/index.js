@@ -19,6 +19,7 @@ import { orderService } from "../../services/OrderService";
 import toastMessage from "../ToastMessage";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+import { convertImage } from "../../utils/convertImage";
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -118,11 +119,11 @@ const Index = ({ linkTo = "" }) => {
               //   item.orderHours[0] +
               //   ":00.000Z",
               // OrderByTimeTo:
-              //   convertDateSendToDB(item.orderDate).slice(0, 11) +
+              // convertDateSendToDB(item.orderDate).slice(0, 11) +
               //   item.orderHours[1] +
               //   ":00.000Z",
-              OrderByTimeFrom: filter.OrderByTimeFrom,
-              OrderByTimeTo: filter.OrderByTimeTo,
+              OrderByTimeFrom: convertDateSendToDB(filter.OrderByTimeFrom),
+              OrderByTimeTo: convertDateSendToDB(filter.OrderByTimeTo),
               PaymentType: 0,
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
@@ -133,7 +134,8 @@ const Index = ({ linkTo = "" }) => {
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue: chooseServiceList[i].Sales,
+              BookingValue:
+                chooseServiceList[i].Sales || chooseServiceList[i].PriceByHour,
             };
             const response = await orderService.addOrder(newData);
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
@@ -155,7 +157,8 @@ const Index = ({ linkTo = "" }) => {
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue: chooseServiceList[i].Sales,
+              BookingValue:
+                chooseServiceList[i].Sales || chooseServiceList[i].PriceByDate,
             };
             const response = await orderService.addOrder(newData);
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
@@ -206,7 +209,7 @@ const Index = ({ linkTo = "" }) => {
               />
             </div>
             {chooseServiceList.length > 0 &&
-              chooseServiceList.map((item) => (
+              chooseServiceList?.map((item) => (
                 <>
                   <div className="border-bottom">
                     <div
@@ -215,10 +218,9 @@ const Index = ({ linkTo = "" }) => {
                     >
                       <img
                         src={`${
-                          item.Image.length > 0 &&
-                          item.Image[0].includes("https://drive.google.com/")
-                            ? item.Image[0]
-                            : REACT_APP_DB_BASE_URL_IMG + "/" + item.Image[0]
+                          item?.Image?.length > 0
+                            ? convertImage(item?.Image[0])
+                            : ""
                         }`}
                         className="img_service"
                         alt=""
@@ -439,7 +441,6 @@ const Index = ({ linkTo = "" }) => {
             <PopUpSignIn
               onClick={(e) => {
                 handleOnClickOrder();
-                e.stopPropagation();
               }}
             >
               <Button
