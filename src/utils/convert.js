@@ -1,6 +1,6 @@
 import Moment from "moment";
 export const convertTime = (time) => {
-  if (time !== null) {
+  if (time) {
     const thisMoment = new Date(`${time.slice(0, 23)}-07:00`);
     const modify = thisMoment.toISOString();
     Moment.locale("en");

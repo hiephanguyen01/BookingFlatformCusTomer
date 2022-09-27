@@ -1,10 +1,12 @@
 import {
   CheckCircleOutlined,
   HeartOutlined,
+  LoadingOutlined,
   MoreOutlined,
+  ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Pagination, Popover, Rate } from "antd";
+import { Pagination, Popover, Rate, Button } from "antd";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -43,6 +45,7 @@ import { SlideCard } from "./SlideCard";
 // import { Voucher } from "./Voucher";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { convertImage } from "../../utils/convertImage";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -58,8 +61,14 @@ export const StudioDetail = () => {
   // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { studioDetail1, studioDetail, studioNear, studioPostList, filter } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail1,
+    studioDetail,
+    studioNear,
+    studioPostList,
+    filter,
+    loading,
+  } = useSelector((state) => state.studioPostReducer);
   // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
@@ -69,11 +78,11 @@ export const StudioDetail = () => {
       ? 1
       : undefined;
 
-  useEffect(() => {
-    // setTimeout(() => {
-    //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
-    // }, 5000);
-  }, []);
+  // useEffect(() => {
+  // setTimeout(() => {
+  //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+  // }, 5000);
+  // }, []);
   useEffect(() => {
     dispatch(studioDetailAction(id, cate));
     dispatch(getDetailRoomAction(id));
@@ -96,10 +105,7 @@ export const StudioDetail = () => {
                 alt="as"
                 style={{ width: "100%", borderRadius: " 6px" }}
                 src={`${
-                  data?.Image?.length > 0 &&
-                  data?.Image[0]?.includes("https://drive.google.com/")
-                    ? data?.Image[0]
-                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
                 }`}
               />
               <div
@@ -520,7 +526,7 @@ export const StudioDetail = () => {
 
   return (
     <>
-      <MetaDecorator
+          <MetaDecorator
         description={studioDetail?.data?.Description}
         imgAlt={studioDetail?.data?.Image[0]}
         imgUrl={
@@ -531,261 +537,350 @@ export const StudioDetail = () => {
         }
         title={studioDetail?.data?.Name}
       />
-      <div className={cx("wrapper")}>
-        <div className={cx("studioDetail")}>
-          <div className={cx("box1")}>
-            <div className={cx("top")}>
-              <div className={cx("title")}>
-                <h3>{studioDetail?.data?.Name} </h3>
-                <CheckCircleOutlined
-                  style={{ fontSize: "20px", color: "#03AC84" }}
-                />
-              </div>
-              <div className={cx("icons")}>
-                <PopUpSignIn
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}>
-                  <HeartOutlined className={cx("item")} />
-                </PopUpSignIn>
-                <Popover
-                  placement="bottomRight"
-                  content={
-                    <div
-                      onClick={() => handleReport()}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "10px",
-                        padding: "10px",
-                      }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                          cursor: "pointer",
-                        }}>
-                        <WarningOutlined style={{ fontSize: "20px" }} />
-                        <span style={{ fontSize: "18px", fontWeight: "bold" }}>
-                          Báo cáo
-                        </span>
-                      </div>
-                    </div>
-                  }
-                  trigger="click">
-                  <MoreOutlined className={cx("item")} />
-                </Popover>
-              </div>
-            </div>
-            <div className={cx("address")}>
-              <img src={images.address} alt="sa" />
-              <span>{studioDetail?.data?.Address}</span>
-            </div>
-            <div className={cx("rate")}>
-              <Rate disabled allowHalf value={5}></Rate>
-              <span>5</span>
-              <span className={cx("number-order")} style={{ fontSize: "15px" }}>
-                60 đã đặt{" "}
-              </span>
-            </div>
-            <div className={cx("container")}>
-              {studioDetail1?.Image?.slice(0, 5).map((item, index) => {
-                return index !== 4 ? (
-                  <div
-                    key={index}
-                    onClick={() =>
-                      dispatch({
-                        type: "SHOW_MODAL_LIST",
-                        Component: <ModalImage data={studioDetail1?.Image} />,
-                        width: "1169px",
-                      })
-                    }
-                    className={cx("item")}>
-                    <img
-                      alt="sa"
-                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
-                    />
-                  </div>
-                ) : (
-                  <div
-                    onClick={() =>
-                      dispatch({
-                        type: SHOW_MODAL,
-                        Component: <ModalImage data={studioDetail1?.Image} />,
-                        width: "1169px",
-                      })
-                    }
-                    key={index}
-                    className={cx("item")}>
-                    <img
-                      src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
-                      alt="as"
-                    />
-                    <div className={cx("number")}>
-                      {studioDetail1?.Image.length - 5}+
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            // <ImagePost data={studioDetail?.data?.Image} />
+      <div 
+      {loading ? (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              background: "white",
+              width: "fit-content",
+              borderRadius: "50%",
+              padding: "10px",
+              margin: "10px",
+            }}
+          >
+            <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
-          <div className={cx("box2")}>
-            <div className={cx("left")}>
-              <div className={cx("description")}>
-                <ReadMoreDesc title="Chi tiết sản phẩm">
-                  {studioDetail?.data?.Description}
-                </ReadMoreDesc>
-              </div>
-              <div className={cx("sale")}>
-                <h3>4 Mã khuyến mãi</h3>
-                <div className={cx("listSale")}>
-                  <span>GIẢM 50K</span>
-                  <span>GIẢM 500K</span>
+        </div>
+      ) : (
+        <>
+          <Helmet>
+            <title>{studioDetail?.data?.Name}</title>
+            <meta
+              name="description"
+              content={studioDetail?.data?.Description}
+            ></meta>
+            <meta
+              property="og:url"
+              itemprop="url"
+              content={`${REACT_APP_DB_BASE_URL_IMG}${pathname}`}
+            ></meta>
+            <meta
+              property="og:description"
+              content={studioDetail?.data?.Description}
+            ></meta>
+            <meta
+              content={studioDetail?.data?.Image?.slice(0, 1)}
+              property="og:image"
+              itemprop="thumbnailUrl"
+            ></meta>
+            <meta property="og:image:width" content="740"></meta>
+            <meta property="og:image:height" content="555"></meta>
+            <meta property="og:locale" content="vi_VN"></meta>
+            <meta property="og:site_name" content="Booking Studio"></meta>
+            <meta
+              property="og:title"
+              itemprop="name"
+              content={studioDetail?.data?.Name}
+            ></meta>
+          </Helmet>
+          <div className={cx("wrapper")}>
+            <div className={cx("studioDetail")}>
+              <div className={cx("box1")}>
+                <div className={cx("top")}>
+                  <div className={cx("title")}>
+                    <h3>{studioDetail?.data?.Name} </h3>
+                    <CheckCircleOutlined
+                      style={{ fontSize: "20px", color: "#03AC84" }}
+                    />
+                  </div>
+                  <div className={cx("icons")}>
+                    <PopUpSignIn
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <HeartOutlined className={cx("item")} />
+                    </PopUpSignIn>
+                    <Popover
+                      placement="bottomRight"
+                      content={
+                        <div
+                          onClick={() => handleReport()}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                            padding: "10px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <WarningOutlined style={{ fontSize: "20px" }} />
+                            <span
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
+                              Báo cáo
+                            </span>
+                          </div>
+                        </div>
+                      }
+                      trigger="click"
+                    >
+                      <MoreOutlined className={cx("item")} />
+                    </Popover>
+                  </div>
                 </div>
-              </div>
-              <div className={cx("table")}>
-                <div className="ms-20">
-                  <SelectTimeOption />
-                </div>
-                <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                {/* <Table
-                  className={cx("table-ant")}
-                  columns={columns}
-                  dataSource={roomDetail ?? roomDetail}
-                  pagination={{
-                    defaultPageSize: 5,
-                    showSizeChanger: true,
-                    pageSizeOptions: ["1", "5", "10"],
-                    style: { marginTop: "16px!important" },
-                    className: cx("paginate"),
-                  }}
-                /> */}
-              </div>
-
-              <div className={cx("rating")}>
-                <CommentRating
-                  data={studioDetail?.rating}
-                  className="mb-43 mt-12"
-                />
-              </div>
-            </div>
-            <div className={cx("right")}>
-              <div className={cx("map")}>
-                <h3>Xem trên bản đồ</h3>
                 <div className={cx("address")}>
-                  <img src={images.address} alt="" />
+                  <img src={images.address} alt="sa" />
                   <span>{studioDetail?.data?.Address}</span>
                 </div>
-                <div className="mapouter">
-                  <div className="gmap_canvas">
-                    <iframe
-                      className="gmap_iframe"
-                      width="100%"
-                      frameBorder={0}
-                      scrolling="no"
-                      marginHeight={0}
-                      marginWidth={0}
-                      src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
-                    />
-                    <a href="https://embedmapgenerator.com/">
-                      embed google maps in website
-                    </a>
-                  </div>
-                  <style
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        ".mapouter{position:relative;text-align:right;width:100%;height:255px;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:255px;}.gmap_iframe {height:255px!important;}",
-                    }}
-                  />
-                </div>
-              </div>
-              <div className={cx("order")}>
-                <h3>Đã chọn {chooseService.length} phòng</h3>
-                <div className={cx("item")}>
-                  <span>Giá gốc</span>
-                  {chooseService.length > 0 && (
-                    <span
-                      style={{
-                        textDecoration: "line-through",
-                        fontSize: " 16px",
-                        color: "#828282",
-                      }}>
-                      {`${convertPrice(
-                        chooseService?.reduce(
-                          (total, item) => total + item.PriceByDate,
-                          0
-                        )
-                      )}`}
-                      đ
-                    </span>
-                  )}
-                </div>
-                <div className={cx("item")}>
-                  <span>Bao gồm 50.000đ thuế và phí </span>
+                <div className={cx("rate")}>
+                  <Rate disabled allowHalf value={5}></Rate>
+                  <span>5</span>
                   <span
-                    style={{
-                      color: "#E22828",
-                      fontSize: "20px",
-                      fontWeight: "700",
-                    }}>
-                    {`${convertPrice(
-                      chooseService?.reduce(
-                        (total, item) => total + item.PriceByDate,
-                        0
-                      )
-                    )}`}
-                    đ
+                    className={cx("number-order")}
+                    style={{ fontSize: "15px" }}
+                  >
+                    60 đã đặt{" "}
                   </span>
                 </div>
+                {/* <div className={cx("container")}>
+            {studioDetail1?.Image?.slice(0, 5).map((item, index) => {
+              return index !== 4 ? (
                 <div
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    justifyContent: "space-between",
-                    marginTop: "20px",
-                  }}>
-                  <button
-                    style={{
-                      flex: "2.5",
-                      padding: "14px 36px",
-                      background: "#E7E7E7",
-                      borderRadius: "8px",
-                      border: 0,
-                      cursor: "pointer",
-                      fontWeight: "700",
-                    }}>
-                    Thêm vào giỏ hàng
-                  </button>
-                  <button
-                    style={{
-                      flex: "1",
-                      padding: "14px 36px",
-                      background: "#E22828",
-                      borderRadius: "8px",
-                      color: "#fff",
-                      border: 0,
-                      cursor: "pointer",
-                      fontWeight: "700",
-                    }}
-                    onClick={handleBook}>
-                    Đặt ngay
-                  </button>
+                  key={index}
+                  onClick={() =>
+                    dispatch({
+                      type: "SHOW_MODAL_LIST",
+                      Component: <ModalImage data={studioDetail1?.Image} />,
+                      width: "1169px",
+                    })
+                  }
+                  className={cx("item")}
+                >
+                  <img
+                    alt="sa"
+                    src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
+                  />
+                </div>
+              ) : (
+                <div
+                  onClick={() =>
+                    dispatch({
+                      type: SHOW_MODAL,
+                      Component: <ModalImage data={studioDetail1?.Image} />,
+                      width: "1169px",
+                    })
+                  }
+                  key={index}
+                  className={cx("item")}
+                >
+                  <img
+                    src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
+                    alt="as"
+                  />
+                  <div className={cx("number")}>
+                    {studioDetail1?.Image.length - 5}+
+                  </div>
+                </div>
+              );
+            })}
+          </div> */}
+                <ImagePost data={studioDetail?.data?.Image} />
+              </div>
+              <div className={cx("box2")}>
+                <div className={cx("left")}>
+                  <div className={cx("description")}>
+                    <ReadMoreDesc title="Chi tiết sản phẩm">
+                      {studioDetail?.data?.Description}
+                    </ReadMoreDesc>
+                  </div>
+                  <div className={cx("sale")}>
+                    <h3>4 Mã khuyến mãi</h3>
+                    <div className={cx("listSale")}>
+                      <span>GIẢM 50K</span>
+                      <span>GIẢM 500K</span>
+                    </div>
+                  </div>
+                  <div className={cx("table")}>
+                    <div className="ms-20">
+                      <SelectTimeOption />
+                    </div>
+                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
+                    {/* <Table
+                className={cx("table-ant")}
+                columns={columns}
+                dataSource={roomDetail ?? roomDetail}
+                pagination={{
+                  defaultPageSize: 5,
+                  showSizeChanger: true,
+                  pageSizeOptions: ["1", "5", "10"],
+                  style: { marginTop: "16px!important" },
+                  className: cx("paginate"),
+                }}
+              /> */}
+                  </div>
+
+                  <div className={cx("rating")}>
+                    <CommentRating
+                      data={studioDetail?.rating}
+                      className="mb-43 mt-12"
+                    />
+                  </div>
+                </div>
+                <div className={cx("right")}>
+                  <div className={cx("map")}>
+                    <h3>Xem trên bản đồ</h3>
+                    <div className={cx("address")}>
+                      <img src={images.address} alt="" />
+                      <span>{studioDetail?.data?.Address}</span>
+                    </div>
+                    <div className="mapouter">
+                      <div className="gmap_canvas">
+                        <iframe
+                          className="gmap_iframe"
+                          width="100%"
+                          frameBorder={0}
+                          scrolling="no"
+                          marginHeight={0}
+                          marginWidth={0}
+                          src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                        />
+                        <a href="https://embedmapgenerator.com/">
+                          embed google maps in website
+                        </a>
+                      </div>
+                      <style
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            ".mapouter{position:relative;text-align:right;width:100%;height:255px;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:255px;}.gmap_iframe {height:255px!important;}",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className={cx("order")}>
+                    <h3>Đã chọn {chooseService.length} phòng</h3>
+                    <div className={cx("item")}>
+                      <span>Giá gốc</span>
+                      {chooseService.length > 0 && (
+                        <span
+                          style={{
+                            textDecoration: "line-through",
+                            fontSize: " 16px",
+                            color: "#828282",
+                          }}
+                        >
+                          {`${convertPrice(
+                            chooseService?.reduce(
+                              (total, item) => total + item.PriceByDate,
+                              0
+                            )
+                          )}`}
+                          đ
+                        </span>
+                      )}
+                    </div>
+                    <div className={cx("item")}>
+                      <span>Bao gồm 50.000đ thuế và phí </span>
+                      <span
+                        style={{
+                          color: "#E22828",
+                          fontSize: "20px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        {`${convertPrice(
+                          chooseService?.reduce(
+                            (total, item) => total + item.PriceByDate,
+                            0
+                          )
+                        )}`}
+                        đ
+                      </span>
+                    </div>
+                    <div className="w-100 d-flex justify-content-between mt-20">
+                      <Button
+                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
+                        <ShoppingCartOutlined />
+                        Thêm vào giỏ hàng
+                      </Button>
+                      <Button
+                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                        onClick={handleBook}
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
+                        Đặt ngay
+                      </Button>
+                    </div>
+                    {/* <div
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        justifyContent: "space-between",
+                        marginTop: "20px",
+                      }}
+                    >
+                      <Button
+                        style={{
+                          padding: "14px 36px",
+                          background: "#E7E7E7",
+                          borderRadius: "8px",
+                          border: 0,
+                          cursor: "pointer",
+                          fontWeight: "700",
+                        }}
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
+                        Thêm vào giỏ hàng
+                      </Button>
+                      <Button
+                        style={{
+                          flex: "1",
+                          padding: "14px 36px",
+                          background: "#E22828",
+                          borderRadius: "8px",
+                          color: "#fff",
+                          border: 0,
+                          cursor: "pointer",
+                          fontWeight: "700",
+                        }}
+                        onClick={handleBook}
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
+                        Đặt ngay
+                      </Button>
+                    </div> */}
+                  </div>
                 </div>
               </div>
+              <SlideCard
+                data={
+                  studioPostList ??
+                  studioPostList.filter((item) => item.id !== id)
+                }
+                title="Studio tương tự"
+              />
+              <SlideCard data={studioNear ?? studioNear} title="Gần bạn" />
+              {/* <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" /> */}
             </div>
           </div>
-          <SlideCard
-            data={
-              studioPostList ?? studioPostList.filter((item) => item.id !== id)
-            }
-            title="Studio tương tự"
-          />
-          <SlideCard data={studioNear ?? studioNear} title="Gần bạn" />
-          {/* <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" /> */}
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };
