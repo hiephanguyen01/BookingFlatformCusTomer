@@ -526,7 +526,7 @@ export const StudioDetail = () => {
 
   return (
     <>
-          <MetaDecorator
+      <MetaDecorator
         description={studioDetail?.data?.Description}
         imgAlt={studioDetail?.data?.Image[0]}
         imgUrl={
@@ -537,15 +537,13 @@ export const StudioDetail = () => {
         }
         title={studioDetail?.data?.Name}
       />
-      <div 
       {loading ? (
         <div
           style={{
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -553,43 +551,12 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
       ) : (
         <>
-          <Helmet>
-            <title>{studioDetail?.data?.Name}</title>
-            <meta
-              name="description"
-              content={studioDetail?.data?.Description}
-            ></meta>
-            <meta
-              property="og:url"
-              itemprop="url"
-              content={`${REACT_APP_DB_BASE_URL_IMG}${pathname}`}
-            ></meta>
-            <meta
-              property="og:description"
-              content={studioDetail?.data?.Description}
-            ></meta>
-            <meta
-              content={studioDetail?.data?.Image?.slice(0, 1)}
-              property="og:image"
-              itemprop="thumbnailUrl"
-            ></meta>
-            <meta property="og:image:width" content="740"></meta>
-            <meta property="og:image:height" content="555"></meta>
-            <meta property="og:locale" content="vi_VN"></meta>
-            <meta property="og:site_name" content="Booking Studio"></meta>
-            <meta
-              property="og:title"
-              itemprop="name"
-              content={studioDetail?.data?.Name}
-            ></meta>
-          </Helmet>
           <div className={cx("wrapper")}>
             <div className={cx("studioDetail")}>
               <div className={cx("box1")}>
@@ -604,8 +571,7 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       <HeartOutlined className={cx("item")} />
                     </PopUpSignIn>
                     <Popover
@@ -618,27 +584,23 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}
-                        >
+                          }}>
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}
-                          >
+                            }}>
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
+                              style={{ fontSize: "18px", fontWeight: "bold" }}>
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click"
-                    >
+                      trigger="click">
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -652,8 +614,7 @@ export const StudioDetail = () => {
                   <span>5</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}
-                  >
+                    style={{ fontSize: "15px" }}>
                     60 đã đặt{" "}
                   </span>
                 </div>
@@ -781,8 +742,7 @@ export const StudioDetail = () => {
                             textDecoration: "line-through",
                             fontSize: " 16px",
                             color: "#828282",
-                          }}
-                        >
+                          }}>
                           {`${convertPrice(
                             chooseService?.reduce(
                               (total, item) => total + item.PriceByDate,
@@ -800,8 +760,7 @@ export const StudioDetail = () => {
                           color: "#E22828",
                           fontSize: "20px",
                           fontWeight: "700",
-                        }}
-                      >
+                        }}>
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) => total + item.PriceByDate,
@@ -814,16 +773,14 @@ export const StudioDetail = () => {
                     <div className="w-100 d-flex justify-content-between mt-20">
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
+                        disabled={chooseService.length > 0 ? false : true}>
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
+                        disabled={chooseService.length > 0 ? false : true}>
                         Đặt ngay
                       </Button>
                     </div>
