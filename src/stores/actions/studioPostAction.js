@@ -87,3 +87,116 @@ export const studioDetailAction1 = (id, category) => {
     dispatch({ type: LOADING, payload: false });
   };
 };
+
+export const getLikeStudioPostAction = (postId, category, setLike, like) => {
+  return async (dispatch) => {
+    try {
+      await studioPostService.getLikeStudioPost({
+        PostId: postId,
+        CategoryId: category,
+      });
+      setLike(!like);
+      dispatch(getAllStudioLikedAction1(category));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction6 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+      console.log(data);
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction5 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+      console.log(data);
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction4 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+      console.log(data);
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getAllStudioLikedAction1 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+      console.log(data);
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getAllStudioLikedAction2 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+      console.log(data);
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getAllStudioLikedAction3 = (category) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked({
+        CategoryId: category,
+      });
+      console.log(data);
+      dispatch({
+        type: `SET_LIST_LIKED_CATEGORY_${category}`,
+        data: data.Posts,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
