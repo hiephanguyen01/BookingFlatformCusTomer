@@ -42,6 +42,7 @@ import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 // import { Voucher } from "./Voucher";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -107,15 +108,13 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   Phòng
                 </span>
                 <span
@@ -123,8 +122,7 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   {data.Name}
                 </span>
               </div>
@@ -134,15 +132,13 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   Diện tích
                 </span>
                 <span
@@ -150,8 +146,7 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   {data.Area}
                 </span>
               </div>
@@ -161,15 +156,13 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   Phong cách
                 </span>
                 <span
@@ -177,8 +170,7 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   {data.Style}
                 </span>
               </div>
@@ -193,15 +185,17 @@ export const StudioDetail = () => {
             <>
               <div>
                 <div
-                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                  }}>
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     {filter.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
@@ -219,8 +213,7 @@ export const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {filter.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
@@ -238,8 +231,7 @@ export const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   {data.PriceNote}
                 </p>
                 <button
@@ -249,8 +241,7 @@ export const StudioDetail = () => {
                     color: "#ffff",
                     border: " 1px solid #E22828",
                     borderRadius: " 8px",
-                  }}
-                >
+                  }}>
                   Giảm 50%{" "}
                 </button>
               </div>
@@ -273,8 +264,7 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Bỏ chọn
                 </span>
               ) : (
@@ -290,8 +280,7 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Chọn
                 </span>
               )}
@@ -531,36 +520,17 @@ export const StudioDetail = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{studioDetail?.data?.Name}</title>
-        <meta
-          name="description"
-          content={studioDetail?.data?.Description}
-        ></meta>
-        <meta
-          property="og:url"
-          itemprop="url"
-          content={`${REACT_APP_DB_BASE_URL_IMG}${pathname}`}
-        ></meta>
-        <meta
-          property="og:description"
-          content={studioDetail?.data?.Description}
-        ></meta>
-        <meta
-          content={studioDetail?.data?.Image?.slice(0, 1)}
-          property="og:image"
-          itemprop="thumbnailUrl"
-        ></meta>
-        <meta property="og:image:width" content="740"></meta>
-        <meta property="og:image:height" content="555"></meta>
-        <meta property="og:locale" content="vi_VN"></meta>
-        <meta property="og:site_name" content="Booking Studio"></meta>
-        <meta
-          property="og:title"
-          itemprop="name"
-          content={studioDetail?.data?.Name}
-        ></meta>
-      </Helmet>
+      <MetaDecorator
+        description={studioDetail?.data?.Description}
+        imgAlt={studioDetail?.data?.Image[0]}
+        imgUrl={
+          window.location.origin +
+          REACT_APP_DB_BASE_URL_IMG +
+          "/" +
+          studioDetail?.data?.Image[0]
+        }
+        title={studioDetail?.data?.Name}
+      />
       <div className={cx("wrapper")}>
         <div className={cx("studioDetail")}>
           <div className={cx("box1")}>
@@ -575,8 +545,7 @@ export const StudioDetail = () => {
                 <PopUpSignIn
                   onClick={(e) => {
                     e.stopPropagation();
-                  }}
-                >
+                  }}>
                   <HeartOutlined className={cx("item")} />
                 </PopUpSignIn>
                 <Popover
@@ -589,16 +558,14 @@ export const StudioDetail = () => {
                         flexDirection: "column",
                         gap: "10px",
                         padding: "10px",
-                      }}
-                    >
+                      }}>
                       <div
                         style={{
                           display: "flex",
                           alignItems: "center",
                           gap: "10px",
                           cursor: "pointer",
-                        }}
-                      >
+                        }}>
                         <WarningOutlined style={{ fontSize: "20px" }} />
                         <span style={{ fontSize: "18px", fontWeight: "bold" }}>
                           Báo cáo
@@ -606,8 +573,7 @@ export const StudioDetail = () => {
                       </div>
                     </div>
                   }
-                  trigger="click"
-                >
+                  trigger="click">
                   <MoreOutlined className={cx("item")} />
                 </Popover>
               </div>
@@ -635,8 +601,7 @@ export const StudioDetail = () => {
                         width: "1169px",
                       })
                     }
-                    className={cx("item")}
-                  >
+                    className={cx("item")}>
                     <img
                       alt="sa"
                       src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
@@ -652,8 +617,7 @@ export const StudioDetail = () => {
                       })
                     }
                     key={index}
-                    className={cx("item")}
-                  >
+                    className={cx("item")}>
                     <img
                       src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
                       alt="as"
@@ -747,8 +711,7 @@ export const StudioDetail = () => {
                         textDecoration: "line-through",
                         fontSize: " 16px",
                         color: "#828282",
-                      }}
-                    >
+                      }}>
                       {`${convertPrice(
                         chooseService?.reduce(
                           (total, item) => total + item.PriceByDate,
@@ -766,8 +729,7 @@ export const StudioDetail = () => {
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     {`${convertPrice(
                       chooseService?.reduce(
                         (total, item) => total + item.PriceByDate,
@@ -783,8 +745,7 @@ export const StudioDetail = () => {
                     gap: "10px",
                     justifyContent: "space-between",
                     marginTop: "20px",
-                  }}
-                >
+                  }}>
                   <button
                     style={{
                       flex: "2.5",
@@ -794,8 +755,7 @@ export const StudioDetail = () => {
                       border: 0,
                       cursor: "pointer",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     Thêm vào giỏ hàng
                   </button>
                   <button
@@ -809,8 +769,7 @@ export const StudioDetail = () => {
                       cursor: "pointer",
                       fontWeight: "700",
                     }}
-                    onClick={handleBook}
-                  >
+                    onClick={handleBook}>
                     Đặt ngay
                   </button>
                 </div>

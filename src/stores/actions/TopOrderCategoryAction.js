@@ -8,7 +8,6 @@ import {
   SET_TOP_PHOTOGRAPHER_POST,
 } from "../types/TopOrderCategoryPostType";
 import {
-  getAllStudioLikedAction,
   getAllStudioLikedAction1,
   getAllStudioLikedAction2,
   getAllStudioLikedAction3,
