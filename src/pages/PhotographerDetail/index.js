@@ -28,6 +28,8 @@ import {
 } from "../../stores/actions/OrderAction";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { convertImage } from "../../utils/convertImage";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -37,7 +39,7 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, loading } = useSelector(
+  const { studioDetail, loading, filter } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -76,10 +78,7 @@ const PhotographerDetail = () => {
             <>
               <img
                 src={`${
-                  data.Image.length > 0 &&
-                  data?.Image[0]?.includes("https://drive.google.com/")
-                    ? data?.Image[0]
-                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
                 }`}
                 style={{ width: "100%", marginBottom: "20px" }}
                 alt=""
@@ -187,11 +186,15 @@ const PhotographerDetail = () => {
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0) {
+    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       dispatch(chooseServiceAction(chooseService));
       navigate("order");
     } else {
-      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      if (filter.OrderByTime === -1) {
+        toastMessage("Bạn cần chọn đặt theo ngày!", "warn");
+      } else if (chooseService.length <= 0) {
+        toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      }
     }
   };
   const handleAddCart = () => {
@@ -204,6 +207,13 @@ const PhotographerDetail = () => {
   };
   return (
     <>
+      <MetaDecorator
+        title={studioDetail?.data?.Name}
+        description={studioDetail?.data?.Description}
+        imgUrl={studioDetail?.data?.Image[0]}
+        type="article"
+        imgAlt="Booking Studio Details"
+      />
       {loading ? (
         <div
           style={{
@@ -443,6 +453,7 @@ const PhotographerDetail = () => {
                     <Button
                       className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
                       onClick={handleAddCart}
+                      // disabled={chooseService.length > 0 ? false : true}
                     >
                       <ShoppingCartOutlined />
                       Thêm vào giỏ hàng
@@ -450,6 +461,11 @@ const PhotographerDetail = () => {
                     <Button
                       className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                       onClick={handleBook}
+                      // disabled={
+                      //   chooseService.length > 0 && filter.OrderByTime !== -1
+                      //     ? false
+                      //     : true
+                      // }
                     >
                       Đặt ngay
                     </Button>

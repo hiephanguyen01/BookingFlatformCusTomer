@@ -44,10 +44,10 @@
 
         li {
           color: $secondary-800;
+          margin-right: 8px;
 
-          &:nth-child(2),
-          &:nth-child(3) {
-            margin-left: 8px;
+          &:last-child {
+            margin-right: 0;
           }
         }
       }

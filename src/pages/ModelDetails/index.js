@@ -32,6 +32,8 @@ import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { convertImage } from "../../utils/convertImage";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -97,10 +99,7 @@ const Index = () => {
             <>
               <img
                 src={`${
-                  data?.Image?.length > 0 &&
-                  data?.Image[0]?.includes("https://drive.google.com/")
-                    ? data?.Image[0]
-                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
+                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
                 }`}
                 style={{ width: "100%", marginBottom: "20px" }}
               />
@@ -217,6 +216,13 @@ const Index = () => {
 
   return (
     <>
+      <MetaDecorator
+        title={studioDetail?.data?.Name}
+        description={studioDetail?.data?.Description}
+        imgUrl={studioDetail?.data?.Image[0]}
+        type="article"
+        imgAlt="Booking Studio Details"
+      />
       {loading ? (
         <div
           style={{
@@ -466,13 +472,17 @@ const Index = () => {
                       </div>
                     </div>
                     <div className="w-100 d-flex justify-content-between">
-                      <Button className="w-60 h-48px d-flex justify-content-center align-items-center btn_add">
+                      <Button
+                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
+                        disabled={chooseService.length > 0 ? false : true}
                       >
                         Đặt ngay
                       </Button>
