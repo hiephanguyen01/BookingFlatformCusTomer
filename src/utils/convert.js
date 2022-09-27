@@ -1,5 +1,4 @@
 import Moment from "moment";
-
 export const convertTime = (time) => {
   if (time) {
     const thisMoment = new Date(`${time.slice(0, 23)}-07:00`);

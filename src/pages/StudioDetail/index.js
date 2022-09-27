@@ -44,6 +44,7 @@ import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 // import { Voucher } from "./Voucher";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 
 const COLUMN = [
@@ -113,15 +114,13 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   Phòng
                 </span>
                 <span
@@ -129,8 +128,7 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   {data.Name}
                 </span>
               </div>
@@ -140,15 +138,13 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   Diện tích
                 </span>
                 <span
@@ -156,8 +152,7 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   {data.Area}
                 </span>
               </div>
@@ -167,15 +162,13 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   Phong cách
                 </span>
                 <span
@@ -183,8 +176,7 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   {data.Style}
                 </span>
               </div>
@@ -199,15 +191,17 @@ export const StudioDetail = () => {
             <>
               <div>
                 <div
-                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                  }}>
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     {filter.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
@@ -225,8 +219,7 @@ export const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {filter.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
@@ -244,8 +237,7 @@ export const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   {data.PriceNote}
                 </p>
                 <button
@@ -255,8 +247,7 @@ export const StudioDetail = () => {
                     color: "#ffff",
                     border: " 1px solid #E22828",
                     borderRadius: " 8px",
-                  }}
-                >
+                  }}>
                   Giảm 50%{" "}
                 </button>
               </div>
@@ -279,8 +270,7 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Bỏ chọn
                 </span>
               ) : (
@@ -296,8 +286,7 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Chọn
                 </span>
               )}
@@ -537,6 +526,18 @@ export const StudioDetail = () => {
 
   return (
     <>
+          <MetaDecorator
+        description={studioDetail?.data?.Description}
+        imgAlt={studioDetail?.data?.Image[0]}
+        imgUrl={
+          window.location.origin +
+          REACT_APP_DB_BASE_URL_IMG +
+          "/" +
+          studioDetail?.data?.Image[0]
+        }
+        title={studioDetail?.data?.Name}
+      />
+      <div 
       {loading ? (
         <div
           style={{
