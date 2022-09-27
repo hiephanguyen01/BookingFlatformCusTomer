@@ -165,7 +165,7 @@ const Header = () => {
       provinceIds: [values.province],
       keyString: values.keyString,
     };
-    dispatch(getFilterStudioPost(5, 1, newFilter));
+    dispatch(getFilterStudioPost(5, 1, newFilter,user));
     setVisible(false);
     navigate("/home/filter");
   };

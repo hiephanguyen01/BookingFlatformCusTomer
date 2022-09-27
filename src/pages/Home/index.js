@@ -190,7 +190,7 @@ export const Home = () => {
   // const category = useSelector((state) => state.listByCategoryReducer.category);
   // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { filter, laoding } = useSelector((state) => state.studioPostReducer);
-
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   const [chooseCate, setChooseCate] = useState();
   const [provinces, setProvinces] = useState([]);
@@ -210,13 +210,13 @@ export const Home = () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
-    dispatch(getTop10OrderStudioPostAction(1));
-    dispatch(getTop10OrderPhotographerAction(2));
-    dispatch(getTop10OrderClothesAction(3));
-    dispatch(getTop10OrderMakeupAction(4));
-    dispatch(getTop10OrderDeviceAction(5));
-    dispatch(getTop10OrderModelAction(6));
-  }, []);
+    dispatch(getTop10OrderStudioPostAction(1,currentUser));
+    dispatch(getTop10OrderPhotographerAction(2,currentUser));
+    dispatch(getTop10OrderClothesAction(3,currentUser));
+    dispatch(getTop10OrderMakeupAction(4,currentUser));
+    dispatch(getTop10OrderDeviceAction(5,currentUser));
+    dispatch(getTop10OrderModelAction(6,currentUser));
+  }, [currentUser,dispatch]);
 
   const handleClickCategory = (categoryId) => {
     const newFilter = {
