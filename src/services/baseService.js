@@ -42,10 +42,11 @@ export class BaseService {
     });
   };
 
-  delete = (url) => {
+  delete = (url, model = {}) => {
     return axios({
       url: `${process.env.REACT_APP_DB_BASE_URL}${url}`,
       method: "DELETE",
+      data: model,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       }, //token yêu cầu từ backend chứng minh user đã đăng nhập rồi

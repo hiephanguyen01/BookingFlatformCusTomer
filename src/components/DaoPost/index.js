@@ -6,7 +6,7 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Popover, Modal, message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
 import "./daoPost.scss";
@@ -28,6 +28,8 @@ import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
 import CopyToClipboard from "react-copy-to-clipboard";
+import toastMessage from "../ToastMessage";
+import { cancelSavePost } from "../../stores/actions/userAction";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
@@ -35,8 +37,8 @@ const DaoPost = (props) => {
     (state) => state.authenticateReducer.currentUser
   );
   const { item, likePostList, type = "post" } = props;
-  console.log(currentUser);
-  const [post, setPost] = useState(item);
+  const [post, setPost] = useState({ ...item });
+  const [likeCmt, setLikeCmt] = useState([]);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
@@ -47,7 +49,9 @@ const DaoPost = (props) => {
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
-
+  useEffect(() => {
+    setPost({ ...item });
+  }, [item]);
   const {
     Id,
     Username,
@@ -99,6 +103,21 @@ const DaoPost = (props) => {
       }
     }
   };
+
+  const handleLikeCmt = () => {
+    if (currentUser) {
+      if (checkLikePost()) {
+        // dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(false);
+        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
+      } else {
+        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+        setMouseClickHeart(true);
+        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+      }
+    }
+  };
+
   const handleMoreOptionClick = async (itm) => {
     switch (itm.id) {
       case 1:
@@ -116,13 +135,15 @@ const DaoPost = (props) => {
       case 4:
         try {
           if (type !== "post") {
+            dispatch(cancelSavePost(currentUser?.id, Id));
+            toastMessage("Hủy lưu bài viết thành công!", "success");
           } else {
             await userService.savePost(currentUser.id, Id);
-            message.success("Lưu bài viết thành công");
-            setMoreOptionModal(false);
+            toastMessage("Lưu bài viết thành công!", "success");
           }
+          setMoreOptionModal(false);
         } catch (error) {
-          message.success("Lưu bài viết thất bại");
+          toastMessage(error.response.data.message, "warn");
           setMoreOptionModal(false);
         }
         break;
@@ -144,12 +165,12 @@ const DaoPost = (props) => {
   if (tempCount < 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((post, idx) => (
+        {Image.map((img, idx) => (
           <Col
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(post)}
+            onClick={() => handleImageModal(img)}
           >
             <img
               style={{
@@ -160,9 +181,9 @@ const DaoPost = (props) => {
               }}
               key={idx}
               src={`${
-                post.includes("https://drive.google.com/")
-                  ? post
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + post
+                img.includes("https://drive.google.com/")
+                  ? img
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
               }`}
               alt=""
             />
@@ -173,7 +194,7 @@ const DaoPost = (props) => {
   } else if (tempCount === 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((post, idx) => {
+        {Image.map((img, idx) => {
           // console.log(idx);
           if (idx === 0) {
             //Kiểm tra cái idx này sau khi nhét API vào (Không xóa)
@@ -182,7 +203,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(post)}
+                onClick={() => handleImageModal(img)}
               >
                 <img
                   style={{
@@ -193,9 +214,9 @@ const DaoPost = (props) => {
                   }}
                   key={idx}
                   src={`${
-                    post.includes("https://drive.google.com/")
-                      ? post
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + post
+                    img.includes("https://drive.google.com/")
+                      ? img
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
                   }`}
                   alt=""
                 />
@@ -208,7 +229,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(post)}
+                onClick={() => handleImageModal(img)}
               >
                 <img
                   style={{
@@ -219,9 +240,9 @@ const DaoPost = (props) => {
                   }}
                   key={idx}
                   src={`${
-                    post.includes("https://drive.google.com/")
-                      ? post
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + post
+                    img.includes("https://drive.google.com/")
+                      ? img
+                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
                   }`}
                   alt=""
                 />
@@ -234,8 +255,8 @@ const DaoPost = (props) => {
   } else if (tempCount === 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((post, idx) => (
-          <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(post)}>
+        {Image.map((img, idx) => (
+          <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(img)}>
             <img
               style={{
                 width: "100%",
@@ -245,9 +266,9 @@ const DaoPost = (props) => {
               }}
               key={idx}
               src={`${
-                post.includes("https://drive.google.com/")
-                  ? post
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + post
+                img.includes("https://drive.google.com/")
+                  ? img
+                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
               }`}
               alt=""
             />
@@ -258,7 +279,7 @@ const DaoPost = (props) => {
   } else if (tempCount > 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((post, idx) => {
+        {Image.map((img, idx) => {
           if (idx < 4) {
             //Again, có lý do mà nó là 9 :v đừng xóa comment này
             return (
@@ -267,7 +288,7 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(post)}
+                onClick={() => handleImageModal(img)}
               >
                 <div className="image-container">
                   {idx === 8 && (
@@ -287,9 +308,9 @@ const DaoPost = (props) => {
                     }}
                     key={idx}
                     src={`${
-                      post.includes("https://drive.google.com/")
-                        ? post
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + post
+                      img.includes("https://drive.google.com/")
+                        ? img
+                        : REACT_APP_DB_BASE_URL_IMG + "/" + img
                     }`}
                     alt=""
                   />
@@ -535,7 +556,7 @@ const DaoPost = (props) => {
                         <img src={convertImage(Avatar)} alt="" />
                         <div className="post__main__info__nametime">
                           <p className="post__main__info__nametime__name">
-                            {Username}
+                            {Fullname}
                           </p>
                           <p>2 giờ</p>
                         </div>
@@ -589,17 +610,17 @@ const DaoPost = (props) => {
                             e.stopPropagation();
                           }}
                         >
-                          {mouseOverHeart || mouseClickHeart ? (
+                          {false ? (
                             <HeartFilled
-                              onClick={() =>
-                                setMouseClickHeart(!mouseClickHeart)
-                              }
+                              // onClick={() =>
+                              //   setMouseClickHeart(!mouseClickHeart)
+                              // }
                               style={{
                                 fontSize: "20px",
                                 color: "#E22828",
                                 marginBottom: "2px",
                               }}
-                              onMouseLeave={() => setMouseOverHeart(false)}
+                              // onMouseLeave={() => setMouseOverHeart(false)}
                             />
                           ) : (
                             <HeartOutlined
@@ -609,132 +630,7 @@ const DaoPost = (props) => {
                                 cursor: "pointer",
                                 marginBottom: "2px",
                               }}
-                              onMouseOver={() => setMouseOverHeart(true)}
-                            />
-                          )}
-                        </PopUpSignIn>
-                        <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
-                          {TotalLikes}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="comment_post">
-                    <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
-                      <div className="d-flex justify-content-between align-posts-center">
-                        <img src={convertImage(Avatar)} alt="" />
-                        <div className="post__main__info__nametime">
-                          <p className="post__main__info__nametime__name">
-                            {Username}
-                          </p>
-                          <p>2 giờ</p>
-                        </div>
-                      </div>
-                    </header>
-                    <div className="post_slider_container">
-                      <Swiper
-                        slidesPerView={"1.4"}
-                        spaceBetween={15}
-                        // pagination={{
-                        //   clickable: true,
-                        // }}
-                        navigation={true}
-                        modules={[Navigation, Pagination]}
-                        className="post_slider"
-                      >
-                        <SwiperSlide className="post_slider_item">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_post_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_post_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_post">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_post_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_post_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                        <SwiperSlide className="post_slider_post">
-                          <a href="#">
-                            <div className="d-flex h-100">
-                              <img
-                                src={imgSwiper1}
-                                className="h-100 me-12"
-                                style={{ objectFit: "contain" }}
-                              />
-                              <div className="py-3">
-                                <div className="post_slider_post_name mb-5">
-                                  BOOKINGSTUDIO.VN
-                                </div>
-                                <div className="post_slider_post_description">
-                                  Studio Wisteria chuyên cung cấp dịch vụ chụp
-                                  hình cưới chuyên...
-                                </div>
-                              </div>
-                            </div>
-                          </a>
-                        </SwiperSlide>
-                      </Swiper>
-                    </div>
-                    <div
-                      className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                      style={{ borderBottom: "1px solid #E7E7E7" }}
-                    >
-                      <div className="post__main__content__like-comment__likes d-flex">
-                        <PopUpSignIn
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
-                          {mouseOverHeart || mouseClickHeart ? (
-                            <HeartFilled
-                              onClick={() => {
-                                setMouseClickHeart(!mouseClickHeart);
-                              }}
-                              style={{
-                                fontSize: "20px",
-                                color: "#E22828",
-                                marginBottom: "2px",
-                              }}
-                              onMouseLeave={() => setMouseOverHeart(false)}
-                            />
-                          ) : (
-                            <HeartOutlined
-                              style={{
-                                color: "#828282",
-                                fontSize: "20px",
-                                cursor: "pointer",
-                                marginBottom: "2px",
-                              }}
-                              onMouseOver={() => setMouseOverHeart(true)}
+                              // onMouseOver={() => setMouseOverHeart(true)}
                             />
                           )}
                         </PopUpSignIn>

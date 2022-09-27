@@ -1,86 +1,36 @@
 import { studioPostService } from "../../services/StudioPostService";
+import { userService } from "../../services/UserService";
 import {
   SET_LOADING,
-  GET_SAVE_POST_LIST,
-  CANCEL_SAVE_POST,
-  SAVE_POST,
+  SET_SAVED_POST_LIST,
+  CANCEL_SAVED_POST,
 } from "../types/userTypes";
 
-export const getSavePostList = (limit, page, userId) => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+export const getSavedPostList = (limit, page, userId) => async (dispatch) => {
+  dispatch({ type: SET_LOADING, payload: true });
   try {
-    const { data } = await studioPostService.getAllStudioPost(
-      limit,
-      page,
-      category
-    );
-    dispatch({ type: SET_POST_LIST, payload: data.data });
-    dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
+    const { data } = await userService.getSavedPostList(userId, page, limit);
+    console.log(data.data.map((val) => val.savedPost));
+    dispatch({
+      type: SET_SAVED_POST_LIST,
+      payload: data.data.map((val) => val.savedPost),
+    });
+    // dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
   } catch (error) {
     console.error(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  dispatch({ type: SET_LOADING, payload: false });
 };
-export const getFilterStudioPost =
-  (limit, page, filter) => async (dispatch) => {
-    dispatch({ type: LOADING, payload: true });
-    try {
-      const { data } = await studioPostService.getFilterStudioPost(
-        limit,
-        page,
-        filter
-      );
-      dispatch({ type: SET_POST_LIST, payload: data.data });
-      dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
-      dispatch({ type: SET_FILTER, payload: filter });
-    } catch (error) {
-      console.error(error);
-    }
-    dispatch({ type: LOADING, payload: false });
-  };
 
-export const studioDetailAction = (id, category) => {
-  return async (dispatch) => {
-    dispatch({ type: LOADING, payload: true });
-    try {
-      const { data } = await studioPostService.getDetailStudio(id, category);
-      console.log(data);
-      dispatch({
-        type: SET_STUDIO_DETAIL,
-        payload: {
-          data: data.data,
-          service: data.service,
-          album: data.album,
-          shop: data.shop,
-          rating: data.rating,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    dispatch({ type: LOADING, payload: false });
-  };
-};
-export const studioNearAction = (lat, lng) => async (dispatch) => {
+export const cancelSavePost = (userId, postId) => async (dispatch) => {
   try {
-    const { data } = await studioPostService.getStudioNear(lat, lng);
-    dispatch({ type: SET_STUDIO_NEAR, payload: data });
+    const res = await userService.cancelSavePost(userId, postId);
+    dispatch({
+      type: CANCEL_SAVED_POST,
+      payload: { userId, postId },
+    });
+    // dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
-};
-
-export const studioDetailAction1 = (id, category) => {
-  return async (dispatch) => {
-    dispatch({ type: LOADING, payload: true });
-    try {
-      const { data } = await studioPostService.getDetailStudio(id, category);
-      console.log(data);
-      dispatch({ type: SET_STUDIO_DETAIL1, payload: data.data });
-      dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
-    } catch (error) {
-      console.log(error);
-    }
-    dispatch({ type: LOADING, payload: false });
-  };
 };

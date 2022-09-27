@@ -1,7 +1,7 @@
 import { BaseService } from "./baseService";
 
 class UserService extends BaseService {
-  getListSavePost = (UserId, page, limit) => {
+  getSavedPostList = (UserId, page, limit) => {
     return this.get(
       `/api/save-post?&UserId=${UserId}&page=${page}&limit=${limit}`
     );
@@ -12,12 +12,14 @@ class UserService extends BaseService {
       PostId,
     });
   };
+
   cancelSavePost = (UserId, PostId) => {
     return this.delete(`/api/save-post`, {
       UserId,
       PostId,
     });
   };
+
   infoUser = (id) => {
     return this.get(`/api/booking-user/${id}`);
   };
