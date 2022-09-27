@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-
-const REACT_APP_BASE_URL = "https://demometa.surge.sh";
+import { REACT_APP_DB_BASE_URL } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const MetaDecorator = ({ title, description, imgUrl, imgAlt, type }) => {
   return (
@@ -15,7 +14,7 @@ const MetaDecorator = ({ title, description, imgUrl, imgAlt, type }) => {
 
         <meta property="og:type" content={type || "article"} />
         <meta property="og:image" content={imgUrl} />
-        <meta property="og:url" content={REACT_APP_BASE_URL} />
+        <meta property="og:url" content={REACT_APP_DB_BASE_URL} />
         <meta name="twitter:card" content="summary_large_image" />
 
         <meta property="og:site_name" content="European Travel, Inc." />

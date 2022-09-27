@@ -6,7 +6,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import { ModalCustom } from "./components/Modal";
 import { AuthPage } from "./pages/Auth/AuthPage";
-import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import BookStudio from "./pages/BookStudio";
 import Cart from "./pages/Cart";
 import PageClothes from "./pages/ClothesDetails/PageClothes";
@@ -21,6 +20,8 @@ import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
 import PageStudio from "./pages/StudioDetail/PageStudio";
 import UserAccount from "./pages/UserAccount";
 import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
+import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
+import PostDetail from "./pages/PostDetail/PostDetail";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
 import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
 
@@ -64,6 +65,7 @@ function App() {
           />
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
+          <Route path="dao/posts/:postId" element={<PostDetail />} />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
           <Route path="studio/*" element={<PageStudio />} />

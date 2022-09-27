@@ -191,7 +191,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
         <img
           onLoad={() => scrollToBottom()}
           style={{
-            maxWidth:"200px",
+            maxWidth: "200px",
             height: "auto",
             borderRadius: "10px",
             color: "#fff !important",
@@ -282,8 +282,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
                         ? "ChatContent__conversation__other__content"
                         : itm.Chatting === "Admin" && itm.Type !== "text"
                         ? "ChatContent__conversation__other__img"
-                        : itm.Chatting !== "Admin" &&
-                          itm.Type === "text"
+                        : itm.Chatting !== "Admin" && itm.Type === "text"
                         ? "ChatContent__conversation__you__content"
                         : "ChatContent__conversation__you__img"
                     }
