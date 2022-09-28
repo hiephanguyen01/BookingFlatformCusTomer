@@ -19,6 +19,7 @@ import {
   getTop10OrderPhotographerAction,
   getTop10OrderStudioPostAction,
 } from "../../stores/actions/TopOrderCategoryAction";
+import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import styles from "./home.module.scss";
 import { ListItem } from "./ListCard";
@@ -147,50 +148,11 @@ const { Option } = AutoComplete;
 //         </div>
 //       </Modal>
 
-const CATEGORIES = [
-  {
-    id: 1,
-    label: "Studio",
-    img: images.studio1,
-    linkTo: "studio",
-  },
-  {
-    id: 2,
-    label: "Nhiếp ảnh",
-    img: images.cameraman,
-    linkTo: "photographer",
-  },
-  {
-    id: 6,
-    label: "Thiết bị",
-    img: images.camera,
-    linkTo: "device",
-  },
-  {
-    id: 3,
-    label: "Trang phục",
-    img: images.clothes,
-    linkTo: "clothes",
-  },
-  {
-    id: 4,
-    label: "Make up",
-    img: images.makeup,
-    linkTo: "makeup",
-  },
-  {
-    id: 5,
-    label: "Người mẫu",
-    img: images.model,
-    linkTo: "model",
-  },
-];
-
 export const Home = () => {
   // const category = useSelector((state) => state.listByCategoryReducer.category);
   // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { filter, laoding } = useSelector((state) => state.studioPostReducer);
-
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   const [chooseCate, setChooseCate] = useState();
   const [provinces, setProvinces] = useState([]);
@@ -210,13 +172,13 @@ export const Home = () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
-    dispatch(getTop10OrderStudioPostAction(1));
-    dispatch(getTop10OrderPhotographerAction(2));
-    dispatch(getTop10OrderClothesAction(3));
-    dispatch(getTop10OrderMakeupAction(4));
-    dispatch(getTop10OrderDeviceAction(5));
-    dispatch(getTop10OrderModelAction(6));
-  }, []);
+    dispatch(getTop10OrderStudioPostAction(1,currentUser));
+    dispatch(getTop10OrderPhotographerAction(2,currentUser));
+    dispatch(getTop10OrderClothesAction(3,currentUser));
+    dispatch(getTop10OrderMakeupAction(4,currentUser));
+    dispatch(getTop10OrderDeviceAction(5,currentUser));
+    dispatch(getTop10OrderModelAction(6,currentUser));
+  }, [currentUser,dispatch]);
 
   const handleClickCategory = (categoryId) => {
     const newFilter = {
@@ -247,8 +209,7 @@ export const Home = () => {
               onClick={() => {
                 setChooseCate(item.id);
                 handleClickCategory(item.id);
-              }}
-            >
+              }}>
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>
@@ -265,8 +226,7 @@ export const Home = () => {
                     color: "#616161",
                     padding: "0",
                     margin: "0",
-                  }}
-                >
+                  }}>
                   ART STUDIO{" "}
                 </h3>
                 <img src={images.special} />
@@ -277,8 +237,7 @@ export const Home = () => {
                     fontWeight: "600",
                     padding: "0",
                     margin: "0",
-                  }}
-                >
+                  }}>
                   -1.000.000 vnd{" "}
                 </h5>
                 <p
@@ -286,8 +245,7 @@ export const Home = () => {
                     fontSize: "22px",
                     color: "#616161",
                     marginTop: "28px",
-                  }}
-                >
+                  }}>
                   Khi đăng ký trước 1 tháng{" "}
                 </p>
               </div>

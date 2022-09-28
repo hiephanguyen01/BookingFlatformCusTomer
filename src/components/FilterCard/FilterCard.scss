@@ -12,6 +12,24 @@
     margin-bottom: 0;
   }
 
+  .like {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #fff;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    &:hover {
+      background-color: #d2666682;
+    }
+  }
+
   .groupImage {
     position: relative;
 
@@ -27,7 +45,8 @@
       overflow: hidden;
       z-index: 1;
 
-      &:hover {}
+      &:hover {
+      }
     }
 
     .sale {

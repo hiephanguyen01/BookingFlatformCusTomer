@@ -277,11 +277,11 @@ const DaoPost = (props) => {
       </Row>
     );
   } else if (tempCount > 4) {
+    console.log("Post này có hơn 4 bài nè");
     ImageSection = (
       <Row gutter={[16, 16]}>
         {Image.map((img, idx) => {
           if (idx < 4) {
-            //Again, có lý do mà nó là 9 :v đừng xóa comment này
             return (
               <Col
                 className="greater-than-four-images-section"
@@ -291,8 +291,8 @@ const DaoPost = (props) => {
                 onClick={() => handleImageModal(img)}
               >
                 <div className="image-container">
-                  {idx === 8 && (
-                    <div className="fourth-image-overlay d-flex justify-content-center align-posts-center">
+                  {idx === 3 && (
+                    <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
                       <h1>{tempCount - 3}</h1>
                       <PlusOutlined
                         style={{ fontSize: "34px", color: "#fff" }}
@@ -318,6 +318,10 @@ const DaoPost = (props) => {
               </Col>
             );
           }
+          // else{
+          //   let remainImg = tempCount - 4
+          //   return
+          // }
         })}
       </Row>
     );
