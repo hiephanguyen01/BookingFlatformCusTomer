@@ -1,5 +1,5 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Tabs } from "antd";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { Input, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { orderService } from "../../../../services/OrderService";
 import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";
@@ -56,7 +56,20 @@ const OrderStatus = () => {
             </div>
           </div>
         ) : (
-          <Tabs defaultActiveKey={params.BookingStatus} onChange={onChange}>
+          <Tabs
+            className="tab_search"
+            defaultActiveKey={params.BookingStatus}
+            onChange={onChange}
+            tabBarExtraContent={{
+              right: (
+                <Input
+                  prefix={<SearchOutlined />}
+                  className="input"
+                  placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,...
+              "
+                />
+              ),
+            }}>
             <TabPane tab="Chờ thanh toán" key={1}>
               {booking &&
                 booking.map((item) => <OrderStatusItem item={item} />)}
