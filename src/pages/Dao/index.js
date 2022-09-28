@@ -263,7 +263,7 @@ const Dao = () => {
     // const newFilter = { ...filter, page: filter.page !== 1 ? };
     dispatch(getAllPostDaoAction(listPost, filter));
   }, [filter.page]);
-  console.log(files);
+  // console.log(files);
   useEffect(() => {
     const newFilter = { ...filter, page: 1 };
     setFilter(newFilter);
