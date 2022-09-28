@@ -191,12 +191,13 @@ const PhotographerDetail = () => {
       navigate("order");
     } else {
       if (filter.OrderByTime === -1) {
-        toastMessage("Bạn cần chọn đặt theo ngày!", "warn");
+        toastMessage("Bạn cần chọn thời gian!", "warn");
       } else if (chooseService.length <= 0) {
         toastMessage("Bạn cần chọn dịch vụ!", "warn");
       }
     }
   };
+
   const handleAddCart = () => {
     if (chooseService.length > 0) {
       dispatch(addOrder(cate, chooseService));

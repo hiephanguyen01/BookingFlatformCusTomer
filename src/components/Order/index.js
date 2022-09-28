@@ -13,7 +13,11 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-import { convertDateSendToDB, convertPrice } from "../../utils/convert";
+import {
+  convertDateSendToDB,
+  convertPrice,
+  convertTimeSendDB,
+} from "../../utils/convert";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import { orderService } from "../../services/OrderService";
 import toastMessage from "../ToastMessage";
@@ -122,8 +126,14 @@ const Index = ({ linkTo = "" }) => {
               // convertDateSendToDB(item.orderDate).slice(0, 11) +
               //   item.orderHours[1] +
               //   ":00.000Z",
-              OrderByTimeFrom: convertDateSendToDB(filter.OrderByTimeFrom),
-              OrderByTimeTo: convertDateSendToDB(filter.OrderByTimeTo),
+              OrderByTimeFrom:
+                convertDateSendToDB(filter.OrderByTimeFrom).slice(0, 11) +
+                convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
+                ":00.000Z",
+              OrderByTimeTo:
+                convertDateSendToDB(filter.OrderByTimeTo).slice(0, 11) +
+                convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
+                ":00.000Z",
               PaymentType: 0,
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
@@ -145,8 +155,12 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom: filter.OrderByDateFrom,
-              OrderByDateTo: filter.OrderByDateTo,
+              OrderByDateFrom:
+                convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
+                "00:00:00.000Z",
+              OrderByDateTo:
+                convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
+                "00:00:00.000Z",
               PaymentType: 0,
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
