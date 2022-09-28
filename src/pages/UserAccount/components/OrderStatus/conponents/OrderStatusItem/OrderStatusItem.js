@@ -43,6 +43,9 @@ const OrderStatusItem = ({ item }) => {
           category,
         });
         setPost(data.data);
+        if (data.data.id === 11) {
+          console.log(data.data);
+        }
       } catch (error) {
         console.log(error);
       }

@@ -37,7 +37,6 @@ export const convertDateSendToDB = (date) => {
 
 export const convertTimeSendDB = (time) => {
   const splitTime = time.split(":");
-  console.log(splitTime);
   return `${
     parseInt(parseInt(splitTime[0]) - 7) > 9
       ? parseInt(splitTime[0]) - 7
@@ -45,7 +44,6 @@ export const convertTimeSendDB = (time) => {
   }:${splitTime[1]}`;
 };
 export const numberWithDot = (x) => {
-  console.log(x);
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
