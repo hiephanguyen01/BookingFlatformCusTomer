@@ -1,13 +1,16 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "./slideAlbum.scss";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { convertImage } from "../../../../utils/convertImage";
+import { ModalImage } from "../../../../components/ModalImg";
 
 const Index = ({ data, style = {}, className = "" }) => {
+  const dispatch = useDispatch();
   return (
     <>
       <div className={`list_item_album ${className}`} style={{ ...style }}>
@@ -40,13 +43,19 @@ const Index = ({ data, style = {}, className = "" }) => {
           >
             {data?.Image?.map((item, idx) => {
               return (
-                <SwiperSlide key={idx}>
+                <SwiperSlide
+                  key={idx}
+                  onClick={() =>
+                    dispatch({
+                      type: "SHOW_MODAL_LIST",
+                      Component: (
+                        <ModalImage title={data.Name} data={data?.Image} />
+                      ),
+                    })
+                  }
+                >
                   <img
-                    src={`${
-                      item.includes("https://drive.google.com/")
-                        ? item
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
-                    }`}
+                    src={convertImage(item)}
                     style={{ height: "100%" }}
                     alt=""
                   />

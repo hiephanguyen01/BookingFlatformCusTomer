@@ -9,19 +9,20 @@ export const CustomerLayout = () => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const [visible, setVisible] = useState(true);
   console.log(user);
-  useEffect(() => {
-    if (window.location.href.split("/")[4]?.includes("dao")) {
-      setVisible(false);
-    } else {
-      setVisible(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log(window.location);
+  //   if (window.location.pathname.includes("dao")) {
+  //     setVisible(false);
+  //   } else {
+  //     setVisible(true);
+  //   }
+  // }, []);
   return (
     <div style={{ position: "relative" }} className="scroll-hide">
       {user && <Chat />}
       <Header />
       <Outlet />
-      {visible && <Footer />}
+      <Footer />
     </div>
   );
 };

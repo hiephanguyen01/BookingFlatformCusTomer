@@ -508,11 +508,15 @@ export const StudioDetail = () => {
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0) {
+    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       dispatch(chooseServiceAction(chooseService));
       navigate("order");
     } else {
-      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      if (filter.OrderByTime === -1) {
+        toastMessage("Bạn cần chọn thời gian!", "warn");
+      } else if (chooseService.length <= 0) {
+        toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      }
     }
   };
   const handleAddCart = () => {
