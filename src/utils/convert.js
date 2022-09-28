@@ -25,9 +25,13 @@ export const convertPrice = (price) => {
 };
 
 export const convertDateSendToDB = (date) => {
+  console.log(date);
   const convertDate = new Date(date);
+  console.log(convertDate);
   const stringMoment = convertDate.toISOString();
+  console.log(stringMoment.slice(11, 19));
   const thisMoment = new Date(`${stringMoment.slice(0, 23)}-07:00`);
+  console.log(thisMoment);
   const modify = `${thisMoment.toISOString()}`;
   return modify;
 };
@@ -36,8 +40,8 @@ export const convertTimeSendDB = (time) => {
   const splitTime = time.split(":");
   console.log(splitTime);
   return `${
-    parseInt(splitTime[0]).toString().length > 1
-      ? parseInt(splitTime[0])
+    parseInt(parseInt(splitTime[0]) - 7) > 9
+      ? parseInt(splitTime[0]) - 7
       : `0${parseInt(splitTime[0]) - 7}`
   }:${splitTime[1]}`;
 };

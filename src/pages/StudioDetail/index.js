@@ -519,11 +519,15 @@ export const StudioDetail = () => {
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0) {
+    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       dispatch(chooseServiceAction(chooseService));
       navigate("order");
     } else {
-      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      if (filter.OrderByTime === -1) {
+        toastMessage("Bạn cần chọn thời gian!", "warn");
+      } else if (chooseService.length <= 0) {
+        toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      }
     }
   };
   const handleAddCart = () => {
@@ -811,17 +815,13 @@ export const StudioDetail = () => {
                       </span>
                     </div>
                     <div className="w-100 d-flex justify-content-between mt-20">
-                      <Button
-                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
+                      <Button className="w-60 h-48px d-flex justify-content-center align-items-center btn_add">
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
                       >
                         Đặt ngay
                       </Button>

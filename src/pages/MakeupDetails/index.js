@@ -44,7 +44,7 @@ const COLUMN = [
   { title: "Chọn dịch vụ", size: 4 },
 ];
 const Index = () => {
-  const { studioDetail, loading } = useSelector(
+  const { studioDetail, loading, filter } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -211,11 +211,15 @@ const Index = () => {
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0) {
+    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       dispatch(chooseServiceAction(chooseService));
       navigate("order");
     } else {
-      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      if (filter.OrderByTime === -1) {
+        toastMessage("Bạn cần chọn thời gian!", "warn");
+      } else if (chooseService.length <= 0) {
+        toastMessage("Bạn cần chọn dịch vụ!", "warn");
+      }
     }
   };
   const handleAddCart = () => {
@@ -474,7 +478,6 @@ const Index = () => {
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
                         onClick={handleAddCart}
-                        disabled={chooseService.length > 0 ? false : true}
                       >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
@@ -482,7 +485,6 @@ const Index = () => {
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
                       >
                         Đặt ngay
                       </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ModalImage.scss";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,10 +16,14 @@ import { useDispatch } from "react-redux";
 import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import { CloseOutlined } from "@ant-design/icons";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-export const ModalImage = ({ data }) => {
+import { convertImage } from "../../utils/convertImage";
+export const ModalImage = ({ title = "", data }) => {
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   /* console.log(thumbsSwiper); */
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <div
       style={{
@@ -30,7 +34,7 @@ export const ModalImage = ({ data }) => {
         position: "relative",
       }}
     >
-      <h3>ALBUM CHỤP PHONG CẢNH</h3>
+      <h3>{title}</h3>
       <div onClick={() => dispatch({ type: HIDE_MODAL })} className={"close"}>
         <CloseOutlined style={{ fontSize: "22px" }} />
       </div>
@@ -54,14 +58,7 @@ export const ModalImage = ({ data }) => {
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
-                <img
-                  src={`${
-                    item.includes("https://drive.google.com/")
-                      ? item
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
-                  }`}
-                  alt=""
-                />
+                <img src={convertImage(item)} alt="" />
               </SwiperSlide>
             );
           })}
@@ -96,11 +93,7 @@ export const ModalImage = ({ data }) => {
                     height: "108px",
                     objectFit: "cover",
                   }}
-                  src={`${
-                    item.includes("https://drive.google.com/")
-                      ? item
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + item
-                  }`}
+                  src={convertImage(item)}
                   alt=""
                 />
               </SwiperSlide>

@@ -84,7 +84,13 @@ export const Card = ({ value, category }) => {
         )}
       </div>
       <div className={cx("content")}>
-        <h5>{value?.Name || "Studio Mizo Misaki với concept tối giản"}</h5>
+        <div className="h-43px mb-8">
+          <h5>
+            {value?.Name.length > 60
+              ? `${value?.Name?.slice(0, 55)}...`
+              : value?.Name || "Studio Mizo Misaki với concept tối giản"}
+          </h5>
+        </div>
         <div className={cx("address")}>
           <img className={cx("icon-location")} alt="" src={images?.address} />
           <span>{value?.Address || "Quận 1, TPHCM"}</span>

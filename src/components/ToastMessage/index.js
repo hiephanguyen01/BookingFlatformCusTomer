@@ -1,8 +1,12 @@
 import { message } from "antd";
 import React from "react";
 
-const toastMessage = (mess, type = "info") => {
-  message[type](mess);
+const toastMessage = (mess, type = "info", className = "", style = {}) => {
+  message[type]({
+    content: mess,
+    className: className,
+    style: style,
+  });
 };
 
 export default toastMessage;
