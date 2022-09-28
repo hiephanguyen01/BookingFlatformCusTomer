@@ -9,5 +9,22 @@
     padding: 0 0;
     margin-bottom: 12px;
   }
-  
+}
+.tab_search {
+  .ant-tabs-content {
+    flex-direction: column !important;
+  }
+  .ant-tabs-extra-content {
+    margin: 20px 0px;
+    width: 100% !important;
+    input {
+      padding: 10px;
+    }
+    .ant-input-affix-wrapper {
+      border-radius: 10px !important;
+    }
+  }
+  .ant-tabs-nav {
+    flex-direction: column !important;
+  }
 }

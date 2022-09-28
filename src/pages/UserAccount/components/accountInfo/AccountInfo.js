@@ -59,7 +59,7 @@ const AccountInfo = () => {
           formData.append("Image", file);
         }
       }
-      await userService.saveInfo(UserMe.id, formData);
+      await userService.saveInfo(formData);
       dispatch(getCurrentUser());
       setLoading(false);
     } catch (error) {
