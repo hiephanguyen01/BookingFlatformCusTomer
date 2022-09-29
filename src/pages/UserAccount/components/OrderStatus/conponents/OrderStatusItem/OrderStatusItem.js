@@ -31,10 +31,13 @@ const OrderStatusItem = ({ item }) => {
     category,
   } = item;
   const orderDate = new Date(CreationTime);
-  OrderByTimeFrom = new Date(OrderByTimeFrom);
-  OrderByTimeTo = new Date(OrderByTimeTo);
-  OrderByDateFrom = new Date(OrderByDateFrom);
-  OrderByDateTo = new Date(OrderByDateTo);
+  if (OrderByTimeFrom && OrderByTimeTo) {
+    OrderByTimeFrom = new Date(OrderByTimeFrom);
+    OrderByTimeTo = new Date(OrderByTimeTo);
+  } else {
+    OrderByDateFrom = new Date(OrderByDateFrom);
+    OrderByDateTo = new Date(OrderByDateTo);
+  }
   useEffect(() => {
     (async () => {
       try {
@@ -43,15 +46,11 @@ const OrderStatusItem = ({ item }) => {
           category,
         });
         setPost(data.data);
-        if (data.data.id === 11) {
-          console.log(data.data);
-        }
       } catch (error) {
         console.log(error);
       }
     })();
   }, [TenantId]);
-
   const navigateToDetail = () => {
     switch (category) {
       case 1:
