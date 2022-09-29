@@ -48,6 +48,7 @@ export const numberWithDot = (x) => {
 };
 
 export const timeStructure = (date) => {
+  console.log(date);
   return (
     ("0" + date.getHours()).slice(-2) +
     ":" +

@@ -62,7 +62,7 @@ const OrderStatus = () => {
       setPageBooking(booking.slice(0, pageSize));
       setCurrentPage(1);
     }
-  }, [booking.length, filter]);
+  }, [booking, filter]);
 
   return (
     <>
