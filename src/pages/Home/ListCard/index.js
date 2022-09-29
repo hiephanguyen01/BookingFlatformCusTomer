@@ -1,20 +1,68 @@
-import React from "react";
+import { Pagination } from "antd";
 import classNames from "classnames/bind";
-import styles from "./ListCard.module.scss";
+import React, { memo, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Card } from "../../../components/Card";
+import styles from "./ListCard.module.scss";
 const cx = classNames.bind(styles);
-export const ListItem = ({ title, data, navigate }) => {
+const pageSize = 8;
+const ListItem = ({ category }) => {
+  const [state, setState] = useState({
+    values: [],
+    totalPage: 0,
+    current: 1,
+    minIndex: 0,
+    maxIndex: 0,
+  });
+  const dispatch = useDispatch();
+  const { listLikedUser } = useSelector((state) => state.studioPostReducer);
+  const { values, current, minIndex, maxIndex } = state;
+
+  useEffect(() => {
+    setState({
+      values: listLikedUser,
+      totalPage: listLikedUser.length / pageSize,
+      minIndex: 0,
+      maxIndex: pageSize,
+    });
+  }, [listLikedUser]);
+  const handleChange = (page) => {
+    console.log(page);
+    setState({
+      ...state,
+      current: page,
+      minIndex: (page - 1) * pageSize,
+      maxIndex: page * pageSize,
+    });
+  };
   return (
     <div className={cx("ListItem")}>
-      <div className={cx("title")}>
+      {/* <div className={cx("title")}>
         <h3>{title}</h3>
         <a>Xem thêm</a>
-      </div>
+      </div> */}
       <div className={cx("box-container")}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => {
-          return <Card key={idx} id={item} />;
+        {listLikedUser?.map((item, idx) => {
+          return (
+            idx >= minIndex &&
+            idx < maxIndex && (
+              <Card key={idx} value={item} category={category} />
+            )
+          );
         })}
       </div>
+      <Pagination
+        pageSize={pageSize}
+        current={current}
+        total={values.length}
+        onChange={handleChange}
+        style={{
+          paddingTop: "10px",
+          background: "#f5f5f5",
+          textAlign: "right",
+        }}
+      />
     </div>
   );
 };
+export default memo(ListItem);
