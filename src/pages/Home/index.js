@@ -19,6 +19,15 @@ import {
   getTop10OrderPhotographerAction,
   getTop10OrderStudioPostAction,
 } from "../../stores/actions/TopOrderCategoryAction";
+import {
+  getAllStudioLikedAction1,
+  getAllStudioLikedAction2,
+  getAllStudioLikedAction3,
+  getAllStudioLikedAction4,
+  getAllStudioLikedAction5,
+  getAllStudioLikedAction6,
+} from "../../stores/actions/studioPostAction";
+
 import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import styles from "./home.module.scss";
@@ -172,13 +181,23 @@ export const Home = () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
-    dispatch(getTop10OrderStudioPostAction(1,currentUser));
-    dispatch(getTop10OrderPhotographerAction(2,currentUser));
-    dispatch(getTop10OrderClothesAction(3,currentUser));
-    dispatch(getTop10OrderMakeupAction(4,currentUser));
-    dispatch(getTop10OrderDeviceAction(5,currentUser));
-    dispatch(getTop10OrderModelAction(6,currentUser));
-  }, [currentUser,dispatch]);
+    dispatch(getTop10OrderStudioPostAction(1));
+    dispatch(getTop10OrderPhotographerAction(2));
+    dispatch(getTop10OrderClothesAction(3));
+    dispatch(getTop10OrderMakeupAction(4));
+    dispatch(getTop10OrderDeviceAction(5));
+    dispatch(getTop10OrderModelAction(6));
+  }, [dispatch]);
+  useEffect(() => {
+    if (currentUser !== null) {
+      dispatch(getAllStudioLikedAction1(1));
+      dispatch(getAllStudioLikedAction2(2));
+      dispatch(getAllStudioLikedAction3(3));
+      dispatch(getAllStudioLikedAction4(4));
+      dispatch(getAllStudioLikedAction5(5));
+      dispatch(getAllStudioLikedAction6(6));
+    }
+  }, [currentUser, dispatch]);
 
   const handleClickCategory = (categoryId) => {
     const newFilter = {
@@ -209,7 +228,8 @@ export const Home = () => {
               onClick={() => {
                 setChooseCate(item.id);
                 handleClickCategory(item.id);
-              }}>
+              }}
+            >
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>
@@ -226,7 +246,8 @@ export const Home = () => {
                     color: "#616161",
                     padding: "0",
                     margin: "0",
-                  }}>
+                  }}
+                >
                   ART STUDIO{" "}
                 </h3>
                 <img src={images.special} />
@@ -237,7 +258,8 @@ export const Home = () => {
                     fontWeight: "600",
                     padding: "0",
                     margin: "0",
-                  }}>
+                  }}
+                >
                   -1.000.000 vnd{" "}
                 </h5>
                 <p
@@ -245,7 +267,8 @@ export const Home = () => {
                     fontSize: "22px",
                     color: "#616161",
                     marginTop: "28px",
-                  }}>
+                  }}
+                >
                   Khi đăng ký trước 1 tháng{" "}
                 </p>
               </div>

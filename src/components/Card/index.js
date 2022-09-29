@@ -6,7 +6,10 @@ import { Rate } from "antd";
 import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
 import { useDispatch, useSelector } from "react-redux";
-import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
+import {
+  getAllStudioLikedAction1,
+  getLikeStudioPostAction,
+} from "../../stores/actions/studioPostAction";
 
 const cx = classNames.bind(styles);
 
@@ -17,6 +20,7 @@ export const Card = ({ value, category }) => {
     }` || images.baby;
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
+  const dispatch = useDispatch();
   const {
     listLikedCategory1,
     listLikedCategory2,
@@ -25,11 +29,10 @@ export const Card = ({ value, category }) => {
     listLikedCategory5,
     listLikedCategory6,
   } = useSelector((state) => state.studioPostReducer);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [like, setLike] = useState(false);
   const [data, setData] = useState([]);
-  let dataCard = [];
+
   useEffect(() => {
     switch (category?.id) {
       case 1:
@@ -65,7 +68,7 @@ export const Card = ({ value, category }) => {
   const handleChangeLike = (e) => {
     e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(value.id, category.id, setLike, like));
+    dispatch(getLikeStudioPostAction(value?.id, category.id, setLike, like));
   };
   return (
     <div
