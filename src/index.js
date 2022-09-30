@@ -11,7 +11,7 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import store from "./stores/store";
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.hydrateRoot(document.getElementById("root"));
 const helmetContext = {};
 root.render(
   <Provider store={store}>
