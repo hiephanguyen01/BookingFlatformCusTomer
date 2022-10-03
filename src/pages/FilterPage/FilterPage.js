@@ -43,12 +43,12 @@ const categories = [
     name: "Make up",
   },
   {
-    id: 5,
+    id: 6,
     value: "model",
     name: "Người mẫu",
   },
   {
-    id: 6,
+    id: 5,
     value: "device",
     name: "Thiết bị",
   },

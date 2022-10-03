@@ -21,6 +21,7 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
+
 import {
   addOrder,
   chooseServiceAction,
@@ -40,11 +41,16 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-// import { Voucher } from "./Voucher";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+
+// import { Voucher } from "./Voucher";
+//import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+//import { convertImage } from "../../utils/convertImage";
+//import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
