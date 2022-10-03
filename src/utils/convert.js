@@ -1,5 +1,4 @@
 import Moment from "moment";
-
 export const convertTime = (time) => {
   if (time) {
     const thisMoment = new Date(`${time.slice(0, 23)}-07:00`);
@@ -41,11 +40,11 @@ export const convertTimeSendDB = (time) => {
   }:${splitTime[1]}`;
 };
 export const numberWithDot = (x) => {
-  console.log(x);
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
 export const timeStructure = (date) => {
+  console.log(date);
   return (
     ("0" + date.getHours()).slice(-2) +
     ":" +

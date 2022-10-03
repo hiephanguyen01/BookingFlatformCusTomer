@@ -1,12 +1,13 @@
 .ListItem {
-  margin-top: 36px;
+  // margin-top: 36px;
 
   .title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background: #ffffff;
+    // background: #ffffff;
+    background-color: #f5f5f5;
 
     h3 {
       font-size: 24px;
@@ -26,10 +27,14 @@
   }
 
   .box-container {
-    margin-top: 10px;
+    padding-top: 10px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
+    display: grid;
+    // grid-template-columns: repeat(25%);
+    // grid-template-rows: 25% 25% 25% 25% ;
     gap: 9px;
+    background-color: #f5f5f5;
   }
 }
 
@@ -37,7 +42,7 @@
   .ListItem {
     .box-container {
       // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      // grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     }
   }
 }

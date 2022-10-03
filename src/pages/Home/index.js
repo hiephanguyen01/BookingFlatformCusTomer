@@ -19,6 +19,16 @@ import {
   getTop10OrderPhotographerAction,
   getTop10OrderStudioPostAction,
 } from "../../stores/actions/TopOrderCategoryAction";
+import {
+  getAllStudioLikedAction1,
+  getAllStudioLikedAction2,
+  getAllStudioLikedAction3,
+  getAllStudioLikedAction4,
+  getAllStudioLikedAction5,
+  getAllStudioLikedAction6,
+} from "../../stores/actions/studioPostAction";
+
+import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import styles from "./home.module.scss";
 import { ListItem } from "./ListCard";
@@ -147,50 +157,11 @@ const { Option } = AutoComplete;
 //         </div>
 //       </Modal>
 
-const CATEGORIES = [
-  {
-    id: 1,
-    label: "Studio",
-    img: images.studio1,
-    linkTo: "studio",
-  },
-  {
-    id: 2,
-    label: "Nhiếp ảnh",
-    img: images.cameraman,
-    linkTo: "photographer",
-  },
-  {
-    id: 6,
-    label: "Thiết bị",
-    img: images.camera,
-    linkTo: "device",
-  },
-  {
-    id: 3,
-    label: "Trang phục",
-    img: images.clothes,
-    linkTo: "clothes",
-  },
-  {
-    id: 4,
-    label: "Make up",
-    img: images.makeup,
-    linkTo: "makeup",
-  },
-  {
-    id: 5,
-    label: "Người mẫu",
-    img: images.model,
-    linkTo: "model",
-  },
-];
-
 export const Home = () => {
   // const category = useSelector((state) => state.listByCategoryReducer.category);
   // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { filter, laoding } = useSelector((state) => state.studioPostReducer);
-
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   const [chooseCate, setChooseCate] = useState();
   const [provinces, setProvinces] = useState([]);
@@ -216,7 +187,17 @@ export const Home = () => {
     dispatch(getTop10OrderMakeupAction(4));
     dispatch(getTop10OrderDeviceAction(5));
     dispatch(getTop10OrderModelAction(6));
-  }, []);
+  }, [dispatch]);
+  useEffect(() => {
+    if (currentUser !== null) {
+      dispatch(getAllStudioLikedAction1(1));
+      dispatch(getAllStudioLikedAction2(2));
+      dispatch(getAllStudioLikedAction3(3));
+      dispatch(getAllStudioLikedAction4(4));
+      dispatch(getAllStudioLikedAction5(5));
+      dispatch(getAllStudioLikedAction6(6));
+    }
+  }, [currentUser, dispatch]);
 
   const handleClickCategory = (categoryId) => {
     const newFilter = {

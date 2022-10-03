@@ -1,22 +1,21 @@
-import { Col, Row, Button, Modal, Switch } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { Button, Col, Modal, Row, Switch } from "antd";
 import React, { useState } from "react";
-import "./accountInfo.scss";
-import TextInput from "../../../../components/TextInput/TextInput";
-import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 import imgFB from "../../../../assets/img/userAccount/facebook (4) 1facebook.png";
 import imgGG from "../../../../assets/img/userAccount/google 1google.png";
-import { UserOutlined } from "@ant-design/icons";
-import EditText from "../../../../components/TextInput/EditText";
-import { useEffect } from "react";
-import { userService } from "../../../../services/UserService";
-import { ClipLoader } from "react-spinners";
-import { useDispatch, useSelector } from "react-redux";
+import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
 import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
+import EditText from "../../../../components/TextInput/EditText";
+import TextInput from "../../../../components/TextInput/TextInput";
+import { userService } from "../../../../services/UserService";
 import {
   getCurrentUser,
   logOut,
 } from "../../../../stores/actions/autheticateAction";
-import { useNavigate } from "react-router-dom";
+import "./accountInfo.scss";
 const AccountInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -60,7 +59,7 @@ const AccountInfo = () => {
           formData.append("Image", file);
         }
       }
-      await userService.saveInfo(UserMe.id, formData);
+      await userService.saveInfo(formData);
       dispatch(getCurrentUser());
       setLoading(false);
     } catch (error) {

@@ -2,6 +2,7 @@ import { studioPostService } from "../../services/StudioPostService";
 import {
   LOADING,
   SET_FILTER,
+  SET_LIST_LIKED_CATEGORY,
   SET_POST_LIST,
   SET_POST_PAGINATION,
   SET_STUDIO_DETAIL,
@@ -25,7 +26,7 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: false });
 };
 export const getFilterStudioPost =
-  (limit, page, filter) => async (dispatch) => {
+  (limit, page, filter, user) => async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getFilterStudioPost(
@@ -36,6 +37,9 @@ export const getFilterStudioPost =
       dispatch({ type: SET_POST_LIST, payload: data.data });
       dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
       dispatch({ type: SET_FILTER, payload: filter });
+      if (user !== null) {
+        dispatch(getAllStudioLikedAction1(filter.category));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +51,7 @@ export const studioDetailAction = (id, category) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getDetailStudio(id, category);
-      console.log(data);
+
       dispatch({
         type: SET_STUDIO_DETAIL,
         payload: {
@@ -78,7 +82,7 @@ export const studioDetailAction1 = (id, category) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getDetailStudio(id, category);
-      console.log(data);
+
       dispatch({ type: SET_STUDIO_DETAIL1, payload: data.data });
       dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
     } catch (error) {
@@ -88,27 +92,30 @@ export const studioDetailAction1 = (id, category) => {
   };
 };
 
-export const getLikeStudioPostAction = (postId, category, setLike, like) => {
+export const getLikeStudioPostAction = (postId, category) => {
   return async (dispatch) => {
     try {
       await studioPostService.getLikeStudioPost({
         PostId: postId,
         CategoryId: category,
       });
-      setLike(!like);
       dispatch(getAllStudioLikedAction1(category));
+      dispatch(getAllStudioLikedAction(category))
     } catch (error) {
       console.log(error);
     }
   };
 };
-export const getAllStudioLikedAction6 = (category) => {
+export const getAllStudioLikedAction6 = (category, sort = "") => {
   return async (dispatch) => {
     try {
-      const { data } = await studioPostService.getAllStudioLiked({
-        CategoryId: category,
-      });
-      console.log(data);
+      const { data } = await studioPostService.getAllStudioLiked(
+        {
+          CategoryId: category,
+        },
+        sort
+      );
+
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
@@ -118,13 +125,16 @@ export const getAllStudioLikedAction6 = (category) => {
     }
   };
 };
-export const getAllStudioLikedAction5 = (category) => {
+export const getAllStudioLikedAction5 = (category, sort = "") => {
   return async (dispatch) => {
     try {
-      const { data } = await studioPostService.getAllStudioLiked({
-        CategoryId: category,
-      });
-      console.log(data);
+      const { data } = await studioPostService.getAllStudioLiked(
+        {
+          CategoryId: category,
+        },
+        sort
+      );
+
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
@@ -134,13 +144,16 @@ export const getAllStudioLikedAction5 = (category) => {
     }
   };
 };
-export const getAllStudioLikedAction4 = (category) => {
+export const getAllStudioLikedAction4 = (category, sort = "") => {
   return async (dispatch) => {
     try {
-      const { data } = await studioPostService.getAllStudioLiked({
-        CategoryId: category,
-      });
-      console.log(data);
+      const { data } = await studioPostService.getAllStudioLiked(
+        {
+          CategoryId: category,
+        },
+        sort
+      );
+
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
@@ -151,13 +164,15 @@ export const getAllStudioLikedAction4 = (category) => {
   };
 };
 
-export const getAllStudioLikedAction1 = (category) => {
+export const getAllStudioLikedAction1 = (category, sort = "") => {
   return async (dispatch) => {
     try {
-      const { data } = await studioPostService.getAllStudioLiked({
-        CategoryId: category,
-      });
-      console.log(data);
+      const { data } = await studioPostService.getAllStudioLiked(
+        {
+          CategoryId: category,
+        },
+        sort
+      );
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
@@ -168,13 +183,35 @@ export const getAllStudioLikedAction1 = (category) => {
   };
 };
 
-export const getAllStudioLikedAction2 = (category) => {
+export const getAllStudioLikedAction = (category, sort = "") => {
   return async (dispatch) => {
     try {
-      const { data } = await studioPostService.getAllStudioLiked({
-        CategoryId: category,
+      const { data } = await studioPostService.getAllStudioLiked(
+        {
+          CategoryId: category,
+        },
+        sort
+      );
+      dispatch({
+        type: SET_LIST_LIKED_CATEGORY,
+        data: data.Posts,
       });
-      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getAllStudioLikedAction2 = (category, sort = "") => {
+  return async (dispatch) => {
+    try {
+      const { data } = await studioPostService.getAllStudioLiked(
+        {
+          CategoryId: Number(category),
+        },
+        sort
+      );
+
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
@@ -184,13 +221,16 @@ export const getAllStudioLikedAction2 = (category) => {
     }
   };
 };
-export const getAllStudioLikedAction3 = (category) => {
+export const getAllStudioLikedAction3 = (category, sort = "") => {
   return async (dispatch) => {
     try {
-      const { data } = await studioPostService.getAllStudioLiked({
-        CategoryId: category,
-      });
-      console.log(data);
+      const { data } = await studioPostService.getAllStudioLiked(
+        {
+          CategoryId: category,
+        },
+        sort
+      );
+
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,

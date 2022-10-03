@@ -13,15 +13,12 @@ export const Footer = ({ status }) => {
         <div className="FooterStatus__wait">
           <div className="FooterStatus__wait__prove">
             <InfoCircleOutlined />
-            <div>
-              Vui lòng thanh toán và cập nhật minh chứng trong vòng 15 phút
-            </div>
+            <div>Thanh toán và cập nhật minh chứng trong 15 phút</div>
           </div>
           <div className="FooterStatus__wait__button">
             <Link
               to="/home/confirm-order"
-              className="FooterStatus__wait__button__1"
-            >
+              className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
             <button className="FooterStatus__wait__button__2">
@@ -42,8 +39,7 @@ export const Footer = ({ status }) => {
         <div className="FooterStatus__complete">
           <button
             className="FooterStatus__complete__rating"
-            onClick={() => setVisible(true)}
-          >
+            onClick={() => setVisible(true)}>
             Đánh giá
           </button>
           <button className="FooterStatus__complete__order">Đặt lại</button>
@@ -53,8 +49,7 @@ export const Footer = ({ status }) => {
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal"
-          >
+            className="FooterStatus__complete__modal">
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

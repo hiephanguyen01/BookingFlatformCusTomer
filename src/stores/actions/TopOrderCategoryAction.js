@@ -7,15 +7,6 @@ import {
   SET_TOP_ORDER_STUIDO_POST,
   SET_TOP_PHOTOGRAPHER_POST,
 } from "../types/TopOrderCategoryPostType";
-import {
-  getAllStudioLikedAction,
-  getAllStudioLikedAction1,
-  getAllStudioLikedAction2,
-  getAllStudioLikedAction3,
-  getAllStudioLikedAction4,
-  getAllStudioLikedAction5,
-  getAllStudioLikedAction6,
-} from "./studioPostAction";
 
 export const getTop10OrderStudioPostAction = (category) => {
   return async (dispatch) => {
@@ -24,7 +15,6 @@ export const getTop10OrderStudioPostAction = (category) => {
         "studio-post"
       );
       dispatch({ type: SET_TOP_ORDER_STUIDO_POST, data });
-      dispatch(getAllStudioLikedAction1(category));
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +27,6 @@ export const getTop10OrderModelAction = (category) => {
         "model"
       );
       dispatch({ type: SET_TOP_MODEL_POST, data });
-      dispatch(getAllStudioLikedAction2(category));
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +39,6 @@ export const getTop10OrderClothesAction = (category) => {
         "clothes"
       );
       dispatch({ type: SET_TOP_CLOTHES_POST, data });
-      dispatch(getAllStudioLikedAction3(category));
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +51,6 @@ export const getTop10OrderDeviceAction = (category) => {
         "device"
       );
       dispatch({ type: SET_TOP_DEVICE_POST, data });
-      dispatch(getAllStudioLikedAction4(category));
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +63,6 @@ export const getTop10OrderMakeupAction = (category) => {
         "makeup"
       );
       dispatch({ type: SET_TOP_MAKEUP_POST, data: data });
-      dispatch(getAllStudioLikedAction5(category));
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +75,6 @@ export const getTop10OrderPhotographerAction = (category) => {
         "photographer"
       );
       dispatch({ type: SET_TOP_PHOTOGRAPHER_POST, data: data });
-      dispatch(getAllStudioLikedAction6(category));
     } catch (error) {
       console.log(error);
     }

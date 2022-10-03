@@ -26,8 +26,8 @@ class UserService extends BaseService {
   getListRatings = (id) => {
     return this.get(`/api/my-ratings/${id}`);
   };
-  saveInfo = (id, data) => {
-    return this.patch(`/api/booking-user/updateMe/${id}`, data);
+  saveInfo = (data) => {
+    return this.patch(`/api/booking-user/updateMe`, data);
   };
   deleteMe = () => {
     return this.patch(`/api/booking-user/deleteMe`);
