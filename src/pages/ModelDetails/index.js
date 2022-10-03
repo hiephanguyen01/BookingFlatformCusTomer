@@ -2,6 +2,7 @@ import {
   CheckCircleOutlined,
   DownOutlined,
   ExclamationCircleOutlined,
+  HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
@@ -25,7 +26,10 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import svgLocation from "../../assets/svg/location.svg";
 import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import {
+  getLikeStudioPostAction,
+  studioDetailAction,
+} from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
@@ -57,10 +61,19 @@ const Index = () => {
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
   const dispatch = useDispatch();
-
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   useEffect(() => {
-    dispatch(studioDetailAction(id, cate));
-  }, []);
+    if (currentUser !== null) {
+      dispatch(studioDetailAction(id, cate, currentUser?.id));
+    } else {
+      dispatch(studioDetailAction(id, cate));
+    }
+  }, [currentUser, id, cate, dispatch]);
+
+  const handleChangeLike = (e) => {
+    if (!currentUser) navigate("/auth/sign-in");
+    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+  };
 
   const handleChooseService = (data) => {
     let newChooseService = [...chooseService];
@@ -79,7 +92,8 @@ const Index = () => {
             <div
               onClick={() =>
                 dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }>
+              }
+            >
               <ExclamationCircleOutlined className="me-10" />
               Báo cáo
             </div>
@@ -118,7 +132,8 @@ const Index = () => {
                   style={{
                     marginBottom: "0",
                     color: "#E22828",
-                  }}>
+                  }}
+                >
                   {convertPrice(data.Sales)}đ
                 </h4>
                 <div
@@ -128,7 +143,8 @@ const Index = () => {
                     lineHeight: "16px",
                     color: "#828282",
                     textDecoration: "line-through",
-                  }}>
+                  }}
+                >
                   {convertPrice(data.Price)}đ
                 </div>
               </div>
@@ -139,7 +155,8 @@ const Index = () => {
                   fontSize: "12px",
                   lineHeight: "16px",
                   color: "#828282",
-                }}>
+                }}
+              >
                 Bao gồm 50.000đ thuế và phí{" "}
               </div>
               <span
@@ -149,7 +166,8 @@ const Index = () => {
                   borderRadius: "4px",
                   padding: "3px 10px",
                   color: "#ffffff",
-                }}>
+                }}
+              >
                 Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
             </>
@@ -171,7 +189,8 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Bỏ chọn
                 </span>
               ) : (
@@ -187,7 +206,8 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Chọn
                 </span>
               )}
@@ -226,7 +246,8 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -234,7 +255,8 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -245,12 +267,14 @@ const Index = () => {
             margin: "auto",
             backgroundColor: "rgb(245, 245, 245)",
             padding: "2rem 0",
-          }}>
+          }}
+        >
           <div className="costume_container">
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}>
+                style={{ marginBottom: "11px" }}
+              >
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -259,8 +283,28 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}>
-                    <HeartOutlined className="icon_heart" />
+                    }}
+                  >
+                    {studioDetail?.data?.UsersLiked ? (
+                      <HeartFilled
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    ) : (
+                      <HeartOutlined
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    )}
+                    {/* <HeartOutlined className="icon_heart" /> */}
                   </PopUpSignIn>
                   <Dropdown overlay={menu_report} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
@@ -301,7 +345,8 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem", height: "100%" }}
-                  className="mb-12">
+                  className="mb-12"
+                >
                   <div className="desc_col_left mb-12">
                     <ReadMoreDesc title="Mô tả">
                       {studioDetail?.data?.Description}
@@ -311,13 +356,15 @@ const Index = () => {
                     className="py-26 px-18"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}>
+                    }}
+                  >
                     <div
                       className="mb-15"
                       style={{
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}>
+                      }}
+                    >
                       4 Mã khuyến mãi
                     </div>
                     <div className="d-flex align-items-center">
@@ -328,7 +375,8 @@ const Index = () => {
                           padding: "7px 13px",
                           color: "#1FCBA2",
                           marginRight: "0.5rem",
-                        }}>
+                        }}
+                      >
                         Giảm 50K
                       </div>
                       <div
@@ -338,7 +386,8 @@ const Index = () => {
                           padding: "7px 13px",
                           color: "#1FCBA2",
                           marginRight: "0.5rem",
-                        }}>
+                        }}
+                      >
                         Giảm 100K
                       </div>
                       <RightOutlined style={{ color: "#1FCBA2" }} />
@@ -349,7 +398,8 @@ const Index = () => {
                   lg={8}
                   sm={24}
                   style={{ paddingLeft: "0.25rem", height: "100%" }}
-                  className="mb-12">
+                  className="mb-12"
+                >
                   <div className="desc_col_right">
                     <div className="">
                       <div className="desc_col_right_title">
@@ -357,7 +407,8 @@ const Index = () => {
                       </div>
                       <div
                         className="text-medium-re"
-                        style={{ marginBottom: "15px" }}>
+                        style={{ marginBottom: "15px" }}
+                      >
                         <img src={svgLocation} style={{ marginRight: "6px" }} />
                         {studioDetail?.data?.Address}
                       </div>
@@ -366,7 +417,8 @@ const Index = () => {
                       style={{ width: "100%", height: "220px", border: "0" }}
                       src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
                       loading="lazy"
-                      referrerpolicy="no-referrer-when-downgrade"></iframe>
+                      referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
                   </div>
                 </Col>
               </Row>
@@ -377,12 +429,14 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem" }}
-                  className="col_left">
+                  className="col_left"
+                >
                   <div
                     className=" py-22 mb-12 h-100"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}>
+                    }}
+                  >
                     <div className="ms-24 pt-20">
                       <SelectTimeOption />
                     </div>
@@ -395,7 +449,8 @@ const Index = () => {
                       padding: "24px 26px",
                       backgroundColor: "#ffffff",
                       // height: "100%",
-                    }}>
+                    }}
+                  >
                     <div className="d-flex justify-content-between mb-12">
                       <div
                         className=""
@@ -405,7 +460,8 @@ const Index = () => {
                           lineHeight: "25px",
                           /* Neutral/Grey 700 */
                           color: "#222222",
-                        }}>
+                        }}
+                      >
                         Đã chọn {chooseService.length} sản phẩm
                       </div>
                       {chooseService.length > 0 && (
@@ -417,7 +473,8 @@ const Index = () => {
                             textDecorationLine: "line-through",
                             /* Neutral/Grey 400 */
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           {`${convertPrice(
                             chooseService?.reduce(
                               (total, item) => total + item.Price,
@@ -439,7 +496,8 @@ const Index = () => {
                           lineHeight: "27px",
                           /* Primary/Red 700 */
                           color: "#E22828",
-                        }}>
+                        }}
+                      >
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) => total + item.Sales,
@@ -456,7 +514,8 @@ const Index = () => {
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}>
+                        onClick={handleBook}
+                      >
                         Đặt ngay
                       </Button>
                     </div>
@@ -485,7 +544,8 @@ const Index = () => {
                           ))}
                         <div
                           className="btn_see_more"
-                          onClick={() => setToggleSeeMore(true)}>
+                          onClick={() => setToggleSeeMore(true)}
+                        >
                           Xem thêm <DownOutlined className="icon" />
                         </div>
                       </>
