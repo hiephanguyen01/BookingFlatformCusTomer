@@ -6,20 +6,19 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Pagination, Popover, Rate, Button } from "antd";
+import { Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import images from "../../assets/images";
+import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
-import toastMessage from "../../components/ToastMessage";
-import Table from "../../components/Table";
-import CommentRating from "../../components/CommentRating";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import Table from "../../components/Table";
+import toastMessage from "../../components/ToastMessage";
 
 import {
   addOrder,
@@ -39,13 +38,12 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import styles from "./Detail.module.scss";
-import { ModalImage } from "./ModalImg";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 // import { Voucher } from "./Voucher";
-import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },

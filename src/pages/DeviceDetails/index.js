@@ -108,7 +108,7 @@ const Index = () => {
   const navigate = useNavigate();
   const cate =
     location.pathname.split("/").filter((item) => item !== "")[1] === "device"
-      ? 6
+      ? 5
       : undefined;
 
   const [chooseService, setChooseService] = useState([]);
@@ -138,8 +138,7 @@ const Index = () => {
             <div
               onClick={() =>
                 dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }
-            >
+              }>
               <ExclamationCircleOutlined className="me-10" />
               Báo cáo
             </div>
@@ -219,16 +218,14 @@ const Index = () => {
                   lineHeight: "16px",
                   color: "#828282",
                   textDecoration: "line-through",
-                }}
-              >
+                }}>
                 {convertPrice(data.Sales)}đ
               </div>
               <h4
                 style={{
                   marginBottom: "12px",
                   color: "#E22828",
-                }}
-              >
+                }}>
                 {convertPrice(data.Price)}đ
               </h4>
               <span
@@ -238,8 +235,7 @@ const Index = () => {
                   borderRadius: "4px",
                   padding: "3px 10px",
                   color: "#ffffff",
-                }}
-              >
+                }}>
                 Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
             </>
@@ -262,8 +258,7 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Bỏ chọn
                 </span>
               ) : (
@@ -279,8 +274,7 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Chọn
                 </span>
               )}
@@ -318,8 +312,7 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -327,8 +320,7 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -339,14 +331,12 @@ const Index = () => {
             margin: "auto",
             backgroundColor: "rgb(245, 245, 245)",
             padding: "2rem 0",
-          }}
-        >
+          }}>
           <div className="costume_container">
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}
-              >
+                style={{ marginBottom: "11px" }}>
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -355,8 +345,7 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}
-                  >
+                    }}>
                     <HeartOutlined className="icon_heart" />
                   </PopUpSignIn>
                   <Dropdown overlay={menu_report} trigger={["click"]}>
@@ -396,8 +385,7 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem", height: "100%" }}
-                  className="mb-12"
-                >
+                  className="mb-12">
                   <div className="desc_col_left">
                     <ReadMoreDesc title="Mô tả">
                       {studioDetail?.data?.Description}
@@ -409,8 +397,7 @@ const Index = () => {
                     lg={8}
                     sm={24}
                     style={{ paddingLeft: "0.25rem", height: "100%" }}
-                    className="mb-12"
-                  >
+                    className="mb-12">
                     <div className="desc_col_right">
                       <div className="d-flex mb-30" style={{}}>
                         <img src={imgPost} className="avatar" />
@@ -421,8 +408,7 @@ const Index = () => {
                           </div>
                           <div
                             className="text-medium-re"
-                            style={{ marginBottom: "15px" }}
-                          >
+                            style={{ marginBottom: "15px" }}>
                             <img
                               src={svgLocation}
                               style={{ marginRight: "6px" }}
@@ -451,15 +437,13 @@ const Index = () => {
                   className="py-26 px-18"
                   style={{
                     backgroundColor: "#ffffff",
-                  }}
-                >
+                  }}>
                   <div
                     className="mb-15"
                     style={{
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     4 Mã khuyến mãi
                   </div>
                   <div className="d-flex align-items-center">
@@ -470,8 +454,7 @@ const Index = () => {
                         padding: "7px 13px",
                         color: "#1FCBA2",
                         marginRight: "0.5rem",
-                      }}
-                    >
+                      }}>
                       Giảm 50K
                     </div>
                     <div
@@ -481,8 +464,7 @@ const Index = () => {
                         padding: "7px 13px",
                         color: "#1FCBA2",
                         marginRight: "0.5rem",
-                      }}
-                    >
+                      }}>
                       Giảm 100K
                     </div>
                     <RightOutlined style={{ color: "#1FCBA2" }} />
@@ -496,14 +478,12 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem" }}
-                  className="col_left"
-                >
+                  className="col_left">
                   <div
                     className=" py-22 mb-12 h-100"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}
-                  >
+                    }}>
                     <div className="ms-24 pt-20">
                       <SelectTimeOption />
                     </div>
@@ -516,8 +496,7 @@ const Index = () => {
                       padding: "24px 26px",
                       backgroundColor: "#ffffff",
                       // height: "100%",
-                    }}
-                  >
+                    }}>
                     <div className="d-flex justify-content-between mb-12">
                       <div
                         className=""
@@ -527,8 +506,7 @@ const Index = () => {
                           lineHeight: "25px",
                           /* Neutral/Grey 700 */
                           color: "#222222",
-                        }}
-                      >
+                        }}>
                         Đã chọn {chooseService.length} sản phẩm
                       </div>
                       {chooseService.length > 0 && (
@@ -540,8 +518,7 @@ const Index = () => {
                             textDecorationLine: "line-through",
                             /* Neutral/Grey 400 */
                             color: "#828282",
-                          }}
-                        >
+                          }}>
                           {`${convertPrice(
                             chooseService?.reduce(
                               (total, item) => total + item.Price,
@@ -563,8 +540,7 @@ const Index = () => {
                           lineHeight: "27px",
                           /* Primary/Red 700 */
                           color: "#E22828",
-                        }}
-                      >
+                        }}>
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) => total + item.Sales,
@@ -581,8 +557,7 @@ const Index = () => {
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}
-                      >
+                        onClick={handleBook}>
                         Đặt ngay
                       </Button>
                     </div>

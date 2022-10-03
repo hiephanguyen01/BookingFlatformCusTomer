@@ -100,7 +100,7 @@ export const getLikeStudioPostAction = (postId, category) => {
         CategoryId: category,
       });
       dispatch(getAllStudioLikedAction1(category));
-      dispatch(getAllStudioLikedAction(category))
+      dispatch(getAllStudioLikedAction(category));
     } catch (error) {
       console.log(error);
     }
