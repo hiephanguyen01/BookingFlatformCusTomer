@@ -1,15 +1,12 @@
-import { Col, Row, Tabs } from "antd";
+import { Tabs } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Card } from "../../../../components/Card";
 import {
   getAllStudioLikedAction,
   getAllStudioLikedAction1,
 } from "../../../../stores/actions/studioPostAction";
 import ListItem from "../../../Home/ListCard";
 import { DividerCustom } from "../OrderStatus/conponents/DividerCustom/DividerCustom";
-import { LikeAll } from "./components/LikeAll";
-import { LikeFilter } from "./components/LikeFilter";
 import "./liked.scss";
 const Liked = () => {
   const dispatch = useDispatch();
