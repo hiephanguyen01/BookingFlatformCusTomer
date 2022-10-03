@@ -6,6 +6,7 @@ import {
   ShoppingCartOutlined,
   DownOutlined,
   LoadingOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 import "./photographerDetail.scss";
 import Table from "../../components/Table";
@@ -18,7 +19,10 @@ import SlideAlbum from "../MakeupDetails/components/SlideAlbum";
 import CommentRating from "../../components/CommentRating";
 import SlideCard from "../../components/SlideCard";
 import ImagePost from "../../components/imagePost/ImagePost";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import {
+  getLikeStudioPostAction,
+  studioDetailAction,
+} from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import toastMessage from "../../components/ToastMessage";
@@ -53,12 +57,16 @@ const PhotographerDetail = () => {
 
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
-
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-
+  console.log(studioDetail);
   useEffect(() => {
-    dispatch(studioDetailAction(id, cate));
-  }, []);
+    if (currentUser !== null) {
+      dispatch(studioDetailAction(id, cate, currentUser?.id));
+    } else {
+      dispatch(studioDetailAction(id, cate));
+    }
+  }, [currentUser, id, cate, dispatch]);
 
   const handleChooseService = (data) => {
     let newChooseService = [...chooseService];
@@ -200,6 +208,11 @@ const PhotographerDetail = () => {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
+  const handleChangeLike = (e) => {
+    e.stopPropagation();
+    if (!currentUser) navigate("/auth/sign-in");
+    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+  };
   return (
     <>
       <MetaDecorator
@@ -265,14 +278,27 @@ const PhotographerDetail = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}>
-                    <HeartOutlined
-                      style={{
-                        fontSize: "25px",
-                        color: "#E22828",
-                        marginRight: "10px",
-                      }}
-                    />
+                    }}
+                  >
+                    {studioDetail?.data?.UsersLiked ? (
+                      <HeartFilled
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    ) : (
+                      <HeartOutlined
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    )}
                   </PopUpSignIn>
                   <MoreOutlined
                     style={{

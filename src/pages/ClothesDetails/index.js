@@ -2,6 +2,7 @@ import {
   CheckCircleOutlined,
   DownOutlined,
   ExclamationCircleOutlined,
+  HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
@@ -25,7 +26,10 @@ import svgLocation from "../../assets/svg/location.svg";
 import imgPost from "../../assets/dao/Frame 163.jpg";
 import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import {
+  getLikeStudioPostAction,
+  studioDetailAction,
+} from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
@@ -65,13 +69,18 @@ const Index = () => {
       : undefined;
 
   const [chooseService, setChooseService] = useState([]);
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
 
   const { Option } = Select;
 
   useEffect(() => {
-    dispatch(studioDetailAction(id, cate));
-  }, []);
+    if (currentUser !== null) {
+      dispatch(studioDetailAction(id, cate, currentUser?.id));
+    } else {
+      dispatch(studioDetailAction(id, cate));
+    }
+  }, [currentUser, id, cate, dispatch]);
 
   console.log(studioDetail);
   const handleChange = (value) => {
@@ -86,6 +95,10 @@ const Index = () => {
       newChooseService.push(data);
     }
     setChooseService(newChooseService);
+  };
+  const handleChangeLike = (e) => {
+    if (!currentUser) navigate("/auth/sign-in");
+    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
   };
 
   const menu = (
@@ -302,8 +315,28 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}>
-                    <HeartOutlined className="icon_heart" />
+                    }}
+                  >
+                    {studioDetail?.data?.UsersLiked ? (
+                      <HeartFilled
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    ) : (
+                      <HeartOutlined
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    )}
+                    {/* <HeartOutlined className="icon_heart" /> */}
                   </PopUpSignIn>
                   <Dropdown overlay={menu} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
@@ -320,7 +353,11 @@ const Index = () => {
                 </div>
               </div>
               <div className="location">
-                <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
+                <img
+                  alt=""
+                  src={svgLocation}
+                  style={{ marginRight: "0.5rem" }}
+                />
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">

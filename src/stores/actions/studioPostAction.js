@@ -46,11 +46,16 @@ export const getFilterStudioPost =
     dispatch({ type: LOADING, payload: false });
   };
 
-export const studioDetailAction = (id, category) => {
+export const studioDetailAction = (id, category, currentUser) => {
   return async (dispatch) => {
+    console.log("currentUser", currentUser);
     dispatch({ type: LOADING, payload: true });
     try {
-      const { data } = await studioPostService.getDetailStudio(id, category);
+      const { data } = await studioPostService.getDetailStudio(
+        id,
+        category,
+        currentUser
+      );
 
       dispatch({
         type: SET_STUDIO_DETAIL,
@@ -92,7 +97,7 @@ export const studioDetailAction1 = (id, category) => {
   };
 };
 
-export const getLikeStudioPostAction = (postId, category) => {
+export const getLikeStudioPostAction = (postId, category, currentUser = "") => {
   return async (dispatch) => {
     try {
       await studioPostService.getLikeStudioPost({
@@ -101,6 +106,9 @@ export const getLikeStudioPostAction = (postId, category) => {
       });
       dispatch(getAllStudioLikedAction1(category));
       dispatch(getAllStudioLikedAction(category));
+      if (currentUser.trim !== "") {
+        dispatch(studioDetailAction(postId, category, currentUser));
+      }
     } catch (error) {
       console.log(error);
     }

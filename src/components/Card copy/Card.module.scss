@@ -1,0 +1,104 @@
+.card {
+    position: relative;
+    border: 1px solid #e7e7e7;
+    box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+
+    background-color: #ffff;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    cursor: pointer;
+
+    &:hover {
+        .thumbnail {
+            transform: scale(1.1);
+            overflow: hidden;
+        }
+    }
+}
+
+.like {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #fff;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #d2666682;
+    }
+}
+
+.image {
+    width: 100%;
+    height: 136px;
+    overflow: hidden;
+
+    .thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.3s linear;
+    }
+}
+
+.content {
+    padding: 12px;
+
+    h5 {
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        text-align: start;
+    }
+
+    .address {
+        display: flex;
+        align-items: flex-start;
+        line-height: 1.2;
+        gap: 6px;
+        margin-bottom: 8px;
+
+        .icon-location {
+            width: 10px;
+            height: 10px;
+            object-fit: contain;
+        }
+
+        span {
+            font-size: 14px;
+            color: #828282;
+            text-align: left;
+        }
+    }
+
+    .rate {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+
+        span {
+            font-size: 13px;
+        }
+    }
+}
+
+@media (min-width: 1450px) {
+    .card {
+
+        // height: 300px;
+        image {
+            height: 300px;
+        }
+
+        img {}
+    }
+}
