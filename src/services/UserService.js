@@ -32,6 +32,15 @@ class UserService extends BaseService {
   deleteMe = () => {
     return this.patch(`/api/booking-user/deleteMe`);
   };
+  getRecentViews = () => {
+    return this.get(`/api/booking-user/recently`);
+  };
+  setRecentViews = (PostId, Category) => {
+    return this.post(`/api/booking-user/recently-watch`, {
+      PostId,
+      Category,
+    });
+  };
 }
 
 export const userService = new UserService();

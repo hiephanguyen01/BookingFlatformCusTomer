@@ -62,6 +62,7 @@ const PhotographerDetail = () => {
   console.log(studioDetail);
   useEffect(() => {
     if (currentUser !== null) {
+      console.log(currentUser);
       dispatch(studioDetailAction(id, cate, currentUser?.id));
     } else {
       dispatch(studioDetailAction(id, cate));
@@ -278,8 +279,7 @@ const PhotographerDetail = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}
-                  >
+                    }}>
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{

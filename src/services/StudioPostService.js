@@ -17,7 +17,6 @@ class StudioPostService extends BaseService {
   };
   getDetailStudio = (id, category, currentUser = "") => {
     if (currentUser.trim !== "") {
-      console.log("sasa", currentUser);
       return this.get(
         `/api/studio-post/byid?id=${id}&category=${category}&userId=${currentUser}`
       );

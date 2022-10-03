@@ -1,4 +1,5 @@
 import { studioPostService } from "../../services/StudioPostService";
+import { userService } from "../../services/UserService";
 import {
   LOADING,
   SET_FILTER,
@@ -48,7 +49,6 @@ export const getFilterStudioPost =
 
 export const studioDetailAction = (id, category, currentUser) => {
   return async (dispatch) => {
-    console.log("currentUser", currentUser);
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getDetailStudio(
@@ -56,7 +56,9 @@ export const studioDetailAction = (id, category, currentUser) => {
         category,
         currentUser
       );
-
+      if (currentUser) {
+        await userService.setRecentViews(id, category);
+      }
       dispatch({
         type: SET_STUDIO_DETAIL,
         payload: {
