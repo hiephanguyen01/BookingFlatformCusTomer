@@ -7,37 +7,36 @@ import {
   LoadingOutlined,
   MoreOutlined,
   RightOutlined,
-  ShoppingCartOutlined,
+  ShoppingCartOutlined
 } from "@ant-design/icons";
 import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-
-import "./makeupDetails.scss";
-
-import Table from "../../components/Table";
-import CommentRating from "../../components/CommentRating";
-import SlideAlbum from "./components/SlideAlbum";
-import SlideCard from "../../components/SlideCard";
-import Report from "../../components/ReportModal";
-import ReadMoreDesc from "../../components/ReadMoreDesc";
-
 import svgLocation from "../../assets/svg/location.svg";
+import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { getLikeStudioPostAction, studioDetailAction } from "../../stores/actions/studioPostAction";
-import { convertPrice } from "../../utils/convert";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import ReadMoreDesc from "../../components/ReadMoreDesc";
+import Report from "../../components/ReportModal";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import SlideCard from "../../components/SlideCard";
+import Table from "../../components/Table";
+import toastMessage from "../../components/ToastMessage";
 import {
   addOrder,
-  chooseServiceAction,
+  chooseServiceAction
 } from "../../stores/actions/OrderAction";
-import toastMessage from "../../components/ToastMessage";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
-import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { getLikeStudioPostAction, studioDetailAction } from "../../stores/actions/studioPostAction";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import SlideAlbum from "./components/SlideAlbum";
+import "./makeupDetails.scss";
+
+
+
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
   { title: "Mô tả", size: 8 },
