@@ -2,6 +2,7 @@ import {
   CheckCircleOutlined,
   DownOutlined,
   ExclamationCircleOutlined,
+  HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
@@ -26,7 +27,10 @@ import imgPost from "../../assets/dao/Frame 163.jpg";
 import ImagePost from "../../components/imagePost/ImagePost";
 import deviceImg from "../../assets/images/deviceImg.png";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import {
+  getLikeStudioPostAction,
+  studioDetailAction,
+} from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
@@ -113,11 +117,16 @@ const Index = () => {
 
   const [chooseService, setChooseService] = useState([]);
   const [activeId, setActiveId] = useState(5);
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(studioDetailAction(id, cate));
-  }, []);
+    if (currentUser !== null) {
+      dispatch(studioDetailAction(id, cate, currentUser?.id));
+    } else {
+      dispatch(studioDetailAction(id, cate));
+    }
+  }, [currentUser, id, cate, dispatch]);
   console.log(studioDetail);
 
   const handleChooseService = (data) => {
@@ -128,6 +137,10 @@ const Index = () => {
       newChooseService.push(data);
     }
     setChooseService(newChooseService);
+  };
+  const handleChangeLike = (e) => {
+    if (!currentUser) navigate("/auth/sign-in");
+    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
   };
 
   const menu_report = (
@@ -173,7 +186,6 @@ const Index = () => {
               <Dropdown overlay={menu_size} trigger={["click"]}>
                 <a onClick={(e) => e.preventDefault()}>
                   <Space className="d-flex justify-content-between px-10 py-8 dropdown">
-                    S
                     <DownOutlined className="ms-15" />
                   </Space>
                 </a>
@@ -357,7 +369,26 @@ const Index = () => {
                       e.stopPropagation();
                     }}
                   >
-                    <HeartOutlined className="icon_heart" />
+                    {studioDetail?.data?.UsersLiked ? (
+                      <HeartFilled
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    ) : (
+                      <HeartOutlined
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    )}
+                    {/* <HeartOutlined className="icon_heart" /> */}
                   </PopUpSignIn>
                   <Dropdown overlay={menu_report} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>

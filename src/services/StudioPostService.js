@@ -15,7 +15,13 @@ class StudioPostService extends BaseService {
       `/api/studio-post?page=${page}&limit=${limit}&category=${category}`
     );
   };
-  getDetailStudio = (id, category) => {
+  getDetailStudio = (id, category, currentUser = "") => {
+    if (currentUser.trim !== "") {
+      console.log("sasa", currentUser);
+      return this.get(
+        `/api/studio-post/byid?id=${id}&category=${category}&userId=${currentUser}`
+      );
+    }
     return this.get(`/api/studio-post/byid?id=${id}&category=${category}`);
   };
   getStudioNear = (id, lat, lng) => {

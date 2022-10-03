@@ -1,4 +1,4 @@
-import { Pagination } from "antd";
+import { Col, Pagination, Row } from "antd";
 import classNames from "classnames/bind";
 import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,16 +41,20 @@ const ListItem = ({ category }) => {
         <h3>{title}</h3>
         <a>Xem thêm</a>
       </div> */}
-      <div className={cx("box-container")}>
+      {/* <div className={cx("box-container")}> */}
+      <Row gutter={[16, 16]}>
         {listLikedUser?.map((item, idx) => {
           return (
             idx >= minIndex &&
             idx < maxIndex && (
-              <Card key={idx} value={item} category={category} />
+              <Col span={6}>
+                <Card key={idx} value={item} category={category} />
+              </Col>
             )
           );
         })}
-      </div>
+      </Row>
+      {/* </div> */}
       <Pagination
         pageSize={pageSize}
         current={current}
