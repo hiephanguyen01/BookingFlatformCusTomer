@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 const REACT_APP_BASE_URL = "https://demometa.surge.sh";
 const MetaDecorator = ({ title, description, imgUrl, imgAlt, type }) => {
   return (
-    <Helmet>
+    <Helmet prioritizeSeoTags>
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />
