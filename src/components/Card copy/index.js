@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import styles from "./Card.module.scss";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,8 +21,6 @@ export const Card = ({ value, category }) => {
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-  const location = useLocation();
-
   const {
     listLikedCategory1,
     listLikedCategory2,
@@ -32,6 +30,7 @@ export const Card = ({ value, category }) => {
     listLikedCategory6,
   } = useSelector((state) => state.studioPostReducer);
   const navigate = useNavigate();
+  const [like, setLike] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -69,14 +68,13 @@ export const Card = ({ value, category }) => {
   const handleChangeLike = (e) => {
     e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(value?.id, category.id));
-  };
-  const handleNavigate = () => {
-    navigate(`/home/${category.name}/${value.id}`)
+    dispatch(getLikeStudioPostAction(value?.id, category.id, setLike, like));
   };
   return (
-
-    <div className={cx("card")} onClick={handleNavigate}>
+    <div
+      className={cx("card")}
+      onClick={() => navigate(`${category.name}/${value.id}`)}
+    >
       <div className={cx("image")}>
         <img className={cx("thumbnail")} alt="" src={img} />
       </div>
@@ -103,7 +101,7 @@ export const Card = ({ value, category }) => {
         <div className={cx("rate")}>
           <Rate disabled allowHalf value={3} />
           <span style={{ color: "828282", fontSize: "12px" }}>
-            {value?.BookingCount} đã đặt
+            {value?.BookingCount || "60"} đã đặt
           </span>
         </div>
       </div>

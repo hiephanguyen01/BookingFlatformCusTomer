@@ -109,6 +109,7 @@ const OrderStatus = () => {
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     pageBooking={pageBooking}
@@ -120,6 +121,7 @@ const OrderStatus = () => {
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     pageBooking={pageBooking}
@@ -131,6 +133,7 @@ const OrderStatus = () => {
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     pageBooking={pageBooking}
@@ -142,6 +145,7 @@ const OrderStatus = () => {
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     booking={booking}

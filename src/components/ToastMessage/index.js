@@ -1,5 +1,4 @@
 import { message } from "antd";
-import React from "react";
 
 const toastMessage = (mess, type = "info", className = "", style = {}) => {
   message[type]({

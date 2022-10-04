@@ -1,3 +1,4 @@
+import { orderService } from "../../services/OrderService";
 import {
   LOADING,
   SET_CHOOSE_SERVICE,
@@ -27,6 +28,16 @@ export const getAllOrderByUserId = () => async (dispatch) => {
     console.error(error);
   }
   dispatch({ type: LOADING, payload: false });
+};
+
+export const getTotalOrder = async (id, category) => {
+  try {
+    const { data } = await orderService.getTotalOrderOfStudio(id, category);
+    console.log(data.payload.count);
+    return data.payload.count;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export const chooseServiceAction = (data) => async (dispatch) => {

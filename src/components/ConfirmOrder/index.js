@@ -46,6 +46,18 @@ const Index = () => {
   const [file, setFile] = useState({});
   const [partner, setPartner] = useState({});
 
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(
+      `${
+        location?.state?.IdentifyCode &&
+        location?.state?.IdentifyCode?.join(", ").length > 30
+          ? `${location.state.IdentifyCode.join(", ").slice(0, 30)}...`
+          : location.state.IdentifyCode.join(", ")
+      }`
+    );
+    toastMessage("Đã lưu mã booking vào bộ nhớ tạm!", "success");
+  };
+
   useEffect(() => {
     const getPartner = async () => {
       try {
@@ -126,7 +138,11 @@ const Index = () => {
                   : `${location?.state?.IdentifyCode?.slice(0, 30)}...`}
               </span>
             </div>
-            <div className="text-medium-re" style={{ color: "#03AC84" }}>
+            <div
+              onClick={handleCopyToClipboard}
+              className="text-medium-re"
+              style={{ color: "#03AC84", cursor: "pointer" }}
+            >
               SAO CHÉP
             </div>
           </div>

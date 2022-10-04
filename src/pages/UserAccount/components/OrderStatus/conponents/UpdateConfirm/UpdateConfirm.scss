@@ -1,8 +1,18 @@
-@import '../../../../../../App.scss';
-.done{
-    color: $secondary-700;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+@import "../../../../../../App.scss";
+.done {
+  color: $secondary-700;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.booking_code {
+  width: 80%;
+  span {
+    display: inline-block;
+    width: 78%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

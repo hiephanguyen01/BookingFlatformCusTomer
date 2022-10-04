@@ -13,7 +13,9 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_
 import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
 import "./OrderStatusItem.scss";
-const OrderStatusItem = ({ item, pageBooking, setPageBooking }) => {
+
+const OrderStatusItem = ({ item, pageBooking, setPageBooking, id}) => {
+
   const [post, setPost] = useState();
   const navigate = useNavigate();
   let {
@@ -151,6 +153,7 @@ const OrderStatusItem = ({ item, pageBooking, setPageBooking }) => {
         </div>
         <Divider className="style-divider" />
         <Footer
+          id={id} 
           status={BookingStatus}
           IdentifyCode={IdentifyCode}
           TenantId={TenantId}

@@ -14,7 +14,7 @@ export const CATEGORIES = [
     linkTo: "photographer",
   },
   {
-    id: 6,
+    id: 5,
     label: "Thiết bị",
     img: images.camera,
     linkTo: "device",
@@ -32,7 +32,7 @@ export const CATEGORIES = [
     linkTo: "makeup",
   },
   {
-    id: 5,
+    id: 6,
     label: "Người mẫu",
     img: images.model,
     linkTo: "model",

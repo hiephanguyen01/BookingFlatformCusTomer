@@ -1,7 +1,11 @@
-import React from "react";
+import "./support.scss";
 
 const Support = () => {
-  return <div>Support</div>;
+  return (
+    <section className="support">
+      <p>Support</p>
+    </section>
+  );
 };
 
 export default Support;

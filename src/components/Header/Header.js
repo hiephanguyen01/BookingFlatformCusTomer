@@ -165,7 +165,7 @@ const Header = () => {
       provinceIds: [values.province],
       keyString: values.keyString,
     };
-    dispatch(getFilterStudioPost(5, 1, newFilter,user));
+    dispatch(getFilterStudioPost(5, 1, newFilter, user));
     setVisible(false);
     navigate("/home/filter");
   };
@@ -198,7 +198,9 @@ const Header = () => {
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&
                   provinces.map((val) => (
-                    <Option value={val.id}>{val.Name}</Option>
+                    <Option key={val.id} value={val.id}>
+                      {val.Name}
+                    </Option>
                   ))}
               </Select>
             </Form.Item>
@@ -269,7 +271,11 @@ const Header = () => {
                 <p>
                   {user?.Fullname ? user.Fullname : user.Email}
                   <DownOutlined
-                    style={{ fontSize: "10px", color: "#828282" }}
+                    style={{
+                      fontSize: "10px",
+                      color: "#828282",
+                      marginLeft: "3px",
+                    }}
                   />
                 </p>
               </div>

@@ -6,6 +6,7 @@ import {
   ShoppingCartOutlined,
   DownOutlined,
   LoadingOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 import "./photographerDetail.scss";
 import Table from "../../components/Table";
@@ -18,7 +19,10 @@ import SlideAlbum from "../MakeupDetails/components/SlideAlbum";
 import CommentRating from "../../components/CommentRating";
 import SlideCard from "../../components/SlideCard";
 import ImagePost from "../../components/imagePost/ImagePost";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import {
+  getLikeStudioPostAction,
+  studioDetailAction,
+} from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import toastMessage from "../../components/ToastMessage";
@@ -53,12 +57,17 @@ const PhotographerDetail = () => {
 
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
-
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-
+  console.log(studioDetail);
   useEffect(() => {
-    dispatch(studioDetailAction(id, cate));
-  }, []);
+    if (currentUser !== null) {
+      console.log(currentUser);
+      dispatch(studioDetailAction(id, cate, currentUser?.id));
+    } else {
+      dispatch(studioDetailAction(id, cate));
+    }
+  }, [currentUser, id, cate, dispatch]);
 
   const handleChooseService = (data) => {
     let newChooseService = [...chooseService];
@@ -99,8 +108,7 @@ const PhotographerDetail = () => {
                   style={{
                     marginBottom: "0",
                     color: "#E22828",
-                  }}
-                >
+                  }}>
                   {convertPrice(data.Sales)}đ
                 </h4>
                 <div
@@ -110,8 +118,7 @@ const PhotographerDetail = () => {
                     lineHeight: "16px",
                     color: "#828282",
                     textDecoration: "line-through",
-                  }}
-                >
+                  }}>
                   {convertPrice(data.Price)}đ
                 </div>
               </div>
@@ -122,8 +129,7 @@ const PhotographerDetail = () => {
                   fontSize: "12px",
                   lineHeight: "16px",
                   color: "#828282",
-                }}
-              >
+                }}>
                 Bao gồm 50.000đ thuế và phí
               </div>
               <span
@@ -133,8 +139,7 @@ const PhotographerDetail = () => {
                   borderRadius: "4px",
                   padding: "3px 10px",
                   color: "#ffffff",
-                }}
-              >
+                }}>
                 Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
             </>
@@ -156,8 +161,7 @@ const PhotographerDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Bỏ chọn
                 </span>
               ) : (
@@ -173,8 +177,7 @@ const PhotographerDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Chọn
                 </span>
               )}
@@ -206,6 +209,11 @@ const PhotographerDetail = () => {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
+  const handleChangeLike = (e) => {
+    e.stopPropagation();
+    if (!currentUser) navigate("/auth/sign-in");
+    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+  };
   return (
     <>
       <MetaDecorator
@@ -221,8 +229,7 @@ const PhotographerDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -230,8 +237,7 @@ const PhotographerDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -273,15 +279,26 @@ const PhotographerDetail = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}
-                  >
-                    <HeartOutlined
-                      style={{
-                        fontSize: "25px",
-                        color: "#E22828",
-                        marginRight: "10px",
-                      }}
-                    />
+                    }}>
+                    {studioDetail?.data?.UsersLiked ? (
+                      <HeartFilled
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    ) : (
+                      <HeartOutlined
+                        style={{
+                          fontSize: "25px",
+                          color: "#E22828",
+                          marginRight: "10px",
+                        }}
+                        onClick={handleChangeLike}
+                      />
+                    )}
                   </PopUpSignIn>
                   <MoreOutlined
                     style={{
@@ -296,8 +313,7 @@ const PhotographerDetail = () => {
             </header>
             <Row
               style={{ marginRight: "0", marginLeft: "0" }}
-              gutter={[24, 24]}
-            >
+              gutter={[24, 24]}>
               <Col style={{ paddingLeft: "0" }} md={16}>
                 <Row className="photographer-detail__container__description">
                   <Col md={24}>
@@ -317,8 +333,7 @@ const PhotographerDetail = () => {
                           padding: "7px 13px",
                           color: "#1FCBA2",
                           marginRight: "0.5rem",
-                        }}
-                      >
+                        }}>
                         Giảm 50K
                       </li>
                       <li
@@ -328,8 +343,7 @@ const PhotographerDetail = () => {
                           padding: "7px 13px",
                           color: "#1FCBA2",
                           marginRight: "0.5rem",
-                        }}
-                      >
+                        }}>
                         Giảm 100K
                       </li>
                     </ul>
@@ -372,13 +386,11 @@ const PhotographerDetail = () => {
             </Row>
             <Row
               style={{ marginLeft: "0", marginRight: "0" }}
-              gutter={[18, 18]}
-            >
+              gutter={[18, 18]}>
               <Col
                 style={{ paddingLeft: "0" }}
                 md={16}
-                className="photographer-detail__container__services"
-              >
+                className="photographer-detail__container__services">
                 <div className="h-100" style={{ backgroundColor: "#fff" }}>
                   <div className="ms-24 pt-20">
                     <SelectTimeOption />
@@ -388,14 +400,12 @@ const PhotographerDetail = () => {
               </Col>
               <Col
                 md={8}
-                className="photographer-detail__container__chosen-services"
-              >
+                className="photographer-detail__container__chosen-services">
                 <div
                   style={{
                     padding: " 0 15px 0 15px",
                     backgroundColor: "#ffffff",
-                  }}
-                >
+                  }}>
                   <div className="d-flex justify-content-between mb-12">
                     <div
                       className=""
@@ -404,8 +414,7 @@ const PhotographerDetail = () => {
                         fontSize: "18px",
                         lineHeight: "25px",
                         color: "#222222",
-                      }}
-                    >
+                      }}>
                       Đã chọn {chooseService.length} sản phẩm
                     </div>
                     {chooseService.length > 0 && (
@@ -416,8 +425,7 @@ const PhotographerDetail = () => {
                           lineHeight: "22px",
                           textDecorationLine: "line-through",
                           color: "#828282",
-                        }}
-                      >
+                        }}>
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) => total + item.Price,
@@ -439,8 +447,7 @@ const PhotographerDetail = () => {
                         lineHeight: "27px",
                         /* Primary/Red 700 */
                         color: "#E22828",
-                      }}
-                    >
+                      }}>
                       {`${convertPrice(
                         chooseService?.reduce(
                           (total, item) => total + item.Sales,
@@ -495,8 +502,7 @@ const PhotographerDetail = () => {
                           ))}
                         <div
                           className="btn_see_more"
-                          onClick={() => setToggleSeeMore(true)}
-                        >
+                          onClick={() => setToggleSeeMore(true)}>
                           Xem thêm <DownOutlined className="icon" />
                         </div>
                       </>

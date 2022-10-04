@@ -11,11 +11,12 @@ const Option = ({ option, disabled }) => {
   const { filter } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
+  // const [date, setDate] = useState();
   const [time, setTime] = useState([]);
-  const [dates, setDates] = useState([
-    convertDateSendToDB(new Date()),
-    convertDateSendToDB(new Date()),
-  ]);
+  // const [dates, setDates] = useState([
+  //   convertDateSendToDB(new Date()),
+  //   convertDateSendToDB(new Date()),
+  // ]);
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
     if (time.length > 0) {
@@ -33,6 +34,8 @@ const Option = ({ option, disabled }) => {
   };
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
+    console.log(timeString);
+
     if (date !== "") {
       dispatch(
         getFilterStudioPost(5, 1, {
@@ -47,7 +50,7 @@ const Option = ({ option, disabled }) => {
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
-    setDates(datesString);
+    // setDates(datesString);
     dispatch(
       getFilterStudioPost(5, 1, {
         ...filter,

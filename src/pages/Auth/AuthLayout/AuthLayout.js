@@ -8,12 +8,12 @@ export const AuthLayout = ({ children }) => {
     <div className="login-container">
       <Link to="/home">
         <div className="header-login">
-          <img alt="logo" src={logo} className="logo-booking"></img>
+          <img alt="logo" src={logo} className="logo-booking" />
         </div>
       </Link>
       <div className="body-login ">
         <div className="body-contain-login">
-          <img alt="pic" src={authPic} className="pic-login"></img>
+          <img alt="pic" src={authPic} className="pic-login" />
           <div className="w-50 login-platform ">{children}</div>
         </div>
       </div>

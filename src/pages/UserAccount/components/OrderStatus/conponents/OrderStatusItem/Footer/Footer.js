@@ -85,7 +85,6 @@ export const Footer = ({
       dispatch({ type: TOGGLE_STATE, payload: error.response.data.message.id });
     }
   };
-
   switch (status) {
     case 1:
       return (
@@ -96,7 +95,7 @@ export const Footer = ({
           </div>
           <div className="FooterStatus__wait__button">
             <Link
-              to="/home/confirm-order"
+              to="/home/confirm-order/${id}"
               state={{
                 IdentifyCode: [IdentifyCode],
                 TenantId,
@@ -107,7 +106,7 @@ export const Footer = ({
               className="FooterStatus__wait__button__1"
             >
               <UploadOutlined /> Đã thanh toán
-            </Link>
+            </div>
             <button className="FooterStatus__wait__button__2">
               Thanh toán cọc
             </button>
