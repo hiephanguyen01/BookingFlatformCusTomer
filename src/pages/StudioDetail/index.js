@@ -9,33 +9,21 @@ import {
 } from "@ant-design/icons";
 import { Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-=======
-import React, { useEffect, useState } from "react";
->>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
-<<<<<<< HEAD
-=======
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
->>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-<<<<<<< HEAD
-=======
-
->>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 import {
   addOrder,
   chooseServiceAction,
-  getTotalOrder,
 } from "../../stores/actions/OrderAction";
 // import {
 //   getAllRatingStudioByIdAction,
@@ -58,16 +46,9 @@ import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 
 // import { Voucher } from "./Voucher";
-<<<<<<< HEAD
-import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { convertImage } from "../../utils/convertImage";
-import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-=======
 //import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 //import { convertImage } from "../../utils/convertImage";
 //import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-
->>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -117,19 +98,7 @@ export const StudioDetail = () => {
     }
     dispatch(getDetailRoomAction(id));
     dispatch(getAllStudioPost(10, 1, 1));
-<<<<<<< HEAD
-    // dispatch(getAllRatingStudioByIdAction(id, 5));
-    // dispatch(getNumberRateStudioByIdAction(id));
-  }, [id]);
-  // useEffect(() => {
-  //   (async () => {
-  //     let data = await getTotalOrder(id);
-  //     setCount(data);
-  //   })();
-  // }, []);
-=======
   }, [id, dispatch, cate, currentUser]);
->>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
@@ -392,7 +361,7 @@ export const StudioDetail = () => {
   const handleChangeLike = (e) => {
     e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate,currentUser?.id));
+    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
   };
   return (
     <>
@@ -446,9 +415,15 @@ export const StudioDetail = () => {
                       }}
                     >
                       {studioDetail?.data?.UsersLiked ? (
-                        <HeartFilled onClick={handleChangeLike} className={cx("item")} />
+                        <HeartFilled
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
                       ) : (
-                        <HeartOutlined onClick={handleChangeLike} className={cx("item")} />
+                        <HeartOutlined
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
                       )}
                     </PopUpSignIn>
                     <Popover
