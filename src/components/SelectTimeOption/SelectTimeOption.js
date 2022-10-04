@@ -96,7 +96,7 @@ const Option = ({ option, disabled }) => {
                   moment(filter.OrderByTimeTo.slice(11, 16), "HH:mm"),
                 ]}
                 disabled={disabled}
-                minuteStep={15}
+                minuteStep={60}
               />
             </div>
           </Form.Item>

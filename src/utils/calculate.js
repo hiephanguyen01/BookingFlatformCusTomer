@@ -5,7 +5,6 @@ export const calDate = (dateFrom, dateTo) => {
   const monthTo = parseInt(dateTo?.slice(5, 7));
   const yearFrom = parseInt(dateFrom?.slice(0, 4));
   const yearTo = parseInt(dateTo?.slice(0, 4));
-  console.log(dayFrom, monthFrom, yearFrom, dayTo, monthTo, yearTo);
   if (yearFrom === yearTo) {
     if (monthFrom === monthTo) {
       return dayTo - dayFrom + 1;
@@ -66,7 +65,6 @@ export const calTime = (timeFrom, timeTo) => {
   const minusTo = parseInt(timeTo?.slice(14, 16));
   const hourFrom = parseInt(timeFrom?.slice(11, 13));
   const minusFrom = parseInt(timeFrom?.slice(14, 16));
-  console.log(hourFrom, minusFrom, hourTo, minusTo);
   let sumMinus = 0;
   for (let i = hourFrom; i <= hourTo; i++) {
     if (i === hourFrom) {
@@ -85,7 +83,6 @@ export const calTimeMinus = (timeFrom, timeTo) => {
   const minusTo = parseInt(timeTo?.slice(14, 16));
   const hourFrom = parseInt(timeFrom?.slice(11, 13));
   const minusFrom = parseInt(timeFrom?.slice(14, 16));
-  console.log(hourFrom, minusFrom, hourTo, minusTo);
   let sumMinus = 0;
   for (let i = hourFrom; i <= hourTo; i++) {
     if (i === hourFrom) {

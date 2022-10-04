@@ -3,12 +3,16 @@ import {
   CREATE_CONVERSATION,
   UPDATE_SCROLL,
   FLAG_CLOSE_CONVERSATION,
+  SHOW_CHAT,
+  TOGGLE_STATE,
 } from "../types/messType";
 const initState = {
+  showChat: false,
   findConversation: 0,
   flagCreate: 0,
   update: false,
   closeConversation: false,
+  toggleState: 1,
 };
 export const chatReducer = (state = initState, action) => {
   switch (action.type) {
@@ -31,6 +35,16 @@ export const chatReducer = (state = initState, action) => {
       return {
         ...state,
         closeConversation: !state.closeConversation,
+      };
+    case SHOW_CHAT:
+      return {
+        ...state,
+        showChat: !state.showChat,
+      };
+    case TOGGLE_STATE:
+      return {
+        ...state,
+        toggleState: action.payload,
       };
     default:
       return state;

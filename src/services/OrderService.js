@@ -7,6 +7,7 @@ class OrderService extends BaseService {
   getAllOrderByUserId = (params) => {
     return this.get(`/api/booking/personal`, params);
   };
+
   addOrder = (data) => {
     return this.post("/api/booking", data);
   };

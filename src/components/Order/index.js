@@ -105,7 +105,6 @@ const Index = ({ linkTo = "" }) => {
     });
     dispatch(chooseServiceAction(newListService));
   };
-  console.log(calDate(filter.OrderByDateFrom, filter.OrderByDateTo));
   const handleOnClickOrder = async () => {
     try {
       if (user === null) {
@@ -131,8 +130,8 @@ const Index = ({ linkTo = "" }) => {
               BookingUserName: infoUser.name,
               BookingPhone: infoUser.phoneNumber,
               BookingEmail: infoUser.email,
-              BookingUserId: 1,
-              CreatorUserId: 1,
+              BookingUserId: user.id,
+              CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
@@ -160,8 +159,8 @@ const Index = ({ linkTo = "" }) => {
               BookingUserName: infoUser.name,
               BookingPhone: infoUser.phoneNumber,
               BookingEmail: infoUser.email,
-              BookingUserId: 1,
-              CreatorUserId: 1,
+              BookingUserId: user.id,
+              CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,

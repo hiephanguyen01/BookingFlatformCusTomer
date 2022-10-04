@@ -115,13 +115,15 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}>
+                }}
+              >
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   Phòng
                 </span>
                 <span
@@ -129,7 +131,8 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}>
+                  }}
+                >
                   {data.Name}
                 </span>
               </div>
@@ -139,13 +142,15 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}>
+                }}
+              >
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   Diện tích
                 </span>
                 <span
@@ -153,7 +158,8 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}>
+                  }}
+                >
                   {data.Area}
                 </span>
               </div>
@@ -163,13 +169,15 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}>
+                }}
+              >
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   Phong cách
                 </span>
                 <span
@@ -177,7 +185,8 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}>
+                  }}
+                >
                   {data.Style}
                 </span>
               </div>
@@ -196,13 +205,15 @@ export const StudioDetail = () => {
                     display: "flex",
                     gap: "10px",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}>
+                    }}
+                  >
                     {filter.OrderByTime === 0 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
@@ -220,7 +231,8 @@ export const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
+                    }}
+                  >
                     {filter.OrderByTime === 0 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
@@ -238,7 +250,8 @@ export const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   {data.PriceNote}
                 </p>
                 <button
@@ -248,7 +261,8 @@ export const StudioDetail = () => {
                     color: "#ffff",
                     border: " 1px solid #E22828",
                     borderRadius: " 8px",
-                  }}>
+                  }}
+                >
                   Giảm 50%{" "}
                 </button>
               </div>
@@ -271,7 +285,8 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Bỏ chọn
                 </span>
               ) : (
@@ -287,7 +302,8 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Chọn
                 </span>
               )}
@@ -563,7 +579,8 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -571,7 +588,8 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -591,7 +609,8 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}>
+                      }}
+                    >
                       <HeartOutlined className={cx("item")} />
                     </PopUpSignIn>
                     <Popover
@@ -604,23 +623,27 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}>
+                          }}
+                        >
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}>
+                            }}
+                          >
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click">
+                      trigger="click"
+                    >
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -634,7 +657,8 @@ export const StudioDetail = () => {
                   <span>5</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}>
+                    style={{ fontSize: "15px" }}
+                  >
                     60 đã đặt{" "}
                   </span>
                 </div>
@@ -762,7 +786,6 @@ export const StudioDetail = () => {
                             textDecoration: "line-through",
                             fontSize: " 16px",
                             color: "#828282",
-<<<<<<< HEAD
                           }}
                         >
                           {filter.OrderByTime === 0 &&
@@ -791,15 +814,6 @@ export const StudioDetail = () => {
                                 0
                               )
                             )}`}
-=======
-                          }}>
-                          {`${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) => total + item.PriceByDate,
-                              0
-                            )
-                          )}`}
->>>>>>> 443fc4f8c899003b6967158092e5e99e3bed1ed5
                           đ
                         </span>
                       )}
@@ -811,7 +825,6 @@ export const StudioDetail = () => {
                           color: "#E22828",
                           fontSize: "20px",
                           fontWeight: "700",
-<<<<<<< HEAD
                         }}
                       >
                         {filter.OrderByTime === 0 &&
@@ -840,29 +853,22 @@ export const StudioDetail = () => {
                               0
                             )
                           )}`}
-=======
-                        }}>
-                        {`${convertPrice(
-                          chooseService?.reduce(
-                            (total, item) => total + item.PriceByDate,
-                            0
-                          )
-                        )}`}
->>>>>>> 443fc4f8c899003b6967158092e5e99e3bed1ed5
                         đ
                       </span>
                     </div>
                     <div className="w-100 d-flex justify-content-between mt-20">
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        disabled={chooseService.length > 0 ? false : true}>
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}>
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
                         Đặt ngay
                       </Button>
                     </div>

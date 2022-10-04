@@ -44,7 +44,6 @@ export const numberWithDot = (x) => {
 };
 
 export const timeStructure = (date) => {
-  console.log(date);
   return (
     ("0" + date.getHours()).slice(-2) +
     ":" +
@@ -57,8 +56,9 @@ export const timeStructure = (date) => {
     date.getFullYear()
   );
 };
+
 export const dateStructure = (date) => {
   return (
-    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    date?.getDate() + "/" + (date?.getMonth() + 1) + "/" + date?.getFullYear()
   );
 };
