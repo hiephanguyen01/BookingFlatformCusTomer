@@ -12,18 +12,18 @@ const Liked = () => {
   const dispatch = useDispatch();
   const { TabPane } = Tabs;
   const onChange = (key) => {
-    console.log(key);
     dispatch(getAllStudioLikedAction1(+key));
     dispatch(getAllStudioLikedAction(+key));
   };
   useEffect(() => {
-    dispatch(getAllStudioLikedAction1(+1));
-  });
+    dispatch(getAllStudioLikedAction(1));
+    dispatch(getAllStudioLikedAction1(1));
+  }, [dispatch]);
   return (
     <>
       <h4 className="Like__header">Danh sách đã thích</h4>
       <div className="Like__body">
-        <Tabs defaultActiveKey={1} onChange={onChange}>
+        <Tabs defaultValue={1} onChange={onChange}>
           <TabPane tab="Studio" key={1}>
             <DividerCustom />
             <ListItem category={{ id: 1, name: "studio" }} />
