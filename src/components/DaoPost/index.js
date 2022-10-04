@@ -480,11 +480,7 @@ const DaoPost = (props) => {
                     style={{ borderBottom: "1px solid #E7E7E7" }}
                   >
                     <div className="post__main__content__like-comment__likes d-flex">
-                      <PopUpSignIn
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
+                      <PopUpSignIn onClick={(e) => {}}>
                         {mouseOverHeart ||
                         checkLikePost() ||
                         mouseClickHeart ? (
@@ -515,11 +511,7 @@ const DaoPost = (props) => {
                       </p>
                     </div>
                     <div className="post__main__content__like-comment__comments d-flex">
-                      <PopUpSignIn
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
+                      <PopUpSignIn onClick={(e) => {}}>
                         <Comments
                           className="active"
                           style={{ color: "#E22828" }}
@@ -603,11 +595,7 @@ const DaoPost = (props) => {
                         className="post__main__content__like-comment__likes d-flex"
                         onClick={() => console.log(123)}
                       >
-                        <PopUpSignIn
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
+                        <PopUpSignIn onClick={(e) => {}}>
                           {false ? (
                             <HeartFilled
                               // onClick={() =>
@@ -649,11 +637,7 @@ const DaoPost = (props) => {
           </div>
           <div className="post__main__content__like-comment d-flex align-posts-center">
             <div className="post__main__content__like-comment__likes d-flex">
-              <PopUpSignIn
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
+              <PopUpSignIn onClick={(e) => {}}>
                 {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
                   <HeartFilled
                     onClick={handleLike}
@@ -682,11 +666,7 @@ const DaoPost = (props) => {
               </p>
             </div>
             <div className="post__main__content__like-comment__comments d-flex">
-              <PopUpSignIn
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
+              <PopUpSignIn onClick={(e) => {}}>
                 <Comments
                   onClick={() => setCommentsClick(!commentsClick)}
                   className={`${commentsClick ? "active" : ""}`}
