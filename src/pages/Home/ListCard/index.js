@@ -37,11 +37,6 @@ const ListItem = ({ category }) => {
   };
   return (
     <div className={cx("ListItem")}>
-      {/* <div className={cx("title")}>
-        <h3>{title}</h3>
-        <a>Xem thêm</a>
-      </div> */}
-      {/* <div className={cx("box-container")}> */}
       <Row gutter={[16, 16]}>
         {listLikedUser?.map((item, idx) => {
           return (

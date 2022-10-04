@@ -32,7 +32,6 @@ export const Card = ({ value, category }) => {
     listLikedCategory6,
   } = useSelector((state) => state.studioPostReducer);
   const navigate = useNavigate();
-  const [like, setLike] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -73,9 +72,10 @@ export const Card = ({ value, category }) => {
     dispatch(getLikeStudioPostAction(value?.id, category.id));
   };
   const handleNavigate = () => {
-    navigate(`${category?.name}/${value.id}`);
+    navigate(`/home/${category.name}/${value.id}`)
   };
   return (
+
     <div className={cx("card")} onClick={handleNavigate}>
       <div className={cx("image")}>
         <img className={cx("thumbnail")} alt="" src={img} />
