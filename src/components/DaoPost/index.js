@@ -158,7 +158,7 @@ const DaoPost = (props) => {
     likePostList?.filter((itm) => itm.PostId === Id).length > 0;
 
   let ImageSection = null;
-  let tempCount = Image.length;
+  let tempCount = Image?.length;
   // Object.entries(post).forEach((post2, idx) => {
   //   if (post2[0].includes("Image")) tempCount++;
   // });
@@ -403,7 +403,7 @@ const DaoPost = (props) => {
                     modules={[Pagination, Navigation]}
                     className="swiperPostDetail"
                   >
-                    {Image.map((img, index) => (
+                    {Image?.map((img, index) => (
                       <SwiperSlide
                         key={index}
                         style={{ background: "#1D2226", padding: "90px 0" }}
