@@ -74,7 +74,8 @@ const OrderStatus = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <div
               style={{
                 background: "white",
@@ -82,7 +83,8 @@ const OrderStatus = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}>
+              }}
+            >
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -100,11 +102,13 @@ const OrderStatus = () => {
                   placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
                 />
               ),
-            }}>
+            }}
+          >
             <TabPane tab="Chờ thanh toán" key={1}>
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     booking={booking}
@@ -116,6 +120,7 @@ const OrderStatus = () => {
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     booking={booking}
@@ -127,6 +132,7 @@ const OrderStatus = () => {
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     booking={booking}
@@ -138,6 +144,7 @@ const OrderStatus = () => {
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
+                    id={item.id}
                     key={idx}
                     item={item}
                     booking={booking}
@@ -154,7 +161,8 @@ const OrderStatus = () => {
             display: "flex",
             justifyContent: "right",
             padding: "10px 10px",
-          }}>
+          }}
+        >
           <Pagination
             showSizeChanger={false}
             onChange={handleChange}

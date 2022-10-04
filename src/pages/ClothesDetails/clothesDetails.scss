@@ -1,191 +1,187 @@
 @import "../../App.scss";
 
 .costume_container {
-    max-width: 1300px;
-    margin: auto;
+  max-width: 1300px;
+  margin: auto;
 
-    .wrapper_banner {
-        padding: 30px;
-        background-color: #ffffff;
+  .wrapper_banner {
+    // padding: 30px;
+    background-color: #ffffff;
+    width: 100%;
+    margin-bottom: 0.75rem;
+
+    .header {
+      &_title {
+        font-weight: 800;
+        font-size: 30px;
+        line-height: 41px;
+        color: #222222;
+
+        .icon_check_circle {
+          height: 100%;
+          color: green;
+          margin-left: 0.25rem;
+        }
+      }
+
+      .icon_heart {
+        height: 100%;
+        font-size: 25px;
+        color: #e22828;
+        margin-right: 2rem;
+      }
+    }
+
+    .location {
+      margin-bottom: 15px;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 25px;
+      color: #828282;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .rating {
+      font-size: 15px;
+      // padding-right: 10px;
+      padding: 0 6.25px 0 0 !important;
+      border-right: 0.6px solid #b2b2b2;
+      flex-direction: row !important;
+    }
+
+    .reserve {
+      margin-top: 3px;
+      font-weight: 400;
+      font-size: 16px;
+      margin-left: 10px;
+      line-height: 22px;
+    }
+  }
+
+  .wrapper_description {
+    width: 100%;
+
+    .desc_col_left {
+      padding: 24px 26px;
+      background-color: #ffffff;
+    }
+
+    .desc_col_right {
+      padding: 24px 26px;
+      background-color: #ffffff;
+      height: 100%;
+
+      .avatar {
+        height: 60px;
+        width: 60px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: 15px;
+      }
+
+      .desc_col_right_title {
+        margin-bottom: 6px;
+        font-size: 20px;
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+
+        .icon_check_circle {
+          color: #03ac84;
+          font-size: 14px;
+          margin-left: 5px;
+        }
+      }
+
+      .btn_see {
         width: 100%;
-        margin-bottom: 0.75rem;
-
-        .header {
-
-            &_title {
-                font-weight: 800;
-                font-size: 30px;
-                line-height: 41px;
-                color: #222222;
-
-                .icon_check_circle {
-                    height: 100%;
-                    color: green;
-                    margin-left: 0.25rem;
-
-                }
-            }
-
-            .icon_heart {
-                height: 100%;
-                font-size: 25px;
-                color: #E22828;
-                margin-right: 2rem;
-
-            }
-        }
-
-        .location {
-            margin-bottom: 15px;
-            font-weight: 400;
-            font-size: 18px;
-            line-height: 25px;
-            color: #828282;
-
-            display: flex;
-            align-items: center;
-        }
-
-        .rating {
-            font-size: 15px;
-            padding-right: 10px;
-            border-right: 0.6px solid #B2B2B2;
-        }
-
-        .reserve {
-            margin-top: 3px;
-            font-weight: 400;
-            font-size: 16px;
-            margin-left: 10px;
-            line-height: 22px;
-        }
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $primary-700;
+        border-radius: 8px;
+        color: $primary-700;
+      }
     }
+  }
 
-    .wrapper_description {
-        width: 100%;
+  .wrapper_list_costume {
+    min-height: 186px;
 
-        .desc_col_left {
-            padding: 24px 26px;
-            background-color: #ffffff;
-        }
+    .col_left {
+      min-height: 186px;
 
-        .desc_col_right {
-            padding: 24px 26px;
-            background-color: #ffffff;
-            height: 100%;
+      .choose_size {
+        color: $secondary-800;
+      }
 
-            .avatar {
-                height: 60px;
-                width: 60px;
-                object-fit: cover;
-                border-radius: 50%;
-                margin-right: 15px;
-            }
+      .table-header {
+        background-color: $neutral-50;
+        padding: 14px 0px;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 22px;
+        color: #000000;
+      }
 
-            .desc_col_right_title {
-                margin-bottom: 6px;
-                font-size: 20px;
-                font-weight: 700;
+      .table-header-col {
+        padding-left: 0.5rem;
+      }
 
-                display: flex;
-                align-items: center;
+      .table-col-first {
+        padding: 32px 18px 32px 0;
+        border-bottom: 1px solid #b2b2b2;
+        border-right: 1px solid #b2b2b2;
+      }
 
-                .icon_check_circle {
-                    color: #03AC84;
-                    font-size: 14px;
-                    margin-left: 5px;
-                }
-            }
+      .table-col-last {
+        padding: 32px 18px;
+        border-bottom: 1px solid #b2b2b2;
+      }
 
-            .btn_see {
-                width: 100%;
-                height: 48px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 1px solid $primary-700;
-                border-radius: 8px;
-                color: $primary-700;
-            }
-
-        }
+      .table-col {
+        padding: 32px 18px;
+        border-bottom: 1px solid #b2b2b2;
+        border-right: 1px solid #b2b2b2;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #222222;
+      }
     }
-
-    .wrapper_list_costume {
-        min-height: 186px;
-
-        .col_left {
-            min-height: 186px;
-
-            .choose_size {
-                color: $secondary-800;
-
-
-            }
-
-            .table-header {
-                background-color: $neutral-50;
-                padding: 14px 0px;
-                font-weight: 700;
-                font-size: 16px;
-                line-height: 22px;
-                color: #000000;
-            }
-
-            .table-header-col {
-                padding-left: 0.5rem;
-            }
-
-            .table-col-first {
-                padding: 32px 18px 32px 0;
-                border-bottom: 1px solid #B2B2B2;
-                border-right: 1px solid #B2B2B2;
-            }
-
-            .table-col-last {
-                padding: 32px 18px;
-                border-bottom: 1px solid #B2B2B2;
-            }
-
-            .table-col {
-                padding: 32px 18px;
-                border-bottom: 1px solid #B2B2B2;
-                border-right: 1px solid #B2B2B2;
-                font-weight: 400;
-                font-size: 16px;
-                line-height: 22px;
-                color: #222222;
-            }
-        }
-    }
+  }
 }
 
 .dropdown {
-    border: 1px solid $neutral-400;
-    border-radius: 5px;
-    font-weight: 400;
-    font-size: 16px;
+  border: 1px solid $neutral-400;
+  border-radius: 5px;
+  font-weight: 400;
+  font-size: 16px;
 
-    line-height: 22px;
-    color: #222222;
+  line-height: 22px;
+  color: #222222;
 }
 
 .btn_add {
-    background-color: $neutral-100  !important;
-    border-radius: 8px !important;
-    font-weight: 700 !important;
-    font-size: 14px !important;
-    line-height: 19px !important;
-    color: #000000 !important;
-    text-transform: uppercase !important;
+  background-color: $neutral-100 !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  line-height: 19px !important;
+  color: #000000 !important;
+  text-transform: uppercase !important;
 }
 
 .btn_order {
-    background-color: $primary-700  !important;
-    border-radius: 8px !important;
-    font-weight: 700 !important;
-    font-size: 14px !important;
-    line-height: 19px !important;
-    color: #FFFFFF !important;
-    text-transform: uppercase !important;
+  background-color: $primary-700 !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  line-height: 19px !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
 }

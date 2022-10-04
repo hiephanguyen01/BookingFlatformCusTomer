@@ -335,12 +335,12 @@ const Index = () => {
                 <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
                 {studioDetail?.data?.Address}
               </div>
-              <div className="d-flex align-items-center mb-20">
+              <div className="d-flex align-items-center mb-26">
                 <Rate
                   disabled
                   allowHalf
                   defaultValue={4.5}
-                  className="rating"
+                  className="rating d-flex align-items-center"
                 />
                 <span className="reserve">
                   Đã đặt {studioDetail?.data?.BookingCount}

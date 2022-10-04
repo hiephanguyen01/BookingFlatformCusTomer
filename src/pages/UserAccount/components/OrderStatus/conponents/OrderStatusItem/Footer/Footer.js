@@ -4,9 +4,11 @@ import { InfoCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Modal } from "antd";
 import { RateModal } from "./RateModal/RateModal";
-import { Link } from "react-router-dom";
-export const Footer = ({ status }) => {
+import { useNavigate } from "react-router-dom";
+
+export const Footer = ({ status, id }) => {
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
   switch (status) {
     case 1:
       return (
@@ -16,11 +18,12 @@ export const Footer = ({ status }) => {
             <div>Thanh toán và cập nhật minh chứng trong 15 phút</div>
           </div>
           <div className="FooterStatus__wait__button">
-            <Link
-              to="/home/confirm-order"
-              className="FooterStatus__wait__button__1">
+            <div
+              onClick={() => navigate(`/home/confirm-order/${id}`)}
+              className="FooterStatus__wait__button__1"
+            >
               <UploadOutlined /> Đã thanh toán
-            </Link>
+            </div>
             <button className="FooterStatus__wait__button__2">
               Thanh toán cọc
             </button>
@@ -39,7 +42,8 @@ export const Footer = ({ status }) => {
         <div className="FooterStatus__complete">
           <button
             className="FooterStatus__complete__rating"
-            onClick={() => setVisible(true)}>
+            onClick={() => setVisible(true)}
+          >
             Đánh giá
           </button>
           <button className="FooterStatus__complete__order">Đặt lại</button>
@@ -49,7 +53,8 @@ export const Footer = ({ status }) => {
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal">
+            className="FooterStatus__complete__modal"
+          >
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

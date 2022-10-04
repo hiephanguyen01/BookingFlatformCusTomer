@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import Chat from "../../components/Chat/Chat";
@@ -8,7 +8,7 @@ import "./CustomerLayout.scss";
 export const CustomerLayout = () => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const [visible, setVisible] = useState(true);
-  console.log(user);
+  // console.log(user);
   // useEffect(() => {
   //   console.log(window.location);
   //   if (window.location.pathname.includes("dao")) {

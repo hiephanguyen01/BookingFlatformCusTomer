@@ -13,8 +13,9 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_
 import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
 import "./OrderStatusItem.scss";
-const OrderStatusItem = ({ item }) => {
+const OrderStatusItem = (props) => {
   const [post, setPost] = useState();
+  const { item, id } = props;
   const navigate = useNavigate();
   let {
     TenantId,
@@ -83,7 +84,8 @@ const OrderStatusItem = ({ item }) => {
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}>
+            onClick={navigateToDetail}
+          >
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
@@ -148,7 +150,7 @@ const OrderStatusItem = ({ item }) => {
           </div>
         </div>
         <Divider className="style-divider" />
-        <Footer status={BookingStatus} />
+        <Footer id={id} status={BookingStatus} />
       </div>
     </>
   );

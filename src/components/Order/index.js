@@ -110,12 +110,40 @@ const Index = ({ linkTo = "" }) => {
     try {
       if (user === null) {
         // handleSendOtp(phoneNumber, Navigate, "", null, null);
+        return;
       }
-      if (isEmpty() === 1) {
+      if (Boolean(isEmpty())) {
         let IdentifyCode = [],
           TenantId;
+
+        //Handle date time section *************
+        const timeFromTemp = convertTimeSendDB(
+          filter.OrderByTimeFrom.slice(11, 19)
+        );
+        let prevDayFromflagTemp = parseInt(timeFromTemp.split("#")[1]);
+        const dateFromTemp = convertDateSendToDB(
+          filter.OrderByTimeFrom,
+          Boolean(prevDayFromflagTemp)
+        ).slice(0, 11);
+        const timeFromOfficial = timeFromTemp.split("#")[0];
+
+        const timeToTemp = convertTimeSendDB(
+          filter.OrderByTimeTo.slice(11, 19)
+        );
+        let prevDayToflagTemp = parseInt(timeToTemp.split("#")[1]);
+        const dateToTemp = convertDateSendToDB(
+          filter.OrderByTimeTo,
+          Boolean(prevDayToflagTemp)
+        ).slice(0, 11);
+        const timeToOfficial = timeToTemp.split("#")[0];
+
+        //Check coi có bị trùng cái thời gian đặt room này trên database ko
+
+        //**************************************
+
         if (filter.OrderByTime === 0) {
           for (let i = 0; i < chooseServiceList.length; i++) {
+            console.log("Đang trong này");
             const newData = {
               OrderByTime: 1,
               // OrderByTimeFrom:
@@ -127,13 +155,15 @@ const Index = ({ linkTo = "" }) => {
               //   item.orderHours[1] +
               //   ":00.000Z",
               OrderByTimeFrom:
-                convertDateSendToDB(filter.OrderByTimeFrom).slice(0, 11) +
-                convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
-                ":00.000Z",
+                // convertDateSendToDB(filter.OrderByTimeFrom).slice(0, 11) +
+                // convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
+                // ":00.000Z",
+                dateFromTemp + timeFromOfficial + ":00.000Z",
               OrderByTimeTo:
-                convertDateSendToDB(filter.OrderByTimeTo).slice(0, 11) +
-                convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
-                ":00.000Z",
+                // convertDateSendToDB(filter.OrderByTimeTo).slice(0, 11) +
+                // convertTimeSendDB(filter.OrderByTimeTo.slice(11, 19)) +
+                // ":00.000Z",
+                dateToTemp + timeToOfficial + ":00.000Z",
               PaymentType: 0,
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
