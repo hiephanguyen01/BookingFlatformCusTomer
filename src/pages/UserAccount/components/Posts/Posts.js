@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import DaoPost from "../../../../components/DaoPost";
 import { userService } from "../../../../services/UserService";
+import { getLikePostList } from "../../../../stores/actions/PostDaoAction";
 import {
   getListPosts,
   getSavedPostList,
@@ -12,11 +13,13 @@ const Posts = () => {
   const dispatch = useDispatch();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const { savedPostList } = useSelector((state) => state.userReducer);
+  const { likePostList } = useSelector((state) => state.postDaoReducer);
   const [savedPosts, setSavedPosts] = useState([...savedPostList]);
   console.log(savedPostList);
 
   useEffect(() => {
     dispatch(getListPosts(19, 1));
+    dispatch(getLikePostList(UserMe.id));
   }, []);
   useEffect(() => {
     setSavedPosts([...savedPostList]);
@@ -30,7 +33,7 @@ const Posts = () => {
       <div>
         {savedPosts.map((itm, index) => (
           <div key={index} className="PostSaved__body">
-            <DaoPost item={itm} type="save-post" />
+            <DaoPost likePostList={likePostList} item={itm} type="save-post" />
           </div>
         ))}
       </div>
