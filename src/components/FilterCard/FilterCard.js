@@ -15,6 +15,7 @@ import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { useDispatch, useSelector } from "react-redux";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
+import { convertImage } from "../../utils/convertImage";
 const FilterCard = ({ data, category }) => {
   const [like, setLike] = useState(false);
   const navigate = useNavigate();
@@ -105,27 +106,12 @@ const FilterCard = ({ data, category }) => {
             </div>
             <div className="sale">-60% HÔM NAY</div>
             <div className="main">
-              <img
-                className="main"
-                src={`${
-                  data?.Image[0].includes("https://drive.google.com/")
-                    ? data?.Image[0]
-                    : REACT_APP_DB_BASE_URL_IMG + "/" + data?.Image[0]
-                }`}
-                alt=""
-              />
+              <img className="main" src={convertImage(data.Image[0])} alt="" />
             </div>
             <div className="right">
               {data?.Image.slice(1, 3).map((img, index) => (
                 <div className="sub" key={index}>
-                  <img
-                    src={`${
-                      img.includes("https://drive.google.com/")
-                        ? img
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                    }`}
-                    alt=""
-                  />
+                  <img src={convertImage(img)} alt="" />
                 </div>
               ))}
             </div>

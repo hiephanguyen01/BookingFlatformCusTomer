@@ -106,7 +106,7 @@ export const Footer = ({
               className="FooterStatus__wait__button__1"
             >
               <UploadOutlined /> Đã thanh toán
-            </div>
+            </Link>
             <button className="FooterStatus__wait__button__2">
               Thanh toán cọc
             </button>

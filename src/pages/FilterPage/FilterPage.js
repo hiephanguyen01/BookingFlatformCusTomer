@@ -148,7 +148,8 @@ const FilterPage = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   <p className="text">LỌC THEO</p>
                   <Button htmlType="submit" type="primary">
                     Xoá bộ lọc
@@ -174,7 +175,8 @@ const FilterPage = () => {
                   <div className="category_radio_group">
                     <Radio.Group
                       onChange={onChangeFilterCategory}
-                      value={filter.category}>
+                      value={filter.category}
+                    >
                       {categories &&
                         categories.map((val) => (
                           <Radio key={val.id} value={val.id}>
@@ -244,7 +246,8 @@ const FilterPage = () => {
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
-                }}>
+                }}
+              >
                 <div
                   style={{
                     background: "white",
@@ -252,7 +255,8 @@ const FilterPage = () => {
                     borderRadius: "50%",
                     padding: "10px",
                     margin: "10px",
-                  }}>
+                  }}
+                >
                   <LoadingOutlined style={{ fontSize: "40px" }} />
                 </div>
               </div>
@@ -275,10 +279,11 @@ const FilterPage = () => {
                 display: "flex",
                 justifyContent: "right",
                 padding: "10px 10px",
-              }}>
+              }}
+            >
               <Pagination
                 pageSize={pagination?.limit || 0}
-                defaultCurrent={1}
+                current={pagination?.currentPage}
                 total={pagination?.total}
                 onChange={onChangePage}
               />

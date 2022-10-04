@@ -72,10 +72,9 @@ export const Card = ({ value, category }) => {
     dispatch(getLikeStudioPostAction(value?.id, category.id));
   };
   const handleNavigate = () => {
-    navigate(`/home/${category.name}/${value.id}`)
+    navigate(`/home/${category.name}/${value.id}`);
   };
   return (
-
     <div className={cx("card")} onClick={handleNavigate}>
       <div className={cx("image")}>
         <img className={cx("thumbnail")} alt="" src={img} />
@@ -90,15 +89,11 @@ export const Card = ({ value, category }) => {
       </div>
       <div className={cx("content")}>
         <div className="h-43px mb-8">
-          <h5>
-            {value?.Name.length > 60
-              ? `${value?.Name?.slice(0, 55)}...`
-              : value?.Name || "Studio Mizo Misaki với concept tối giản"}
-          </h5>
+          <h5>{value?.Name}</h5>
         </div>
         <div className={cx("address")}>
           <img className={cx("icon-location")} alt="" src={images?.address} />
-          <span>{value?.Address || "Quận 1, TPHCM"}</span>
+          <span>{value?.Address}</span>
         </div>
         <div className={cx("rate")}>
           <Rate disabled allowHalf value={3} />
