@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import "./UpdateConfirm.scss";
-import UploadImage from "../../../../../../components/UploadImage";
 import {
-  ExclamationCircleOutlined,
   CheckCircleOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
+import { useState } from "react";
+import toastMessage from "../../../../../../components/ToastMessage";
+import UploadImage from "../../../../../../components/UploadImage";
+import "./UpdateConfirm.scss";
+
 const UpdateConfirm = () => {
+  const [order, setOrder] = useState(null);
   const [file, setFile] = useState([]);
   const [done, setDone] = useState(false);
+
   const onChangeFile = (e) => {
     const newFiles = [...file];
     const newFile = e.target.files[0];
@@ -21,7 +25,12 @@ const UpdateConfirm = () => {
       setDone(true);
     }
   };
-console.log(done);
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(order.IdentifyCode);
+    toastMessage("Đã lưu mã booking vào bộ nhớ tạm!", "success");
+  };
+
   return (
     <div
       className="py-12"
@@ -37,10 +46,15 @@ console.log(done);
 
         <div className="border_bottom">
           <div className="d-flex justify-content-between mb-12">
-            <div className="booking_code text-medium-re">
-              Mã Booking: <span className="text-medium-se">244256211</span>
+            <div className="booking_code text-medium-re d-flex ">
+              Mã Booking:{" "}
+              <span className="text-medium-se">{order?.IdentifyCode}</span>
             </div>
-            <div className="text-medium-re" style={{ color: "#03AC84" }}>
+            <div
+              onClick={handleCopyToClipboard}
+              className="text-medium-re"
+              style={{ color: "#03AC84", cursor: "pointer" }}
+            >
               SAO CHÉP
             </div>
           </div>
@@ -156,7 +170,8 @@ console.log(done);
             </>
           ) : (
             <div className="done">
-              <CheckCircleOutlined className="me-10"/> Cập nhật minh chứng thành công
+              <CheckCircleOutlined className="me-10" /> Cập nhật minh chứng
+              thành công
             </div>
           )}
           <div className="d-flex">
@@ -174,5 +189,5 @@ console.log(done);
       </div>
     </div>
   );
-}
+};
 export default UpdateConfirm;

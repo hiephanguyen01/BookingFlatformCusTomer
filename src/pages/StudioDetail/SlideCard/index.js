@@ -27,6 +27,7 @@ export const SlideCard = ({ title, data, category }) => {
             className="slideDetail"
             slidesPerView={1}
             spaceBetween={8}
+            loop={true}
             grabCursor={true}
             autoplay={{
               delay: 2500,

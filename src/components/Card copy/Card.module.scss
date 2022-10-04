@@ -52,18 +52,11 @@
 
 .content {
     padding: 12px;
-    overflow: hidden;
 
     h5 {
         font-size: 16px !important;
         font-weight: 700 !important;
         text-align: start;
-        display: -webkit-box;
-        line-height: 18px;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     .address {
@@ -71,27 +64,18 @@
         align-items: flex-start;
         line-height: 1.2;
         gap: 6px;
-        margin-bottom: 4px;
-        // height: 34px;
-        // overflow: hidden;
+        margin-bottom: 8px;
 
         .icon-location {
             width: 10px;
             height: 10px;
             object-fit: contain;
-            margin-top: 3px;
         }
 
         span {
-            text-align: left;
-            display: -webkit-box;
             font-size: 14px;
-            line-height: 18px;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            height: 36px;
+            color: #828282;
+            text-align: left;
         }
     }
 

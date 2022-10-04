@@ -13,6 +13,7 @@ import {
   SET_LIST_LIKED_CATEGORY_4,
   SET_LIST_LIKED_CATEGORY_5,
   SET_LIST_LIKED_CATEGORY_6,
+  SET_LIST_LIKED_CATEGORY,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -21,8 +22,16 @@ const initialState = {
   filter: {
     keyString: "",
     OrderByTime: -1,
-    OrderByTimeFrom: convertDateSendToDB(new Date()),
-    OrderByTimeTo: convertDateSendToDB(new Date()),
+    OrderByTimeFrom:
+      convertDateSendToDB(new Date()).slice(0, 13) + ":00:00.000Z",
+    OrderByTimeTo:
+      convertDateSendToDB(new Date()).slice(0, 11) +
+      `${
+        parseInt(convertDateSendToDB(new Date()).slice(11, 13)) > 9
+          ? parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
+          : `0${parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1}`
+      }` +
+      ":00:00.000Z",
     OrderByDateFrom: convertDateSendToDB(new Date()),
     OrderByDateTo: convertDateSendToDB(new Date()),
     category: 1,
@@ -45,6 +54,7 @@ const initialState = {
   listLikedCategory4: [],
   listLikedCategory5: [],
   listLikedCategory6: [],
+  listLikedUser: [],
 };
 
 export const studioPostReducer = (state = initialState, action) => {
@@ -84,6 +94,11 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         studioNear: action.payload,
+      };
+    case SET_LIST_LIKED_CATEGORY:
+      return {
+        ...state,
+        listLikedUser: action.data,
       };
     case SET_LIST_LIKED_CATEGORY_1:
       return {

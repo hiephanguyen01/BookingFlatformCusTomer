@@ -12,8 +12,10 @@ import {
 import { socket } from "../ConnectSocket/ConnectSocket";
 import { useDispatch, useSelector } from "react-redux";
 import { closeConversationSelector } from "../../stores/selector/ChatSelector";
+import { SHOW_CHAT } from "../../stores/types/messType";
 const Chat = () => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const { showChat } = useSelector((state) => state.chatReducer);
   const closeConversation = useSelector(closeConversationSelector);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
@@ -29,9 +31,11 @@ const Chat = () => {
       userId: UserMe.id,
     });
     socket.on("online_partner", (partner) => {
+      console.log(partner);
       dispatch(getOnlinePartner(partner));
     });
     socket.on("offline_partner", (partner) => {
+      console.log(partner);
       dispatch(getOfflinePartner(partner));
     });
 
@@ -43,7 +47,7 @@ const Chat = () => {
   return (
     <div>
       <div
-        onClick={showLargeDrawer}
+        onClick={() => dispatch({ type: SHOW_CHAT })}
         className={notiMessage ? "Chat__noti-message Chat" : "Chat"}
       >
         {notiMessage ? (
@@ -60,7 +64,12 @@ const Chat = () => {
         ></img>
         Chat
       </div>
-      <Drawer placement="right" width={750} onClose={onClose} visible={visible}>
+      <Drawer
+        placement="right"
+        width={750}
+        onClose={() => dispatch({ type: SHOW_CHAT })}
+        visible={showChat}
+      >
         <div className="Chat__container__header">
           <div className="Chat__container__header__left">
             <img alt="chatIcon" src={ChatIcon} className="Chat__icon"></img>

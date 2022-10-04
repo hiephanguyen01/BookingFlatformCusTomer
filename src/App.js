@@ -19,11 +19,12 @@ import PageModel from "./pages/ModelDetails/PageModel";
 import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
 import PageStudio from "./pages/StudioDetail/PageStudio";
 import UserAccount from "./pages/UserAccount";
-import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
+import UpdateConfirm from "./components/ConfirmOrder";
 import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import PostDetail from "./pages/PostDetail/PostDetail";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
 import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
+import Support from "./pages/UserAccount/components/support/Support";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ function App() {
                 <UserAccount />
               </ProtectedRouter>
             }
-          />
+          ></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />

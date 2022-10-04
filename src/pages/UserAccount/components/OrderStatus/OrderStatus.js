@@ -1,23 +1,47 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Tabs } from "antd";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { Input, Pagination, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { orderService } from "../../../../services/OrderService";
 import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";
 import "./orderStatus.scss";
 const { TabPane } = Tabs;
 const OrderStatus = () => {
-  const [booking, setBooking] = useState();
+  const [booking, setBooking] = useState([]);
+  const [filter, setFilter] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageBooking, setPageBooking] = useState([]);
   const EntryDate = { startDate: "", endDate: "" };
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
-    category: 1,
+    // category: 1,
     BookingStatus: 1,
     EntryDate: JSON.stringify(EntryDate),
   });
   const onChange = (key) => {
+    setFilter([]);
     setParams({ ...params, BookingStatus: key });
+  };
+  const handleChange = (current, pageSize) => {
+    const last = current * pageSize;
+    const first = last - pageSize;
+    if (filter.length) {
+      setPageBooking(filter.slice(first, last));
+    } else {
+      setPageBooking(booking.slice(first, last));
+    }
+  };
+  const onChangeInput = (e) => {
+    const input = e.target.value.toLowerCase();
+    const newData = booking.filter(
+      (val) =>
+        val.IdentifyCode.toLowerCase().includes(input) ||
+        val.Item?.Name.toLowerCase().includes(input)
+    );
+    setCurrentPage(1);
+    setFilter(newData);
   };
   useEffect(() => {
     (async () => {
@@ -25,7 +49,6 @@ const OrderStatus = () => {
       try {
         const { data } = await orderService.getAllOrderByUserId(params);
         setBooking(data.data);
-        console.log(data.data);
       } catch (error) {
         console.log(error);
       }
@@ -33,9 +56,19 @@ const OrderStatus = () => {
     })();
   }, [params]);
 
+  useEffect(() => {
+    if (filter.length) {
+      setPageBooking(filter.slice(0, pageSize));
+      setCurrentPage(1);
+    } else {
+      setPageBooking(booking.slice(0, pageSize));
+      setCurrentPage(1);
+    }
+  }, [booking, filter]);
+
   return (
     <>
-      <h4 className="OrderStatus__header">Thông tin tài khoản</h4>
+      <h4 className="OrderStatus__header">Lịch sử đơn đặt</h4>
       <div className="OrderStatus__body">
         {loading ? (
           <div
@@ -56,26 +89,87 @@ const OrderStatus = () => {
             </div>
           </div>
         ) : (
-          <Tabs defaultActiveKey={params.BookingStatus} onChange={onChange}>
+          <Tabs
+            className="tab_search"
+            defaultActiveKey={params.BookingStatus}
+            onChange={onChange}
+            tabBarExtraContent={{
+              right: (
+                <Input
+                  onChange={onChangeInput}
+                  prefix={<SearchOutlined />}
+                  className="input"
+                  placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
+                />
+              ),
+            }}>
             <TabPane tab="Chờ thanh toán" key={1}>
               {booking &&
-                booking.map((item) => <OrderStatusItem item={item} />)}
+                pageBooking.map((item, idx) => (
+                  <OrderStatusItem
+                    id={item.id}
+                    key={idx}
+                    item={item}
+                    pageBooking={pageBooking}
+                    setPageBooking={setPageBooking}
+                  />
+                ))}
             </TabPane>
             <TabPane tab="Sắp tới" key={2}>
               {booking &&
-                booking.map((item) => <OrderStatusItem item={item} />)}
+                pageBooking.map((item, idx) => (
+                  <OrderStatusItem
+                    id={item.id}
+                    key={idx}
+                    item={item}
+                    pageBooking={pageBooking}
+                    setPageBooking={setPageBooking}
+                  />
+                ))}
             </TabPane>
             <TabPane tab="Đã hoàn tất" key={3}>
               {booking &&
-                booking.map((item) => <OrderStatusItem item={item} />)}
+                pageBooking.map((item, idx) => (
+                  <OrderStatusItem
+                    id={item.id}
+                    key={idx}
+                    item={item}
+                    pageBooking={pageBooking}
+                    setPageBooking={setPageBooking}
+                  />
+                ))}
             </TabPane>
             <TabPane tab="Đã hủy" key={4}>
               {booking &&
-                booking.map((item) => <OrderStatusItem item={item} />)}
+                pageBooking.map((item, idx) => (
+                  <OrderStatusItem
+                    id={item.id}
+                    key={idx}
+                    item={item}
+                    booking={booking}
+                    setBooking={setBooking}
+                  />
+                ))}
             </TabPane>
           </Tabs>
         )}
       </div>
+      {booking && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "right",
+            padding: "10px 10px",
+          }}>
+          <Pagination
+            showSizeChanger={false}
+            onChange={handleChange}
+            pageSize={pageSize}
+            defaultCurrent={currentPage}
+            total={filter.length || booking.length}
+          />
+        </div>
+      )}
     </>
   );
 };

@@ -9,4 +9,11 @@
         }
     }
 
+    .timeContainer {}
+}
+
+.ant-picker-time-panel-column {
+    &::after {
+        display: none !important;
+    }
 }

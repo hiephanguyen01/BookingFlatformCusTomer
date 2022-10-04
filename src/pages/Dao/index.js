@@ -449,7 +449,7 @@ const Dao = () => {
                 let newPost = { ...post };
                 if (newPost.tags.includes(item.id)) {
                   newPost.tags = newPost.tags.filter((val) => val !== item.id);
-                } else {
+                } else if (newPost.tags.length < 3) {
                   newPost.tags.push(item.id);
                 }
                 setPost(newPost);

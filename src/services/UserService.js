@@ -12,7 +12,9 @@ class UserService extends BaseService {
       PostId,
     });
   };
-
+  getListPosts = (page, limit) => {
+    return this.get(`/api/save-post/me?page=${page}&limit=${limit}`);
+  };
   cancelSavePost = (UserId, PostId) => {
     return this.delete(`/api/save-post`, {
       UserId,
@@ -26,11 +28,20 @@ class UserService extends BaseService {
   getListRatings = (id) => {
     return this.get(`/api/my-ratings/${id}`);
   };
-  saveInfo = (id, data) => {
-    return this.patch(`/api/booking-user/updateMe/${id}`, data);
+  saveInfo = (data) => {
+    return this.patch(`/api/booking-user/updateMe`, data);
   };
   deleteMe = () => {
     return this.patch(`/api/booking-user/deleteMe`);
+  };
+  getRecentViews = () => {
+    return this.get(`/api/booking-user/recently`);
+  };
+  setRecentViews = (PostId, Category) => {
+    return this.post(`/api/booking-user/recently-watch`, {
+      PostId,
+      Category,
+    });
   };
 }
 

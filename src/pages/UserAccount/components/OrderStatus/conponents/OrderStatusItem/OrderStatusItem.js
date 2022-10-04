@@ -1,26 +1,28 @@
+import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Divider } from "antd";
 import React, { useEffect, useState } from "react";
-import "./OrderStatusItem.scss";
+import { useNavigate } from "react-router-dom";
 import demo from "../../../../../../assets/Chat/demo.png";
-import { DividerCustom } from "../DividerCustom/DividerCustom";
-import { Footer } from "./Footer/Footer";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { studioPostService } from "../../../../../../services/StudioPostService";
 import {
   dateStructure,
   numberWithDot,
   timeStructure,
 } from "../../../../../../utils/convert";
-import { studioPostService } from "../../../../../../services/StudioPostService";
-import { CheckCircleTwoTone } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-const OrderStatusItem = ({ item }) => {
+import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { DividerCustom } from "../DividerCustom/DividerCustom";
+import { Footer } from "./Footer/Footer";
+import "./OrderStatusItem.scss";
+
+const OrderStatusItem = ({ item, pageBooking, setPageBooking, id}) => {
+
   const [post, setPost] = useState();
   const navigate = useNavigate();
   let {
     TenantId,
     BookingStatus,
     IdentifyCode,
-    StudioRoom,
+    Item,
     CreationTime,
     OrderByTimeFrom,
     OrderByTimeTo,
@@ -28,18 +30,23 @@ const OrderStatusItem = ({ item }) => {
     OrderByDateTo,
     DepositValue,
     BookingValue,
+    category,
+    EvidenceImage,
   } = item;
   const orderDate = new Date(CreationTime);
-  OrderByTimeFrom = new Date(OrderByTimeFrom);
-  OrderByTimeTo = new Date(OrderByTimeTo);
-  OrderByDateFrom = new Date(OrderByDateFrom);
-  OrderByDateTo = new Date(OrderByDateTo);
+  if (OrderByTimeFrom && OrderByTimeTo) {
+    OrderByTimeFrom = new Date(OrderByTimeFrom);
+    OrderByTimeTo = new Date(OrderByTimeTo);
+  } else {
+    OrderByDateFrom = new Date(OrderByDateFrom);
+    OrderByDateTo = new Date(OrderByDateTo);
+  }
   useEffect(() => {
     (async () => {
       try {
         const { data } = await studioPostService.getPostByTenantId({
           TenantId,
-          category: 1,
+          category,
         });
         setPost(data.data);
       } catch (error) {
@@ -47,9 +54,30 @@ const OrderStatusItem = ({ item }) => {
       }
     })();
   }, [TenantId]);
-
   const navigateToDetail = () => {
-    navigate(`/home/studio/${post.id}`);
+    switch (category) {
+      case 1:
+        navigate(`/home/studio/${post.id}`);
+        break;
+      case 2:
+        navigate(`/home/photographer/${post.id}`);
+        break;
+      case 3:
+        navigate(`/home/clothes/${post.id}`);
+        break;
+      case 4:
+        navigate(`/home/makeup/${post.id}`);
+        break;
+      case 5:
+        navigate(`/home/device/${post.id}`);
+        break;
+      case 6:
+        navigate(`/home/model/${post.id}`);
+        break;
+
+      default:
+        break;
+    }
   };
   return (
     <>
@@ -58,7 +86,8 @@ const OrderStatusItem = ({ item }) => {
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}>
+            onClick={navigateToDetail}
+          >
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
@@ -76,14 +105,14 @@ const OrderStatusItem = ({ item }) => {
               alt=""
               className="OrderStatusItem__body__info__pic"
               src={
-                StudioRoom.Image1
-                  ? `${REACT_APP_DB_BASE_URL_IMG}/${StudioRoom.Image1}`
+                Item?.Image1
+                  ? `${REACT_APP_DB_BASE_URL_IMG}/${Item?.Image1}`
                   : demo
               }
             />
             <div className="OrderStatusItem__body__info__content">
               <div className="OrderStatusItem__body__info__content__title">
-                {StudioRoom.Name}
+                {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">
                 Ngày tạo: <span>{dateStructure(orderDate)}</span>
@@ -123,7 +152,16 @@ const OrderStatusItem = ({ item }) => {
           </div>
         </div>
         <Divider className="style-divider" />
-        <Footer status={BookingStatus} />
+        <Footer
+          id={id} 
+          status={BookingStatus}
+          IdentifyCode={IdentifyCode}
+          TenantId={TenantId}
+          EvidenceImage={EvidenceImage}
+          Category={category}
+          pageBooking={pageBooking}
+          setPageBooking={setPageBooking}
+        />
       </div>
     </>
   );

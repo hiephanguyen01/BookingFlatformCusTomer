@@ -15,7 +15,12 @@ class StudioPostService extends BaseService {
       `/api/studio-post?page=${page}&limit=${limit}&category=${category}`
     );
   };
-  getDetailStudio = (id, category) => {
+  getDetailStudio = (id, category, currentUser = "") => {
+    if (currentUser.trim !== "") {
+      return this.get(
+        `/api/studio-post/byid?id=${id}&category=${category}&userId=${currentUser}`
+      );
+    }
     return this.get(`/api/studio-post/byid?id=${id}&category=${category}`);
   };
   getStudioNear = (id, lat, lng) => {
@@ -24,7 +29,10 @@ class StudioPostService extends BaseService {
   getLikeStudioPost = (data) => {
     return this.post(`/api/booking-user/like-studio-post`, data);
   };
-  getAllStudioLiked = (data) => {
+  getAllStudioLiked = (data, _sort = "") => {
+    if (_sort.trim() !== "") {
+      return this.post(`/api/booking-user/liked-studio?_sort=${_sort}`, data);
+    }
     return this.post(`/api/booking-user/liked-studio`, data);
   };
 }

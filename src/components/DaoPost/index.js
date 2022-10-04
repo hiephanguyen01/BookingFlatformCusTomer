@@ -158,7 +158,7 @@ const DaoPost = (props) => {
     likePostList?.filter((itm) => itm.PostId === Id).length > 0;
 
   let ImageSection = null;
-  let tempCount = Image.length;
+  let tempCount = Image?.length;
   // Object.entries(post).forEach((post2, idx) => {
   //   if (post2[0].includes("Image")) tempCount++;
   // });
@@ -223,7 +223,6 @@ const DaoPost = (props) => {
               </Col>
             );
           } else {
-            // console.log(idx);
             return (
               <Col
                 key={idx}
@@ -277,7 +276,6 @@ const DaoPost = (props) => {
       </Row>
     );
   } else if (tempCount > 4) {
-    console.log("Post này có hơn 4 bài nè");
     ImageSection = (
       <Row gutter={[16, 16]}>
         {Image.map((img, idx) => {
@@ -318,10 +316,6 @@ const DaoPost = (props) => {
               </Col>
             );
           }
-          // else{
-          //   let remainImg = tempCount - 4
-          //   return
-          // }
         })}
       </Row>
     );
@@ -409,7 +403,7 @@ const DaoPost = (props) => {
                     modules={[Pagination, Navigation]}
                     className="swiperPostDetail"
                   >
-                    {Image.map((img, index) => (
+                    {Image?.map((img, index) => (
                       <SwiperSlide
                         key={index}
                         style={{ background: "#1D2226", padding: "90px 0" }}
@@ -486,11 +480,7 @@ const DaoPost = (props) => {
                     style={{ borderBottom: "1px solid #E7E7E7" }}
                   >
                     <div className="post__main__content__like-comment__likes d-flex">
-                      <PopUpSignIn
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
+                      <PopUpSignIn onClick={(e) => {}}>
                         {mouseOverHeart ||
                         checkLikePost() ||
                         mouseClickHeart ? (
@@ -521,11 +511,7 @@ const DaoPost = (props) => {
                       </p>
                     </div>
                     <div className="post__main__content__like-comment__comments d-flex">
-                      <PopUpSignIn
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
+                      <PopUpSignIn onClick={(e) => {}}>
                         <Comments
                           className="active"
                           style={{ color: "#E22828" }}
@@ -609,11 +595,7 @@ const DaoPost = (props) => {
                         className="post__main__content__like-comment__likes d-flex"
                         onClick={() => console.log(123)}
                       >
-                        <PopUpSignIn
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
+                        <PopUpSignIn onClick={(e) => {}}>
                           {false ? (
                             <HeartFilled
                               // onClick={() =>
@@ -655,11 +637,7 @@ const DaoPost = (props) => {
           </div>
           <div className="post__main__content__like-comment d-flex align-posts-center">
             <div className="post__main__content__like-comment__likes d-flex">
-              <PopUpSignIn
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
+              <PopUpSignIn onClick={(e) => {}}>
                 {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
                   <HeartFilled
                     onClick={handleLike}
@@ -688,11 +666,7 @@ const DaoPost = (props) => {
               </p>
             </div>
             <div className="post__main__content__like-comment__comments d-flex">
-              <PopUpSignIn
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
+              <PopUpSignIn onClick={(e) => {}}>
                 <Comments
                   onClick={() => setCommentsClick(!commentsClick)}
                   className={`${commentsClick ? "active" : ""}`}
