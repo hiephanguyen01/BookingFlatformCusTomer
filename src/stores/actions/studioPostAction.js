@@ -1,4 +1,5 @@
 import { studioPostService } from "../../services/StudioPostService";
+import { userService } from "../../services/UserService";
 import {
   LOADING,
   SET_FILTER,
@@ -46,12 +47,18 @@ export const getFilterStudioPost =
     dispatch({ type: LOADING, payload: false });
   };
 
-export const studioDetailAction = (id, category) => {
+export const studioDetailAction = (id, category, currentUser) => {
   return async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
-      const { data } = await studioPostService.getDetailStudio(id, category);
-
+      const { data } = await studioPostService.getDetailStudio(
+        id,
+        category,
+        currentUser
+      );
+      if (currentUser) {
+        await userService.setRecentViews(id, category);
+      }
       dispatch({
         type: SET_STUDIO_DETAIL,
         payload: {
@@ -92,7 +99,7 @@ export const studioDetailAction1 = (id, category) => {
   };
 };
 
-export const getLikeStudioPostAction = (postId, category) => {
+export const getLikeStudioPostAction = (postId, category, currentUser = "") => {
   return async (dispatch) => {
     try {
       await studioPostService.getLikeStudioPost({
@@ -100,7 +107,10 @@ export const getLikeStudioPostAction = (postId, category) => {
         CategoryId: category,
       });
       dispatch(getAllStudioLikedAction1(category));
-      dispatch(getAllStudioLikedAction(category))
+      dispatch(getAllStudioLikedAction(category));
+      if (currentUser.trim !== "") {
+        dispatch(studioDetailAction(postId, category, currentUser));
+      }
     } catch (error) {
       console.log(error);
     }

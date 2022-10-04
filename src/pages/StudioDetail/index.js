@@ -1,5 +1,6 @@
 import {
   CheckCircleOutlined,
+  HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
@@ -8,17 +9,29 @@ import {
 } from "@ant-design/icons";
 import { Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
+=======
+import React, { useEffect, useState } from "react";
+>>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
+<<<<<<< HEAD
+=======
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+>>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 import {
   addOrder,
   chooseServiceAction,
@@ -31,19 +44,30 @@ import {
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
+  getLikeStudioPostAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 // import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
 import { convertPrice } from "../../utils/convert";
+import { convertImage } from "../../utils/convertImage";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+
 // import { Voucher } from "./Voucher";
+<<<<<<< HEAD
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+=======
+//import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+//import { convertImage } from "../../utils/convertImage";
+//import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+
+>>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -59,6 +83,8 @@ export const StudioDetail = () => {
   // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
+  console.log(currentUser?.id);
   const {
     studioDetail1,
     studioDetail,
@@ -67,6 +93,7 @@ export const StudioDetail = () => {
     filter,
     loading,
   } = useSelector((state) => state.studioPostReducer);
+  console.log(studioDetail);
   // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
@@ -81,10 +108,16 @@ export const StudioDetail = () => {
   //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
   // }, 5000);
   // }, []);
+
   useEffect(() => {
-    dispatch(studioDetailAction(id, cate));
+    if (currentUser !== null) {
+      dispatch(studioDetailAction(id, cate, currentUser?.id));
+    } else {
+      dispatch(studioDetailAction(id, cate));
+    }
     dispatch(getDetailRoomAction(id));
     dispatch(getAllStudioPost(10, 1, 1));
+<<<<<<< HEAD
     // dispatch(getAllRatingStudioByIdAction(id, 5));
     // dispatch(getNumberRateStudioByIdAction(id));
   }, [id]);
@@ -94,6 +127,9 @@ export const StudioDetail = () => {
   //     setCount(data);
   //   })();
   // }, []);
+=======
+  }, [id, dispatch, cate, currentUser]);
+>>>>>>> 22d24612ba4f18607bced2c1958b5377cf8984cd
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
@@ -321,204 +357,6 @@ export const StudioDetail = () => {
     }
   };
 
-  // const columns = [
-  //   {
-  //     title: "Loại phòng",
-  //     width: "30%",
-  //     render: (text) => {
-  //       return (
-  //         <div style={{ textAlign: "center" }}>
-  //           <img
-  //             alt="as"
-  //             style={{ width: "100%", height: "100px", borderRadius: " 6px" }}
-  //             src={`${REACT_APP_DB_BASE_URL_IMG}${text.Image[0]}`}
-  //           />
-  //           <div
-  //             style={{
-  //               display: "flex",
-  //               justifyContent: "space-between",
-  //               alignItems: "center",
-  //               marginTop: "10px",
-  //             }}
-  //           >
-  //             <span
-  //               style={{
-  //                 color: "#616161",
-  //                 fontSize: "16px",
-  //                 fontWeight: "400",
-  //               }}
-  //             >
-  //               Phòng
-  //             </span>
-  //             <span
-  //               style={{
-  //                 color: "#3F3F3F",
-  //                 fontSize: "16px",
-  //                 fontWeight: "700",
-  //               }}
-  //             >
-  //               {text.Name}
-  //             </span>
-  //           </div>
-  //           <div
-  //             style={{
-  //               display: "flex",
-  //               justifyContent: "space-between",
-  //               alignItems: "center",
-  //               marginTop: "10px",
-  //             }}
-  //           >
-  //             <span
-  //               style={{
-  //                 color: "#616161",
-  //                 fontSize: "16px",
-  //                 fontWeight: "400",
-  //               }}
-  //             >
-  //               Diện tích
-  //             </span>
-  //             <span
-  //               style={{
-  //                 color: "#3F3F3F",
-  //                 fontSize: "16px",
-  //                 fontWeight: "700",
-  //               }}
-  //             >
-  //               {text.Area}
-  //             </span>
-  //           </div>
-  //           <div
-  //             style={{
-  //               display: "flex",
-  //               justifyContent: "space-between",
-  //               alignItems: "center",
-  //               marginTop: "10px",
-  //             }}
-  //           >
-  //             <span
-  //               style={{
-  //                 color: "#616161",
-  //                 fontSize: "16px",
-  //                 fontWeight: "400",
-  //               }}
-  //             >
-  //               Phong cách
-  //             </span>
-  //             <span
-  //               style={{
-  //                 color: "#3F3F3F",
-  //                 fontSize: "16px",
-  //                 fontWeight: "700",
-  //               }}
-  //             >
-  //               {text.Style}
-  //             </span>
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     title: "Mô tả",
-  //     dataIndex: "Description",
-  //     key: "Description",
-  //     render: (text) => {
-  //       return <p>{text}</p>;
-  //     },
-  //   },
-  //   {
-  //     title: "Giá cho thời gian bạn đã chọn ",
-  //     render: (text) => {
-  //       return (
-  //         <div>
-  //           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-  //             <span
-  //               style={{
-  //                 color: "#E22828",
-  //                 fontSize: "20px",
-  //                 fontWeight: "700",
-  //               }}
-  //             >
-  //               {text.PriceByDate.toLocaleString("it-IT", {
-  //                 style: "currency",
-  //                 currency: "VND",
-  //               })}
-  //             </span>
-  //             <span
-  //               style={{
-  //                 color: "#828282",
-  //                 textDecoration: "line-through",
-  //                 fontSize: "14px",
-  //                 fontWeight: "400",
-  //               }}
-  //             >
-  //               {text.PriceByHour.toLocaleString("it-IT", {
-  //                 style: "currency",
-  //                 currency: "VND",
-  //               })}
-  //             </span>
-  //           </div>
-  //           <p
-  //             style={{ color: "#828282", fontSize: "14px", fontWeight: "400" }}
-  //           >
-  //             {text.PriceNote}
-  //           </p>
-  //           <button
-  //             style={{
-  //               padding: "3px 21px",
-  //               background: "#E22828",
-  //               color: "#ffff",
-  //               border: " 1px solid #E22828",
-  //               borderRadius: " 8px",
-  //             }}
-  //           >
-  //             Giảm 50%{" "}
-  //           </button>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     title: "Chọn phòng",
-  //     key: "action",
-  //     width: "17%",
-  //     render: (text) => (
-  //       <div style={{ textAlign: "center" }}>
-  //         {roomSelect?.findIndex((item1) => item1.id === text.id) !== -1 ? (
-  //           <button
-  //             style={{
-  //               padding: "15px 30px",
-  //               background: "#E7E7E7",
-  //               color: "#3F3F3F",
-  //               border: " 1px solid transparent",
-  //               borderRadius: " 8px",
-  //             }}
-  //             onClick={() => {
-  //               dispatch({ type: SET_SELECT_ROOM, data: text });
-  //               handleChooseService();
-  //             }}
-  //           >
-  //             Bỏ chọn
-  //           </button>
-  //         ) : (
-  //           <button
-  //             style={{
-  //               padding: "15px 30px",
-  //               background: "#fff",
-  //               color: "#E22828",
-  //               border: " 1px solid #E22828",
-  //               borderRadius: " 8px",
-  //             }}
-  //             onClick={() => dispatch({ type: SET_SELECT_ROOM, data: text })}
-  //           >
-  //             Chọn
-  //           </button>
-  //         )}
-  //       </div>
-  //     ),
-  //   },
-  // ];
-
   const [chooseService, setChooseService] = useState([]);
 
   const handleChooseService = (data) => {
@@ -551,7 +389,11 @@ export const StudioDetail = () => {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
-
+  const handleChangeLike = (e) => {
+    e.stopPropagation();
+    if (!currentUser) navigate("/auth/sign-in");
+    dispatch(getLikeStudioPostAction(id, cate,currentUser?.id));
+  };
   return (
     <>
       <MetaDecorator
@@ -565,7 +407,7 @@ export const StudioDetail = () => {
         }
         title={studioDetail?.data?.Name}
       />
-      {loading ? (
+      {false ? (
         <div
           style={{
             width: "100%",
@@ -603,7 +445,11 @@ export const StudioDetail = () => {
                         e.stopPropagation();
                       }}
                     >
-                      <HeartOutlined className={cx("item")} />
+                      {studioDetail?.data?.UsersLiked ? (
+                        <HeartFilled onClick={handleChangeLike} className={cx("item")} />
+                      ) : (
+                        <HeartOutlined onClick={handleChangeLike} className={cx("item")} />
+                      )}
                     </PopUpSignIn>
                     <Popover
                       placement="bottomRight"

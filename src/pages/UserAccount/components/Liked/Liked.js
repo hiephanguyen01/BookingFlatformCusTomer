@@ -1,11 +1,12 @@
 import { Tabs } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getAllStudioLikedAction, getAllStudioLikedAction1 } from "../../../../stores/actions/studioPostAction";
+import {
+  getAllStudioLikedAction,
+  getAllStudioLikedAction1,
+} from "../../../../stores/actions/studioPostAction";
 import ListItem from "../../../Home/ListCard";
 import { DividerCustom } from "../OrderStatus/conponents/DividerCustom/DividerCustom";
-import { LikeAll } from "./components/LikeAll";
-import { LikeFilter } from "./components/LikeFilter";
 import "./liked.scss";
 const Liked = () => {
   const dispatch = useDispatch();
@@ -15,9 +16,9 @@ const Liked = () => {
     dispatch(getAllStudioLikedAction1(Number(key)));
     dispatch(getAllStudioLikedAction(Number(key)));
   };
-useEffect(()=>{
-  dispatch(getAllStudioLikedAction1(Number(1)));
-})
+  useEffect(() => {
+    dispatch(getAllStudioLikedAction1(Number(1)));
+  });
   return (
     <>
       <h4 className="Like__header">Danh sách đã thích</h4>
