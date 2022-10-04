@@ -1,17 +1,16 @@
-import React from "react";
-import "./FooterStatus.scss";
 import {
   ExclamationCircleOutlined,
   InfoCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "antd";
-import { RateModal } from "./RateModal/RateModal";
+import moment from "moment";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { orderService } from "../../../../../../../services/OrderService";
+import { socket } from "../../../../../../../components/ConnectSocket/ConnectSocket";
 import { chatService } from "../../../../../../../services/ChatService";
+import { orderService } from "../../../../../../../services/OrderService";
 import {
   createConverAction,
   findConverAction,
@@ -20,9 +19,8 @@ import {
   SHOW_CHAT,
   TOGGLE_STATE,
 } from "../../../../../../../stores/types/messType";
-import { socket } from "../../../../../../../components/ConnectSocket/ConnectSocket";
-import moment from "moment";
-
+import "./FooterStatus.scss";
+import { RateModal } from "./RateModal/RateModal";
 export const Footer = ({
   status,
   IdentifyCode,
@@ -103,10 +101,9 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1"
-            >
+              className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
-            </div>
+            </Link>
             <button className="FooterStatus__wait__button__2">
               Thanh toán cọc
             </button>
@@ -124,8 +121,7 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}
-          >
+            }}>
             Liên hệ
           </button>
         </div>
@@ -135,8 +131,7 @@ export const Footer = ({
         <div className="FooterStatus__complete">
           <button
             className="FooterStatus__complete__rating"
-            onClick={() => setVisible(true)}
-          >
+            onClick={() => setVisible(true)}>
             Đánh giá
           </button>
           <button className="FooterStatus__complete__order">Đặt lại</button>
@@ -146,8 +141,7 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal"
-          >
+            className="FooterStatus__complete__modal">
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
