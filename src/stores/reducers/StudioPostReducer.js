@@ -22,8 +22,16 @@ const initialState = {
   filter: {
     keyString: "",
     OrderByTime: -1,
-    OrderByTimeFrom: convertDateSendToDB(new Date()),
-    OrderByTimeTo: convertDateSendToDB(new Date()),
+    OrderByTimeFrom:
+      convertDateSendToDB(new Date()).slice(0, 13) + ":00:00.000Z",
+    OrderByTimeTo:
+      convertDateSendToDB(new Date()).slice(0, 11) +
+      `${
+        parseInt(convertDateSendToDB(new Date()).slice(11, 13)) > 9
+          ? parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
+          : `0${parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1}`
+      }` +
+      ":00:00.000Z",
     OrderByDateFrom: convertDateSendToDB(new Date()),
     OrderByDateTo: convertDateSendToDB(new Date()),
     category: 1,

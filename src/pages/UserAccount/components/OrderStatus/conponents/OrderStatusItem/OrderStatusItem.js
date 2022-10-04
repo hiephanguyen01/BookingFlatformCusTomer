@@ -13,9 +13,10 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_
 import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
 import "./OrderStatusItem.scss";
-const OrderStatusItem = (props) => {
+
+const OrderStatusItem = ({ item, pageBooking, setPageBooking, id}) => {
+
   const [post, setPost] = useState();
-  const { item, id } = props;
   const navigate = useNavigate();
   let {
     TenantId,
@@ -30,6 +31,7 @@ const OrderStatusItem = (props) => {
     DepositValue,
     BookingValue,
     category,
+    EvidenceImage,
   } = item;
   const orderDate = new Date(CreationTime);
   if (OrderByTimeFrom && OrderByTimeTo) {
@@ -150,7 +152,16 @@ const OrderStatusItem = (props) => {
           </div>
         </div>
         <Divider className="style-divider" />
-        <Footer id={id} status={BookingStatus} />
+        <Footer
+          id={id} 
+          status={BookingStatus}
+          IdentifyCode={IdentifyCode}
+          TenantId={TenantId}
+          EvidenceImage={EvidenceImage}
+          Category={category}
+          pageBooking={pageBooking}
+          setPageBooking={setPageBooking}
+        />
       </div>
     </>
   );

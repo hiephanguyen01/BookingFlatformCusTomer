@@ -25,19 +25,14 @@ export const convertPrice = (price) => {
 
 export const convertDateSendToDB = (date, prevDayFlag) => {
   //prevDayFlag là Boolean
-  // console.log(date);
   let convertDate = new Date(date);
-  // console.log("prevDayFlag:", prevDayFlag);
   convertDate = prevDayFlag
     ? new Date(convertDate.setDate(convertDate.getDate() - 1))
     : convertDate;
 
   const stringMoment = convertDate.toISOString();
-  // console.log(stringMoment.slice(11, 19));
   const thisMoment = new Date(`${stringMoment.slice(0, 23)}-07:00`);
-  // console.log(thisMoment);
   const modify = `${thisMoment.toISOString()}`;
-  // console.log(modify);
   return modify;
 };
 
@@ -63,7 +58,6 @@ export const numberWithDot = (x) => {
 };
 
 export const timeStructure = (date) => {
-  // console.log(date);
   return (
     ("0" + date.getHours()).slice(-2) +
     ":" +
@@ -76,8 +70,9 @@ export const timeStructure = (date) => {
     date.getFullYear()
   );
 };
+
 export const dateStructure = (date) => {
   return (
-    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    date?.getDate() + "/" + (date?.getMonth() + 1) + "/" + date?.getFullYear()
   );
 };

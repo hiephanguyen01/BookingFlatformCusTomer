@@ -64,7 +64,7 @@ const Option = ({ option, disabled }) => {
   switch (Number(filter.OrderByTime)) {
     case 0:
       return (
-        <div>
+        <div className="timeContainer">
           <Form.Item
             name="date"
             label="Chọn ngày"
@@ -99,6 +99,7 @@ const Option = ({ option, disabled }) => {
                   moment(filter.OrderByTimeTo.slice(11, 16), "HH:mm"),
                 ]}
                 disabled={disabled}
+                minuteStep={60}
               />
             </div>
           </Form.Item>

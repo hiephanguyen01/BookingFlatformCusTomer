@@ -12,17 +12,24 @@ import {
   findConverSelector,
 } from "../../../stores/selector/ChatSelector";
 import { updateMAction } from "../../../stores/actions/ChatAction";
+import { TOGGLE_STATE } from "../../../stores/types/messType";
 export const ChatBody = React.memo(() => {
-  const UserMe = useSelector((state)=> state.authenticateReducer.currentUser )
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const getToggleState = useSelector((state) => state.chatReducer.toggleState);
+  console.log(getToggleState);
   const updateConversation = useSelector(findConverSelector);
   const flagCreateConver = useSelector(createConverFlagSelector);
   const dispatch = useDispatch();
-  const [toggleState, setToggleState] = useState(1);
+  const [toggleState, setToggleState] = useState(getToggleState);
+  console.log(toggleState);
   const initMountStateUser = useRef([]);
   const [infoChatAdmin, setInfoChatAdmin] = useState();
   const [conversation, setConversation] = useState(initMountStateUser.current);
   const [hasMore, setHasMore] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
+  useEffect(() => {
+    setToggleState(getToggleState);
+  }, [getToggleState]);
   const userChat = () => {
     return conversation.map((chat) => (
       <ChatUser
@@ -31,11 +38,13 @@ export const ChatBody = React.memo(() => {
         toggleState={toggleState}
         toggleClick={(e) => {
           setToggleState(e);
+          dispatch({ type: TOGGLE_STATE, payload: e });
           dispatch(updateMAction());
         }}
       />
     ));
   };
+
   const contentChat = () => {
     return conversation.map((chat) => (
       <div
@@ -49,14 +58,17 @@ export const ChatBody = React.memo(() => {
   useEffect(() => {
     (async () => {
       const res = await chatService.getConversation(8, 1, UserMe.id, 1);
-      
       initMountStateUser.current = res.data.data;
       setConversation(res.data.data);
       setToggleState(res.data.data[0].id);
+      dispatch({ type: TOGGLE_STATE, payload: res.data.data[0].id });
     })();
   }, []);
   useEffect(() => {
-    if (flagCreateConver) setToggleState(flagCreateConver);
+    if (flagCreateConver) {
+      setToggleState(flagCreateConver);
+      dispatch({ type: TOGGLE_STATE, payload: flagCreateConver });
+    }
   }, [flagCreateConver]);
 
   useEffect(() => {
@@ -83,10 +95,12 @@ export const ChatBody = React.memo(() => {
             initMountStateUser.current = [data.data, ...newConversationUser];
             setConversation(initMountStateUser.current);
             setToggleState(data.data.id);
+            dispatch({ type: TOGGLE_STATE, payload: data.data.id });
           } else {
             initMountStateUser.current = [data.data, ...newConversationUser];
             setConversation(initMountStateUser.current);
             setToggleState(data.data.id);
+            dispatch({ type: TOGGLE_STATE, payload: data.data.id });
           }
         } catch (error) {
           console.log("ko ton tai ", error);
@@ -126,8 +140,10 @@ export const ChatBody = React.memo(() => {
         <ChatAdmin
           info={infoChatAdmin}
           toggleState={toggleState}
+          setToggleState={setToggleState}
           toggleClick={(e) => {
             setToggleState(e);
+            dispatch({ type: TOGGLE_STATE, payload: e });
             dispatch(updateMAction());
           }}
         />

@@ -16,7 +16,7 @@ const OrderStatus = () => {
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
-    category: 1,
+    // category: 1,
     BookingStatus: 1,
     EntryDate: JSON.stringify(EntryDate),
   });
@@ -54,6 +54,7 @@ const OrderStatus = () => {
       setLoading(false);
     })();
   }, [params]);
+
   useEffect(() => {
     if (filter.length) {
       setPageBooking(filter.slice(0, pageSize));
@@ -111,8 +112,8 @@ const OrderStatus = () => {
                     id={item.id}
                     key={idx}
                     item={item}
-                    booking={booking}
-                    setBooking={setBooking}
+                    pageBooking={pageBooking}
+                    setPageBooking={setPageBooking}
                   />
                 ))}
             </TabPane>
@@ -123,8 +124,8 @@ const OrderStatus = () => {
                     id={item.id}
                     key={idx}
                     item={item}
-                    booking={booking}
-                    setBooking={setBooking}
+                    pageBooking={pageBooking}
+                    setPageBooking={setPageBooking}
                   />
                 ))}
             </TabPane>
@@ -135,8 +136,8 @@ const OrderStatus = () => {
                     id={item.id}
                     key={idx}
                     item={item}
-                    booking={booking}
-                    setBooking={setBooking}
+                    pageBooking={pageBooking}
+                    setPageBooking={setPageBooking}
                   />
                 ))}
             </TabPane>

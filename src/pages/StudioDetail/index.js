@@ -25,10 +25,6 @@ import {
   addOrder,
   chooseServiceAction,
 } from "../../stores/actions/OrderAction";
-// import {
-//   getAllRatingStudioByIdAction,
-//   getNumberRateStudioByIdAction,
-// } from "../../stores/actions/RatingAcion";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
@@ -36,7 +32,6 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-// import { SET_SELECT_ROOM } from "../../stores/types/RoomType";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
@@ -45,10 +40,10 @@ import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 
-// import { Voucher } from "./Voucher";
-//import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-//import { convertImage } from "../../utils/convertImage";
-//import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { convertImage } from "../../utils/convertImage";
+import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -226,12 +221,12 @@ export const StudioDetail = () => {
                     }}
                   >
                     {filter.OrderByTime === 0 &&
-                      data?.PriceByDate?.toLocaleString("it-IT", {
+                      data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
                     {filter.OrderByTime === 1 &&
-                      data?.PriceByHour?.toLocaleString("it-IT", {
+                      data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
@@ -245,12 +240,12 @@ export const StudioDetail = () => {
                     }}
                   >
                     {filter.OrderByTime === 0 &&
-                      data?.PriceByDate?.toLocaleString("it-IT", {
+                      data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
                     {filter.OrderByTime === 1 &&
-                      data?.PriceByHour?.toLocaleString("it-IT", {
+                      data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
@@ -329,19 +324,34 @@ export const StudioDetail = () => {
   const [chooseService, setChooseService] = useState([]);
 
   const handleChooseService = (data) => {
-    let newChooseService = [...chooseService];
-    if (newChooseService.filter((item) => item.id === data.id).length > 0) {
-      newChooseService = newChooseService.filter((item) => item.id !== data.id);
+    if (filter.OrderByTime === 0 || filter.OrderByTime === 1) {
+      let newChooseService = [...chooseService];
+      if (newChooseService.filter((item) => item.id === data.id).length > 0) {
+        newChooseService = newChooseService.filter(
+          (item) => item.id !== data.id
+        );
+      } else {
+        newChooseService.push(data);
+      }
+      setChooseService(newChooseService);
     } else {
-      newChooseService.push(data);
+      toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn");
     }
-    setChooseService(newChooseService);
   };
 
   const handleBook = () => {
     if (chooseService.length > 0 && filter.OrderByTime !== -1) {
-      dispatch(chooseServiceAction(chooseService));
-      navigate("order");
+      if (filter.OrderByTime === 0) {
+        if (calTimeMinus(filter.OrderByTimeFrom, filter.OrderByTimeTo) >= 60) {
+          dispatch(chooseServiceAction(chooseService));
+          navigate("order");
+        } else {
+          toastMessage("Thời gian đặt tối thiểu là 60 phút!", "warn");
+        }
+      } else {
+        dispatch(chooseServiceAction(chooseService));
+        navigate("order");
+      }
     } else {
       if (filter.OrderByTime === -1) {
         toastMessage("Bạn cần chọn thời gian!", "warn");
@@ -601,12 +611,32 @@ export const StudioDetail = () => {
                             color: "#828282",
                           }}
                         >
-                          {`${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) => total + item.PriceByDate,
-                              0
-                            )
-                          )}`}
+                          {filter.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByHour *
+                                    calTime(
+                                      filter.OrderByTimeFrom,
+                                      filter.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}`}
+                          {filter.OrderByTime === 1 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByDate *
+                                    calDate(
+                                      filter.OrderByDateFrom,
+                                      filter.OrderByDateTo
+                                    ),
+                                0
+                              )
+                            )}`}
                           đ
                         </span>
                       )}
@@ -620,12 +650,32 @@ export const StudioDetail = () => {
                           fontWeight: "700",
                         }}
                       >
-                        {`${convertPrice(
-                          chooseService?.reduce(
-                            (total, item) => total + item.PriceByDate,
-                            0
-                          )
-                        )}`}
+                        {filter.OrderByTime === 0 &&
+                          `${convertPrice(
+                            chooseService?.reduce(
+                              (total, item) =>
+                                total +
+                                item.PriceByHour *
+                                  calTime(
+                                    filter.OrderByTimeFrom,
+                                    filter.OrderByTimeTo
+                                  ),
+                              0
+                            )
+                          )}`}
+                        {filter.OrderByTime === 1 &&
+                          `${convertPrice(
+                            chooseService?.reduce(
+                              (total, item) =>
+                                total +
+                                item.PriceByDate *
+                                  calDate(
+                                    filter.OrderByDateFrom,
+                                    filter.OrderByDateTo
+                                  ),
+                              0
+                            )
+                          )}`}
                         đ
                       </span>
                     </div>

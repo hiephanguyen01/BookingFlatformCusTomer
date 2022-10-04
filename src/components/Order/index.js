@@ -24,6 +24,7 @@ import toastMessage from "../ToastMessage";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
+import { calDate, calTime } from "../../utils/calculate";
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -66,7 +67,6 @@ const Index = ({ linkTo = "" }) => {
     default:
       break;
   }
-  console.log(cate);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setStudioPostIdAction(id));
@@ -104,7 +104,6 @@ const Index = ({ linkTo = "" }) => {
     });
     dispatch(chooseServiceAction(newListService));
   };
-
   const handleOnClickOrder = async () => {
     try {
       if (user === null) {
@@ -145,14 +144,6 @@ const Index = ({ linkTo = "" }) => {
             console.log("Đang trong này");
             const newData = {
               OrderByTime: 1,
-              // OrderByTimeFrom:
-              //   convertDateSendToDB(item.orderDate).slice(0, 11) +
-              //   item.orderHours[0] +
-              //   ":00.000Z",
-              // OrderByTimeTo:
-              // convertDateSendToDB(item.orderDate).slice(0, 11) +
-              //   item.orderHours[1] +
-              //   ":00.000Z",
               OrderByTimeFrom:
                 // convertDateSendToDB(filter.OrderByTimeFrom).slice(0, 11) +
                 // convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
@@ -168,13 +159,15 @@ const Index = ({ linkTo = "" }) => {
               BookingUserName: infoUser.name,
               BookingPhone: infoUser.phoneNumber,
               BookingEmail: infoUser.email,
-              BookingUserId: 1,
-              CreatorUserId: 1,
+              BookingUserId: user.id,
+              CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
               BookingValue:
-                chooseServiceList[i].Sales || chooseServiceList[i].PriceByHour,
+                (chooseServiceList[i].Sales ||
+                  chooseServiceList[i].PriceByHour) *
+                calTime(filter.OrderByTimeFrom, filter.OrderByTimeTo),
             };
             const response = await orderService.addOrder(newData);
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
@@ -195,13 +188,15 @@ const Index = ({ linkTo = "" }) => {
               BookingUserName: infoUser.name,
               BookingPhone: infoUser.phoneNumber,
               BookingEmail: infoUser.email,
-              BookingUserId: 1,
-              CreatorUserId: 1,
+              BookingUserId: user.id,
+              CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
               BookingValue:
-                chooseServiceList[i].Sales || chooseServiceList[i].PriceByDate,
+                (chooseServiceList[i].Sales ||
+                  chooseServiceList[i].PriceByDate) *
+                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
             };
             const response = await orderService.addOrder(newData);
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
@@ -372,21 +367,31 @@ const Index = ({ linkTo = "" }) => {
                       marginBottom: "12px",
                     }}>
                     {filter.OrderByTime === 0 &&
-                      convertPrice(
-                        chooseServiceList.reduce(
+                      `${convertPrice(
+                        chooseServiceList?.reduce(
                           (total, service) =>
-                            total + (service.Sales || service.PriceByHour),
+                            total +
+                            (service.Sales || service.PriceByHour) *
+                              calTime(
+                                filter.OrderByTimeFrom,
+                                filter.OrderByTimeTo
+                              ),
                           0
                         )
-                      )}
+                      )}`}
                     {filter.OrderByTime === 1 &&
-                      convertPrice(
-                        chooseServiceList.reduce(
+                      `${convertPrice(
+                        chooseServiceList?.reduce(
                           (total, service) =>
-                            total + (service.Sales || service.PriceByDate),
+                            total +
+                            (service.Sales || service.PriceByDate) *
+                              calDate(
+                                filter.OrderByDateFrom,
+                                filter.OrderByDateTo
+                              ),
                           0
                         )
-                      )}
+                      )}`}
                     đ
                   </div>
                 </div>
@@ -405,21 +410,31 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}>
                     {filter.OrderByTime === 0 &&
-                      convertPrice(
-                        chooseServiceList.reduce(
+                      `${convertPrice(
+                        chooseServiceList?.reduce(
                           (total, service) =>
-                            total + (service.Sales || service.PriceByHour),
+                            total +
+                            (service.Sales || service.PriceByHour) *
+                              calTime(
+                                filter.OrderByTimeFrom,
+                                filter.OrderByTimeTo
+                              ),
                           0
                         )
-                      )}
+                      )}`}
                     {filter.OrderByTime === 1 &&
-                      convertPrice(
-                        chooseServiceList.reduce(
+                      `${convertPrice(
+                        chooseServiceList?.reduce(
                           (total, service) =>
-                            total + (service.Sales || service.PriceByDate),
+                            total +
+                            (service.Sales || service.PriceByDate) *
+                              calDate(
+                                filter.OrderByDateFrom,
+                                filter.OrderByDateTo
+                              ),
                           0
                         )
-                      )}
+                      )}`}
                     đ
                   </div>
                 </div>

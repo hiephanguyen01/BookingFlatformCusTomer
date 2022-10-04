@@ -10,9 +10,6 @@ class OrderService extends BaseService {
   getOrderById = (id, category) => {
     return this.get(`/api/booking/byid?id=${id}&category=${category}`);
   };
-  getTotalOrderOfStudio = (id, category) => {
-    return this.get(`/api/booking/count?id=${id}&category=${category}`);
-  };
   addOrder = (data) => {
     return this.post("/api/booking", data);
   };

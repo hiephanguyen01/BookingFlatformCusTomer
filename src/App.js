@@ -19,7 +19,7 @@ import PageModel from "./pages/ModelDetails/PageModel";
 import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
 import PageStudio from "./pages/StudioDetail/PageStudio";
 import UserAccount from "./pages/UserAccount";
-import UpdateConfirm from "./pages/UserAccount/components/OrderStatus/conponents/UpdateConfirm/index";
+import UpdateConfirm from "./components/ConfirmOrder";
 import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import PostDetail from "./pages/PostDetail/PostDetail";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
