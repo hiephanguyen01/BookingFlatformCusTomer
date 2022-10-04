@@ -43,6 +43,18 @@ const Index = () => {
   const [file, setFile] = useState({});
   const [partner, setPartner] = useState({});
 
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(
+      `${
+        location?.state?.IdentifyCode &&
+        location?.state?.IdentifyCode?.join(", ").length > 30
+          ? `${location.state.IdentifyCode.join(", ").slice(0, 30)}...`
+          : location.state.IdentifyCode.join(", ")
+      }`
+    );
+    toastMessage("Đã lưu mã booking vào bộ nhớ tạm!", "success");
+  };
+
   useEffect(() => {
     const getPartner = async () => {
       try {
@@ -93,7 +105,8 @@ const Index = () => {
   return (
     <div
       className="py-12"
-      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}>
+      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
+    >
       <div className="confirm_order_container">
         <div className="border_bottom">
           <div className="confirm_title">
@@ -115,7 +128,11 @@ const Index = () => {
                   : location.state.IdentifyCode.join(", ")}
               </span>
             </div>
-            <div className="text-medium-re" style={{ color: "#03AC84" }}>
+            <div
+              onClick={handleCopyToClipboard}
+              className="text-medium-re"
+              style={{ color: "#03AC84", cursor: "pointer" }}
+            >
               SAO CHÉP
             </div>
           </div>
@@ -133,7 +150,8 @@ const Index = () => {
           <div className="d-flex justify-content-between mb-18">
             <div
               className=" text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Số tài khoản:
             </div>
             <div
@@ -142,14 +160,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               {partner.BankAccount}
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Ngân hàng:
             </div>
             <div
@@ -158,14 +178,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               {partner.BankBranchName}
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Tên thụ hưởng:
             </div>
             <div
@@ -174,14 +196,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               {partner.BankAccountOwnerName}
             </div>
           </div>
           <div className="d-flex justify-content-between">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Nội dung chuyển khoản:
             </div>
             <div
@@ -190,7 +214,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               {location?.state?.IdentifyCode &&
               location?.state?.IdentifyCode?.join(", ").length > 30
                 ? `${location.state.IdentifyCode.join(", ").slice(0, 30)}...`
@@ -210,13 +235,15 @@ const Index = () => {
             <UploadImage
               onChangeFile={onChangeFile}
               multiple={true}
-              image={file.preview}>
+              image={file.preview}
+            >
               <div className="btn_upload">Tải ảnh lên</div>
             </UploadImage>
           </div>
           <div
             className="btn_update text-medium-se mb-30 "
-            onClick={handleClickBtnUpdate}>
+            onClick={handleClickBtnUpdate}
+          >
             Cập nhật minh chứng
           </div>
           <div className="d-flex">

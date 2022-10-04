@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -21,7 +21,6 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-
 import {
   addOrder,
   chooseServiceAction,
@@ -51,15 +50,14 @@ import { SlideCard } from "./SlideCard";
 //import { convertImage } from "../../utils/convertImage";
 //import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
-
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
   { title: "Mô tả", size: 7 },
   { title: "Giá cho thời gian bạn đã chọn ", size: 7 },
   { title: "Chọn dịch vụ", size: 4 },
 ];
-
 const cx = classNames.bind(styles);
+
 export const StudioDetail = () => {
   const { id } = useParams();
   const { pathname } = useLocation();
@@ -110,6 +108,7 @@ export const StudioDetail = () => {
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
         {
+          key: "title",
           render: () => (
             <div style={{ textAlign: "center" }}>
               <img
@@ -204,9 +203,11 @@ export const StudioDetail = () => {
           ),
         },
         {
+          key: "desc",
           render: () => <p>{data.Description}</p>,
         },
         {
+          key: "currency",
           render: () => (
             <>
               <div>
@@ -280,6 +281,7 @@ export const StudioDetail = () => {
           ),
         },
         {
+          key: "choose",
           render: () => (
             <>
               {chooseService.filter((item) => item.id === data.id).length >
@@ -359,7 +361,7 @@ export const StudioDetail = () => {
   const handleChangeLike = (e) => {
     e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate,currentUser?.id));
+    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
   };
   return (
     <>
@@ -413,9 +415,15 @@ export const StudioDetail = () => {
                       }}
                     >
                       {studioDetail?.data?.UsersLiked ? (
-                        <HeartFilled onClick={handleChangeLike} className={cx("item")} />
+                        <HeartFilled
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
                       ) : (
-                        <HeartOutlined onClick={handleChangeLike} className={cx("item")} />
+                        <HeartOutlined
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
                       )}
                     </PopUpSignIn>
                     <Popover
@@ -464,7 +472,7 @@ export const StudioDetail = () => {
                     className={cx("number-order")}
                     style={{ fontSize: "15px" }}
                   >
-                    60 đã đặt{" "}
+                    {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
                 {/* <div className={cx("container")}>

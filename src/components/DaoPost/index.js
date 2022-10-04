@@ -223,7 +223,6 @@ const DaoPost = (props) => {
               </Col>
             );
           } else {
-            // console.log(idx);
             return (
               <Col
                 key={idx}
@@ -277,7 +276,6 @@ const DaoPost = (props) => {
       </Row>
     );
   } else if (tempCount > 4) {
-    console.log("Post này có hơn 4 bài nè");
     ImageSection = (
       <Row gutter={[16, 16]}>
         {Image.map((img, idx) => {
@@ -318,10 +316,6 @@ const DaoPost = (props) => {
               </Col>
             );
           }
-          // else{
-          //   let remainImg = tempCount - 4
-          //   return
-          // }
         })}
       </Row>
     );
