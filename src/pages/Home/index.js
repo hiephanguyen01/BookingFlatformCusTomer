@@ -32,6 +32,7 @@ import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import styles from "./home.module.scss";
 import { ListItem } from "./ListCard";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const cx = classNames.bind(styles);
 const { Option } = AutoComplete;
@@ -160,7 +161,7 @@ const { Option } = AutoComplete;
 export const Home = () => {
   // const category = useSelector((state) => state.listByCategoryReducer.category);
   // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
-  const { filter, laoding } = useSelector((state) => state.studioPostReducer);
+  const { filter, loading } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   const [chooseCate, setChooseCate] = useState();
@@ -188,6 +189,7 @@ export const Home = () => {
     dispatch(getTop10OrderDeviceAction(5));
     dispatch(getTop10OrderModelAction(6));
   }, [dispatch]);
+
   useEffect(() => {
     if (currentUser !== null) {
       dispatch(getAllStudioLikedAction1(1));
@@ -286,7 +288,7 @@ export const Home = () => {
         </div>
 
         {/* <ListItem title="Được đặt nhiều nhất" />
-        <ListItem title="Đã xem gần đây" /> */}
+      <ListItem title="Đã xem gần đây" /> */}
         <SlideCard
           category={{ name: "studio", id: 1 }}
           data={listOustandingStudioPost}

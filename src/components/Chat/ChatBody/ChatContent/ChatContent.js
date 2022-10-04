@@ -59,8 +59,6 @@ export const ChatContent = React.memo(({ chatInfo }) => {
           (item) => item.TenantId === chatInfo.PartnerId.id
         );
         setBooking(filterBooking);
-        console.log(data.data);
-        console.log(chatInfo);
       } catch (error) {
         console.log(error);
       }

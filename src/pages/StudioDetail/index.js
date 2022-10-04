@@ -56,7 +56,6 @@ export const StudioDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  console.log(currentUser?.id);
   const {
     studioDetail1,
     studioDetail,
@@ -90,6 +89,13 @@ export const StudioDetail = () => {
     dispatch(getDetailRoomAction(id));
     dispatch(getAllStudioPost(10, 1, 1));
   }, [id, dispatch, cate, currentUser]);
+
+  useEffect(() => {
+    console.log(currentUser?.id);
+    return () => {
+      dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
+    };
+  }, []);
 
   const handleReport = () => {
     dispatch({ type: SHOW_MODAL, Component: <Report /> });
@@ -366,7 +372,7 @@ export const StudioDetail = () => {
         }
         title={studioDetail?.data?.Name}
       />
-      {false ? (
+      {loading ? (
         <div
           style={{
             width: "100%",
