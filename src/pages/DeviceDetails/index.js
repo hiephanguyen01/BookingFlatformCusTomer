@@ -18,7 +18,6 @@ import "./deviceDetails.scss";
 
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
-import SlideCard from "../../components/SlideCard";
 import Report from "../../components/ReportModal";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
@@ -29,6 +28,7 @@ import deviceImg from "../../assets/images/deviceImg.png";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
@@ -39,6 +39,7 @@ import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
+import { SlideCard } from "../StudioDetail/SlideCard";
 
 const COLUMN = [
   { title: "Loại sản phẩm", size: 5 },
@@ -104,7 +105,7 @@ const menu_amount = (
 );
 
 const Index = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, filter, loading,listStudioSimilar } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -126,6 +127,7 @@ const Index = () => {
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
   console.log(studioDetail);
 
@@ -603,7 +605,15 @@ const Index = () => {
                 <CommentRating data={[]} className="mb-43" />
               </Col>
             </Row>
-            <SlideCard title="Trang phục tương tự" />
+            {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "device", id: 5 }}
+                title="Thiết bị tương tự"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       )}

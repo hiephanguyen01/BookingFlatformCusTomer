@@ -1,43 +1,42 @@
 import {
-  CheckCircleOutlined,
-  DownOutlined,
-  ExclamationCircleOutlined,
+  CheckCircleOutlined, ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
   RightOutlined,
-  ShoppingCartOutlined,
+  ShoppingCartOutlined
 } from "@ant-design/icons";
 import { Button, Col, Dropdown, Menu, Rate, Row, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-
-import "./clothesDetails.scss";
-
-import Table from "../../components/Table";
-import CommentRating from "../../components/CommentRating";
-import SlideCard from "../../components/SlideCard";
-import Report from "../../components/ReportModal";
-import ReadMoreDesc from "../../components/ReadMoreDesc";
-
-import svgLocation from "../../assets/svg/location.svg";
 import imgPost from "../../assets/dao/Frame 163.jpg";
+import svgLocation from "../../assets/svg/location.svg";
+import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import ReadMoreDesc from "../../components/ReadMoreDesc";
+import Report from "../../components/ReportModal";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import Table from "../../components/Table";
+import toastMessage from "../../components/ToastMessage";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import {
   getLikeStudioPostAction,
-  studioDetailAction,
+  getStudioSimilarAction,
+  studioDetailAction
 } from "../../stores/actions/studioPostAction";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertPrice } from "../../utils/convert";
+import { convertImage } from "../../utils/convertImage";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
-import toastMessage from "../../components/ToastMessage";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
-import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { convertImage } from "../../utils/convertImage";
+import { SlideCard } from "../StudioDetail/SlideCard";
+import "./clothesDetails.scss";
+
+
+
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -57,7 +56,7 @@ const QUANTITY = [
 ];
 
 const Index = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, filter, loading,listStudioSimilar } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -80,6 +79,7 @@ const Index = () => {
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
   console.log(studioDetail);
@@ -109,7 +109,8 @@ const Index = () => {
             <div
               onClick={() =>
                 dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }>
+              }
+            >
               <ExclamationCircleOutlined className="me-10" />
               Báo cáo
             </div>
@@ -155,7 +156,8 @@ const Index = () => {
                 style={{
                   width: "100%",
                 }}
-                onChange={handleChange}>
+                onChange={handleChange}
+              >
                 {SIZE.map((item) => (
                   <Option value={item.id}>{item.label}</Option>
                 ))}
@@ -171,7 +173,8 @@ const Index = () => {
               style={{
                 width: "100%",
               }}
-              onChange={handleChange}>
+              onChange={handleChange}
+            >
               {COLOR.map((item) => (
                 <Option value={item.id}>{item.label}</Option>
               ))}
@@ -186,7 +189,8 @@ const Index = () => {
               style={{
                 width: "100%",
               }}
-              onChange={handleChange}>
+              onChange={handleChange}
+            >
               {QUANTITY.map((item) => (
                 <Option value={item.id}>{item.label}</Option>
               ))}
@@ -205,14 +209,16 @@ const Index = () => {
                   lineHeight: "16px",
                   color: "#828282",
                   textDecoration: "line-through",
-                }}>
+                }}
+              >
                 {convertPrice(data.Sales)}
               </div>
               <h4
                 style={{
                   marginBottom: "12px",
                   color: "#E22828",
-                }}>
+                }}
+              >
                 {convertPrice(data.Price)}
               </h4>
               <span
@@ -222,7 +228,8 @@ const Index = () => {
                   borderRadius: "4px",
                   padding: "3px 10px",
                   color: "#ffffff",
-                }}>
+                }}
+              >
                 Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
             </>
@@ -245,7 +252,8 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Bỏ chọn
                 </span>
               ) : (
@@ -261,7 +269,8 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Chọn
                 </span>
               )}
@@ -301,12 +310,14 @@ const Index = () => {
             margin: "auto",
             backgroundColor: "rgb(245, 245, 245)",
             padding: "2rem 0",
-          }}>
+          }}
+        >
           <div className="costume_container">
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}>
+                style={{ marginBottom: "11px" }}
+              >
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -379,7 +390,8 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem", height: "100%" }}
-                  className="mb-12">
+                  className="mb-12"
+                >
                   <div className="desc_col_left">
                     <ReadMoreDesc title="Chi tiết sản phẩm">
                       {studioDetail?.data?.Description}
@@ -391,7 +403,8 @@ const Index = () => {
                     lg={8}
                     sm={24}
                     style={{ paddingLeft: "0.25rem", height: "100%" }}
-                    className="mb-12">
+                    className="mb-12"
+                  >
                     <div className="desc_col_right">
                       <div className="d-flex mb-25" style={{}}>
                         <img
@@ -436,13 +449,15 @@ const Index = () => {
                   className="py-26 px-18"
                   style={{
                     backgroundColor: "#ffffff",
-                  }}>
+                  }}
+                >
                   <div
                     className="mb-15"
                     style={{
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}>
+                    }}
+                  >
                     4 Mã khuyến mãi
                   </div>
                   <div className="d-flex align-items-center">
@@ -453,7 +468,8 @@ const Index = () => {
                         padding: "7px 13px",
                         color: "#1FCBA2",
                         marginRight: "0.5rem",
-                      }}>
+                      }}
+                    >
                       Giảm 50K
                     </div>
                     <div
@@ -463,7 +479,8 @@ const Index = () => {
                         padding: "7px 13px",
                         color: "#1FCBA2",
                         marginRight: "0.5rem",
-                      }}>
+                      }}
+                    >
                       Giảm 100K
                     </div>
                     <RightOutlined style={{ color: "#1FCBA2" }} />
@@ -477,12 +494,14 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem" }}
-                  className="col_left">
+                  className="col_left"
+                >
                   <div
                     className=" py-22 mb-12 h-100"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}>
+                    }}
+                  >
                     <div className=" px-24">
                       <Link to="#" className="choose_size text-medium-se ">
                         Hướng dẫn chọn size{" "}
@@ -501,7 +520,8 @@ const Index = () => {
                       padding: "24px 26px",
                       backgroundColor: "#ffffff",
                       // height: "100%",
-                    }}>
+                    }}
+                  >
                     <div className="d-flex justify-content-between mb-12">
                       <div
                         className=""
@@ -511,7 +531,8 @@ const Index = () => {
                           lineHeight: "25px",
                           /* Neutral/Grey 700 */
                           color: "#222222",
-                        }}>
+                        }}
+                      >
                         Đã chọn {chooseService.length} sản phẩm
                       </div>
                       {chooseService.length > 0 && (
@@ -523,7 +544,8 @@ const Index = () => {
                             textDecorationLine: "line-through",
                             /* Neutral/Grey 400 */
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           {`${convertPrice(
                             chooseService?.reduce(
                               (total, item) => total + item.Price,
@@ -545,7 +567,8 @@ const Index = () => {
                           lineHeight: "27px",
                           /* Primary/Red 700 */
                           color: "#E22828",
-                        }}>
+                        }}
+                      >
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) => total + item.Sales,
@@ -562,7 +585,8 @@ const Index = () => {
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}>
+                        onClick={handleBook}
+                      >
                         Đặt ngay
                       </Button>
                     </div>
@@ -571,7 +595,15 @@ const Index = () => {
               </Row>
             </div>
             <CommentRating data={[]} className="mb-43" />
-            <SlideCard title="Trang phục tương tự" />
+            {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "clothes", id: 3 }}
+                title="Trang phục tương tự"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       ) : (
@@ -580,7 +612,8 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -588,7 +621,8 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>

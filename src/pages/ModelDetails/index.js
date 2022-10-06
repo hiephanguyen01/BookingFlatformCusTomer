@@ -19,7 +19,6 @@ import "./modelDetails.scss";
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
 import SlideAlbum from "./components/SlideAlbum";
-import SlideCard from "../../components/SlideCard";
 import Report from "../../components/ReportModal";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
@@ -28,6 +27,7 @@ import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
@@ -38,6 +38,7 @@ import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
+import { SlideCard } from "../StudioDetail/SlideCard";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -47,7 +48,7 @@ const COLUMN = [
 ];
 
 const Index = () => {
-  const { studioDetail, loading, filter } = useSelector(
+  const { studioDetail, loading, filter, listStudioSimilar } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -68,6 +69,7 @@ const Index = () => {
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
   const handleChangeLike = (e) => {
@@ -560,7 +562,15 @@ const Index = () => {
                 <CommentRating data={[]} className="mb-43" />
               </Col>
             </Row>
-            <SlideCard title="Trang phục tương tự" />
+            {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "model", id: 6 }}
+                title="Model tương tự"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       )}

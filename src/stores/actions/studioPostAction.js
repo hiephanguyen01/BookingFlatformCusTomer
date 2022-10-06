@@ -64,6 +64,7 @@ export const studioDetailAction = (id, category, currentUser) => {
       }
       if (currentUser) {
         await userService.setRecentViews(id, category);
+        dispatch(getAllStudioLikedAction1(category));
       }
       dispatch({
         type: SET_STUDIO_DETAIL,
@@ -123,7 +124,7 @@ export const getLikeStudioPostAction = (postId, category, currentUser = "") => {
       });
       dispatch(getAllStudioLikedAction1(category));
       dispatch(getAllStudioLikedAction(category));
-      if (currentUser.trim !== "") {
+      if (currentUser) {
         dispatch(studioDetailAction(postId, category, currentUser));
       }
     } catch (error) {

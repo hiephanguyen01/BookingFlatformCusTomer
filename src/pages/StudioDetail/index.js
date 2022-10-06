@@ -64,9 +64,9 @@ export const StudioDetail = () => {
     studioPostList,
     filter,
     loading,
-    listStudioSimilar
+    listStudioSimilar,
   } = useSelector((state) => state.studioPostReducer);
-  console.log(studioNear);
+  console.log(studioDetail);
   // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
@@ -390,7 +390,7 @@ export const StudioDetail = () => {
         }
         title={studioDetail?.data?.Name}
       />
-      {loading ? (
+      {false ? (
         <div
           style={{
             width: "100%",
@@ -741,13 +741,15 @@ export const StudioDetail = () => {
                 </div>
               </div>
               <SlideCard
-                data={
-                  listStudioSimilar ??
-                  listStudioSimilar
-                }
+                data={listStudioSimilar ?? listStudioSimilar}
+                category={{ name: "studio", id: 1 }}
                 title="Studio tương tự"
               />
-              <SlideCard data={studioNear ?? studioNear} title="Gần bạn" />
+              <SlideCard
+                data={studioNear ?? studioNear}
+                category={{ name: "studio", id: 1 }}
+                title="Gần bạn"
+              />
               {/* <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" /> */}
             </div>
           </div>
