@@ -14,6 +14,7 @@ import {
   SET_LIST_LIKED_CATEGORY_5,
   SET_LIST_LIKED_CATEGORY_6,
   SET_LIST_LIKED_CATEGORY,
+  SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -55,6 +56,7 @@ const initialState = {
   listLikedCategory5: [],
   listLikedCategory6: [],
   listLikedUser: [],
+  listStudioSimilar: [],
 };
 
 export const studioPostReducer = (state = initialState, action) => {
@@ -129,6 +131,11 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         listLikedCategory6: action.data,
+      };
+    case SET_STUDIO_SIMILAR:
+      return {
+        ...state,
+        listStudioSimilar: action.data,
       };
 
     default:

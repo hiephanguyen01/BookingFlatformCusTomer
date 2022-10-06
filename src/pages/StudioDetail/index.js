@@ -29,6 +29,7 @@ import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
@@ -63,8 +64,9 @@ export const StudioDetail = () => {
     studioPostList,
     filter,
     loading,
+    listStudioSimilar
   } = useSelector((state) => state.studioPostReducer);
-  console.log(studioDetail);
+  console.log(studioNear);
   // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
   const { ratingStudioPostDetai, numberRating } = useSelector(
     (state) => state.ratingReducer
@@ -87,7 +89,7 @@ export const StudioDetail = () => {
       dispatch(studioDetailAction(id, cate));
     }
     dispatch(getDetailRoomAction(id));
-    dispatch(getAllStudioPost(10, 1, 1));
+    dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
   useEffect(() => {
@@ -740,8 +742,8 @@ export const StudioDetail = () => {
               </div>
               <SlideCard
                 data={
-                  studioPostList ??
-                  studioPostList.filter((item) => item.id !== id)
+                  listStudioSimilar ??
+                  listStudioSimilar
                 }
                 title="Studio tương tự"
               />
