@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./confirmOrder.scss";
 
@@ -12,7 +12,7 @@ import { convertImage } from "../../utils/convertImage";
 
 const Index = () => {
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
   const navigate = useNavigate();
   let cate;
   const nameCategory = location.pathname
@@ -47,14 +47,7 @@ const Index = () => {
   const [partner, setPartner] = useState({});
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(
-      `${
-        location?.state?.IdentifyCode &&
-        location?.state?.IdentifyCode?.join(", ").length > 30
-          ? `${location.state.IdentifyCode.join(", ").slice(0, 30)}...`
-          : location.state.IdentifyCode.join(", ")
-      }`
-    );
+    navigator.clipboard.writeText(location?.state?.IdentifyCode);
     toastMessage("Đã lưu mã booking vào bộ nhớ tạm!", "success");
   };
 
@@ -75,7 +68,7 @@ const Index = () => {
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
-    console.log(newFile);
+    // console.log(newFile);
     if (newFile.preview !== null) {
       setFile(newFile);
     }
@@ -96,7 +89,7 @@ const Index = () => {
             formData,
             IdentifyCode[i]
           );
-          console.log(response);
+          // console.log(response);
         }
         if (location?.state?.updatePay || false) {
           toastMessage("Cập nhật minh chứng thành công!", "success");
@@ -127,16 +120,11 @@ const Index = () => {
 
         <div className="border_bottom">
           <div className="d-flex justify-content-between mb-12">
-            <div className="booking_code text-medium-re">
-              Mã Booking:
-              <span className="text-medium-se">
-                {location?.state?.IdentifyCode > 1
-                  ? `${location?.state?.IdentifyCode?.join(", ").slice(
-                      0,
-                      30
-                    )}...`
-                  : `${location?.state?.IdentifyCode?.slice(0, 30)}...`}
-              </span>
+            <div className="booking_code d-flex text-medium-re">
+              <p>Mã Booking:</p>
+              <div className="banking-mess text-medium-se">
+                {location?.state?.IdentifyCode}
+              </div>
             </div>
             <div
               onClick={handleCopyToClipboard}
@@ -219,16 +207,14 @@ const Index = () => {
               Nội dung chuyển khoản:
             </div>
             <div
-              className="text-medium-se w-60"
+              className="banking-mess text-medium-se w-60"
               style={{
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
               }}
             >
-              {location?.state?.IdentifyCode > 1
-                ? `${location?.state?.IdentifyCode?.join(", ").slice(0, 30)}...`
-                : `${location?.state?.IdentifyCode?.slice(0, 30)}...`}
+              {location?.state?.IdentifyCode}
             </div>
           </div>
         </div>

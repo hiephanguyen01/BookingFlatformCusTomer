@@ -103,6 +103,9 @@
   max-width: 700px !important;
   width: 700px !important;
 
+  .ant-modal-header {
+    border-radius: 10px !important;
+  }
   .ant-modal-header,
   .ant-modal-footer {
     border: none !important;
