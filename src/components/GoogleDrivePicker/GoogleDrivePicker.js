@@ -13,10 +13,10 @@ const GoogleDrivePicker = ({ files, setFiles }) => {
         "1082256084414-9h6v2ndvh6782nhbrhg7nf4i2jotglj8.apps.googleusercontent.com",
       developerKey: "AIzaSyCkcQ9mQMakZutniH3f4dAUGYpXIrzxpys",
       viewId: "DOCS",
-      token:
-        "ya29.a0Aa4xrXOW5SXFPnOHbAguW6b3lJzLj3fQoYp4-HZDrnh1MCaNOFM4q836GM10-T3U4Mi24m1kxt0czNof7XnO67bQG4OztcOGpQ5Zzsgt-IYC-bMbOTDG8gJNRUsNafVez2oKtFzuWVjRyE-lftlzsQDmwUNCaCgYKATASARESFQEjDvL9rZ-Bnou8CMUMgY8pGhhqvg0163", // pass oauth token in case you already have one
-      showUploadView: false,
-      showUploadFolders: false,
+      // token:
+      //   "ya29.a0Aa4xrXOW5SXFPnOHbAguW6b3lJzLj3fQoYp4-HZDrnh1MCaNOFM4q836GM10-T3U4Mi24m1kxt0czNof7XnO67bQG4OztcOGpQ5Zzsgt-IYC-bMbOTDG8gJNRUsNafVez2oKtFzuWVjRyE-lftlzsQDmwUNCaCgYKATASARESFQEjDvL9rZ-Bnou8CMUMgY8pGhhqvg0163", // pass oauth token in case you already have one
+      showUploadView: true,
+      showUploadFolders: true,
       supportDrives: true,
       multiselect: true,
       // customViews: customViewsArray, // custom view
