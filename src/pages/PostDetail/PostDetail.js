@@ -46,7 +46,7 @@ const PostDetail = () => {
   console.log(postDetail);
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
-
+    
     return () => {
       dispatch({ type: "DELETE_DETAIL_POST", data: {} });
     };

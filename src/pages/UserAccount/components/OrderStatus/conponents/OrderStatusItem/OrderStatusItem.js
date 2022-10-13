@@ -161,6 +161,8 @@ const OrderStatusItem = ({ item, pageBooking, setPageBooking, id}) => {
           Category={category}
           pageBooking={pageBooking}
           setPageBooking={setPageBooking}
+          Item={Item}
+          post={post}
         />
       </div>
     </>

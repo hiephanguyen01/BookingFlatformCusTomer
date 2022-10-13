@@ -26,6 +26,9 @@ class StudioPostService extends BaseService {
   getStudioNear = (id, lat, lng) => {
     return this.get(`/api/studio-post/distance/${id}?lat=${lat}&lng=${lng}`);
   };
+  getStudioSimilar = (id, cate) => {
+    return this.get(`/api/studio-post/similar/${id}?category=${cate}`);
+  };
   getLikeStudioPost = (data) => {
     return this.post(`/api/booking-user/like-studio-post`, data);
   };

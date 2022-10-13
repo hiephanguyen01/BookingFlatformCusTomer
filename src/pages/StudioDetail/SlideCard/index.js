@@ -30,8 +30,8 @@ export const SlideCard = ({ title, data, category }) => {
             loop={true}
             grabCursor={true}
             autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
+              delay: 3500,
+              // disableOnInteraction: false,
             }}
             navigation={true}
             breakpoints={{

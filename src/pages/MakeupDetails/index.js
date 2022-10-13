@@ -20,7 +20,6 @@ import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import Report from "../../components/ReportModal";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
-import SlideCard from "../../components/SlideCard";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
 import {
@@ -29,6 +28,7 @@ import {
 } from "../../stores/actions/OrderAction";
 import {
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
@@ -36,6 +36,7 @@ import { calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import { SlideCard } from "../StudioDetail/SlideCard";
 import SlideAlbum from "./components/SlideAlbum";
 import "./makeupDetails.scss";
 import Voucher from "../../components/Voucher";
@@ -49,7 +50,7 @@ const COLUMN = [
   { title: "Chọn dịch vụ", size: 4 },
 ];
 const Index = () => {
-  const { studioDetail, loading, filter } = useSelector(
+  const { studioDetail, loading, filter, listStudioSimilar } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -71,6 +72,7 @@ const Index = () => {
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
@@ -325,12 +327,14 @@ const Index = () => {
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
-                <Rate
+              <Rate
                   disabled
                   allowHalf
-                  defaultValue={4.5}
-                  className="rating"
+                  value={studioDetail?.data?.TotalRate}
+                  className="rating d-flex align-items-center"
                 />
+
+                <span className="reserve">{studioDetail?.data?.TotalRate}</span>
                 <span className="reserve">
                   Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
@@ -574,11 +578,18 @@ const Index = () => {
             )}
             <Row>
               <Col lg={16} md={24}>
-                {" "}
-                <CommentRating data={[]} className="mb-43" />
+                <CommentRating data={studioDetail} className="mb-43" />
               </Col>
             </Row>
-            <SlideCard title="Trang phục tương tự" />
+            {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "makeup", id: 4 }}
+                title="Trang điểm tương tự"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       ) : (

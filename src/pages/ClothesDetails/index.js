@@ -1,6 +1,5 @@
 import {
   CheckCircleOutlined,
-  DownOutlined,
   ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
@@ -13,26 +12,29 @@ import { Button, Col, Dropdown, Menu, Rate, Row, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-
-import "./clothesDetails.scss";
-
-import Table from "../../components/Table";
-import CommentRating from "../../components/CommentRating";
-import SlideCard from "../../components/SlideCard";
-import Report from "../../components/ReportModal";
-import ReadMoreDesc from "../../components/ReadMoreDesc";
-
-import svgLocation from "../../assets/svg/location.svg";
 import imgPost from "../../assets/dao/Frame 163.jpg";
+import svgLocation from "../../assets/svg/location.svg";
+import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import ReadMoreDesc from "../../components/ReadMoreDesc";
+import Report from "../../components/ReportModal";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import Table from "../../components/Table";
+import toastMessage from "../../components/ToastMessage";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import {
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertPrice } from "../../utils/convert";
+import { convertImage } from "../../utils/convertImage";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
+import { SlideCard } from "../StudioDetail/SlideCard";
+import "./clothesDetails.scss";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
@@ -60,7 +62,7 @@ const QUANTITY = [
 ];
 
 const Index = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, filter, loading, listStudioSimilar } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -83,6 +85,7 @@ const Index = () => {
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
@@ -381,9 +384,11 @@ const Index = () => {
                 <Rate
                   disabled
                   allowHalf
-                  defaultValue={4.5}
+                  value={studioDetail?.data?.TotalRate}
                   className="rating d-flex align-items-center"
                 />
+
+                <span className="reserve">{studioDetail?.data?.TotalRate}</span>
                 <span className="reserve">
                   Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
@@ -600,8 +605,16 @@ const Index = () => {
                 </Col>
               </Row>
             </div>
-            <CommentRating data={[]} className="mb-43" />
-            <SlideCard title="Trang phục tương tự" />
+            <CommentRating data={studioDetail} className="mb-43" />
+            {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "clothes", id: 3 }}
+                title="Trang phục tương tự"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       ) : (
