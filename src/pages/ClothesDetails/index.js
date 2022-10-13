@@ -1,11 +1,12 @@
 import {
-  CheckCircleOutlined, ExclamationCircleOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
   RightOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Dropdown, Menu, Rate, Row, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
@@ -25,7 +26,7 @@ import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import {
   getLikeStudioPostAction,
   getStudioSimilarAction,
-  studioDetailAction
+  studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertPrice } from "../../utils/convert";
@@ -34,9 +35,6 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import "./clothesDetails.scss";
-
-
-
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -56,7 +54,7 @@ const QUANTITY = [
 ];
 
 const Index = () => {
-  const { studioDetail, filter, loading,listStudioSimilar } = useSelector(
+  const { studioDetail, filter, loading, listStudioSimilar } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -375,9 +373,11 @@ const Index = () => {
                 <Rate
                   disabled
                   allowHalf
-                  defaultValue={4.5}
+                  value={studioDetail?.data?.TotalRate}
                   className="rating d-flex align-items-center"
                 />
+
+                <span className="reserve">{studioDetail?.data?.TotalRate}</span>
                 <span className="reserve">
                   Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
@@ -594,7 +594,7 @@ const Index = () => {
                 </Col>
               </Row>
             </div>
-            <CommentRating data={[]} className="mb-43" />
+            <CommentRating data={studioDetail} className="mb-43" />
             {listStudioSimilar.length > 0 ? (
               <SlideCard
                 data={listStudioSimilar}

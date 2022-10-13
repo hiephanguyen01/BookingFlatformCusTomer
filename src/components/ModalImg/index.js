@@ -20,7 +20,6 @@ import { convertImage } from "../../utils/convertImage";
 export const ModalImage = ({ title = "", data }) => {
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  /* console.log(thumbsSwiper); */
   useEffect(() => {
     return () => {};
   }, []);
@@ -84,6 +83,7 @@ export const ModalImage = ({ title = "", data }) => {
           {data?.map((item, idx) => {
             return (
               <SwiperSlide
+              key={idx}
                 className="slide-item"
                 style={{ width: "187px", height: "108px" }}
               >

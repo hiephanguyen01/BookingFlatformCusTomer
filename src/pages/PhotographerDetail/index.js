@@ -274,10 +274,15 @@ const PhotographerDetail = () => {
                   <div className="photographer-detail__container__header__info__right-side__rating d-flex align-items-center">
                     <div className="stars d-flex align-items-center">
                       <Rate
-                        style={{ fontSize: "13px" }}
                         disabled
-                        defaultValue={5}
+                        allowHalf
+                        value={studioDetail?.data?.TotalRate}
+                        className="rating d-flex align-items-center"
                       />
+
+                      <span className="reserve">
+                        {studioDetail?.data?.TotalRate}
+                      </span>
                       <div className="star-number">{5}</div>
                     </div>
                     <div className="has-booked">
@@ -535,10 +540,7 @@ const PhotographerDetail = () => {
             )}
             <Row gutter={[18, 18]}>
               <Col md={16}>
-                <CommentRating
-                  data={studioDetail?.rating}
-                  className="mb-43 mt-12"
-                />
+                <CommentRating data={studioDetail} className="mb-43 mt-12" />
               </Col>
             </Row>
             {listStudioSimilar.length > 0 ? (

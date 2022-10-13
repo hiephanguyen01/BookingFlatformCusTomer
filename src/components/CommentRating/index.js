@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import { Rate, Pagination, Divider } from "antd";
 import {
   CheckCircleOutlined,
   PlayCircleOutlined,
   StarFilled,
 } from "@ant-design/icons";
-
-import "./commentRating.scss";
-
+import { Divider, Pagination, Rate } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import images from "../../assets/images";
 import imgCmt from "../../assets/images/deviceImg.png";
 import { convertTime } from "../../utils/convert";
+import { convertImage } from "../../utils/convertImage";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { ModalImage } from "../ModalImg";
+import "./commentRating.scss";
 
 const STAR_LIST = [
   { id: 0, label: "Tất cả" },
@@ -21,20 +22,51 @@ const STAR_LIST = [
   { id: 2, label: "2" },
   { id: 1, label: "1" },
 ];
-
+const pageSize = 5;
 const Index = ({ data = [], className }) => {
-  const limit = 5;
   const [chooseRating, setChooseRating] = useState(0);
-  const [page, setPage] = useState(0);
+  const [state, setState] = useState({
+    values: [],
+    totalPage: 0,
+    current: 1,
+    minIndex: 0,
+    maxIndex: 0,
+  });
+  const dispatch = useDispatch();
+  const { values, current, minIndex, maxIndex } = state;
+  useEffect(() => {
+    setState({
+      values: data?.rating,
+      totalPage: data?.rating?.length / pageSize,
+      minIndex: 0,
+      maxIndex: pageSize,
+    });
+  }, [data]);
 
-  const totalStart =
-    (
-      data?.reduce((starTotal, star) => starTotal + star.Rate, 0) / data.length
-    ).toFixed(2) | 0;
-
-  const handleChangePage = (p) => {
-    setPage(p);
+  const handleChange = (page) => {
+    console.log(page);
+    setState({
+      ...state,
+      current: page,
+      minIndex: (page - 1) * pageSize,
+      maxIndex: page * pageSize,
+    });
   };
+  useEffect(() => {
+    if (chooseRating === 0) {
+      setState((prev) => ({
+        ...prev,
+        values: data.rating,
+      }));
+    } else {
+      setState((prev) => ({
+        ...prev,
+        values: data?.rating?.filter((d) => d.Rate === chooseRating),
+      }));
+    }
+  }, [chooseRating, data]);
+  if (data.length < 1) return null;
+
   return (
     <>
       <div className={`rating ${className}`}>
@@ -42,17 +74,19 @@ const Index = ({ data = [], className }) => {
         <div className="rate d-flex align-items-center">
           <Rate
             allowHalf
-            value={Number(totalStart)}
+            value={Number(data.data.TotalRate)}
             style={{ fontSize: "10px" }}
             disabled
           ></Rate>
-          <div className="pt-3 ps-5">{`${totalStart} (${data.length})`}</div>
+          <div className="pt-3 ps-5">{`${data.data.TotalRate ||5} (${data.rating.length ||0})`}</div>
         </div>
         <div className="listRates">
           {STAR_LIST.map((star) => {
             return (
               <div
-                onClick={() => setChooseRating(star.id)}
+                onClick={() => {
+                  setChooseRating(star.id);
+                }}
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
@@ -62,120 +96,140 @@ const Index = ({ data = [], className }) => {
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
                   {star.id === 0
-                    ? `(${data.length})`
-                    : `(${data?.filter((d) => d.Rate === star.id).length})`}
+                    ? `(${data.rating.length})`
+                    : `(${
+                        data?.rating?.filter((d) => d.Rate === star.id).length
+                      })`}
                 </span>
               </div>
             );
           })}
         </div>
-        {data.length > 0 && (
+        {values?.length > 0 && (
           <>
-            {" "}
             <div className="rating_list">
               {chooseRating === 0
-                ? data
-                    .slice(
-                      (page - 1 > 0 ? page - 1 : 0) * limit,
-                      (page - 1 > 0 ? page - 1 : 0) * limit + limit
-                    )
-                    .map((item) => (
-                      <div key={item.id} className="rating_wrapper">
-                        <div className="info-user">
-                          <div className="d-flex">
-                            <div className="w-36px h-36px">
-                              <img
-                                src={`${REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
-                                className="img_avatar"
-                                alt=""
-                              />
-                            </div>
-                            <div className="info ms-10">
-                              <h3>{item.BookingUser.Username}</h3>
-                              <Rate disabled allowHalf value={item.Rate}></Rate>
-                            </div>
-                          </div>
-                          <span>{convertTime(item.CreationTime)}</span>
-                        </div>
-                        <div className="description">{item.Description}</div>
-                        <ul className="listImages">
-                          <li className="item-video">
-                            <img src={imgCmt} alt="" />
-                            <PlayCircleOutlined className="play" />
-                          </li>
-                          {item.Image.map((img, index) => (
-                            <li key={index} className="item-image">
-                              <img
-                                src={`${
-                                  img.includes("https://drive.google.com/")
-                                    ? img
-                                    : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                                }`}
-                                alt=""
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                        <div
-                          className="mt-16 mb-25 text-medium-re"
-                          style={{ color: "#828282" }}
-                        >
-                          Phòng : Wisteria Premium
-                        </div>
-                        <div className="d-flex">
-                          <div className="w-28px h-28px me-15">
-                            <img
-                              src={images.banner2}
-                              className="img_avatar"
-                              alt=""
-                            />
-                          </div>
-                          <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
-                            <div>
-                              <div className="name_reply text-medium-se">
-                                Wisteria Studio{" "}
-                                <CheckCircleOutlined
-                                  className="w-14px h-14px"
-                                  style={{ color: "#03AC84" }}
+                ? values.map(
+                    (item, idx) =>
+                      idx >= minIndex &&
+                      idx < maxIndex && (
+                        <div key={item.id} className="rating_wrapper">
+                          <div className="info-user">
+                            <div className="d-flex">
+                              <div className="w-36px h-36px">
+                                <img
+                                  src={convertImage(item.BookingUser.Image)}
+                                  className="img_avatar"
+                                  alt=""
                                 />
                               </div>
-                              <div className="cmt_reply text-medium-re">
-                                Cảm ơn bạn vì đã tin tưởng và ủng hộ Studio
-                                Wisteria
+                              <div className="info ms-10">
+                                <h3>
+                                  {item.BookingUser.Username ||
+                                    item.BookingUser.Fullname}
+                                </h3>
+                                <Rate
+                                  disabled
+                                  allowHalf
+                                  value={item?.Rate}
+                                ></Rate>
                               </div>
                             </div>
-                            <span>1 tuần trước</span>
+                            <span>{convertTime(item.CreationTime)}</span>
                           </div>
+                          <div className="description">{item.Description}</div>
+                          <ul
+                            className="listImages"
+                            onClick={() =>
+                              dispatch({
+                                type: "SHOW_MODAL_LIST",
+                                Component: <ModalImage data={item?.Image} />,
+                              })
+                            }
+                          >
+                            <li className="item-video">
+                              <img src={imgCmt} alt="" />
+                              <PlayCircleOutlined className="play" />
+                            </li>
+                            {item.Image.map((img, index) => (
+                              <li key={index} className="item-image">
+                                <img
+                                  src={`${
+                                    img.includes("https://drive.google.com/")
+                                      ? img
+                                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
+                                  }`}
+                                  alt=""
+                                />
+                              </li>
+                            ))}
+                          </ul>
+                          <div
+                            className="mt-16 mb-25 text-medium-re"
+                            style={{ color: "#828282" }}
+                          >
+                            Phòng : Wisteria Premium
+                          </div>
+                          <div className="d-flex">
+                            <div className="w-28px h-28px me-15">
+                              <img
+                                src={images.banner2}
+                                className="img_avatar"
+                                alt=""
+                              />
+                            </div>
+                            <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
+                              <div>
+                                <div className="name_reply text-medium-se">
+                                  Wisteria Studio{" "}
+                                  <CheckCircleOutlined
+                                    className="w-14px h-14px"
+                                    style={{ color: "#03AC84" }}
+                                  />
+                                </div>
+                                <div className="cmt_reply text-medium-re">
+                                  Cảm ơn bạn vì đã tin tưởng và ủng hộ Studio
+                                  Wisteria
+                                </div>
+                              </div>
+                              <span>1 tuần trước</span>
+                            </div>
+                          </div>
+                          <Divider style={{ backgroundColor: "#E7E7E7" }} />
                         </div>
-                        <Divider style={{ backgroundColor: "#E7E7E7" }} />
-                      </div>
-                    ))
-                : data
+                      )
+                  )
+                : values
                     .filter((d) => d.Rate === chooseRating)
-                    .slice(
-                      (page - 1 > 0 ? page - 1 : 0) * limit,
-                      (page - 1 > 0 ? page - 1 : 0) * limit + limit
-                    )
                     .map((item) => (
                       <div key={item.id} className="rating_wrapper">
                         <div className="info-user">
                           <div className="d-flex">
                             <div className="w-36px h-36px">
                               <img
-                                src={`${REACT_APP_DB_BASE_URL_IMG}/${item.BookingUser.Image}`}
+                                src={convertImage(item?.BookingUser?.Image)}
                                 className="img_avatar"
                                 alt=""
                               />
                             </div>
                             <div className="info ms-10">
-                              <h3>{item.BookingUser.Username}</h3>
+                              {item.BookingUser.Username ||
+                                item.BookingUser.Fullname}
                               <Rate disabled allowHalf value={item.Rate}></Rate>
                             </div>
                           </div>
                           <span>{convertTime(item.CreationTime)}</span>
                         </div>
                         <div className="description">{item.Description}</div>
-                        <ul className="listImages">
+                        <ul
+                          className="listImages"
+                          onClick={() =>
+                            dispatch({
+                              type: "SHOW_MODAL_LIST",
+                              Component: <ModalImage data={item?.Image} />,
+                            })
+                          }
+                        >
                           <li className="item-video">
                             <img src={imgCmt} alt="" />
                             <PlayCircleOutlined className="play" />
@@ -231,9 +285,10 @@ const Index = ({ data = [], className }) => {
             <div className="pagination-ds">
               <Pagination
                 className="pagination-ds"
-                defaultCurrent={1}
-                total={Math.ceil(data.length / limit) * 10}
-                onChange={handleChangePage}
+                pageSize={pageSize}
+                current={current}
+                total={values.length}
+                onChange={handleChange}
               />
             </div>
           </>

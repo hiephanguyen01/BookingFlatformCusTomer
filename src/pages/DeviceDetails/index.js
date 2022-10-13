@@ -401,12 +401,14 @@ const Index = () => {
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
-                <Rate
+              <Rate
                   disabled
                   allowHalf
-                  defaultValue={4.5}
-                  className="rating"
+                  value={studioDetail?.data?.TotalRate}
+                  className="rating d-flex align-items-center"
                 />
+
+                <span className="reserve">{studioDetail?.data?.TotalRate}</span>
                 <span className="reserve">
                   Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
@@ -602,7 +604,7 @@ const Index = () => {
             <Row>
               <Col lg={16} md={24}>
                 {" "}
-                <CommentRating data={[]} className="mb-43" />
+                <CommentRating data={studioDetail} className="mb-43" />
               </Col>
             </Row>
             {listStudioSimilar.length > 0 ? (

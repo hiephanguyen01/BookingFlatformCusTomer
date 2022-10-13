@@ -480,8 +480,8 @@ export const StudioDetail = () => {
                   <span>{studioDetail?.data?.Address}</span>
                 </div>
                 <div className={cx("rate")}>
-                  <Rate disabled allowHalf value={5}></Rate>
-                  <span>5</span>
+                  <Rate disabled allowHalf value={studioDetail?.data?.TotalRate}></Rate>
+                  <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
                     style={{ fontSize: "15px" }}
@@ -552,23 +552,13 @@ export const StudioDetail = () => {
                       <SelectTimeOption />
                     </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                    {/* <Table
-                className={cx("table-ant")}
-                columns={columns}
-                dataSource={roomDetail ?? roomDetail}
-                pagination={{
-                  defaultPageSize: 5,
-                  showSizeChanger: true,
-                  pageSizeOptions: ["1", "5", "10"],
-                  style: { marginTop: "16px!important" },
-                  className: cx("paginate"),
-                }}
-              /> */}
                   </div>
 
                   <div className={cx("rating")}>
                     <CommentRating
-                      data={studioDetail?.rating}
+                    
+                      data={studioDetail}
+                      
                       className="mb-43 mt-12"
                     />
                   </div>
@@ -750,7 +740,6 @@ export const StudioDetail = () => {
                 category={{ name: "studio", id: 1 }}
                 title="Gần bạn"
               />
-              {/* <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" /> */}
             </div>
           </div>
         </>
