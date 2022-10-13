@@ -74,7 +74,7 @@ const Index = ({ data = [], className }) => {
         <div className="rate d-flex align-items-center">
           <Rate
             allowHalf
-            value={Number(data.data.TotalRate)}
+            value={Number(data?.data?.TotalRate)}
             style={{ fontSize: "10px" }}
             disabled
           ></Rate>

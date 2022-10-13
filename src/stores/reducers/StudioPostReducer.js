@@ -138,6 +138,7 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         listStudioSimilar: action.data,
+      };
     case SET_PROMOTION_CODE:
       return {
         ...state,

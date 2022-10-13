@@ -35,14 +35,10 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import "./clothesDetails.scss";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
-import toastMessage from "../../components/ToastMessage";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
-import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { convertImage } from "../../utils/convertImage";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import Voucher from "../../components/Voucher";
+import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 
 const SIZE = [
   { id: "S", label: "S" },
