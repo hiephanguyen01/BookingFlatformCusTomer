@@ -35,6 +35,9 @@ class StudioPostService extends BaseService {
     }
     return this.post(`/api/booking-user/liked-studio`, data);
   };
+  updateView = (data) => {
+    return this.patch(`/api/album/`, data);
+  };
 }
 
 export const studioPostService = new StudioPostService();
