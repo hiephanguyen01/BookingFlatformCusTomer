@@ -59,10 +59,7 @@ const FilterPage = () => {
   const { filter, loading, pagination, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
-  console.log(filter);
-
   const [provinces, setProvinces] = useState([]);
-
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();

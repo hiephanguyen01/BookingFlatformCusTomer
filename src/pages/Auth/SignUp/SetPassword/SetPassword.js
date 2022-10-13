@@ -94,9 +94,14 @@ export const SetPassword = ({
       </div>
       <div className="term-sign-up">
         Bằng cách nhấn vào Đăng ký,bạn đã đồng ý với{" "}
-        <span className="policy-sign-up">Điều khoản sử dụng</span> và{" "}
-        <span className="policy-sign-up">Chính sách bảo mật</span> của chúng
-        tôi.
+        <a href="/home/terms-use">
+          <span className="policy-sign-up">Điều khoản sử dụng</span>
+        </a>{" "}
+        và{" "}
+        <a href="/home/privacy-policy">
+          <span className="policy-sign-up">Chính sách bảo mật</span>
+        </a>{" "}
+        của chúng tôi.
       </div>
       <Link to={checkNormal && checkUpper && checkInrange ? nextLink : ""}>
         <button
@@ -105,7 +110,8 @@ export const SetPassword = ({
               ? "continue-sign-up"
               : "stop-sign-up"
           }
-          onClick={onSubmit}>
+          onClick={onSubmit}
+        >
           {submit}
         </button>
       </Link>

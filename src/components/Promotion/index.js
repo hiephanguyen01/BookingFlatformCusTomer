@@ -1,34 +1,31 @@
 import { CloseOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPromoCodeByStudioPostAction } from "../../stores/actions/promoCodeAction";
+import {
+  getPromotionCodeUserSave,
+  setChoosePromotionUser,
+} from "../../stores/actions/promoCodeAction";
 import { HIDE_MODAL } from "../../stores/types/modalTypes";
 
 import "./voucher.scss";
 import { convertTime } from "../../utils/convert";
 
 const Index = () => {
-  const [choose, setChoose] = useState([]);
-  const { promoCodeByStudio, studioPostId } = useSelector(
+  const { promoCodeUserSave, studioPostId } = useSelector(
     (state) => state.promoCodeReducer
   );
+  const [choose, setChoose] = useState({ ...promoCodeUserSave });
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getPromoCodeByStudioPostAction(studioPostId));
+    dispatch(getPromotionCodeUserSave());
   }, []);
 
-  const handleChooseVoucher = (id) => {
-    const newChoose = [...choose];
-    const check = newChoose.findIndex((item) => item === id);
-    if (check !== -1) {
-      newChoose.splice(check, 1);
-    } else {
-      newChoose.unshift(id);
-    }
-    setChoose([...newChoose]);
+  const handleChooseVoucher = (code) => {
+    setChoose({ ...code });
+    dispatch(setChoosePromotionUser(code));
   };
   return (
-    <div className="voucher_container">
+    <div className="promotion_container">
       <div
         className="close_modal"
         onClick={() => {
@@ -38,19 +35,19 @@ const Index = () => {
         <CloseOutlined />
       </div>
       <header className="header_modal">Mã khuyến mãi</header>
-      {promoCodeByStudio &&
-        promoCodeByStudio
-          .filter((item) => item.Expired > new Date().toISOString())
+      {promoCodeUserSave &&
+        promoCodeUserSave
+          .filter((item) => item.DateTimeExpire > new Date().toISOString())
           .map((item, index) => (
-            <div className="voucher_wrap">
-              <div className="voucher_content">
-                <div className="voucher_code">{item.Name}</div>
-                <div className="voucher_desc">{item.Description}</div>
-                <div className="voucher_date">
-                  HSD: {convertTime(item.Expired).slice(0, 10)}
+            <div className="promotion_wrap">
+              <div className="promotion_content">
+                <div className="promotion_code">{item.SaleCode}</div>
+                <div className="promotion_desc">{item.Title}</div>
+                <div className="promotion_date">
+                  HSD: {convertTime(item.DateTimeExpire).slice(0, 10)}
                 </div>
               </div>
-              {choose.includes(item) ? (
+              {choose.id === item.id ? (
                 <div
                   className="btn_applied"
                   onClick={() => {

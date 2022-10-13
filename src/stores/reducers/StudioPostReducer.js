@@ -14,6 +14,7 @@ import {
   SET_LIST_LIKED_CATEGORY_5,
   SET_LIST_LIKED_CATEGORY_6,
   SET_LIST_LIKED_CATEGORY,
+  SET_PROMOTION_CODE,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -55,6 +56,7 @@ const initialState = {
   listLikedCategory5: [],
   listLikedCategory6: [],
   listLikedUser: [],
+  promotionCode: [],
 };
 
 export const studioPostReducer = (state = initialState, action) => {
@@ -129,6 +131,11 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         listLikedCategory6: action.data,
+      };
+    case SET_PROMOTION_CODE:
+      return {
+        ...state,
+        promotionCode: action.data,
       };
 
     default:

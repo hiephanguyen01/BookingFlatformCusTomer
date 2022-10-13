@@ -35,6 +35,9 @@ class StudioPostService extends BaseService {
     }
     return this.post(`/api/booking-user/liked-studio`, data);
   };
+  getPromotionByTenantId = (tenantId) => {
+    return this.get(`/api/promo-code/by-tenant-id?TenantId=${tenantId}`);
+  };
 }
 
 export const studioPostService = new StudioPostService();

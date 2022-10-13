@@ -22,7 +22,7 @@ export const modalReducer = (state = initialState, action) => {
         isListImage: true,
       };
     case HIDE_MODAL:
-      return { ...state, visible: false, isListImage: false };
+      return { ...state, visible: false, Component: <></>, isListImage: false };
 
     default:
       return state;

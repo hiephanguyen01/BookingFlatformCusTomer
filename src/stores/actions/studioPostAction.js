@@ -2,6 +2,7 @@ import { studioPostService } from "../../services/StudioPostService";
 import { userService } from "../../services/UserService";
 import {
   LOADING,
+  SET_PROMOTION_CODE,
   SET_FILTER,
   SET_LIST_LIKED_CATEGORY,
   SET_POST_LIST,
@@ -240,7 +241,6 @@ export const getAllStudioLikedAction3 = (category, sort = "") => {
         },
         sort
       );
-
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
@@ -249,4 +249,16 @@ export const getAllStudioLikedAction3 = (category, sort = "") => {
       console.log(error);
     }
   };
+};
+
+export const getPromotionByTenantId = (tenantId) => async (dispatch) => {
+  try {
+    const { data } = await studioPostService.getPromotionByTenantId(tenantId);
+    dispatch({
+      type: SET_PROMOTION_CODE,
+      data: data.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
