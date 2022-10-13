@@ -38,6 +38,10 @@ import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
+import { calTime } from "../../utils/calculate";
+import Voucher from "../../components/Voucher";
+import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -70,19 +74,29 @@ const Index = () => {
     }
   }, [currentUser, id, cate, dispatch]);
 
+  useEffect(() => {
+    // let timeOut;
+    // timeOut = setTimeout(() => {
+    //   dispatch({
+    //     type: SHOW_MODAL,
+    //     Component: <Voucher />,
+    //   });
+    // }, 2000);
+
+    return () => {
+      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // clearTimeout(timeOut);
+    };
+  }, []);
+
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");
     dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
   };
 
   const handleChooseService = (data) => {
-    let newChooseService = [...chooseService];
-    if (newChooseService.filter((item) => item.id === data.id).length > 0) {
-      newChooseService = newChooseService.filter((item) => item.id !== data.id);
-    } else {
-      newChooseService.push(data);
-    }
-    setChooseService(newChooseService);
+    setChooseService([{ ...data }]);
   };
   const menu_report = (
     <Menu
@@ -261,14 +275,7 @@ const Index = () => {
           </div>
         </div>
       ) : (
-        <div
-          className=""
-          style={{
-            margin: "auto",
-            backgroundColor: "rgb(245, 245, 245)",
-            padding: "2rem 0",
-          }}
-        >
+        <div className="container_detail">
           <div className="costume_container">
             <div className="wrapper_banner">
               <div
@@ -477,7 +484,13 @@ const Index = () => {
                         >
                           {`${convertPrice(
                             chooseService?.reduce(
-                              (total, item) => total + item.Price,
+                              (total, item) =>
+                                total +
+                                item.Price *
+                                  calTime(
+                                    filter.OrderByTimeFrom,
+                                    filter.OrderByTimeTo
+                                  ),
                               0
                             )
                           )}`}
@@ -500,7 +513,13 @@ const Index = () => {
                       >
                         {`${convertPrice(
                           chooseService?.reduce(
-                            (total, item) => total + item.Sales,
+                            (total, item) =>
+                              total +
+                              item.Sales *
+                                calTime(
+                                  filter.OrderByTimeFrom,
+                                  filter.OrderByTimeTo
+                                ),
                             0
                           )
                         )}`}

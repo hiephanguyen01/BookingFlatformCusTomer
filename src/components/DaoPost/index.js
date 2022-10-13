@@ -21,7 +21,7 @@ import img1 from "../../assets/dao/Frame 180.png";
 import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch, useSelector } from "react-redux";
-import { likePost } from "../../stores/actions/PostDaoAction";
+import { getLikePostList, likePost } from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { userService } from "../../services/UserService";
@@ -40,7 +40,9 @@ const DaoPost = (props) => {
   const [post, setPost] = useState({ ...item });
   const [likeCmt, setLikeCmt] = useState([]);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
-  const [mouseClickHeart, setMouseClickHeart] = useState(false);
+  const [mouseClickHeart, setMouseClickHeart] = useState(
+    likePostList?.filter((itm) => itm.PostId === item.Id).length > 0
+  );
   const [commentsClick, setCommentsClick] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [moreOptionModal, setMoreOptionModal] = useState(false);
@@ -52,6 +54,7 @@ const DaoPost = (props) => {
   useEffect(() => {
     setPost({ ...item });
   }, [item]);
+
   const {
     Id,
     Username,
@@ -92,17 +95,26 @@ const DaoPost = (props) => {
 
   const handleLike = () => {
     if (currentUser) {
-      if (checkLikePost()) {
-        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
-        setMouseClickHeart(false);
+      const flag = mouseClickHeart;
+      if (flag) {
         setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
+        setMouseClickHeart(false);
       } else {
-        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
-        setMouseClickHeart(true);
         setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+        setMouseClickHeart(true);
       }
+
+      // if (checkLikePost()) {
+      //   setMouseClickHeart(false);
+      //   setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
+      // } else {
+      //   setMouseClickHeart(true);
+      //   setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+      // }
+      dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
     }
   };
+  console.log(mouseClickHeart);
 
   const handleLikeCmt = () => {
     if (currentUser) {
@@ -485,7 +497,7 @@ const DaoPost = (props) => {
                         checkLikePost() ||
                         mouseClickHeart ? (
                           <HeartFilled
-                            onClick={likePost}
+                            onClick={handleLike}
                             style={{
                               fontSize: "20px",
                               color: "#E22828",
@@ -495,6 +507,7 @@ const DaoPost = (props) => {
                           />
                         ) : (
                           <HeartOutlined
+                            onClick={handleLike}
                             style={{
                               color: "#828282",
                               fontSize: "20px",
@@ -638,7 +651,7 @@ const DaoPost = (props) => {
           <div className="post__main__content__like-comment d-flex align-posts-center">
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn onClick={(e) => {}}>
-                {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
+                {mouseOverHeart || mouseClickHeart ? (
                   <HeartFilled
                     onClick={handleLike}
                     style={{

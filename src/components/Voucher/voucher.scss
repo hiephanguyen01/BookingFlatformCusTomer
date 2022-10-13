@@ -1,6 +1,6 @@
 @import "../../App.scss";
 
-.promotion_container {
+.save_promotion_container {
     position: relative;
     padding: 0px 0px 0px;
     display: flex;
@@ -57,7 +57,7 @@
         margin-bottom: 23px;
     }
 
-    .promotion_wrap {
+    .save_promotion_wrap {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -72,10 +72,10 @@
             border-bottom: none;
         }
 
-        .promotion_content {
+        .save_promotion_content {
             width: 70%;
 
-            .promotion_code {
+            .save_promotion_code {
                 font-weight: 400;
                 font-size: 14px;
                 line-height: 16px;
@@ -84,7 +84,7 @@
                 margin-bottom: 8px;
             }
 
-            .promotion_desc {
+            .save_promotion_desc {
                 font-weight: 700;
                 color: $neutral-700;
                 margin-bottom: 8px;
@@ -101,7 +101,7 @@
                 min-height: 20px;
             }
 
-            .promotion_date {
+            .save_promotion_date {
                 font-weight: 400;
                 font-size: 14px;
                 line-height: 19px;
