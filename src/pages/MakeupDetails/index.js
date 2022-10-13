@@ -32,12 +32,16 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import SlideAlbum from "./components/SlideAlbum";
 import "./makeupDetails.scss";
+import Voucher from "../../components/Voucher";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -71,14 +75,24 @@ const Index = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
+  useEffect(() => {
+    // let timeOut;
+    // timeOut = setTimeout(() => {
+    //   dispatch({
+    //     type: SHOW_MODAL,
+    //     Component: <Voucher />,
+    //   });
+    // }, 2000);
+
+    return () => {
+      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // clearTimeout(timeOut);
+    };
+  }, []);
+
   const handleChooseService = (data) => {
-    let newChooseService = [...chooseService];
-    if (newChooseService.filter((item) => item.id === data.id).length > 0) {
-      newChooseService = newChooseService.filter((item) => item.id !== data.id);
-    } else {
-      newChooseService.push(data);
-    }
-    setChooseService(newChooseService);
+    setChooseService([{ ...data }]);
   };
   console.log(studioDetail);
 
@@ -252,14 +266,7 @@ const Index = () => {
         imgAlt="Booking Studio Details"
       />
       {!loading ? (
-        <div
-          className=""
-          style={{
-            margin: "auto",
-            backgroundColor: "rgb(245, 245, 245)",
-            padding: "2rem 0",
-          }}
-        >
+        <div className="container_detail">
           <div className="costume_container">
             <div className="wrapper_banner">
               <div
@@ -457,7 +464,6 @@ const Index = () => {
                           fontWeight: "600",
                           fontSize: "18px",
                           lineHeight: "25px",
-                          /* Neutral/Grey 700 */
                           color: "#222222",
                         }}
                       >
@@ -470,13 +476,18 @@ const Index = () => {
                             fontSize: "16px",
                             lineHeight: "22px",
                             textDecorationLine: "line-through",
-                            /* Neutral/Grey 400 */
                             color: "#828282",
                           }}
                         >
                           {`${convertPrice(
                             chooseService?.reduce(
-                              (total, item) => total + item.Price,
+                              (total, item) =>
+                                total +
+                                item.Price *
+                                  calTime(
+                                    filter.OrderByTimeFrom,
+                                    filter.OrderByTimeTo
+                                  ),
                               0
                             )
                           )}`}
@@ -499,7 +510,13 @@ const Index = () => {
                       >
                         {`${convertPrice(
                           chooseService?.reduce(
-                            (total, item) => total + item.Sales,
+                            (total, item) =>
+                              total +
+                              item.Sales *
+                                calTime(
+                                  filter.OrderByTimeFrom,
+                                  filter.OrderByTimeTo
+                                ),
                             0
                           )
                         )}`}

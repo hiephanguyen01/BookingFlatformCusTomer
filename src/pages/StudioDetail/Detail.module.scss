@@ -1,7 +1,10 @@
-.wrapper {}
+.wrapper {
+    max-width: 1300px;
+    margin: auto;
+}
 
 .studioDetail {
-    padding: 12px 70px 54px 70px;
+    // padding: 0 70px 54px 70px;
     background-color: #f6f6f6;
     display: flex;
     flex-direction: column;

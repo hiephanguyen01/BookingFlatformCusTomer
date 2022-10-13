@@ -35,6 +35,14 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import "./clothesDetails.scss";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import toastMessage from "../../components/ToastMessage";
+import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { convertImage } from "../../utils/convertImage";
+import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import Voucher from "../../components/Voucher";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -80,19 +88,29 @@ const Index = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
+  useEffect(() => {
+    // let timeOut;
+    // timeOut = setTimeout(() => {
+    //   dispatch({
+    //     type: SHOW_MODAL,
+    //     Component: <Voucher />,
+    //   });
+    // }, 2000);
+
+    return () => {
+      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // clearTimeout(timeOut);
+    };
+  }, []);
+
   console.log(studioDetail);
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
 
   const handleChooseService = (data) => {
-    let newChooseService = [...chooseService];
-    if (newChooseService.filter((item) => item.id === data.id).length > 0) {
-      newChooseService = newChooseService.filter((item) => item.id !== data.id);
-    } else {
-      newChooseService.push(data);
-    }
-    setChooseService(newChooseService);
+    setChooseService([{ ...data }]);
   };
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");
@@ -302,14 +320,7 @@ const Index = () => {
         imgAlt="Booking Studio Details"
       />
       {!loading ? (
-        <div
-          className=""
-          style={{
-            margin: "auto",
-            backgroundColor: "rgb(245, 245, 245)",
-            padding: "2rem 0",
-          }}
-        >
+        <div className="container_detail">
           <div className="costume_container">
             <div className="wrapper_banner">
               <div
