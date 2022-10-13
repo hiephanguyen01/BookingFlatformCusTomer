@@ -76,7 +76,7 @@ export const StudioDetail = () => {
   const { ratingStudioPostDetail, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
-
+  console.log(studioDetail);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -522,7 +522,11 @@ export const StudioDetail = () => {
                   <span>{studioDetail?.data?.Address}</span>
                 </div>
                 <div className={cx("rate")}>
-                  <Rate disabled allowHalf value={studioDetail?.data?.TotalRate}></Rate>
+                  <Rate
+                    disabled
+                    allowHalf
+                    value={studioDetail?.data?.TotalRate}
+                  ></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
@@ -602,9 +606,7 @@ export const StudioDetail = () => {
 
                   <div className={cx("rating")}>
                     <CommentRating
-                    
                       data={studioDetail}
-                      
                       className="mb-43 mt-12"
                     />
                   </div>

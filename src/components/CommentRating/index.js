@@ -24,6 +24,7 @@ const STAR_LIST = [
 ];
 const pageSize = 5;
 const Index = ({ data = [], className }) => {
+  console.log(data);
   const [chooseRating, setChooseRating] = useState(0);
   const [state, setState] = useState({
     values: [],
@@ -71,15 +72,20 @@ const Index = ({ data = [], className }) => {
     <>
       <div className={`rating ${className}`}>
         <h3>Đánh giá</h3>
-        <div className="rate d-flex align-items-center">
-          <Rate
-            allowHalf
-            value={Number(data?.data?.TotalRate)}
-            style={{ fontSize: "10px" }}
-            disabled
-          ></Rate>
-          <div className="pt-3 ps-5">{`${data.data.TotalRate ||5} (${data.rating.length ||0})`}</div>
-        </div>
+        {data?.data && (
+          <div className="rate d-flex align-items-center">
+            <Rate
+              allowHalf
+              value={Number(data?.data?.TotalRate)}
+              style={{ fontSize: "10px" }}
+              disabled
+            ></Rate>
+            <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
+              data?.rating?.length || 0
+            })`}</div>
+          </div>
+        )}
+
         <div className="listRates">
           {STAR_LIST.map((star) => {
             return (
@@ -96,7 +102,7 @@ const Index = ({ data = [], className }) => {
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
                   {star.id === 0
-                    ? `(${data.rating.length})`
+                    ? `(${data?.rating?.length})`
                     : `(${
                         data?.rating?.filter((d) => d.Rate === star.id).length
                       })`}
@@ -118,15 +124,15 @@ const Index = ({ data = [], className }) => {
                             <div className="d-flex">
                               <div className="w-36px h-36px">
                                 <img
-                                  src={convertImage(item.BookingUser.Image)}
+                                  src={convertImage(item?.BookingUser?.Image)}
                                   className="img_avatar"
                                   alt=""
                                 />
                               </div>
                               <div className="info ms-10">
                                 <h3>
-                                  {item.BookingUser.Username ||
-                                    item.BookingUser.Fullname}
+                                  {item?.BookingUser?.Username ||
+                                    item?.BookingUser?.Fullname}
                                 </h3>
                                 <Rate
                                   disabled
@@ -135,9 +141,9 @@ const Index = ({ data = [], className }) => {
                                 ></Rate>
                               </div>
                             </div>
-                            <span>{convertTime(item.CreationTime)}</span>
+                            <span>{convertTime(item?.CreationTime)}</span>
                           </div>
-                          <div className="description">{item.Description}</div>
+                          <div className="description">{item?.Description}</div>
                           <ul
                             className="listImages"
                             onClick={() =>
@@ -151,7 +157,7 @@ const Index = ({ data = [], className }) => {
                               <img src={imgCmt} alt="" />
                               <PlayCircleOutlined className="play" />
                             </li>
-                            {item.Image.map((img, index) => (
+                            {item?.Image.map((img, index) => (
                               <li key={index} className="item-image">
                                 <img
                                   src={`${
@@ -168,7 +174,10 @@ const Index = ({ data = [], className }) => {
                             className="mt-16 mb-25 text-medium-re"
                             style={{ color: "#828282" }}
                           >
-                            Phòng : Wisteria Premium
+                            {item?.StudioRoom?.Name ||
+                              item?.PhotographerServicePackage?.Name ||
+                              item?.ModelServicePackage?.Name ||
+                              item?.MakeupServicePackage?.Name}
                           </div>
                           <div className="d-flex">
                             <div className="w-28px h-28px me-15">

@@ -41,6 +41,12 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
         Category,
         formData
       );
+      setData({
+        Rate: "",
+        Description: "",
+        IsAnonymous: false,
+        image: [],
+      });
       onOk();
 
       console.log(result);

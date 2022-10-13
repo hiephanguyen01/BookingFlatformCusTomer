@@ -51,9 +51,8 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, loading, filter, listStudioSimilar,promotionCode } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { studioDetail, loading, filter, listStudioSimilar, promotionCode } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -586,21 +585,18 @@ const PhotographerDetail = () => {
               )}
               <Row gutter={[18, 18]}>
                 <Col md={16}>
-                  <CommentRating
-                    data={studioDetail?.rating}
-                    className="mb-43 mt-12"
-                  />
+                  <CommentRating data={studioDetail} className="mb-43 mt-12" />
                 </Col>
               </Row>
               {listStudioSimilar.length > 0 ? (
-              <SlideCard
-                data={listStudioSimilar}
-                category={{ name: "photographer", id: 2 }}
-                title="Photographer tương tự"
-              />
-            ) : (
-              <></>
-            )}
+                <SlideCard
+                  data={listStudioSimilar}
+                  category={{ name: "photographer", id: 2 }}
+                  title="Photographer tương tự"
+                />
+              ) : (
+                <></>
+              )}
             </div>
           </section>
         </div>
