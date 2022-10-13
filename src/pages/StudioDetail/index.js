@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
+import Voucher from "../../components/Voucher";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
@@ -30,6 +31,7 @@ import {
   getAllStudioPost,
   getLikeStudioPostAction,
   studioDetailAction,
+  getPromotionByTenantId,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertPrice } from "../../utils/convert";
@@ -40,6 +42,10 @@ import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
+import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
+import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import PromotionList from "../../components/PromotionList/PromotionList";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -63,22 +69,67 @@ export const StudioDetail = () => {
     studioPostList,
     filter,
     loading,
+    promotionCode,
   } = useSelector((state) => state.studioPostReducer);
-  console.log(studioDetail);
   // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
-  const { ratingStudioPostDetai, numberRating } = useSelector(
+  const { ratingStudioPostDetail, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
+
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
       ? 1
       : undefined;
 
-  // useEffect(() => {
-  // setTimeout(() => {
-  //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
-  // }, 5000);
-  // }, []);
+  const filter_promo = promotionCode
+    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+    ?.reduce((arr, item) => {
+      if (
+        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+        0
+      ) {
+        return [...arr];
+      }
+      return [...arr, item];
+    }, []);
+  useEffect(() => {
+    // let timeOut;
+
+    // timeOut = setTimeout(() => {
+    //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+    // }, 2000);
+    // dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+    // if (
+    //   promotionCode
+    //     ?.filter(
+    //       (item) => item.SaleCode.DateTimeExpire > new Date().toISOString()
+    //     )
+    //     ?.reduce((arr, item) => {
+    //       if (
+    //         promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id)
+    //           .length > 0
+    //       ) {
+    //         return [...arr];
+    //       }
+    //       return [...arr, item];
+    //     }, []).length > 0
+    // ) {
+    //   timeOut = setTimeout(() => {
+    //     dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+    //   }, 2000);
+    // }
+    return () => {
+      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // clearTimeout(timeOut);
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch(getPromotionCodeUserSave());
+    dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
+  }, [studioDetail]);
 
   useEffect(() => {
     if (currentUser !== null) {
@@ -327,15 +378,7 @@ export const StudioDetail = () => {
 
   const handleChooseService = (data) => {
     if (filter.OrderByTime === 0 || filter.OrderByTime === 1) {
-      let newChooseService = [...chooseService];
-      if (newChooseService.filter((item) => item.id === data.id).length > 0) {
-        newChooseService = newChooseService.filter(
-          (item) => item.id !== data.id
-        );
-      } else {
-        newChooseService.push(data);
-      }
-      setChooseService(newChooseService);
+      setChooseService([{ ...data }]);
     } else {
       toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn");
     }
@@ -409,7 +452,7 @@ export const StudioDetail = () => {
           </div>
         </div>
       ) : (
-        <>
+        <div className="container_detail">
           <div className={cx("wrapper")}>
             <div className={cx("studioDetail")}>
               <div className={cx("box1")}>
@@ -539,12 +582,16 @@ export const StudioDetail = () => {
                     </ReadMoreDesc>
                   </div>
                   <div className={cx("sale")}>
+                    <PromotionList data={filter_promo} />
+                  </div>
+
+                  {/* <div className={cx("sale")}>
                     <h3>4 Mã khuyến mãi</h3>
                     <div className={cx("listSale")}>
                       <span>GIẢM 50K</span>
                       <span>GIẢM 500K</span>
                     </div>
-                  </div>
+                  </div> */}
                   <div className={cx("table")}>
                     <div className="ms-20">
                       <SelectTimeOption />
@@ -749,7 +796,7 @@ export const StudioDetail = () => {
               {/* <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" /> */}
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );

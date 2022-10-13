@@ -25,6 +25,9 @@ import PostDetail from "./pages/PostDetail/PostDetail";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
 import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
 import Support from "./pages/UserAccount/components/support/Support";
+import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import TermsUse from "./pages/TermsUse/TermsUse";
 
 function App() {
   const dispatch = useDispatch();
@@ -69,6 +72,7 @@ function App() {
           <Route path="dao/posts/:postId" element={<PostDetail />} />
           <Route path="studio/book" element={<BookStudio />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="helpCenter/*" element={<HelpCenterPage />}></Route>
           <Route path="studio/*" element={<PageStudio />} />
           <Route path="photographer/*" element={<PagePhotographer />} />
           <Route path="device/*" element={<PageDevice />} />
@@ -76,6 +80,8 @@ function App() {
           <Route path="model/*" element={<PageModel />} />
           <Route path="makeup/*" element={<PageMakeup />} />
           <Route path="confirm-order/*" element={<UpdateConfirm />} />
+          <Route path="privacy-policy/*" element={<PrivacyPolicy />}></Route>
+          <Route path="terms-use/*" element={<TermsUse />}></Route>
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}

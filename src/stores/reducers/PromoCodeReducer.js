@@ -3,6 +3,8 @@ import {
   GET_PROMO_BY_STUDIO_POST,
   GET_PAGINATE_POSSIBILITY,
   SET_STUDIO_POST_ID,
+  SET_PROMOTION_CODE_USER_SAVE,
+  SET_CHOOSE_PROMOTION_USER,
 } from "../types/promoCodeType";
 
 const initialState = {
@@ -10,6 +12,8 @@ const initialState = {
   promoCodeByStudio: [],
   promoCodeList: [],
   pagination: {},
+  promoCodeUserSave: [],
+  choosePromotionUser: {},
 };
 
 export const promoCodeReducer = (state = initialState, action) => {
@@ -22,6 +26,10 @@ export const promoCodeReducer = (state = initialState, action) => {
       return { ...state, pagination: action.data };
     case SET_STUDIO_POST_ID:
       return { ...state, studioPostId: action.data };
+    case SET_PROMOTION_CODE_USER_SAVE:
+      return { ...state, promoCodeUserSave: action.data };
+    case SET_CHOOSE_PROMOTION_USER:
+      return { ...state, choosePromotionUser: action.data };
     default:
       return state;
   }

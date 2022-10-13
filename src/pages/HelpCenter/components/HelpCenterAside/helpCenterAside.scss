@@ -1,0 +1,27 @@
+.help-center-aside {
+    text-align: left;
+    background-color: #ffffff;
+    padding: 90px 50px;
+    height: 100%;
+
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 22px;
+
+
+    .active {
+        span {
+            font-size: 16px;
+            margin-left: 0.5rem;
+            font-weight: 600;
+            color: #E22828;
+        }
+    }
+
+    span {
+        font-size: 16px;
+        margin-left: 0.5rem;
+        font-weight: 400;
+        color: #222222;
+    }
+}
