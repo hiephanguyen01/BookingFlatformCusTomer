@@ -11,9 +11,7 @@ import "./voucher.scss";
 import { convertTime } from "../../utils/convert";
 
 const Index = () => {
-  const { promoCodeUserSave, studioPostId } = useSelector(
-    (state) => state.promoCodeReducer
-  );
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const [choose, setChoose] = useState({ ...promoCodeUserSave });
   const dispatch = useDispatch();
   useEffect(() => {

@@ -7,18 +7,16 @@ import Voucher from "../Voucher";
 import "./promotionList.scss";
 
 const PromotionList = ({ data }) => {
-  const { promoCodeUserSave, studioPostId } = useSelector(
-    (state) => state.promoCodeReducer
-  );
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
 
   const dispatch = useDispatch();
 
-  const handleViewDetailPromo = () => {
-    // dispatch({
-    //   type: SHOW_MODAL,
-    //   Component: <Promotion />,
-    // });
-  };
+  //   const handleViewDetailPromo = () => {
+  //     // dispatch({
+  //     //   type: SHOW_MODAL,
+  //     //   Component: <Promotion />,
+  //     // });
+  //   };
   const showPromotion = () => {
     dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
   };

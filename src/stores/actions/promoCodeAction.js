@@ -5,7 +5,6 @@ import {
   SET_STUDIO_POST_ID,
   SET_PROMOTION_CODE_USER_SAVE,
   SET_CHOOSE_PROMOTION_USER,
-  SAVE_PROMOTION,
 } from "../types/promoCodeType";
 import { promoCodeService } from "../../services/PromoCodeService";
 
@@ -89,7 +88,7 @@ export const setChoosePromotionUser = (data) => {
 export const savePromotion = (promoCodeId) => {
   return async (dispatch) => {
     try {
-      const { data } = await promoCodeService.savePromotion({
+      await promoCodeService.savePromotion({
         PromoteCodeId: promoCodeId,
       });
     } catch (error) {
@@ -101,7 +100,7 @@ export const savePromotion = (promoCodeId) => {
 export const cancelSavePromotion = (promoCodeId) => {
   return async (dispatch) => {
     try {
-      const { data } = await promoCodeService.cancelSavePromotion(promoCodeId);
+      await promoCodeService.cancelSavePromotion(promoCodeId);
     } catch (error) {
       console.error(error);
     }

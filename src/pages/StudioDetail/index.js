@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
-import Voucher from "../../components/Voucher";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
@@ -142,7 +141,6 @@ export const StudioDetail = () => {
   }, [id, dispatch, cate, currentUser]);
 
   useEffect(() => {
-    console.log(currentUser?.id);
     return () => {
       dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
     };
@@ -378,7 +376,11 @@ export const StudioDetail = () => {
 
   const handleChooseService = (data) => {
     if (filter.OrderByTime === 0 || filter.OrderByTime === 1) {
-      setChooseService([{ ...data }]);
+      if (chooseService.filter((item) => item.id === data.id).length > 0) {
+        setChooseService([]);
+      } else {
+        setChooseService([{ ...data }]);
+      }
     } else {
       toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn");
     }

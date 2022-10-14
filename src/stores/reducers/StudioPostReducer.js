@@ -15,6 +15,8 @@ import {
   SET_LIST_LIKED_CATEGORY_6,
   SET_LIST_LIKED_CATEGORY,
   SET_PROMOTION_CODE,
+  SET_FILTER_SERVICE,
+  LOADING_SERVICE,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -57,6 +59,22 @@ const initialState = {
   listLikedCategory6: [],
   listLikedUser: [],
   promotionCode: [],
+  filterService: {
+    OrderByTime: -1,
+    OrderByTimeFrom:
+      convertDateSendToDB(new Date()).slice(0, 13) + ":00:00.000Z",
+    OrderByTimeTo:
+      convertDateSendToDB(new Date()).slice(0, 11) +
+      `${
+        parseInt(convertDateSendToDB(new Date()).slice(11, 13)) > 9
+          ? parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
+          : `0${parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1}`
+      }` +
+      ":00:00.000Z",
+    OrderByDateFrom: convertDateSendToDB(new Date()),
+    OrderByDateTo: convertDateSendToDB(new Date()),
+  },
+  loadingService: false,
 };
 
 export const studioPostReducer = (state = initialState, action) => {
@@ -137,7 +155,18 @@ export const studioPostReducer = (state = initialState, action) => {
         ...state,
         promotionCode: action.data,
       };
-
+    case LOADING_SERVICE:
+      return {
+        ...state,
+        loadingService: action.payload,
+      };
+    case SET_FILTER_SERVICE:
+      console.log(action);
+      return {
+        ...state,
+        filterService: { ...action.payload },
+        filter: { ...state.filter, ...action.payload },
+      };
     default:
       return state;
   }

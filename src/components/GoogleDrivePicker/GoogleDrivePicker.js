@@ -1,11 +1,9 @@
 import { FolderOpenOutlined } from "@ant-design/icons";
-import { useState } from "react";
 import useDrivePicker from "react-google-drive-picker";
 import "./googleDrivePicker.scss";
 
 const GoogleDrivePicker = ({ files, setFiles }) => {
-  const [openPicker, authResponse] = useDrivePicker();
-  const [data, setData] = useState([]);
+  const [openPicker] = useDrivePicker();
   // const customViewsArray = [new google.picker.DocsView()]; // custom view
   const handleOpenPicker = () => {
     openPicker({

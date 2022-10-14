@@ -31,7 +31,6 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
@@ -39,7 +38,6 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 import { calTime } from "../../utils/calculate";
-import Voucher from "../../components/Voucher";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 
@@ -96,7 +94,11 @@ const Index = () => {
   };
 
   const handleChooseService = (data) => {
-    setChooseService([{ ...data }]);
+    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      setChooseService([]);
+    } else {
+      setChooseService([{ ...data }]);
+    }
   };
   const menu_report = (
     <Menu

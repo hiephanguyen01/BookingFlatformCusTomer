@@ -1,6 +1,5 @@
 import {
   CheckCircleOutlined,
-  DownOutlined,
   ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
@@ -40,7 +39,6 @@ import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
-import Voucher from "../../components/Voucher";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -107,7 +105,11 @@ const Index = () => {
   };
 
   const handleChooseService = (data) => {
-    setChooseService([{ ...data }]);
+    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      setChooseService([]);
+    } else {
+      setChooseService([{ ...data }]);
+    }
   };
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");

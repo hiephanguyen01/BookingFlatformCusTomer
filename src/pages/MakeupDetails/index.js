@@ -38,7 +38,6 @@ import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import SlideAlbum from "./components/SlideAlbum";
 import "./makeupDetails.scss";
-import Voucher from "../../components/Voucher";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 
@@ -90,7 +89,11 @@ const Index = () => {
   }, []);
 
   const handleChooseService = (data) => {
-    setChooseService([{ ...data }]);
+    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      setChooseService([]);
+    } else {
+      setChooseService([{ ...data }]);
+    }
   };
   console.log(studioDetail);
 

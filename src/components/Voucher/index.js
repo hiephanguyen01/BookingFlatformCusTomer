@@ -5,7 +5,6 @@ import {
   cancelSavePromotion,
   getPromotionCodeUserSave,
   savePromotion,
-  setChoosePromotionUser,
 } from "../../stores/actions/promoCodeAction";
 import { HIDE_MODAL } from "../../stores/types/modalTypes";
 
@@ -14,11 +13,9 @@ import { convertTime } from "../../utils/convert";
 import { getPromotionByTenantId } from "../../stores/actions/studioPostAction";
 
 const Index = () => {
-  const { promoCodeUserSave, studioPostId } = useSelector(
-    (state) => state.promoCodeReducer
-  );
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
 
-  const { studioDetail, loading, filter, promotionCode } = useSelector(
+  const { studioDetail, promotionCode } = useSelector(
     (state) => state.studioPostReducer
   );
   const [savePromo, setSavePromo] = useState([]);
