@@ -25,6 +25,15 @@ class PostDaoService extends BaseService {
   createLike = (data) => {
     return this.post("/api/like/", data);
   };
+  getAllDefaultComments = () => {
+    return this.get(`/api/user-comment`);
+  };
+  getComments = (postId) => {
+    return this.get(`/api/comment/${postId}`);
+  };
+  // getComments = (postId) => {
+  //   return this.get(`/api/comment/${postId}`);
+  // };
 }
 
 export const postDaoService = new PostDaoService();

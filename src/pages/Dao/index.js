@@ -14,6 +14,7 @@ import DaoPost from "../../components/DaoPost";
 import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
 import {
+  getAllDefaultComments,
   getAllPostDaoAction,
   getLikePostList,
 } from "../../stores/actions/PostDaoAction";
@@ -85,6 +86,10 @@ const Dao = () => {
 
   const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    dispatch(getAllDefaultComments());
+  }, []);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];

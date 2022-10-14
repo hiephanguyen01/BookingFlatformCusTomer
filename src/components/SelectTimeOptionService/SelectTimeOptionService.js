@@ -107,6 +107,9 @@ const Option = ({ option, disabled }) => {
                 "YYYY-MM-DD"
               )}
               disabled={disabled}
+              disabledDate={(current) => {
+                return current && current <= moment().subtract(1, "days");
+              }}
             />
           </Form.Item>
           <Form.Item
@@ -149,6 +152,9 @@ const Option = ({ option, disabled }) => {
                 moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
               ]}
               disabled={disabled}
+              disabledDate={(current) => {
+                return current && current <= moment().subtract(1, "days");
+              }}
             />
           </Form.Item>
         </div>

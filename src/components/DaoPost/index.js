@@ -22,7 +22,7 @@ import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch, useSelector } from "react-redux";
 import { getLikePostList, likePost } from "../../stores/actions/PostDaoAction";
-import { convertTime } from "../../utils/convert";
+import { convertDatePost, convertTime } from "../../utils/convert";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
@@ -30,12 +30,15 @@ import { convertImage } from "../../utils/convertImage";
 import CopyToClipboard from "react-copy-to-clipboard";
 import toastMessage from "../ToastMessage";
 import { cancelSavePost } from "../../stores/actions/userAction";
+import { postDaoService } from "../../services/PostDaoService";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
   const currentUser = useSelector(
     (state) => state.authenticateReducer.currentUser
   );
+
+  const { defaultComments } = useSelector((state) => state.postDaoReducer);
   const { item, likePostList, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
   const [likeCmt, setLikeCmt] = useState([]);
@@ -51,9 +54,6 @@ const DaoPost = (props) => {
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   const [imageInModal, setImageInModal] = useState("");
-  useEffect(() => {
-    setPost({ ...item });
-  }, [item]);
 
   const {
     Id,
@@ -68,6 +68,19 @@ const DaoPost = (props) => {
     // comments,
     CreationTime,
   } = post;
+
+  const [showComment, setShowComment] = useState([]);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    setPost({ ...item });
+
+    const getComments = async () => {
+      const { data } = await postDaoService.getComments(item.Id);
+      setComments(data.data);
+    };
+    getComments();
+  }, [item]);
 
   const moreOptionOnEachPost = [
     { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
@@ -114,7 +127,6 @@ const DaoPost = (props) => {
       dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
     }
   };
-  console.log(mouseClickHeart);
 
   const handleLikeCmt = () => {
     if (currentUser) {
@@ -174,6 +186,24 @@ const DaoPost = (props) => {
   // Object.entries(post).forEach((post2, idx) => {
   //   if (post2[0].includes("Image")) tempCount++;
   // });
+
+  const getCommentsByPostId = (id) => {
+    const newChooseComment = [...showComment];
+    const checkIndex = newChooseComment.indexOf(id);
+    if (checkIndex === -1) {
+      newChooseComment.push(id);
+    } else {
+      newChooseComment.splice(checkIndex, 1);
+    }
+    const tempCmt = [...comments];
+    if (tempCmt.find((cmt) => cmt.PostId === id)) {
+    } else {
+    }
+    setShowComment(newChooseComment);
+  };
+
+  const handleAddComment = () => {};
+
   if (tempCount < 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
@@ -192,11 +222,7 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={`${
-                img.includes("https://drive.google.com/")
-                  ? img
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
-              }`}
+              src={convertImage(img)}
               alt=""
             />
           </Col>
@@ -225,11 +251,7 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={`${
-                    img.includes("https://drive.google.com/")
-                      ? img
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                  }`}
+                  src={convertImage(img)}
                   alt=""
                 />
               </Col>
@@ -250,11 +272,7 @@ const DaoPost = (props) => {
                     borderRadius: "6px",
                   }}
                   key={idx}
-                  src={`${
-                    img.includes("https://drive.google.com/")
-                      ? img
-                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                  }`}
+                  src={convertImage(img)}
                   alt=""
                 />
               </Col>
@@ -276,11 +294,7 @@ const DaoPost = (props) => {
                 borderRadius: "6px",
               }}
               key={idx}
-              src={`${
-                img.includes("https://drive.google.com/")
-                  ? img
-                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
-              }`}
+              src={convertImage(img)}
               alt=""
             />
           </Col>
@@ -317,11 +331,7 @@ const DaoPost = (props) => {
                       borderRadius: "6px",
                     }}
                     key={idx}
-                    src={`${
-                      img.includes("https://drive.google.com/")
-                        ? img
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                    }`}
+                    src={convertImage(img)}
                     alt=""
                   />
                 </div>
@@ -701,9 +711,11 @@ const DaoPost = (props) => {
           <img src={img1} alt="" />
           <div className="post__middle__right-side">
             <ul className="d-flex align-posts-center">
-              <li>Bên mình có nhé</li>
-              <li>Vào trang mình xem thử nhé</li>
-              <li>Bên mình đang khuyến mãi luôn ạ</li>
+              {defaultComments.map((item) => (
+                <li key={item.id} onClick={handleAddComment}>
+                  {item.Content}
+                </li>
+              ))}
             </ul>
             <div className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center">
               <PlusOutlined style={{ color: "#03AC84", fontSize: "14px" }} />
@@ -716,6 +728,66 @@ const DaoPost = (props) => {
         className={commentsClick ? "post__comments" : "post__comments d-none"}
       >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
+        {comments.map((cmt, idx) => (
+          <div key={cmt.id} className="post__comments__detail">
+            {idx !== 0 && (
+              <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
+            )}
+            <div className="post__comments__detail__info d-flex align-posts-center">
+              <img
+                className="post__comments__detail__info_avatar"
+                src={cmt.BookingUser.Image}
+                alt=""
+              />
+              <div
+                style={{ marginLeft: "10px" }}
+                className="post__comments__detail__info__nametime"
+              >
+                <p className="post__comments__detail__info__nametime__name">
+                  {cmt.BookingUser.Fullname}
+                </p>
+                <p>{convertTime(cmt.createdAt)}</p>
+              </div>
+            </div>
+            <div
+              style={{ marginLeft: "40px", marginTop: "5px" }}
+              className="post__comments__detail__content"
+            >
+              {cmt.Content}
+            </div>
+            {/* <Swiper
+              navigation={true}
+              modules={[Pagination, Navigation]}
+              className="mySwiper"
+              slidesPerView={2}
+              spaceBetween={10}
+              slidesPerGroup={1}
+              loopFillGroupWithBlank={true}
+            >
+              {post.services.map((post2, idx) => (
+                <SwiperSlide key={post2.Id}>
+                  <img src={post2.image} />
+                  <div className="post__comments__detail__slide-content d-flex flex-column">
+                    <p>{post2.link}</p>
+                    <p>{post2.content}</p>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper> */}
+            <div className="d-flex" style={{ marginTop: "22px" }}>
+              <HeartFilled
+                style={{
+                  fontSize: "20px",
+                  color: "#E22828",
+                  marginBottom: "2px",
+                }}
+              />
+              <p style={{ paddingLeft: "5px", color: "#E22828" }}>
+                {post.TotalLikes}
+              </p>
+            </div>
+          </div>
+        ))}
         {/* {comments.map((post, idx) => (
           <div key={post.Id} className="post__comments__detail">
             {idx !== 0 && (

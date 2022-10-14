@@ -78,6 +78,9 @@ const Option = ({ option, disabled }) => {
               onChange={handleOnchangeDate}
               defaultValue={moment(filter?.OrderByTimeFrom, "YYYY-MM-DD")}
               disabled={disabled}
+              disabledDate={(current) => {
+                return current && current <= moment().subtract(1, "days");
+              }}
             />
           </Form.Item>
           <Form.Item
@@ -120,6 +123,9 @@ const Option = ({ option, disabled }) => {
                 moment(filter?.OrderByDateTo, "YYYY-MM-DD"),
               ]}
               disabled={disabled}
+              disabledDate={(current) => {
+                return current && current <= moment().subtract(1, "days");
+              }}
             />
           </Form.Item>
         </div>
