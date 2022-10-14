@@ -14,6 +14,7 @@ import {
   SET_LIST_LIKED_CATEGORY_5,
   SET_LIST_LIKED_CATEGORY_6,
   SET_LIST_LIKED_CATEGORY,
+  SET_STUDIO_SIMILAR,
   SET_PROMOTION_CODE,
   SET_FILTER_SERVICE,
   LOADING_SERVICE,
@@ -58,6 +59,7 @@ const initialState = {
   listLikedCategory5: [],
   listLikedCategory6: [],
   listLikedUser: [],
+  listStudioSimilar: [],
   promotionCode: [],
   filterService: {
     OrderByTime: -1,
@@ -149,6 +151,11 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         listLikedCategory6: action.data,
+      };
+    case SET_STUDIO_SIMILAR:
+      return {
+        ...state,
+        listStudioSimilar: action.data,
       };
     case SET_PROMOTION_CODE:
       return {

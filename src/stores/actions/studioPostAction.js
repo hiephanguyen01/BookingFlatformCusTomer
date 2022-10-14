@@ -12,6 +12,7 @@ import {
   SET_STUDIO_NEAR,
   LOADING_SERVICE,
   SET_FILTER_SERVICE,
+  SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
@@ -59,8 +60,14 @@ export const studioDetailAction = (id, category, currentUser) => {
         category,
         currentUser
       );
+      if (category == 1) {
+        dispatch(
+          studioNearAction(id, data.data.Latitude, data.data.Longtitude)
+        );
+      }
       if (currentUser) {
         await userService.setRecentViews(id, category);
+        dispatch(getAllStudioLikedAction1(category));
       }
       dispatch({
         type: SET_STUDIO_DETAIL,
@@ -78,10 +85,19 @@ export const studioDetailAction = (id, category, currentUser) => {
     dispatch({ type: LOADING, payload: false });
   };
 };
-export const studioNearAction = (lat, lng) => async (dispatch) => {
+export const studioNearAction = (id, lat, lng) => async (dispatch) => {
   try {
-    const { data } = await studioPostService.getStudioNear(lat, lng);
+    const { data } = await studioPostService.getStudioNear(id, lat, lng);
     dispatch({ type: SET_STUDIO_NEAR, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getStudioSimilarAction = (id, cate) => async (dispatch) => {
+  try {
+    const { data } = await studioPostService.getStudioSimilar(id, cate);
+    console.log("similar", data);
+    dispatch({ type: SET_STUDIO_SIMILAR, data: data.data });
   } catch (error) {
     console.log(error);
   }
@@ -111,7 +127,7 @@ export const getLikeStudioPostAction = (postId, category, currentUser = "") => {
       });
       dispatch(getAllStudioLikedAction1(category));
       dispatch(getAllStudioLikedAction(category));
-      if (currentUser.trim !== "") {
+      if (currentUser) {
         dispatch(studioDetailAction(postId, category, currentUser));
       }
     } catch (error) {

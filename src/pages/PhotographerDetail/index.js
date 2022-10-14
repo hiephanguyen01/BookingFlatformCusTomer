@@ -17,10 +17,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SlideAlbum from "../MakeupDetails/components/SlideAlbum";
 import CommentRating from "../../components/CommentRating";
-import SlideCard from "../../components/SlideCard";
 import ImagePost from "../../components/imagePost/ImagePost";
 import {
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   getPromotionByTenantId,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
@@ -33,6 +33,7 @@ import {
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
+import { SlideCard } from "../StudioDetail/SlideCard";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { calTime } from "../../utils/calculate";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
@@ -48,12 +49,10 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, loading, filter, promotionCode } = useSelector(
+  const { studioDetail, loading, filter, listStudioSimilar,promotionCode } = useSelector(
     (state) => state.studioPostReducer
   );
-
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
-
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -80,11 +79,11 @@ const PhotographerDetail = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (currentUser !== null) {
-      console.log(currentUser);
       dispatch(studioDetailAction(id, cate, currentUser?.id));
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
@@ -604,7 +603,15 @@ const PhotographerDetail = () => {
                   />
                 </Col>
               </Row>
-              <SlideCard title="Trang phục tương tự" />
+              {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "photographer", id: 2 }}
+                title="Photographer tương tự"
+              />
+            ) : (
+              <></>
+            )}
             </div>
           </section>
         </div>

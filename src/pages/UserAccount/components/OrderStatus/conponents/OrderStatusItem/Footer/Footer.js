@@ -30,6 +30,8 @@ export const Footer = ({
   Category,
   pageBooking,
   setPageBooking,
+  Item,
+  post
 }) => {
   const [visible, setVisible] = useState(false);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
@@ -150,6 +152,10 @@ export const Footer = ({
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
+              Category={Category}
+              id={id}
+              Item={Item}
+              post={post}
             />
           </Modal>
         </div>

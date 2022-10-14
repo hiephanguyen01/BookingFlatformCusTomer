@@ -18,7 +18,6 @@ import "./deviceDetails.scss";
 
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
-import SlideCard from "../../components/SlideCard";
 import Report from "../../components/ReportModal";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
@@ -28,6 +27,7 @@ import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
@@ -37,6 +37,7 @@ import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
+import { SlideCard } from "../StudioDetail/SlideCard";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 
@@ -104,7 +105,7 @@ const menu_amount = (
 );
 
 const Index = () => {
-  const { studioDetail, filter, loading } = useSelector(
+  const { studioDetail, filter, loading,listStudioSimilar } = useSelector(
     (state) => state.studioPostReducer
   );
   const { id } = useParams();
@@ -125,6 +126,7 @@ const Index = () => {
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
@@ -415,12 +417,14 @@ const Index = () => {
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
-                <Rate
+              <Rate
                   disabled
                   allowHalf
-                  defaultValue={4.5}
-                  className="rating"
+                  value={studioDetail?.data?.TotalRate}
+                  className="rating d-flex align-items-center"
                 />
+
+                <span className="reserve">{studioDetail?.data?.TotalRate}</span>
                 <span className="reserve">
                   Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
@@ -630,10 +634,18 @@ const Index = () => {
             <Row>
               <Col lg={16} md={24}>
                 {" "}
-                <CommentRating data={[]} className="mb-43" />
+                <CommentRating data={studioDetail} className="mb-43" />
               </Col>
             </Row>
-            <SlideCard title="Trang phục tương tự" />
+            {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "device", id: 5 }}
+                title="Thiết bị tương tự"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       )}
