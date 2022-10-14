@@ -45,7 +45,7 @@ const Index = ({ data = [], className }) => {
   }, [data]);
 
   const handleChange = (page) => {
-    console.log(page);
+    console.log("page", page);
     setState({
       ...state,
       current: page,
@@ -57,7 +57,7 @@ const Index = ({ data = [], className }) => {
     if (chooseRating === 0) {
       setState((prev) => ({
         ...prev,
-        values: data.rating,
+        values: data?.rating,
       }));
     } else {
       setState((prev) => ({
@@ -90,9 +90,7 @@ const Index = ({ data = [], className }) => {
           {STAR_LIST.map((star) => {
             return (
               <div
-                onClick={() => {
-                  setChooseRating(star.id);
-                }}
+                onClick={() => setChooseRating(star.id)}
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
