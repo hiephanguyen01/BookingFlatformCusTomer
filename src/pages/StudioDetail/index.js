@@ -150,7 +150,7 @@ export const StudioDetail = () => {
   }, []);
 
   const handleReport = () => {
-    dispatch({ type: SHOW_MODAL, Component: <Report /> });
+    dispatch({ type: SHOW_MODAL, Component: <Report category={cate} postId={id} /> });
   };
 
   const ROW = (dataSource = []) => {
