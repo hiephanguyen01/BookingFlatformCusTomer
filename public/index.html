@@ -35,7 +35,7 @@
     />
 
     <title>Booking Studio</title>
-    <!-- <meta
+    <meta
       name="description"
       content="Web site created using create-react-app"
     />
@@ -51,24 +51,36 @@
     <meta
       property="og:image"
       content="https://jes.edu.vn/wp-content/uploads/2017/10/h%C3%ACnh-%E1%BA%A3nh.jpg"
-    /> -->
-    <!--
+    />
     <meta property="og:image:width" content="500" />
-    <meta property="og:image:height" content="500" /> -->
+    <meta property="og:image:height" content="500" />
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
+
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: "1457349284776215",
+        xfbml: true,
+        version: "v15.0",
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+  </script>
 </html>
