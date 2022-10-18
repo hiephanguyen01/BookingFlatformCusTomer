@@ -17,7 +17,7 @@ import "./commentRating.scss";
 const STAR_LIST = [
   { id: 0, label: "Tất cả" },
   { id: 5, label: "5" },
-  { id: 4, label: "4" },
+  { id: 6, label: "4" },
   { id: 3, label: "3" },
   { id: 2, label: "2" },
   { id: 1, label: "1" },
@@ -42,16 +42,8 @@ const Index = ({ data = [], className }) => {
       maxIndex: pageSize,
     });
   }, [data]);
+  console.log(values);
 
-  const handleChange = (page) => {
-    console.log(page);
-    setState({
-      ...state,
-      current: page,
-      minIndex: (page - 1) * pageSize,
-      maxIndex: page * pageSize,
-    });
-  };
   useEffect(() => {
     if (chooseRating === 0) {
       setState((prev) => ({
@@ -61,32 +53,45 @@ const Index = ({ data = [], className }) => {
     } else {
       setState((prev) => ({
         ...prev,
-        values: data?.rating?.filter((d) => d.Rate === chooseRating),
+        values: data.rating.filter((d) => d.Rate === chooseRating),
       }));
     }
+
   }, [chooseRating, data]);
+  const handleChange = (page) => {
+    console.log("page", page);
+    setState((prev) => ({
+      ...prev,
+      current: page,
+      minIndex: (page - 1) * pageSize,
+      maxIndex: page * pageSize,
+    }));
+  };
   if (data.length < 1) return null;
 
   return (
     <>
       <div className={`rating ${className}`}>
         <h3>Đánh giá</h3>
-        <div className="rate d-flex align-items-center">
-          <Rate
-            allowHalf
-            value={Number(data?.data?.TotalRate)}
-            style={{ fontSize: "10px" }}
-            disabled
-          ></Rate>
-          <div className="pt-3 ps-5">{`${data.data.TotalRate ||5} (${data.rating.length ||0})`}</div>
-        </div>
+        {data?.data && (
+          <div className="rate d-flex align-items-center">
+            <Rate
+              allowHalf
+              value={Number(data?.data?.TotalRate)}
+              style={{ fontSize: "10px" }}
+              disabled
+            ></Rate>
+            <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
+              data?.rating?.length || 0
+            })`}</div>
+          </div>
+        )}
+
         <div className="listRates">
           {STAR_LIST.map((star) => {
             return (
               <div
-                onClick={() => {
-                  setChooseRating(star.id);
-                }}
+                onClick={() => setChooseRating(star.id)}
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
@@ -96,7 +101,7 @@ const Index = ({ data = [], className }) => {
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
                   {star.id === 0
-                    ? `(${data.rating.length})`
+                    ? `(${data?.rating?.length})`
                     : `(${
                         data?.rating?.filter((d) => d.Rate === star.id).length
                       })`}
@@ -108,186 +113,103 @@ const Index = ({ data = [], className }) => {
         {values?.length > 0 && (
           <>
             <div className="rating_list">
-              {chooseRating === 0
-                ? values.map(
-                    (item, idx) =>
-                      idx >= minIndex &&
-                      idx < maxIndex && (
-                        <div key={item.id} className="rating_wrapper">
-                          <div className="info-user">
-                            <div className="d-flex">
-                              <div className="w-36px h-36px">
-                                <img
-                                  src={convertImage(item.BookingUser.Image)}
-                                  className="img_avatar"
-                                  alt=""
-                                />
-                              </div>
-                              <div className="info ms-10">
-                                <h3>
-                                  {item.BookingUser.Username ||
-                                    item.BookingUser.Fullname}
-                                </h3>
-                                <Rate
-                                  disabled
-                                  allowHalf
-                                  value={item?.Rate}
-                                ></Rate>
-                              </div>
-                            </div>
-                            <span>{convertTime(item.CreationTime)}</span>
-                          </div>
-                          <div className="description">{item.Description}</div>
-                          <ul
-                            className="listImages"
-                            onClick={() =>
-                              dispatch({
-                                type: "SHOW_MODAL_LIST",
-                                Component: <ModalImage data={item?.Image} />,
-                              })
-                            }
-                          >
-                            <li className="item-video">
-                              <img src={imgCmt} alt="" />
-                              <PlayCircleOutlined className="play" />
-                            </li>
-                            {item.Image.map((img, index) => (
-                              <li key={index} className="item-image">
-                                <img
-                                  src={`${
-                                    img.includes("https://drive.google.com/")
-                                      ? img
-                                      : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                                  }`}
-                                  alt=""
-                                />
-                              </li>
-                            ))}
-                          </ul>
-                          <div
-                            className="mt-16 mb-25 text-medium-re"
-                            style={{ color: "#828282" }}
-                          >
-                            Phòng : Wisteria Premium
-                          </div>
-                          <div className="d-flex">
-                            <div className="w-28px h-28px me-15">
-                              <img
-                                src={images.banner2}
-                                className="img_avatar"
-                                alt=""
-                              />
-                            </div>
-                            <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
-                              <div>
-                                <div className="name_reply text-medium-se">
-                                  Wisteria Studio{" "}
-                                  <CheckCircleOutlined
-                                    className="w-14px h-14px"
-                                    style={{ color: "#03AC84" }}
-                                  />
-                                </div>
-                                <div className="cmt_reply text-medium-re">
-                                  Cảm ơn bạn vì đã tin tưởng và ủng hộ Studio
-                                  Wisteria
-                                </div>
-                              </div>
-                              <span>1 tuần trước</span>
-                            </div>
-                          </div>
-                          <Divider style={{ backgroundColor: "#E7E7E7" }} />
-                        </div>
-                      )
-                  )
-                : values
-                    .filter((d) => d.Rate === chooseRating)
-                    .map((item) => (
-                      <div key={item.id} className="rating_wrapper">
-                        <div className="info-user">
-                          <div className="d-flex">
-                            <div className="w-36px h-36px">
-                              <img
-                                src={convertImage(item?.BookingUser?.Image)}
-                                className="img_avatar"
-                                alt=""
-                              />
-                            </div>
-                            <div className="info ms-10">
-                              {item.BookingUser.Username ||
-                                item.BookingUser.Fullname}
-                              <Rate disabled allowHalf value={item.Rate}></Rate>
-                            </div>
-                          </div>
-                          <span>{convertTime(item.CreationTime)}</span>
-                        </div>
-                        <div className="description">{item.Description}</div>
-                        <ul
-                          className="listImages"
-                          onClick={() =>
-                            dispatch({
-                              type: "SHOW_MODAL_LIST",
-                              Component: <ModalImage data={item?.Image} />,
-                            })
-                          }
-                        >
-                          <li className="item-video">
-                            <img src={imgCmt} alt="" />
-                            <PlayCircleOutlined className="play" />
-                          </li>
-                          {item.Image.map((img, index) => (
-                            <li key={index} className="item-image">
-                              <img
-                                src={`${
-                                  img.includes("https://drive.google.com/")
-                                    ? img
-                                    : REACT_APP_DB_BASE_URL_IMG + "/" + img
-                                }`}
-                                alt=""
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                        <div
-                          className="mt-16 mb-25 text-medium-re"
-                          style={{ color: "#828282" }}
-                        >
-                          Phòng : Wisteria Premium{" "}
-                        </div>
+              {values?.map(
+                (item, idx) =>
+                  idx >= minIndex &&
+                  idx < maxIndex && (
+                    <div key={`${item.id}${idx}`} className="rating_wrapper">
+                      <div className="info-user">
                         <div className="d-flex">
-                          <div className="w-28px h-28px me-15">
+                          <div className="w-36px h-36px">
                             <img
-                              src={images.banner2}
+                              src={convertImage(item?.BookingUser?.Image)}
                               className="img_avatar"
                               alt=""
                             />
                           </div>
-                          <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
-                            <div>
-                              <div className="name_reply text-medium-se">
-                                Wisteria Studio{" "}
-                                <CheckCircleOutlined
-                                  className="w-14px h-14px"
-                                  style={{ color: "#03AC84" }}
-                                />
-                              </div>
-                              <div className="cmt_reply text-medium-re">
-                                Cảm ơn bạn vì đã tin tưởng và ủng hộ Studio
-                                Wisteria
-                              </div>
-                            </div>
-                            <span>1 tuần trước</span>
+                          <div className="info ms-10">
+                            <h3>
+                              {item?.BookingUser?.Username ||
+                                item?.BookingUser?.Fullname}
+                            </h3>
+                            <Rate disabled allowHalf value={item?.Rate}></Rate>
                           </div>
                         </div>
-                        <Divider style={{ backgroundColor: "#E7E7E7" }} />
+                        <span>{convertTime(item?.CreationTime)}</span>
                       </div>
-                    ))}
+                      <div className="description">{item?.Description}</div>
+                      <ul
+                        className="listImages"
+                        onClick={() =>
+                          dispatch({
+                            type: "SHOW_MODAL_LIST",
+                            Component: <ModalImage data={item?.Image} />,
+                          })
+                        }
+                      >
+                        <li className="item-video">
+                          <img src={imgCmt} alt="" />
+                          <PlayCircleOutlined className="play" />
+                        </li>
+                        {item?.Image.map((img, index) => (
+                          <li key={index} className="item-image">
+                            <img
+                              src={`${
+                                img.includes("https://drive.google.com/")
+                                  ? img
+                                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
+                              }`}
+                              alt=""
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                      <div
+                        className="mt-16 mb-25 text-medium-re"
+                        style={{ color: "#828282" }}
+                      >
+                        {item?.StudioRoom?.Name ||
+                          item?.PhotographerServicePackage?.Name ||
+                          item?.ModelServicePackage?.Name ||
+                          item?.MakeupServicePackage?.Name}
+                      </div>
+                      <div className="d-flex">
+                        <div className="w-28px h-28px me-15">
+                          <img
+                            src={images.banner2}
+                            className="img_avatar"
+                            alt=""
+                          />
+                        </div>
+                        <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
+                          <div>
+                            <div className="name_reply text-medium-se">
+                              Wisteria Studio{" "}
+                              <CheckCircleOutlined
+                                className="w-14px h-14px"
+                                style={{ color: "#03AC84" }}
+                              />
+                            </div>
+                            <div className="cmt_reply text-medium-re">
+                              Cảm ơn bạn vì đã tin tưởng và ủng hộ Studio
+                              Wisteria
+                            </div>
+                          </div>
+                          <span>1 tuần trước</span>
+                        </div>
+                      </div>
+                      <Divider style={{ backgroundColor: "#E7E7E7" }} />
+                    </div>
+                  )
+              )}
             </div>
             <div className="pagination-ds">
               <Pagination
                 className="pagination-ds"
                 pageSize={pageSize}
+                defaultPageSize={1}
                 current={current}
-                total={values.length}
+                total={values?.length}
                 onChange={handleChange}
               />
             </div>
