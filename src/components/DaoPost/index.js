@@ -383,6 +383,7 @@ const DaoPost = (props) => {
             <ReportPost
               isReportPostModalVisible={isReportPostModalVisible}
               setIsReportPostModalVisible={setIsReportPostModalVisible}
+              postId={Id}
             />
           </div>
         </header>

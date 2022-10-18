@@ -8,8 +8,9 @@ import {
   MoreOutlined,
   RightOutlined,
   ShoppingCartOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
+import { Button, Col, Dropdown, Menu, Popover, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -19,7 +20,6 @@ import "./modelDetails.scss";
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
 import SlideAlbum from "./components/SlideAlbum";
-import Report from "../../components/ReportModal";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
 import svgLocation from "../../assets/svg/location.svg";
@@ -41,6 +41,7 @@ import { SlideCard } from "../StudioDetail/SlideCard";
 import { calTime } from "../../utils/calculate";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import { Report } from "../StudioDetail/Report";
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
   { title: "Mô tả", size: 8 },
@@ -101,25 +102,25 @@ const Index = () => {
       setChooseService([{ ...data }]);
     }
   };
-  const menu_report = (
-    <Menu
-      items={[
-        {
-          label: (
-            <div
-              onClick={() =>
-                dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }
-            >
-              <ExclamationCircleOutlined className="me-10" />
-              Báo cáo
-            </div>
-          ),
-          key: "0",
-        },
-      ]}
-    />
-  );
+  // const menu_report = (
+  //   <Menu
+  //     items={[
+  //       {
+  //         label: (
+  //           <div
+  //             onClick={() =>
+  //               dispatch({ type: SHOW_MODAL, Component: <Report /> })
+  //             }
+  //           >
+  //             <ExclamationCircleOutlined className="me-10" />
+  //             Báo cáo
+  //           </div>
+  //         ),
+  //         key: "0",
+  //       },
+  //     ]}
+  //   />
+  // );
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -128,6 +129,7 @@ const Index = () => {
           render: () => (
             <>
               <img
+                alt=""
                 src={`${
                   data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
                 }`}
@@ -248,6 +250,13 @@ const Index = () => {
     }
   };
 
+  const handleReport = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <Report category={cate} postId={id} />,
+    });
+  };
+
   return (
     <>
       <MetaDecorator
@@ -316,7 +325,7 @@ const Index = () => {
                     )}
                     {/* <HeartOutlined className="icon_heart" /> */}
                   </PopUpSignIn>
-                  <Dropdown overlay={menu_report} trigger={["click"]}>
+                  {/* <Dropdown overlay={menu_report} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
                         <MoreOutlined
@@ -327,7 +336,44 @@ const Index = () => {
                         />
                       </Space>
                     </a>
-                  </Dropdown>
+                  </Dropdown> */}
+                  <Popover
+                    placement="bottomRight"
+                    content={
+                      <div
+                        onClick={() => handleReport()}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                          padding: "10px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <WarningOutlined style={{ fontSize: "20px" }} />
+                          <span
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
+                            Báo cáo
+                          </span>
+                        </div>
+                      </div>
+                    }
+                    trigger="click"
+                  >
+                    <MoreOutlined
+                      style={{
+                        fontSize: "25px",
+                      }}
+                    />
+                  </Popover>
                 </div>
               </div>
               <div className="location">
@@ -335,7 +381,7 @@ const Index = () => {
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
-              <Rate
+                <Rate
                   disabled
                   allowHalf
                   value={studioDetail?.data?.TotalRate}

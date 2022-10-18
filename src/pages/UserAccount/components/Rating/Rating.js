@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { userService } from "../../../../services/UserService";
 import { RatingOther } from "./components/RatingOther";
 import { RatingStudio } from "./components/RatingStudio";
+import CommentRating from "../../../../components/CommentRating";
 import "./rating.scss";
 const STAR_LIST = [
   { id: 5, label: "5" },
@@ -18,7 +19,7 @@ const Rating = () => {
   useEffect(() => {
     (async () => {
       //truyen id cua thang user vo
-      const { data } = await userService.getListRatings(5);
+      const { data } = await userService.getListRatings();
       console.log(data);
       setMyRatings(data);
     })();
@@ -42,7 +43,7 @@ const Rating = () => {
 
   return (
     <>
-      <h4 className="Rating__header">Đánh giá của tôi</h4>
+      {/* <h4 className="Rating__header">Đánh giá của tôi</h4>
       <div className="Rating__body">
         <h3>Đánh giá</h3>
         <div className="d-flex align-items-center ">
@@ -50,7 +51,8 @@ const Rating = () => {
             allowHalf
             value={Number(totalStart)}
             style={{ fontSize: "10px" }}
-            disabled></Rate>
+            disabled
+          ></Rate>
           <div className="pt-3  Rating__body__star">
             {totalStart} <span>({myRatings.length} đánh giá)</span>
           </div>
@@ -65,7 +67,8 @@ const Rating = () => {
                   chooseRating === star.id
                     ? "Rating__body__list-rate__rate_item__active"
                     : ""
-                }`}>
+                }`}
+              >
                 <span>{star.label}</span>
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
@@ -82,6 +85,8 @@ const Rating = () => {
         <Divider />
         {handleStar()}
       </div>
+    </> */}
+      <CommentRating data={{ rating: myRatings }} className="mb-43 mt-12" />
     </>
   );
 };

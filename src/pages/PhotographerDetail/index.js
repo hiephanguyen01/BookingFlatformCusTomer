@@ -7,12 +7,13 @@ import {
   DownOutlined,
   LoadingOutlined,
   HeartFilled,
+  WarningOutlined,
 } from "@ant-design/icons";
 import "./photographerDetail.scss";
 import Table from "../../components/Table";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import { ReactComponent as Check } from "../../assets/PhotographerDetail/check 2.svg";
-import { Rate, Row, Col, Button } from "antd";
+import { Rate, Row, Col, Button, Popover } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SlideAlbum from "../MakeupDetails/components/SlideAlbum";
@@ -40,6 +41,7 @@ import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import { Report } from "../StudioDetail/Report";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -49,9 +51,8 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, loading, filter, listStudioSimilar,promotionCode } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { studioDetail, loading, filter, listStudioSimilar, promotionCode } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -288,6 +289,13 @@ const PhotographerDetail = () => {
     if (!currentUser) navigate("/auth/sign-in");
     dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
   };
+  const handleReport = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <Report category={cate} postId={id} />,
+    });
+  };
+
   return (
     <>
       <MetaDecorator
@@ -385,11 +393,43 @@ const PhotographerDetail = () => {
                         />
                       )}
                     </PopUpSignIn>
-                    <MoreOutlined
-                      style={{
-                        fontSize: "25px",
-                      }}
-                    />
+                    <Popover
+                      placement="bottomRight"
+                      content={
+                        <div
+                          onClick={() => handleReport()}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                            padding: "10px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <WarningOutlined style={{ fontSize: "20px" }} />
+                            <span
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
+                              Báo cáo
+                            </span>
+                          </div>
+                        </div>
+                      }
+                      trigger="click"
+                    >
+                      <MoreOutlined
+                        style={{
+                          fontSize: "25px",
+                        }}
+                      />
+                    </Popover>
                   </div>
                 </div>
                 <div className="photographer-detail__container__header__image">
@@ -597,21 +637,18 @@ const PhotographerDetail = () => {
               )}
               <Row gutter={[18, 18]}>
                 <Col md={16}>
-                  <CommentRating
-                    data={studioDetail?.rating}
-                    className="mb-43 mt-12"
-                  />
+                  <CommentRating data={studioDetail} className="mb-43 mt-12" />
                 </Col>
               </Row>
               {listStudioSimilar.length > 0 ? (
-              <SlideCard
-                data={listStudioSimilar}
-                category={{ name: "photographer", id: 2 }}
-                title="Photographer tương tự"
-              />
-            ) : (
-              <></>
-            )}
+                <SlideCard
+                  data={listStudioSimilar}
+                  category={{ name: "photographer", id: 2 }}
+                  title="Photographer tương tự"
+                />
+              ) : (
+                <></>
+              )}
             </div>
           </section>
         </div>
