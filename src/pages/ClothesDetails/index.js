@@ -117,7 +117,11 @@ const Index = () => {
   };
 
   const handleChooseService = (data) => {
-    setChooseService([{ ...data }]);
+    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      setChooseService([]);
+    } else {
+      setChooseService([{ ...data }]);
+    }
   };
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");

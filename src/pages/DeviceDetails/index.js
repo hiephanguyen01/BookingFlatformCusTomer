@@ -24,7 +24,6 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import svgLocation from "../../assets/svg/location.svg";
 import imgPost from "../../assets/dao/Frame 163.jpg";
 import ImagePost from "../../components/imagePost/ImagePost";
-import deviceImg from "../../assets/images/deviceImg.png";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   getLikeStudioPostAction,
@@ -32,7 +31,6 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
@@ -121,7 +119,6 @@ const Index = () => {
       : undefined;
 
   const [chooseService, setChooseService] = useState([]);
-  const [activeId, setActiveId] = useState(5);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
 
@@ -152,7 +149,11 @@ const Index = () => {
   console.log(studioDetail);
 
   const handleChooseService = (data) => {
-    setChooseService([{ ...data }]);
+    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      setChooseService([]);
+    } else {
+      setChooseService([{ ...data }]);
+    }
   };
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");

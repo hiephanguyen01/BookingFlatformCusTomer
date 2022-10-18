@@ -27,20 +27,18 @@ import {
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import toastMessage from "../../components/ToastMessage";
-import Voucher from "../../components/Voucher";
 import {
   addOrder,
   chooseServiceAction,
 } from "../../stores/actions/OrderAction";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import PromotionList from "../../components/PromotionList/PromotionList";
-import { calDate, calTime } from "../../utils/calculate";
-import { HIDE_MODAL, SHOW_MODAL } from "../../stores/types/modalTypes";
+import { calTime } from "../../utils/calculate";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
+import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { Report } from "../StudioDetail/Report";
@@ -97,6 +95,15 @@ const PhotographerDetail = () => {
   console.log(filter_promo);
 
   useEffect(() => {
+    // dispatch(
+    //   setFilterStudioService(5, 1, {
+    //     OrderByTime: filter.OrderByTime,
+    //     OrderByTimeFrom: filter.OrderByTimeFrom,
+    //     OrderByTimeTo: filter.OrderByTimeTo,
+    //     OrderByDateFrom: filter.OrderByDateFrom,
+    //     OrderByDateTo: filter.OrderByDateTo,
+    //   })
+    // );
     // let timeOut;
     // timeOut = setTimeout(() => {
     //   dispatch({
@@ -134,7 +141,11 @@ const PhotographerDetail = () => {
   }, []);
 
   const handleChooseService = (data) => {
-    setChooseService([{ ...data }]);
+    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      setChooseService([]);
+    } else {
+      setChooseService([{ ...data }]);
+    }
   };
 
   const ROW = (dataSource = []) => {
@@ -487,9 +498,9 @@ const PhotographerDetail = () => {
                   className="photographer-detail__container__services"
                 >
                   <div className="h-100" style={{ backgroundColor: "#fff" }}>
-                    <div className="ms-24 pt-20">
+                    {/* <div className="ms-24 pt-20">
                       <SelectTimeOption />
-                    </div>
+                    </div> */}
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>

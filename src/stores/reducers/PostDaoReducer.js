@@ -6,6 +6,7 @@ import {
   REMOVE_RESULT,
   GET_LIKE_POST_LIST,
   DELETE_DETAIL_POST,
+  GET_ALL_DEFAULT_CMT,
 } from "../types/PostDaoType";
 const initialState = {
   likePostList: [],
@@ -14,6 +15,7 @@ const initialState = {
   pagination: {},
   postDetail: {},
   selectSearch: [],
+  defaultComments: [],
 };
 export const postDaoReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -49,6 +51,9 @@ export const postDaoReducer = (state = initialState, action) => {
     }
     case GET_LIKE_POST_LIST: {
       return { ...state, likePostList: action.data };
+    }
+    case GET_ALL_DEFAULT_CMT: {
+      return { ...state, defaultComments: action.data };
     }
     default:
       return state;

@@ -10,6 +10,8 @@ import {
   SET_STUDIO_DETAIL,
   SET_STUDIO_DETAIL1,
   SET_STUDIO_NEAR,
+  LOADING_SERVICE,
+  SET_FILTER_SERVICE,
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
 
@@ -278,3 +280,15 @@ export const getPromotionByTenantId = (tenantId) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const setFilterStudioService =
+  (limit, page, filter) => async (dispatch) => {
+    dispatch({ type: LOADING_SERVICE, payload: true });
+    try {
+      dispatch({ type: SET_POST_PAGINATION, payload: { limit, page } });
+      dispatch({ type: SET_FILTER_SERVICE, payload: filter });
+    } catch (error) {
+      console.error(error);
+    }
+    dispatch({ type: LOADING_SERVICE, payload: false });
+  };

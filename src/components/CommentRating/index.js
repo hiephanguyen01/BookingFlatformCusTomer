@@ -73,20 +73,17 @@ const Index = ({ data = [], className }) => {
     <>
       <div className={`rating ${className}`}>
         <h3>Đánh giá</h3>
-        {data?.data && (
-          <div className="rate d-flex align-items-center">
-            <Rate
-              allowHalf
-              value={Number(data?.data?.TotalRate)}
-              style={{ fontSize: "10px" }}
-              disabled
-            ></Rate>
-            <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
-              data?.rating?.length || 0
-            })`}</div>
-          </div>
-        )}
-
+        <div className="rate d-flex align-items-center">
+          <Rate
+            allowHalf
+            value={Number(data?.data?.TotalRate)}
+            style={{ fontSize: "10px" }}
+            disabled
+          ></Rate>
+          <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
+            data?.rating?.length || 0
+          })`}</div>
+        </div>
         <div className="listRates">
           {STAR_LIST.map((star) => {
             return (
@@ -101,9 +98,10 @@ const Index = ({ data = [], className }) => {
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
                   {star.id === 0
-                    ? `(${data?.rating?.length})`
+                    ? `(${data?.rating?.length || 0})`
                     : `(${
-                        data?.rating?.filter((d) => d.Rate === star.id).length
+                        data?.rating?.filter((d) => d.Rate === star.id)
+                          .length || 0
                       })`}
                 </span>
               </div>

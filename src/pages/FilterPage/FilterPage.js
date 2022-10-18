@@ -125,7 +125,6 @@ const FilterPage = () => {
     initState();
     form.resetFields();
   };
-  const formatter = (value) => `${value}%`;
   return (
     <div className="FilterPage">
       <div className="container">

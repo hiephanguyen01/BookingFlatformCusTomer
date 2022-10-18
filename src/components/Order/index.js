@@ -1,5 +1,5 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { Col, DatePicker, Row, TimePicker, Input, Button } from "antd";
+import { Col, Row, Input, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
@@ -12,13 +12,11 @@ import Promotion from "../../components/Promotion";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import {
   convertDateSendToDB,
   convertPrice,
   convertTimeSendDB,
 } from "../../utils/convert";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import { orderService } from "../../services/OrderService";
 import toastMessage from "../ToastMessage";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
@@ -63,6 +61,7 @@ const Index = ({ linkTo = "" }) => {
       break;
     case "device":
       cate = 5;
+      break;
     case "model":
       cate = 6;
       break;

@@ -6,3 +6,4 @@ export const SELECT_RESULT = "SELECT_RESULT";
 export const REMOVE_RESULT = "REMOVE_RESULT";
 export const CREATE_POST = "CREATE_POST";
 export const GET_LIKE_POST_LIST = "GET_LIKE_POST_LIST";
+export const GET_ALL_DEFAULT_CMT = "GET_ALL_DEFAULT_CMT";

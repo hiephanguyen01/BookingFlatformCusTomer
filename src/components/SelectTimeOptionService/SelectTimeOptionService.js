@@ -2,27 +2,23 @@ import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import { setFilterStudioService } from "../../stores/actions/studioPostAction";
+import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertDateSendToDB } from "../../utils/convert";
 
-import "./selectTimeOption.scss";
+import "./selectTimeOptionService.scss";
 
 const Option = ({ option, disabled }) => {
-  const { filter } = useSelector((state) => state.studioPostReducer);
+  const { filterService } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
-  // const [date, setDate] = useState();
   const [time, setTime] = useState([]);
-  // const [dates, setDates] = useState([
-  //   convertDateSendToDB(new Date()),
-  //   convertDateSendToDB(new Date()),
-  // ]);
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
     if (time.length > 0) {
       dispatch(
-        getFilterStudioPost(5, 1, {
-          ...filter,
+        setFilterStudioService(5, 1, {
+          ...filterService,
           OrderByTime: 0,
           OrderByTimeFrom:
             convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
@@ -30,16 +26,37 @@ const Option = ({ option, disabled }) => {
             convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
         })
       );
+      // dispatch({
+      //   type: SET_FILTER_SERVICE,
+      //   payload: {
+      //     ...filterService,
+      //     OrderByTime: 0,
+      //     OrderByTimeFrom:
+      //       convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
+      //     OrderByTimeTo:
+      //       convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
+      //   },
+      // });
     }
   };
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
-    console.log(timeString);
 
     if (date !== "") {
+      // dispatch({
+      //   type: SET_FILTER_SERVICE,
+      //   payload: {
+      //     ...filterService,
+      //     OrderByTime: 0,
+      //     OrderByTimeFrom:
+      //       convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
+      //     OrderByTimeTo:
+      //       convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
+      //   },
+      // });
       dispatch(
-        getFilterStudioPost(5, 1, {
-          ...filter,
+        setFilterStudioService(5, 1, {
+          ...filterService,
           OrderByTime: 0,
           OrderByTimeFrom:
             convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
@@ -51,9 +68,18 @@ const Option = ({ option, disabled }) => {
   };
   const handleOnchangeDateRange = (ds, datesString) => {
     // setDates(datesString);
+    // dispatch({
+    //   type: SET_FILTER_SERVICE,
+    //   payload: {
+    //     ...filterService,
+    //     OrderByTime: 1,
+    //     OrderByDateFrom: convertDateSendToDB(datesString[0]),
+    //     OrderByDateTo: convertDateSendToDB(datesString[1]),
+    //   },
+    // });
     dispatch(
-      getFilterStudioPost(5, 1, {
-        ...filter,
+      setFilterStudioService(5, 1, {
+        ...filterService,
         OrderByTime: 1,
         OrderByDateFrom: convertDateSendToDB(datesString[0]),
         OrderByDateTo: convertDateSendToDB(datesString[1]),
@@ -61,7 +87,7 @@ const Option = ({ option, disabled }) => {
     );
   };
 
-  switch (Number(filter.OrderByTime)) {
+  switch (Number(filterService.OrderByTime)) {
     case 0:
       return (
         <div className="timeContainer">
@@ -76,7 +102,10 @@ const Option = ({ option, disabled }) => {
           >
             <DatePicker
               onChange={handleOnchangeDate}
-              defaultValue={moment(filter?.OrderByTimeFrom, "YYYY-MM-DD")}
+              defaultValue={moment(
+                filterService?.OrderByTimeFrom,
+                "YYYY-MM-DD"
+              )}
               disabled={disabled}
               disabledDate={(current) => {
                 return current && current <= moment().subtract(1, "days");
@@ -98,8 +127,8 @@ const Option = ({ option, disabled }) => {
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 defaultValue={[
-                  moment(filter.OrderByTimeFrom.slice(11, 16), "HH:mm"),
-                  moment(filter.OrderByTimeTo.slice(11, 16), "HH:mm"),
+                  moment(filterService.OrderByTimeFrom.slice(11, 16), "HH:mm"),
+                  moment(filterService.OrderByTimeTo.slice(11, 16), "HH:mm"),
                 ]}
                 disabled={disabled}
                 minuteStep={60}
@@ -119,8 +148,8 @@ const Option = ({ option, disabled }) => {
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
               defaultValue={[
-                moment(filter?.OrderByDateFrom, "YYYY-MM-DD"),
-                moment(filter?.OrderByDateTo, "YYYY-MM-DD"),
+                moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
+                moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
               ]}
               disabled={disabled}
               disabledDate={(current) => {
@@ -135,24 +164,28 @@ const Option = ({ option, disabled }) => {
   }
 };
 
-const SelectTimeOption = ({ disabled }) => {
-  const { filter } = useSelector((state) => state.studioPostReducer);
-  const [selection, setSelection] = useState(filter.OrderByTime);
+const SelectTimeOptionService = ({ disabled }) => {
+  const { filterService } = useSelector((state) => state.studioPostReducer);
+  const [selection, setSelection] = useState(filterService.OrderByTime);
 
   const dispatch = useDispatch();
 
   const handleOnChangeSelection = (e) => {
     setSelection(e.target.value);
+    // dispatch({
+    //   type: SET_FILTER_SERVICE,
+    //   payload: { ...filterService, OrderByTime: e.target.value },
+    // });
     dispatch(
-      getFilterStudioPost(5, 1, {
-        ...filter,
+      setFilterStudioService(5, 1, {
+        ...filterService,
         OrderByTime: e.target.value,
       })
     );
   };
 
   return (
-    <div className="selectTimeOptionContainer">
+    <div className="selectTimeOptionServiceContainer mb-20">
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}
@@ -169,4 +202,4 @@ const SelectTimeOption = ({ disabled }) => {
     </div>
   );
 };
-export default SelectTimeOption;
+export default SelectTimeOptionService;
