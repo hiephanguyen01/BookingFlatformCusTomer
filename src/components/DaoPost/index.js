@@ -630,16 +630,17 @@ const DaoPost = (props) => {
                           </header>
                           {comment?.services?.length > 0 ? (
                             <>
-                              {" "}
-                              <div
-                                style={{
-                                  marginLeft: "40px",
-                                  marginTop: "15px",
-                                }}
-                                className="post__comments__detail__content"
-                              >
-                                {comment.Content.split("---")[0]}
-                              </div>
+                              {comment.Content.split("---")[0].length > 0 && (
+                                <div
+                                  style={{
+                                    marginLeft: "40px",
+                                    marginTop: "15px",
+                                  }}
+                                  className="post__comments__detail__content"
+                                >
+                                  {comment.Content.split("---")[0]}
+                                </div>
+                              )}
                               <div className="post_slider_container">
                                 <Swiper
                                   slidesPerView={"1.4"}
@@ -686,7 +687,7 @@ const DaoPost = (props) => {
                               style={{ marginLeft: "40px", marginTop: "15px" }}
                               className="post__comments__detail__content"
                             >
-                              {comment.Content}
+                              {comment.Content.split("---")[0]}
                             </div>
                           )}
                           <div
@@ -843,12 +844,14 @@ const DaoPost = (props) => {
               </div>
               {cmt?.services?.length > 0 ? (
                 <>
-                  <div
-                    style={{ marginLeft: "40px", marginTop: "5px" }}
-                    className="post__comments__detail__content"
-                  >
-                    {cmt.Content.split("---")[0]}
-                  </div>
+                  {cmt?.Content.split("---")[0].length > 0 && (
+                    <div
+                      style={{ marginLeft: "40px", marginTop: "5px" }}
+                      className="post__comments__detail__content"
+                    >
+                      {cmt.Content.split("---")[0]}
+                    </div>
+                  )}
                   <div className="w-100">
                     <CommentSlider data={cmt?.services} />
                   </div>
@@ -858,7 +861,7 @@ const DaoPost = (props) => {
                   style={{ marginLeft: "40px", marginTop: "5px" }}
                   className="post__comments__detail__content"
                 >
-                  {cmt.Content}
+                  {cmt.Content.split("---")[0]}
                 </div>
               )}
               <div className="d-flex" style={{ marginTop: "22px" }}>

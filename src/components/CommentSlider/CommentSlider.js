@@ -8,6 +8,25 @@ import "swiper/css/navigation";
 import { convertImage } from "../../utils/convertImage";
 
 const CommentSlider = ({ data = [] }) => {
+  const convertCategory = (category) => {
+    switch (category) {
+      case 1:
+        return "studio";
+      case 2:
+        return "photographer";
+      case 3:
+        return "clothes";
+      case 4:
+        return "makeup";
+      case 5:
+        return "device";
+      case 6:
+        return "model";
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="post_slider_container">
       <Swiper
@@ -22,7 +41,10 @@ const CommentSlider = ({ data = [] }) => {
       >
         {data?.map((item, index) => (
           <SwiperSlide key={index} className="post_slider_item">
-            <a href="#" className="h-100">
+            <a
+              href={`${convertCategory(item.category)}/${item.id}`}
+              className="h-100"
+            >
               <div className="d-flex h-100">
                 <img
                   src={convertImage(item.Image[0])}
