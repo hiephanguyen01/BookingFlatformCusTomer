@@ -39,6 +39,7 @@ import "./clothesDetails.scss";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import Voucher from "../../components/Voucher";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+import PromotionList from "../../components/PromotionList/PromotionList";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -58,9 +59,9 @@ const QUANTITY = [
 ];
 
 const Index = () => {
-  const { studioDetail, filter, loading, listStudioSimilar } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { studioDetail, filter, loading, listStudioSimilar, promotionCode } =
+    useSelector((state) => state.studioPostReducer);
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,6 +69,18 @@ const Index = () => {
     location.pathname.split("/").filter((item) => item !== "")[1] === "clothes"
       ? 3
       : undefined;
+
+  const filter_promo = promotionCode
+    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+    ?.reduce((arr, item) => {
+      if (
+        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+        0
+      ) {
+        return [...arr];
+      }
+      return [...arr, item];
+    }, []);
 
   const [chooseService, setChooseService] = useState([]);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -462,40 +475,7 @@ const Index = () => {
                     backgroundColor: "#ffffff",
                   }}
                 >
-                  <div
-                    className="mb-15"
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "700",
-                    }}
-                  >
-                    4 Mã khuyến mãi
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <div
-                      style={{
-                        border: "1px solid #1FCBA2",
-                        borderRadius: "4px",
-                        padding: "7px 13px",
-                        color: "#1FCBA2",
-                        marginRight: "0.5rem",
-                      }}
-                    >
-                      Giảm 50K
-                    </div>
-                    <div
-                      style={{
-                        border: "1px solid #1FCBA2",
-                        borderRadius: "4px",
-                        padding: "7px 13px",
-                        color: "#1FCBA2",
-                        marginRight: "0.5rem",
-                      }}
-                    >
-                      Giảm 100K
-                    </div>
-                    <RightOutlined style={{ color: "#1FCBA2" }} />
-                  </div>
+                  <PromotionList data={filter_promo} />
                 </div>
               </Col>
             </Row>
@@ -518,9 +498,6 @@ const Index = () => {
                         Hướng dẫn chọn size{" "}
                         <RightOutlined style={{ color: "#1FCBA2" }} />
                       </Link>
-                    </div>
-                    <div className="ms-24 pt-20">
-                      <SelectTimeOption />
                     </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>

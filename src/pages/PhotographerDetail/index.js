@@ -49,9 +49,8 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, loading, filter, listStudioSimilar,promotionCode } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { studioDetail, loading, filter, listStudioSimilar, promotionCode } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -90,8 +89,6 @@ const PhotographerDetail = () => {
     dispatch(getPromotionCodeUserSave());
     dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
   }, [studioDetail]);
-
-  console.log(filter_promo);
 
   useEffect(() => {
     // dispatch(
@@ -133,21 +130,24 @@ const PhotographerDetail = () => {
     //   }, 2000);
     // }
     return () => {
-      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
-      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      // dispatch({ type: SET_PROMOTION_CODE, data: [] });
       // clearTimeout(timeOut);
     };
   }, []);
 
   const handleChooseService = (data) => {
-    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+    console.log(chooseService);
+    if (chooseService.filter((itm) => itm.id === data.id).length > 0) {
+      // console.log(data);
       setChooseService([]);
     } else {
       setChooseService([{ ...data }]);
     }
   };
-
+  console.log(chooseService);
   const ROW = (dataSource = []) => {
+    console.log(chooseService);
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
         {
@@ -220,8 +220,7 @@ const PhotographerDetail = () => {
         {
           render: () => (
             <>
-              {chooseService.filter((item) => item.id === data.id).length >
-              0 ? (
+              {chooseService.filter((itm) => itm.id === data.id).length > 0 ? (
                 <span
                   onClick={() => handleChooseService(data)}
                   style={{
@@ -604,14 +603,14 @@ const PhotographerDetail = () => {
                 </Col>
               </Row>
               {listStudioSimilar.length > 0 ? (
-              <SlideCard
-                data={listStudioSimilar}
-                category={{ name: "photographer", id: 2 }}
-                title="Photographer tương tự"
-              />
-            ) : (
-              <></>
-            )}
+                <SlideCard
+                  data={listStudioSimilar}
+                  category={{ name: "photographer", id: 2 }}
+                  title="Photographer tương tự"
+                />
+              ) : (
+                <></>
+              )}
             </div>
           </section>
         </div>

@@ -40,6 +40,7 @@ import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import PromotionList from "../../components/PromotionList/PromotionList";
 
 const COLUMN = [
   { title: "Loại sản phẩm", size: 5 },
@@ -105,9 +106,9 @@ const menu_amount = (
 );
 
 const Index = () => {
-  const { studioDetail, filter, loading,listStudioSimilar } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { studioDetail, filter, loading, listStudioSimilar, promotionCode } =
+    useSelector((state) => state.studioPostReducer);
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -115,6 +116,18 @@ const Index = () => {
     location.pathname.split("/").filter((item) => item !== "")[1] === "device"
       ? 5
       : undefined;
+
+  const filter_promo = promotionCode
+    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+    ?.reduce((arr, item) => {
+      if (
+        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+        0
+      ) {
+        return [...arr];
+      }
+      return [...arr, item];
+    }, []);
 
   const [chooseService, setChooseService] = useState([]);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -417,7 +430,7 @@ const Index = () => {
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
-              <Rate
+                <Rate
                   disabled
                   allowHalf
                   value={studioDetail?.data?.TotalRate}
@@ -494,40 +507,7 @@ const Index = () => {
                     backgroundColor: "#ffffff",
                   }}
                 >
-                  <div
-                    className="mb-15"
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "700",
-                    }}
-                  >
-                    4 Mã khuyến mãi
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <div
-                      style={{
-                        border: "1px solid #1FCBA2",
-                        borderRadius: "4px",
-                        padding: "7px 13px",
-                        color: "#1FCBA2",
-                        marginRight: "0.5rem",
-                      }}
-                    >
-                      Giảm 50K
-                    </div>
-                    <div
-                      style={{
-                        border: "1px solid #1FCBA2",
-                        borderRadius: "4px",
-                        padding: "7px 13px",
-                        color: "#1FCBA2",
-                        marginRight: "0.5rem",
-                      }}
-                    >
-                      Giảm 100K
-                    </div>
-                    <RightOutlined style={{ color: "#1FCBA2" }} />
-                  </div>
+                  <PromotionList data={filter_promo} />
                 </div>
               </Col>
             </Row>
@@ -545,9 +525,6 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    <div className="ms-24 pt-20">
-                      <SelectTimeOption />
-                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>

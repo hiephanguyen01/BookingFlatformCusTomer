@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Col, Pagination, Row } from "antd";
 
 import "./table.scss";
@@ -17,8 +17,7 @@ const Index = ({ column, row = [], className = "", style }) => {
     setLoading(true);
     setRows([...row.slice((currentPage - 1) * 5, currentPage * 5)]);
     setLoading(false);
-  }, [currentPage]);
-  console.log(loadingService, loading);
+  }, [currentPage, row]);
   // useEffect(() => {
   //   setCurrentPage(1);
   // }, [loadingService]);

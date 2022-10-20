@@ -524,7 +524,11 @@ export const StudioDetail = () => {
                   <span>{studioDetail?.data?.Address}</span>
                 </div>
                 <div className={cx("rate")}>
-                  <Rate disabled allowHalf value={studioDetail?.data?.TotalRate}></Rate>
+                  <Rate
+                    disabled
+                    allowHalf
+                    value={studioDetail?.data?.TotalRate}
+                  ></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
@@ -596,17 +600,12 @@ export const StudioDetail = () => {
                     </div>
                   </div> */}
                   <div className={cx("table")}>
-                    <div className="ms-20">
-                      <SelectTimeOption />
-                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
 
                   <div className={cx("rating")}>
                     <CommentRating
-                    
                       data={studioDetail}
-                      
                       className="mb-43 mt-12"
                     />
                   </div>
