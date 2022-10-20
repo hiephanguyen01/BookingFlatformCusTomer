@@ -77,9 +77,10 @@ const ModalChooseService = ({
       const res = await postDaoService.createComment({
         PostId,
         Content:
-          chooseCommentDefault.Content +
+          (chooseCommentDefault.Content || "") +
           "---" +
-          newData.map((item) => JSON.stringify(item)).join("//"),
+          newData.map((item) => JSON.stringify(item)).join("//") +
+          "//",
       });
       if (res) {
         handleState();
