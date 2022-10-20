@@ -1,20 +1,91 @@
-import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
+import { DatePicker, Form, Radio, Slider, Space, TimePicker } from "antd";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertDateSendToDB } from "../../utils/convert";
 
 import "./selectTimeOptionService.scss";
+const format = "DD.MM.YYYY HH:mm";
 
-const Option = ({ option, disabled }) => {
+function dateRange(startDate, endDate, steps = 1) {
+  const dateArray = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= new Date(endDate)) {
+    dateArray.push(moment(currentDate).format("l"));
+    // Use UTC date to prevent problems with time zones and DST
+    currentDate.setUTCDate(currentDate.getUTCDate() + steps);
+  }
+
+  return dateArray;
+}
+function dateRangeHour(startDate, endDate) {
+  const dateArray = [];
+  let currentDate = moment(startDate).format("HH:mm:ss").slice(0, 2);
+  for (
+    let i = Number(currentDate);
+    i <= Number(moment(endDate).format("HH:mm:ss").slice(0, 2));
+    i++
+  ) {
+    dateArray.push(i);
+  }
+  console.log(dateArray);
+  return dateArray;
+}
+const Option = ({ option, disabled, service }) => {
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
+  const [data, setData] = useState(service);
+  const [disableHour, setDisableHour] = useState([]);
   const [time, setTime] = useState([]);
+
+  function firstAndLast(array) {
+    const firstItem = array[0];
+    const lastItem = array[array.length - 1];
+
+    const objOutput = [firstItem, lastItem];
+
+    return objOutput;
+  }
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
+    if (dString && option === 0) {
+      console.log(
+        "disableDate",
+
+        service?.Bookings?.reduce((acc, item) => {
+          let dates = dateRange(
+            moment(item.OrderByTimeFrom).format("l"),
+            moment(item.OrderByTimeTo).format("l")
+          );
+          acc.push(...dates);
+          return uniqueInOrder(acc);
+        }, []),
+        firstAndLast(
+          service?.Bookings?.reduce((acc, item) => {
+            let dates = dateRange(
+              moment(item.OrderByTimeFrom).format("l"),
+              moment(item.OrderByTimeTo).format("l")
+            );
+            acc.push(...dates);
+            return uniqueInOrder(acc);
+          }, [])
+        )
+      );
+      console.log(service?.Bookings);
+      let hl = service?.Bookings?.filter((item) => {
+        const dates = dateRange(
+          moment(item.OrderByTimeFrom).format("l"),
+          moment(item.OrderByTimeTo).format("l")
+        );
+        return dates.includes(moment(dString).format("l"));
+      });
+      console.log(hl);
+      setDisableHour(hl);
+    }
     if (time.length > 0) {
       dispatch(
         setFilterStudioService(5, 1, {
@@ -41,7 +112,7 @@ const Option = ({ option, disabled }) => {
   };
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
-
+    console.log("timn date", timeString);
     if (date !== "") {
       // dispatch({
       //   type: SET_FILTER_SERVICE,
@@ -77,6 +148,7 @@ const Option = ({ option, disabled }) => {
     //     OrderByDateTo: convertDateSendToDB(datesString[1]),
     //   },
     // });
+    console.log(datesString);
     dispatch(
       setFilterStudioService(5, 1, {
         ...filterService,
@@ -86,7 +158,37 @@ const Option = ({ option, disabled }) => {
       })
     );
   };
+  const disabledDates = [
+    {
+      start: moment("19.10.20222 13:00", format),
+      end: moment("19.10.2022 15:00", format),
+    },
+    {
+      start: moment("21.10.20222 13:00", format),
+      end: moment("27.10.2022 15:00", format),
+    },
+  ];
 
+  function uniqueInOrder(x) {
+    return (Array.isArray(x) ? x : x.split("")).filter(
+      (c, i) => c !== x[i + 1]
+    );
+  }
+
+  const getDisabledHours = (date, type) => {
+    let array = [];
+    if (disableHour.length > 0) {
+      array = disableHour.reduce((acc, item) => {
+        let dates = dateRangeHour(
+          moment(item.OrderByTimeFrom).format(),
+          moment(item.OrderByTimeTo).format()
+        );
+        acc.push(...dates);
+        return uniqueInOrder(acc);
+      }, []);
+    }
+    return array;
+  };
   switch (Number(filterService.OrderByTime)) {
     case 0:
       return (
@@ -102,13 +204,31 @@ const Option = ({ option, disabled }) => {
           >
             <DatePicker
               onChange={handleOnchangeDate}
-              defaultValue={moment(
-                filterService?.OrderByTimeFrom,
-                "YYYY-MM-DD"
-              )}
+              status={"error"}
+              // defaultValue={moment(
+              //   filterService?.OrderByTimeFrom,
+              //   "YYYY-MM-DD"
+              // )}
+              inputReadOnly={true}
               disabled={disabled}
+              // disabledDate={(current) => {
+              //   return current && current <= moment().subtract(1, "days");
+
+              // }}
               disabledDate={(current) => {
-                return current && current <= moment().subtract(1, "days");
+                return (
+                  service?.Bookings?.filter((item) => !item.OrderByTime)
+                    .reduce((acc, item) => {
+                      let dates = dateRange(
+                        moment(item.OrderByTimeFrom).format("l"),
+                        moment(item.OrderByTimeTo).format("l")
+                      );
+                      acc.push(...dates);
+                      return uniqueInOrder(acc);
+                    }, [])
+                    .some((date) => moment(current).isSame(moment(date))) ||
+                  (current && current <= moment().subtract(1, "days"))
+                );
               }}
             />
           </Form.Item>
@@ -123,15 +243,19 @@ const Option = ({ option, disabled }) => {
           >
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
-                format="HH:mm"
+                format="HH "
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
-                defaultValue={[
-                  moment(filterService.OrderByTimeFrom.slice(11, 16), "HH:mm"),
-                  moment(filterService.OrderByTimeTo.slice(11, 16), "HH:mm"),
-                ]}
+                // defaultValue={[
+                //   moment(filterService.OrderByTimeFrom.slice(11, 16), "HH"),
+                //   moment(filterService.OrderByTimeTo.slice(11, 16), "HH"),
+                // ]}
+                inputReadOnly={true}
+                disabledTime={(date, type) => ({
+                  disabledHours: () => getDisabledHours(date, type) || [],
+                })}
                 disabled={disabled}
-                minuteStep={60}
+                // minuteStep={60}
               />
             </div>
           </Form.Item>
@@ -147,13 +271,35 @@ const Option = ({ option, disabled }) => {
           >
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
-              defaultValue={[
-                moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
-                moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
-              ]}
+              // defaultValue={[
+              //   moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
+              //   moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
+              // ]}
               disabled={disabled}
+              inputReadOnly={true}
               disabledDate={(current) => {
-                return current && current <= moment().subtract(1, "days");
+                if (
+                  moment(moment(current).format("l")).isSame(
+                    moment("10/28/2022")
+                  )
+                ) {
+                  console.log("dsaghdsahdkjsahkjda");
+                }
+                return (
+                  service?.Bookings?.reduce((acc, item) => {
+                    let dates = dateRange(
+                      moment(item.OrderByTimeFrom).format("l"),
+                      moment(item.OrderByTimeTo).format("l")
+                    );
+                    acc.push(...dates);
+                    return uniqueInOrder(acc);
+                  }, []).some((date) =>
+                    moment(moment(current).format("l")).isSame(
+                      moment("10/28/2022")
+                    )
+                  ) ||
+                  (current && current <= moment().subtract(1, "days"))
+                );
               }}
             />
           </Form.Item>
@@ -164,7 +310,8 @@ const Option = ({ option, disabled }) => {
   }
 };
 
-const SelectTimeOptionService = ({ disabled }) => {
+const SelectTimeOptionService = ({ disabled, service }) => {
+  const [data, setData] = useState(service);
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const [selection, setSelection] = useState(filterService.OrderByTime);
 
@@ -183,7 +330,9 @@ const SelectTimeOptionService = ({ disabled }) => {
       })
     );
   };
-
+  useEffect(() => {
+    setData(service);
+  }, [service]);
   return (
     <div className="selectTimeOptionServiceContainer mb-20">
       <Radio.Group
@@ -198,7 +347,7 @@ const SelectTimeOptionService = ({ disabled }) => {
           <Radio value={1}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
-      <Option option={selection} disabled={disabled} />
+      <Option service={data} option={selection} disabled={disabled} />
     </div>
   );
 };

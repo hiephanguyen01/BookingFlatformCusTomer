@@ -42,6 +42,7 @@ import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { Report } from "../StudioDetail/Report";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
