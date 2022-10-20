@@ -38,9 +38,18 @@ const Index = () => {
               <Route path="posts" element={<Posts />} />
               <Route path="post-saved" element={<PostSaved />} />
               <Route path="recently-viewed" element={<RecentlyViewed />} />
-              <Route path="clause" element={<Clause />} />
-              <Route path="policy" element={<Policy />} />
-              <Route path="support" element={<Support />} />
+              <Route
+                path="clause"
+                element={<Navigate to="/home/terms-use" />}
+              />
+              <Route
+                path="policy"
+                element={<Navigate to="/home/privacy-policy" />}
+              />
+              <Route
+                path="support"
+                element={<Navigate to="/home/helpCenter" />}
+              />
             </Routes>
           </Col>
         </Row>

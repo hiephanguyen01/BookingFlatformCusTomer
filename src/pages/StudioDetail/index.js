@@ -600,9 +600,6 @@ export const StudioDetail = () => {
                     </div>
                   </div> */}
                   <div className={cx("table")}>
-                    <div className="ms-20">
-                      <SelectTimeOption />
-                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
 

@@ -42,6 +42,7 @@ import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { Report } from "../StudioDetail/Report";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
@@ -92,8 +93,6 @@ const PhotographerDetail = () => {
     dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
   }, [studioDetail]);
 
-  console.log(filter_promo);
-
   useEffect(() => {
     // dispatch(
     //   setFilterStudioService(5, 1, {
@@ -134,21 +133,24 @@ const PhotographerDetail = () => {
     //   }, 2000);
     // }
     return () => {
-      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
-      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      // dispatch({ type: SET_PROMOTION_CODE, data: [] });
       // clearTimeout(timeOut);
     };
   }, []);
 
   const handleChooseService = (data) => {
-    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+    console.log(chooseService);
+    if (chooseService.filter((itm) => itm.id === data.id).length > 0) {
+      // console.log(data);
       setChooseService([]);
     } else {
       setChooseService([{ ...data }]);
     }
   };
-
+  console.log(chooseService);
   const ROW = (dataSource = []) => {
+    console.log(chooseService);
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
         {
@@ -221,8 +223,7 @@ const PhotographerDetail = () => {
         {
           render: () => (
             <>
-              {chooseService.filter((item) => item.id === data.id).length >
-              0 ? (
+              {chooseService.filter((itm) => itm.id === data.id).length > 0 ? (
                 <span
                   onClick={() => handleChooseService(data)}
                   style={{

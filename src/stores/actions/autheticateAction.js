@@ -54,8 +54,10 @@ export const facebookSignIn = () => async (dispatch) => {
   }
   dispatch({ type: SET_LOADING, payload: false });
 };
+
 export const googleSignIn = () => async (dispatch) => {
   const provider = new GoogleAuthProvider();
+  localStorage.setItem("providerId", provider.providerId);
   try {
     dispatch({ type: SET_LOADING, payload: true });
     const res = await signInWithPopup(auth, provider);
@@ -71,6 +73,51 @@ export const googleSignIn = () => async (dispatch) => {
   }
   dispatch({ type: SET_LOADING, payload: false });
 };
+
+export const socialAccountLink =
+  (setCheckedLink, checkedLink, phone, navigate) => async (dispatch) => {
+    const provider = new GoogleAuthProvider();
+    try {
+      dispatch({ type: SET_LOADING, payload: true });
+      let res, resp;
+      if (checkedLink) {
+        resp = await authenticateService.cancelSocialAccountLink({
+          providerId: provider.providerId,
+        });
+        openNotificationWithIcon(
+          "success",
+          "Successfully unlinked google account"
+        );
+      } else {
+        res = await signInWithPopup(auth, provider);
+        resp = await authenticateService.socialAccountLink({
+          ...res.user,
+          ...res.user.providerData[0],
+        });
+        openNotificationWithIcon(
+          "success",
+          "Successfully linked google account"
+        );
+      }
+
+      // localStorage.setItem("token", resp.data.token);
+      // setAuthToken(resp.data.token);
+      setCheckedLink(!checkedLink);
+      // dispatch(handleSendOtp("0934115420", navigate, "", undefined, 6));
+      // dispatch(configureCaptcha());
+
+      dispatch({ type: SET_USER, payload: resp.data.data });
+    } catch (error) {
+      openNotificationWithIcon(
+        "error",
+        error.response.data.message,
+        "please try again"
+      );
+      setCheckedLink(checkedLink);
+    }
+    dispatch({ type: SET_LOADING, payload: false });
+  };
+
 export const handleSendOtp =
   (phoneNum, navigate, to, onClick, num) => async (dispatch) => {
     try {
