@@ -1,18 +1,25 @@
 import "./reportPostDao.scss";
 import { useState } from "react";
 import { Modal, Input, Radio, Space } from "antd";
+import TextArea from "antd/lib/input/TextArea";
+import { reportService } from "../../services/ReportService";
 
-const options = [
-  "Nội dung trùng lặp, spam",
-  "Thông tin sai sự thật",
-  "Lộ thông tin cá nhân, vd: Số điện thoại,...",
-  "Ngôn từ gây thù ghét",
-  "Khác",
+const data = [
+  { label: "Nội dung trùng lặp, spam", value: "Nội dung trùng lặp, spam" },
+  { label: "Thông tin sai sự thật", value: "Thông tin sai sự thật" },
+  {
+    label: "Lộ thông tin cá nhân, vd: Số điện thoại,...",
+    value: "Lộ thông tin cá nhân, vd: Số điện thoại,...",
+  },
+  { label: "Ngôn từ gây thù ghét", value: "Ngôn từ gây thù ghét" },
+  { label: "Khác", value: 4 },
 ];
 
 const ReportPost = (props) => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState("");
   const [afterReport, setAfterReport] = useState(false);
+
+  const [valueText, setValueText] = useState("");
 
   const onChange = (e) => {
     // console.log("radio checked", e.target.value);
@@ -22,9 +29,27 @@ const ReportPost = (props) => {
     props.setIsReportPostModalVisible(false);
     setAfterReport(false);
   };
-  const handleOk = () => {
-    props.setIsReportPostModalVisible(false);
-    setAfterReport(true);
+  const handleOk = async () => {
+    console.log(valueText, props.postId);
+    try {
+      if (value === 6) {
+        const data1 = await reportService.createReportDao({
+          PostId: Number(props.postId),
+          Content: valueText,
+        });
+        console.log(data1);
+      } else {
+        const data1 = await reportService.createReportDao({
+          PostId: Number(props.postId),
+          Content: value,
+        });
+        console.log(data1);
+      }
+      props.setIsReportPostModalVisible(false);
+      setAfterReport(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -43,22 +68,28 @@ const ReportPost = (props) => {
       >
         <h3>Lý do báo cáo bài viết</h3>
         <Radio.Group onChange={onChange} value={value}>
-          <Space direction="vertical">
-            {options.map((item, idx) => (
-              <Radio key={idx} value={idx}>
-                {item}
-                {value === 4 && idx === 4 && (
-                  <Input
-                    style={{
-                      width: 100,
-                      marginLeft: 10,
-                    }}
-                  />
-                )}
-              </Radio>
-            ))}
+          <Space
+            direction="vertical"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            {data.map((item, idx) => {
+              return <Radio value={item.value}>{item.label}</Radio>;
+            })}
           </Space>
         </Radio.Group>
+        {value === 4 ? (
+          <TextArea
+            style={{ marginTop: "10px" }}
+            value={valueText}
+            onChange={(e) => setValueText(e.target.value)}
+            placeholder="Nhập lý do"
+            autoSize={{ minRows: 3, maxRows: 5 }}
+          />
+        ) : null}
       </Modal>
       <Modal
         visible={afterReport}

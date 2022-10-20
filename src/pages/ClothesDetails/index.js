@@ -7,8 +7,19 @@ import {
   MoreOutlined,
   RightOutlined,
   ShoppingCartOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Rate, Row, Select, Space } from "antd";
+import {
+  Button,
+  Col,
+  Dropdown,
+  Menu,
+  Popover,
+  Rate,
+  Row,
+  Select,
+  Space,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -18,7 +29,6 @@ import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
-import Report from "../../components/ReportModal";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
@@ -40,6 +50,7 @@ import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import Voucher from "../../components/Voucher";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import PromotionList from "../../components/PromotionList/PromotionList";
+import { Report } from "../StudioDetail/Report";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -128,6 +139,13 @@ const Index = () => {
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");
     dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+  };
+
+  const handleReport = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <Report category={cate} postId={id} />,
+    });
   };
 
   const menu = (
@@ -371,7 +389,7 @@ const Index = () => {
                     )}
                     {/* <HeartOutlined className="icon_heart" /> */}
                   </PopUpSignIn>
-                  <Dropdown overlay={menu} trigger={["click"]}>
+                  {/* <Dropdown overlay={menu} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
                         <MoreOutlined
@@ -382,7 +400,44 @@ const Index = () => {
                         />
                       </Space>
                     </a>
-                  </Dropdown>
+                  </Dropdown> */}
+                  <Popover
+                    placement="bottomRight"
+                    content={
+                      <div
+                        onClick={() => handleReport()}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                          padding: "10px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <WarningOutlined style={{ fontSize: "20px" }} />
+                          <span
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
+                            Báo cáo
+                          </span>
+                        </div>
+                      </div>
+                    }
+                    trigger="click"
+                  >
+                    <MoreOutlined
+                      style={{
+                        fontSize: "25px",
+                      }}
+                    />
+                  </Popover>
                 </div>
               </div>
               <div className="location">

@@ -75,7 +75,7 @@ export const StudioDetail = () => {
   const { ratingStudioPostDetail, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
-
+  console.log(studioDetail);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -148,7 +148,7 @@ export const StudioDetail = () => {
   }, []);
 
   const handleReport = () => {
-    dispatch({ type: SHOW_MODAL, Component: <Report /> });
+    dispatch({ type: SHOW_MODAL, Component: <Report category={cate} postId={id} /> });
   };
 
   const ROW = (dataSource = []) => {
