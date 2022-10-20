@@ -26,6 +26,7 @@ const CommentSlider = ({ data = [] }) => {
         break;
     }
   };
+
   return (
     <div className="post_slider_container">
       <Swiper
