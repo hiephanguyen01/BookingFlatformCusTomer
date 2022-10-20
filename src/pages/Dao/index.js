@@ -14,15 +14,12 @@ import DaoPost from "../../components/DaoPost";
 import DaoPostSearchModal from "../../components/DaoPostSearchModal";
 import UploadImage from "../../components/UploadImage";
 import {
+  getAllDefaultComments,
   getAllPostDaoAction,
   getLikePostList,
 } from "../../stores/actions/PostDaoAction";
-// import { Modal, message, Input } from "antd";
-// import uploadImg from "../../assets/dao/uploadImg.png";
-import GoogleDrivePicker from "../../components/GoogleDrivePicker/GoogleDrivePicker";
 import { GET_LIST_POST } from "../../stores/types/PostDaoType";
 import "./dao.scss";
-// import OneDrivePicker from "../../components/OneDrivePicker/OneDrivePicker";
 import { postDaoService } from "../../services/PostDaoService";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 
@@ -90,6 +87,10 @@ const Dao = () => {
   const [searchDaoPostVisible, setSearchDaoPostVisible] = useState(false);
   const [visible, setVisible] = useState(false);
 
+  useEffect(() => {
+    dispatch(getAllDefaultComments());
+  }, []);
+
   const onChangeFile = (e) => {
     const newFiles = [...files];
     if (newFiles.length === 6) return null;
@@ -136,9 +137,9 @@ const Dao = () => {
     });
   };
 
-  const errorMess = () => {
+  const errorMess = (mess) => {
     message.error({
-      content: "Đăng bài viết thất bại!",
+      content: mess || "Đăng bài viết thất bại!",
       className: "custom-class",
       style: {
         marginTop: "40vh",
@@ -394,11 +395,11 @@ const Dao = () => {
               border: "0.6px dashed #1FCBA2",
               borderRadius: "10px",
             }}
-            multiple={false}
+            multiple={true}
           >
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
           </UploadImage>
-          <GoogleDrivePicker files={filesDrive} setFiles={setFilesDrive} />
+          {/* <GoogleDrivePicker files={filesDrive} setFiles={setFilesDrive} /> */}
           {files &&
             files.map((item, index) => (
               <div key={index} style={{ position: "relative" }}>
@@ -451,6 +452,8 @@ const Dao = () => {
                   newPost.tags = newPost.tags.filter((val) => val !== item.id);
                 } else if (newPost.tags.length < 3) {
                   newPost.tags.push(item.id);
+                } else {
+                  errorMess("Số hash tag vượt quá giới hạn !");
                 }
                 setPost(newPost);
               }}

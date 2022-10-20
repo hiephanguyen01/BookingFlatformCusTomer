@@ -1,0 +1,20 @@
+.selectTimeOptionServiceContainer {
+
+    .ant-form-item {
+        label {
+            width: 100px;
+
+            &.disabled {
+                opacity: 0.5;
+            }
+        }
+    }
+
+    .timeContainer {}
+}
+
+.ant-picker-time-panel-column {
+    &::after {
+        display: none !important;
+    }
+}

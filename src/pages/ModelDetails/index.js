@@ -8,8 +8,9 @@ import {
   MoreOutlined,
   RightOutlined,
   ShoppingCartOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Rate, Row, Space } from "antd";
+import { Button, Col, Dropdown, Menu, Popover, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -19,8 +20,6 @@ import "./modelDetails.scss";
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
 import SlideAlbum from "./components/SlideAlbum";
-import SlideCard from "../../components/SlideCard";
-import Report from "../../components/ReportModal";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
 import svgLocation from "../../assets/svg/location.svg";
@@ -28,17 +27,22 @@ import ImagePost from "../../components/imagePost/ImagePost";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
 import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
-
+import { SlideCard } from "../StudioDetail/SlideCard";
+import { calTime } from "../../utils/calculate";
+import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import PromotionList from "../../components/PromotionList/PromotionList";
+import { Report } from "../StudioDetail/Report";
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
   { title: "Mô tả", size: 8 },
@@ -47,9 +51,9 @@ const COLUMN = [
 ];
 
 const Index = () => {
-  const { studioDetail, loading, filter } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { studioDetail, loading, filter, listStudioSimilar, promotionCode } =
+    useSelector((state) => state.studioPostReducer);
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,7 +61,17 @@ const Index = () => {
     location.pathname.split("/").filter((item) => item !== "")[1] === "model"
       ? 6
       : undefined;
-
+  const filter_promo = promotionCode
+    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+    ?.reduce((arr, item) => {
+      if (
+        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+        0
+      ) {
+        return [...arr];
+      }
+      return [...arr, item];
+    }, []);
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
   const dispatch = useDispatch();
@@ -68,7 +82,24 @@ const Index = () => {
     } else {
       dispatch(studioDetailAction(id, cate));
     }
+    dispatch(getStudioSimilarAction(id, cate));
   }, [currentUser, id, cate, dispatch]);
+
+  useEffect(() => {
+    // let timeOut;
+    // timeOut = setTimeout(() => {
+    //   dispatch({
+    //     type: SHOW_MODAL,
+    //     Component: <Voucher />,
+    //   });
+    // }, 2000);
+
+    return () => {
+      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // clearTimeout(timeOut);
+    };
+  }, []);
 
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");
@@ -76,33 +107,31 @@ const Index = () => {
   };
 
   const handleChooseService = (data) => {
-    let newChooseService = [...chooseService];
-    if (newChooseService.filter((item) => item.id === data.id).length > 0) {
-      newChooseService = newChooseService.filter((item) => item.id !== data.id);
+    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      setChooseService([]);
     } else {
-      newChooseService.push(data);
+      setChooseService([{ ...data }]);
     }
-    setChooseService(newChooseService);
   };
-  const menu_report = (
-    <Menu
-      items={[
-        {
-          label: (
-            <div
-              onClick={() =>
-                dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }
-            >
-              <ExclamationCircleOutlined className="me-10" />
-              Báo cáo
-            </div>
-          ),
-          key: "0",
-        },
-      ]}
-    />
-  );
+  // const menu_report = (
+  //   <Menu
+  //     items={[
+  //       {
+  //         label: (
+  //           <div
+  //             onClick={() =>
+  //               dispatch({ type: SHOW_MODAL, Component: <Report /> })
+  //             }
+  //           >
+  //             <ExclamationCircleOutlined className="me-10" />
+  //             Báo cáo
+  //           </div>
+  //         ),
+  //         key: "0",
+  //       },
+  //     ]}
+  //   />
+  // );
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -111,6 +140,7 @@ const Index = () => {
           render: () => (
             <>
               <img
+                alt=""
                 src={`${
                   data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
                 }`}
@@ -231,6 +261,13 @@ const Index = () => {
     }
   };
 
+  const handleReport = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <Report category={cate} postId={id} />,
+    });
+  };
+
   return (
     <>
       <MetaDecorator
@@ -261,14 +298,7 @@ const Index = () => {
           </div>
         </div>
       ) : (
-        <div
-          className=""
-          style={{
-            margin: "auto",
-            backgroundColor: "rgb(245, 245, 245)",
-            padding: "2rem 0",
-          }}
-        >
+        <div className="container_detail">
           <div className="costume_container">
             <div className="wrapper_banner">
               <div
@@ -306,7 +336,7 @@ const Index = () => {
                     )}
                     {/* <HeartOutlined className="icon_heart" /> */}
                   </PopUpSignIn>
-                  <Dropdown overlay={menu_report} trigger={["click"]}>
+                  {/* <Dropdown overlay={menu_report} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
                         <MoreOutlined
@@ -317,7 +347,44 @@ const Index = () => {
                         />
                       </Space>
                     </a>
-                  </Dropdown>
+                  </Dropdown> */}
+                  <Popover
+                    placement="bottomRight"
+                    content={
+                      <div
+                        onClick={() => handleReport()}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                          padding: "10px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <WarningOutlined style={{ fontSize: "20px" }} />
+                          <span
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
+                            Báo cáo
+                          </span>
+                        </div>
+                      </div>
+                    }
+                    trigger="click"
+                  >
+                    <MoreOutlined
+                      style={{
+                        fontSize: "25px",
+                      }}
+                    />
+                  </Popover>
                 </div>
               </div>
               <div className="location">
@@ -328,9 +395,11 @@ const Index = () => {
                 <Rate
                   disabled
                   allowHalf
-                  defaultValue={4.5}
-                  className="rating"
+                  value={studioDetail?.data?.TotalRate}
+                  className="rating d-flex align-items-center"
                 />
+
+                <span className="reserve">{studioDetail?.data?.TotalRate}</span>
                 <span className="reserve">
                   Đã đặt {studioDetail?.data?.BookingCount}
                 </span>
@@ -358,40 +427,7 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    <div
-                      className="mb-15"
-                      style={{
-                        fontSize: "20px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      4 Mã khuyến mãi
-                    </div>
-                    <div className="d-flex align-items-center">
-                      <div
-                        style={{
-                          border: "1px solid #1FCBA2",
-                          borderRadius: "4px",
-                          padding: "7px 13px",
-                          color: "#1FCBA2",
-                          marginRight: "0.5rem",
-                        }}
-                      >
-                        Giảm 50K
-                      </div>
-                      <div
-                        style={{
-                          border: "1px solid #1FCBA2",
-                          borderRadius: "4px",
-                          padding: "7px 13px",
-                          color: "#1FCBA2",
-                          marginRight: "0.5rem",
-                        }}
-                      >
-                        Giảm 100K
-                      </div>
-                      <RightOutlined style={{ color: "#1FCBA2" }} />
-                    </div>
+                    <PromotionList data={filter_promo} />
                   </div>
                 </Col>
                 <Col
@@ -437,9 +473,6 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    <div className="ms-24 pt-20">
-                      <SelectTimeOption />
-                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
@@ -477,7 +510,13 @@ const Index = () => {
                         >
                           {`${convertPrice(
                             chooseService?.reduce(
-                              (total, item) => total + item.Price,
+                              (total, item) =>
+                                total +
+                                item.Price *
+                                  calTime(
+                                    filter.OrderByTimeFrom,
+                                    filter.OrderByTimeTo
+                                  ),
                               0
                             )
                           )}`}
@@ -500,7 +539,13 @@ const Index = () => {
                       >
                         {`${convertPrice(
                           chooseService?.reduce(
-                            (total, item) => total + item.Sales,
+                            (total, item) =>
+                              total +
+                              item.Sales *
+                                calTime(
+                                  filter.OrderByTimeFrom,
+                                  filter.OrderByTimeTo
+                                ),
                             0
                           )
                         )}`}
@@ -557,10 +602,18 @@ const Index = () => {
             <Row>
               <Col lg={16} md={24}>
                 {" "}
-                <CommentRating data={[]} className="mb-43" />
+                <CommentRating data={studioDetail} className="mb-43" />
               </Col>
             </Row>
-            <SlideCard title="Trang phục tương tự" />
+            {listStudioSimilar.length > 0 ? (
+              <SlideCard
+                data={listStudioSimilar}
+                category={{ name: "model", id: 6 }}
+                title="Model tương tự"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       )}

@@ -29,7 +29,9 @@ import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getAllStudioPost,
   getLikeStudioPostAction,
+  getStudioSimilarAction,
   studioDetailAction,
+  getPromotionByTenantId,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertPrice } from "../../utils/convert";
@@ -40,6 +42,10 @@ import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
+import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
+import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import PromotionList from "../../components/PromotionList/PromotionList";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -63,22 +69,67 @@ export const StudioDetail = () => {
     studioPostList,
     filter,
     loading,
+    listStudioSimilar,
+    promotionCode,
   } = useSelector((state) => state.studioPostReducer);
-  console.log(studioDetail);
-  // const { roomDetail, roomSelect } = useSelector((state) => state.roomReducer);
-  const { ratingStudioPostDetai, numberRating } = useSelector(
+  const { ratingStudioPostDetail, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
+  console.log(studioDetail);
+  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
       ? 1
       : undefined;
 
-  // useEffect(() => {
-  // setTimeout(() => {
-  //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
-  // }, 5000);
-  // }, []);
+  const filter_promo = promotionCode
+    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+    ?.reduce((arr, item) => {
+      if (
+        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+        0
+      ) {
+        return [...arr];
+      }
+      return [...arr, item];
+    }, []);
+  useEffect(() => {
+    // let timeOut;
+
+    // timeOut = setTimeout(() => {
+    //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+    // }, 2000);
+    // dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+    // if (
+    //   promotionCode
+    //     ?.filter(
+    //       (item) => item.SaleCode.DateTimeExpire > new Date().toISOString()
+    //     )
+    //     ?.reduce((arr, item) => {
+    //       if (
+    //         promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id)
+    //           .length > 0
+    //       ) {
+    //         return [...arr];
+    //       }
+    //       return [...arr, item];
+    //     }, []).length > 0
+    // ) {
+    //   timeOut = setTimeout(() => {
+    //     dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
+    //   }, 2000);
+    // }
+    return () => {
+      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // clearTimeout(timeOut);
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch(getPromotionCodeUserSave());
+    dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
+  }, [studioDetail]);
 
   useEffect(() => {
     if (currentUser !== null) {
@@ -87,18 +138,17 @@ export const StudioDetail = () => {
       dispatch(studioDetailAction(id, cate));
     }
     dispatch(getDetailRoomAction(id));
-    dispatch(getAllStudioPost(10, 1, 1));
+    dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
   useEffect(() => {
-    console.log(currentUser?.id);
     return () => {
       dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
     };
   }, []);
 
   const handleReport = () => {
-    dispatch({ type: SHOW_MODAL, Component: <Report /> });
+    dispatch({ type: SHOW_MODAL, Component: <Report category={cate} postId={id} /> });
   };
 
   const ROW = (dataSource = []) => {
@@ -327,15 +377,11 @@ export const StudioDetail = () => {
 
   const handleChooseService = (data) => {
     if (filter.OrderByTime === 0 || filter.OrderByTime === 1) {
-      let newChooseService = [...chooseService];
-      if (newChooseService.filter((item) => item.id === data.id).length > 0) {
-        newChooseService = newChooseService.filter(
-          (item) => item.id !== data.id
-        );
+      if (chooseService.filter((item) => item.id === data.id).length > 0) {
+        setChooseService([]);
       } else {
-        newChooseService.push(data);
+        setChooseService([{ ...data }]);
       }
-      setChooseService(newChooseService);
     } else {
       toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn");
     }
@@ -388,7 +434,7 @@ export const StudioDetail = () => {
         }
         title={studioDetail?.data?.Name}
       />
-      {loading ? (
+      {false ? (
         <div
           style={{
             width: "100%",
@@ -409,7 +455,7 @@ export const StudioDetail = () => {
           </div>
         </div>
       ) : (
-        <>
+        <div className="container_detail">
           <div className={cx("wrapper")}>
             <div className={cx("studioDetail")}>
               <div className={cx("box1")}>
@@ -478,8 +524,12 @@ export const StudioDetail = () => {
                   <span>{studioDetail?.data?.Address}</span>
                 </div>
                 <div className={cx("rate")}>
-                  <Rate disabled allowHalf value={5}></Rate>
-                  <span>5</span>
+                  <Rate
+                    disabled
+                    allowHalf
+                    value={studioDetail?.data?.TotalRate}
+                  ></Rate>
+                  <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
                     style={{ fontSize: "15px" }}
@@ -539,34 +589,23 @@ export const StudioDetail = () => {
                     </ReadMoreDesc>
                   </div>
                   <div className={cx("sale")}>
+                    <PromotionList data={filter_promo} />
+                  </div>
+
+                  {/* <div className={cx("sale")}>
                     <h3>4 Mã khuyến mãi</h3>
                     <div className={cx("listSale")}>
                       <span>GIẢM 50K</span>
                       <span>GIẢM 500K</span>
                     </div>
-                  </div>
+                  </div> */}
                   <div className={cx("table")}>
-                    <div className="ms-20">
-                      <SelectTimeOption />
-                    </div>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                    {/* <Table
-                className={cx("table-ant")}
-                columns={columns}
-                dataSource={roomDetail ?? roomDetail}
-                pagination={{
-                  defaultPageSize: 5,
-                  showSizeChanger: true,
-                  pageSizeOptions: ["1", "5", "10"],
-                  style: { marginTop: "16px!important" },
-                  className: cx("paginate"),
-                }}
-              /> */}
                   </div>
 
                   <div className={cx("rating")}>
                     <CommentRating
-                      data={studioDetail?.rating}
+                      data={studioDetail}
                       className="mb-43 mt-12"
                     />
                   </div>
@@ -739,17 +778,18 @@ export const StudioDetail = () => {
                 </div>
               </div>
               <SlideCard
-                data={
-                  studioPostList ??
-                  studioPostList.filter((item) => item.id !== id)
-                }
+                data={listStudioSimilar ?? listStudioSimilar}
+                category={{ name: "studio", id: 1 }}
                 title="Studio tương tự"
               />
-              <SlideCard data={studioNear ?? studioNear} title="Gần bạn" />
-              {/* <SlideCard data={[1, 2, 3, 4, 5, 6, 7]} title="Bạn vừa mới xem" /> */}
+              <SlideCard
+                data={studioNear ?? studioNear}
+                category={{ name: "studio", id: 1 }}
+                title="Gần bạn"
+              />
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );

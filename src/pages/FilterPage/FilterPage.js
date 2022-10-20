@@ -10,7 +10,9 @@ import {
   Row,
   Select,
   Slider,
+  TimePicker,
 } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
@@ -54,15 +56,15 @@ const categories = [
   },
 ];
 const FilterPage = () => {
+  const [date, setDate] = useState(convertDateSendToDB(new Date()));
+  const [time, setTime] = useState([]);
+
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { filter, loading, pagination, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
-  console.log(filter);
-
   const [provinces, setProvinces] = useState([]);
-
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
@@ -117,6 +119,11 @@ const FilterPage = () => {
       getFilterStudioPost(5, 1, { ...filter, priceOption: e.target.value })
     );
   };
+  const onChangeRateOption = (e) => {
+    dispatch(
+      getFilterStudioPost(5, 1, { ...filter, ratingOption: e.target.value })
+    );
+  };
   const onChangeSlideRange = (val) => {
     const [price1, price2] = val;
     dispatch(getFilterStudioPost(5, 1, { ...filter, price1, price2 }));
@@ -128,7 +135,21 @@ const FilterPage = () => {
     initState();
     form.resetFields();
   };
-  const formatter = (value) => `${value}%`;
+  const handleOnchangeHour = (t, timeString) => {
+    setTime(timeString);
+    if (date !== "") {
+      dispatch(
+        getFilterStudioPost(5, 1, {
+          ...filter,
+          OrderByTime: 1,
+          OrderByTimeFrom:
+            convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
+          OrderByTimeTo:
+            convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
+        })
+      );
+    }
+  };
   return (
     <div className="FilterPage">
       <div className="container">
@@ -136,11 +157,30 @@ const FilterPage = () => {
           <Col span={6}>
             <Form {...layout} onFinish={handleClearFilter} form={form}>
               {/* timefil */}
-              <div className="box">
+              {/* <div className="box">
                 <p className="text">Khung giờ bạn muốn đặt</p>
                 <Divider />
-                <SelectTimeOption />
-              </div>
+                <div
+                  className=""
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}>
+                  <TimePicker.RangePicker
+                    format="HH:mm"
+                    onChange={handleOnchangeHour}
+                    size="large"
+                    inputReadOnly={true}
+                    defaultValue={[
+                      moment(filter.OrderByTimeFrom.slice(11, 16), "HH:mm"),
+                      moment(filter.OrderByTimeTo.slice(11, 16), "HH:mm"),
+                    ]}
+                    minuteStep={60}
+                  />
+                </div>
+              </div> */}
               {/* filter */}
               <div className="box">
                 <div
@@ -148,8 +188,7 @@ const FilterPage = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <p className="text">LỌC THEO</p>
                   <Button htmlType="submit" type="primary">
                     Xoá bộ lọc
@@ -162,7 +201,15 @@ const FilterPage = () => {
                 </Form.Item>
 
                 <Form.Item label="Địa điểm" name="location">
-                  <Select onChange={onChangeFilterProvince}>
+                  <Select
+                    showSearch
+                    onChange={onChangeFilterProvince}
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }>
                     {provinces &&
                       provinces.map((val) => (
                         <Option value={val.id}>{val.Name}</Option>
@@ -175,8 +222,7 @@ const FilterPage = () => {
                   <div className="category_radio_group">
                     <Radio.Group
                       onChange={onChangeFilterCategory}
-                      value={filter.category}
-                    >
+                      value={filter.category}>
                       {categories &&
                         categories.map((val) => (
                           <Radio key={val.id} value={val.id}>
@@ -219,18 +265,18 @@ const FilterPage = () => {
 
                 <Divider />
                 <p className="text">Đánh giá</p>
-                <Form.Item name="rating">
+                <Form.Item name="ratingOption">
                   <div className="filter_rating_container">
-                    <Radio.Group>
+                    <Radio.Group onChange={onChangeRateOption}>
                       <Row>
                         <Col span={24}>
-                          <Radio value="A3">Đánh giá nhiều nhất </Radio>
+                          <Radio value={1}>Đánh giá nhiều nhất</Radio>
                         </Col>
                         <Col span={24}>
-                          <Radio value="B3">Đánh giá cao nhất </Radio>
+                          <Radio value={2}>Đánh giá cao nhất</Radio>
                         </Col>
                         <Col span={24}>
-                          <Radio value="C3">Đặt nhiều nhất</Radio>
+                          <Radio value={3}>Đặt nhiều nhất</Radio>
                         </Col>
                       </Row>
                     </Radio.Group>
@@ -246,8 +292,7 @@ const FilterPage = () => {
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
-                }}
-              >
+                }}>
                 <div
                   style={{
                     background: "white",
@@ -255,8 +300,7 @@ const FilterPage = () => {
                     borderRadius: "50%",
                     padding: "10px",
                     margin: "10px",
-                  }}
-                >
+                  }}>
                   <LoadingOutlined style={{ fontSize: "40px" }} />
                 </div>
               </div>
@@ -279,8 +323,7 @@ const FilterPage = () => {
                 display: "flex",
                 justifyContent: "right",
                 padding: "10px 10px",
-              }}
-            >
+              }}>
               <Pagination
                 pageSize={pagination?.limit || 0}
                 current={pagination?.currentPage}

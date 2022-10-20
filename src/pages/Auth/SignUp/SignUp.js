@@ -1,4 +1,3 @@
-
 import { Button, Divider } from "antd";
 import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
@@ -63,12 +62,14 @@ export const SignUp = ({ onClickSignUp }) => {
               phoneNum.length >= 9 && phoneNum.length <= 11
                 ? "d-none"
                 : "invalidPhone"
-            }>
+            }
+          >
             Vui lòng nhập số điện thoại hợp lệ !
           </div>
         </div>
       </div>
       <div id="sign-in-button"></div>
+      {/* Capcha --------------- */}
       <Button
         onClick={() => {
           handleSendOtpp();
@@ -78,7 +79,8 @@ export const SignUp = ({ onClickSignUp }) => {
         type="primary"
         loading={loading}
         disabled={phoneNum.length < 9 && phoneNum.length > 11}
-        style={{ borderRadius: "10px" }}>
+        style={{ borderRadius: "10px" }}
+      >
         Đăng ký
       </Button>
       <div className="have-account">
@@ -86,7 +88,8 @@ export const SignUp = ({ onClickSignUp }) => {
         {onClickSignUp ? (
           <span
             className="have-account-button"
-            onClick={() => onClickSignUp(1)}>
+            onClick={() => onClickSignUp(1)}
+          >
             Đăng nhập
           </span>
         ) : (

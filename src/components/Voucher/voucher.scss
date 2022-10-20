@@ -1,0 +1,145 @@
+@import "../../App.scss";
+
+.save_promotion_container {
+    position: relative;
+    padding: 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    max-height: 500px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: #CCCCCC;
+    }
+
+    &::-webkit-scrollbar {
+        width: 0px;
+        background-color: #F5F5F5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: #D62929;
+        background-image: -webkit-linear-gradient(90deg,
+                transparent,
+                rgba(0, 0, 0, 0.4) 50%,
+                transparent,
+                transparent)
+    }
+
+    .close_modal {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        background: $neutral-400;
+
+        top: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    .header_modal {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 27px;
+        color: $neutral-600;
+
+        margin-bottom: 23px;
+    }
+
+    .save_promotion_wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #B2B2B2;
+
+        &:last-child {
+            margin-bottom: 0px;
+            border-bottom: none;
+        }
+
+        .save_promotion_content {
+            width: 70%;
+
+            .save_promotion_code {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 16px;
+                color: $neutral-500;
+
+                margin-bottom: 8px;
+            }
+
+            .save_promotion_desc {
+                font-weight: 700;
+                color: $neutral-700;
+                margin-bottom: 8px;
+                display: -webkit-box;
+
+                font-size: 16px;
+                line-height: 20px;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-height: 40px;
+                min-height: 20px;
+            }
+
+            .save_promotion_date {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 19px;
+                color: $neutral-500;
+            }
+        }
+
+        .btn_apply {
+            padding: 8px 0;
+            background: #1FCBA2;
+            color: #fff;
+            border-radius: 4px;
+
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            cursor: pointer;
+
+            min-width: 110px;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .btn_applied {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            color: $neutral-400;
+
+            background: #E7E7E7;
+            border-radius: 4px;
+            padding: 8px 20px;
+            cursor: pointer;
+
+            min-width: 110px;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}

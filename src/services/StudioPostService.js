@@ -26,6 +26,9 @@ class StudioPostService extends BaseService {
   getStudioNear = (id, lat, lng) => {
     return this.get(`/api/studio-post/distance/${id}?lat=${lat}&lng=${lng}`);
   };
+  getStudioSimilar = (id, cate) => {
+    return this.get(`/api/studio-post/similar/${id}?category=${cate}`);
+  };
   getLikeStudioPost = (data) => {
     return this.post(`/api/booking-user/like-studio-post`, data);
   };
@@ -34,6 +37,12 @@ class StudioPostService extends BaseService {
       return this.post(`/api/booking-user/liked-studio?_sort=${_sort}`, data);
     }
     return this.post(`/api/booking-user/liked-studio`, data);
+  };
+  updateView = (data) => {
+    return this.patch(`/api/album/`, data);
+  };
+  getPromotionByTenantId = (tenantId) => {
+    return this.get(`/api/promo-code/by-tenant-id?TenantId=${tenantId}`);
   };
 }
 

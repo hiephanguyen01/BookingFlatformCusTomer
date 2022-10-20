@@ -96,7 +96,7 @@ export const Card = ({ value, category }) => {
           <span>{value?.Address}</span>
         </div>
         <div className={cx("rate")}>
-          <Rate disabled allowHalf value={3} />
+          <Rate disabled allowHalf value={value?.TotalRate || 5} />
           <span style={{ color: "828282", fontSize: "12px" }}>
             {value?.BookingCount} đã đặt
           </span>

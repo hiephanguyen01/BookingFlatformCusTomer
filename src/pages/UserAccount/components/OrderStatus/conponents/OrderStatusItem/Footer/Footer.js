@@ -22,6 +22,7 @@ import {
 import "./FooterStatus.scss";
 import { RateModal } from "./RateModal/RateModal";
 export const Footer = ({
+  id,
   status,
   IdentifyCode,
   TenantId,
@@ -29,6 +30,8 @@ export const Footer = ({
   Category,
   pageBooking,
   setPageBooking,
+  Item,
+  post
 }) => {
   const [visible, setVisible] = useState(false);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
@@ -93,7 +96,7 @@ export const Footer = ({
           </div>
           <div className="FooterStatus__wait__button">
             <Link
-              to="/home/confirm-order/${id}"
+              to={`/home/confirm-order/${id}`}
               state={{
                 IdentifyCode: [IdentifyCode],
                 TenantId,
@@ -101,7 +104,8 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1">
+              className="FooterStatus__wait__button__1"
+            >
               <UploadOutlined /> Đã thanh toán
             </Link>
             <button className="FooterStatus__wait__button__2">
@@ -121,7 +125,8 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}>
+            }}
+          >
             Liên hệ
           </button>
         </div>
@@ -131,7 +136,8 @@ export const Footer = ({
         <div className="FooterStatus__complete">
           <button
             className="FooterStatus__complete__rating"
-            onClick={() => setVisible(true)}>
+            onClick={() => setVisible(true)}
+          >
             Đánh giá
           </button>
           <button className="FooterStatus__complete__order">Đặt lại</button>
@@ -141,10 +147,15 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal">
+            className="FooterStatus__complete__modal"
+          >
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
+              Category={Category}
+              id={id}
+              Item={Item}
+              post={post}
             />
           </Modal>
         </div>

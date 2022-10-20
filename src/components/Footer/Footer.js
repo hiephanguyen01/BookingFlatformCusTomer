@@ -9,7 +9,7 @@ import { ReactComponent as LinkedIn } from "../../assets/footer/linkedin.svg";
 
 import { CopyrightOutlined } from "@ant-design/icons";
 import "./Footer.scss";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 const Footer = () => {
   const location = useLocation();
   console.log();
@@ -37,15 +37,23 @@ const Footer = () => {
               <Col span={6}>
                 <p className="title">VỀ CHÚNG TÔI</p>
                 <ul className="pt-30">
-                  <li className="item mt-20">Giới thiệu Plus Stinv</li>
-                  <li className="item mt-20">Chính sách bảo mật </li>
-                  <li className="item mt-20">Điều khoản sử dụng</li>
+                  <a href="https://vnplus.vn" alt="" target="_blank">
+                    <li className="item mt-20">Giới thiệu Plus Stinv</li>
+                  </a>
+                  <Link to="privacy-policy">
+                    <li className="item mt-20">Chính sách bảo mật </li>
+                  </Link>
+                  <Link to="terms-use">
+                    <li className="item mt-20">Điều khoản sử dụng</li>
+                  </Link>
                 </ul>
               </Col>
               <Col span={6}>
                 <p className="title">HỖ TRỢ KHÁCH HÀNG</p>
                 <ul className="pt-30">
-                  <li className="item mt-20">Trung tâm trợ giúp</li>
+                  <Link to={"helpCenter"}>
+                    <li className="item mt-20">Trung tâm trợ giúp</li>
+                  </Link>
                   <li className="item mt-20">Quy định chung</li>
                 </ul>
               </Col>

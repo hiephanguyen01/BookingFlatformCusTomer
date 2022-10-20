@@ -10,6 +10,9 @@ class RatingService extends BaseService {
   getNumberRatingStuido = (id) => {
     return this.get(`/api/room/number-rate/${id}`);
   };
+  createRatingBookign = (id,cate,data)=>{
+    return this.post(`/api/rating&report/rating/${id}?category=${cate}`,data)
+  }
 }
 
 export const ratingService = new RatingService();

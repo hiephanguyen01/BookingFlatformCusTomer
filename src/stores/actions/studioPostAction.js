@@ -2,6 +2,7 @@ import { studioPostService } from "../../services/StudioPostService";
 import { userService } from "../../services/UserService";
 import {
   LOADING,
+  SET_PROMOTION_CODE,
   SET_FILTER,
   SET_LIST_LIKED_CATEGORY,
   SET_POST_LIST,
@@ -9,6 +10,9 @@ import {
   SET_STUDIO_DETAIL,
   SET_STUDIO_DETAIL1,
   SET_STUDIO_NEAR,
+  LOADING_SERVICE,
+  SET_FILTER_SERVICE,
+  SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
@@ -56,8 +60,14 @@ export const studioDetailAction = (id, category, currentUser) => {
         category,
         currentUser
       );
+      if (category === 1) {
+        dispatch(
+          studioNearAction(id, data.data.Latitude, data.data.Longtitude)
+        );
+      }
       if (currentUser) {
         await userService.setRecentViews(id, category);
+        dispatch(getAllStudioLikedAction1(category));
       }
       dispatch({
         type: SET_STUDIO_DETAIL,
@@ -75,10 +85,18 @@ export const studioDetailAction = (id, category, currentUser) => {
     dispatch({ type: LOADING, payload: false });
   };
 };
-export const studioNearAction = (lat, lng) => async (dispatch) => {
+export const studioNearAction = (id, lat, lng) => async (dispatch) => {
   try {
-    const { data } = await studioPostService.getStudioNear(lat, lng);
+    const { data } = await studioPostService.getStudioNear(id, lat, lng);
     dispatch({ type: SET_STUDIO_NEAR, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getStudioSimilarAction = (id, cate) => async (dispatch) => {
+  try {
+    const { data } = await studioPostService.getStudioSimilar(id, cate);
+    dispatch({ type: SET_STUDIO_SIMILAR, data: data.data });
   } catch (error) {
     console.log(error);
   }
@@ -108,7 +126,7 @@ export const getLikeStudioPostAction = (postId, category, currentUser = "") => {
       });
       dispatch(getAllStudioLikedAction1(category));
       dispatch(getAllStudioLikedAction(category));
-      if (currentUser.trim !== "") {
+      if (currentUser) {
         dispatch(studioDetailAction(postId, category, currentUser));
       }
     } catch (error) {
@@ -240,7 +258,6 @@ export const getAllStudioLikedAction3 = (category, sort = "") => {
         },
         sort
       );
-
       dispatch({
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
@@ -250,3 +267,27 @@ export const getAllStudioLikedAction3 = (category, sort = "") => {
     }
   };
 };
+
+export const getPromotionByTenantId = (tenantId) => async (dispatch) => {
+  try {
+    const { data } = await studioPostService.getPromotionByTenantId(tenantId);
+    dispatch({
+      type: SET_PROMOTION_CODE,
+      data: data.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const setFilterStudioService =
+  (limit, page, filter) => async (dispatch) => {
+    dispatch({ type: LOADING_SERVICE, payload: true });
+    try {
+      dispatch({ type: SET_POST_PAGINATION, payload: { limit, page } });
+      dispatch({ type: SET_FILTER_SERVICE, payload: filter });
+    } catch (error) {
+      console.error(error);
+    }
+    dispatch({ type: LOADING_SERVICE, payload: false });
+  };

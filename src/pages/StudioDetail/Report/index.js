@@ -4,8 +4,9 @@ import TextArea from "antd/lib/input/TextArea";
 import { useDispatch } from "react-redux";
 import { HIDE_MODAL, SHOW_MODAL } from "../../../stores/types/modalTypes";
 import { Reply } from "../Relay";
+import { reportDetailAction } from "../../../stores/actions/ReportAction";
 
-export const Report = () => {
+export const Report = ({ category, postId }) => {
   const [value, setValue] = useState(1);
   const dispatch = useDispatch();
 
@@ -13,18 +14,65 @@ export const Report = () => {
 
   const onChange = (e) => {
     setValue(e.target.value);
+    console.log(e.target.value);
   };
 
+  const data = [
+    {
+      label: "Nội dung trùng lặp, spam",
+      value: "Nội dung trùng lặp, spam",
+    },
+    {
+      label: "Thông tin sai sự thật",
+      value: "Thông tin sai sự thật",
+    },
+    {
+      label: "Lộ thông tin cá nhân, vd: Số điện thoại,...",
+      value: "Lộ thông tin cá nhân, vd: Số điện thoại,...",
+    },
+    {
+      label: "Ngôn từ gây thù ghét",
+      value: "Ngôn từ gây thù ghét",
+    },
+    {
+      label: "Khác",
+      value: 6,
+    },
+  ];
+  const handleSubmit = () => {
+    if (value === 6) {
+      dispatch(
+        reportDetailAction({
+          Category: Number(category),
+          PostId: Number(postId),
+          Content: valueText,
+        })
+      );
+    } else {
+      dispatch(
+        reportDetailAction({
+          Category: Number(category),
+          PostId: Number(postId),
+          Content: value,
+        })
+      );
+    }
+  };
   return (
-    <div style={{textAlign:"left"}}>
+    <div style={{ textAlign: "left" }}>
       <h4 style={{ fontSize: "20px", fontWeight: "700" }}>Lý do báo cáo </h4>
       <Radio.Group onChange={onChange} value={value}>
-        <Space direction="vertical" style={{display:"flex", flexDirection:"column",alignItems:"flex-start"}}>
-          <Radio value={1}>Nội dung trùng lặp, spam</Radio>
-          <Radio value={2}>Thông tin sai sự thật</Radio>
-          <Radio value={3}>Lộ thông tin cá nhân, vd: Số điện thoại,...</Radio>
-          <Radio value={4}>Ngôn từ gây thù ghét</Radio>
-          <Radio value={6}>Khác</Radio>
+        <Space
+          direction="vertical"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          {data.map((item, idx) => {
+            return <Radio value={item.value}>{item.label}</Radio>;
+          })}
         </Space>
       </Radio.Group>
       {value === 6 ? (
@@ -42,7 +90,8 @@ export const Report = () => {
           gap: "10px",
           justifyContent: "flex-end",
           marginTop: "20px",
-        }}>
+        }}
+      >
         <button
           onClick={() => dispatch({ type: HIDE_MODAL })}
           style={{
@@ -51,11 +100,12 @@ export const Report = () => {
             borderRadius: "8px",
             border: 0,
             cursor: "pointer",
-          }}>
+          }}
+        >
           Huỷ
         </button>
         <button
-          onClick={() => dispatch({ type: SHOW_MODAL, Component: <Reply /> })}
+          onClick={() => handleSubmit()}
           style={{
             padding: "14px 36px",
             background: "#E22828",
@@ -63,7 +113,8 @@ export const Report = () => {
             color: "#fff",
             border: 0,
             cursor: "pointer",
-          }}>
+          }}
+        >
           Báo cáo
         </button>
       </div>

@@ -1,7 +1,7 @@
 @import "../../App.scss";
 
 .post {
-  min-width: 100% !important;
+  max-width: 825px !important;
 
   &__main {
     min-width: 100% !important;
@@ -106,27 +106,41 @@
   }
 
   &__middle {
-    padding: 10px 10px 0 20px;
+    padding: 10px 20px 0 20px;
 
     img {
       object-fit: contain;
       height: fit-content;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
     }
 
     &__right-side {
       ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
         li {
           width: fit-content;
           padding: 11px 8px 11px 8px;
           box-shadow: 0.5px 1px 4px rgba(0, 0, 0, 0.16);
           border-radius: 8px;
+
           font-size: 14px;
           font-weight: 400;
           line-height: 19px;
           margin-left: 10px;
 
+          cursor: pointer;
+
           &:first-child {
             margin-left: 16px;
+          }
+
+          &.active {
+            background-color: #96fde5;
           }
         }
       }
@@ -157,7 +171,7 @@
   &__comments {
     // width: 100%;
     margin-top: 10px;
-    padding: 10px 0 0 20px;
+    padding: 10px 20px 0 20px;
 
     &__detail {
       margin-top: 10px;
@@ -167,6 +181,12 @@
       }
 
       &__info {
+        &_avatar {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+        }
+
         &__nametime {
           &__name {
             font-weight: 700;
@@ -176,9 +196,21 @@
           }
         }
       }
+
+      &__content {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 11px;
+        gap: 10px;
+
+        background-color: #F4F4F4;
+        border-radius: 8px;
+        margin-left: 30px;
+      }
     }
 
-    .mySwiper {
+    .related-service-swiper {
       margin-top: 20px;
       width: 100%;
       height: 100%;
@@ -290,10 +322,12 @@
     position: relative;
     width: 100%;
     height: 100%;
+
     img {
       position: relative;
       z-index: 1;
     }
+
     .fourth-image-overlay {
       position: absolute;
       z-index: 2;

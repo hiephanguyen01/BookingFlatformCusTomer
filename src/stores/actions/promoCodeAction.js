@@ -3,6 +3,8 @@ import {
   GET_PAGINATE_POSSIBILITY,
   GET_PROMO_BY_STUDIO_POST,
   SET_STUDIO_POST_ID,
+  SET_PROMOTION_CODE_USER_SAVE,
+  SET_CHOOSE_PROMOTION_USER,
 } from "../types/promoCodeType";
 import { promoCodeService } from "../../services/PromoCodeService";
 
@@ -45,6 +47,60 @@ export const setStudioPostIdAction = (studioPostId) => {
   return async (dispatch) => {
     try {
       dispatch({ type: SET_STUDIO_POST_ID, data: studioPostId });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const getPromotionCodeUserSave = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await promoCodeService.getPromoCodeUserSave();
+      dispatch({
+        type: SET_PROMOTION_CODE_USER_SAVE,
+        data: data.data.reduce((arr, item) => {
+          if (item.PromoteCodeId === undefined) {
+            return [...arr, item];
+          }
+          return [...arr, item.SaleCode];
+        }, []),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const setChoosePromotionUser = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: SET_CHOOSE_PROMOTION_USER,
+        data: data,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const savePromotion = (promoCodeId) => {
+  return async (dispatch) => {
+    try {
+      await promoCodeService.savePromotion({
+        PromoteCodeId: promoCodeId,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const cancelSavePromotion = (promoCodeId) => {
+  return async (dispatch) => {
+    try {
+      await promoCodeService.cancelSavePromotion(promoCodeId);
     } catch (error) {
       console.error(error);
     }

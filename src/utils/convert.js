@@ -57,6 +57,13 @@ export const numberWithDot = (x) => {
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
+export const numberSlice = (x) => {
+  return x
+    ?.toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    .slice(0, -4);
+};
+
 export const timeStructure = (date) => {
   return (
     ("0" + date.getHours()).slice(-2) +
