@@ -60,7 +60,7 @@ export const studioDetailAction = (id, category, currentUser) => {
         category,
         currentUser
       );
-      if (category == 1) {
+      if (category === 1) {
         dispatch(
           studioNearAction(id, data.data.Latitude, data.data.Longtitude)
         );
