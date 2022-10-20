@@ -2,22 +2,18 @@ import {
   CheckCircleTwoTone,
   HeartFilled,
   HeartOutlined,
-  HeartTwoTone,
   StarOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import CurrencyFormat from "react-currency-format";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
-import CurrencyFormat from "react-currency-format";
-import "./FilterCard.scss";
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-import { useDispatch, useSelector } from "react-redux";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
 import { convertImage } from "../../utils/convertImage";
+import "./FilterCard.scss";
 const FilterCard = ({ data, category }) => {
-  const [like, setLike] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -72,8 +68,7 @@ const FilterCard = ({ data, category }) => {
       {data && (
         <div
           className="FilterCard"
-          onClick={() => navigate(`/home/${category.value}/${data.id}`)}
-        >
+          onClick={() => navigate(`/home/${category.value}/${data.id}`)}>
           <div className="groupImage">
             <div onClick={handleChangeLike} className={"like"}>
               {value?.findIndex((item) => item.id === data.id) > -1 ? (
@@ -104,7 +99,7 @@ const FilterCard = ({ data, category }) => {
                 />
               </PopUpSignIn> */}
             </div>
-            <div className="sale">-60% HÔM NAY</div>
+            {/* <div className="sale">-60% HÔM NAY</div> */}
             <div className="main">
               <img className="main" src={convertImage(data.Image[0])} alt="" />
             </div>
@@ -130,7 +125,7 @@ const FilterCard = ({ data, category }) => {
                   className="me-5"
                   twoToneColor="#F8D93A"
                 />
-                5 (20)
+                {data.TotalRate} ({data.NumberOfRating})
               </p>
             </div>
             <div className="d-flex justify-content-between align-items-center">
