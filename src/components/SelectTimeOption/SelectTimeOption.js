@@ -11,12 +11,7 @@ const Option = ({ option, disabled }) => {
   const { filter } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
-  // const [date, setDate] = useState();
   const [time, setTime] = useState([]);
-  // const [dates, setDates] = useState([
-  //   convertDateSendToDB(new Date()),
-  //   convertDateSendToDB(new Date()),
-  // ]);
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
     if (time.length > 0) {
@@ -72,8 +67,7 @@ const Option = ({ option, disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "8px",
-            }}
-          >
+            }}>
             <DatePicker
               onChange={handleOnchangeDate}
               defaultValue={moment(filter?.OrderByTimeFrom, "YYYY-MM-DD")}
@@ -90,8 +84,7 @@ const Option = ({ option, disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}
-          >
+            }}>
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
@@ -114,8 +107,11 @@ const Option = ({ option, disabled }) => {
           <Form.Item
             name="time"
             label="Chọn ngày"
-            style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
-          >
+            style={{
+              width: "100%",
+              marginRight: "20px",
+              marginBottom: "10px",
+            }}>
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
               defaultValue={[
@@ -158,8 +154,7 @@ const SelectTimeOption = ({ disabled }) => {
         onChange={handleOnChangeSelection}
         style={{ padding: "0 0 20px" }}
         value={selection}
-        disabled={disabled}
-      >
+        disabled={disabled}>
         <Space direction="vertical">
           <Radio value={0}>Đặt theo giờ</Radio>
           <Radio value={1}>Đặt theo ngày</Radio>

@@ -23,7 +23,6 @@
     }
     &__input {
       border-radius: 8px;
-      // padding: 12px;
       background-color: $neutral-50;
       svg {
         path {
@@ -38,6 +37,7 @@
           font-size: 16px;
           line-height: 22px;
         }
+        // pointer-events: none;
       }
     }
   }

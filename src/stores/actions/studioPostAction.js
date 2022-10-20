@@ -60,7 +60,7 @@ export const studioDetailAction = (id, category, currentUser) => {
         category,
         currentUser
       );
-      if (category == 1) {
+      if (category === 1) {
         dispatch(
           studioNearAction(id, data.data.Latitude, data.data.Longtitude)
         );
@@ -96,7 +96,6 @@ export const studioNearAction = (id, lat, lng) => async (dispatch) => {
 export const getStudioSimilarAction = (id, cate) => async (dispatch) => {
   try {
     const { data } = await studioPostService.getStudioSimilar(id, cate);
-    console.log("similar", data);
     dispatch({ type: SET_STUDIO_SIMILAR, data: data.data });
   } catch (error) {
     console.log(error);

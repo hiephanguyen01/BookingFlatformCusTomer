@@ -93,8 +93,6 @@ const PhotographerDetail = () => {
     dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
   }, [studioDetail]);
 
-  console.log(filter_promo);
-
   useEffect(() => {
     // dispatch(
     //   setFilterStudioService(5, 1, {
@@ -135,21 +133,24 @@ const PhotographerDetail = () => {
     //   }, 2000);
     // }
     return () => {
-      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
-      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      // dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
+      // dispatch({ type: SET_PROMOTION_CODE, data: [] });
       // clearTimeout(timeOut);
     };
   }, []);
 
   const handleChooseService = (data) => {
-    if (chooseService.filter((item) => item.id === data.id).length > 0) {
+    console.log(chooseService);
+    if (chooseService.filter((itm) => itm.id === data.id).length > 0) {
+      // console.log(data);
       setChooseService([]);
     } else {
       setChooseService([{ ...data }]);
     }
   };
-
+  console.log(chooseService);
   const ROW = (dataSource = []) => {
+    console.log(chooseService);
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
         {
@@ -178,8 +179,7 @@ const PhotographerDetail = () => {
                   style={{
                     marginBottom: "0",
                     color: "#E22828",
-                  }}
-                >
+                  }}>
                   {convertPrice(data.Sales)}đ
                 </h4>
                 <div
@@ -189,8 +189,7 @@ const PhotographerDetail = () => {
                     lineHeight: "16px",
                     color: "#828282",
                     textDecoration: "line-through",
-                  }}
-                >
+                  }}>
                   {convertPrice(data.Price)}đ
                 </div>
               </div>
@@ -201,8 +200,7 @@ const PhotographerDetail = () => {
                   fontSize: "12px",
                   lineHeight: "16px",
                   color: "#828282",
-                }}
-              >
+                }}>
                 Bao gồm 50.000đ thuế và phí
               </div>
               <span
@@ -212,8 +210,7 @@ const PhotographerDetail = () => {
                   borderRadius: "4px",
                   padding: "3px 10px",
                   color: "#ffffff",
-                }}
-              >
+                }}>
                 Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
             </>
@@ -222,8 +219,7 @@ const PhotographerDetail = () => {
         {
           render: () => (
             <>
-              {chooseService.filter((item) => item.id === data.id).length >
-              0 ? (
+              {chooseService.filter((itm) => itm.id === data.id).length > 0 ? (
                 <span
                   onClick={() => handleChooseService(data)}
                   style={{
@@ -235,8 +231,7 @@ const PhotographerDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Bỏ chọn
                 </span>
               ) : (
@@ -252,8 +247,7 @@ const PhotographerDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Chọn
                 </span>
               )}
@@ -312,8 +306,7 @@ const PhotographerDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -321,8 +314,7 @@ const PhotographerDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -333,8 +325,7 @@ const PhotographerDetail = () => {
             margin: "auto",
             backgroundColor: "rgb(245, 245, 245)",
             padding: "2rem 0",
-          }}
-        >
+          }}>
           <section className="photographer-detail">
             <div className="photographer-detail__container">
               <header className="photographer-detail__container__header">
@@ -372,8 +363,7 @@ const PhotographerDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           style={{
@@ -404,27 +394,23 @@ const PhotographerDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}
-                        >
+                          }}>
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}
-                          >
+                            }}>
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
+                              style={{ fontSize: "18px", fontWeight: "bold" }}>
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click"
-                    >
+                      trigger="click">
                       <MoreOutlined
                         style={{
                           fontSize: "25px",
@@ -439,8 +425,7 @@ const PhotographerDetail = () => {
               </header>
               <Row
                 style={{ marginRight: "0", marginLeft: "0" }}
-                gutter={[24, 24]}
-              >
+                gutter={[24, 24]}>
                 <Col style={{ paddingLeft: "0" }} md={16}>
                   <Row className="photographer-detail__container__description">
                     <Col md={24}>
@@ -491,13 +476,11 @@ const PhotographerDetail = () => {
               </Row>
               <Row
                 style={{ marginLeft: "0", marginRight: "0" }}
-                gutter={[18, 18]}
-              >
+                gutter={[18, 18]}>
                 <Col
                   style={{ paddingLeft: "0" }}
                   md={16}
-                  className="photographer-detail__container__services"
-                >
+                  className="photographer-detail__container__services">
                   <div className="h-100" style={{ backgroundColor: "#fff" }}>
                     {/* <div className="ms-24 pt-20">
                       <SelectTimeOption />
@@ -507,14 +490,12 @@ const PhotographerDetail = () => {
                 </Col>
                 <Col
                   md={8}
-                  className="photographer-detail__container__chosen-services"
-                >
+                  className="photographer-detail__container__chosen-services">
                   <div
                     style={{
                       padding: " 0 15px 0 15px",
                       backgroundColor: "#ffffff",
-                    }}
-                  >
+                    }}>
                     <div className="d-flex justify-content-between mb-12">
                       <div
                         className=""
@@ -523,8 +504,7 @@ const PhotographerDetail = () => {
                           fontSize: "18px",
                           lineHeight: "25px",
                           color: "#222222",
-                        }}
-                      >
+                        }}>
                         Đã chọn {chooseService.length} sản phẩm
                       </div>
                       {chooseService.length > 0 && (
@@ -535,8 +515,7 @@ const PhotographerDetail = () => {
                             lineHeight: "22px",
                             textDecorationLine: "line-through",
                             color: "#828282",
-                          }}
-                        >
+                          }}>
                           {`${convertPrice(
                             chooseService?.reduce(
                               (total, item) =>
@@ -564,8 +543,7 @@ const PhotographerDetail = () => {
                           lineHeight: "27px",
                           /* Primary/Red 700 */
                           color: "#E22828",
-                        }}
-                      >
+                        }}>
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) =>
@@ -626,8 +604,7 @@ const PhotographerDetail = () => {
                             ))}
                           <div
                             className="btn_see_more"
-                            onClick={() => setToggleSeeMore(true)}
-                          >
+                            onClick={() => setToggleSeeMore(true)}>
                             Xem thêm <DownOutlined className="icon" />
                           </div>
                         </>

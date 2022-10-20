@@ -270,6 +270,7 @@ export const StudioDetail = () => {
                     display: "flex",
                     gap: "10px",
                     alignItems: "center",
+                    flexWrap:"wrap"
                   }}
                 >
                   <span
@@ -566,14 +567,8 @@ export const StudioDetail = () => {
                     </div>
                   </div> */}
                   <div className={cx("table")}>
-                    {/* <div className="ms-20">
-                      <SelectTimeOption />
-                    </div> */}
-                    <Table
-                      column={COLUMN}
-                      row={ROW(studioDetail?.service)}
-                      service={studioDetail?.service}
-                    />
+
+                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
 
                   <div className={cx("rating")}>
@@ -709,44 +704,6 @@ export const StudioDetail = () => {
                         Đặt ngay
                       </Button>
                     </div>
-                    {/* <div
-                      style={{
-                        display: "flex",
-                        gap: "10px",
-                        justifyContent: "space-between",
-                        marginTop: "20px",
-                      }}
-                    >
-                      <Button
-                        style={{
-                          padding: "14px 36px",
-                          background: "#E7E7E7",
-                          borderRadius: "8px",
-                          border: 0,
-                          cursor: "pointer",
-                          fontWeight: "700",
-                        }}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
-                        Thêm vào giỏ hàng
-                      </Button>
-                      <Button
-                        style={{
-                          flex: "1",
-                          padding: "14px 36px",
-                          background: "#E22828",
-                          borderRadius: "8px",
-                          color: "#fff",
-                          border: 0,
-                          cursor: "pointer",
-                          fontWeight: "700",
-                        }}
-                        onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
-                        Đặt ngay
-                      </Button>
-                    </div> */}
                   </div>
                 </div>
               </div>

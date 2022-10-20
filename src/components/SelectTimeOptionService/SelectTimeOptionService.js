@@ -278,13 +278,6 @@ const Option = ({ option, disabled, service }) => {
               disabled={disabled}
               inputReadOnly={true}
               disabledDate={(current) => {
-                if (
-                  moment(moment(current).format("l")).isSame(
-                    moment("10/28/2022")
-                  )
-                ) {
-                  console.log("dsaghdsahdkjsahkjda");
-                }
                 return (
                   service?.Bookings?.reduce((acc, item) => {
                     let dates = dateRange(
@@ -294,9 +287,7 @@ const Option = ({ option, disabled, service }) => {
                     acc.push(...dates);
                     return uniqueInOrder(acc);
                   }, []).some((date) =>
-                    moment(moment(current).format("l")).isSame(
-                      moment("10/28/2022")
-                    )
+                    moment(moment(current).format("l")).isSame(moment(date))
                   ) ||
                   (current && current <= moment().subtract(1, "days"))
                 );

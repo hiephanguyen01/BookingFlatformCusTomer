@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Col, Pagination, Row } from "antd";
 
 import "./table.scss";
@@ -17,7 +17,8 @@ const Index = ({ column, row = [], className = "", style, service }) => {
     setLoading(true);
     setRows([...row.slice((currentPage - 1) * 5, currentPage * 5)]);
     setLoading(false);
-  }, [currentPage]);
+
+  }, [currentPage, row]);
   // useEffect(() => {
   //   setCurrentPage(1);
   // }, [loadingService]);
@@ -31,7 +32,7 @@ const Index = ({ column, row = [], className = "", style, service }) => {
             backgroundColor: "#ffffff",
           }}
         >
-          <SelectTimeOptionService service={service} />
+          {/* <SelectTimeOptionService service={service} /> */}
           <Row className="table-header">
             {column.map((item, index) => (
               <Col key={index} span={item.size} className="table-header-col">

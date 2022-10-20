@@ -3,6 +3,7 @@ import {
   GET_DETAIL_POST,
   GET_PAGINATE_POSIBILITY,
   GET_ALL_DEFAULT_CMT,
+  SET_RELATED_SERVICE,
 } from "../types/PostDaoType";
 import { postDaoService } from "../../services/PostDaoService";
 
@@ -33,7 +34,7 @@ export const getAllPostDaoAction = (currentListPost, filter) => {
         data: data.pagination,
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 };
@@ -51,7 +52,7 @@ export const getPostDaoAction = (currentListPost, limit, page) => {
         data: data.pagination,
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 };
@@ -119,6 +120,16 @@ export const getAllDefaultComments = () => {
       const { data } = await postDaoService.getAllDefaultComments();
       console.log(data);
       dispatch({ type: GET_ALL_DEFAULT_CMT, data: data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const setRelatedService = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: SET_RELATED_SERVICE, data: data });
     } catch (err) {
       console.log(err);
     }
