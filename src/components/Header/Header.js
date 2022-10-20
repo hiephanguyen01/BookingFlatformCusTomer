@@ -23,6 +23,7 @@ import noBody from "../../assets/img/no-body.png";
 import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import { convertImage } from "../../utils/convertImage";
 import { ImageDetect } from "../ImageDetect/ImageDetect";
 import SearchButton from "../layouts/SearchButton";
 import "./Header.scss";
@@ -30,7 +31,7 @@ const { Option } = Select;
 const Header = () => {
   const [provinces, setProvinces] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
-  const img = ImageDetect(user);
+  const img = convertImage(user?.Image);
   const filter = useSelector((state) => state.studioPostReducer.filter);
   const dispatch = useDispatch();
   const navigate = useNavigate();

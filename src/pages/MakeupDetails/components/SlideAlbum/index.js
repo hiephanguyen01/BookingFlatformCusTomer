@@ -15,7 +15,6 @@ import { CATEGORIES } from "../../../../utils/category";
 const Index = ({ data, style = {}, className = "" }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  console.log(data);
   const onClickShowModal = async (data) => {
     dispatch({
       type: "SHOW_MODAL_LIST",
@@ -58,7 +57,8 @@ const Index = ({ data, style = {}, className = "" }) => {
               },
             }}
             modules={[Navigation]}
-            className="swiperMakeup">
+            className="swiperMakeup"
+          >
             {data?.Image?.map((item, idx) => {
               return (
                 <SwiperSlide key={idx} onClick={() => onClickShowModal(data)}>
