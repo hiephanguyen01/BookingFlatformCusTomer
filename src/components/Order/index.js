@@ -23,6 +23,7 @@ import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
 import { calDate, calTime } from "../../utils/calculate";
+import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -73,6 +74,10 @@ const Index = ({ linkTo = "" }) => {
   useEffect(() => {
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
+
+    return () => {
+      dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+    };
   }, []);
 
   const isEmpty = () => {
@@ -87,26 +92,53 @@ const Index = ({ linkTo = "" }) => {
     return 1;
   };
 
-  // const onChangeDate = (date, dateString, serviceId) => {
-  //   const newListService = chooseServiceList.map((item) => {
-  //     if (item.id === Number(serviceId)) {
-  //       return { ...item, orderDate: dateString };
-  //     }
-  //     return item;
-  //   });
-  //   dispatch(chooseServiceAction(newListService));
-  // };
+  const calculatePrice = () => {
+    switch (filter.OrderByTime) {
+      case 0:
+        const priceByHour = chooseServiceList?.reduce(
+          (total, service) =>
+            total +
+            (service?.Sales || service?.Price || service?.PriceByHour) *
+              calTime(filter?.OrderByTimeFrom, filter?.OrderByTimeTo),
+          0
+        );
+        if (choosePromotionUser?.TypeReduce === 1) {
+          return priceByHour - (choosePromotionUser?.ReduceValue || 0);
+        } else {
+          return (
+            priceByHour -
+            ((priceByHour * choosePromotionUser?.ReduceValue) / 100 >=
+            choosePromotionUser?.MaxReduce
+              ? choosePromotionUser?.MaxReduce
+              : (priceByHour / 100) * (choosePromotionUser?.ReduceValue || 0))
+          );
+        }
+      case 1:
+        const priceByDate =
+          chooseServiceList?.reduce(
+            (total, service) =>
+              total +
+              (service.Sales || service.Price || service.PriceByDate) *
+                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+            0
+          ) || 0;
+        if (choosePromotionUser?.TypeReduce === 1) {
+          return priceByDate - (choosePromotionUser?.ReduceValue || 0);
+        } else {
+          return (
+            priceByDate -
+            ((priceByDate * choosePromotionUser?.ReduceValue) / 100 >=
+            choosePromotionUser?.MaxReduce
+              ? choosePromotionUser?.MaxReduce
+              : (priceByDate / 100) * (choosePromotionUser?.ReduceValue || 0))
+          );
+        }
 
-  // const onChangeHour = (times, timeString, serviceId) => {
-  //   const newListService = chooseServiceList.map((item) => {
-  //     if (item.id === Number(serviceId)) {
-  //       return { ...item, orderHours: timeString };
-  //     }
-  //     return item;
-  //   });
-  //   dispatch(chooseServiceAction(newListService));
-  // };
-
+      default:
+        break;
+    }
+  };
+  console.log(calculatePrice());
   const handleOnClickOrder = async () => {
     try {
       if (user === null) {
@@ -422,7 +454,7 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}
                   >
-                    {filter.OrderByTime === 0 &&
+                    {/* {filter.OrderByTime === 0 &&
                       `${convertPrice(
                         choosePromotionUser?.TypeReduce === 1
                           ? `${
@@ -470,7 +502,7 @@ const Index = ({ linkTo = "" }) => {
                                 (total, service) =>
                                   total +
                                   (service.Sales || service.PriceByDate) *
-                                    calTime(
+                                    calDate(
                                       filter.OrderByDateFrom,
                                       filter.OrderByDateTo
                                     ),
@@ -482,7 +514,7 @@ const Index = ({ linkTo = "" }) => {
                                 (total, service) =>
                                   total +
                                   (service.Sales || service.PriceByDate) *
-                                    calTime(
+                                    calDate(
                                       filter.OrderByDateFrom,
                                       filter.OrderByDateTo
                                     ),
@@ -492,7 +524,7 @@ const Index = ({ linkTo = "" }) => {
                                 (total, service) =>
                                   total +
                                   (service.Sales || service.PriceByDate) *
-                                    calTime(
+                                    calDate(
                                       filter.OrderByDateFrom,
                                       filter.OrderByDateTo
                                     ),
@@ -511,8 +543,8 @@ const Index = ({ linkTo = "" }) => {
                         //       ),
                         //   0
                         // )
-                      )}`}
-                    đ
+                      )}`} */}
+                    {convertPrice(calculatePrice())}đ
                   </div>
                 </div>
               </div>

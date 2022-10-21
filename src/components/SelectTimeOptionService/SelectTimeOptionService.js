@@ -31,10 +31,10 @@ function dateRangeHour(startDate, endDate) {
   ) {
     dateArray.push(i);
   }
-  console.log(dateArray);
   return dateArray;
 }
 const Option = ({ option, disabled, service }) => {
+  console.log(service);
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
@@ -53,29 +53,6 @@ const Option = ({ option, disabled, service }) => {
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
     if (dString && option === 0) {
-      console.log(
-        "disableDate",
-
-        service?.Bookings?.reduce((acc, item) => {
-          let dates = dateRange(
-            moment(item.OrderByTimeFrom).format("l"),
-            moment(item.OrderByTimeTo).format("l")
-          );
-          acc.push(...dates);
-          return uniqueInOrder(acc);
-        }, []),
-        firstAndLast(
-          service?.Bookings?.reduce((acc, item) => {
-            let dates = dateRange(
-              moment(item.OrderByTimeFrom).format("l"),
-              moment(item.OrderByTimeTo).format("l")
-            );
-            acc.push(...dates);
-            return uniqueInOrder(acc);
-          }, [])
-        )
-      );
-      console.log(service?.Bookings);
       let hl = service?.Bookings?.filter((item) => {
         const dates = dateRange(
           moment(item.OrderByTimeFrom).format("l"),
@@ -83,7 +60,6 @@ const Option = ({ option, disabled, service }) => {
         );
         return dates.includes(moment(dString).format("l"));
       });
-      console.log(hl);
       setDisableHour(hl);
     }
     if (time.length > 0) {
@@ -112,7 +88,6 @@ const Option = ({ option, disabled, service }) => {
   };
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
-    console.log("timn date", timeString);
     if (date !== "") {
       // dispatch({
       //   type: SET_FILTER_SERVICE,
@@ -148,7 +123,6 @@ const Option = ({ option, disabled, service }) => {
     //     OrderByDateTo: convertDateSendToDB(datesString[1]),
     //   },
     // });
-    console.log(datesString);
     dispatch(
       setFilterStudioService(5, 1, {
         ...filterService,
@@ -177,8 +151,8 @@ const Option = ({ option, disabled, service }) => {
 
   const getDisabledHours = (date, type) => {
     let array = [];
-    if (disableHour.length > 0) {
-      array = disableHour.reduce((acc, item) => {
+    if (disableHour?.length > 0) {
+      array = disableHour?.reduce((acc, item) => {
         let dates = dateRangeHour(
           moment(item.OrderByTimeFrom).format(),
           moment(item.OrderByTimeTo).format()
@@ -243,7 +217,7 @@ const Option = ({ option, disabled, service }) => {
           >
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
-                format="HH "
+                format="HH:mm"
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 // defaultValue={[
@@ -255,7 +229,7 @@ const Option = ({ option, disabled, service }) => {
                   disabledHours: () => getDisabledHours(date, type) || [],
                 })}
                 disabled={disabled}
-                // minuteStep={60}
+                minuteStep={60}
               />
             </div>
           </Form.Item>

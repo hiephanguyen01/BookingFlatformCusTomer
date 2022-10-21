@@ -24,7 +24,12 @@ const Footer = () => {
               <Col span={6}>
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
                 <div className="logo">
-                  <img src={Android} alt="" />
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
+                    target="_blank"
+                  >
+                    <img src={Android} alt="" />
+                  </a>
                   <Ios />
                 </div>
                 <p className="item">Theo dõi chúng tôi trên</p>

@@ -155,7 +155,6 @@ const Index = () => {
     // }, 2000);
 
     return () => {
-      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       // clearTimeout(timeOut);
     };
