@@ -56,7 +56,6 @@ const Index = ({ data = [], className }) => {
         values: data.rating.filter((d) => d.Rate === chooseRating),
       }));
     }
-
   }, [chooseRating, data]);
   const handleChange = (page) => {
     console.log("page", page);
@@ -205,10 +204,10 @@ const Index = ({ data = [], className }) => {
               <Pagination
                 className="pagination-ds"
                 pageSize={pageSize}
-                defaultPageSize={1}
-                current={current}
+                current={current ||1}
                 total={values?.length}
                 onChange={handleChange}
+                defaultPageSize={1}
               />
             </div>
           </>
