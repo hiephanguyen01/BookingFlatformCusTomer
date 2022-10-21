@@ -43,6 +43,7 @@ import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 const COLUMN = [
   { title: "Dịch vụ", size: 5 },
   { title: "Mô tả", size: 8 },
@@ -151,7 +152,10 @@ const Index = () => {
           ),
         },
         {
-          render: () => <p>{data.Description}</p>,
+          render: () => {
+            console.log("dataa", data);
+            return <SelectTimeOptionService service={data} />;
+          },
         },
         {
           render: () => (

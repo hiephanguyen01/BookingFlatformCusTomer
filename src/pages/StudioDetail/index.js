@@ -46,6 +46,7 @@ import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import PromotionList from "../../components/PromotionList/PromotionList";
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -148,7 +149,10 @@ export const StudioDetail = () => {
   }, []);
 
   const handleReport = () => {
-    dispatch({ type: SHOW_MODAL, Component: <Report category={cate} postId={id} /> });
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <Report category={cate} postId={id} />,
+    });
   };
 
   const ROW = (dataSource = []) => {
@@ -251,7 +255,10 @@ export const StudioDetail = () => {
         },
         {
           key: "desc",
-          render: () => <p>{data.Description}</p>,
+          render: () => {
+            console.log("dataa", data);
+            return <SelectTimeOptionService service={data} />;
+          },
         },
         {
           key: "currency",
@@ -263,6 +270,7 @@ export const StudioDetail = () => {
                     display: "flex",
                     gap: "10px",
                     alignItems: "center",
+                    flexWrap:"wrap"
                   }}
                 >
                   <span
@@ -537,48 +545,7 @@ export const StudioDetail = () => {
                     {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
-                {/* <div className={cx("container")}>
-            {studioDetail1?.Image?.slice(0, 5).map((item, index) => {
-              return index !== 4 ? (
-                <div
-                  key={index}
-                  onClick={() =>
-                    dispatch({
-                      type: "SHOW_MODAL_LIST",
-                      Component: <ModalImage data={studioDetail1?.Image} />,
-                      width: "1169px",
-                    })
-                  }
-                  className={cx("item")}
-                >
-                  <img
-                    alt="sa"
-                    src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
-                  />
-                </div>
-              ) : (
-                <div
-                  onClick={() =>
-                    dispatch({
-                      type: SHOW_MODAL,
-                      Component: <ModalImage data={studioDetail1?.Image} />,
-                      width: "1169px",
-                    })
-                  }
-                  key={index}
-                  className={cx("item")}
-                >
-                  <img
-                    src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
-                    alt="as"
-                  />
-                  <div className={cx("number")}>
-                    {studioDetail1?.Image.length - 5}+
-                  </div>
-                </div>
-              );
-            })}
-          </div> */}
+
                 <ImagePost data={studioDetail?.data?.Image} />
               </div>
               <div className={cx("box2")}>
@@ -600,6 +567,7 @@ export const StudioDetail = () => {
                     </div>
                   </div> */}
                   <div className={cx("table")}>
+
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
 
@@ -736,44 +704,6 @@ export const StudioDetail = () => {
                         Đặt ngay
                       </Button>
                     </div>
-                    {/* <div
-                      style={{
-                        display: "flex",
-                        gap: "10px",
-                        justifyContent: "space-between",
-                        marginTop: "20px",
-                      }}
-                    >
-                      <Button
-                        style={{
-                          padding: "14px 36px",
-                          background: "#E7E7E7",
-                          borderRadius: "8px",
-                          border: 0,
-                          cursor: "pointer",
-                          fontWeight: "700",
-                        }}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
-                        Thêm vào giỏ hàng
-                      </Button>
-                      <Button
-                        style={{
-                          flex: "1",
-                          padding: "14px 36px",
-                          background: "#E22828",
-                          borderRadius: "8px",
-                          color: "#fff",
-                          border: 0,
-                          cursor: "pointer",
-                          fontWeight: "700",
-                        }}
-                        onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
-                        Đặt ngay
-                      </Button>
-                    </div> */}
                   </div>
                 </div>
               </div>
