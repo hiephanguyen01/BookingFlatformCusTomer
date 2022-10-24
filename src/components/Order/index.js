@@ -138,7 +138,6 @@ const Index = ({ linkTo = "" }) => {
         break;
     }
   };
-  console.log(calculatePrice());
   const handleOnClickOrder = async () => {
     try {
       if (user === null) {

@@ -34,7 +34,6 @@ function dateRangeHour(startDate, endDate) {
   return dateArray;
 }
 const Option = ({ option, disabled, service }) => {
-  console.log(service);
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
@@ -89,17 +88,6 @@ const Option = ({ option, disabled, service }) => {
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
     if (date !== "") {
-      // dispatch({
-      //   type: SET_FILTER_SERVICE,
-      //   payload: {
-      //     ...filterService,
-      //     OrderByTime: 0,
-      //     OrderByTimeFrom:
-      //       convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
-      //     OrderByTimeTo:
-      //       convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
-      //   },
-      // });
       dispatch(
         setFilterStudioService(5, 1, {
           ...filterService,
@@ -113,16 +101,6 @@ const Option = ({ option, disabled, service }) => {
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
-    // setDates(datesString);
-    // dispatch({
-    //   type: SET_FILTER_SERVICE,
-    //   payload: {
-    //     ...filterService,
-    //     OrderByTime: 1,
-    //     OrderByDateFrom: convertDateSendToDB(datesString[0]),
-    //     OrderByDateTo: convertDateSendToDB(datesString[1]),
-    //   },
-    // });
     dispatch(
       setFilterStudioService(5, 1, {
         ...filterService,
@@ -157,7 +135,9 @@ const Option = ({ option, disabled, service }) => {
           moment(item.OrderByTimeFrom).format(),
           moment(item.OrderByTimeTo).format()
         );
+        console.log(dates);
         acc.push(...dates);
+        console.log(uniqueInOrder(acc));
         return uniqueInOrder(acc);
       }, []);
     }
