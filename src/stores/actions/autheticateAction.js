@@ -160,6 +160,7 @@ export const LoginWithPhoneNumber = (data, navigate) => async (dispatch) => {
     dispatch({ type: SET_LOADING, payload: true });
     const resp = await authenticateService.loginByPhoneNumber(data);
     localStorage.setItem("token", resp.data.token);
+    localStorage.removeItem("providerId");
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
     navigate("/home/dao");

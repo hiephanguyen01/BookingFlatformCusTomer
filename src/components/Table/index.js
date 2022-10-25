@@ -17,12 +17,10 @@ const Index = ({ column, row = [], className = "", style, service }) => {
     setLoading(true);
     setRows([...row.slice((currentPage - 1) * 5, currentPage * 5)]);
     setLoading(false);
-
   }, [currentPage, row]);
   // useEffect(() => {
   //   setCurrentPage(1);
   // }, [loadingService]);
-  console.log("service", service);
   return (
     <div className={`w-100 table ${className}`} style={{ ...style }}>
       <Row>

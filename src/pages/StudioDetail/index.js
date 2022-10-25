@@ -72,11 +72,11 @@ export const StudioDetail = () => {
     loading,
     listStudioSimilar,
     promotionCode,
+    filterService,
   } = useSelector((state) => state.studioPostReducer);
   const { ratingStudioPostDetail, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
-  console.log(studioDetail);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -121,7 +121,6 @@ export const StudioDetail = () => {
     //   }, 2000);
     // }
     return () => {
-      dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       // clearTimeout(timeOut);
     };
@@ -161,7 +160,7 @@ export const StudioDetail = () => {
         {
           key: "title",
           render: () => (
-            <div style={{ textAlign: "center" }}>
+            <div style={{}}>
               <img
                 alt="as"
                 style={{ width: "100%", borderRadius: " 6px" }}
@@ -250,13 +249,22 @@ export const StudioDetail = () => {
                   {data.Style}
                 </span>
               </div>
+              <div
+                className="mt-15"
+                style={{
+                  color: "#616161",
+                  fontSize: "16px",
+                  fontWeight: "400",
+                }}
+              >
+                {data.Description}
+              </div>
             </div>
           ),
         },
         {
           key: "desc",
           render: () => {
-            console.log("dataa", data);
             return <SelectTimeOptionService service={data} />;
           },
         },
@@ -270,7 +278,7 @@ export const StudioDetail = () => {
                     display: "flex",
                     gap: "10px",
                     alignItems: "center",
-                    flexWrap:"wrap"
+                    flexWrap: "wrap",
                   }}
                 >
                   <span
@@ -384,14 +392,21 @@ export const StudioDetail = () => {
   const [chooseService, setChooseService] = useState([]);
 
   const handleChooseService = (data) => {
-    if (filter.OrderByTime === 0 || filter.OrderByTime === 1) {
+    if (
+      (filterService.OrderByTime === 0 &&
+        filterService.OrderByTimeFrom !== "" &&
+        filterService.OrderByTimeTo !== "") ||
+      (filter.OrderByTime === 1 &&
+        filterService.OrderByDateFrom !== "" &&
+        filterService.OrderByDateTo !== "")
+    ) {
       if (chooseService.filter((item) => item.id === data.id).length > 0) {
         setChooseService([]);
       } else {
         setChooseService([{ ...data }]);
       }
     } else {
-      toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn");
+      toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
     }
   };
 
@@ -567,7 +582,6 @@ export const StudioDetail = () => {
                     </div>
                   </div> */}
                   <div className={cx("table")}>
-
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
 

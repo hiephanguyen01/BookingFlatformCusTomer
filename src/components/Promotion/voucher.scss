@@ -87,7 +87,7 @@
             .promotion_desc {
                 font-weight: 700;
                 color: $neutral-700;
-                margin-bottom: 8px;
+                margin-bottom: 4px;
                 display: -webkit-box;
 
                 font-size: 16px;
@@ -101,6 +101,14 @@
                 min-height: 20px;
             }
 
+            .promotion_value {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 19px;
+                color: $neutral-500;
+                margin-bottom: 4px;
+            }
+
             .promotion_date {
                 font-weight: 400;
                 font-size: 14px;
@@ -110,7 +118,6 @@
         }
 
         .btn_apply {
-            padding: 8px 0;
             background: #1FCBA2;
             color: #fff;
             border-radius: 4px;
@@ -118,12 +125,15 @@
             font-weight: 400;
             font-size: 16px;
             line-height: 22px;
-            cursor: pointer;
 
             min-width: 110px;
             display: flex;
             justify-content: center;
+            border: none;
 
+            &.visible {
+                opacity: 0.5;
+            }
         }
 
         .btn_applied {

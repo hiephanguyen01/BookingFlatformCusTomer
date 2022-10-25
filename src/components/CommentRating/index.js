@@ -42,7 +42,6 @@ const Index = ({ data = [], className }) => {
       maxIndex: pageSize,
     });
   }, [data]);
-  console.log(values);
 
   useEffect(() => {
     if (chooseRating === 0) {
@@ -56,7 +55,6 @@ const Index = ({ data = [], className }) => {
         values: data.rating.filter((d) => d.Rate === chooseRating),
       }));
     }
-
   }, [chooseRating, data]);
   const handleChange = (page) => {
     console.log("page", page);
