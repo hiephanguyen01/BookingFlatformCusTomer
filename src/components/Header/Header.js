@@ -78,7 +78,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -116,7 +117,8 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}>
+              onClick={() => navigate("/home/user/")}
+            >
               Thông tin tài khoản
             </Button>
           ),
@@ -129,7 +131,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -177,7 +180,8 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}>
+        footer={[]}
+      >
         <div className="logo">
           <img src={Logo} alt="" />
         </div>
@@ -189,14 +193,16 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="province"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select
                 defaultValue=""
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                   option.children.toLowerCase().includes(input.toLowerCase())
-                }>
+                }
+              >
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&
                   provinces.map((val) => (
@@ -208,7 +214,8 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="">
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -235,7 +242,8 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}>
+              style={{ width: "50%" }}
+            >
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -247,56 +255,59 @@ const Header = () => {
             <img src={Logo} alt="" />
           </div>
         </Link>
+
         <Input
-          className="container__input"
+          className="container__input "
           placeholder="Bạn đang tìm gì?"
           prefix={<SearchIcon />}
           suffix={<SearchButton />}
           onClick={() => setVisible(true)}
         />
-        <div className="tip" onClick={() => navigate("/home/dao")}>
-          <img src={DaoIcon} alt="" />
-          <p>Dạo</p>
+        <div className="container__right">
+          <div className="tip" onClick={() => navigate("/home/dao")}>
+            <img src={DaoIcon} alt="" />
+            <p>Dạo</p>
+          </div>
+          <Link to={"cart"} className="tip">
+            <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
+            <p style={{ color: "#828282" }}>Giỏ hàng</p>
+          </Link>
+          {user ? (
+            <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+              <div className="user">
+                <Avatar src={user.Image ? img : noBody} />
+                <div className="text">
+                  <p>Tài khoản</p>
+                  <p>
+                    {user?.Fullname ? user.Fullname : user.Email}
+                    <DownOutlined
+                      style={{
+                        fontSize: "10px",
+                        color: "#828282",
+                        marginLeft: "3px",
+                      }}
+                    />
+                  </p>
+                </div>
+              </div>
+            </Dropdown>
+          ) : (
+            <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+              <div className="user">
+                <Avatar src={noBody} />
+                <div className="text">
+                  {!user && <p>Đăng ký/Đăng nhập</p>}
+                  <p>
+                    {user ? user.Fullname : "Tài khoản"}
+                    <DownOutlined
+                      style={{ fontSize: "10px", color: "#828282" }}
+                    />
+                  </p>
+                </div>
+              </div>
+            </Dropdown>
+          )}
         </div>
-        <Link to={"cart"} className="tip">
-          <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
-          <p style={{ color: "#828282" }}>Giỏ hàng</p>
-        </Link>
-        {user ? (
-          <Dropdown overlay={menuSignOut} placement="topRight" arrow>
-            <div className="user">
-              <Avatar src={user.Image ? img : noBody} />
-              <div className="text">
-                <p>Tài khoản</p>
-                <p>
-                  {user?.Fullname ? user.Fullname : user.Email}
-                  <DownOutlined
-                    style={{
-                      fontSize: "10px",
-                      color: "#828282",
-                      marginLeft: "3px",
-                    }}
-                  />
-                </p>
-              </div>
-            </div>
-          </Dropdown>
-        ) : (
-          <Dropdown overlay={menuSignIn} placement="topRight" arrow>
-            <div className="user">
-              <Avatar src={noBody} />
-              <div className="text">
-                {!user && <p>Đăng ký/Đăng nhập</p>}
-                <p>
-                  {user ? user.Fullname : "Tài khoản"}
-                  <DownOutlined
-                    style={{ fontSize: "10px", color: "#828282" }}
-                  />
-                </p>
-              </div>
-            </div>
-          </Dropdown>
-        )}
       </div>
     </div>
   );

@@ -16,12 +16,11 @@ const Footer = () => {
 
   return (
     <>
-      {" "}
       {!location.pathname.includes("dao/posts") && (
         <div className="Footer">
           <div className="container">
-            <Row>
-              <Col span={6}>
+            <Row gutter={[20, 20]}>
+              <Col sm={24} md={12} lg={6}>
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
                 <div className="logo">
                   <a
@@ -39,7 +38,7 @@ const Footer = () => {
                   <LinkedIn />
                 </div>
               </Col>
-              <Col span={6}>
+              <Col sm={24} md={12} lg={6}>
                 <p className="title">VỀ CHÚNG TÔI</p>
                 <ul className="pt-30">
                   <a href="https://vnplus.vn" alt="" target="_blank">
@@ -53,7 +52,7 @@ const Footer = () => {
                   </Link>
                 </ul>
               </Col>
-              <Col span={6}>
+              <Col sm={24} md={12} lg={6}>
                 <p className="title">HỖ TRỢ KHÁCH HÀNG</p>
                 <ul className="pt-30">
                   <Link to={"helpCenter"}>
@@ -62,7 +61,7 @@ const Footer = () => {
                   <li className="item mt-20">Quy định chung</li>
                 </ul>
               </Col>
-              <Col span={6}>
+              <Col sm={24} md={12} lg={6}>
                 <Enter />
                 <p className="title exten">
                   Công ty Cổ phần Công nghệ và Đầu tư VNPLUS
