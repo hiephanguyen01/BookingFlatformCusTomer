@@ -14,8 +14,8 @@ import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
 import "./OrderStatusItem.scss";
 
-const OrderStatusItem = ({ item, pageBooking, setPageBooking, id}) => {
-
+const OrderStatusItem = ({ item, pageBooking, setPageBooking, id }) => {
+  console.log("itembokigndnsa", item);
   const [post, setPost] = useState();
   const navigate = useNavigate();
   let {
@@ -153,7 +153,7 @@ const OrderStatusItem = ({ item, pageBooking, setPageBooking, id}) => {
         </div>
         <Divider className="style-divider" />
         <Footer
-          id={id} 
+          id={id}
           status={BookingStatus}
           IdentifyCode={IdentifyCode}
           TenantId={TenantId}

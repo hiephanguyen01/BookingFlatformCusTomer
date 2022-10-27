@@ -252,7 +252,7 @@ export const Home = () => {
                 >
                   ART STUDIO{" "}
                 </h3>
-                <img src={images.special} />
+                <img src={images.special} alt="bannẻ" />
                 <h5
                   style={{
                     fontSize: "30px",

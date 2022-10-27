@@ -4,8 +4,9 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import { Modal } from "antd";
+import axios from "axios";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { socket } from "../../../../../../../components/ConnectSocket/ConnectSocket";
@@ -19,6 +20,7 @@ import {
   SHOW_CHAT,
   TOGGLE_STATE,
 } from "../../../../../../../stores/types/messType";
+import { FooterRating } from "./FooterRating";
 import "./FooterStatus.scss";
 import { RateModal } from "./RateModal/RateModal";
 export const Footer = ({
@@ -31,12 +33,14 @@ export const Footer = ({
   pageBooking,
   setPageBooking,
   Item,
-  post
+  post,
 }) => {
   const [visible, setVisible] = useState(false);
+  const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
   const dispatch = useDispatch();
+ 
 
   const handleCancelOrder = async () => {
     try {
@@ -134,13 +138,27 @@ export const Footer = ({
     case 3:
       return (
         <div className="FooterStatus__complete">
-          <button
-            className="FooterStatus__complete__rating"
-            onClick={() => setVisible(true)}
-          >
-            Đánh giá
-          </button>
-          <button className="FooterStatus__complete__order">Đặt lại</button>
+          <FooterRating id={id} setVisible={setVisible}/>
+          {/* {data.findIndex(
+            (item) =>
+              item.StudioBookingId === id ||
+              item.PhotographerBookingId === id ||
+              item.ModelBookingId === id ||
+              item.MakeupBookingId === id ||
+              item.DeviceBookingId === id ||
+              item.ClothesBookingId === id
+          ) > -1 ? (
+            <></>
+          ) : (
+            <button
+              className="FooterStatus__complete__rating"
+              onClick={() => setVisible(true)}
+            >
+              Đánh giá
+            </button>
+          )}
+
+          <button className="FooterStatus__complete__order">Đặt lại</button> */}
           <Modal
             centered
             visible={visible}

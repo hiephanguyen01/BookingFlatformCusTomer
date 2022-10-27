@@ -54,7 +54,7 @@ const ListItem = ({ category }) => {
       {/* </div> */}
       <Pagination
         pageSize={pageSize}
-        current={current}
+        current={current || 1}
         total={values.length}
         onChange={handleChange}
         style={{

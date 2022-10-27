@@ -31,7 +31,6 @@ function dateRangeHour(startDate, endDate) {
   ) {
     dateArray.push(i);
   }
-  console.log(dateArray);
   return dateArray;
 }
 const Option = ({ option, disabled, service }) => {
@@ -53,29 +52,6 @@ const Option = ({ option, disabled, service }) => {
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
     if (dString && option === 0) {
-      console.log(
-        "disableDate",
-
-        service?.Bookings?.reduce((acc, item) => {
-          let dates = dateRange(
-            moment(item.OrderByTimeFrom).format("l"),
-            moment(item.OrderByTimeTo).format("l")
-          );
-          acc.push(...dates);
-          return uniqueInOrder(acc);
-        }, []),
-        firstAndLast(
-          service?.Bookings?.reduce((acc, item) => {
-            let dates = dateRange(
-              moment(item.OrderByTimeFrom).format("l"),
-              moment(item.OrderByTimeTo).format("l")
-            );
-            acc.push(...dates);
-            return uniqueInOrder(acc);
-          }, [])
-        )
-      );
-      console.log(service?.Bookings);
       let hl = service?.Bookings?.filter((item) => {
         const dates = dateRange(
           moment(item.OrderByTimeFrom).format("l"),
@@ -83,7 +59,6 @@ const Option = ({ option, disabled, service }) => {
         );
         return dates.includes(moment(dString).format("l"));
       });
-      console.log(hl);
       setDisableHour(hl);
     }
     if (time.length > 0) {
@@ -112,19 +87,7 @@ const Option = ({ option, disabled, service }) => {
   };
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
-    console.log("timn date", timeString);
     if (date !== "") {
-      // dispatch({
-      //   type: SET_FILTER_SERVICE,
-      //   payload: {
-      //     ...filterService,
-      //     OrderByTime: 0,
-      //     OrderByTimeFrom:
-      //       convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
-      //     OrderByTimeTo:
-      //       convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
-      //   },
-      // });
       dispatch(
         setFilterStudioService(5, 1, {
           ...filterService,
@@ -138,17 +101,6 @@ const Option = ({ option, disabled, service }) => {
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
-    // setDates(datesString);
-    // dispatch({
-    //   type: SET_FILTER_SERVICE,
-    //   payload: {
-    //     ...filterService,
-    //     OrderByTime: 1,
-    //     OrderByDateFrom: convertDateSendToDB(datesString[0]),
-    //     OrderByDateTo: convertDateSendToDB(datesString[1]),
-    //   },
-    // });
-    console.log(datesString);
     dispatch(
       setFilterStudioService(5, 1, {
         ...filterService,
@@ -177,13 +129,15 @@ const Option = ({ option, disabled, service }) => {
 
   const getDisabledHours = (date, type) => {
     let array = [];
-    if (disableHour.length > 0) {
-      array = disableHour.reduce((acc, item) => {
+    if (disableHour?.length > 0) {
+      array = disableHour?.reduce((acc, item) => {
         let dates = dateRangeHour(
           moment(item.OrderByTimeFrom).format(),
           moment(item.OrderByTimeTo).format()
         );
+        console.log(dates);
         acc.push(...dates);
+        console.log(uniqueInOrder(acc));
         return uniqueInOrder(acc);
       }, []);
     }
@@ -243,7 +197,7 @@ const Option = ({ option, disabled, service }) => {
           >
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
-                format="HH "
+                format="HH:mm"
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 // defaultValue={[
@@ -255,7 +209,7 @@ const Option = ({ option, disabled, service }) => {
                   disabledHours: () => getDisabledHours(date, type) || [],
                 })}
                 disabled={disabled}
-                // minuteStep={60}
+                minuteStep={60}
               />
             </div>
           </Form.Item>
