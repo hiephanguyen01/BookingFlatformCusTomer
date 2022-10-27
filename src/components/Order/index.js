@@ -180,12 +180,12 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom:
-                convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
-                "00:00:00.000Z",
-              OrderByDateTo:
-                convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
-                "00:00:00.000Z",
+              OrderByDateFrom: "24/10/2022",
+              // convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
+              // "00:00:00.000Z",
+              OrderByDateTo: "26/10/2022",
+              // convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
+              // "00:00:00.000Z",
               PaymentType: 0,
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
@@ -196,10 +196,10 @@ const Index = ({ linkTo = "" }) => {
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue:
-                (chooseServiceList[i].Sales ||
-                  chooseServiceList[i].PriceByDate) *
-                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+              BookingValue: "4",
+              // (chooseServiceList[i].Sales ||
+              //   chooseServiceList[i].PriceByDate) *
+              // calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
             };
             const response = await orderService.addOrder(newData);
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
