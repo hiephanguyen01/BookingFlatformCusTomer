@@ -127,6 +127,11 @@ const Option = ({ option, disabled, service }) => {
     );
   }
 
+  function remove_duplicates_es6(arr) {
+    let s = new Set(arr);
+    let it = s.values();
+    return Array.from(it);
+  }
   const getDisabledHours = (date, type) => {
     let array = [];
     if (disableHour?.length > 0) {
@@ -135,10 +140,8 @@ const Option = ({ option, disabled, service }) => {
           moment(item.OrderByTimeFrom).format(),
           moment(item.OrderByTimeTo).format()
         );
-        console.log(dates);
-        acc.push(...dates);
-        console.log(uniqueInOrder(acc));
-        return uniqueInOrder(acc);
+        acc.push(...dates.slice(0, -1));
+        return remove_duplicates_es6(acc);
       }, []);
     }
     return array;
@@ -165,22 +168,20 @@ const Option = ({ option, disabled, service }) => {
               // )}
               inputReadOnly={true}
               disabled={disabled}
-              // disabledDate={(current) => {
-              //   return current && current <= moment().subtract(1, "days");
-
-              // }}
               disabledDate={(current) => {
                 return (
                   service?.Bookings?.filter((item) => !item.OrderByTime)
                     .reduce((acc, item) => {
-                      let dates = dateRange(
-                        moment(item.OrderByTimeFrom).format("l"),
-                        moment(item.OrderByTimeTo).format("l")
+                      let dates2 = dateRange(
+                        moment(item.OrderByDateFrom).format("l"),
+                        moment(item.OrderByDateTo).format("l")
                       );
-                      acc.push(...dates);
+                      acc.push(...dates2);
                       return uniqueInOrder(acc);
                     }, [])
-                    .some((date) => moment(current).isSame(moment(date))) ||
+                    .some((date) =>
+                      moment(moment(current).format("l")).isSame(moment(date))
+                    ) ||
                   (current && current <= moment().subtract(1, "days"))
                 );
               }}
@@ -238,7 +239,11 @@ const Option = ({ option, disabled, service }) => {
                       moment(item.OrderByTimeFrom).format("l"),
                       moment(item.OrderByTimeTo).format("l")
                     );
-                    acc.push(...dates);
+                    let dates2 = dateRange(
+                      moment(item.OrderByDateFrom).format("l"),
+                      moment(item.OrderByDateTo).format("l")
+                    );
+                    acc.push(...dates, ...dates2);
                     return uniqueInOrder(acc);
                   }, []).some((date) =>
                     moment(moment(current).format("l")).isSame(moment(date))

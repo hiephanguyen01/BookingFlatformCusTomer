@@ -14,6 +14,7 @@ const TextInput = ({
   isPass = false,
   error = false,
   value,
+  ...props
 }) => {
   return (
     <div
@@ -52,6 +53,7 @@ const TextInput = ({
         />
       ) : (
         <Input
+          {...props}
           name={name}
           value={value}
           placeholder={placeholder}

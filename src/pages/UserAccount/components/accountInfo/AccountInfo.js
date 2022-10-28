@@ -18,6 +18,7 @@ import {
   logOut,
 } from "../../../../stores/actions/autheticateAction";
 import { convertImage } from "../../../../utils/convertImage";
+import noBody from "../../../../assets/img/no-body.png";
 import "./accountInfo.scss";
 const AccountInfo = () => {
   const navigate = useNavigate();
@@ -99,7 +100,13 @@ const AccountInfo = () => {
                 <div className="ms-40 d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
                   {file ? (
                     <img
-                      src={file.preview ? file.preview : myImg}
+                      src={
+                        file.preview
+                          ? file.preview
+                          : UserMe.Image !== null
+                          ? myImg
+                          : noBody
+                      }
                       className="w-100 h-100"
                       style={{ objectFit: "cover" }}
                       alt=""

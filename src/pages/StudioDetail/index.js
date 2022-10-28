@@ -47,6 +47,7 @@ import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
+import { openNotification } from "../../utils/Notification";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -74,6 +75,7 @@ export const StudioDetail = () => {
     promotionCode,
     filterService,
   } = useSelector((state) => state.studioPostReducer);
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const { ratingStudioPostDetail, numberRating } = useSelector(
     (state) => state.ratingReducer
   );
@@ -411,6 +413,11 @@ export const StudioDetail = () => {
   };
 
   const handleBook = () => {
+    if (!UserMe.Email) {
+      openNotification("error", "Update email before booking!");
+      navigate("/home/user/accountInfo");
+      return;
+    }
     if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       if (filter.OrderByTime === 0) {
         if (calTimeMinus(filter.OrderByTimeFrom, filter.OrderByTimeTo) >= 60) {
