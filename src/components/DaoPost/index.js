@@ -18,7 +18,7 @@ import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
 import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
 import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
 import img1 from "../../assets/dao/Frame 180.png";
-import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
+import sendComment from "../../assets/svg/sendComment.svg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../../stores/actions/PostDaoAction";
@@ -258,7 +258,8 @@ const DaoPost = (props) => {
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(img)}>
+            onClick={() => handleImageModal(img)}
+          >
             <img
               style={{
                 width: "100%",
@@ -286,7 +287,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(img)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -306,7 +308,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(img)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -355,7 +358,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(img)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <div className="image-container">
                   {idx === 3 && (
                     <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
@@ -405,7 +409,8 @@ const DaoPost = (props) => {
                     <li onClick={() => handleMoreOptionClick(itm)} key={idx}>
                       <CopyToClipboard
                         onCopy={() => {}}
-                        text={`${window.location.href}/posts/${Id}`}>
+                        text={`${window.location.href}/posts/${Id}`}
+                      >
                         <div className="container d-flex">
                           <div>{itm.icon}</div>
                           <p>{itm.title}</p>
@@ -417,7 +422,8 @@ const DaoPost = (props) => {
               }
               trigger="click"
               visible={moreOptionModal}
-              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}>
+              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}
+            >
               <MoreOutlined style={{ fontSize: "24px" }} />
             </Popover>
             <ReportPost
@@ -448,11 +454,13 @@ const DaoPost = (props) => {
               visible={isModalVisibleDetail}
               bodyStyle={{
                 backgroundColor: "transparent",
-              }}>
+              }}
+            >
               <Row>
                 <Col
                   span={16}
-                  style={{ backgroundColor: "#1D2226", height: "100%" }}>
+                  style={{ backgroundColor: "#1D2226", height: "100%" }}
+                >
                   <Swiper
                     slidesPerView={1}
                     spaceBetween={30}
@@ -462,11 +470,13 @@ const DaoPost = (props) => {
                     // }}
                     navigation={true}
                     modules={[Pagination, Navigation]}
-                    className="swiperPostDetail">
+                    className="swiperPostDetail"
+                  >
                     {Image?.map((img, index) => (
                       <SwiperSlide
                         key={index}
-                        style={{ background: "#1D2226", padding: "90px 0" }}>
+                        style={{ background: "#1D2226", padding: "90px 0" }}
+                      >
                         <img
                           src={convertImage(img)}
                           className="w-100 h-100"
@@ -483,7 +493,8 @@ const DaoPost = (props) => {
                     overflowY: "scroll",
                     position: "relative",
                     height: "100vh",
-                  }}>
+                  }}
+                >
                   <header className="post__main__info d-flex justify-content-between align-posts-center">
                     <div className="d-flex justify-content-between align-posts-center">
                       <img src={convertImage(Avatar)} alt="" />
@@ -513,7 +524,8 @@ const DaoPost = (props) => {
                         visible={isModalOptionDetail}
                         onVisibleChange={(newVisible) =>
                           setIsModalOptionDetail(newVisible)
-                        }>
+                        }
+                      >
                         <MoreOutlined style={{ fontSize: "24px" }} />
                       </Popover>
                       <ReportPost
@@ -534,7 +546,8 @@ const DaoPost = (props) => {
                   </div>
                   <div
                     className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-                    style={{ borderBottom: "1px solid #E7E7E7" }}>
+                    style={{ borderBottom: "1px solid #E7E7E7" }}
+                  >
                     <div className="post__main__content__like-comment__likes d-flex">
                       <PopUpSignIn onClick={(e) => {}}>
                         {mouseOverHeart ||
@@ -790,11 +803,12 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__middle" : "post__middle d-none"}>
+        className={commentsClick ? "post__middle" : "post__middle d-none"}
+      >
         <hr color="#E7E7E7" style={{ marginBottom: "20px" }} />
         <div className="d-flex">
           <img src={img1} alt="" />
-          <div className="post__middle__right-side">
+          <div className="post__middle__right-side me-20">
             <ul className="d-flex align-posts-center">
               {defaultComments.map((item) => (
                 <li
@@ -814,10 +828,17 @@ const DaoPost = (props) => {
               <p>Chọn dịch vụ liên quan</p>
             </div>
           </div>
+          <img
+            src={sendComment}
+            style={{ borderRadius: "0", cursor: "pointer" }}
+            className="mt-5"
+            alt=""
+          />
         </div>
       </section>
       <section
-        className={commentsClick ? "post__comments" : "post__comments d-none"}>
+        className={commentsClick ? "post__comments" : "post__comments d-none"}
+      >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
         {comments
           .sort((a, b) => b.id - a.id)

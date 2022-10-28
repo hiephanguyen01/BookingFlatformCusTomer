@@ -142,32 +142,32 @@ const Index = ({ linkTo = "" }) => {
         let IdentifyCode = [],
           TenantId;
 
-        //Handle date time section *************
-        const timeFromTemp = convertTimeSendDB(
-          filter.OrderByTimeFrom.slice(11, 19)
-        );
-        let prevDayFromflagTemp = parseInt(timeFromTemp.split("#")[1]);
-        const dateFromTemp = convertDateSendToDB(
-          filter.OrderByTimeFrom,
-          Boolean(prevDayFromflagTemp)
-        ).slice(0, 11);
-        const timeFromOfficial = timeFromTemp.split("#")[0];
-
-        const timeToTemp = convertTimeSendDB(
-          filter.OrderByTimeTo.slice(11, 19)
-        );
-        let prevDayToflagTemp = parseInt(timeToTemp.split("#")[1]);
-        const dateToTemp = convertDateSendToDB(
-          filter.OrderByTimeTo,
-          Boolean(prevDayToflagTemp)
-        ).slice(0, 11);
-        const timeToOfficial = timeToTemp.split("#")[0];
-
         //Check coi có bị trùng cái thời gian đặt room này trên database ko
 
         //**************************************
 
         if (filter.OrderByTime === 0) {
+          //Handle date time section *************
+          const timeFromTemp = convertTimeSendDB(
+            filter?.OrderByTimeFrom?.slice(11, 19)
+          );
+          let prevDayFromflagTemp = parseInt(timeFromTemp?.split("#")[1]);
+          const dateFromTemp = convertDateSendToDB(
+            filter?.OrderByTimeFrom,
+            Boolean(prevDayFromflagTemp)
+          ).slice(0, 11);
+          const timeFromOfficial = timeFromTemp?.split("#")[0];
+
+          const timeToTemp = convertTimeSendDB(
+            filter?.OrderByTimeTo?.slice(11, 19)
+          );
+          let prevDayToflagTemp = parseInt(timeToTemp?.split("#")[1]);
+          const dateToTemp = convertDateSendToDB(
+            filter?.OrderByTimeTo,
+            Boolean(prevDayToflagTemp)
+          ).slice(0, 11);
+          const timeToOfficial = timeToTemp.split("#")[0];
+
           for (let i = 0; i < chooseServiceList.length; i++) {
             console.log("Đang trong này");
             const newData = {
