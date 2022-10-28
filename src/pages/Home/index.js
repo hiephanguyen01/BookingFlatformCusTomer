@@ -3,13 +3,18 @@ import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { bannerService } from "../../services/Banner";
 import logoImg from "../../../src/assets/img/Logo1.png";
-import images from "../../assets/images";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { studioPostService } from "../../services/StudioPostService";
+import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import {
-  getAllStudioLikedAction,
-  getFilterStudioPost,
+  getAllStudioLikedAction1,
+  getAllStudioLikedAction2,
+  getAllStudioLikedAction3,
+  getAllStudioLikedAction4,
+  getAllStudioLikedAction5,
+  getAllStudioLikedAction6,
 } from "../../stores/actions/studioPostAction";
 import {
   getTop10OrderClothesAction,
@@ -19,20 +24,11 @@ import {
   getTop10OrderPhotographerAction,
   getTop10OrderStudioPostAction,
 } from "../../stores/actions/TopOrderCategoryAction";
-import {
-  getAllStudioLikedAction1,
-  getAllStudioLikedAction2,
-  getAllStudioLikedAction3,
-  getAllStudioLikedAction4,
-  getAllStudioLikedAction5,
-  getAllStudioLikedAction6,
-} from "../../stores/actions/studioPostAction";
 
 import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
+import Banner from "./Banner/Banner";
 import styles from "./home.module.scss";
-import { ListItem } from "./ListCard";
-import { LoadingOutlined } from "@ant-design/icons";
 
 const cx = classNames.bind(styles);
 const { Option } = AutoComplete;
@@ -159,8 +155,6 @@ const { Option } = AutoComplete;
 //       </Modal>
 
 export const Home = () => {
-  // const category = useSelector((state) => state.listByCategoryReducer.category);
-  // const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { filter, loading } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
@@ -209,8 +203,13 @@ export const Home = () => {
     dispatch(getFilterStudioPost(5, 1, newFilter));
     navigate("/home/filter");
   };
-
-  const handleChange = (value) => {};
+  const [banners, setBannerList] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const { data } = await bannerService.getAllBanner();
+      setBannerList(data.data);
+    })();
+  }, []);
 
   return (
     <div className={cx("home_container")}>
@@ -230,14 +229,14 @@ export const Home = () => {
               onClick={() => {
                 setChooseCate(item.id);
                 handleClickCategory(item.id);
-              }}
-            >
+              }}>
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>
           ))}
         </div>
-        <div className={cx("banner")}>
+        {/* Banner */}
+        {/* <div className={cx("banner")}>
           <div className={cx("box-container")}>
             <div className={cx("box")}>
               <img src={images.banner1} alt="sa" />
@@ -248,8 +247,7 @@ export const Home = () => {
                     color: "#616161",
                     padding: "0",
                     margin: "0",
-                  }}
-                >
+                  }}>
                   ART STUDIO{" "}
                 </h3>
                 <img src={images.special} alt="bannẻ" />
@@ -260,8 +258,7 @@ export const Home = () => {
                     fontWeight: "600",
                     padding: "0",
                     margin: "0",
-                  }}
-                >
+                  }}>
                   -1.000.000 vnd{" "}
                 </h5>
                 <p
@@ -269,8 +266,7 @@ export const Home = () => {
                     fontSize: "22px",
                     color: "#616161",
                     marginTop: "28px",
-                  }}
-                >
+                  }}>
                   Khi đăng ký trước 1 tháng{" "}
                 </p>
               </div>
@@ -285,8 +281,8 @@ export const Home = () => {
               </div>
             </div>
           </div>
-        </div>
-
+        </div> */}
+        <Banner banners={banners} />
         {/* <ListItem title="Được đặt nhiều nhất" />
       <ListItem title="Đã xem gần đây" /> */}
         <SlideCard
