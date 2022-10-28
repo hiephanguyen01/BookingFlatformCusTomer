@@ -28,6 +28,7 @@ import Support from "./pages/UserAccount/components/support/Support";
 import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsUse from "./pages/TermsUse/TermsUse";
+import Success from "./components/Email/Success";
 
 function App() {
   const dispatch = useDispatch();
@@ -57,6 +58,7 @@ function App() {
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
+        <Route path="/test" element={<Success />}></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route
@@ -65,8 +67,7 @@ function App() {
               <ProtectedRouter>
                 <UserAccount />
               </ProtectedRouter>
-            }
-          ></Route>
+            }></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />
