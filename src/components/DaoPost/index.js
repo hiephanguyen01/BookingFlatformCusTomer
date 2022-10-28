@@ -78,10 +78,20 @@ const DaoPost = (props) => {
 
   const [showComment, setShowComment] = useState([]);
   const [comments, setComments] = useState([]);
+  const [pagination, setPagination] = useState({});
   const [chooseCommentDefault, setChooseCommentDefault] = useState({});
   const getComments = async () => {
-    const { data } = await postDaoService.getComments(item.Id);
-    setComments(data.data);
+    try {
+      const { data } = await postDaoService.getComments(
+        item.Id,
+        (pagination.currentPage || 0) + 1,
+        5
+      );
+      setComments([...comments, ...data.data]);
+      setPagination(data.pagination);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     setPost({ ...item });
@@ -217,18 +227,7 @@ const DaoPost = (props) => {
   const handleShowModalChooseService = () => {
     dispatch({
       type: SHOW_MODAL,
-      Component: (
-        <ModalChooseService
-          hasTags={Tags}
-          PostId={Id}
-          chooseCommentDefault={chooseCommentDefault}
-          setChooseCommentDefault={setChooseCommentDefault}
-          handleState={() => {
-            getComments();
-            setPost({ ...post, TotalComments: post.TotalComments + 1 });
-          }}
-        />
-      ),
+      Component: <ModalChooseService hasTags={Tags} PostId={Id} />,
     });
   };
   const handleAddComment = (cmt) => {
@@ -248,6 +247,47 @@ const DaoPost = (props) => {
     // } catch (error) {
     //   toastMessage("Add comment fail", "error");
     // }
+  };
+
+  const handleSendComment = async () => {
+    if (
+      relatedService.length > 0 ||
+      chooseCommentDefault.Content !== undefined
+    ) {
+      const newData = relatedService.reduce(
+        (arr, item) => [
+          ...arr,
+          { category: item.category, serviceId: item.id },
+        ],
+        []
+      );
+      try {
+        const res = await postDaoService.createComment({
+          PostId: Id,
+          Content:
+            (chooseCommentDefault.Content || "") +
+            "---" +
+            newData.map((item) => JSON.stringify(item)).join("//") +
+            "//",
+        });
+        if (res) {
+          getComments();
+          setPost({ ...post, TotalComments: post.TotalComments + 1 });
+          // setComments([res.data, ...comments]);
+        }
+      } catch (error) {
+        toastMessage("Add related service fail!", "error");
+      }
+    } else {
+      toastMessage(
+        "Vui lòng chọn bình luận hoặc dịch vụ liên quan!",
+        "warning"
+      );
+    }
+  };
+
+  const handleSeeMoreComment = () => {
+    getComments();
   };
 
   if (tempCount < 3) {
@@ -813,7 +853,9 @@ const DaoPost = (props) => {
               {defaultComments.map((item) => (
                 <li
                   key={item.id}
-                  className={chooseCommentDefault.id === item.id && "active"}
+                  className={`${
+                    chooseCommentDefault.id === item.id && "active"
+                  } d-select`}
                   onClick={() => handleAddComment(item)}
                 >
                   {item.Content}
@@ -825,7 +867,7 @@ const DaoPost = (props) => {
               onClick={handleShowModalChooseService}
             >
               <PlusOutlined style={{ color: "#03AC84", fontSize: "14px" }} />
-              <p>Chọn dịch vụ liên quan</p>
+              <p className="d-select">Chọn dịch vụ liên quan</p>
             </div>
           </div>
           <img
@@ -833,6 +875,7 @@ const DaoPost = (props) => {
             style={{ borderRadius: "0", cursor: "pointer" }}
             className="mt-5"
             alt=""
+            onClick={handleSendComment}
           />
         </div>
       </section>
@@ -841,7 +884,7 @@ const DaoPost = (props) => {
       >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
         {comments
-          .sort((a, b) => b.id - a.id)
+          // .sort((a, b) => b.id - a.id)
           .map((cmt, idx) => (
             <div key={cmt.id} className="post__comments__detail">
               {idx !== 0 && (
@@ -915,56 +958,11 @@ const DaoPost = (props) => {
               </div>
             </div>
           ))}
-        {/* {comments.map((post, idx) => (
-          <div key={post.Id} className="post__comments__detail">
-            {idx !== 0 && (
-              <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
-            )}
-            <div className="post__comments__detail__info d-flex align-posts-center">
-              <img src={post.Avatar} alt="" />
-              <div
-                style={{ marginLeft: "10px" }}
-                className="pos__comments__detail__info__nametime"
-              >
-                <p className="post__comments__detail__info__nametime__name">
-                  {post.Username}
-                </p>
-                <p>{post.CreationTime}</p>
-              </div>
-            </div>
-            <Swiper
-              navigation={true}
-              modules={[Pagination, Navigation]}
-              className="mySwiper"
-              slidesPerView={2}
-              spaceBetween={10}
-              slidesPerGroup={1}
-              loopFillGroupWithBlank={true}
-            >
-              {post.services.map((post2, idx) => (
-                <SwiperSlide key={post2.Id}>
-                  <img src={post2.image} />
-                  <div className="post__comments__detail__slide-content d-flex flex-column">
-                    <p>{post2.link}</p>
-                    <p>{post2.content}</p>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className="d-flex" style={{ marginTop: "22px" }}>
-              <HeartFilled
-                style={{
-                  fontSize: "20px",
-                  color: "#E22828",
-                  marginBottom: "2px",
-                }}
-              />
-              <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                {post.TotalLikes}
-              </p>
-            </div>
+        {pagination.hasNextPage && (
+          <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
+            Xem thêm bình luận
           </div>
-        ))} */}
+        )}
       </section>
     </article>
   );

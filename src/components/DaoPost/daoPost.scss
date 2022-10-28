@@ -117,6 +117,8 @@
     }
 
     &__right-side {
+      flex: 1;
+
       ul {
         display: flex;
         flex-wrap: wrap;
@@ -278,6 +280,18 @@
             color: $neutral-700;
           }
         }
+      }
+    }
+
+    .btn-see-more-cmt {
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #1fcba2;
+      font-size: 16px;
+
+      &:hover {
+        text-decoration: underline solid 1.5px;
       }
     }
   }

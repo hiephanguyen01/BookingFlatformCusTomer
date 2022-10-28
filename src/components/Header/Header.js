@@ -273,24 +273,33 @@ const Header = () => {
             <p style={{ color: "#828282" }}>Giỏ hàng</p>
           </Link>
           {user ? (
-            <Dropdown overlay={menuSignOut} placement="topRight" arrow>
-              <div className="user">
-                <Avatar src={user.Image ? img : noBody} />
-                <div className="text">
-                  <p>Tài khoản</p>
-                  <p>
-                    {user?.Fullname ? user.Fullname : user.Email}
-                    <DownOutlined
-                      style={{
-                        fontSize: "10px",
-                        color: "#828282",
-                        marginLeft: "3px",
-                      }}
-                    />
-                  </p>
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={user.Image ? img : noBody} />
+                  <div className="text">
+                    <p>Tài khoản</p>
+                    <p>
+                      {user?.Fullname ? user.Fullname : user.Email}
+                      <DownOutlined
+                        style={{
+                          fontSize: "10px",
+                          color: "#828282",
+                          marginLeft: "3px",
+                        }}
+                      />
+                    </p>
+                  </div>
                 </div>
+              </Dropdown>
+              <div
+                // type="secondary"
+                className="btn-become-partner w-80 ms-30 mt-5 d-select"
+                // onClick={() => navigate("/home/user/")}
+              >
+                Trở thành đối tác
               </div>
-            </Dropdown>
+            </div>
           ) : (
             <Dropdown overlay={menuSignIn} placement="topRight" arrow>
               <div className="user">
