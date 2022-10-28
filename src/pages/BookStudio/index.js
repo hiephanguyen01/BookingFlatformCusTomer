@@ -14,7 +14,9 @@ import React from "react";
 import "./bookStudio.scss";
 import imgStudio from "../../assets/dao/Frame 163.jpg";
 import TextInput from "../../components/TextInput/TextInput";
+import { useSelector } from "react-redux";
 const Index = () => {
+  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const onClick = ({ key }) => {
     // message.info(`Click on item ${key}`);
   };

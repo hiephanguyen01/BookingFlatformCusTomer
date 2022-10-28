@@ -33,12 +33,7 @@ const Index = ({ linkTo = "" }) => {
   const { studioDetail, filter } = useSelector(
     (state) => state.studioPostReducer
   );
-  const [infoUser, setInfoUser] = useState({
-    name: "ok",
-    phoneNumber: "0987654321",
-    email: "ok",
-    message: "ok",
-  });
+  const [infoUser, setInfoUser] = useState(user);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -82,10 +77,9 @@ const Index = ({ linkTo = "" }) => {
 
   const isEmpty = () => {
     if (
-      infoUser.name === "" ||
-      infoUser.phoneNumber === "" ||
-      infoUser.email === "" ||
-      infoUser.message === ""
+      infoUser.Fullname === "" ||
+      infoUser.Phone === "" ||
+      infoUser.Email === ""
     ) {
       return 0;
     }
@@ -327,30 +321,6 @@ const Index = ({ linkTo = "" }) => {
                       Khung giờ bạn muốn đặt
                     </div>
                     <SelectTimeOption disabled="true" />
-                    {/* <div
-                      className="text-description d-flex align-items-center"
-                      style={{ marginBottom: "12px" }}
-                    >
-                      <div style={{ color: "#616161", width: "50px" }}>
-                        Ngày
-                      </div>
-                      <DatePicker
-                        onChange={(date, dateString) =>
-                          onChangeDate(date, dateString, item.id)
-                        }
-                        style={{ color: "#3F3F3F" }}
-                        format="YYYY-MM-DD"
-                      />
-                    </div>
-                    <div className="text-description d-flex align-items-center">
-                      <div style={{ color: "#616161", width: "50px" }}>Giờ</div>
-                      <TimePicker.RangePicker
-                        style={{ color: "#3F3F3F" }}
-                        onChange={(time, timeString) =>
-                          onChangeHour(time, timeString, item.id)
-                        }
-                      />
-                    </div> */}
                   </div>
                 </>
               ))}
@@ -453,96 +423,6 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}
                   >
-                    {/* {filter.OrderByTime === 0 &&
-                      `${convertPrice(
-                        choosePromotionUser?.TypeReduce === 1
-                          ? `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByHour) *
-                                    calTime(
-                                      filter.OrderByTimeFrom,
-                                      filter.OrderByTimeTo
-                                    ),
-                                0
-                              ) - (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                          : `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByHour) *
-                                    calTime(
-                                      filter.OrderByTimeFrom,
-                                      filter.OrderByTimeTo
-                                    ),
-                                0
-                              ) -
-                              (chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByHour) *
-                                    calTime(
-                                      filter.OrderByTimeFrom,
-                                      filter.OrderByTimeTo
-                                    ),
-                                0
-                              ) /
-                                100) *
-                                (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                      )}`}
-                    {filter.OrderByTime === 1 &&
-                      `${convertPrice(
-                        choosePromotionUser?.TypeReduce === 1
-                          ? `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByDate) *
-                                    calDate(
-                                      filter.OrderByDateFrom,
-                                      filter.OrderByDateTo
-                                    ),
-                                0
-                              ) - (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                          : `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByDate) *
-                                    calDate(
-                                      filter.OrderByDateFrom,
-                                      filter.OrderByDateTo
-                                    ),
-                                0
-                              ) -
-                              (chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByDate) *
-                                    calDate(
-                                      filter.OrderByDateFrom,
-                                      filter.OrderByDateTo
-                                    ),
-                                0
-                              ) /
-                                100) *
-                                (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                        // chooseServiceList?.reduce(
-                        //   (total, service) =>
-                        //     total +
-                        //     (service.Sales || service.PriceByDate) *
-                        //       calDate(
-                        //         filter.OrderByDateFrom,
-                        //         filter.OrderByDateTo
-                        //       ),
-                        //   0
-                        // )
-                      )}`} */}
                     {convertPrice(calculatePrice())}đ
                   </div>
                 </div>
@@ -573,22 +453,28 @@ const Index = ({ linkTo = "" }) => {
               styleContainer={{ width: "100%" }}
               name="name"
               onChange={(e) => handleOnChangeText(e)}
-              value={infoUser.name}
+              value={infoUser?.Fullname}
             />
             <TextInput
               name="phoneNumber"
               placeholder="Số điện thoại"
               styleContainer={{ width: "100%" }}
               onChange={(e) => handleOnChangeText(e)}
-              value={infoUser.phoneNumber}
+              value={infoUser?.Phone}
             />
-            <TextInput
-              name="email"
-              placeholder="Email"
-              styleContainer={{ width: "100%" }}
-              onChange={(e) => handleOnChangeText(e)}
-              value={infoUser.email}
-            />
+            <div>
+              <TextInput
+                name="email"
+                placeholder="Email"
+                styleContainer={{ width: "100%", marginBottom: "10px" }}
+                onChange={(e) => handleOnChangeText(e)}
+                disabled
+                value={infoUser?.Email}
+              />
+              <p style={{ color: "red" }}>
+                Vui lòng xác thực email trước khi hoàn tất đơn hàng.
+              </p>
+            </div>
           </div>
           <div
             className="d-flex justify-content-end"
