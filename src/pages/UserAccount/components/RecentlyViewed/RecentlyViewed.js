@@ -28,9 +28,8 @@ const RecentlyViewed = () => {
       <Row gutter={[16, 16]}>
         {post.map((item, idx) => {
           return (
-            <Col span={6}>
+            <Col span={6} key={idx}>
               <Card
-                key={idx}
                 value={item}
                 category={{
                   id: item.category,

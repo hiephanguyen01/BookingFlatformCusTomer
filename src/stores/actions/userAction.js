@@ -1,9 +1,8 @@
-import { studioPostService } from "../../services/StudioPostService";
 import { userService } from "../../services/UserService";
 import {
+  CANCEL_SAVED_POST,
   SET_LOADING,
   SET_SAVED_POST_LIST,
-  CANCEL_SAVED_POST,
 } from "../types/userTypes";
 
 export const getSavedPostList = (limit, page, userId) => async (dispatch) => {
@@ -40,7 +39,7 @@ export const getListPosts = (limit, page) => async (dispatch) => {
 
 export const cancelSavePost = (userId, postId) => async (dispatch) => {
   try {
-    const res = await userService.cancelSavePost(userId, postId);
+    await userService.cancelSavePost(userId, postId);
     dispatch({
       type: CANCEL_SAVED_POST,
       payload: { userId, postId },

@@ -78,8 +78,7 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}
-              >
+                style={{ borderRadius: "5px" }}>
                 Đăng nhập
               </Button>
             </Link>
@@ -117,8 +116,7 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}
-            >
+              onClick={() => navigate("/home/user/")}>
               Thông tin tài khoản
             </Button>
           ),
@@ -131,8 +129,7 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}
-            >
+              onClick={() => handleSignOut()}>
               Đăng xuất
             </Button>
           ),
@@ -180,8 +177,7 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}
-      >
+        footer={[]}>
         <div className="logo">
           <img src={Logo} alt="" />
         </div>
@@ -193,16 +189,14 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="province"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select
                 defaultValue=""
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                   option.children.toLowerCase().includes(input.toLowerCase())
-                }
-              >
+                }>
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&
                   provinces.map((val) => (
@@ -214,8 +208,7 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select defaultValue="">
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -242,8 +235,7 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}
-            >
+              style={{ width: "50%" }}>
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -278,7 +270,7 @@ const Header = () => {
                 <Avatar src={user.Image ? img : noBody} />
                 <div className="text">
                   <p>Tài khoản</p>
-                  <p>
+                  <div>
                     {user?.Fullname ? user.Fullname : user.Email}
                     <DownOutlined
                       style={{
@@ -287,7 +279,7 @@ const Header = () => {
                         marginLeft: "3px",
                       }}
                     />
-                  </p>
+                  </div>
                 </div>
               </div>
             </Dropdown>

@@ -25,8 +25,7 @@ const Footer = () => {
                 <div className="logo">
                   <a
                     href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
-                    target="_blank"
-                  >
+                    target="_blank">
                     <img src={Android} alt="" />
                   </a>
                   <Ios />
@@ -41,22 +40,26 @@ const Footer = () => {
               <Col sm={24} md={12} lg={6}>
                 <p className="title">VỀ CHÚNG TÔI</p>
                 <ul className="pt-30">
-                  <a href="https://vnplus.vn" alt="" target="_blank">
-                    <li className="item mt-20">Giới thiệu Plus Stinv</li>
+                  <a
+                    className="item mt-20"
+                    href="https://vnplus.vn"
+                    alt=""
+                    target="_blank">
+                    Giới thiệu Plus Stinv
                   </a>
-                  <Link to="privacy-policy">
-                    <li className="item mt-20">Chính sách bảo mật </li>
+                  <Link className="item mt-20" to="privacy-policy">
+                    Chính sách bảo mật
                   </Link>
-                  <Link to="terms-use">
-                    <li className="item mt-20">Điều khoản sử dụng</li>
+                  <Link className="item mt-20" to="terms-use">
+                    Điều khoản sử dụng
                   </Link>
                 </ul>
               </Col>
               <Col sm={24} md={12} lg={6}>
                 <p className="title">HỖ TRỢ KHÁCH HÀNG</p>
                 <ul className="pt-30">
-                  <Link to={"helpCenter"}>
-                    <li className="item mt-20">Trung tâm trợ giúp</li>
+                  <Link className="item mt-20" to={"helpCenter"}>
+                    Trung tâm trợ giúp
                   </Link>
                   <li className="item mt-20">Quy định chung</li>
                 </ul>

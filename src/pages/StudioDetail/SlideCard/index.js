@@ -48,15 +48,15 @@ export const SlideCard = ({ title, data, category }) => {
                 spaceBetween: 10,
               },
             }}
-            modules={[Navigation, Autoplay]}
-          >
-            {data?.map((item, idx) => {
-              return (
-                <SwiperSlide key={idx}>
-                  <Card category={category} value={item} />
-                </SwiperSlide>
-              );
-            })}
+            modules={[Navigation, Autoplay]}>
+            {data &&
+              data.map((item, idx) => {
+                return (
+                  <SwiperSlide key={idx}>
+                    <Card category={category} value={item} />
+                  </SwiperSlide>
+                );
+              })}
           </Swiper>
         </div>
       </div>
