@@ -31,7 +31,7 @@ const cx = classNames.bind(styles);
 export const VerifyOtp = ({ setValid, email }) => {
   const [value, setValue] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
-  const [countDown, setCountDown] = React.useState(10);
+  const [countDown, setCountDown] = React.useState(60);
   const dispatch = useDispatch();
   console.log(value.length);
   useEffect(() => {
@@ -68,6 +68,7 @@ export const VerifyOtp = ({ setValid, email }) => {
       });
       console.log(data);
       dispatch({ type: HIDE_MODAL });
+      setValue("");
     } catch (error) {
       console.log("loiroi");
       setIsInvalid(true);
@@ -79,8 +80,9 @@ export const VerifyOtp = ({ setValid, email }) => {
     <div className={cx("container")}>
       <h2>Verify Your Account</h2>
       <p>
-        We emailed you the six digit code to cool_guy@email.com <br /> Enter the
-        code below to confirm your email address.
+        We emailed you the six digit code to{" "}
+        <span style={{ color: "green", fontWeight: "bold" }}>{email} </span>
+        <br /> Enter the code below to confirm your email address.
       </p>
       <StyledReactInputVerificationCode isInvalid={isInvalid}>
         <ReactInputVerificationCode
@@ -109,7 +111,7 @@ export const VerifyOtp = ({ setValid, email }) => {
                   await studioPostService.sendCodeEmail({
                     Email: email,
                   });
-                  setCountDown(10);
+                  setCountDown(60);
                 } catch (error) {
                   console.log(error);
                 }
