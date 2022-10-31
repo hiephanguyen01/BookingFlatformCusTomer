@@ -29,6 +29,7 @@ import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsUse from "./pages/TermsUse/TermsUse";
 import Success from "./components/Email/Success";
+import { VerifyOtp } from "./components/Modal/verifyOtp/VerifyOtp";
 
 function App() {
   const dispatch = useDispatch();
@@ -67,7 +68,8 @@ function App() {
               <ProtectedRouter>
                 <UserAccount />
               </ProtectedRouter>
-            }></Route>
+            }
+          ></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />

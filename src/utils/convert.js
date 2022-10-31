@@ -37,7 +37,7 @@ export const convertDateSendToDB = (date, prevDayFlag) => {
 };
 
 export const convertTimeSendDB = (time) => {
-  const splitTime = time.split(":");
+  const splitTime = time?.split(":");
   // console.log(parseInt(splitTime[0]));
   if (parseInt(splitTime[0]) < 7) {
     return `${

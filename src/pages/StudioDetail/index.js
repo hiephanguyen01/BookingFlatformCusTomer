@@ -17,37 +17,35 @@ import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { VerifyOtp } from "../../components/Modal/verifyOtp/VerifyOtp";
+import PromotionList from "../../components/PromotionList/PromotionList";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
 import {
   addOrder,
   chooseServiceAction,
 } from "../../stores/actions/OrderAction";
+import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
-  getAllStudioPost,
   getLikeStudioPostAction,
+  getPromotionByTenantId,
   getStudioSimilarAction,
   studioDetailAction,
-  getPromotionByTenantId,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
+import { openNotification } from "../../utils/Notification";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
-import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
-import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
-import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
-import PromotionList from "../../components/PromotionList/PromotionList";
-import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
-import { openNotification } from "../../utils/Notification";
 
 const COLUMN = [
   { title: "Loại phòng", size: 6 },
@@ -153,6 +151,7 @@ export const StudioDetail = () => {
     dispatch({
       type: SHOW_MODAL,
       Component: <Report category={cate} postId={id} />,
+      
     });
   };
 
@@ -413,11 +412,7 @@ export const StudioDetail = () => {
   };
 
   const handleBook = () => {
-    if (!UserMe.Email) {
-      openNotification("error", "Update email before booking!");
-      navigate("/home/user/accountInfo");
-      return;
-    }
+    
     if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       if (filter.OrderByTime === 0) {
         if (calTimeMinus(filter.OrderByTimeFrom, filter.OrderByTimeTo) >= 60) {

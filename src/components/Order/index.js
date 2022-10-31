@@ -1,29 +1,28 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { Col, Row, Input, Button } from "antd";
+import { Button, Col, Input, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-
-import "./order.scss";
-
-import TextInput from "../../components/TextInput/TextInput";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Promotion from "../../components/Promotion";
-
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import TextInput from "../../components/TextInput/TextInput";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+import { orderService } from "../../services/OrderService";
 import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { calDate, calTime } from "../../utils/calculate";
 import {
   convertDateSendToDB,
   convertPrice,
   convertTimeSendDB,
 } from "../../utils/convert";
-import { orderService } from "../../services/OrderService";
-import toastMessage from "../ToastMessage";
-import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
-import { calDate, calTime } from "../../utils/calculate";
-import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
+import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import toastMessage from "../ToastMessage";
+import "./order.scss";
+
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -142,32 +141,32 @@ const Index = ({ linkTo = "" }) => {
         let IdentifyCode = [],
           TenantId;
 
-        //Handle date time section *************
-        const timeFromTemp = convertTimeSendDB(
-          filter.OrderByTimeFrom.slice(11, 19)
-        );
-        let prevDayFromflagTemp = parseInt(timeFromTemp.split("#")[1]);
-        const dateFromTemp = convertDateSendToDB(
-          filter.OrderByTimeFrom,
-          Boolean(prevDayFromflagTemp)
-        ).slice(0, 11);
-        const timeFromOfficial = timeFromTemp.split("#")[0];
-
-        const timeToTemp = convertTimeSendDB(
-          filter.OrderByTimeTo.slice(11, 19)
-        );
-        let prevDayToflagTemp = parseInt(timeToTemp.split("#")[1]);
-        const dateToTemp = convertDateSendToDB(
-          filter.OrderByTimeTo,
-          Boolean(prevDayToflagTemp)
-        ).slice(0, 11);
-        const timeToOfficial = timeToTemp.split("#")[0];
-
         //Check coi có bị trùng cái thời gian đặt room này trên database ko
 
         //**************************************
 
         if (filter.OrderByTime === 0) {
+          //Handle date time section *************
+          const timeFromTemp = convertTimeSendDB(
+            filter?.OrderByTimeFrom?.slice(11, 19)
+          );
+          let prevDayFromflagTemp = parseInt(timeFromTemp?.split("#")[1]);
+          const dateFromTemp = convertDateSendToDB(
+            filter?.OrderByTimeFrom,
+            Boolean(prevDayFromflagTemp)
+          ).slice(0, 11);
+          const timeFromOfficial = timeFromTemp?.split("#")[0];
+
+          const timeToTemp = convertTimeSendDB(
+            filter?.OrderByTimeTo?.slice(11, 19)
+          );
+          let prevDayToflagTemp = parseInt(timeToTemp?.split("#")[1]);
+          const dateToTemp = convertDateSendToDB(
+            filter?.OrderByTimeTo,
+            Boolean(prevDayToflagTemp)
+          ).slice(0, 11);
+          const timeToOfficial = timeToTemp.split("#")[0];
+
           for (let i = 0; i < chooseServiceList.length; i++) {
             console.log("Đang trong này");
             const newData = {
@@ -475,7 +474,19 @@ const Index = ({ linkTo = "" }) => {
                 Vui lòng xác thực email trước khi hoàn tất đơn hàng.
               </p>
             </div>
+            <Button
+              onClick={() =>
+                dispatch({
+                  type: SHOW_MODAL,
+                  // Component: <Report category={cate} postId={id} />,
+                  Component: <VerifyOtp />,
+                })
+              }
+            >
+              Xac thuc demo
+            </Button>
           </div>
+
           <div
             className="d-flex justify-content-end"
             style={{ marginTop: "35px" }}
