@@ -13,12 +13,11 @@ import {
 } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import ImgDefaultUser from "../../../../assets/img/userAccount/default-user-image.png";
-import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
+import { Link, useLocation } from "react-router-dom";
 import noBody from "../../../../assets/img/no-body.png";
 import useDebounce from "../../../../components/hooks/useDebounce";
+import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
 import { userService } from "../../../../services/UserService";
 import { getCurrentUser } from "../../../../stores/actions/autheticateAction";
 
@@ -100,14 +99,12 @@ const Aside = ({ children }) => {
           newPathname === item.linkTo
             ? { color: "#E22828" }
             : { color: "#222222" }
-        }
-      >
+        }>
         <div
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
-          }}
-        >
+          }}>
           {item.icon}
           <span
             style={
@@ -118,8 +115,7 @@ const Aside = ({ children }) => {
                     fontWeight: "600",
                   }
                 : { fontSize: "16px", marginLeft: "0.5rem", fontWeight: "400" }
-            }
-          >
+            }>
             {item.title}
           </span>
         </div>
@@ -166,15 +162,13 @@ const Aside = ({ children }) => {
         style={{
           paddingBottom: "1rem",
           borderBottom: "1px solid #CACACA",
-        }}
-      >
+        }}>
         <div
           className=""
           style={{
             height: "46px",
             marginRight: "1rem",
-          }}
-        >
+          }}>
           <img
             src={UserMe.Image !== null ? ImageDetect(UserMe) : noBody}
             alt=""
@@ -203,8 +197,7 @@ const Aside = ({ children }) => {
               onClick={() => {
                 ref.current.focus();
               }}
-              type="text"
-            >
+              type="text">
               <EditOutlined style={{ color: "#03AC84" }} />
             </Button>
           </div>
@@ -216,8 +209,7 @@ const Aside = ({ children }) => {
           marginTop: "1rem",
           borderBottom: "1px solid #CACACA",
           paddingBottom: "1rem",
-        }}
-      >
+        }}>
         <h5 style={{ textTransform: "uppercase" }}>Tài khoản của chúng tôi</h5>
         {ITEM_USER_ACCOUNT_ASIDE.map((item, index) => (
           <AsideItems item={item} key={index} />
