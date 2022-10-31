@@ -340,7 +340,7 @@ const Index = ({ linkTo = "" }) => {
                 onChange={handleOnChangeText}
                 placeholder="Gửi lời nhắn cho shop"
                 className="text-area"
-                name="message"
+                name="Message"
                 value={infoUser?.message}
                 onResize={false}
               />
@@ -449,12 +449,12 @@ const Index = ({ linkTo = "" }) => {
             <TextInput
               placeholder="Tên khách hàng"
               styleContainer={{ width: "100%" }}
-              name="name"
+              name="Fullname"
               onChange={(e) => handleOnChangeText(e)}
               value={infoUser?.Fullname}
             />
             <TextInput
-              name="phoneNumber"
+              name="Phone"
               placeholder="Số điện thoại"
               styleContainer={{ width: "100%" }}
               onChange={(e) => handleOnChangeText(e)}
@@ -470,7 +470,13 @@ const Index = ({ linkTo = "" }) => {
                 onChange={(e) => handleOnChangeText(e)}
               />
             </div>
-            {Valid ? (
+            {infoUser?.IsActiveEmail &&
+            infoUser?.Email.trim() === user?.Email.trim() ? (
+              <div style={{ color: "green" }}>
+                <span>Đã được xác thực </span>
+                <CheckCircleOutlined color="green" />
+              </div>
+            ) : Valid ? (
               <div style={{ color: "green" }}>
                 <span>Đã được xác thực </span>
                 <CheckCircleOutlined color="green" />
@@ -505,19 +511,55 @@ const Index = ({ linkTo = "" }) => {
             className="d-flex justify-content-end"
             style={{ marginTop: "35px" }}
           >
-            <PopUpSignIn
-              onClick={(e) => {
-                handleOnClickOrder();
-              }}
-            >
+            {infoUser?.IsActiveEmail &&
+            infoUser?.Email.trim() === user?.Email.trim() ? (
+              <PopUpSignIn
+                onClick={(e) => {
+                  handleOnClickOrder();
+                }}
+              >
+                <Button
+                  type="primary"
+                  // disabled={Valid ? false : true}
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              </PopUpSignIn>
+            ) : Valid ? (
+              <PopUpSignIn
+                onClick={(e) => {
+                  handleOnClickOrder();
+                }}
+              >
+                <Button
+                  type="primary"
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              </PopUpSignIn>
+            ) : (
               <Button
                 type="primary"
-                disabled={Valid ? false : true}
-                style={{ borderRadius: "8px", height: "45px", width: "270px" }}
+                disabled={true}
+                style={{
+                  borderRadius: "8px",
+                  height: "45px",
+                  width: "270px",
+                }}
               >
                 Hoàn tất đặt
               </Button>
-            </PopUpSignIn>
+            )}
           </div>
         </Col>
       </Row>
