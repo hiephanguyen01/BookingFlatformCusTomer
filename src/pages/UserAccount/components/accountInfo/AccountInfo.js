@@ -140,6 +140,19 @@ const AccountInfo = () => {
                   handleChangeValue(name, value);
                 }}
               />
+              {UserMe.IsActiveEmail ? (
+                <p
+                  style={{ color: "green", paddingLeft: "39.703px!important" }}
+                >
+                  Email đã được xác nhận
+                </p>
+              ) : UserMe.Email.trim() !== " " ? (
+                <p style={{ color: "red", paddingLeft: "39.703px" }}>
+                  Vui lòng kiểm trả email để xác thực email.
+                </p>
+              ) : (
+                <></>
+              )}
             </Col>
             <Col lg={12} sm={24}>
               <EditText

@@ -17,6 +17,7 @@ import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import { VerifyOtp } from "../../components/Modal/verifyOtp/VerifyOtp";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
@@ -150,6 +151,7 @@ export const StudioDetail = () => {
     dispatch({
       type: SHOW_MODAL,
       Component: <Report category={cate} postId={id} />,
+      
     });
   };
 
@@ -393,11 +395,7 @@ export const StudioDetail = () => {
   };
 
   const handleBook = () => {
-    if (!UserMe.Email) {
-      openNotification("error", "Update email before booking!");
-      navigate("/home/user/accountInfo");
-      return;
-    }
+    
     if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       if (filter.OrderByTime === 0) {
         if (calTimeMinus(filter.OrderByTimeFrom, filter.OrderByTimeTo) >= 60) {

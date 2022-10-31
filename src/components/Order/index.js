@@ -1,29 +1,29 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { Col, Row, Input, Button } from "antd";
+import { Button, Col, Form, Input, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-
-import "./order.scss";
-
-import TextInput from "../../components/TextInput/TextInput";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Promotion from "../../components/Promotion";
-
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import TextInput from "../../components/TextInput/TextInput";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+import { orderService } from "../../services/OrderService";
+import { studioPostService } from "../../services/StudioPostService";
 import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { calDate, calTime } from "../../utils/calculate";
 import {
   convertDateSendToDB,
   convertPrice,
   convertTimeSendDB,
 } from "../../utils/convert";
-import { orderService } from "../../services/OrderService";
-import toastMessage from "../ToastMessage";
-import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
-import { calDate, calTime } from "../../utils/calculate";
-import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
+import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import toastMessage from "../ToastMessage";
+import "./order.scss";
+
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -33,12 +33,13 @@ const Index = ({ linkTo = "" }) => {
   const { studioDetail, filter } = useSelector(
     (state) => state.studioPostReducer
   );
-  const [infoUser, setInfoUser] = useState(user);
+  const [infoUser, setInfoUser] = useState();
+  const [Valid, setValid] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   let cate;
-
+  console.log("djskadhjsag", infoUser);
   const nameCategory = location.pathname
     .split("/")
     .filter((item) => item !== "")[1];
@@ -67,6 +68,7 @@ const Index = ({ linkTo = "" }) => {
   }
   const dispatch = useDispatch();
   useEffect(() => {
+    setInfoUser(user);
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
 
@@ -171,22 +173,18 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             console.log("Đang trong này");
             const newData = {
-              OrderByTime: 1,
-              OrderByTimeFrom:
-                // convertDateSendToDB(filter.OrderByTimeFrom).slice(0, 11) +
-                // convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
-                // ":00.000Z",
-                dateFromTemp + timeFromOfficial + ":00.000Z",
-              OrderByTimeTo:
-                // convertDateSendToDB(filter.OrderByTimeTo).slice(0, 11) +
-                // convertTimeSendDB(filter.OrderByTimeTo.slice(11, 19)) +
-                // ":00.000Z",
-                dateToTemp + timeToOfficial + ":00.000Z",
+              OrderByTime: 0,
+              OrderByDateFrom:
+                convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
+                "00:00:00.000Z",
+              OrderByDateTo:
+                convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
+                "00:00:00.000Z",
               PaymentType: 0,
-              OrderNote: infoUser.message,
-              BookingUserName: infoUser.name,
-              BookingPhone: infoUser.phoneNumber,
-              BookingEmail: infoUser.email,
+              OrderNote: infoUser.Message,
+              BookingUserName: infoUser.Fullname,
+              BookingPhone: infoUser.Phone,
+              BookingEmail: infoUser.Email,
               BookingUserId: user.id,
               CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
@@ -194,8 +192,8 @@ const Index = ({ linkTo = "" }) => {
               IsPayDeposit: 1,
               BookingValue:
                 (chooseServiceList[i].Sales ||
-                  chooseServiceList[i].PriceByHour) *
-                calTime(filter.OrderByTimeFrom, filter.OrderByTimeTo),
+                  chooseServiceList[i].PriceByDate) *
+                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
             };
             const response = await orderService.addOrder(newData);
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
@@ -212,10 +210,10 @@ const Index = ({ linkTo = "" }) => {
                 convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
                 "00:00:00.000Z",
               PaymentType: 0,
-              OrderNote: infoUser.message,
-              BookingUserName: infoUser.name,
-              BookingPhone: infoUser.phoneNumber,
-              BookingEmail: infoUser.email,
+              OrderNote: infoUser.Message,
+              BookingUserName: infoUser.Fullname,
+              BookingPhone: infoUser.Phone,
+              BookingEmail: infoUser.Email,
               BookingUserId: user.id,
               CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
@@ -250,7 +248,7 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const handleOnChangeText = (e) => {
-    setInfoUser({ ...infoUser, [e.target.name]: e.target.value });
+    setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   return (
@@ -343,7 +341,7 @@ const Index = ({ linkTo = "" }) => {
                 placeholder="Gửi lời nhắn cho shop"
                 className="text-area"
                 name="message"
-                value={infoUser.message}
+                value={infoUser?.message}
                 onResize={false}
               />
             </div>
@@ -464,18 +462,45 @@ const Index = ({ linkTo = "" }) => {
             />
             <div>
               <TextInput
-                name="email"
+                value={infoUser?.Email}
+                required
+                name="Email"
                 placeholder="Email"
                 styleContainer={{ width: "100%", marginBottom: "10px" }}
                 onChange={(e) => handleOnChangeText(e)}
-                disabled
-                value={infoUser?.Email}
               />
-              <p style={{ color: "red" }}>
-                Vui lòng xác thực email trước khi hoàn tất đơn hàng.
-              </p>
             </div>
+            {Valid ? (
+              <div style={{ color: "green" }}>
+                <span>Đã được xác thực </span>
+                <CheckCircleOutlined color="green" />
+              </div>
+            ) : (
+              <Button
+                disabled={infoUser?.Email ? false : true}
+                type="primary"
+                onClick={async () => {
+                  try {
+                    dispatch({
+                      type: SHOW_MODAL,
+
+                      Component: (
+                        <VerifyOtp email={infoUser.Email} setValid={setValid} />
+                      ),
+                    });
+                    await studioPostService.sendCodeEmail({
+                      Email: infoUser.Email,
+                    });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              >
+                Verify Email
+              </Button>
+            )}
           </div>
+
           <div
             className="d-flex justify-content-end"
             style={{ marginTop: "35px" }}
@@ -487,6 +512,7 @@ const Index = ({ linkTo = "" }) => {
             >
               <Button
                 type="primary"
+                disabled={Valid ? false : true}
                 style={{ borderRadius: "8px", height: "45px", width: "270px" }}
               >
                 Hoàn tất đặt
