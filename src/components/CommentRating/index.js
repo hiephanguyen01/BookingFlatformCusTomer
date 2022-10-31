@@ -33,7 +33,6 @@ const Index = ({ data = [], className }) => {
     maxIndex: 0,
   });
   const dispatch = useDispatch();
-  console.log("commenndnsadsa", data);
   const { values, current, minIndex, maxIndex } = state;
   useEffect(() => {
     setState({
@@ -77,8 +76,7 @@ const Index = ({ data = [], className }) => {
             allowHalf
             value={Number(data?.data?.TotalRate)}
             style={{ fontSize: "10px" }}
-            disabled
-          ></Rate>
+            disabled></Rate>
           <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
             data?.rating?.length || 0
           })`}</div>
@@ -91,8 +89,7 @@ const Index = ({ data = [], className }) => {
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
-                }`}
-              >
+                }`}>
                 <span>{star.label}</span>
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
@@ -156,8 +153,7 @@ const Index = ({ data = [], className }) => {
                             type: "SHOW_MODAL_LIST",
                             Component: <ModalImage data={item?.Image} />,
                           })
-                        }
-                      >
+                        }>
                         <li className="item-video">
                           <img src={imgCmt} alt="" />
                           <PlayCircleOutlined className="play" />
@@ -177,8 +173,7 @@ const Index = ({ data = [], className }) => {
                       </ul>
                       <div
                         className="mt-16 mb-25 text-medium-re"
-                        style={{ color: "#828282" }}
-                      >
+                        style={{ color: "#828282" }}>
                         {item?.StudioRoom?.Name ||
                           item?.PhotographerServicePackage?.Name ||
                           item?.ModelServicePackage?.Name ||

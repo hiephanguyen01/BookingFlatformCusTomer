@@ -25,13 +25,12 @@ const Index = ({ setChooseVoucher }) => {
         className="close_modal"
         onClick={() => {
           dispatch({ type: HIDE_MODAL });
-        }}
-      >
+        }}>
         <CloseOutlined />
       </div>
       <header className="header_modal">Mã khuyến mãi</header>
       {[1, 2, 3].map((item, index) => (
-        <div className="voucher_wrap">
+        <div className="voucher_wrap" key={index}>
           <div className="voucher_content">
             <div className="voucher_code">WISTERIA2205</div>
             <div className="voucher_desc">Giảm 200K cho đơn 2.500K </div>
@@ -42,8 +41,7 @@ const Index = ({ setChooseVoucher }) => {
               className="btn_applied"
               onClick={() => {
                 handleChooseVoucher(item);
-              }}
-            >
+              }}>
               Đã áp dụng
             </div>
           ) : (
@@ -51,8 +49,7 @@ const Index = ({ setChooseVoucher }) => {
               className="btn_apply"
               onClick={() => {
                 handleChooseVoucher(item);
-              }}
-            >
+              }}>
               Áp dụng
             </div>
           )}

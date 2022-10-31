@@ -6,9 +6,9 @@ export const LikeAll = () => {
     <div className="Like__Layout">{children}</div>
   );
   const ok = () => {
-    return Array.apply(null, { length: 12 }).map(() => {
+    return Array.apply(null, { length: 12 }).map((val, idx) => {
       return (
-        <div style={{ width: "24%", marginBottom: "10px" }}>
+        <div key={idx} style={{ width: "24%", marginBottom: "10px" }}>
           <Card />
         </div>
       );

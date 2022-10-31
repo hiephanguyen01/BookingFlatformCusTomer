@@ -1,17 +1,14 @@
 import { Col, Row } from "antd";
 import React from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AccountInfo from "./components/accountInfo/AccountInfo";
 import Aside from "./components/aside/Aside";
-import Clause from "./components/Clause/Clause";
 import Liked from "./components/Liked/Liked";
 import OrderStatus from "./components/OrderStatus/OrderStatus";
-import Policy from "./components/Policy/Policy";
 import Posts from "./components/Posts/Posts";
 import PostSaved from "./components/PostsSaved/PostSaved";
 import Rating from "./components/Rating/Rating";
 import RecentlyViewed from "./components/RecentlyViewed/RecentlyViewed";
-import Support from "./components/support/Support";
 
 const Index = () => {
   return (
@@ -21,8 +18,7 @@ const Index = () => {
         margin: "auto",
         backgroundColor: "rgb(245, 245, 245)",
         padding: "2rem 0",
-      }}
-    >
+      }}>
       <div style={{ maxWidth: "1200px", margin: "auto" }}>
         <Row>
           <Col span={6}>

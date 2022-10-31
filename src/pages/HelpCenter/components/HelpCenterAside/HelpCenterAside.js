@@ -66,8 +66,7 @@ const HelpCenterAside = ({ children, ref }) => {
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
-          }}
-        >
+          }}>
           {item.icon}
           <span
           // style={
