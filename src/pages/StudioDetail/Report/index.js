@@ -68,10 +68,13 @@ export const Report = ({ category, postId }) => {
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-          }}
-        >
+          }}>
           {data.map((item, idx) => {
-            return <Radio value={item.value}>{item.label}</Radio>;
+            return (
+              <Radio key={idx} value={item.value}>
+                {item.label}
+              </Radio>
+            );
           })}
         </Space>
       </Radio.Group>
@@ -90,8 +93,7 @@ export const Report = ({ category, postId }) => {
           gap: "10px",
           justifyContent: "flex-end",
           marginTop: "20px",
-        }}
-      >
+        }}>
         <button
           onClick={() => dispatch({ type: HIDE_MODAL })}
           style={{
@@ -100,8 +102,7 @@ export const Report = ({ category, postId }) => {
             borderRadius: "8px",
             border: 0,
             cursor: "pointer",
-          }}
-        >
+          }}>
           Huỷ
         </button>
         <button
@@ -113,8 +114,7 @@ export const Report = ({ category, postId }) => {
             color: "#fff",
             border: 0,
             cursor: "pointer",
-          }}
-        >
+          }}>
           Báo cáo
         </button>
       </div>

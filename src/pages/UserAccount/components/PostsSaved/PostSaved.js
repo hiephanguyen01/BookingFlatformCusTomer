@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DaoPost from "../../../../components/DaoPost";
-import { userService } from "../../../../services/UserService";
 import { getLikePostList } from "../../../../stores/actions/PostDaoAction";
 import { getSavedPostList } from "../../../../stores/actions/userAction";
 import "./postSaved.scss";
