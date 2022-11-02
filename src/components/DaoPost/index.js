@@ -80,11 +80,11 @@ const DaoPost = (props) => {
   const [comments, setComments] = useState([]);
   const [pagination, setPagination] = useState({});
   const [chooseCommentDefault, setChooseCommentDefault] = useState({});
-  const getComments = async () => {
+  const getComments = async (currentPage) => {
     try {
       const { data } = await postDaoService.getComments(
         item.Id,
-        (pagination.currentPage || 0) + 1,
+        currentPage || 1,
         5
       );
       setComments([...comments, ...data.data]);
@@ -95,7 +95,6 @@ const DaoPost = (props) => {
   };
   useEffect(() => {
     setPost({ ...item });
-    getComments();
   }, [item]);
 
   // useEffect(() => {
@@ -118,6 +117,9 @@ const DaoPost = (props) => {
   const handleImageModal = (url) => {
     setImageInModal(url);
     setIsModalVisibleDetail(true);
+    if (comments.length <= 0) {
+      getComments(1);
+    }
   };
 
   const handleOkDetail = () => {
@@ -262,16 +264,14 @@ const DaoPost = (props) => {
         []
       );
       try {
+        // console.log(JSON.stringify(newData));
         const res = await postDaoService.createComment({
           PostId: Id,
-          Content:
-            (chooseCommentDefault.Content || "") +
-            "---" +
-            newData.map((item) => JSON.stringify(item)).join("//") +
-            "//",
+          Content: chooseCommentDefault.Content || "",
+          Services: JSON.stringify(newData),
         });
         if (res) {
-          getComments();
+          getComments(1);
           setPost({ ...post, TotalComments: post.TotalComments + 1 });
           // setComments([res.data, ...comments]);
         }
@@ -287,7 +287,7 @@ const DaoPost = (props) => {
   };
 
   const handleSeeMoreComment = () => {
-    getComments();
+    getComments(pagination.currentPage + 1);
   };
 
   if (tempCount < 3) {
@@ -681,68 +681,60 @@ const DaoPost = (props) => {
                               </div>
                             </div>
                           </header>
-                          {comment?.services?.length > 0 ? (
-                            <>
-                              {comment.Content.split("---")[0].length > 0 && (
-                                <div
-                                  style={{
-                                    marginLeft: "40px",
-                                    marginTop: "15px",
-                                  }}
-                                  className="post__comments__detail__content"
-                                >
-                                  {comment.Content.split("---")[0]}
-                                </div>
-                              )}
-                              <div className="post_slider_container">
-                                <Swiper
-                                  slidesPerView={"1.4"}
-                                  spaceBetween={15}
-                                  // pagination={{
-                                  //   clickable: true,
-                                  // }}
-                                  navigation={true}
-                                  modules={[Navigation, Pagination]}
-                                  className="post_slider"
-                                >
-                                  {comment?.services?.map((item, index) => (
-                                    <SwiperSlide
-                                      key={index}
-                                      className="post_slider_item"
-                                    >
-                                      <a href="#" className="h-100">
-                                        <div className="d-flex h-100">
-                                          <img
-                                            src={convertImage(item.Image[0])}
-                                            className="me-12"
-                                            style={{
-                                              width: "100px",
-                                              objectFit: "cover",
-                                            }}
-                                          />
-                                          <div className="py-5 ">
-                                            <div className="post_slider_item_name mb-5">
-                                              {item.Name}
-                                            </div>
-                                            <div className="post_slider_item_description">
-                                              {item.Description}
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </a>
-                                    </SwiperSlide>
-                                  ))}
-                                </Swiper>
-                              </div>
-                            </>
-                          ) : (
+                          {comment.Content && (
                             <div
-                              style={{ marginLeft: "40px", marginTop: "15px" }}
+                              style={{
+                                marginLeft: "40px",
+                                marginTop: "15px",
+                              }}
                               className="post__comments__detail__content"
                             >
-                              {comment.Content.split("---")[0]}
+                              {comment.Content}
                             </div>
                           )}
+                          {comment?.services?.length > 0 && (
+                            <div className="post_slider_container">
+                              <Swiper
+                                slidesPerView={"1.4"}
+                                spaceBetween={15}
+                                // pagination={{
+                                //   clickable: true,
+                                // }}
+                                navigation={true}
+                                modules={[Navigation, Pagination]}
+                                className="post_slider"
+                              >
+                                {comment?.services?.map((item, index) => (
+                                  <SwiperSlide
+                                    key={index}
+                                    className="post_slider_item"
+                                  >
+                                    <a href="#" className="h-100">
+                                      <div className="d-flex h-100">
+                                        <img
+                                          src={convertImage(item.Image[0])}
+                                          className="me-12"
+                                          style={{
+                                            width: "100px",
+                                            objectFit: "cover",
+                                          }}
+                                        />
+                                        <div className="py-5 ">
+                                          <div className="post_slider_item_name mb-5">
+                                            {item.Name}
+                                          </div>
+                                          <div className="post_slider_item_description">
+                                            {item.Description}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </a>
+                                  </SwiperSlide>
+                                ))}
+                              </Swiper>
+                            </div>
+                          )}
+
                           <div
                             className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
                             style={{ borderBottom: "1px solid #E7E7E7" }}
@@ -787,6 +779,14 @@ const DaoPost = (props) => {
                           </div>
                         </div>
                       ))}
+                    {pagination.hasNextPage && (
+                      <div
+                        className="btn-see-more-cmt"
+                        onClick={handleSeeMoreComment}
+                      >
+                        Xem thêm bình luận
+                      </div>
+                    )}
                   </div>
                 </Col>
               </Row>
@@ -830,7 +830,12 @@ const DaoPost = (props) => {
             <div className="post__main__content__like-comment__comments d-flex">
               <PopUpSignIn onClick={(e) => {}}>
                 <Comments
-                  onClick={() => setCommentsClick(!commentsClick)}
+                  onClick={() => {
+                    setCommentsClick(!commentsClick);
+                    if (comments.length <= 0) {
+                      getComments(1);
+                    }
+                  }}
                   className={`${commentsClick ? "active" : ""}`}
                   style={commentsClick ? { color: "#E22828" } : {}}
                 />
@@ -906,26 +911,17 @@ const DaoPost = (props) => {
                   <p>{convertTime(cmt.createdAt)}</p>
                 </div>
               </div>
-              {cmt?.services?.length > 0 ? (
-                <>
-                  {cmt?.Content.split("---")[0].length > 0 && (
-                    <div
-                      style={{ marginLeft: "40px", marginTop: "5px" }}
-                      className="post__comments__detail__content"
-                    >
-                      {cmt.Content.split("---")[0]}
-                    </div>
-                  )}
-                  <div className="w-100">
-                    <CommentSlider data={cmt?.services} />
-                  </div>
-                </>
-              ) : (
+              {cmt?.Content && (
                 <div
                   style={{ marginLeft: "40px", marginTop: "5px" }}
                   className="post__comments__detail__content"
                 >
-                  {cmt.Content.split("---")[0]}
+                  {cmt.Content}
+                </div>
+              )}
+              {cmt?.services?.length > 0 && (
+                <div className="w-100">
+                  <CommentSlider data={cmt?.services} />
                 </div>
               )}
               <div className="d-flex" style={{ marginTop: "22px" }}>

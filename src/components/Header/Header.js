@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import queryString from "query-string";
 import DaoIcon from "../../assets/header/DaoIcon.svg";
 import Logo from "../../assets/header/Logo.svg";
 import { ReactComponent as SearchIcon } from "../../assets/header/SearchIcon.svg";
@@ -168,7 +169,13 @@ const Header = () => {
     };
     dispatch(getFilterStudioPost(5, 1, newFilter, user));
     setVisible(false);
-    navigate("/home/filter");
+    const tempFilter = {
+      category: values.category,
+      provinceIds: values?.province ? [values.province] : [],
+      keyString: values.keyString,
+      priceOption: values.price,
+    };
+    navigate(`/home/filter?${queryString.stringify(tempFilter)}`);
   };
   const handleSignOut = () => {
     dispatch(logOut(navigate));

@@ -282,18 +282,18 @@
         }
       }
     }
+  }
+}
 
-    .btn-see-more-cmt {
-      cursor: pointer;
-      margin-top: 15px;
-      font-weight: 600;
-      color: #1fcba2;
-      font-size: 16px;
+.btn-see-more-cmt {
+  cursor: pointer;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #1fcba2;
+  font-size: 16px;
 
-      &:hover {
-        text-decoration: underline solid 1.5px;
-      }
-    }
+  &:hover {
+    text-decoration: underline solid 1.5px;
   }
 }
 
