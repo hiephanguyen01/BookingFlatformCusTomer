@@ -20,6 +20,7 @@ const images = {
   clothes: require("./clothes.svg").default,
   makeup: require("./makeup.svg").default,
   model: require("./model.svg").default,
+  default: require("./default.png"),
 };
 
 export default images;

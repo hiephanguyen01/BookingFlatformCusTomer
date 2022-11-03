@@ -112,13 +112,19 @@ const FilterCard = ({ data, category }) => {
             </div>
           </div>
           <div className="text">
-            <p className="title">
-              {data.Name} <CheckCircleTwoTone twoToneColor="#52c41a" />
-            </p>
+            <div
+              className="d-flex align-items-center"
+              style={{ padding: "17px 10px 10px 17px" }}>
+              <p className="title">{data.Name}</p>
+              <CheckCircleTwoTone
+                style={{ fontSize: "20px" }}
+                twoToneColor="#52c41a"
+              />
+            </div>
             <div className="d-flex justify-content-between align-items-center">
-              <p className="description">
+              <div className="description">
                 <img src={Logo3} alt="" /> {data.Address}
-              </p>
+              </div>
               <p>
                 <StarOutlined
                   style={{ color: "#F8D93A" }}
@@ -129,9 +135,9 @@ const FilterCard = ({ data, category }) => {
               </p>
             </div>
             <div className="d-flex justify-content-between align-items-center">
-              <p className="description">
+              <div className="description-category">
                 <img src={Logo2} alt="" /> {category.name}
-              </p>
+              </div>
               <p>Đã đặt {data.BookingCount}</p>
             </div>
 

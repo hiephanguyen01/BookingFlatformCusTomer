@@ -42,7 +42,6 @@ const Index = ({ data = [], className }) => {
       maxIndex: pageSize,
     });
   }, [data]);
-  console.log(values);
 
   useEffect(() => {
     if (chooseRating === 0) {
@@ -56,7 +55,6 @@ const Index = ({ data = [], className }) => {
         values: data.rating.filter((d) => d.Rate === chooseRating),
       }));
     }
-
   }, [chooseRating, data]);
   const handleChange = (page) => {
     console.log("page", page);
@@ -78,8 +76,7 @@ const Index = ({ data = [], className }) => {
             allowHalf
             value={Number(data?.data?.TotalRate)}
             style={{ fontSize: "10px" }}
-            disabled
-          ></Rate>
+            disabled></Rate>
           <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
             data?.rating?.length || 0
           })`}</div>
@@ -92,8 +89,7 @@ const Index = ({ data = [], className }) => {
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
-                }`}
-              >
+                }`}>
                 <span>{star.label}</span>
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
@@ -119,16 +115,30 @@ const Index = ({ data = [], className }) => {
                       <div className="info-user">
                         <div className="d-flex">
                           <div className="w-36px h-36px">
-                            <img
-                              src={convertImage(item?.BookingUser?.Image)}
-                              className="img_avatar"
-                              alt=""
-                            />
+                            {item?.IsAnonymous ? (
+                              <img
+                                src={images.default}
+                                className="img_avatar"
+                                alt=""
+                              />
+                            ) : (
+                              <img
+                                src={convertImage(item?.BookingUser?.Image)}
+                                className="img_avatar"
+                                alt=""
+                              />
+                            )}
                           </div>
                           <div className="info ms-10">
                             <h3>
-                              {item?.BookingUser?.Username ||
-                                item?.BookingUser?.Fullname}
+                              {item?.IsAnonymous ? (
+                                "Đánh giá ẩn danh"
+                              ) : (
+                                <>
+                                  {item?.BookingUser?.Username ||
+                                    item?.BookingUser?.Fullname}
+                                </>
+                              )}
                             </h3>
                             <Rate disabled allowHalf value={item?.Rate}></Rate>
                           </div>
@@ -143,8 +153,7 @@ const Index = ({ data = [], className }) => {
                             type: "SHOW_MODAL_LIST",
                             Component: <ModalImage data={item?.Image} />,
                           })
-                        }
-                      >
+                        }>
                         <li className="item-video">
                           <img src={imgCmt} alt="" />
                           <PlayCircleOutlined className="play" />
@@ -164,8 +173,7 @@ const Index = ({ data = [], className }) => {
                       </ul>
                       <div
                         className="mt-16 mb-25 text-medium-re"
-                        style={{ color: "#828282" }}
-                      >
+                        style={{ color: "#828282" }}>
                         {item?.StudioRoom?.Name ||
                           item?.PhotographerServicePackage?.Name ||
                           item?.ModelServicePackage?.Name ||
@@ -205,10 +213,10 @@ const Index = ({ data = [], className }) => {
               <Pagination
                 className="pagination-ds"
                 pageSize={pageSize}
-                defaultPageSize={1}
-                current={current}
+                current={current || 1}
                 total={values?.length}
                 onChange={handleChange}
+                defaultPageSize={1}
               />
             </div>
           </>

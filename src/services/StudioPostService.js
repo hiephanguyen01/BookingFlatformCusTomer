@@ -44,6 +44,12 @@ class StudioPostService extends BaseService {
   getPromotionByTenantId = (tenantId) => {
     return this.get(`/api/promo-code/by-tenant-id?TenantId=${tenantId}`);
   };
+  sendCodeEmail = (data) => {
+    return this.post(`/api/booking-user/gen-code`, data);
+  };
+  verifyCodeEmail = (data) => {
+    return this.post(`/api/booking-user/verify-code`, data);
+  };
 }
 
 export const studioPostService = new StudioPostService();

@@ -247,56 +247,59 @@ const Header = () => {
             <img src={Logo} alt="" />
           </div>
         </Link>
+
         <Input
-          className="container__input"
+          className="container__input "
           placeholder="Bạn đang tìm gì?"
           prefix={<SearchIcon />}
           suffix={<SearchButton />}
           onClick={() => setVisible(true)}
         />
-        <div className="tip" onClick={() => navigate("/home/dao")}>
-          <img src={DaoIcon} alt="" />
-          <p>Dạo</p>
+        <div className="container__right">
+          <div className="tip" onClick={() => navigate("/home/dao")}>
+            <img src={DaoIcon} alt="" />
+            <p>Dạo</p>
+          </div>
+          <Link to={"cart"} className="tip">
+            <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
+            <p style={{ color: "#828282" }}>Giỏ hàng</p>
+          </Link>
+          {user ? (
+            <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+              <div className="user">
+                <Avatar src={user.Image ? img : noBody} />
+                <div className="text">
+                  <p>Tài khoản</p>
+                  <div>
+                    {user?.Fullname ? user.Fullname : user.Email}
+                    <DownOutlined
+                      style={{
+                        fontSize: "10px",
+                        color: "#828282",
+                        marginLeft: "3px",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </Dropdown>
+          ) : (
+            <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+              <div className="user">
+                <Avatar src={noBody} />
+                <div className="text">
+                  {!user && <p>Đăng ký/Đăng nhập</p>}
+                  <p>
+                    {user ? user.Fullname : "Tài khoản"}
+                    <DownOutlined
+                      style={{ fontSize: "10px", color: "#828282" }}
+                    />
+                  </p>
+                </div>
+              </div>
+            </Dropdown>
+          )}
         </div>
-        <Link to={"cart"} className="tip">
-          <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
-          <p style={{ color: "#828282" }}>Giỏ hàng</p>
-        </Link>
-        {user ? (
-          <Dropdown overlay={menuSignOut} placement="topRight" arrow>
-            <div className="user">
-              <Avatar src={user.Image ? img : noBody} />
-              <div className="text">
-                <p>Tài khoản</p>
-                <p>
-                  {user?.Fullname ? user.Fullname : user.Email}
-                  <DownOutlined
-                    style={{
-                      fontSize: "10px",
-                      color: "#828282",
-                      marginLeft: "3px",
-                    }}
-                  />
-                </p>
-              </div>
-            </div>
-          </Dropdown>
-        ) : (
-          <Dropdown overlay={menuSignIn} placement="topRight" arrow>
-            <div className="user">
-              <Avatar src={noBody} />
-              <div className="text">
-                {!user && <p>Đăng ký/Đăng nhập</p>}
-                <p>
-                  {user ? user.Fullname : "Tài khoản"}
-                  <DownOutlined
-                    style={{ fontSize: "10px", color: "#828282" }}
-                  />
-                </p>
-              </div>
-            </div>
-          </Dropdown>
-        )}
       </div>
     </div>
   );

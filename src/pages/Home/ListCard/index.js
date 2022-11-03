@@ -44,8 +44,8 @@ const ListItem = ({ category }) => {
           return (
             idx >= minIndex &&
             idx < maxIndex && (
-              <Col span={6}>
-                <Card key={idx} value={item} category={category} />
+              <Col span={6} key={idx}>
+                <Card value={item} category={category} />
               </Col>
             )
           );
@@ -54,7 +54,7 @@ const ListItem = ({ category }) => {
       {/* </div> */}
       <Pagination
         pageSize={pageSize}
-        current={current}
+        current={current || 1}
         total={values.length}
         onChange={handleChange}
         style={{

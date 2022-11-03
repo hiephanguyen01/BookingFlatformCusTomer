@@ -25,6 +25,7 @@
     align-items: center;
     cursor: pointer;
     z-index: 1000;
+
     &:hover {
       background-color: #d2666682;
     }
@@ -45,8 +46,7 @@
       overflow: hidden;
       z-index: 1;
 
-      &:hover {
-      }
+      &:hover {}
     }
 
     .sale {
@@ -102,12 +102,37 @@
   }
 
   p.title {
-    padding: 17px 17px 10px 17px;
+    padding-right: 5px;
     font-weight: 700;
     font-size: 20px;
+    display: -webkit-box;
+    // flex: 1;
+
+    line-height: 22px;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    max-width: 440px;
   }
 
   p.description {
+    padding: 5px 0 0 17px;
+    font-weight: 400;
+    display: -webkit-box;
+    font-size: 14px;
+
+    line-height: 16px;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    width: 360px;
+  }
+
+  p.description-category {
     padding: 5px 0 0 17px;
     font-weight: 400;
     font-size: 14px;

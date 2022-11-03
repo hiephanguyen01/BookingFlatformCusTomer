@@ -1,18 +1,9 @@
-import { StarFilled } from "@ant-design/icons";
-import { Divider, Rate } from "antd";
 import React, { useEffect, useState } from "react";
+import CommentRating from "../../../../components/CommentRating";
 import { userService } from "../../../../services/UserService";
 import { RatingOther } from "./components/RatingOther";
 import { RatingStudio } from "./components/RatingStudio";
-import CommentRating from "../../../../components/CommentRating";
 import "./rating.scss";
-const STAR_LIST = [
-  { id: 5, label: "5" },
-  { id: 4, label: "4" },
-  { id: 3, label: "3" },
-  { id: 2, label: "2" },
-  { id: 1, label: "1" },
-];
 const Rating = () => {
   const [myRatings, setMyRatings] = useState([]);
   const [chooseRating, setChooseRating] = useState(5);

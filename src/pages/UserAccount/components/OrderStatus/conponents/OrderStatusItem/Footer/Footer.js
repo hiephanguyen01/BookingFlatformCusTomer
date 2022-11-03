@@ -19,6 +19,7 @@ import {
   SHOW_CHAT,
   TOGGLE_STATE,
 } from "../../../../../../../stores/types/messType";
+import { FooterRating } from "./FooterRating";
 import "./FooterStatus.scss";
 import { RateModal } from "./RateModal/RateModal";
 export const Footer = ({
@@ -31,9 +32,10 @@ export const Footer = ({
   pageBooking,
   setPageBooking,
   Item,
-  post
+  post,
 }) => {
   const [visible, setVisible] = useState(false);
+  const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
   const dispatch = useDispatch();
@@ -104,8 +106,7 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1"
-            >
+              className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
             <button className="FooterStatus__wait__button__2">
@@ -125,8 +126,7 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}
-          >
+            }}>
             Liên hệ
           </button>
         </div>
@@ -134,21 +134,34 @@ export const Footer = ({
     case 3:
       return (
         <div className="FooterStatus__complete">
-          <button
-            className="FooterStatus__complete__rating"
-            onClick={() => setVisible(true)}
-          >
-            Đánh giá
-          </button>
-          <button className="FooterStatus__complete__order">Đặt lại</button>
+          <FooterRating id={id} visible={visible} setVisible={setVisible} />
+          {/* {data.findIndex(
+            (item) =>
+              item.StudioBookingId === id ||
+              item.PhotographerBookingId === id ||
+              item.ModelBookingId === id ||
+              item.MakeupBookingId === id ||
+              item.DeviceBookingId === id ||
+              item.ClothesBookingId === id
+          ) > -1 ? (
+            <></>
+          ) : (
+            <button
+              className="FooterStatus__complete__rating"
+              onClick={() => setVisible(true)}
+            >
+              Đánh giá
+            </button>
+          )}
+
+          <button className="FooterStatus__complete__order">Đặt lại</button> */}
           <Modal
             centered
             visible={visible}
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal"
-          >
+            className="FooterStatus__complete__modal">
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

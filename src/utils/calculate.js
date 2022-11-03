@@ -75,7 +75,7 @@ export const calTime = (timeFrom, timeTo) => {
       sumMinus += 60;
     }
   }
-  return Math.ceil(sumMinus / 60);
+  return Math.round(sumMinus / 60);
 };
 
 export const calTimeMinus = (timeFrom, timeTo) => {

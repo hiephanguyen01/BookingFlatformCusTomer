@@ -23,7 +23,7 @@ import {
 const initialState = {
   loading: false,
   studioPostList: [],
-  filter: {
+  filter: JSON.parse(localStorage.getItem("filter-post")) || {
     keyString: "",
     OrderByTime: -1,
     OrderByTimeFrom:
@@ -61,21 +61,36 @@ const initialState = {
   listLikedUser: [],
   listStudioSimilar: [],
   promotionCode: [],
-  filterService: {
-    OrderByTime: -1,
-    OrderByTimeFrom:
-      convertDateSendToDB(new Date()).slice(0, 13) + ":00:00.000Z",
-    OrderByTimeTo:
-      convertDateSendToDB(new Date()).slice(0, 11) +
-      `${
-        parseInt(convertDateSendToDB(new Date()).slice(11, 13)) > 9
-          ? parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
-          : `0${parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1}`
-      }` +
-      ":00:00.000Z",
-    OrderByDateFrom: convertDateSendToDB(new Date()),
-    OrderByDateTo: convertDateSendToDB(new Date()),
-  },
+  filterService: JSON.parse(localStorage.getItem("filter-post"))
+    ? {
+        OrderByTime: JSON.parse(localStorage.getItem("filter-post"))
+          .OrderByTime,
+        OrderByTimeFrom: JSON.parse(localStorage.getItem("filter-post"))
+          .OrderByTimeFrom,
+        OrderByTimeTo: JSON.parse(localStorage.getItem("filter-post"))
+          .OrderByTimeTo,
+        OrderByDateFrom: JSON.parse(localStorage.getItem("filter-post"))
+          .OrderByDateFrom,
+        OrderByDateTo: JSON.parse(localStorage.getItem("filter-post"))
+          .OrderByDateTo,
+      }
+    : {
+        OrderByTime: -1,
+        OrderByTimeFrom:
+          convertDateSendToDB(new Date()).slice(0, 13) + ":00:00.000Z",
+        OrderByTimeTo:
+          convertDateSendToDB(new Date()).slice(0, 11) +
+          `${
+            parseInt(convertDateSendToDB(new Date()).slice(11, 13)) > 9
+              ? parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
+              : `0${
+                  parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
+                }`
+          }` +
+          ":00:00.000Z",
+        OrderByDateFrom: convertDateSendToDB(new Date()),
+        OrderByDateTo: convertDateSendToDB(new Date()),
+      },
   loadingService: false,
 };
 

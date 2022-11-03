@@ -6,7 +6,7 @@ import SelectTimeOptionService from "../SelectTimeOptionService/SelectTimeOption
 import { useSelector } from "react-redux";
 import { LoadingOutlined } from "@ant-design/icons";
 
-const Index = ({ column, row = [], className = "", style }) => {
+const Index = ({ column, row = [], className = "", style, service }) => {
   const { loadingService, pagination } = useSelector(
     (state) => state.studioPostReducer
   );
@@ -21,7 +21,6 @@ const Index = ({ column, row = [], className = "", style }) => {
   // useEffect(() => {
   //   setCurrentPage(1);
   // }, [loadingService]);
-
   return (
     <div className={`w-100 table ${className}`} style={{ ...style }}>
       <Row>
@@ -31,7 +30,7 @@ const Index = ({ column, row = [], className = "", style }) => {
             backgroundColor: "#ffffff",
           }}
         >
-          <SelectTimeOptionService />
+          {/* <SelectTimeOptionService service={service} /> */}
           <Row className="table-header">
             {column.map((item, index) => (
               <Col key={index} span={item.size} className="table-header-col">
