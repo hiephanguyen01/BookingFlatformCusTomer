@@ -3,16 +3,16 @@ import queryString from "query-string";
 import { userService } from "../../services/UserService";
 import {
   LOADING,
-  SET_PROMOTION_CODE,
+  LOADING_SERVICE,
   SET_FILTER,
+  SET_FILTER_SERVICE,
   SET_LIST_LIKED_CATEGORY,
   SET_POST_LIST,
   SET_POST_PAGINATION,
+  SET_PROMOTION_CODE,
   SET_STUDIO_DETAIL,
   SET_STUDIO_DETAIL1,
   SET_STUDIO_NEAR,
-  LOADING_SERVICE,
-  SET_FILTER_SERVICE,
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
 

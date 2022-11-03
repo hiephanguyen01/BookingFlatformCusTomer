@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export const FooterRating = ({ id, setVisible }) => {
+export const FooterRating = ({ id, setVisible, visible }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -22,9 +22,9 @@ export const FooterRating = ({ id, setVisible }) => {
       } catch (error) {
         setLoading(false);
         console.log(error);
-      }
+      } 
     })();
-  }, [id]);
+  }, [id, visible]);
   if (loading) {
     return <></>;
   }

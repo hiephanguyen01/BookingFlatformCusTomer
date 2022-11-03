@@ -124,9 +124,9 @@ const FilterCard = ({ data, category }) => {
               />
             </div>
             <div className="d-flex justify-content-between align-items-center">
-              <p className="description">
+              <div className="description">
                 <img src={Logo3} alt="" /> {data.Address}
-              </p>
+              </div>
               <p>
                 <StarOutlined
                   style={{ color: "#F8D93A" }}
@@ -139,7 +139,7 @@ const FilterCard = ({ data, category }) => {
             <div className="d-flex justify-content-between align-items-center">
               <p className="description-category">
                 <img src={Logo2} alt="" /> {category.name}
-              </p>
+              </div>
               <p>Đã đặt {data.BookingCount}</p>
             </div>
 

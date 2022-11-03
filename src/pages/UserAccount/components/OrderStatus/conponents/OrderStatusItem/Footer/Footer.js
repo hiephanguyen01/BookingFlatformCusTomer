@@ -4,9 +4,8 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import { Modal } from "antd";
-import axios from "axios";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { socket } from "../../../../../../../components/ConnectSocket/ConnectSocket";
@@ -40,7 +39,6 @@ export const Footer = ({
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
   const dispatch = useDispatch();
- 
 
   const handleCancelOrder = async () => {
     try {
@@ -108,8 +106,7 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1"
-            >
+              className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
             <button className="FooterStatus__wait__button__2">
@@ -129,8 +126,7 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}
-          >
+            }}>
             Liên hệ
           </button>
         </div>
@@ -138,7 +134,7 @@ export const Footer = ({
     case 3:
       return (
         <div className="FooterStatus__complete">
-          <FooterRating id={id} setVisible={setVisible}/>
+          <FooterRating id={id} visible={visible} setVisible={setVisible} />
           {/* {data.findIndex(
             (item) =>
               item.StudioBookingId === id ||
@@ -165,8 +161,7 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal"
-          >
+            className="FooterStatus__complete__modal">
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

@@ -13,7 +13,7 @@ export const ModalCustom = () => {
   return (
     <div>
       <Modal
-        className={isListImage ? "modalCus" : ""}
+        className={isListImage ? "modalCus" : undefined}
         style={{ borderRadius: "6px" }}
         visible={visible}
         closable={false}
