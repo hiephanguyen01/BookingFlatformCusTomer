@@ -11,9 +11,9 @@ export const getAllPostDaoAction = (currentListPost, filter) => {
   return async (dispatch) => {
     try {
       const { data } = await postDaoService.getAllPost(
-        filter.limit,
-        filter.page,
-        filter.tags.join(",")
+        filter?.limit,
+        filter?.page,
+        filter?.tags.join(",")
       );
       if (filter.page === 1) {
         let temp = [...data.data];
@@ -118,7 +118,6 @@ export const getAllDefaultComments = () => {
   return async (dispatch) => {
     try {
       const { data } = await postDaoService.getAllDefaultComments();
-      console.log(data);
       dispatch({ type: GET_ALL_DEFAULT_CMT, data: data });
     } catch (err) {
       console.log(err);

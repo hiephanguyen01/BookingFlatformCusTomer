@@ -10,6 +10,7 @@ import imgGG from "../../../../assets/img/userAccount/google 1google.png";
 import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
 import EditText from "../../../../components/TextInput/EditText";
 import TextInput from "../../../../components/TextInput/TextInput";
+import toastMessage from "../../../../components/ToastMessage";
 import { userService } from "../../../../services/UserService";
 import {
   getCurrentUser,
@@ -45,8 +46,12 @@ const AccountInfo = () => {
     setVisible(false);
   };
   const handleDelete = async () => {
-    await userService.deleteMe();
-    dispatch(logOut(navigate));
+    try {
+      await userService.deleteMe();
+      dispatch(logOut(navigate));
+    } catch (error) {
+      toastMessage(error.response.data.message, "error");
+    }
     setVisible(false);
   };
   const handleChangeValue = (name, value) => {
@@ -304,8 +309,10 @@ const AccountInfo = () => {
           Bạn có chắc muốn xóa tài khoản này?
         </div>
         <div className="AccountInfo__delete__modal__content">
-          Điều này đồng nghĩa với việc tài khoản Nguyen Hoang Minh bị xóa vĩnh
-          viễn.
+          {`Điều này đồng nghĩa với việc tài khoản ${
+            UserMe.Phone || UserMe.Email
+          } bị xóa vĩnh
+          viễn.`}
         </div>
         <div className="AccountInfo__delete__modal__group__btn">
           <button
