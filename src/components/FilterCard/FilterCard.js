@@ -68,8 +68,7 @@ const FilterCard = ({ data, category }) => {
       {data && (
         <div
           className="FilterCard"
-          onClick={() => navigate(`/home/${category.value}/${data.id}`)}
-        >
+          onClick={() => navigate(`/home/${category.value}/${data.id}`)}>
           <div className="groupImage">
             <div onClick={handleChangeLike} className={"like"}>
               {value?.findIndex((item) => item.id === data.id) > -1 ? (
@@ -115,8 +114,7 @@ const FilterCard = ({ data, category }) => {
           <div className="text">
             <div
               className="d-flex align-items-center"
-              style={{ padding: "17px 10px 10px 17px" }}
-            >
+              style={{ padding: "17px 10px 10px 17px" }}>
               <p className="title">{data.Name}</p>
               <CheckCircleTwoTone
                 style={{ fontSize: "20px" }}
@@ -139,7 +137,7 @@ const FilterCard = ({ data, category }) => {
             <div className="d-flex justify-content-between align-items-center">
               <p className="description-category">
                 <img src={Logo2} alt="" /> {category.name}
-              </div>
+              </p>
               <p>Đã đặt {data.BookingCount}</p>
             </div>
 
