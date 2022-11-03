@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import queryString from "query-string";
 import DaoIcon from "../../assets/header/DaoIcon.svg";
 import Logo from "../../assets/header/Logo.svg";
 import { ReactComponent as SearchIcon } from "../../assets/header/SearchIcon.svg";
@@ -165,7 +166,13 @@ const Header = () => {
     };
     dispatch(getFilterStudioPost(5, 1, newFilter, user));
     setVisible(false);
-    navigate("/home/filter");
+    const tempFilter = {
+      category: values.category,
+      provinceIds: values?.province ? [values.province] : [],
+      keyString: values.keyString,
+      priceOption: values.price,
+    };
+    navigate(`/home/filter?${queryString.stringify(tempFilter)}`);
   };
   const handleSignOut = () => {
     dispatch(logOut(navigate));
@@ -265,24 +272,33 @@ const Header = () => {
             <p style={{ color: "#828282" }}>Giỏ hàng</p>
           </Link>
           {user ? (
-            <Dropdown overlay={menuSignOut} placement="topRight" arrow>
-              <div className="user">
-                <Avatar src={user.Image ? img : noBody} />
-                <div className="text">
-                  <p>Tài khoản</p>
-                  <div>
-                    {user?.Fullname ? user.Fullname : user.Email}
-                    <DownOutlined
-                      style={{
-                        fontSize: "10px",
-                        color: "#828282",
-                        marginLeft: "3px",
-                      }}
-                    />
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={user.Image ? img : noBody} />
+                  <div className="text">
+                    <p>Tài khoản</p>
+                    <p>
+                      {user?.Fullname ? user.Fullname : user.Email}
+                      <DownOutlined
+                        style={{
+                          fontSize: "10px",
+                          color: "#828282",
+                          marginLeft: "3px",
+                        }}
+                      />
+                    </p>
                   </div>
                 </div>
+              </Dropdown>
+              <div
+                // type="secondary"
+                className="btn-become-partner w-80 ms-30 mt-5 d-select"
+                // onClick={() => navigate("/home/user/")}
+              >
+                Trở thành đối tác
               </div>
-            </Dropdown>
+            </div>
           ) : (
             <Dropdown overlay={menuSignIn} placement="topRight" arrow>
               <div className="user">

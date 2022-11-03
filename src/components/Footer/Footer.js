@@ -4,15 +4,15 @@ import { ReactComponent as Enter } from "../../assets/footer/enterprise.svg";
 import { ReactComponent as Facebook } from "../../assets/footer/facebook.svg";
 import Android from "../../assets/footer/google-play-badge.png";
 import { ReactComponent as Insta } from "../../assets/footer/instagram.svg";
-import { ReactComponent as Ios } from "../../assets/footer/ios.svg";
+import Ios from "../../assets/footer/ios.svg";
 import { ReactComponent as LinkedIn } from "../../assets/footer/linkedin.svg";
+import Logo from "../../assets/header/Logo.svg";
 
 import { CopyrightOutlined } from "@ant-design/icons";
 import "./Footer.scss";
 import { Link, useLocation } from "react-router-dom";
 const Footer = () => {
   const location = useLocation();
-  console.log();
 
   return (
     <>
@@ -25,10 +25,17 @@ const Footer = () => {
                 <div className="logo">
                   <a
                     href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
-                    target="_blank">
-                    <img src={Android} alt="" />
+                    target="_blank"
+                  >
+                    <img src={Android} alt="" className="h-100" />
                   </a>
-                  <Ios />
+                  <a
+                    href="https://apps.apple.com/vn/app/booking-studio/id1563362722"
+                    target="_blank"
+                    className="ms-10"
+                  >
+                    <img src={Ios} target="_blank" className="h-33px" alt="" />
+                  </a>
                 </div>
                 <p className="item">Theo dõi chúng tôi trên</p>
                 <div className="icons">
@@ -39,13 +46,9 @@ const Footer = () => {
               </Col>
               <Col sm={24} md={12} lg={6}>
                 <p className="title">VỀ CHÚNG TÔI</p>
-                <ul className="pt-30">
-                  <a
-                    className="item mt-20"
-                    href="https://vnplus.vn"
-                    alt=""
-                    target="_blank">
-                    Giới thiệu Plus Stinv
+                <ul className="pt-10">
+                  <a href="https://vnplus.vn" alt="" target="_blank">
+                    <li className="item mt-20"> Giới thiệu VNPLUS</li>
                   </a>
                   <Link className="item mt-20" to="privacy-policy">
                     Chính sách bảo mật
@@ -57,19 +60,20 @@ const Footer = () => {
               </Col>
               <Col sm={24} md={12} lg={6}>
                 <p className="title">HỖ TRỢ KHÁCH HÀNG</p>
-                <ul className="pt-30">
-                  <Link className="item mt-20" to={"helpCenter"}>
-                    Trung tâm trợ giúp
+                <ul className="pt-10">
+                  <Link to={"helpCenter"}>
+                    <li className="item mt-20">Trung tâm trợ giúp</li>
                   </Link>
                   <li className="item mt-20">Quy định chung</li>
                 </ul>
               </Col>
               <Col sm={24} md={12} lg={6}>
-                <Enter />
+                <img src={Logo} />
+                {/* <Enter /> */}
                 <p className="title exten">
                   Công ty Cổ phần Công nghệ và Đầu tư VNPLUS
                 </p>
-                <BCTVN />
+                {/* <BCTVN /> */}
               </Col>
             </Row>
           </div>

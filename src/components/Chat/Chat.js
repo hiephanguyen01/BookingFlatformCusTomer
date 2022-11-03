@@ -31,11 +31,9 @@ const Chat = () => {
       userId: UserMe.id,
     });
     socket.on("online_partner", (partner) => {
-      console.log(partner);
       dispatch(getOnlinePartner(partner));
     });
     socket.on("offline_partner", (partner) => {
-      console.log(partner);
       dispatch(getOfflinePartner(partner));
     });
 

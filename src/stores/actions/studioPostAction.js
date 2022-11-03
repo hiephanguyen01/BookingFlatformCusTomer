@@ -1,4 +1,5 @@
 import { studioPostService } from "../../services/StudioPostService";
+import queryString from "query-string";
 import { userService } from "../../services/UserService";
 import {
   LOADING,
@@ -31,7 +32,7 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: false });
 };
 export const getFilterStudioPost =
-  (limit, page, filter, user) => async (dispatch) => {
+  (limit, page, filter, user, navigate) => async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getFilterStudioPost(
@@ -45,6 +46,7 @@ export const getFilterStudioPost =
       if (user !== null) {
         dispatch(getAllStudioLikedAction1(filter.category));
       }
+      navigate(`/home/filter?${queryString.stringify(filter)}`);
     } catch (error) {
       console.error(error);
     }

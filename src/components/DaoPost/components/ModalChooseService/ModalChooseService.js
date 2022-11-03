@@ -12,18 +12,11 @@ import { convertPrice } from "../../../../utils/convert";
 import { setRelatedService } from "../../../../stores/actions/PostDaoAction";
 import toastMessage from "../../../ToastMessage";
 
-const ModalChooseService = ({
-  hasTags,
-  PostId,
-  handleState,
-  chooseCommentDefault,
-  setChooseCommentDefault,
-}) => {
+const ModalChooseService = ({ hasTags, PostId }) => {
   const { relatedService } = useSelector((state) => state.postDaoReducer);
   const [options, setOptions] = useState([]);
   const [services, setServices] = useState([]);
   const [filterService, setFilterService] = useState([]);
-  const [select, setSelect] = useState([...relatedService]);
   const [selectService, setSelectService] = useState([...relatedService]);
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
@@ -189,7 +182,11 @@ const ModalChooseService = ({
       <div className="search-footer">
         <Button
           className="h-100 me-20"
-          onClick={() => dispatch({ type: HIDE_MODAL })}
+          onClick={() => {
+            dispatch({ type: HIDE_MODAL });
+            dispatch(setRelatedService([]));
+            setSelectService([]);
+          }}
         >
           Hủy
         </Button>
