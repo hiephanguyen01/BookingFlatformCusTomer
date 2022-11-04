@@ -81,7 +81,7 @@ const Aside = ({ children }) => {
   console.log("uer me", UserMe);
   const ref = useRef(null);
   const [name, setName] = useState(UserMe.Fullname);
-  const debounced = useDebounce(name, 500);
+  const debounced = useDebounce(name, 1500);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   // console.log(pathname.split("/")[4]);

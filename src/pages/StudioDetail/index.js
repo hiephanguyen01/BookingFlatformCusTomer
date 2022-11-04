@@ -308,6 +308,7 @@ export const StudioDetail = () => {
                     }}
                   >
                     {filter.OrderByTime === 1 &&
+
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
