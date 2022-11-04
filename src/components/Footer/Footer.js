@@ -50,11 +50,11 @@ const Footer = () => {
                   <a href="https://vnplus.vn" alt="" target="_blank">
                     <li className="item mt-20"> Giới thiệu VNPLUS</li>
                   </a>
-                  <Link to="privacy-policy">
-                    <li className="item mt-20">Chính sách bảo mật </li>
+                  <Link className="item mt-20" to="privacy-policy">
+                    Chính sách bảo mật
                   </Link>
-                  <Link to="terms-use">
-                    <li className="item mt-20">Điều khoản sử dụng</li>
+                  <Link className="item mt-20" to="terms-use">
+                    Điều khoản sử dụng
                   </Link>
                 </ul>
               </Col>

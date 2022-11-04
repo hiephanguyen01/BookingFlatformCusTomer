@@ -1,0 +1,222 @@
+.success {
+  background-color: #dedede;
+  min-height: 100vh;
+  &__container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    min-height: 100vh;
+    &__img {
+      padding: 42px 0 0 0;
+      img {
+        display: block;
+        margin: 0 auto;
+      }
+    }
+    &__cfm {
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 27px;
+      letter-spacing: 0em;
+      text-align: center;
+      color: #18aa00;
+      margin-top: 24px;
+    }
+    &__name {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 22px;
+      letter-spacing: 0em;
+      text-align: center;
+      margin-top: 24px;
+    }
+    &__desc {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0em;
+      text-align: center;
+      margin: 24px 50px;
+    }
+    &__myorder {
+      display: block;
+      width: fit-content;
+      padding: 13px 53px;
+      background: linear-gradient(90deg, #b21320 -24.4%, #e60019 83.6%);
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 22px;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #ffffff;
+      margin: 24px auto;
+    }
+    &__divider {
+      height: 8px;
+      background: #dedede;
+    }
+    &__order {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 27px;
+      letter-spacing: 0em;
+      text-align: left;
+      padding: 24px 40px;
+      font-weight: 900;
+    }
+    &__info {
+      padding: 24px 40px;
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border-bottom: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      td {
+        &:nth-child(1) {
+          color: #717171;
+        }
+      }
+    }
+    &__checkout {
+      padding: 24px 40px;
+      &__line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        &__text {
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: left;
+        }
+        padding: 8px 0px;
+      }
+      &__divider {
+        padding: 0px 40px;
+        height: 1px;
+        background: #dedede;
+      }
+    }
+    &__order__card {
+      padding: 0px 40px;
+      display: flex;
+      &__img {
+        img {
+          border-radius: 6px;
+          width: 118px;
+          height: 80px;
+        }
+      }
+      &__text {
+        padding-left: 16px;
+        &__addr {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 21px;
+          letter-spacing: 0em;
+          text-align: left;
+        }
+        &__phone {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 17px;
+          letter-spacing: 0em;
+          text-align: left;
+          color: #0085ff;
+          padding: 12px 8px;
+        }
+      }
+    }
+    &__noti {
+      padding: 24px 40px;
+      background-color: #f3f3f3;
+    }
+    &__privacy {
+      display: flex;
+      padding: 0px 40px 24px;
+      &__col {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        &__bar {
+          width: 4px;
+          height: 48px;
+        }
+        &__text {
+          padding-left: 16px;
+          &__title {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+          }
+          &__normal {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21px;
+            letter-spacing: 0em;
+            text-align: left;
+          }
+        }
+      }
+    }
+    &__footer {
+      background: url("./assets/footer.png") 100% no-repeat;
+      display: flex;
+      align-items: center;
+      &__left {
+        padding: 24px 40px 0;
+        width: 65%;
+        &__title {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: left;
+        }
+        &__download {
+          padding-top: 24px;
+        }
+        &__dec {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 17px;
+          letter-spacing: 0em;
+          text-align: left;
+        }
+        &__icon {
+          display: flex;
+          padding: 15px 0px;
+        }
+      }
+      &__right {
+        width: 35%;
+      }
+    }
+  }
+}
+.bold {
+  font-weight: 900;
+}
+.red {
+  background-color: #e60019;
+}
+.green {
+  background-color: #18aa00;
+}
+.t-red {
+  color: #e60019;
+}
+.t-green {
+  color: #18aa00;
+}

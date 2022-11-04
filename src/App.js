@@ -28,6 +28,8 @@ import Support from "./pages/UserAccount/components/support/Support";
 import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsUse from "./pages/TermsUse/TermsUse";
+import Success from "./components/Email/Success";
+import { VerifyOtp } from "./components/Modal/verifyOtp/VerifyOtp";
 
 function App() {
   const dispatch = useDispatch();
@@ -57,6 +59,7 @@ function App() {
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
         <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
+        <Route path="/test" element={<Success />}></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route
