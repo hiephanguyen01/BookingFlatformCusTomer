@@ -140,9 +140,7 @@ const PhotographerDetail = () => {
   }, []);
 
   const handleChooseService = (data) => {
-    console.log(chooseService);
     if (chooseService.filter((itm) => itm.id === data.id).length > 0) {
-      // console.log(data);
       setChooseService([]);
     } else {
       setChooseService([{ ...data }]);
