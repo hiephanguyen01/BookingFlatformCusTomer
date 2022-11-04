@@ -91,7 +91,7 @@ const Option = ({ option, disabled, service }) => {
       dispatch(
         setFilterStudioService(5, 1, {
           ...filterService,
-          OrderByTime: 0,
+          OrderByTime: 1,
           OrderByTimeFrom:
             convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
           OrderByTimeTo:
@@ -104,7 +104,7 @@ const Option = ({ option, disabled, service }) => {
     dispatch(
       setFilterStudioService(5, 1, {
         ...filterService,
-        OrderByTime: 1,
+        OrderByTime: 0,
         OrderByDateFrom: convertDateSendToDB(datesString[0]),
         OrderByDateTo: convertDateSendToDB(datesString[1]),
       })
@@ -147,7 +147,7 @@ const Option = ({ option, disabled, service }) => {
     return array;
   };
   switch (Number(filterService.OrderByTime)) {
-    case 0:
+    case 1:
       return (
         <div className="timeContainer">
           <Form.Item
@@ -216,7 +216,7 @@ const Option = ({ option, disabled, service }) => {
           </Form.Item>
         </div>
       );
-    case 1:
+    case 0:
       return (
         <div>
           <Form.Item
@@ -293,8 +293,8 @@ const SelectTimeOptionService = ({ disabled, service }) => {
         disabled={disabled}
       >
         <Space direction="vertical">
-          <Radio value={0}>Đặt theo giờ</Radio>
-          <Radio value={1}>Đặt theo ngày</Radio>
+          <Radio value={1}>Đặt theo giờ</Radio>
+          <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
       <Option service={data} option={selection} disabled={disabled} />

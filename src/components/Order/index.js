@@ -1,5 +1,6 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Row } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -40,7 +41,6 @@ const Index = ({ linkTo = "" }) => {
   const location = useLocation();
   const navigate = useNavigate();
   let cate;
-  console.log("djskadhjsag", infoUser);
   const nameCategory = location.pathname
     .split("/")
     .filter((item) => item !== "")[1];
@@ -91,7 +91,7 @@ const Index = ({ linkTo = "" }) => {
 
   const calculatePrice = () => {
     switch (filter.OrderByTime) {
-      case 0:
+      case 1:
         const priceByHour = chooseServiceList?.reduce(
           (total, service) =>
             total +
@@ -110,7 +110,7 @@ const Index = ({ linkTo = "" }) => {
               : (priceByHour / 100) * (choosePromotionUser?.ReduceValue || 0))
           );
         }
-      case 1:
+      case 0:
         const priceByDate =
           chooseServiceList?.reduce(
             (total, service) =>
@@ -150,37 +150,11 @@ const Index = ({ linkTo = "" }) => {
         //**************************************
 
         if (filter.OrderByTime === 0) {
-          //Handle date time section *************
-          const timeFromTemp = convertTimeSendDB(
-            filter?.OrderByTimeFrom?.slice(11, 19)
-          );
-          let prevDayFromflagTemp = parseInt(timeFromTemp?.split("#")[1]);
-          const dateFromTemp = convertDateSendToDB(
-            filter?.OrderByTimeFrom,
-            Boolean(prevDayFromflagTemp)
-          ).slice(0, 11);
-          const timeFromOfficial = timeFromTemp?.split("#")[0];
-
-          const timeToTemp = convertTimeSendDB(
-            filter?.OrderByTimeTo?.slice(11, 19)
-          );
-          let prevDayToflagTemp = parseInt(timeToTemp?.split("#")[1]);
-          const dateToTemp = convertDateSendToDB(
-            filter?.OrderByTimeTo,
-            Boolean(prevDayToflagTemp)
-          ).slice(0, 11);
-          const timeToOfficial = timeToTemp.split("#")[0];
-
           for (let i = 0; i < chooseServiceList.length; i++) {
-            console.log("Đang trong này");
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom:
-                convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
-                "00:00:00.000Z",
-              OrderByDateTo:
-                convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
-                "00:00:00.000Z",
+              OrderByDateFrom: convertTimeSendDB(filter.OrderByDateFrom),
+              OrderByDateTo: convertTimeSendDB(filter.OrderByDateTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -191,25 +165,28 @@ const Index = ({ linkTo = "" }) => {
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue:
+              BookingValue: calculatePrice(),
+            };
+            const response = await orderService.addOrder({
+              ...newData,
+              numberOfTime: `${calDate(
+                filter.OrderByDateFrom,
+                filter.OrderByDateTo
+              )} ngày`,
+              initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByDate) *
                 calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
-            };
-            const response = await orderService.addOrder(newData);
+            });
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
           }
         } else if (filter.OrderByTime === 1) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
-              OrderByTime: 0,
-              OrderByDateFrom:
-                convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
-                "00:00:00.000Z",
-              OrderByDateTo:
-                convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
-                "00:00:00.000Z",
+              OrderByTime: 1,
+              OrderByTimeFrom: convertTimeSendDB(filter.OrderByTimeFrom),
+              OrderByTimeTo: convertTimeSendDB(filter.OrderByTimeTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -220,12 +197,19 @@ const Index = ({ linkTo = "" }) => {
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue:
-                (chooseServiceList[i].Sales ||
-                  chooseServiceList[i].PriceByDate) *
-                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+              BookingValue: calculatePrice(),
             };
-            const response = await orderService.addOrder(newData);
+            const response = await orderService.addOrder({
+              ...newData,
+              numberOfTime: `${calTime(
+                filter.OrderByTimeFrom,
+                filter.OrderByTimeTo
+              )} giờ`,
+              initValue:
+                (chooseServiceList[i].Sales ||
+                  chooseServiceList[i].PriceByHour) *
+                calTime(filter.OrderByTimeFrom, filter.OrderByTimeTo),
+            });
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
           }
@@ -303,9 +287,9 @@ const Index = ({ linkTo = "" }) => {
                           Trắng, size S, Số lượng 1
                         </div> */}
                         <div className="text-middle mt-8">
-                          {filter.OrderByTime === 0 &&
-                            convertPrice(item.Sales || item.PriceByHour)}
                           {filter.OrderByTime === 1 &&
+                            convertPrice(item.Sales || item.PriceByHour)}
+                          {filter.OrderByTime === 0 &&
                             convertPrice(item.Sales || item.PriceByDate)}
                           đ
                         </div>
@@ -377,7 +361,7 @@ const Index = ({ linkTo = "" }) => {
                       marginBottom: "12px",
                     }}
                   >
-                    {filter.OrderByTime === 0 &&
+                    {filter.OrderByTime === 1 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
                           (total, service) =>
@@ -390,7 +374,7 @@ const Index = ({ linkTo = "" }) => {
                           0
                         )
                       )}`}
-                    {filter.OrderByTime === 1 &&
+                    {filter.OrderByTime === 0 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
                           (total, service) =>

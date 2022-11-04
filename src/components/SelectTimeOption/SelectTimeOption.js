@@ -57,7 +57,7 @@ const Option = ({ option, disabled }) => {
   };
 
   switch (Number(filter.OrderByTime)) {
-    case 0:
+    case 1:
       return (
         <div className="timeContainer">
           <Form.Item
@@ -67,7 +67,8 @@ const Option = ({ option, disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "8px",
-            }}>
+            }}
+          >
             <DatePicker
               onChange={handleOnchangeDate}
               defaultValue={moment(filter?.OrderByTimeFrom, "YYYY-MM-DD")}
@@ -84,7 +85,8 @@ const Option = ({ option, disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}>
+            }}
+          >
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
@@ -101,7 +103,7 @@ const Option = ({ option, disabled }) => {
           </Form.Item>
         </div>
       );
-    case 1:
+    case 0:
       return (
         <div>
           <Form.Item
@@ -111,7 +113,8 @@ const Option = ({ option, disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}>
+            }}
+          >
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
               defaultValue={[
@@ -154,10 +157,11 @@ const SelectTimeOption = ({ disabled }) => {
         onChange={handleOnChangeSelection}
         style={{ padding: "0 0 20px" }}
         value={selection}
-        disabled={disabled}>
+        disabled={disabled}
+      >
         <Space direction="vertical">
-          <Radio value={0}>Đặt theo giờ</Radio>
-          <Radio value={1}>Đặt theo ngày</Radio>
+          <Radio value={1}>Đặt theo giờ</Radio>
+          <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
       <Option option={selection} disabled={disabled} />

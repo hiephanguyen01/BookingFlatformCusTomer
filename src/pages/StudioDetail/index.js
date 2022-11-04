@@ -288,12 +288,12 @@ export const StudioDetail = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {filter.OrderByTime === 0 &&
+                    {filter.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
-                    {filter.OrderByTime === 1 &&
+                    {filter.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
@@ -307,12 +307,13 @@ export const StudioDetail = () => {
                       fontWeight: "400",
                     }}
                   >
-                    {filter.OrderByTime === 0 &&
+                    {filter.OrderByTime === 1 &&
+
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
-                    {filter.OrderByTime === 1 &&
+                    {filter.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
@@ -618,7 +619,7 @@ export const StudioDetail = () => {
                             color: "#828282",
                           }}
                         >
-                          {filter.OrderByTime === 0 &&
+                          {filter.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseService?.reduce(
                                 (total, item) =>
@@ -631,7 +632,7 @@ export const StudioDetail = () => {
                                 0
                               )
                             )}`}
-                          {filter.OrderByTime === 1 &&
+                          {filter.OrderByTime === 0 &&
                             `${convertPrice(
                               chooseService?.reduce(
                                 (total, item) =>
@@ -657,7 +658,7 @@ export const StudioDetail = () => {
                           fontWeight: "700",
                         }}
                       >
-                        {filter.OrderByTime === 0 &&
+                        {filter.OrderByTime === 1 &&
                           `${convertPrice(
                             chooseService?.reduce(
                               (total, item) =>
@@ -670,7 +671,7 @@ export const StudioDetail = () => {
                               0
                             )
                           )}`}
-                        {filter.OrderByTime === 1 &&
+                        {filter.OrderByTime === 0 &&
                           `${convertPrice(
                             chooseService?.reduce(
                               (total, item) =>

@@ -79,7 +79,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -117,7 +118,8 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}>
+              onClick={() => navigate("/home/user/")}
+            >
               Thông tin tài khoản
             </Button>
           ),
@@ -130,7 +132,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -184,7 +187,8 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}>
+        footer={[]}
+      >
         <div className="logo">
           <img src={Logo} alt="" />
         </div>
@@ -196,14 +200,16 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="province"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select
                 defaultValue=""
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                   option.children.toLowerCase().includes(input.toLowerCase())
-                }>
+                }
+              >
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&
                   provinces.map((val) => (
@@ -215,7 +221,8 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}>
+              style={{ width: "100%", marginRight: "20px" }}
+            >
               <Select defaultValue="">
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -242,7 +249,8 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}>
+              style={{ width: "50%" }}
+            >
               Tìm kiếm
             </Button>
           </Form.Item>
@@ -300,20 +308,29 @@ const Header = () => {
               </div>
             </div>
           ) : (
-            <Dropdown overlay={menuSignIn} placement="topRight" arrow>
-              <div className="user">
-                <Avatar src={noBody} />
-                <div className="text">
-                  {!user && <p>Đăng ký/Đăng nhập</p>}
-                  <p>
-                    {user ? user.Fullname : "Tài khoản"}
-                    <DownOutlined
-                      style={{ fontSize: "10px", color: "#828282" }}
-                    />
-                  </p>
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={noBody} />
+                  <div className="text">
+                    {!user && <p>Đăng ký/Đăng nhập</p>}
+                    <p>
+                      {user ? user.Fullname : "Tài khoản"}
+                      <DownOutlined
+                        style={{ fontSize: "10px", color: "#828282" }}
+                      />
+                    </p>
+                  </div>
                 </div>
+              </Dropdown>
+              <div
+                // type="secondary"
+                className="btn-become-partner w-80 ms-30 mt-5 d-select"
+                // onClick={() => navigate("/home/user/")}
+              >
+                Trở thành đối tác
               </div>
-            </Dropdown>
+            </div>
           )}
         </div>
       </div>
