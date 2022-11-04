@@ -165,7 +165,8 @@ const Index = () => {
                   style={{
                     marginBottom: "0",
                     color: "#E22828",
-                  }}>
+                  }}
+                >
                   {convertPrice(data.Sales)}đ
                 </h4>
                 <div
@@ -175,7 +176,8 @@ const Index = () => {
                     lineHeight: "16px",
                     color: "#828282",
                     textDecoration: "line-through",
-                  }}>
+                  }}
+                >
                   {convertPrice(data.Price)}đ
                 </div>
               </div>
@@ -186,7 +188,8 @@ const Index = () => {
                   fontSize: "12px",
                   lineHeight: "16px",
                   color: "#828282",
-                }}>
+                }}
+              >
                 Bao gồm 50.000đ thuế và phí{" "}
               </div>
               <span
@@ -196,7 +199,8 @@ const Index = () => {
                   borderRadius: "4px",
                   padding: "3px 10px",
                   color: "#ffffff",
-                }}>
+                }}
+              >
                 Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
               </span>
             </>
@@ -218,7 +222,8 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Bỏ chọn
                 </span>
               ) : (
@@ -234,7 +239,8 @@ const Index = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Chọn
                 </span>
               )}
@@ -280,7 +286,8 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -288,7 +295,8 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -298,7 +306,8 @@ const Index = () => {
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}>
+                style={{ marginBottom: "11px" }}
+              >
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -307,7 +316,8 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}>
+                    }}
+                  >
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{
@@ -351,23 +361,27 @@ const Index = () => {
                           flexDirection: "column",
                           gap: "10px",
                           padding: "10px",
-                        }}>
+                        }}
+                      >
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
                             cursor: "pointer",
-                          }}>
+                          }}
+                        >
                           <WarningOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Báo cáo
                           </span>
                         </div>
                       </div>
                     }
-                    trigger="click">
+                    trigger="click"
+                  >
                     <MoreOutlined
                       style={{
                         fontSize: "25px",
@@ -403,7 +417,8 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem", height: "100%" }}
-                  className="mb-12">
+                  className="mb-12"
+                >
                   <div className="desc_col_left mb-12">
                     <ReadMoreDesc title="Mô tả">
                       {studioDetail?.data?.Description}
@@ -413,7 +428,8 @@ const Index = () => {
                     className="py-26 px-18"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}>
+                    }}
+                  >
                     <PromotionList data={filter_promo} />
                   </div>
                 </Col>
@@ -421,7 +437,8 @@ const Index = () => {
                   lg={8}
                   sm={24}
                   style={{ paddingLeft: "0.25rem", height: "100%" }}
-                  className="mb-12">
+                  className="mb-12"
+                >
                   <div className="desc_col_right">
                     <div className="">
                       <div className="desc_col_right_title">
@@ -429,7 +446,8 @@ const Index = () => {
                       </div>
                       <div
                         className="text-medium-re"
-                        style={{ marginBottom: "15px" }}>
+                        style={{ marginBottom: "15px" }}
+                      >
                         <img src={svgLocation} style={{ marginRight: "6px" }} />
                         {studioDetail?.data?.Address}
                       </div>
@@ -438,7 +456,8 @@ const Index = () => {
                       style={{ width: "100%", height: "220px", border: "0" }}
                       src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
                       loading="lazy"
-                      referrerpolicy="no-referrer-when-downgrade"></iframe>
+                      referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
                   </div>
                 </Col>
               </Row>
@@ -449,12 +468,14 @@ const Index = () => {
                   lg={16}
                   sm={24}
                   style={{ paddingRight: "0.25rem" }}
-                  className="col_left">
+                  className="col_left"
+                >
                   <div
                     className=" py-22 mb-12 h-100"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}>
+                    }}
+                  >
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
                 </Col>
@@ -464,7 +485,8 @@ const Index = () => {
                       padding: "24px 26px",
                       backgroundColor: "#ffffff",
                       // height: "100%",
-                    }}>
+                    }}
+                  >
                     <div className="d-flex justify-content-between mb-12">
                       <div
                         className=""
@@ -474,7 +496,8 @@ const Index = () => {
                           lineHeight: "25px",
                           /* Neutral/Grey 700 */
                           color: "#222222",
-                        }}>
+                        }}
+                      >
                         Đã chọn {chooseService.length} sản phẩm
                       </div>
                       {chooseService.length > 0 && (
@@ -486,7 +509,8 @@ const Index = () => {
                             textDecorationLine: "line-through",
                             /* Neutral/Grey 400 */
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           {`${convertPrice(
                             chooseService?.reduce(
                               (total, item) =>
@@ -514,7 +538,8 @@ const Index = () => {
                           lineHeight: "27px",
                           /* Primary/Red 700 */
                           color: "#E22828",
-                        }}>
+                        }}
+                      >
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) =>
@@ -537,7 +562,8 @@ const Index = () => {
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}>
+                        onClick={handleBook}
+                      >
                         Đặt ngay
                       </Button>
                     </div>
@@ -566,7 +592,8 @@ const Index = () => {
                           ))}
                         <div
                           className="btn_see_more"
-                          onClick={() => setToggleSeeMore(true)}>
+                          onClick={() => setToggleSeeMore(true)}
+                        >
                           Xem thêm <DownOutlined className="icon" />
                         </div>
                       </>

@@ -308,20 +308,29 @@ const Header = () => {
               </div>
             </div>
           ) : (
-            <Dropdown overlay={menuSignIn} placement="topRight" arrow>
-              <div className="user">
-                <Avatar src={noBody} />
-                <div className="text">
-                  {!user && <p>Đăng ký/Đăng nhập</p>}
-                  <p>
-                    {user ? user.Fullname : "Tài khoản"}
-                    <DownOutlined
-                      style={{ fontSize: "10px", color: "#828282" }}
-                    />
-                  </p>
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={noBody} />
+                  <div className="text">
+                    {!user && <p>Đăng ký/Đăng nhập</p>}
+                    <p>
+                      {user ? user.Fullname : "Tài khoản"}
+                      <DownOutlined
+                        style={{ fontSize: "10px", color: "#828282" }}
+                      />
+                    </p>
+                  </div>
                 </div>
+              </Dropdown>
+              <div
+                // type="secondary"
+                className="btn-become-partner w-80 ms-30 mt-5 d-select"
+                // onClick={() => navigate("/home/user/")}
+              >
+                Trở thành đối tác
               </div>
-            </Dropdown>
+            </div>
           )}
         </div>
       </div>
