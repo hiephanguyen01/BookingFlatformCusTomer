@@ -24,6 +24,7 @@ const Footer = () => {
               <Col sm={24} md={12} lg={6}>
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
                 <div className="logo">
+<<<<<<< HEAD
                   <div className="me-5">
                     <img src={QRCode} />
                   </div>
@@ -47,6 +48,21 @@ const Footer = () => {
                       />
                     </a>
                   </div>
+=======
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
+                    target="_blank"
+                  >
+                    <img src={Android} alt="" className="h-100" />
+                  </a>
+                  <a
+                    href="https://apps.apple.com/vn/app/booking-studio/id1563362722"
+                    target="_blank"
+                    className="ms-10"
+                  >
+                    <img src={Ios} target="_blank" className="h-33px" alt="" />
+                  </a>
+>>>>>>> 73d305addc0bd1241e907e4ea0abeb351f3e8229
                 </div>
                 <p className="item">Theo dõi chúng tôi trên</p>
                 <div className="icons">

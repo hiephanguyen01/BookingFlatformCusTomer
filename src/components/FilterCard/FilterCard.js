@@ -135,9 +135,9 @@ const FilterCard = ({ data, category }) => {
               </p>
             </div>
             <div className="d-flex justify-content-between align-items-center">
-              <div className="description-category">
+              <p className="description-category">
                 <img src={Logo2} alt="" /> {category.name}
-              </div>
+              </p>
               <p>Đã đặt {data.BookingCount}</p>
             </div>
 
