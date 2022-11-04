@@ -30,6 +30,7 @@ const Index = ({ linkTo = "" }) => {
   const { choosePromotionUser } = useSelector(
     (state) => state.promoCodeReducer
   );
+  console.log("first,", chooseServiceList);
   const { studioDetail, filter } = useSelector(
     (state) => state.studioPostReducer
   );

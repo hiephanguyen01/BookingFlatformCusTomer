@@ -108,10 +108,10 @@ export const VerifyOtp = ({ setValid, email }) => {
               className={cx("send-code-again-sign-up")}
               onClick={async () => {
                 try {
+                  setCountDown(60);
                   await studioPostService.sendCodeEmail({
                     Email: email,
                   });
-                  setCountDown(60);
                 } catch (error) {
                   console.log(error);
                 }
