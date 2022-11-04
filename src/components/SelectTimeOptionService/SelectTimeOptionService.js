@@ -105,8 +105,10 @@ const Option = ({ option, disabled, service }) => {
       setFilterStudioService(5, 1, {
         ...filterService,
         OrderByTime: 0,
-        OrderByDateFrom: convertDateSendToDB(datesString[0]),
-        OrderByDateTo: convertDateSendToDB(datesString[1]),
+        OrderByDateFrom:
+          moment(datesString[0]).toISOString().slice(0, 11) + "00:00:00.000Z",
+        OrderByDateTo:
+          moment(datesString[1]).toISOString().slice(0, 11) + "00:00:00.000Z",
       })
     );
   };
