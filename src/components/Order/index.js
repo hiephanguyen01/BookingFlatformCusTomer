@@ -22,6 +22,7 @@ import {
 import { convertImage } from "../../utils/convertImage";
 import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 import toastMessage from "../ToastMessage";
 import "./order.scss";
 
