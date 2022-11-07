@@ -24,9 +24,13 @@ import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
 import { calDate, calTime } from "../../utils/calculate";
 import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { partnerDetail } = useSelector(
+    (state) => state.registerPartnerReducer
+  );
   const { choosePromotionUser } = useSelector(
     (state) => state.promoCodeReducer
   );
@@ -74,6 +78,10 @@ const Index = ({ linkTo = "" }) => {
   useEffect(() => {
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
+
+    //Get Register Partner Detail of this StudioPost in order to retrieve the value of PaymentTypeOnline column ****
+    dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
+    // *************************************************************************************************************
 
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
@@ -169,8 +177,6 @@ const Index = ({ linkTo = "" }) => {
         ).slice(0, 11);
         const timeToOfficial = timeToTemp.split("#")[0];
 
-        //Check coi có bị trùng cái thời gian đặt room này trên database ko
-
         //**************************************
 
         if (filter.OrderByTime === 0) {
@@ -188,7 +194,6 @@ const Index = ({ linkTo = "" }) => {
                 // convertTimeSendDB(filter.OrderByTimeTo.slice(11, 19)) +
                 // ":00.000Z",
                 dateToTemp + timeToOfficial + ":00.000Z",
-              PaymentType: 0,
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
               BookingPhone: infoUser.phoneNumber,
@@ -197,7 +202,6 @@ const Index = ({ linkTo = "" }) => {
               CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
-              IsPayDeposit: 1,
               BookingValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByHour) *
@@ -211,13 +215,12 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom: "24/10/2022",
-              // convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
-              // "00:00:00.000Z",
-              OrderByDateTo: "26/10/2022",
-              // convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
-              // "00:00:00.000Z",
-              PaymentType: 0,
+              OrderByDateFrom:
+                convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
+                "00:00:00.000Z",
+              OrderByDateTo:
+                convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
+                "00:00:00.000Z",
               OrderNote: infoUser.message,
               BookingUserName: infoUser.name,
               BookingPhone: infoUser.phoneNumber,
@@ -226,8 +229,7 @@ const Index = ({ linkTo = "" }) => {
               CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
-              IsPayDeposit: 1,
-              BookingValue: "4",
+              BookingValue: convertPrice(calculatePrice()).split(".").join(""),
               // (chooseServiceList[i].Sales ||
               //   chooseServiceList[i].PriceByDate) *
               // calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
@@ -358,9 +360,15 @@ const Index = ({ linkTo = "" }) => {
               <div className="text-title" style={{ marginBottom: "8px" }}>
                 Phương thức thanh toán
               </div>
-              <p className="text-description" style={{ color: "#222222" }}>
-                Thanh toán trực tiếp cho shop
-              </p>
+              {Boolean(partnerDetail?.PaymentTypeOnline) ? (
+                <p className="text-description" style={{ color: "#222222" }}>
+                  Thanh toán online (E-banking, Visa, Mastercard)
+                </p>
+              ) : (
+                <p className="text-description" style={{ color: "#222222" }}>
+                  Thanh toán trực tiếp cho shop
+                </p>
+              )}
             </div>
             <div className="border-bottom">
               <div className="text-title" style={{ marginBottom: "8px" }}>
