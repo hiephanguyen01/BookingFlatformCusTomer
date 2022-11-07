@@ -51,7 +51,7 @@ const Option = ({ option, disabled, service }) => {
   }
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
-    if (dString && option === 0) {
+    if (dString && option === 1) {
       let hl = service?.Bookings?.filter((item) => {
         const dates = dateRange(
           moment(item.OrderByTimeFrom).format("l"),
@@ -59,6 +59,7 @@ const Option = ({ option, disabled, service }) => {
         );
         return dates.includes(moment(dString).format("l"));
       });
+      console.log(hl);
       setDisableHour(hl);
     }
     if (time.length > 0) {
@@ -146,6 +147,7 @@ const Option = ({ option, disabled, service }) => {
         return remove_duplicates_es6(acc);
       }, []);
     }
+    console.log(array);
     return array;
   };
   switch (Number(filterService.OrderByTime)) {

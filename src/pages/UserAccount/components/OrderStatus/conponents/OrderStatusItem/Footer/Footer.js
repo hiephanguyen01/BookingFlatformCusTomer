@@ -106,7 +106,8 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1">
+              className="FooterStatus__wait__button__1"
+            >
               <UploadOutlined /> Đã thanh toán
             </Link>
             <button className="FooterStatus__wait__button__2">
@@ -126,7 +127,8 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}>
+            }}
+          >
             Liên hệ
           </button>
         </div>
@@ -161,7 +163,8 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal">
+            className="FooterStatus__complete__modal"
+          >
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

@@ -17,7 +17,7 @@ import "./commentRating.scss";
 const STAR_LIST = [
   { id: 0, label: "Tất cả" },
   { id: 5, label: "5" },
-  { id: 6, label: "4" },
+  { id: 4, label: "4" },
   { id: 3, label: "3" },
   { id: 2, label: "2" },
   { id: 1, label: "1" },
@@ -76,7 +76,8 @@ const Index = ({ data = [], className }) => {
             allowHalf
             value={Number(data?.data?.TotalRate)}
             style={{ fontSize: "10px" }}
-            disabled></Rate>
+            disabled
+          ></Rate>
           <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
             data?.rating?.length || 0
           })`}</div>
@@ -89,7 +90,8 @@ const Index = ({ data = [], className }) => {
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
-                }`}>
+                }`}
+              >
                 <span>{star.label}</span>
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
@@ -153,7 +155,8 @@ const Index = ({ data = [], className }) => {
                             type: "SHOW_MODAL_LIST",
                             Component: <ModalImage data={item?.Image} />,
                           })
-                        }>
+                        }
+                      >
                         <li className="item-video">
                           <img src={imgCmt} alt="" />
                           <PlayCircleOutlined className="play" />
@@ -173,7 +176,8 @@ const Index = ({ data = [], className }) => {
                       </ul>
                       <div
                         className="mt-16 mb-25 text-medium-re"
-                        style={{ color: "#828282" }}>
+                        style={{ color: "#828282" }}
+                      >
                         {item?.StudioRoom?.Name ||
                           item?.PhotographerServicePackage?.Name ||
                           item?.ModelServicePackage?.Name ||
