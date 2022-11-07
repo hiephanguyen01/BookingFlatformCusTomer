@@ -30,6 +30,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsUse from "./pages/TermsUse/TermsUse";
 import Success from "./components/Email/Success";
 import { VerifyOtp } from "./components/Modal/verifyOtp/VerifyOtp";
+import DetectApp from "./pages/DetectApp/DetectApp";
 
 function App() {
   const dispatch = useDispatch();
@@ -85,6 +86,7 @@ function App() {
           <Route path="confirm-order/*" element={<UpdateConfirm />} />
           <Route path="privacy-policy/*" element={<PrivacyPolicy />}></Route>
           <Route path="terms-use/*" element={<TermsUse />}></Route>
+          <Route path="detect-app" element={<DetectApp />}></Route>
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}

@@ -5,15 +5,22 @@ import { ReactComponent as Facebook } from "../../assets/footer/facebook.svg";
 import Android from "../../assets/footer/google-play-badge.png";
 import { ReactComponent as Insta } from "../../assets/footer/instagram.svg";
 import Ios from "../../assets/footer/ios.svg";
-import QRCode from "../../assets/footer/QRCode.svg";
+// import QRCode from "../../assets/footer/QRCode.svg";
 import { ReactComponent as LinkedIn } from "../../assets/footer/linkedin.svg";
 import Logo from "../../assets/header/Logo.svg";
 
 import { CopyrightOutlined } from "@ant-design/icons";
 import "./Footer.scss";
 import { Link, useLocation } from "react-router-dom";
+import QRCode from "qrcode.react";
+import { REACT_APP_DB_BASE_URL } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+
+const QR_URL = `http://localhost:3000/home/detect-app`;
+
 const Footer = () => {
   const location = useLocation();
+
+  console.log(location, window.location);
 
   return (
     <>
@@ -25,7 +32,26 @@ const Footer = () => {
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
                 <div className="logo">
                   <div className="me-5">
-                    <img src={QRCode} />
+                    {/* <img src={QRCode} /> */}
+                    <div
+                      style={{
+                        height: "auto",
+                        margin: "0 auto",
+                        maxWidth: 100,
+                        width: "100%",
+                      }}
+                    >
+                      <QRCode
+                        size={256}
+                        style={{
+                          height: "auto",
+                          maxWidth: "100%",
+                          width: "100%",
+                        }}
+                        value={window.location.host + "/home/detect-app"}
+                        // viewBox={`0 0 256 256`}
+                      />
+                    </div>
                   </div>
                   <div>
                     <a
