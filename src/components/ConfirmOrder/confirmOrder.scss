@@ -83,3 +83,7 @@
     }
   }
 }
+.disable-checkout {
+  pointer-events: none;
+  filter: grayscale(0.6);
+}
