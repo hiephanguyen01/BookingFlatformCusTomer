@@ -3,7 +3,7 @@ import { Button, Input, AutoComplete, Checkbox, Tag } from "antd";
 
 import "./modalChooseService.scss";
 import { SearchOutlined, StarFilled } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HIDE_MODAL } from "../../../../stores/types/modalTypes";
 import { useEffect } from "react";
 import { postDaoService } from "../../../../services/PostDaoService";
@@ -12,18 +12,12 @@ import { convertPrice } from "../../../../utils/convert";
 import { setRelatedService } from "../../../../stores/actions/PostDaoAction";
 import toastMessage from "../../../ToastMessage";
 
-const ModalChooseService = ({
-  hasTags,
-  PostId,
-  handleState,
-  chooseCommentDefault,
-  setChooseCommentDefault,
-}) => {
-  const [select, setSelect] = useState("");
+const ModalChooseService = ({ hasTags, PostId }) => {
+  const { relatedService } = useSelector((state) => state.postDaoReducer);
   const [options, setOptions] = useState([]);
   const [services, setServices] = useState([]);
   const [filterService, setFilterService] = useState([]);
-  const [selectService, setSelectService] = useState([]);
+  const [selectService, setSelectService] = useState([...relatedService]);
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
 
@@ -68,26 +62,26 @@ const ModalChooseService = ({
     setSelectService(newSelectService);
   };
   const handleCmtRelatedService = async () => {
-    // dispatch(setRelatedService([...selectService]));
-    const newData = selectService.reduce(
-      (arr, item) => [...arr, { category: item.category, serviceId: item.id }],
-      []
-    );
-    try {
-      const res = await postDaoService.createComment({
-        PostId,
-        Content:
-          (chooseCommentDefault.Content || "") +
-          "---" +
-          newData.map((item) => JSON.stringify(item)).join("//") +
-          "//",
-      });
-      if (res) {
-        handleState();
-      }
-    } catch (error) {
-      toastMessage("Add related service fail!", "error");
-    }
+    dispatch(setRelatedService([...selectService]));
+    // const newData = selectService.reduce(
+    //   (arr, item) => [...arr, { category: item.category, serviceId: item.id }],
+    //   []
+    // );
+    // try {
+    //   const res = await postDaoService.createComment({
+    //     PostId,
+    //     Content:
+    //       (chooseCommentDefault.Content || "") +
+    //       "---" +
+    //       newData.map((item) => JSON.stringify(item)).join("//") +
+    //       "//",
+    //   });
+    //   if (res) {
+    //     handleState();
+    //   }
+    // } catch (error) {
+    //   toastMessage("Add related service fail!", "error");
+    // }
   };
 
   const handleCloseTag = (e, tag) => {
@@ -95,7 +89,6 @@ const ModalChooseService = ({
     // newSelectService = newSelectService.filter((item) => item.id !== tag.id);
     setSelectService(selectService.filter((item) => item.id !== tag.id));
   };
-  console.log(selectService);
   return (
     <div className="search-container">
       <AutoComplete
@@ -189,7 +182,11 @@ const ModalChooseService = ({
       <div className="search-footer">
         <Button
           className="h-100 me-20"
-          onClick={() => dispatch({ type: HIDE_MODAL })}
+          onClick={() => {
+            dispatch({ type: HIDE_MODAL });
+            dispatch(setRelatedService([]));
+            setSelectService([]);
+          }}
         >
           Hủy
         </Button>

@@ -21,7 +21,9 @@ import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption
 import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { convertDateSendToDB, convertPrice } from "../../utils/convert";
+import queryString from "query-string";
 import "./FilterPage.scss";
+import { useLocation, useNavigate } from "react-router-dom";
 const { Option } = Select;
 const categories = [
   {
@@ -56,6 +58,11 @@ const categories = [
   },
 ];
 const FilterPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const querySearch = queryString.parse(location?.search);
+  console.log(querySearch);
+
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
   const [time, setTime] = useState([]);
 
@@ -70,23 +77,25 @@ const FilterPage = () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
     })();
+    initState();
+    console.log(123);
   }, []);
 
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
-        keyString: "",
-        OrderByTime: -1,
-        OrderByTimeFrom: convertDateSendToDB(new Date()),
-        OrderByTimeTo: convertDateSendToDB(new Date()),
-        OrderByDateFrom: convertDateSendToDB(new Date()),
-        OrderByDateTo: convertDateSendToDB(new Date()),
-        category: 1,
-        priceOption: 0,
+        keyString: querySearch?.keyString || "",
+        // OrderByTime: -1,
+        // OrderByTimeFrom: convertDateSendToDB(new Date()),
+        // OrderByTimeTo: convertDateSendToDB(new Date()),
+        // OrderByDateFrom: convertDateSendToDB(new Date()),
+        // OrderByDateTo: convertDateSendToDB(new Date()),
+        category: Number(querySearch?.category),
+        priceOption: Number(querySearch?.priceOption),
         price1: undefined,
         price2: undefined,
-        provinceIds: [],
-        ratingOption: 1,
+        provinceIds: Number(querySearch?.provinceIds) || [],
+        ratingOption: Number(querySearch?.ratingOption) || 1,
       })
     );
   };
@@ -103,36 +112,91 @@ const FilterPage = () => {
   };
   const onChangeFilterCategory = (e) => {
     dispatch(
-      getFilterStudioPost(5, 1, { ...filter, category: e.target.value })
+      getFilterStudioPost(
+        5,
+        1,
+        { ...filter, category: e.target.value },
+        {},
+        navigate
+      )
     );
   };
   const onChangeFilterProvince = (value) => {
-    dispatch(getFilterStudioPost(5, 1, { ...filter, provinceIds: [value] }));
+    dispatch(
+      getFilterStudioPost(
+        5,
+        1,
+        { ...filter, provinceIds: [value] },
+        {},
+        navigate
+      )
+    );
   };
   const onChangeInput = (e) => {
     dispatch(
-      getFilterStudioPost(5, 1, { ...filter, keyString: e.target.value })
+      getFilterStudioPost(
+        5,
+        1,
+        { ...filter, keyString: e.target.value },
+        {},
+        navigate
+      )
     );
   };
   const onChangePriceOption = (e) => {
     dispatch(
-      getFilterStudioPost(5, 1, { ...filter, priceOption: e.target.value })
+      getFilterStudioPost(
+        5,
+        1,
+        { ...filter, priceOption: e.target.value },
+        {},
+        navigate
+      )
     );
   };
   const onChangeRateOption = (e) => {
     dispatch(
-      getFilterStudioPost(5, 1, { ...filter, ratingOption: e.target.value })
+      getFilterStudioPost(
+        5,
+        1,
+        { ...filter, ratingOption: e.target.value },
+        {},
+        navigate
+      )
     );
   };
   const onChangeSlideRange = (val) => {
     const [price1, price2] = val;
-    dispatch(getFilterStudioPost(5, 1, { ...filter, price1, price2 }));
+    dispatch(
+      getFilterStudioPost(5, 1, { ...filter, price1, price2 }, {}, navigate)
+    );
   };
   const onChangePage = (value) => {
-    dispatch(getFilterStudioPost(5, value, filter));
+    dispatch(getFilterStudioPost(5, value, filter), {}, navigate);
   };
   const handleClearFilter = () => {
-    initState();
+    dispatch(
+      getFilterStudioPost(
+        5,
+        1,
+        {
+          keyString: "",
+          // OrderByTime: -1,
+          // OrderByTimeFrom: convertDateSendToDB(new Date()),
+          // OrderByTimeTo: convertDateSendToDB(new Date()),
+          // OrderByDateFrom: convertDateSendToDB(new Date()),
+          // OrderByDateTo: convertDateSendToDB(new Date()),
+          category: 1,
+          priceOption: 1,
+          price1: undefined,
+          price2: undefined,
+          provinceIds: [],
+          ratingOption: 1,
+        },
+        {},
+        navigate
+      )
+    );
     form.resetFields();
   };
   const handleOnchangeHour = (t, timeString) => {
@@ -188,7 +252,8 @@ const FilterPage = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                  }}>
+                  }}
+                >
                   <p className="text">LỌC THEO</p>
                   <Button htmlType="submit" type="primary">
                     Xoá bộ lọc
@@ -209,7 +274,8 @@ const FilterPage = () => {
                       option.children
                         .toLowerCase()
                         .includes(input.toLowerCase())
-                    }>
+                    }
+                  >
                     {provinces &&
                       provinces.map((val) => (
                         <Option value={val.id}>{val.Name}</Option>
@@ -222,7 +288,8 @@ const FilterPage = () => {
                   <div className="category_radio_group">
                     <Radio.Group
                       onChange={onChangeFilterCategory}
-                      value={filter.category}>
+                      value={filter.category}
+                    >
                       {categories &&
                         categories.map((val) => (
                           <Radio key={val.id} value={val.id}>
@@ -292,7 +359,8 @@ const FilterPage = () => {
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
-                }}>
+                }}
+              >
                 <div
                   style={{
                     background: "white",
@@ -300,7 +368,8 @@ const FilterPage = () => {
                     borderRadius: "50%",
                     padding: "10px",
                     margin: "10px",
-                  }}>
+                  }}
+                >
                   <LoadingOutlined style={{ fontSize: "40px" }} />
                 </div>
               </div>
@@ -323,7 +392,8 @@ const FilterPage = () => {
                 display: "flex",
                 justifyContent: "right",
                 padding: "10px 10px",
-              }}>
+              }}
+            >
               <Pagination
                 pageSize={pagination?.limit || 0}
                 current={pagination?.currentPage}

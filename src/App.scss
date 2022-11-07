@@ -118,6 +118,14 @@ h5 {
   line-height: 21.82px !important;
 }
 
+.d-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
 .d-none {
   display: none;
 }

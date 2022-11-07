@@ -1,30 +1,30 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { Col, Row, Input, Button } from "antd";
+import { Button, Col, Form, Input, Row } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-
-import "./order.scss";
-
-import TextInput from "../../components/TextInput/TextInput";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Promotion from "../../components/Promotion";
-
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import TextInput from "../../components/TextInput/TextInput";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+import { orderService } from "../../services/OrderService";
+import { studioPostService } from "../../services/StudioPostService";
 import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { calDate, calTime } from "../../utils/calculate";
 import {
   convertDateSendToDB,
   convertPrice,
   convertTimeSendDB,
 } from "../../utils/convert";
-import { orderService } from "../../services/OrderService";
-import toastMessage from "../ToastMessage";
-import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
-import { calDate, calTime } from "../../utils/calculate";
-import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
-import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
+import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
+import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import toastMessage from "../ToastMessage";
+import "./order.scss";
+
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -34,20 +34,16 @@ const Index = ({ linkTo = "" }) => {
   const { choosePromotionUser } = useSelector(
     (state) => state.promoCodeReducer
   );
+  console.log("first,", chooseServiceList);
   const { studioDetail, filter } = useSelector(
     (state) => state.studioPostReducer
   );
-  const [infoUser, setInfoUser] = useState({
-    name: "ok",
-    phoneNumber: "0987654321",
-    email: "ok",
-    message: "ok",
-  });
+  const [infoUser, setInfoUser] = useState();
+  const [Valid, setValid] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   let cate;
-
   const nameCategory = location.pathname
     .split("/")
     .filter((item) => item !== "")[1];
@@ -76,6 +72,7 @@ const Index = ({ linkTo = "" }) => {
   }
   const dispatch = useDispatch();
   useEffect(() => {
+    setInfoUser(user);
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
 
@@ -90,10 +87,9 @@ const Index = ({ linkTo = "" }) => {
 
   const isEmpty = () => {
     if (
-      infoUser.name === "" ||
-      infoUser.phoneNumber === "" ||
-      infoUser.email === "" ||
-      infoUser.message === ""
+      infoUser.Fullname === "" ||
+      infoUser.Phone === "" ||
+      infoUser.Email === ""
     ) {
       return 0;
     }
@@ -102,7 +98,7 @@ const Index = ({ linkTo = "" }) => {
 
   const calculatePrice = () => {
     switch (filter.OrderByTime) {
-      case 0:
+      case 1:
         const priceByHour = chooseServiceList?.reduce(
           (total, service) =>
             total +
@@ -121,7 +117,7 @@ const Index = ({ linkTo = "" }) => {
               : (priceByHour / 100) * (choosePromotionUser?.ReduceValue || 0))
           );
         }
-      case 1:
+      case 0:
         const priceByDate =
           chooseServiceList?.reduce(
             (total, service) =>
@@ -156,85 +152,71 @@ const Index = ({ linkTo = "" }) => {
         let IdentifyCode = [],
           TenantId;
 
-        //Handle date time section *************
-        const timeFromTemp = convertTimeSendDB(
-          filter.OrderByTimeFrom.slice(11, 19)
-        );
-        let prevDayFromflagTemp = parseInt(timeFromTemp.split("#")[1]);
-        const dateFromTemp = convertDateSendToDB(
-          filter.OrderByTimeFrom,
-          Boolean(prevDayFromflagTemp)
-        ).slice(0, 11);
-        const timeFromOfficial = timeFromTemp.split("#")[0];
-
-        const timeToTemp = convertTimeSendDB(
-          filter.OrderByTimeTo.slice(11, 19)
-        );
-        let prevDayToflagTemp = parseInt(timeToTemp.split("#")[1]);
-        const dateToTemp = convertDateSendToDB(
-          filter.OrderByTimeTo,
-          Boolean(prevDayToflagTemp)
-        ).slice(0, 11);
-        const timeToOfficial = timeToTemp.split("#")[0];
+        //Check coi có bị trùng cái thời gian đặt room này trên database ko
 
         //**************************************
 
         if (filter.OrderByTime === 0) {
           for (let i = 0; i < chooseServiceList.length; i++) {
-            console.log("Đang trong này");
             const newData = {
-              OrderByTime: 1,
-              OrderByTimeFrom:
-                // convertDateSendToDB(filter.OrderByTimeFrom).slice(0, 11) +
-                // convertTimeSendDB(filter.OrderByTimeFrom.slice(11, 19)) +
-                // ":00.000Z",
-                dateFromTemp + timeFromOfficial + ":00.000Z",
-              OrderByTimeTo:
-                // convertDateSendToDB(filter.OrderByTimeTo).slice(0, 11) +
-                // convertTimeSendDB(filter.OrderByTimeTo.slice(11, 19)) +
-                // ":00.000Z",
-                dateToTemp + timeToOfficial + ":00.000Z",
-              OrderNote: infoUser.message,
-              BookingUserName: infoUser.name,
-              BookingPhone: infoUser.phoneNumber,
-              BookingEmail: infoUser.email,
+              OrderByTime: 0,
+              OrderByDateFrom: convertTimeSendDB(filter.OrderByDateFrom),
+              OrderByDateTo: convertTimeSendDB(filter.OrderByDateTo),
+              PaymentType: 0,
+              OrderNote: infoUser.Message,
+              BookingUserName: infoUser.Fullname,
+              BookingPhone: infoUser.Phone,
+              BookingEmail: infoUser.Email,
               BookingUserId: user.id,
               CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
-              BookingValue:
-                (chooseServiceList[i].Sales ||
-                  chooseServiceList[i].PriceByHour) *
-                calTime(filter.OrderByTimeFrom, filter.OrderByTimeTo),
+              IsPayDeposit: 1,
+              BookingValue: calculatePrice(),
             };
-            const response = await orderService.addOrder(newData);
+            const response = await orderService.addOrder({
+              ...newData,
+              numberOfTime: `${calDate(
+                filter.OrderByDateFrom,
+                filter.OrderByDateTo
+              )} ngày`,
+              initValue:
+                (chooseServiceList[i].Sales ||
+                  chooseServiceList[i].PriceByDate) *
+                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+            });
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
           }
         } else if (filter.OrderByTime === 1) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
-              OrderByTime: 0,
-              OrderByDateFrom:
-                convertDateSendToDB(filter.OrderByDateFrom).slice(0, 11) +
-                "00:00:00.000Z",
-              OrderByDateTo:
-                convertDateSendToDB(filter.OrderByDateTo).slice(0, 11) +
-                "00:00:00.000Z",
-              OrderNote: infoUser.message,
-              BookingUserName: infoUser.name,
-              BookingPhone: infoUser.phoneNumber,
-              BookingEmail: infoUser.email,
+              OrderByTime: 1,
+              OrderByTimeFrom: convertTimeSendDB(filter.OrderByTimeFrom),
+              OrderByTimeTo: convertTimeSendDB(filter.OrderByTimeTo),
+              PaymentType: 0,
+              OrderNote: infoUser.Message,
+              BookingUserName: infoUser.Fullname,
+              BookingPhone: infoUser.Phone,
+              BookingEmail: infoUser.Email,
               BookingUserId: user.id,
               CreatorUserId: user.id,
               ProductId: chooseServiceList[i].id,
               Category: cate,
-              BookingValue: convertPrice(calculatePrice()).split(".").join(""),
-              // (chooseServiceList[i].Sales ||
-              //   chooseServiceList[i].PriceByDate) *
-              // calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+              IsPayDeposit: 1,
+              BookingValue: calculatePrice(),
             };
-            const response = await orderService.addOrder(newData);
+            const response = await orderService.addOrder({
+              ...newData,
+              numberOfTime: `${calTime(
+                filter.OrderByTimeFrom,
+                filter.OrderByTimeTo
+              )} giờ`,
+              initValue:
+                (chooseServiceList[i].Sales ||
+                  chooseServiceList[i].PriceByHour) *
+                calTime(filter.OrderByTimeFrom, filter.OrderByTimeTo),
+            });
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
           }
@@ -258,7 +240,7 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const handleOnChangeText = (e) => {
-    setInfoUser({ ...infoUser, [e.target.name]: e.target.value });
+    setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   return (
@@ -312,9 +294,9 @@ const Index = ({ linkTo = "" }) => {
                           Trắng, size S, Số lượng 1
                         </div> */}
                         <div className="text-middle mt-8">
-                          {filter.OrderByTime === 0 &&
-                            convertPrice(item.Sales || item.PriceByHour)}
                           {filter.OrderByTime === 1 &&
+                            convertPrice(item.Sales || item.PriceByHour)}
+                          {filter.OrderByTime === 0 &&
                             convertPrice(item.Sales || item.PriceByDate)}
                           đ
                         </div>
@@ -329,30 +311,6 @@ const Index = ({ linkTo = "" }) => {
                       Khung giờ bạn muốn đặt
                     </div>
                     <SelectTimeOption disabled="true" />
-                    {/* <div
-                      className="text-description d-flex align-items-center"
-                      style={{ marginBottom: "12px" }}
-                    >
-                      <div style={{ color: "#616161", width: "50px" }}>
-                        Ngày
-                      </div>
-                      <DatePicker
-                        onChange={(date, dateString) =>
-                          onChangeDate(date, dateString, item.id)
-                        }
-                        style={{ color: "#3F3F3F" }}
-                        format="YYYY-MM-DD"
-                      />
-                    </div>
-                    <div className="text-description d-flex align-items-center">
-                      <div style={{ color: "#616161", width: "50px" }}>Giờ</div>
-                      <TimePicker.RangePicker
-                        style={{ color: "#3F3F3F" }}
-                        onChange={(time, timeString) =>
-                          onChangeHour(time, timeString, item.id)
-                        }
-                      />
-                    </div> */}
                   </div>
                 </>
               ))}
@@ -380,8 +338,8 @@ const Index = ({ linkTo = "" }) => {
                 onChange={handleOnChangeText}
                 placeholder="Gửi lời nhắn cho shop"
                 className="text-area"
-                name="message"
-                value={infoUser.message}
+                name="Message"
+                value={infoUser?.message}
                 onResize={false}
               />
             </div>
@@ -416,7 +374,7 @@ const Index = ({ linkTo = "" }) => {
                       marginBottom: "12px",
                     }}
                   >
-                    {filter.OrderByTime === 0 &&
+                    {filter.OrderByTime === 1 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
                           (total, service) =>
@@ -429,7 +387,7 @@ const Index = ({ linkTo = "" }) => {
                           0
                         )
                       )}`}
-                    {filter.OrderByTime === 1 &&
+                    {filter.OrderByTime === 0 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
                           (total, service) =>
@@ -461,96 +419,6 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}
                   >
-                    {/* {filter.OrderByTime === 0 &&
-                      `${convertPrice(
-                        choosePromotionUser?.TypeReduce === 1
-                          ? `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByHour) *
-                                    calTime(
-                                      filter.OrderByTimeFrom,
-                                      filter.OrderByTimeTo
-                                    ),
-                                0
-                              ) - (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                          : `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByHour) *
-                                    calTime(
-                                      filter.OrderByTimeFrom,
-                                      filter.OrderByTimeTo
-                                    ),
-                                0
-                              ) -
-                              (chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByHour) *
-                                    calTime(
-                                      filter.OrderByTimeFrom,
-                                      filter.OrderByTimeTo
-                                    ),
-                                0
-                              ) /
-                                100) *
-                                (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                      )}`}
-                    {filter.OrderByTime === 1 &&
-                      `${convertPrice(
-                        choosePromotionUser?.TypeReduce === 1
-                          ? `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByDate) *
-                                    calDate(
-                                      filter.OrderByDateFrom,
-                                      filter.OrderByDateTo
-                                    ),
-                                0
-                              ) - (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                          : `${
-                              chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByDate) *
-                                    calDate(
-                                      filter.OrderByDateFrom,
-                                      filter.OrderByDateTo
-                                    ),
-                                0
-                              ) -
-                              (chooseServiceList?.reduce(
-                                (total, service) =>
-                                  total +
-                                  (service.Sales || service.PriceByDate) *
-                                    calDate(
-                                      filter.OrderByDateFrom,
-                                      filter.OrderByDateTo
-                                    ),
-                                0
-                              ) /
-                                100) *
-                                (choosePromotionUser?.ReduceValue || 0)
-                            }`
-                        // chooseServiceList?.reduce(
-                        //   (total, service) =>
-                        //     total +
-                        //     (service.Sales || service.PriceByDate) *
-                        //       calDate(
-                        //         filter.OrderByDateFrom,
-                        //         filter.OrderByDateTo
-                        //       ),
-                        //   0
-                        // )
-                      )}`} */}
                     {convertPrice(calculatePrice())}đ
                   </div>
                 </div>
@@ -579,41 +447,117 @@ const Index = ({ linkTo = "" }) => {
             <TextInput
               placeholder="Tên khách hàng"
               styleContainer={{ width: "100%" }}
-              name="name"
+              name="Fullname"
               onChange={(e) => handleOnChangeText(e)}
-              value={infoUser.name}
+              value={infoUser?.Fullname}
             />
             <TextInput
-              name="phoneNumber"
+              name="Phone"
               placeholder="Số điện thoại"
               styleContainer={{ width: "100%" }}
               onChange={(e) => handleOnChangeText(e)}
-              value={infoUser.phoneNumber}
+              value={infoUser?.Phone}
             />
-            <TextInput
-              name="email"
-              placeholder="Email"
-              styleContainer={{ width: "100%" }}
-              onChange={(e) => handleOnChangeText(e)}
-              value={infoUser.email}
-            />
+            <div>
+              <TextInput
+                value={infoUser?.Email}
+                required
+                name="Email"
+                placeholder="Email"
+                styleContainer={{ width: "100%", marginBottom: "10px" }}
+                onChange={(e) => handleOnChangeText(e)}
+              />
+            </div>
+            {infoUser?.IsActiveEmail &&
+            infoUser?.Email.trim() === user?.Email.trim() ? (
+              <div style={{ color: "green" }}>
+                <span>Đã được xác thực </span>
+                <CheckCircleOutlined color="green" />
+              </div>
+            ) : Valid ? (
+              <div style={{ color: "green" }}>
+                <span>Đã được xác thực </span>
+                <CheckCircleOutlined color="green" />
+              </div>
+            ) : (
+              <Button
+                disabled={infoUser?.Email ? false : true}
+                type="primary"
+                onClick={async () => {
+                  try {
+                    dispatch({
+                      type: SHOW_MODAL,
+
+                      Component: (
+                        <VerifyOtp email={infoUser.Email} setValid={setValid} />
+                      ),
+                    });
+                    await studioPostService.sendCodeEmail({
+                      Email: infoUser.Email,
+                    });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              >
+                Verify Email
+              </Button>
+            )}
           </div>
+
           <div
             className="d-flex justify-content-end"
             style={{ marginTop: "35px" }}
           >
-            <PopUpSignIn
-              onClick={(e) => {
-                handleOnClickOrder();
-              }}
-            >
+            {infoUser?.IsActiveEmail &&
+            infoUser?.Email.trim() === user?.Email.trim() ? (
+              <PopUpSignIn
+                onClick={(e) => {
+                  handleOnClickOrder();
+                }}
+              >
+                <Button
+                  type="primary"
+                  // disabled={Valid ? false : true}
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              </PopUpSignIn>
+            ) : Valid ? (
+              <PopUpSignIn
+                onClick={(e) => {
+                  handleOnClickOrder();
+                }}
+              >
+                <Button
+                  type="primary"
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              </PopUpSignIn>
+            ) : (
               <Button
                 type="primary"
-                style={{ borderRadius: "8px", height: "45px", width: "270px" }}
+                disabled={true}
+                style={{
+                  borderRadius: "8px",
+                  height: "45px",
+                  width: "270px",
+                }}
               >
                 Hoàn tất đặt
               </Button>
-            </PopUpSignIn>
+            )}
           </div>
         </Col>
       </Row>

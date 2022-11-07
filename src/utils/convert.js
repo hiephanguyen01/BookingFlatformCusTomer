@@ -1,3 +1,4 @@
+import moment from "moment";
 import Moment from "moment";
 export const convertTime = (time) => {
   if (time) {
@@ -36,23 +37,8 @@ export const convertDateSendToDB = (date, prevDayFlag) => {
   return modify;
 };
 
-export const convertTimeSendDB = (time) => {
-  const splitTime = time.split(":");
-  // console.log(parseInt(splitTime[0]));
-  if (parseInt(splitTime[0]) < 7) {
-    return `${
-      parseInt(24 + (parseInt(splitTime[0]) - 7)) > 9
-        ? 24 + (parseInt(splitTime[0]) - 7)
-        : `0${24 + (parseInt(splitTime[0]) - 7)}`
-    }:${splitTime[1]}#1`; //#1 là để xác định coi là có phải trừ qua ngày hôm sau hay không đối với các trường hợp giờ nhỏ hơn 7h
-  } else {
-    return `${
-      parseInt(parseInt(splitTime[0]) - 7) > 9
-        ? parseInt(splitTime[0]) - 7
-        : `0${parseInt(splitTime[0]) - 7}`
-    }:${splitTime[1]}#0`;
-  }
-};
+export const convertTimeSendDB = (time) => moment(time).subtract(7, "h");
+
 export const numberWithDot = (x) => {
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };

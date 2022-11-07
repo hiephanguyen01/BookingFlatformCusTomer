@@ -11,12 +11,15 @@ import {
   SaveOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button } from "antd";
-import React from "react";
-import ImgDefaultUser from "../../../../assets/img/userAccount/default-user-image.png";
+import { Button, Input } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import noBody from "../../../../assets/img/no-body.png";
+import useDebounce from "../../../../components/hooks/useDebounce";
 import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
+import { userService } from "../../../../services/UserService";
+import { getCurrentUser } from "../../../../stores/actions/autheticateAction";
 
 const ITEM_USER_ACCOUNT_ASIDE = [
   {
@@ -75,9 +78,19 @@ const ITEM_US_ASIDE = [
 
 const Aside = ({ children }) => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  console.log("uer me", UserMe);
+  const ref = useRef(null);
+  const [name, setName] = useState(UserMe.Fullname);
+  const debounced = useDebounce(name, 1500);
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   // console.log(pathname.split("/")[4]);
   const newPathname = pathname.split("/")[4];
+  // useEffect(() => {
+  //   if (UserMe.Fullname) {
+  //     setName(UserMe.Fullname);
+  //   }
+  // }, [UserMe]);
   const AsideItems = ({ item }) => {
     return (
       <Link
@@ -86,14 +99,12 @@ const Aside = ({ children }) => {
           newPathname === item.linkTo
             ? { color: "#E22828" }
             : { color: "#222222" }
-        }
-      >
+        }>
         <div
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
-          }}
-        >
+          }}>
           {item.icon}
           <span
             style={
@@ -104,13 +115,45 @@ const Aside = ({ children }) => {
                     fontWeight: "600",
                   }
                 : { fontSize: "16px", marginLeft: "0.5rem", fontWeight: "400" }
-            }
-          >
+            }>
             {item.title}
           </span>
         </div>
       </Link>
     );
+  };
+
+  useEffect(() => {
+    // if (!debounced.trim()) {
+    //   // setName(UserMe.Fullname);
+    //   return;
+    // }
+
+    const fetchApi = async () => {
+      if (debounced === UserMe.Fullname) {
+        setName(UserMe.Fullname);
+        return;
+      }
+      if (!debounced.trim()) {
+        setName(UserMe.Fullname);
+        return;
+      }
+      try {
+        const formData = new FormData();
+        formData.append("Fullname", debounced);
+        await userService.saveInfo(formData);
+        dispatch(getCurrentUser());
+        console.log("update debounce");
+      } catch (error) {
+        console.log("fail");
+      }
+    };
+    fetchApi();
+  }, [debounced, dispatch]);
+
+  const hanldeChangeName = (e) => {
+    console.log(e.target.value);
+    setName(e.target.value);
   };
   return (
     <div className="container" style={{ margin: "auto" }}>
@@ -119,17 +162,15 @@ const Aside = ({ children }) => {
         style={{
           paddingBottom: "1rem",
           borderBottom: "1px solid #CACACA",
-        }}
-      >
+        }}>
         <div
           className=""
           style={{
             height: "46px",
             marginRight: "1rem",
-          }}
-        >
+          }}>
           <img
-            src={UserMe ?ImageDetect(UserMe)  : ImgDefaultUser}
+            src={UserMe.Image !== null ? ImageDetect(UserMe) : noBody}
             alt=""
             width={60}
             height={60}
@@ -139,8 +180,24 @@ const Aside = ({ children }) => {
         <div>
           <span>Thông tin tài khoản</span>
           <div className="d-flex justify-content-center align-items-center">
-            <h5 style={{ marginBottom: "0" }}>{UserMe.Fullname}</h5>
-            <Button type="text">
+            {/* <h5 style={{ marginBottom: "0" }}> */}
+            <Input
+              ref={ref}
+              value={name}
+              style={{
+                background: "transparent",
+                border: "none",
+                padding: "0",
+              }}
+              placeholder="Basic usage"
+              onChange={hanldeChangeName}
+            />
+            {/* </h5> */}
+            <Button
+              onClick={() => {
+                ref.current.focus();
+              }}
+              type="text">
               <EditOutlined style={{ color: "#03AC84" }} />
             </Button>
           </div>
@@ -152,8 +209,7 @@ const Aside = ({ children }) => {
           marginTop: "1rem",
           borderBottom: "1px solid #CACACA",
           paddingBottom: "1rem",
-        }}
-      >
+        }}>
         <h5 style={{ textTransform: "uppercase" }}>Tài khoản của chúng tôi</h5>
         {ITEM_USER_ACCOUNT_ASIDE.map((item, index) => (
           <AsideItems item={item} key={index} />

@@ -138,7 +138,7 @@ const Index = () => {
       return dataSource?.map((data, index) => [
         {
           render: () => (
-            <>
+            <div key={index}>
               <img
                 alt=""
                 src={`${
@@ -147,7 +147,7 @@ const Index = () => {
                 style={{ width: "100%", marginBottom: "20px" }}
               />
               <div className="text-medium-se">{`${data.Name}`}</div>
-            </>
+            </div>
           ),
         },
         {

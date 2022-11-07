@@ -1,17 +1,18 @@
 import { studioPostService } from "../../services/StudioPostService";
+import queryString from "query-string";
 import { userService } from "../../services/UserService";
 import {
   LOADING,
-  SET_PROMOTION_CODE,
+  LOADING_SERVICE,
   SET_FILTER,
+  SET_FILTER_SERVICE,
   SET_LIST_LIKED_CATEGORY,
   SET_POST_LIST,
   SET_POST_PAGINATION,
+  SET_PROMOTION_CODE,
   SET_STUDIO_DETAIL,
   SET_STUDIO_DETAIL1,
   SET_STUDIO_NEAR,
-  LOADING_SERVICE,
-  SET_FILTER_SERVICE,
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
 
@@ -31,7 +32,7 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: false });
 };
 export const getFilterStudioPost =
-  (limit, page, filter, user) => async (dispatch) => {
+  (limit, page, filter, user, navigate) => async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getFilterStudioPost(
@@ -45,6 +46,7 @@ export const getFilterStudioPost =
       if (user !== null) {
         dispatch(getAllStudioLikedAction1(filter.category));
       }
+      navigate(`/home/filter?${queryString.stringify(filter)}`);
     } catch (error) {
       console.error(error);
     }

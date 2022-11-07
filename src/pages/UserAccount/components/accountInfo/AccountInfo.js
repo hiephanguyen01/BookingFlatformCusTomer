@@ -4,18 +4,18 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import noBody from "../../../../assets/img/no-body.png";
 import imgFB from "../../../../assets/img/userAccount/facebook (4) 1facebook.png";
 import imgGG from "../../../../assets/img/userAccount/google 1google.png";
 import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
-import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
 import EditText from "../../../../components/TextInput/EditText";
 import TextInput from "../../../../components/TextInput/TextInput";
+import toastMessage from "../../../../components/ToastMessage";
 import { userService } from "../../../../services/UserService";
 import {
   getCurrentUser,
-  socialAccountLink,
-  googleSignIn,
   logOut,
+  socialAccountLink,
 } from "../../../../stores/actions/autheticateAction";
 import { convertImage } from "../../../../utils/convertImage";
 import "./accountInfo.scss";
@@ -46,8 +46,12 @@ const AccountInfo = () => {
     setVisible(false);
   };
   const handleDelete = async () => {
-    await userService.deleteMe();
-    dispatch(logOut(navigate));
+    try {
+      await userService.deleteMe();
+      dispatch(logOut(navigate));
+    } catch (error) {
+      toastMessage(error.response.data.message, "error");
+    }
     setVisible(false);
   };
   const handleChangeValue = (name, value) => {
@@ -99,7 +103,13 @@ const AccountInfo = () => {
                 <div className="ms-40 d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
                   {file ? (
                     <img
-                      src={file.preview ? file.preview : myImg}
+                      src={
+                        file.preview
+                          ? file.preview
+                          : UserMe.Image !== null
+                          ? myImg
+                          : noBody
+                      }
                       className="w-100 h-100"
                       style={{ objectFit: "cover" }}
                       alt=""
@@ -135,6 +145,19 @@ const AccountInfo = () => {
                   handleChangeValue(name, value);
                 }}
               />
+              {UserMe?.IsActiveEmail ? (
+                <p
+                  style={{ color: "green", paddingLeft: "39.703px!important" }}
+                >
+                  Email đã được xác nhận
+                </p>
+              ) : UserMe?.Email?.trim() !== " " ? (
+                <p style={{ color: "red", paddingLeft: "39.703px" }}>
+                  Vui lòng kiểm trả email để xác thực email.
+                </p>
+              ) : (
+                <></>
+              )}
             </Col>
             <Col lg={12} sm={24}>
               <EditText
@@ -242,7 +265,7 @@ const AccountInfo = () => {
                       );
                     }}
                     // defaultChecked={false}
-                    disabled={providerId === "google.com" ? true : false}
+                    disabled={UserMe?.GoogleEmail ? true : false}
                     checked={checkedLinkGoogle}
                     style={{}}
                   />
@@ -295,8 +318,10 @@ const AccountInfo = () => {
           Bạn có chắc muốn xóa tài khoản này?
         </div>
         <div className="AccountInfo__delete__modal__content">
-          Điều này đồng nghĩa với việc tài khoản Nguyen Hoang Minh bị xóa vĩnh
-          viễn.
+          {`Điều này đồng nghĩa với việc tài khoản ${
+            UserMe.Phone || UserMe.Email
+          } bị xóa vĩnh
+          viễn.`}
         </div>
         <div className="AccountInfo__delete__modal__group__btn">
           <button

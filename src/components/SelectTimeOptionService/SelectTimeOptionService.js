@@ -91,7 +91,7 @@ const Option = ({ option, disabled, service }) => {
       dispatch(
         setFilterStudioService(5, 1, {
           ...filterService,
-          OrderByTime: 0,
+          OrderByTime: 1,
           OrderByTimeFrom:
             convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
           OrderByTimeTo:
@@ -104,9 +104,11 @@ const Option = ({ option, disabled, service }) => {
     dispatch(
       setFilterStudioService(5, 1, {
         ...filterService,
-        OrderByTime: 1,
-        OrderByDateFrom: convertDateSendToDB(datesString[0]),
-        OrderByDateTo: convertDateSendToDB(datesString[1]),
+        OrderByTime: 0,
+        OrderByDateFrom:
+          moment(datesString[0]).toISOString().slice(0, 11) + "00:00:00.000Z",
+        OrderByDateTo:
+          moment(datesString[1]).toISOString().slice(0, 11) + "00:00:00.000Z",
       })
     );
   };
@@ -127,6 +129,11 @@ const Option = ({ option, disabled, service }) => {
     );
   }
 
+  function remove_duplicates_es6(arr) {
+    let s = new Set(arr);
+    let it = s.values();
+    return Array.from(it);
+  }
   const getDisabledHours = (date, type) => {
     let array = [];
     if (disableHour?.length > 0) {
@@ -135,16 +142,14 @@ const Option = ({ option, disabled, service }) => {
           moment(item.OrderByTimeFrom).format(),
           moment(item.OrderByTimeTo).format()
         );
-        console.log(dates);
-        acc.push(...dates);
-        console.log(uniqueInOrder(acc));
-        return uniqueInOrder(acc);
+        acc.push(...dates.slice(0, -1));
+        return remove_duplicates_es6(acc);
       }, []);
     }
     return array;
   };
   switch (Number(filterService.OrderByTime)) {
-    case 0:
+    case 1:
       return (
         <div className="timeContainer">
           <Form.Item
@@ -165,22 +170,20 @@ const Option = ({ option, disabled, service }) => {
               // )}
               inputReadOnly={true}
               disabled={disabled}
-              // disabledDate={(current) => {
-              //   return current && current <= moment().subtract(1, "days");
-
-              // }}
               disabledDate={(current) => {
                 return (
                   service?.Bookings?.filter((item) => !item.OrderByTime)
                     .reduce((acc, item) => {
-                      let dates = dateRange(
-                        moment(item.OrderByTimeFrom).format("l"),
-                        moment(item.OrderByTimeTo).format("l")
+                      let dates2 = dateRange(
+                        moment(item.OrderByDateFrom).format("l"),
+                        moment(item.OrderByDateTo).format("l")
                       );
-                      acc.push(...dates);
+                      acc.push(...dates2);
                       return uniqueInOrder(acc);
                     }, [])
-                    .some((date) => moment(current).isSame(moment(date))) ||
+                    .some((date) =>
+                      moment(moment(current).format("l")).isSame(moment(date))
+                    ) ||
                   (current && current <= moment().subtract(1, "days"))
                 );
               }}
@@ -215,7 +218,7 @@ const Option = ({ option, disabled, service }) => {
           </Form.Item>
         </div>
       );
-    case 1:
+    case 0:
       return (
         <div>
           <Form.Item
@@ -238,7 +241,11 @@ const Option = ({ option, disabled, service }) => {
                       moment(item.OrderByTimeFrom).format("l"),
                       moment(item.OrderByTimeTo).format("l")
                     );
-                    acc.push(...dates);
+                    let dates2 = dateRange(
+                      moment(item.OrderByDateFrom).format("l"),
+                      moment(item.OrderByDateTo).format("l")
+                    );
+                    acc.push(...dates, ...dates2);
                     return uniqueInOrder(acc);
                   }, []).some((date) =>
                     moment(moment(current).format("l")).isSame(moment(date))
@@ -288,8 +295,8 @@ const SelectTimeOptionService = ({ disabled, service }) => {
         disabled={disabled}
       >
         <Space direction="vertical">
-          <Radio value={0}>Đặt theo giờ</Radio>
-          <Radio value={1}>Đặt theo ngày</Radio>
+          <Radio value={1}>Đặt theo giờ</Radio>
+          <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
       <Option service={data} option={selection} disabled={disabled} />

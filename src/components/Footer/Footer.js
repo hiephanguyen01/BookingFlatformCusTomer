@@ -4,15 +4,16 @@ import { ReactComponent as Enter } from "../../assets/footer/enterprise.svg";
 import { ReactComponent as Facebook } from "../../assets/footer/facebook.svg";
 import Android from "../../assets/footer/google-play-badge.png";
 import { ReactComponent as Insta } from "../../assets/footer/instagram.svg";
-import { ReactComponent as Ios } from "../../assets/footer/ios.svg";
+import Ios from "../../assets/footer/ios.svg";
+import QRCode from "../../assets/footer/QRCode.svg";
 import { ReactComponent as LinkedIn } from "../../assets/footer/linkedin.svg";
+import Logo from "../../assets/header/Logo.svg";
 
 import { CopyrightOutlined } from "@ant-design/icons";
 import "./Footer.scss";
 import { Link, useLocation } from "react-router-dom";
 const Footer = () => {
   const location = useLocation();
-  console.log();
 
   return (
     <>
@@ -23,13 +24,29 @@ const Footer = () => {
               <Col sm={24} md={12} lg={6}>
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
                 <div className="logo">
-                  <a
-                    href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
-                    target="_blank"
-                  >
-                    <img src={Android} alt="" />
-                  </a>
-                  <Ios />
+                  <div className="me-5">
+                    <img src={QRCode} />
+                  </div>
+                  <div>
+                    <a
+                      href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
+                      target="_blank"
+                    >
+                      <img src={Android} alt="" className="h-40px px-3" />
+                    </a>
+                    <a
+                      href="https://apps.apple.com/vn/app/booking-studio/id1563362722"
+                      target="_blank"
+                      className=""
+                    >
+                      <img
+                        src={Ios}
+                        target="_blank"
+                        className="h-33px"
+                        alt=""
+                      />
+                    </a>
+                  </div>
                 </div>
                 <p className="item">Theo dõi chúng tôi trên</p>
                 <div className="icons">
@@ -40,21 +57,25 @@ const Footer = () => {
               </Col>
               <Col sm={24} md={12} lg={6}>
                 <p className="title">VỀ CHÚNG TÔI</p>
-                <ul className="pt-30">
+                <ul className="pt-10">
                   <a href="https://vnplus.vn" alt="" target="_blank">
-                    <li className="item mt-20">Giới thiệu Plus Stinv</li>
+                    <li className="item mt-20"> Giới thiệu VNPLUS</li>
                   </a>
-                  <Link to="privacy-policy">
-                    <li className="item mt-20">Chính sách bảo mật </li>
-                  </Link>
-                  <Link to="terms-use">
-                    <li className="item mt-20">Điều khoản sử dụng</li>
-                  </Link>
+                  <li className="mt-20">
+                    <Link className="item " to="privacy-policy">
+                      Chính sách bảo mật
+                    </Link>
+                  </li>
+                  <li className="mt-20">
+                    <Link className="item" to="terms-use">
+                      Điều khoản sử dụng
+                    </Link>
+                  </li>
                 </ul>
               </Col>
               <Col sm={24} md={12} lg={6}>
                 <p className="title">HỖ TRỢ KHÁCH HÀNG</p>
-                <ul className="pt-30">
+                <ul className="pt-10">
                   <Link to={"helpCenter"}>
                     <li className="item mt-20">Trung tâm trợ giúp</li>
                   </Link>
@@ -62,11 +83,12 @@ const Footer = () => {
                 </ul>
               </Col>
               <Col sm={24} md={12} lg={6}>
-                <Enter />
+                <img src={Logo} />
+                {/* <Enter /> */}
                 <p className="title exten">
                   Công ty Cổ phần Công nghệ và Đầu tư VNPLUS
                 </p>
-                <BCTVN />
+                {/* <BCTVN /> */}
               </Col>
             </Row>
           </div>
