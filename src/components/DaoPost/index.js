@@ -33,6 +33,7 @@ import { postDaoService } from "../../services/PostDaoService";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
 import CommentSlider from "../CommentSlider/CommentSlider";
+import noBody from "../../assets/img/no-body.png";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
@@ -898,7 +899,11 @@ const DaoPost = (props) => {
               <div className="post__comments__detail__info d-flex align-posts-center">
                 <img
                   className="post__comments__detail__info_avatar"
-                  src={cmt.BookingUser.Image}
+                  src={
+                    cmt.BookingUser.Image.trim() !== ""
+                      ? cmt.BookingUser.Image
+                      : noBody
+                  }
                   alt=""
                 />
                 <div
