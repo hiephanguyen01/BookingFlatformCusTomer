@@ -22,12 +22,16 @@ import {
 import { convertImage } from "../../utils/convertImage";
 import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
+import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 import toastMessage from "../ToastMessage";
 import "./order.scss";
 
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { partnerDetail } = useSelector(
+    (state) => state.registerPartnerReducer
+  );
   const { choosePromotionUser } = useSelector(
     (state) => state.promoCodeReducer
   );
@@ -72,6 +76,10 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser(user);
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
+
+    //Get Register Partner Detail of this StudioPost in order to retrieve the value of PaymentTypeOnline column ****
+    dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
+    // *************************************************************************************************************
 
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
@@ -311,9 +319,15 @@ const Index = ({ linkTo = "" }) => {
               <div className="text-title" style={{ marginBottom: "8px" }}>
                 Phương thức thanh toán
               </div>
-              <p className="text-description" style={{ color: "#222222" }}>
-                Thanh toán trực tiếp cho shop
-              </p>
+              {Boolean(partnerDetail?.PaymentTypeOnline) ? (
+                <p className="text-description" style={{ color: "#222222" }}>
+                  Thanh toán online (E-banking, Visa, Mastercard)
+                </p>
+              ) : (
+                <p className="text-description" style={{ color: "#222222" }}>
+                  Thanh toán trực tiếp cho shop
+                </p>
+              )}
             </div>
             <div className="border-bottom">
               <div className="text-title" style={{ marginBottom: "8px" }}>
