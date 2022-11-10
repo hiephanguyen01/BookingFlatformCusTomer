@@ -14,13 +14,18 @@ import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
 import "./OrderStatusItem.scss";
 
-const OrderStatusItem = ({ item, pageBooking, setPageBooking, id }) => {
+const OrderStatusItem = ({
+  item,
+  pageBooking,
+  setPageBooking,
+  id,
+  BookingStatus,
+}) => {
   console.log("itembokigndnsa", item);
   const [post, setPost] = useState();
   const navigate = useNavigate();
   let {
     TenantId,
-    BookingStatus,
     IdentifyCode,
     Item,
     CreationTime,
@@ -86,8 +91,7 @@ const OrderStatusItem = ({ item, pageBooking, setPageBooking, id }) => {
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}
-          >
+            onClick={navigateToDetail}>
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}

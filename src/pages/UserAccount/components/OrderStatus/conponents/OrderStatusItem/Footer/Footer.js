@@ -43,7 +43,7 @@ export const Footer = ({
   const handleCancelOrder = async () => {
     try {
       const formData = new FormData();
-      formData.append("BookingStatus", 4);
+      formData.append("BookingStatus", 2);
       formData.append("Category", Category);
       const response = await orderService.updateOrder(formData, IdentifyCode);
       const newPageBooking = pageBooking.filter(
@@ -88,7 +88,8 @@ export const Footer = ({
       dispatch({ type: TOGGLE_STATE, payload: error.response.data.message.id });
     }
   };
-  switch (status) {
+  console.log(+status);
+  switch (+status) {
     case 1:
       return (
         <div className="FooterStatus__wait">
@@ -106,8 +107,7 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1"
-            >
+              className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
             <button className="FooterStatus__wait__button__2">
@@ -127,8 +127,7 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}
-          >
+            }}>
             Liên hệ
           </button>
         </div>
@@ -163,8 +162,7 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal"
-          >
+            className="FooterStatus__complete__modal">
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
