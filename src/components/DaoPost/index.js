@@ -91,7 +91,7 @@ const DaoPost = (props) => {
         currentPage || 1,
         5
       );
-      setComments([...comments, ...data.data]);
+      setComments(data.data);
       setPagination(data.pagination);
     } catch (error) {
       console.log(error);
@@ -103,7 +103,8 @@ const DaoPost = (props) => {
   const handlerLikeComment = (id) => {
     // getComments(1);
     // setPost({ ...post, TotalComments: post.TotalComments + 1 });
-    dispatch(createLikeCommentDao({ CommentId: id }, getComments,setPost,post));
+    console.log("cliudsadjshajkdsa");
+    dispatch(createLikeCommentDao({ CommentId: id }, item.Id, setComments));
   };
   // useEffect(() => {
   // if (!visible) {
@@ -753,7 +754,9 @@ const DaoPost = (props) => {
                               onClick={() => console.log(123)}
                             >
                               <PopUpSignIn onClick={(e) => {}}>
-                              { comment?.Likes?.some((item) => item?.UserId == currentUser?.id)? (
+                                {comment?.Likes?.some(
+                                  (item) => item?.UserId == currentUser?.id
+                                ) ? (
                                   <HeartFilled
                                     // onClick={() =>
                                     //   setMouseClickHeart(!mouseClickHeart)
@@ -903,7 +906,7 @@ const DaoPost = (props) => {
           // .sort((a, b) => b.id - a.id)
           .map((cmt, idx) => {
             console.log(cmt);
-           
+
             return (
               <div key={cmt.id} className="post__comments__detail">
                 {idx !== 0 && (
@@ -942,16 +945,15 @@ const DaoPost = (props) => {
                     <CommentSlider data={cmt?.services} />
                   </div>
                 )}
-                <div
-                  onClick={() => handlerLikeComment(cmt?.id)}
-                  className="d-flex"
-                  style={{ marginTop: "22px" }}
-                >
-                  { cmt?.Likes?.some((item) => item?.UserId == currentUser?.id) ? (
+                <div className="d-flex" style={{ marginTop: "22px" }}>
+                  {cmt?.Likes?.some(
+                    (item) => item?.UserId == currentUser?.id
+                  ) ? (
                     <HeartFilled
                       // onClick={() =>
                       //   setMouseClickHeart(!mouseClickHeart)
                       // }
+                      onClick={() => handlerLikeComment(cmt?.id)}
                       style={{
                         fontSize: "20px",
                         color: "#E22828",
@@ -967,6 +969,8 @@ const DaoPost = (props) => {
                         cursor: "pointer",
                         marginBottom: "2px",
                       }}
+                      onClick={() => handlerLikeComment(cmt?.id)}
+
                       // onMouseOver={() => setMouseOverHeart(true)}
                     />
                   )}
