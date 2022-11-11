@@ -125,6 +125,17 @@ export const getAllDefaultComments = () => {
   };
 };
 
+export const createLikeCommentDao = (data) => {
+  console.log(data);
+  return async (dispatch) => {
+    try {
+      await postDaoService.createLikeComment(data);
+      // dispatch(getAllDefaultComments);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 export const setRelatedService = (data) => {
   return async (dispatch) => {
     try {

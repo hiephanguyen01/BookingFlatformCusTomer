@@ -21,7 +21,10 @@ import img1 from "../../assets/dao/Frame 180.png";
 import sendComment from "../../assets/svg/sendComment.svg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch, useSelector } from "react-redux";
-import { likePost } from "../../stores/actions/PostDaoAction";
+import {
+  createLikeCommentDao,
+  likePost,
+} from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
 import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
@@ -97,7 +100,11 @@ const DaoPost = (props) => {
   useEffect(() => {
     setPost({ ...item });
   }, [item]);
-
+  const handlerLikeComment = (id) => {
+    // getComments(1);
+    // setPost({ ...post, TotalComments: post.TotalComments + 1 });
+    dispatch(createLikeCommentDao({ CommentId: id }, getComments,setPost,post));
+  };
   // useEffect(() => {
   // if (!visible) {
   //   setChooseCommentDefault({});
@@ -714,6 +721,7 @@ const DaoPost = (props) => {
                                       <div className="d-flex h-100">
                                         <img
                                           src={convertImage(item.Image[0])}
+                                          alt=""
                                           className="me-12"
                                           style={{
                                             width: "100px",
@@ -745,7 +753,7 @@ const DaoPost = (props) => {
                               onClick={() => console.log(123)}
                             >
                               <PopUpSignIn onClick={(e) => {}}>
-                                {false ? (
+                              { comment?.Likes?.some((item) => item?.UserId == currentUser?.id)? (
                                   <HeartFilled
                                     // onClick={() =>
                                     //   setMouseClickHeart(!mouseClickHeart)
@@ -755,6 +763,7 @@ const DaoPost = (props) => {
                                       color: "#E22828",
                                       marginBottom: "2px",
                                     }}
+                                    onClick={() => handlerLikeComment()}
                                     // onMouseLeave={() => setMouseOverHeart(false)}
                                   />
                                 ) : (
@@ -765,6 +774,7 @@ const DaoPost = (props) => {
                                       cursor: "pointer",
                                       marginBottom: "2px",
                                     }}
+                                    onClick={() => handlerLikeComment()}
                                     // onMouseOver={() => setMouseOverHeart(true)}
                                   />
                                 )}
@@ -774,7 +784,7 @@ const DaoPost = (props) => {
                                   mouseClickHeart ? { color: "#E22828" } : {}
                                 }
                               >
-                                {TotalLikes}
+                                {comment?.TotalLike}
                               </p>
                             </div>
                           </div>
@@ -891,74 +901,82 @@ const DaoPost = (props) => {
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
         {comments
           // .sort((a, b) => b.id - a.id)
-          .map((cmt, idx) => (
-            <div key={cmt.id} className="post__comments__detail">
-              {idx !== 0 && (
-                <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
-              )}
-              <div className="post__comments__detail__info d-flex align-posts-center">
-                <img
-                  className="post__comments__detail__info_avatar"
-                  src={
-                    cmt.BookingUser.Image.trim() !== ""
-                      ? cmt.BookingUser.Image
-                      : noBody
-                  }
-                  alt=""
-                />
-                <div
-                  style={{ marginLeft: "10px" }}
-                  className="post__comments__detail__info__nametime"
-                >
-                  <p className="post__comments__detail__info__nametime__name">
-                    {cmt.BookingUser.Fullname}
-                  </p>
-                  <p>{convertTime(cmt.createdAt)}</p>
-                </div>
-              </div>
-              {cmt?.Content && (
-                <div
-                  style={{ marginLeft: "40px", marginTop: "5px" }}
-                  className="post__comments__detail__content"
-                >
-                  {cmt.Content}
-                </div>
-              )}
-              {cmt?.services?.length > 0 && (
-                <div className="w-100">
-                  <CommentSlider data={cmt?.services} />
-                </div>
-              )}
-              <div className="d-flex" style={{ marginTop: "22px" }}>
-                {false ? (
-                  <HeartFilled
-                    // onClick={() =>
-                    //   setMouseClickHeart(!mouseClickHeart)
-                    // }
-                    style={{
-                      fontSize: "20px",
-                      color: "#E22828",
-                      marginBottom: "2px",
-                    }}
-                    // onMouseLeave={() => setMouseOverHeart(false)}
-                  />
-                ) : (
-                  <HeartOutlined
-                    style={{
-                      color: "#828282",
-                      fontSize: "20px",
-                      cursor: "pointer",
-                      marginBottom: "2px",
-                    }}
-                    // onMouseOver={() => setMouseOverHeart(true)}
-                  />
+          .map((cmt, idx) => {
+            console.log(cmt);
+           
+            return (
+              <div key={cmt.id} className="post__comments__detail">
+                {idx !== 0 && (
+                  <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
                 )}
-                <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                  {post.TotalLikes}
-                </p>
+                <div className="post__comments__detail__info d-flex align-posts-center">
+                  <img
+                    className="post__comments__detail__info_avatar"
+                    src={
+                      cmt.BookingUser.Image.trim() !== ""
+                        ? cmt.BookingUser.Image
+                        : noBody
+                    }
+                    alt=""
+                  />
+                  <div
+                    style={{ marginLeft: "10px" }}
+                    className="post__comments__detail__info__nametime"
+                  >
+                    <p className="post__comments__detail__info__nametime__name">
+                      {cmt.BookingUser.Fullname}
+                    </p>
+                    <p>{convertTime(cmt.createdAt)}</p>
+                  </div>
+                </div>
+                {cmt?.Content && (
+                  <div
+                    style={{ marginLeft: "40px", marginTop: "5px" }}
+                    className="post__comments__detail__content"
+                  >
+                    {cmt.Content}
+                  </div>
+                )}
+                {cmt?.services?.length > 0 && (
+                  <div className="w-100">
+                    <CommentSlider data={cmt?.services} />
+                  </div>
+                )}
+                <div
+                  onClick={() => handlerLikeComment(cmt?.id)}
+                  className="d-flex"
+                  style={{ marginTop: "22px" }}
+                >
+                  { cmt?.Likes?.some((item) => item?.UserId == currentUser?.id) ? (
+                    <HeartFilled
+                      // onClick={() =>
+                      //   setMouseClickHeart(!mouseClickHeart)
+                      // }
+                      style={{
+                        fontSize: "20px",
+                        color: "#E22828",
+                        marginBottom: "2px",
+                      }}
+                      // onMouseLeave={() => setMouseOverHeart(false)}
+                    />
+                  ) : (
+                    <HeartOutlined
+                      style={{
+                        color: "#828282",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        marginBottom: "2px",
+                      }}
+                      // onMouseOver={() => setMouseOverHeart(true)}
+                    />
+                  )}
+                  <p style={{ paddingLeft: "5px", color: "#E22828" }}>
+                    {cmt?.TotalLike}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         {pagination.hasNextPage && (
           <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
             Xem thêm bình luận

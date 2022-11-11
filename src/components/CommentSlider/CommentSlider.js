@@ -48,6 +48,7 @@ const CommentSlider = ({ data = [] }) => {
               <div className="d-flex h-100">
                 <img
                   src={convertImage(item.Image[0])}
+                  alt=""
                   className="me-12"
                   style={{ width: "100px", objectFit: "cover" }}
                 />
