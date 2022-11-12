@@ -1,16 +1,14 @@
 import {
   CheckCircleOutlined,
   DownOutlined,
-  ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
-  RightOutlined,
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Popover, Rate, Row, Space } from "antd";
+import { Button, Col, Popover, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -33,13 +31,13 @@ import {
 import { convertPrice } from "../../utils/convert";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import toastMessage from "../../components/ToastMessage";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+// import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import { calDate, calTime } from "../../utils/calculate";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+// import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
@@ -54,7 +52,6 @@ const Index = () => {
   const {
     studioDetail,
     loading,
-    filter,
     listStudioSimilar,
     promotionCode,
     filterService,

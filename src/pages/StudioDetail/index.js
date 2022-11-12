@@ -17,16 +17,13 @@ import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { VerifyOtp } from "../../components/Modal/verifyOtp/VerifyOtp";
+// import { VerifyOtp } from "../../components/Modal/verifyOtp/VerifyOtp";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import {
-  addOrder,
-  chooseServiceAction,
-} from "../../stores/actions/OrderAction";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
@@ -40,7 +37,7 @@ import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
-import { openNotification } from "../../utils/Notification";
+// import { openNotification } from "../../utils/Notification";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
@@ -451,14 +448,14 @@ export const StudioDetail = () => {
       }
     }
   };
-  const handleAddCart = () => {
-    if (chooseService.length > 0) {
-      dispatch(addOrder(cate, chooseService));
-      toastMessage("Đã thêm vào giỏ hàng!", "success");
-    } else {
-      toastMessage("Bạn cần chọn dịch vụ!", "warn");
-    }
-  };
+  // const handleAddCart = () => {
+  //   if (chooseService.length > 0) {
+  //     dispatch(addOrder(cate, chooseService));
+  //     toastMessage("Đã thêm vào giỏ hàng!", "success");
+  //   } else {
+  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
+  //   }
+  // };
   const handleChangeLike = (e) => {
     e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");

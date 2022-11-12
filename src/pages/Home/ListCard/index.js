@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card } from "../../../components/Card";
-import { getAllStudioLikedAction1 } from "../../../stores/actions/studioPostAction";
+// import { getAllStudioLikedAction1 } from "../../../stores/actions/studioPostAction";
 import styles from "./ListCard.module.scss";
 const cx = classNames.bind(styles);
 const pageSize = 8;
@@ -15,7 +15,7 @@ const ListItem = ({ category }) => {
     minIndex: 0,
     maxIndex: 0,
   });
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { listLikedUser } = useSelector((state) => state.studioPostReducer);
   const { values, current, minIndex, maxIndex } = state;
   console.log(listLikedUser);

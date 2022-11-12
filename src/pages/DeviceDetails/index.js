@@ -1,6 +1,5 @@
 import {
   CheckCircleOutlined,
-  DownOutlined,
   ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
@@ -8,28 +7,16 @@ import {
   MinusOutlined,
   MoreOutlined,
   PlusOutlined,
-  RightOutlined,
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import {
-  Button,
-  Col,
-  Dropdown,
-  InputNumber,
-  Menu,
-  Popover,
-  Rate,
-  Row,
-  Space,
-} from "antd";
+import { Button, Col, InputNumber, Popover, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "./deviceDetails.scss";
 
-import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
@@ -42,25 +29,19 @@ import {
   getStudioSimilarAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
-import { convertPrice } from "../../utils/convert";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
-import toastMessage from "../../components/ToastMessage";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+// import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import PromotionList from "../../components/PromotionList/PromotionList";
-import Voucher from "../../components/Voucher";
+// import Voucher from "../../components/Voucher";
 import { Report } from "../StudioDetail/Report";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 
 const Index = () => {
   const {
     studioDetail,
-    filter,
     loading,
     listStudioSimilar,
     promotionCode,
@@ -120,7 +101,7 @@ const Index = () => {
   };
 
   const handleBook = () => {
-    if (amount > 0 && filter.OrderByTime !== -1) {
+    if (amount > 0 && filterService.OrderByTime !== -1) {
       // dispatch(chooseServiceAction(chooseService));
       navigate("order");
     }

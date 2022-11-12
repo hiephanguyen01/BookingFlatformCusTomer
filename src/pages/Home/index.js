@@ -1,4 +1,3 @@
-import { AutoComplete } from "antd";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +31,6 @@ import Banner from "./Banner/Banner";
 import styles from "./home.module.scss";
 
 const cx = classNames.bind(styles);
-const { Option } = AutoComplete;
 
 // ----------------------đừng xoá nhé ---------------------------------
 // export const Home = () => {

@@ -10,14 +10,11 @@ import {
   Row,
   Select,
   Slider,
-  TimePicker,
 } from "antd";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import EmptyPage from "../../components/layouts/EmptyPage";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { convertDateSendToDB, convertPrice } from "../../utils/convert";
@@ -61,9 +58,6 @@ const FilterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const querySearch = queryString.parse(location?.search);
-
-  const [date, setDate] = useState(convertDateSendToDB(new Date()));
-  const [time, setTime] = useState([]);
 
   const dispatch = useDispatch();
   const [form] = Form.useForm();

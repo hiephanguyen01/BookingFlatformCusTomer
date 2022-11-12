@@ -6,11 +6,10 @@ import {
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
-  RightOutlined,
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Popover, Rate, Row, Space } from "antd";
+import { Button, Col, Menu, Popover, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -19,7 +18,7 @@ import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
+// import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
 import {
@@ -40,7 +39,7 @@ import { SlideCard } from "../StudioDetail/SlideCard";
 import SlideAlbum from "./components/SlideAlbum";
 import "./makeupDetails.scss";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
+// import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
@@ -54,7 +53,6 @@ const Index = () => {
   const {
     studioDetail,
     loading,
-    filter,
     listStudioSimilar,
     promotionCode,
     filterService,

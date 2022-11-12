@@ -13,7 +13,6 @@ import {
   signInWithPopup,
   signOut,
   FacebookAuthProvider,
-  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import firebase from "../../pages/Auth/FireBaseSetUp/Firebase";
 

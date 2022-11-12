@@ -1,4 +1,3 @@
-import React from "react";
 import classNames from "classnames/bind";
 import styles from "../../Home/ListCard/ListCard.module.scss";
 import "./styles.scss";
@@ -48,7 +47,8 @@ export const SlideCard = ({ title, data, category }) => {
                 spaceBetween: 10,
               },
             }}
-            modules={[Navigation, Autoplay]}>
+            modules={[Navigation, Autoplay]}
+          >
             {data &&
               data.map((item, idx) => {
                 return (

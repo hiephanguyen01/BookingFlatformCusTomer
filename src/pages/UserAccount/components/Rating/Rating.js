@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CommentRating from "../../../../components/CommentRating";
 import { userService } from "../../../../services/UserService";
-import { RatingOther } from "./components/RatingOther";
-import { RatingStudio } from "./components/RatingStudio";
+// import { RatingOther } from "./components/RatingOther";
+// import { RatingStudio } from "./components/RatingStudio";
 import "./rating.scss";
 const Rating = () => {
   const [myRatings, setMyRatings] = useState([]);
-  const [chooseRating, setChooseRating] = useState(5);
+  // const [chooseRating, setChooseRating] = useState(5);
   useEffect(() => {
     (async () => {
       //truyen id cua thang user vo
@@ -15,22 +15,22 @@ const Rating = () => {
       setMyRatings(data);
     })();
   }, []);
-  const totalStart =
-    (
-      myRatings?.reduce((starTotal, star) => starTotal + star.Rate, 0) /
-      myRatings.length
-    ).toFixed(2) | 0;
-  const handleStar = () => {
-    let rating = [...myRatings];
-    const filterRate = rating.filter((itm) => itm.Rate === chooseRating);
-    return filterRate.map((itm, index) => {
-      if (itm.StudioPostId !== undefined) {
-        return <RatingStudio key={index} info={itm} />;
-      } else {
-        return <RatingOther key={index} info={itm} />;
-      }
-    });
-  };
+  // const totalStart =
+  //   (
+  //     myRatings?.reduce((starTotal, star) => starTotal + star.Rate, 0) /
+  //     myRatings.length
+  //   ).toFixed(2) | 0;
+  // const handleStar = () => {
+  //   let rating = [...myRatings];
+  //   const filterRate = rating.filter((itm) => itm.Rate === chooseRating);
+  //   return filterRate.map((itm, index) => {
+  //     if (itm.StudioPostId !== undefined) {
+  //       return <RatingStudio key={index} info={itm} />;
+  //     } else {
+  //       return <RatingOther key={index} info={itm} />;
+  //     }
+  //   });
+  // };
 
   return (
     <>

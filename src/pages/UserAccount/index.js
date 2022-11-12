@@ -18,7 +18,8 @@ const Index = () => {
         margin: "auto",
         backgroundColor: "rgb(245, 245, 245)",
         padding: "2rem 0",
-      }}>
+      }}
+    >
       <div style={{ maxWidth: "1200px", margin: "auto" }}>
         <Row>
           <Col span={6}>

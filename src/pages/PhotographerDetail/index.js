@@ -36,11 +36,8 @@ import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import PromotionList from "../../components/PromotionList/PromotionList";
-import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
+import { calDate, calTime } from "../../utils/calculate";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
-import { setFilterStudioService } from "../../stores/actions/studioPostAction";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
-import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { Report } from "../StudioDetail/Report";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
@@ -55,7 +52,6 @@ const PhotographerDetail = () => {
   const {
     studioDetail,
     loading,
-    filter,
     listStudioSimilar,
     promotionCode,
     filterService,
