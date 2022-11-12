@@ -211,20 +211,20 @@ const DaoPost = (props) => {
   //   if (post2[0].includes("Image")) tempCount++;
   // });
 
-  const getCommentsByPostId = (id) => {
-    const newChooseComment = [...showComment];
-    const checkIndex = newChooseComment.indexOf(id);
-    if (checkIndex === -1) {
-      newChooseComment.push(id);
-    } else {
-      newChooseComment.splice(checkIndex, 1);
-    }
-    const tempCmt = [...comments];
-    if (tempCmt.find((cmt) => cmt.PostId === id)) {
-    } else {
-    }
-    setShowComment(newChooseComment);
-  };
+  // const getCommentsByPostId = (id) => {
+  //   const newChooseComment = [...showComment];
+  //   const checkIndex = newChooseComment.indexOf(id);
+  //   if (checkIndex === -1) {
+  //     newChooseComment.push(id);
+  //   } else {
+  //     newChooseComment.splice(checkIndex, 1);
+  //   }
+  //   const tempCmt = [...comments];
+  //   if (tempCmt.find((cmt) => cmt.PostId === id)) {
+  //   } else {
+  //   }
+  //   setShowComment(newChooseComment);
+  // };
 
   const handleShowModalChooseService = () => {
     dispatch({
@@ -238,17 +238,6 @@ const DaoPost = (props) => {
     } else {
       setChooseCommentDefault(cmt);
     }
-    // const newCmt = { PostId: Id, Content: cmt.Content };
-    // try {
-    //   const res = await postDaoService.createComment(newCmt);
-    //   if (res) {
-    //     getComments();
-    //     setPost({ ...post, TotalComments: post.TotalComments + 1 });
-    //   }
-    //   // setComments([res, ...comments]);
-    // } catch (error) {
-    //   toastMessage("Add comment fail", "error");
-    // }
   };
 
   const handleSendComment = async () => {
@@ -428,7 +417,7 @@ const DaoPost = (props) => {
       </Row>
     );
   }
-
+  console.log(relatedService);
   return (
     <article className="post">
       <section className="post__main d-flex flex-column">
@@ -635,11 +624,14 @@ const DaoPost = (props) => {
                   <section className="post__middle">
                     <div className="d-flex">
                       <img
-                        className="avatar-comment-default"
+                        className="avatar-comment-default avt"
                         src={convertImage(currentUser?.Image)}
                         alt=""
                       />
-                      <div className="post__middle__right-side">
+                      <div
+                        className="post__middle__right-side"
+                        style={{ width: "100% !important" }}
+                      >
                         <ul className="d-flex align-posts-center">
                           {defaultComments.map((item, index) => (
                             <li
@@ -662,12 +654,17 @@ const DaoPost = (props) => {
                           />
                           <p>Chọn dịch vụ liên quan</p>
                         </div>
+                        {relatedService.length > 0 && (
+                          <div className="w-100">
+                            <CommentSlider data={relatedService} />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </section>
                   <div className="comment_post">
                     {comments
-                      .sort((a, b) => b.id - a.id)
+                      .sort((a, b) => b.createdAt - a.createdAt)
                       .map((comment, index) => (
                         <div key={index}>
                           <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
@@ -851,9 +848,9 @@ const DaoPost = (props) => {
         className={commentsClick ? "post__middle" : "post__middle d-none"}
       >
         <hr color="#E7E7E7" style={{ marginBottom: "20px" }} />
-        <div className="d-flex">
-          <img src={img1} alt="" />
-          <div className="post__middle__right-side me-20">
+        <div className="d-flex w-100">
+          <img className="avt" src={img1} alt="" />
+          <div className="post__middle__right-side me-20 w-100">
             <ul className="d-flex align-posts-center">
               {defaultComments.map((item) => (
                 <li
@@ -874,11 +871,16 @@ const DaoPost = (props) => {
               <PlusOutlined style={{ color: "#03AC84", fontSize: "14px" }} />
               <p className="d-select">Chọn dịch vụ liên quan</p>
             </div>
+            {relatedService.length > 0 && (
+              <div className="w-100" style={{ paddingRight: "50px" }}>
+                <CommentSlider data={relatedService} />
+              </div>
+            )}
           </div>
           <img
             src={sendComment}
             style={{ borderRadius: "0", cursor: "pointer" }}
-            className="mt-5"
+            className="mt-5 avt"
             alt=""
             onClick={handleSendComment}
           />
@@ -889,7 +891,7 @@ const DaoPost = (props) => {
       >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
         {comments
-          // .sort((a, b) => b.id - a.id)
+          .sort((a, b) => b.createdAt - a.createdAt)
           .map((cmt, idx) => (
             <div key={cmt.id} className="post__comments__detail">
               {idx !== 0 && (

@@ -20,8 +20,6 @@ const QR_URL = `http://localhost:3000/home/detect-app`;
 const Footer = () => {
   const location = useLocation();
 
-  console.log(location, window.location);
-
   return (
     <>
       {!location.pathname.includes("dao/posts") && (

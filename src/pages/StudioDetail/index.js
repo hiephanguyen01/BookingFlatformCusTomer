@@ -48,10 +48,9 @@ import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 
 const COLUMN = [
-  { title: "Loại phòng", size: 6 },
-  { title: "Mô tả", size: 7 },
-  { title: "Giá cho thời gian bạn đã chọn ", size: 7 },
-  { title: "Chọn dịch vụ", size: 4 },
+  { title: "Loại phòng", size: 7 },
+  { title: "Chọn thời gian", size: 10 },
+  { title: "Chọn phòng ", size: 7 },
 ];
 const cx = classNames.bind(styles);
 
@@ -66,17 +65,10 @@ export const StudioDetail = () => {
     studioDetail1,
     studioDetail,
     studioNear,
-    studioPostList,
-    filter,
-    loading,
     listStudioSimilar,
     promotionCode,
     filterService,
   } = useSelector((state) => state.studioPostReducer);
-  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-  const { ratingStudioPostDetail, numberRating } = useSelector(
-    (state) => state.ratingReducer
-  );
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -181,6 +173,7 @@ export const StudioDetail = () => {
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
+                    minWidth: "60px",
                   }}
                 >
                   Phòng
@@ -190,6 +183,14 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
+
+                    display: "-webkit-box",
+                    lineHeight: "18px",
+                    webkitLineClamp: "1",
+                    webkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    height: "18px",
                   }}
                 >
                   {data.Name}
@@ -230,24 +231,33 @@ export const StudioDetail = () => {
                   marginTop: "10px",
                 }}
               >
-                <span
+                <div
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
+                    minWidth: "100px",
                   }}
                 >
                   Phong cách
-                </span>
-                <span
+                </div>
+                <div
                   style={{
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
+
+                    display: "-webkit-box",
+                    lineHeight: "18px",
+                    webkitLineClamp: "1",
+                    webkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    height: "18px",
                   }}
                 >
                   {data.Style}
-                </span>
+                </div>
               </div>
               <div
                 className="mt-15"
@@ -272,117 +282,121 @@ export const StudioDetail = () => {
           key: "currency",
           render: () => (
             <>
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <span
+              {filterService.OrderByTime !== -1 && (
+                <div className="mb-20">
+                  <div
                     style={{
-                      color: "#E22828",
-                      fontSize: "20px",
-                      fontWeight: "700",
+                      display: "flex",
+                      gap: "10px",
+                      alignItems: "center",
+                      flexWrap: "wrap",
                     }}
                   >
-                    {filter.OrderByTime === 1 &&
-                      data?.PriceByHour?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    {filter.OrderByTime === 0 &&
-                      data?.PriceByDate?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                  </span>
-                  <span
+                    <span
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                    <span
+                      style={{
+                        color: "#828282",
+                        textDecoration: "line-through",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                  </div>
+                  <p
                     style={{
                       color: "#828282",
-                      textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
                     }}
                   >
-                    {filter.OrderByTime === 1 &&
-
-                      data?.PriceByHour?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    {filter.OrderByTime === 0 &&
-                      data?.PriceByDate?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                  </span>
+                    {data.PriceNote}
+                  </p>
+                  {/* <button
+                    style={{
+                      padding: "3px 21px",
+                      background: "#E22828",
+                      color: "#ffff",
+                      border: " 1px solid #E22828",
+                      borderRadius: " 8px",
+                    }}
+                  >
+                    Giảm 50%{" "}
+                  </button> */}
                 </div>
-                <p
-                  style={{
-                    color: "#828282",
-                    fontSize: "14px",
-                    fontWeight: "400",
-                  }}
-                >
-                  {data.PriceNote}
-                </p>
-                <button
-                  style={{
-                    padding: "3px 21px",
-                    background: "#E22828",
-                    color: "#ffff",
-                    border: " 1px solid #E22828",
-                    borderRadius: " 8px",
-                  }}
-                >
-                  Giảm 50%{" "}
-                </button>
-              </div>
-            </>
-          ),
-        },
-        {
-          key: "choose",
-          render: () => (
-            <>
-              {chooseService.filter((item) => item.id === data.id).length >
-              0 ? (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    backgroundColor: "#E7E7E7",
-                    padding: "15px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Bỏ chọn
-                </span>
-              ) : (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    border: "1px solid #E22828",
-                    color: "#E22828",
-                    padding: "13px 25px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Chọn
-                </span>
               )}
+              <div className="">
+                {chooseService.filter((item) => item.id === data.id).length >
+                0 ? (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      backgroundColor: "#E7E7E7",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Bỏ chọn
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      border: "1px solid #E22828",
+                      color: "#E22828",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Chọn
+                  </div>
+                )}
+              </div>
             </>
           ),
         },
@@ -395,11 +409,11 @@ export const StudioDetail = () => {
   const handleChooseService = (data) => {
     if (
       (filterService.OrderByTime === 0 &&
-        filterService.OrderByTimeFrom !== "" &&
-        filterService.OrderByTimeTo !== "") ||
-      (filter.OrderByTime === 1 &&
         filterService.OrderByDateFrom !== "" &&
-        filterService.OrderByDateTo !== "")
+        filterService.OrderByDateTo !== "") ||
+      (filterService.OrderByTime === 1 &&
+        filterService.OrderByTimeFrom !== "" &&
+        filterService.OrderByTimeTo !== "")
     ) {
       if (chooseService.filter((item) => item.id === data.id).length > 0) {
         setChooseService([]);
@@ -412,9 +426,14 @@ export const StudioDetail = () => {
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
-      if (filter.OrderByTime === 0) {
-        if (calTimeMinus(filter.OrderByTimeFrom, filter.OrderByTimeTo) >= 60) {
+    if (chooseService.length > 0 && filterService.OrderByTime !== -1) {
+      if (filterService.OrderByTime === 0) {
+        if (
+          calTimeMinus(
+            filterService.OrderByTimeFrom,
+            filterService.OrderByTimeTo
+          ) >= 60
+        ) {
           dispatch(chooseServiceAction(chooseService));
           navigate("order");
         } else {
@@ -425,7 +444,7 @@ export const StudioDetail = () => {
         navigate("order");
       }
     } else {
-      if (filter.OrderByTime === -1) {
+      if (filterService.OrderByTime === -1) {
         toastMessage("Bạn cần chọn thời gian!", "warn");
       } else if (chooseService.length <= 0) {
         toastMessage("Bạn cần chọn dịch vụ!", "warn");
@@ -575,7 +594,7 @@ export const StudioDetail = () => {
                     <PromotionList data={filter_promo} />
                   </div>
 
-                  <div className={cx("table")}>
+                  <div className={cx("")}>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
 
@@ -608,9 +627,8 @@ export const StudioDetail = () => {
                     </div>
                   </div>
                   <div className={cx("order")}>
-                    <h3>Đã chọn {chooseService.length} phòng</h3>
                     <div className={cx("item")}>
-                      <span>Giá gốc</span>
+                      <h3>Đã chọn {chooseService.length} phòng</h3>
                       {chooseService.length > 0 && (
                         <span
                           style={{
@@ -619,28 +637,28 @@ export const StudioDetail = () => {
                             color: "#828282",
                           }}
                         >
-                          {filter.OrderByTime === 1 &&
+                          {filterService.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseService?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByHour *
                                     calTime(
-                                      filter.OrderByTimeFrom,
-                                      filter.OrderByTimeTo
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
                                     ),
                                 0
                               )
                             )}`}
-                          {filter.OrderByTime === 0 &&
+                          {filterService.OrderByTime === 0 &&
                             `${convertPrice(
                               chooseService?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByDate *
                                     calDate(
-                                      filter.OrderByDateFrom,
-                                      filter.OrderByDateTo
+                                      filterService.OrderByDateFrom,
+                                      filterService.OrderByDateTo
                                     ),
                                 0
                               )
@@ -650,7 +668,7 @@ export const StudioDetail = () => {
                       )}
                     </div>
                     <div className={cx("item")}>
-                      <span>Bao gồm 50.000đ thuế và phí </span>
+                      <span className="mt-3">Bao gồm 50.000đ thuế và phí </span>
                       <span
                         style={{
                           color: "#E22828",
@@ -658,28 +676,28 @@ export const StudioDetail = () => {
                           fontWeight: "700",
                         }}
                       >
-                        {filter.OrderByTime === 1 &&
+                        {filterService.OrderByTime === 1 &&
                           `${convertPrice(
                             chooseService?.reduce(
                               (total, item) =>
                                 total +
                                 item.PriceByHour *
                                   calTime(
-                                    filter.OrderByTimeFrom,
-                                    filter.OrderByTimeTo
+                                    filterService.OrderByTimeFrom,
+                                    filterService.OrderByTimeTo
                                   ),
                               0
                             )
                           )}`}
-                        {filter.OrderByTime === 0 &&
+                        {filterService.OrderByTime === 0 &&
                           `${convertPrice(
                             chooseService?.reduce(
                               (total, item) =>
                                 total +
                                 item.PriceByDate *
                                   calDate(
-                                    filter.OrderByDateFrom,
-                                    filter.OrderByDateTo
+                                    filterService.OrderByDateFrom,
+                                    filterService.OrderByDateTo
                                   ),
                               0
                             )

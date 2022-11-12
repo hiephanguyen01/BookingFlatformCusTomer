@@ -5,12 +5,24 @@ import {
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
+  MinusOutlined,
   MoreOutlined,
+  PlusOutlined,
   RightOutlined,
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Popover, Rate, Row, Space } from "antd";
+import {
+  Button,
+  Col,
+  Dropdown,
+  InputNumber,
+  Menu,
+  Popover,
+  Rate,
+  Row,
+  Space,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -43,73 +55,17 @@ import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import Voucher from "../../components/Voucher";
 import { Report } from "../StudioDetail/Report";
-
-const COLUMN = [
-  { title: "Loại sản phẩm", size: 5 },
-  { title: "Size", size: 4 },
-  { title: "Màu sắc", size: 4 },
-  { title: "Số lượng", size: 3 },
-  { title: "Đơn giá cho thuê", size: 4 },
-  { title: "Chọn sản phẩm", size: 4 },
-];
-const menu_size = (
-  <Menu
-    items={[
-      {
-        label: <div>S</div>,
-        key: "0",
-      },
-      {
-        label: <div>M</div>,
-        key: "1",
-      },
-      {
-        label: <div>L</div>,
-        key: "3",
-      },
-    ]}
-  />
-);
-const menu_color = (
-  <Menu
-    items={[
-      {
-        label: <div>Trắng</div>,
-        key: "0",
-      },
-      {
-        label: <div>Đen</div>,
-        key: "1",
-      },
-      {
-        label: <div>Đỏ</div>,
-        key: "3",
-      },
-    ]}
-  />
-);
-const menu_amount = (
-  <Menu
-    items={[
-      {
-        label: <div>1</div>,
-        key: "0",
-      },
-      {
-        label: <div>2</div>,
-        key: "1",
-      },
-      {
-        label: <div>3</div>,
-        key: "3",
-      },
-    ]}
-  />
-);
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 
 const Index = () => {
-  const { studioDetail, filter, loading, listStudioSimilar, promotionCode } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail,
+    filter,
+    loading,
+    listStudioSimilar,
+    promotionCode,
+    filterService,
+  } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
 
   const { id } = useParams();
@@ -132,7 +88,7 @@ const Index = () => {
       return [...arr, item];
     }, []);
 
-  const [chooseService, setChooseService] = useState([]);
+  const [amount, setAmount] = useState(1);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
 
@@ -146,28 +102,11 @@ const Index = () => {
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
-    // let timeOut;
-    // timeOut = setTimeout(() => {
-    //   dispatch({
-    //     type: SHOW_MODAL,
-    //     Component: <Voucher />,
-    //   });
-    // }, 2000);
-
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
-      // clearTimeout(timeOut);
     };
   }, []);
-  console.log(studioDetail);
 
-  const handleChooseService = (data) => {
-    if (chooseService.filter((item) => item.id === data.id).length > 0) {
-      setChooseService([]);
-    } else {
-      setChooseService([{ ...data }]);
-    }
-  };
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");
     dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
@@ -180,176 +119,10 @@ const Index = () => {
     });
   };
 
-  const menu_report = (
-    <Menu
-      items={[
-        {
-          label: (
-            <div
-              onClick={() =>
-                dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }
-            >
-              <ExclamationCircleOutlined className="me-10" />
-              Báo cáo
-            </div>
-          ),
-          key: "0",
-        },
-      ]}
-    />
-  );
-
-  const ROW = (dataSource = []) => {
-    if (dataSource.length > 0) {
-      return dataSource?.map((data, index) => [
-        {
-          render: () => (
-            <>
-              <img
-                src={`${
-                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
-                }`}
-                style={{ width: "100%", marginBottom: "20px" }}
-                alt=""
-              />
-              <div className="text-medium-se">{`${data.Name}`}</div>
-            </>
-          ),
-        },
-        {
-          render: () => (
-            <>
-              <Dropdown overlay={menu_size} trigger={["click"]}>
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space className="d-flex justify-content-between px-10 py-8 dropdown">
-                    <DownOutlined className="ms-15" />
-                  </Space>
-                </a>
-              </Dropdown>
-            </>
-          ),
-        },
-        {
-          title: "Màu sắc",
-          render: () => (
-            <Dropdown overlay={menu_color} trigger={["click"]}>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space className="d-flex justify-content-between px-10 py-8 dropdown">
-                  Trắng
-                  <DownOutlined className="ms-15" />
-                </Space>
-              </a>
-            </Dropdown>
-          ),
-        },
-        {
-          title: "Số lượng",
-          render: () => (
-            <Dropdown overlay={menu_amount} trigger={["click"]}>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space className="d-flex justify-content-between px-10 py-8 dropdown">
-                  1
-                  <DownOutlined className="ms-15" />
-                </Space>
-              </a>
-            </Dropdown>
-          ),
-        },
-        {
-          title: "Đơn giá cho thuê",
-          render: () => (
-            <>
-              {" "}
-              <div
-                style={{
-                  fontWeight: "400",
-                  fontSize: "12px",
-                  lineHeight: "16px",
-                  color: "#828282",
-                  textDecoration: "line-through",
-                }}
-              >
-                {convertPrice(data.Sales)}đ
-              </div>
-              <h4
-                style={{
-                  marginBottom: "12px",
-                  color: "#E22828",
-                }}
-              >
-                {convertPrice(data.Price)}đ
-              </h4>
-              <span
-                className="text-medium-se"
-                style={{
-                  background: "#E22828",
-                  borderRadius: "4px",
-                  padding: "3px 10px",
-                  color: "#ffffff",
-                }}
-              >
-                Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
-              </span>
-            </>
-          ),
-        },
-        {
-          title: "Chọn sản phẩm",
-          render: () => (
-            <>
-              {chooseService.filter((item) => item.id === data.id).length >
-              0 ? (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    backgroundColor: "#E7E7E7",
-                    padding: "15px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Bỏ chọn
-                </span>
-              ) : (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    border: "1px solid #E22828",
-                    color: "#E22828",
-                    padding: "13px 25px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Chọn
-                </span>
-              )}
-            </>
-          ),
-        },
-      ]);
-    }
-  };
-
   const handleBook = () => {
-    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
-      dispatch(chooseServiceAction(chooseService));
+    if (amount > 0 && filter.OrderByTime !== -1) {
+      // dispatch(chooseServiceAction(chooseService));
       navigate("order");
-    } else {
-      if (filter.OrderByTime === -1) {
-        toastMessage("Bạn cần chọn thời gian!", "warn");
-      } else if (chooseService.length <= 0) {
-        toastMessage("Bạn cần chọn dịch vụ!", "warn");
-      }
     }
   };
   return (
@@ -566,12 +339,47 @@ const Index = () => {
                   className="col_left"
                 >
                   <div
-                    className=" py-22 mb-12 h-100"
+                    className=" py-22 mb-12 h-100 px-22"
                     style={{
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
+                    {filterService.OrderByTime === -1 && (
+                      <div className="warning-choose-time ">
+                        <ExclamationCircleOutlined className="me-5" />
+                        Chọn khung giờ và số lượng bạn muốn đặt để xem giá cho
+                        từng sản phẩm
+                      </div>
+                    )}
+                    <p className="amount-label">Số lượng</p>
+                    <div className="d-flex amount-wrapper my-15">
+                      <MinusOutlined
+                        className="btn-amount"
+                        onClick={() => {
+                          if (amount > 1) {
+                            setAmount(amount - 1);
+                          }
+                        }}
+                      />
+                      <InputNumber
+                        min={1}
+                        max={100}
+                        value={amount}
+                        onChange={(value) => setAmount(value)}
+                        className="amount-value"
+                        controls={false}
+                      />
+                      {/* <div className="amount-value">
+                        <p>{amount}</p>
+                      </div> */}
+                      <PlusOutlined
+                        className="btn-amount"
+                        onClick={() => setAmount(amount + 1)}
+                      />
+                    </div>
+                    <p className="amount-label">Khung giờ bạn muốn đặt</p>
+                    <br />
+                    <SelectTimeOptionService className="" />
                   </div>
                 </Col>
                 <Col lg={8} sm={24} style={{ paddingLeft: "0.25rem" }}>
@@ -593,9 +401,9 @@ const Index = () => {
                           color: "#222222",
                         }}
                       >
-                        Đã chọn {chooseService.length} sản phẩm
+                        Đã chọn {amount} sản phẩm
                       </div>
-                      {chooseService.length > 0 && (
+                      {amount > 0 && (
                         <div
                           style={{
                             fontWeight: "400",
@@ -606,13 +414,7 @@ const Index = () => {
                             color: "#828282",
                           }}
                         >
-                          {`${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) => total + item.Price,
-                              0
-                            )
-                          )}`}
-                          đ
+                          0 đ
                         </div>
                       )}
                     </div>
@@ -629,13 +431,7 @@ const Index = () => {
                           color: "#E22828",
                         }}
                       >
-                        {`${convertPrice(
-                          chooseService?.reduce(
-                            (total, item) => total + item.Sales,
-                            0
-                          )
-                        )}`}
-                        đ
+                        0 đ
                       </div>
                     </div>
                     <div className="w-100 d-flex justify-content-between">

@@ -18,6 +18,16 @@
 
             // cursor: pointer;
 
+            .wrapper {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            &_info {
+                min-width: 70%;
+                width: 70%;
+            }
+
             &_name {
                 font-weight: 400;
                 font-size: 12px;
@@ -25,6 +35,7 @@
                 color: $neutral-500;
 
                 text-transform: uppercase;
+                flex: 1;
             }
 
             &_description {
@@ -57,4 +68,11 @@
             }
         }
     }
+
+    .post__middle img {
+        border-radius: 0;
+        height: none;
+    }
 }
+
+@media screen {}

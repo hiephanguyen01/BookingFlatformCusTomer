@@ -32,7 +32,7 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { calTime } from "../../utils/calculate";
+import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
@@ -43,16 +43,22 @@ import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 
 const COLUMN = [
-  { title: "Dịch vụ", size: 5 },
-  { title: "Mô tả", size: 8 },
-  { title: "Giá cho thời gian bạn đã chọn ", size: 7 },
-  { title: "Chọn dịch vụ", size: 4 },
+  { title: "Dịch vụ", size: 7 },
+  { title: "Chọn thời gian", size: 10 },
+  { title: "Chọn dịch vụ", size: 7 },
 ];
 const Index = () => {
-  const { studioDetail, loading, filter, listStudioSimilar, promotionCode } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail,
+    loading,
+    filter,
+    listStudioSimilar,
+    promotionCode,
+    filterService,
+  } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -88,28 +94,10 @@ const Index = () => {
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
-    // let timeOut;
-    // timeOut = setTimeout(() => {
-    //   dispatch({
-    //     type: SHOW_MODAL,
-    //     Component: <Voucher />,
-    //   });
-    // }, 2000);
-
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
-      // clearTimeout(timeOut);
     };
   }, []);
-
-  const handleChooseService = (data) => {
-    if (chooseService.filter((item) => item.id === data.id).length > 0) {
-      setChooseService([]);
-    } else {
-      setChooseService([{ ...data }]);
-    }
-  };
-  console.log(studioDetail);
 
   const handleReport = () => {
     dispatch({
@@ -142,110 +130,164 @@ const Index = () => {
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
         {
+          key: "title",
           render: () => (
-            <>
+            <div style={{}}>
               <img
-                src={`${
-                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
-                }`}
-                style={{ width: "100%", marginBottom: "20px" }}
                 alt=""
+                style={{ width: "100%", borderRadius: " 6px" }}
+                src={
+                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
+                }
               />
-              <div className="text-medium-se">{`${data.Name}`}</div>
-            </>
-          ),
-        },
-        {
-          render: () => <p>{data.Description}</p>,
-        },
-        {
-          render: () => (
-            <>
-              <div className="d-flex align-items-center">
-                <h4
-                  className="me-10"
-                  style={{
-                    marginBottom: "0",
-                    color: "#E22828",
-                  }}
-                >
-                  {convertPrice(data.Sales)}đ
-                </h4>
-                <div
-                  style={{
-                    fontWeight: "400",
-                    fontSize: "12px",
-                    lineHeight: "16px",
-                    color: "#828282",
-                    textDecoration: "line-through",
-                  }}
-                >
-                  {convertPrice(data.Price)}đ
-                </div>
+              <div
+                style={{
+                  marginTop: "10px",
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                {data.Name}
               </div>
               <div
-                className="mb-8 mt-4"
+                className="mt-10"
                 style={{
+                  color: "#616161",
+                  fontSize: "16px",
                   fontWeight: "400",
-                  fontSize: "12px",
-                  lineHeight: "16px",
-                  color: "#828282",
                 }}
               >
-                Bao gồm 50.000đ thuế và phí{" "}
+                {data.Description}
               </div>
-              <span
-                className="text-medium-se"
-                style={{
-                  background: "#E22828",
-                  borderRadius: "4px",
-                  padding: "3px 10px",
-                  color: "#ffffff",
-                }}
-              >
-                Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
-              </span>
-            </>
+            </div>
           ),
         },
         {
+          key: "desc",
+          render: () => {
+            return <SelectTimeOptionService service={data} />;
+          },
+        },
+        {
+          key: "currency",
           render: () => (
             <>
-              {chooseService.filter((item) => item.id === data.id).length >
-              0 ? (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    backgroundColor: "#E7E7E7",
-                    padding: "15px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Bỏ chọn
-                </span>
-              ) : (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    border: "1px solid #E22828",
-                    color: "#E22828",
-                    padding: "13px 25px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Chọn
-                </span>
+              {filterService.OrderByTime !== -1 && (
+                <div className="mb-20">
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "5px",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                    <span
+                      style={{
+                        color: "#828282",
+                        textDecoration: "line-through",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      color: "#828282",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    {data.PriceNote}
+                  </p>
+                  {/* <button
+                    style={{
+                      padding: "3px 21px",
+                      background: "#E22828",
+                      color: "#ffff",
+                      border: " 1px solid #E22828",
+                      borderRadius: " 8px",
+                    }}
+                  >
+                    Giảm 50%{" "}
+                  </button> */}
+                </div>
               )}
+              <div className="">
+                {chooseService.filter((item) => item.id === data.id).length >
+                0 ? (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      backgroundColor: "#E7E7E7",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Bỏ chọn
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      border: "1px solid #E22828",
+                      color: "#E22828",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Chọn
+                  </div>
+                )}
+              </div>
             </>
           ),
         },
@@ -253,18 +295,38 @@ const Index = () => {
     }
   };
 
+  const handleChooseService = (data) => {
+    if (
+      (filterService.OrderByTime === 0 &&
+        filterService.OrderByDateFrom !== "" &&
+        filterService.OrderByDateTo !== "") ||
+      (filterService.OrderByTime === 1 &&
+        filterService.OrderByTimeFrom !== "" &&
+        filterService.OrderByTimeTo !== "")
+    ) {
+      if (chooseService.filter((item) => item.id === data.id).length > 0) {
+        setChooseService([]);
+      } else {
+        setChooseService([{ ...data }]);
+      }
+    } else {
+      toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
+    }
+  };
+
   const handleBook = () => {
-    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
+    if (chooseService.length > 0 && filterService.OrderByTime !== -1) {
       dispatch(chooseServiceAction(chooseService));
       navigate("order");
     } else {
-      if (filter.OrderByTime === -1) {
+      if (filterService.OrderByTime === -1) {
         toastMessage("Bạn cần chọn thời gian!", "warn");
       } else if (chooseService.length <= 0) {
         toastMessage("Bạn cần chọn dịch vụ!", "warn");
       }
     }
   };
+
   const handleAddCart = () => {
     if (chooseService.length > 0) {
       dispatch(addOrder(cate, chooseService));
@@ -493,58 +555,86 @@ const Index = () => {
                         Đã chọn {chooseService.length} sản phẩm
                       </div>
                       {chooseService.length > 0 && (
-                        <div
+                        <span
                           style={{
-                            fontWeight: "400",
-                            fontSize: "16px",
-                            lineHeight: "22px",
-                            textDecorationLine: "line-through",
+                            textDecoration: "line-through",
+                            fontSize: " 16px",
                             color: "#828282",
                           }}
                         >
-                          {`${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) =>
-                                total +
-                                item.Price *
-                                  calTime(
-                                    filter.OrderByTimeFrom,
-                                    filter.OrderByTimeTo
-                                  ),
-                              0
-                            )
-                          )}`}
+                          {filterService.OrderByTime === 1 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByHour *
+                                    calTime(
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}`}
+                          {filterService.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByDate *
+                                    calDate(
+                                      filterService.OrderByDateFrom,
+                                      filterService.OrderByDateTo
+                                    ),
+                                0
+                              )
+                            )}`}
                           đ
-                        </div>
+                        </span>
                       )}
                     </div>
                     <div className="d-flex justify-content-between mb-26">
                       <div className="text-medium-re">
                         Bao gồm 50.000đ thuế và phí
                       </div>
-                      <div
-                        style={{
-                          fontWeight: "700",
-                          fontSize: "20px",
-                          lineHeight: "27px",
-                          /* Primary/Red 700 */
-                          color: "#E22828",
-                        }}
-                      >
-                        {`${convertPrice(
-                          chooseService?.reduce(
-                            (total, item) =>
-                              total +
-                              item.Sales *
-                                calTime(
-                                  filter.OrderByTimeFrom,
-                                  filter.OrderByTimeTo
-                                ),
-                            0
-                          )
-                        )}`}
-                        đ
-                      </div>
+                      {chooseService.length > 0 && (
+                        <div
+                          style={{
+                            fontWeight: "700",
+                            fontSize: "20px",
+                            lineHeight: "27px",
+                            /* Primary/Red 700 */
+                            color: "#E22828",
+                          }}
+                        >
+                          {filterService.OrderByTime === 1 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByHour *
+                                    calTime(
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}`}
+                          {filterService.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByDate *
+                                    calDate(
+                                      filterService.OrderByDateFrom,
+                                      filterService.OrderByDateTo
+                                    ),
+                                0
+                              )
+                            )}`}
+                          đ
+                        </div>
+                      )}
                     </div>
                     <div className="w-100 d-flex justify-content-between">
                       <Button

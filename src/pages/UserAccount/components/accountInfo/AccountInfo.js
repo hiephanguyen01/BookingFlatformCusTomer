@@ -1,6 +1,6 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Col, Modal, Row, Switch } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
@@ -13,20 +13,30 @@ import TextInput from "../../../../components/TextInput/TextInput";
 import toastMessage from "../../../../components/ToastMessage";
 import { userService } from "../../../../services/UserService";
 import {
+  facebookLink,
   getCurrentUser,
+  googleLink,
   logOut,
-  socialAccountLink,
 } from "../../../../stores/actions/autheticateAction";
 import { convertImage } from "../../../../utils/convertImage";
 import "./accountInfo.scss";
 const AccountInfo = () => {
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const { providerId } = useSelector((state) => state.authenticateReducer);
   const [checkedLinkGoogle, setCheckedLinkGoogle] = useState(
     UserMe?.GoogleEmail ? true : false
   );
+  const [checkedLinkFB, setCheckedLinkFB] = useState(
+    UserMe?.FacebookEmail ? true : false
+  );
+
+  useEffect(() => {
+    setCheckedLinkFB(UserMe?.FacebookEmail ? true : false);
+    setCheckedLinkGoogle(UserMe?.GoogleEmail ? true : false);
+  }, [UserMe]);
+
   const dispatch = useDispatch();
-  const providerId = localStorage.getItem("providerId");
   const myImg = convertImage(UserMe?.Image);
   const [visible, setVisible] = useState(false);
   const [infoUser, setInfoUser] = useState(UserMe);
@@ -62,7 +72,6 @@ const AccountInfo = () => {
     try {
       const formData = new FormData();
       delete file.preview;
-      console.log("file", file);
       for (let key in infoUser) {
         if (key !== "Image") {
           formData.append(key, infoUser[key]);
@@ -213,6 +222,7 @@ const AccountInfo = () => {
                     defaultChecked={false}
                     onChange={onChangeCheck}
                     style={{}}
+                    disabled={true}
                   />
                 </div>
               </div>
@@ -233,9 +243,18 @@ const AccountInfo = () => {
                     Liên Kết facebook
                   </span>
                   <Switch
-                    defaultChecked={false}
-                    onChange={onChangeCheck}
+                    onChange={() => {
+                      dispatch(
+                        facebookLink(
+                          setCheckedLinkFB,
+                          checkedLinkFB,
+                          UserMe?.Phone
+                        )
+                      );
+                    }}
                     style={{}}
+                    disabled={providerId === "facebook.com" && true}
+                    checked={checkedLinkFB}
                   />
                 </div>
               </div>{" "}
@@ -257,7 +276,7 @@ const AccountInfo = () => {
                     onChange={() => {
                       // setCheckedLinkGoogle(!checkedLinkGoogle);
                       dispatch(
-                        socialAccountLink(
+                        googleLink(
                           setCheckedLinkGoogle,
                           checkedLinkGoogle,
                           UserMe?.Phone
@@ -265,7 +284,7 @@ const AccountInfo = () => {
                       );
                     }}
                     // defaultChecked={false}
-                    disabled={UserMe?.GoogleEmail ? true : false}
+                    disabled={providerId === "google.com" && true}
                     checked={checkedLinkGoogle}
                     style={{}}
                   />
@@ -309,7 +328,7 @@ const AccountInfo = () => {
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
         width={550}
-        height={400}
+        // height={400}
         closable={false}
         className="AccountInfo__delete__modal"
         footer={false}
@@ -317,11 +336,35 @@ const AccountInfo = () => {
         <div className="AccountInfo__delete__modal__header">
           Bạn có chắc muốn xóa tài khoản này?
         </div>
-        <div className="AccountInfo__delete__modal__content">
-          {`Điều này đồng nghĩa với việc tài khoản ${
-            UserMe.Phone || UserMe.Email
-          } bị xóa vĩnh
-          viễn.`}
+        <div
+          className="AccountInfo__delete__modal__content"
+          style={{ color: "#000" }}
+        >
+          <div className="mb-20">
+            Bằng cách bấm vào nút “Xóa tài khoản”, bạn tự nguyện chọn xóa bỏ tài
+            khoản của mình hoàn toàn và không thể thay đổi được, và bạn đồng ý
+            thừa nhận toàn bộ trách nhiệm về mọi hậu quả liên quan đến việc xóa
+            bỏ tài khoản của mình.
+          </div>
+          <div> Bằng cách xóa bỏ tài khoản, Booking Studio sẽ:</div>
+          <ul
+            style={{
+              listStylePosition: "inside",
+              listStyleType: "disc",
+              color: "#E22828",
+              fontWeight: "600",
+            }}
+          >
+            <li>Xóa bỏ tất cả thông tin trên hồ sơ của bạn</li>
+            <li>Xóa bỏ tất cả thông tin về các đơn đặt phòng trước đây </li>
+          </ul>
+          <div className="mt-20">
+            Xin lưu ý, nếu 120 ngày chưa trôi qua kể từ ngày đặt phòng hoặc ngày
+            trả phòng cuối cùng của bạn, chúng tôi không thể xóa bỏ tài khoản
+            của bạn ngay lập tức do mục đích kiểm tra. Chúng tôi sẽ ghi nhận đơn
+            xin xóa bỏ tài khoản 120 ngày sau ngày đặt phòng hoặc trả phòng cuối
+            cùng của bạn.
+          </div>
         </div>
         <div className="AccountInfo__delete__modal__group__btn">
           <button

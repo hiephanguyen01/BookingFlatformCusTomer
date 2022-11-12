@@ -1,26 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const DetectApp = () => {
-  const [detectUrl, setDetectUrl] = useState("");
-  const aRef = useRef(null);
+  const urlApp = "BookingStudioApp://open";
   useEffect(() => {
     if (/Android/i.test(navigator.userAgent)) {
-      setDetectUrl(
-        "https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
-      );
+      window.location.href = urlApp;
+
+      window.location.href =
+        "https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio";
     } else if (/iPhone/i.test(navigator.userAgent)) {
-      setDetectUrl("https://apps.apple.com/vn/app/booking-studio/id1563362722");
+      window.location.href = urlApp;
+
+      window.location.href =
+        "https://apps.apple.com/vn/app/booking-studio/id1563362722";
     }
   }, []);
 
-  useEffect(() => {
-    aRef?.current?.click();
-  }, [detectUrl]);
-  return (
-    <div>
-      <a ref={aRef} href={detectUrl} style={{ display: "none" }}></a>
-    </div>
-  );
+  return <></>;
 };
 
 export default DetectApp;

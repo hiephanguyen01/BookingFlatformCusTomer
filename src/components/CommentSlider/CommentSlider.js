@@ -43,19 +43,21 @@ const CommentSlider = ({ data = [] }) => {
           <SwiperSlide key={index} className="post_slider_item">
             <a
               href={`${convertCategory(item.category)}/${item.id}`}
-              className="h-100"
+              className="h-100 w-100 wrapper"
             >
-              <div className="d-flex h-100">
-                <img
-                  src={convertImage(item.Image[0])}
-                  className="me-12"
-                  style={{ width: "100px", objectFit: "cover" }}
-                />
-                <div className="py-5 ">
-                  <div className="post_slider_item_name mb-5">{item.Name}</div>
-                  <div className="post_slider_item_description">
-                    {item.Description}
-                  </div>
+              <img
+                src={convertImage(item.Image[0])}
+                className="me-12"
+                style={{
+                  minWidth: "100px",
+                  width: "100px",
+                  objectFit: "cover",
+                }}
+              />
+              <div className="py-10 post_slider_item_info">
+                <div className="post_slider_item_name mb-5">{item.Name}</div>
+                <div className="post_slider_item_description">
+                  {item.Description}
                 </div>
               </div>
             </a>

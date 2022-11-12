@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
+import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertImage } from "../../utils/convertImage";
 import "./FilterCard.scss";
 const FilterCard = ({ data, category }) => {
@@ -68,7 +69,20 @@ const FilterCard = ({ data, category }) => {
       {data && (
         <div
           className="FilterCard"
-          onClick={() => navigate(`/home/${category.value}/${data.id}`)}>
+          onClick={() => {
+            dispatch({
+              type: SET_FILTER_SERVICE,
+              payload: {
+                OrderByTime: -1,
+                OrderByTimeFrom: "",
+                OrderByTimeTo: "",
+                OrderByDateFrom: "",
+                OrderByDateTo: "",
+              },
+            });
+            navigate(`/home/${category.value}/${data.id}`);
+          }}
+        >
           <div className="groupImage">
             <div onClick={handleChangeLike} className={"like"}>
               {value?.findIndex((item) => item.id === data.id) > -1 ? (
@@ -114,7 +128,8 @@ const FilterCard = ({ data, category }) => {
           <div className="text">
             <div
               className="d-flex align-items-center"
-              style={{ padding: "17px 10px 10px 17px" }}>
+              style={{ padding: "17px 10px 10px 17px" }}
+            >
               <p className="title">{data.Name}</p>
               <CheckCircleTwoTone
                 style={{ fontSize: "20px" }}

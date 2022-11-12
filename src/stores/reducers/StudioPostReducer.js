@@ -25,19 +25,6 @@ const initialState = {
   studioPostList: [],
   filter: JSON.parse(localStorage.getItem("filter-post")) || {
     keyString: "",
-    OrderByTime: -1,
-    OrderByTimeFrom:
-      convertDateSendToDB(new Date()).slice(0, 13) + ":00:00.000Z",
-    OrderByTimeTo:
-      convertDateSendToDB(new Date()).slice(0, 11) +
-      `${
-        parseInt(convertDateSendToDB(new Date()).slice(11, 13)) > 9
-          ? parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
-          : `0${parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1}`
-      }` +
-      ":00:00.000Z",
-    OrderByDateFrom: convertDateSendToDB(new Date()),
-    OrderByDateTo: convertDateSendToDB(new Date()),
     category: 1,
     priceOption: 0,
     price1: undefined,
@@ -76,20 +63,10 @@ const initialState = {
       }
     : {
         OrderByTime: -1,
-        OrderByTimeFrom:
-          convertDateSendToDB(new Date()).slice(0, 13) + ":00:00.000Z",
-        OrderByTimeTo:
-          convertDateSendToDB(new Date()).slice(0, 11) +
-          `${
-            parseInt(convertDateSendToDB(new Date()).slice(11, 13)) > 9
-              ? parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
-              : `0${
-                  parseInt(convertDateSendToDB(new Date()).slice(11, 13)) + 1
-                }`
-          }` +
-          ":00:00.000Z",
-        OrderByDateFrom: convertDateSendToDB(new Date()),
-        OrderByDateTo: convertDateSendToDB(new Date()),
+        OrderByTimeFrom: "",
+        OrderByTimeTo: "",
+        OrderByDateFrom: "",
+        OrderByDateTo: "",
       },
   loadingService: false,
 };
@@ -183,11 +160,9 @@ export const studioPostReducer = (state = initialState, action) => {
         loadingService: action.payload,
       };
     case SET_FILTER_SERVICE:
-      console.log(action);
       return {
         ...state,
         filterService: { ...action.payload },
-        filter: { ...state.filter, ...action.payload },
       };
     default:
       return state;

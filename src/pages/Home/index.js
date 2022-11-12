@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
 import { bannerService } from "../../services/Banner";
 import logoImg from "../../../src/assets/img/Logo1.png";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
@@ -158,7 +159,7 @@ export const Home = () => {
   const { filter, loading } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-  const [chooseCate, setChooseCate] = useState();
+  // const [chooseCate, setChooseCate] = useState();
   const [provinces, setProvinces] = useState([]);
 
   const navigate = useNavigate();
@@ -201,7 +202,7 @@ export const Home = () => {
       category: categoryId,
     };
     dispatch(getFilterStudioPost(5, 1, newFilter));
-    navigate("/home/filter");
+    navigate(`/home/filter?${queryString.stringify(newFilter)}`);
   };
   const [banners, setBannerList] = useState([]);
   useEffect(() => {
@@ -225,11 +226,12 @@ export const Home = () => {
           {CATEGORIES.map((item) => (
             <div
               key={item.id}
-              className={cx("box", `${chooseCate === item.id && "active"}`)}
+              className={cx("box")}
               onClick={() => {
-                setChooseCate(item.id);
+                // setChooseCate(item.id);
                 handleClickCategory(item.id);
-              }}>
+              }}
+            >
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>

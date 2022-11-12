@@ -51,6 +51,7 @@ import Voucher from "../../components/Voucher";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 
 const SIZE = [
   { id: "S", label: "S" },
@@ -69,9 +70,21 @@ const QUANTITY = [
   { id: 3, label: "3" },
 ];
 
+const COLUMN = [
+  { title: "Loại sản phẩm", size: 7 },
+  { title: "Chọn Size, Màu, Số lượng, Thời gian", size: 10 },
+  { title: "Chọn trang phục", size: 7 },
+];
+
 const Index = () => {
-  const { studioDetail, filter, loading, listStudioSimilar, promotionCode } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail,
+    filter,
+    loading,
+    listStudioSimilar,
+    promotionCode,
+    filterService,
+  } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -123,7 +136,6 @@ const Index = () => {
     };
   }, []);
 
-  console.log(studioDetail);
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
@@ -167,159 +179,245 @@ const Index = () => {
     />
   );
 
-  const COLUMN = [
-    { title: "Loại sản phẩm", size: 5 },
-    { title: "Size", size: 4 },
-    { title: "Màu sắc", size: 4 },
-    { title: "Số lượng", size: 3 },
-    { title: "Đơn giá cho thuê", size: 4 },
-    { title: "Chọn sản phẩm", size: 4 },
-  ];
-
   const ROW = (dataSource = []) => {
     if (dataSource?.length > 0) {
       return dataSource?.map((data, index) => [
         {
+          key: "title",
           render: () => (
-            <>
+            <div style={{}}>
               <img
-                src={`${
-                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
-                }`}
-                style={{ width: "100%", marginBottom: "20px" }}
                 alt=""
-                // onError={(e) => e.target.classList.add("d-none")}
+                style={{ width: "100%", borderRadius: " 6px" }}
+                src={
+                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
+                }
               />
-              <div className="text-medium-se">{data.Name}</div>
-            </>
-          ),
-        },
-        {
-          render: () => (
-            <>
-              <Select
-                defaultValue={SIZE[0]}
-                style={{
-                  width: "100%",
-                }}
-                onChange={handleChange}
-              >
-                {SIZE.map((item) => (
-                  <Option value={item.id}>{item.label}</Option>
-                ))}
-              </Select>
-            </>
-          ),
-        },
-        {
-          title: "Màu sắc",
-          render: () => (
-            <Select
-              defaultValue={COLOR[0]}
-              style={{
-                width: "100%",
-              }}
-              onChange={handleChange}
-            >
-              {COLOR.map((item) => (
-                <Option value={item.id}>{item.label}</Option>
-              ))}
-            </Select>
-          ),
-        },
-        {
-          title: "Số lượng",
-          render: () => (
-            <Select
-              defaultValue={QUANTITY[0]}
-              style={{
-                width: "100%",
-              }}
-              onChange={handleChange}
-            >
-              {QUANTITY.map((item) => (
-                <Option value={item.id}>{item.label}</Option>
-              ))}
-            </Select>
-          ),
-        },
-        {
-          title: "Đơn giá cho thuê",
-          render: () => (
-            <>
-              {" "}
               <div
                 style={{
-                  fontWeight: "400",
-                  fontSize: "12px",
-                  lineHeight: "16px",
-                  color: "#828282",
-                  textDecoration: "line-through",
+                  marginTop: "10px",
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
                 }}
               >
-                {convertPrice(data.Sales)}
+                {data.Name}
               </div>
-              <h4
+              <div
+                className="mt-10"
                 style={{
-                  marginBottom: "12px",
-                  color: "#E22828",
+                  color: "#616161",
+                  fontSize: "16px",
+                  fontWeight: "400",
                 }}
               >
-                {convertPrice(data.Price)}
-              </h4>
-              <span
-                className="text-medium-se"
-                style={{
-                  background: "#E22828",
-                  borderRadius: "4px",
-                  padding: "3px 10px",
-                  color: "#ffffff",
-                }}
-              >
-                Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
-              </span>
-            </>
+                {data.Description}
+              </div>
+            </div>
           ),
         },
         {
-          title: "Chọn sản phẩm",
+          key: "desc",
+          render: () => {
+            return (
+              <>
+                <div className="d-flex align-items-center mb-10">
+                  <div
+                    className=""
+                    style={{
+                      minWidth: "30%",
+                    }}
+                  >
+                    Size
+                  </div>
+                  <Select
+                    defaultValue={SIZE[0]}
+                    style={{
+                      width: "30%",
+                    }}
+                    onChange={handleChange}
+                  >
+                    {SIZE.map((item) => (
+                      <Option value={item.id}>{item.label}</Option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="d-flex align-items-center mb-10">
+                  <div
+                    className=""
+                    style={{
+                      minWidth: "30%",
+                    }}
+                  >
+                    Màu sắc
+                  </div>
+                  <Select
+                    defaultValue={COLOR[0]}
+                    style={{
+                      width: "30%",
+                    }}
+                    onChange={handleChange}
+                  >
+                    {COLOR.map((item) => (
+                      <Option value={item.id}>{item.label}</Option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="d-flex align-items-center mb-10">
+                  <div
+                    className=""
+                    style={{
+                      minWidth: "30%",
+                    }}
+                  >
+                    Số lượng
+                  </div>
+                  <Select
+                    defaultValue={QUANTITY[0]}
+                    style={{
+                      width: "30%",
+                    }}
+                    onChange={handleChange}
+                  >
+                    {QUANTITY.map((item) => (
+                      <Option value={item.id}>{item.label}</Option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="mt-20">
+                  <div
+                    className="mb-10"
+                    style={{
+                      fontWeight: "bolder",
+                    }}
+                  >
+                    Khung giờ bạn muốn đặt
+                  </div>
+                  <SelectTimeOptionService service={data} />
+                </div>
+              </>
+            );
+          },
+        },
+        {
+          key: "currency",
           render: () => (
             <>
-              {chooseService.filter((item) => item.id === data.id).length >
-              0 ? (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    backgroundColor: "#E7E7E7",
-                    padding: "15px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Bỏ chọn
-                </span>
-              ) : (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    border: "1px solid #E22828",
-                    color: "#E22828",
-                    padding: "13px 25px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Chọn
-                </span>
+              {filterService.OrderByTime !== -1 && (
+                <div className="mb-20">
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "5px",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                    <span
+                      style={{
+                        color: "#828282",
+                        textDecoration: "line-through",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      color: "#828282",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    {data.PriceNote}
+                  </p>
+                  {/* <button
+                    style={{
+                      padding: "3px 21px",
+                      background: "#E22828",
+                      color: "#ffff",
+                      border: " 1px solid #E22828",
+                      borderRadius: " 8px",
+                    }}
+                  >
+                    Giảm 50%{" "}
+                  </button> */}
+                </div>
               )}
+              <div className="">
+                {chooseService.filter((item) => item.id === data.id).length >
+                0 ? (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      backgroundColor: "#E7E7E7",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Bỏ chọn
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      border: "1px solid #E22828",
+                      color: "#E22828",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Chọn
+                  </div>
+                )}
+              </div>
             </>
           ),
         },

@@ -47,21 +47,20 @@ const categories = [
     name: "Make up",
   },
   {
-    id: 6,
-    value: "model",
-    name: "Người mẫu",
-  },
-  {
     id: 5,
     value: "device",
     name: "Thiết bị",
+  },
+  {
+    id: 6,
+    value: "model",
+    name: "Người mẫu",
   },
 ];
 const FilterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const querySearch = queryString.parse(location?.search);
-  console.log(querySearch);
 
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
   const [time, setTime] = useState([]);
@@ -199,21 +198,7 @@ const FilterPage = () => {
     );
     form.resetFields();
   };
-  const handleOnchangeHour = (t, timeString) => {
-    setTime(timeString);
-    if (date !== "") {
-      dispatch(
-        getFilterStudioPost(5, 1, {
-          ...filter,
-          OrderByTime: 1,
-          OrderByTimeFrom:
-            convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
-          OrderByTimeTo:
-            convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
-        })
-      );
-    }
-  };
+
   return (
     <div className="FilterPage">
       <div className="container">
