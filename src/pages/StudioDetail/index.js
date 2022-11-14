@@ -706,6 +706,15 @@ export const StudioDetail = () => {
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
                         disabled={chooseService.length > 0 ? false : true}
+                        onClick={() =>
+                          toastMessage(
+                            "Chức năng này đang phát triển!",
+                            "info",
+                            1,
+                            "",
+                            {}
+                          )
+                        }
                       >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng

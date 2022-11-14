@@ -24,18 +24,25 @@
             }
 
             &_info {
-                min-width: 70%;
-                width: 70%;
+                // min-width: 70%;
+                // width: 70%;
+                margin-right: 10px;
             }
 
             &_name {
+                color: $neutral-500;
+                text-transform: uppercase;
                 font-weight: 400;
                 font-size: 12px;
-                line-height: 16px;
-                color: $neutral-500;
 
-                text-transform: uppercase;
-                flex: 1;
+                line-height: 16px;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                height: 16;
             }
 
             &_description {

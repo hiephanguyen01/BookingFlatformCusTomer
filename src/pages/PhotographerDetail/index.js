@@ -630,7 +630,15 @@ const PhotographerDetail = () => {
                     <div className="w-100 d-flex justify-content-between">
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        onClick={handleAddCart}
+                        onClick={() =>
+                          toastMessage(
+                            "Chức năng này đang phát triển!",
+                            "info",
+                            1,
+                            "",
+                            {}
+                          )
+                        }
                         // disabled={chooseService.length > 0 ? false : true}
                       >
                         <ShoppingCartOutlined />

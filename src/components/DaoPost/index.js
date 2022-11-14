@@ -33,6 +33,7 @@ import { postDaoService } from "../../services/PostDaoService";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
 import CommentSlider from "../CommentSlider/CommentSlider";
+import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
@@ -87,8 +88,13 @@ const DaoPost = (props) => {
         currentPage || 1,
         5
       );
-      setComments([...comments, ...data.data]);
-      setPagination(data.pagination);
+      if (currentPage === 1) {
+        setComments([...data.data]);
+        setPagination(data.pagination);
+      } else {
+        setComments([...comments, ...data.data]);
+        setPagination(data.pagination);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -263,6 +269,7 @@ const DaoPost = (props) => {
           getComments(1);
           setPost({ ...post, TotalComments: post.TotalComments + 1 });
           // setComments([res.data, ...comments]);
+          dispatch({ type: SET_RELATED_SERVICE, data: [] });
         }
       } catch (error) {
         toastMessage("Add related service fail!", "error");
@@ -417,7 +424,6 @@ const DaoPost = (props) => {
       </Row>
     );
   }
-  console.log(relatedService);
   return (
     <article className="post">
       <section className="post__main d-flex flex-column">
@@ -484,6 +490,8 @@ const DaoPost = (props) => {
               bodyStyle={{
                 backgroundColor: "transparent",
               }}
+              style={{ overflow: "hidden" }}
+              zIndex={999}
             >
               <Row>
                 <Col
@@ -520,6 +528,7 @@ const DaoPost = (props) => {
                   className="px-23 py-30"
                   style={{
                     overflowY: "scroll",
+                    overflowX: "hidden",
                     position: "relative",
                     height: "100vh",
                   }}
@@ -621,7 +630,7 @@ const DaoPost = (props) => {
                       </p>
                     </div>
                   </div>
-                  <section className="post__middle">
+                  <section className="comment_wrapper">
                     <div className="d-flex">
                       <img
                         className="avatar-comment-default avt"
@@ -629,8 +638,11 @@ const DaoPost = (props) => {
                         alt=""
                       />
                       <div
-                        className="post__middle__right-side"
-                        style={{ width: "100% !important" }}
+                        className="comment_default_wrapper"
+                        style={{
+                          width: "100px !important",
+                          position: "relative",
+                        }}
                       >
                         <ul className="d-flex align-posts-center">
                           {defaultComments.map((item, index) => (
@@ -646,7 +658,7 @@ const DaoPost = (props) => {
                           ))}
                         </ul>
                         <div
-                          className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center"
+                          className="comment_default__choose-service d-flex justify-content-center align-posts-center"
                           onClick={handleShowModalChooseService}
                         >
                           <PlusOutlined
@@ -655,10 +667,20 @@ const DaoPost = (props) => {
                           <p>Chọn dịch vụ liên quan</p>
                         </div>
                         {relatedService.length > 0 && (
-                          <div className="w-100">
-                            <CommentSlider data={relatedService} />
+                          <div className="w-100 pe-20">
+                            <CommentSlider
+                              data={relatedService}
+                              slidesPerView={1.5}
+                            />
                           </div>
                         )}
+                        <img
+                          src={sendComment}
+                          style={{ borderRadius: "0", cursor: "pointer" }}
+                          className="mt-5 btn-send-comment"
+                          alt=""
+                          onClick={handleSendComment}
+                        />
                       </div>
                     </div>
                   </section>
@@ -690,46 +712,50 @@ const DaoPost = (props) => {
                             </div>
                           )}
                           {comment?.services?.length > 0 && (
-                            <div className="post_slider_container">
-                              <Swiper
-                                slidesPerView={"1.4"}
-                                spaceBetween={15}
-                                // pagination={{
-                                //   clickable: true,
-                                // }}
-                                navigation={true}
-                                modules={[Navigation, Pagination]}
-                                className="post_slider"
-                              >
-                                {comment?.services?.map((item, index) => (
-                                  <SwiperSlide
-                                    key={index}
-                                    className="post_slider_item"
-                                  >
-                                    <a href="#" className="h-100">
-                                      <div className="d-flex h-100">
-                                        <img
-                                          src={convertImage(item.Image[0])}
-                                          className="me-12"
-                                          style={{
-                                            width: "100px",
-                                            objectFit: "cover",
-                                          }}
-                                        />
-                                        <div className="py-5 ">
-                                          <div className="post_slider_item_name mb-5">
-                                            {item.Name}
-                                          </div>
-                                          <div className="post_slider_item_description">
-                                            {item.Description}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </a>
-                                  </SwiperSlide>
-                                ))}
-                              </Swiper>
-                            </div>
+                            <CommentSlider
+                              data={comment.services}
+                              slidesPerView={1.5}
+                            />
+                            // <div className="post_slider_container">
+                            //   <Swiper
+                            //     slidesPerView={"1.4"}
+                            //     spaceBetween={15}
+                            //     // pagination={{
+                            //     //   clickable: true,
+                            //     // }}
+                            //     navigation={true}
+                            //     modules={[Navigation, Pagination]}
+                            //     className="post_slider"
+                            //   >
+                            //     {comment?.services?.map((item, index) => (
+                            //       <SwiperSlide
+                            //         key={index}
+                            //         className="post_slider_item"
+                            //       >
+                            //         <a href="#" className="h-100">
+                            //           <div className="d-flex h-100">
+                            //             <img
+                            //               src={convertImage(item.Image[0])}
+                            //               className="me-12"
+                            //               style={{
+                            //                 width: "100px",
+                            //                 objectFit: "cover",
+                            //               }}
+                            //             />
+                            //             <div className="py-5 ">
+                            //               <div className="post_slider_item_name mb-5">
+                            //                 {item.Name}
+                            //               </div>
+                            //               <div className="post_slider_item_description">
+                            //                 {item.Description}
+                            //               </div>
+                            //             </div>
+                            //           </div>
+                            //         </a>
+                            //       </SwiperSlide>
+                            //     ))}
+                            //   </Swiper>
+                            // </div>
                           )}
 
                           <div
@@ -828,6 +854,7 @@ const DaoPost = (props) => {
               <PopUpSignIn onClick={(e) => {}}>
                 <Comments
                   onClick={() => {
+                    dispatch({ type: SET_RELATED_SERVICE, data: [] });
                     setCommentsClick(!commentsClick);
                     if (comments.length <= 0) {
                       getComments(1);
@@ -847,8 +874,8 @@ const DaoPost = (props) => {
       <section
         className={commentsClick ? "post__middle" : "post__middle d-none"}
       >
-        <hr color="#E7E7E7" style={{ marginBottom: "20px" }} />
-        <div className="d-flex w-100">
+        <hr color="#E7E7E7" className="mb-20" />
+        <div className="d-flex w-100" style={{ position: "relative" }}>
           <img className="avt" src={img1} alt="" />
           <div className="post__middle__right-side me-20 w-100">
             <ul className="d-flex align-posts-center">
@@ -880,7 +907,7 @@ const DaoPost = (props) => {
           <img
             src={sendComment}
             style={{ borderRadius: "0", cursor: "pointer" }}
-            className="mt-5 avt"
+            className="mt-5 btn-send-comment"
             alt=""
             onClick={handleSendComment}
           />

@@ -154,7 +154,7 @@ const cx = classNames.bind(styles);
 //       </Modal>
 
 export const Home = () => {
-  const { filter, loading } = useSelector((state) => state.studioPostReducer);
+  const { filter } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   // const [chooseCate, setChooseCate] = useState();

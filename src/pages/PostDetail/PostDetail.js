@@ -88,11 +88,13 @@ const PostDetail = () => {
             // }}
             navigation={true}
             modules={[Pagination, Navigation]}
-            className="swiperPostDetail">
+            className="swiperPostDetail"
+          >
             {postDetail?.Image?.map((img, index) => (
               <SwiperSlide
                 key={index}
-                style={{ background: "#1D2226", padding: "90px 0" }}>
+                style={{ background: "#1D2226", padding: "90px 0" }}
+              >
                 <img
                   src={convertImage(img)}
                   className="w-100 h-100"
@@ -132,7 +134,8 @@ const PostDetail = () => {
                 visible={isModalOptionDetail}
                 onVisibleChange={(newVisible) =>
                   setIsModalOptionDetail(newVisible)
-                }>
+                }
+              >
                 <MoreOutlined style={{ fontSize: "24px" }} />
               </Popover>
               <ReportPost
@@ -151,12 +154,14 @@ const PostDetail = () => {
           </div>
           <div
             className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-            style={{ borderBottom: "1px solid #E7E7E7" }}>
+            style={{ borderBottom: "1px solid #E7E7E7" }}
+          >
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn
                 onClick={(e) => {
                   e.stopPropagation();
-                }}>
+                }}
+              >
                 {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
                   <HeartFilled
                     onClick={likePost}
@@ -188,7 +193,8 @@ const PostDetail = () => {
               <PopUpSignIn
                 onClick={(e) => {
                   e.stopPropagation();
-                }}>
+                }}
+              >
                 <Comments className="active" style={{ color: "#E22828" }} />
               </PopUpSignIn>
               <p className={`${commentsClick ? "active" : ""}`}>
@@ -235,7 +241,8 @@ const PostDetail = () => {
                 // }}
                 navigation={true}
                 modules={[Navigation, Pagination]}
-                className="post_slider">
+                className="post_slider"
+              >
                 {[0, 1, 2].map((item, idx) => (
                   <SwiperSlide key={idx} className="post_slider_item">
                     <a href="#" className="h-100">
@@ -262,14 +269,17 @@ const PostDetail = () => {
             </div>
             <div
               className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-              style={{ borderBottom: "1px solid #E7E7E7" }}>
+              style={{ borderBottom: "1px solid #E7E7E7" }}
+            >
               <div
                 className="post__main__content__like-comment__likes d-flex"
-                onClick={() => console.log(123)}>
+                onClick={() => console.log(123)}
+              >
                 <PopUpSignIn
                   onClick={(e) => {
                     e.stopPropagation();
-                  }}>
+                  }}
+                >
                   {mouseOverHeart || mouseClickHeart ? (
                     <HeartFilled
                       onClick={() => setMouseClickHeart(!mouseClickHeart)}
@@ -319,7 +329,8 @@ const PostDetail = () => {
                 // }}
                 navigation={true}
                 modules={[Navigation, Pagination]}
-                className="post_slider">
+                className="post_slider"
+              >
                 {[0, 1, 2].map((item, idx) => (
                   <SwiperSlide key={idx} className="post_slider_post">
                     <a href="#">
@@ -346,12 +357,14 @@ const PostDetail = () => {
             </div>
             <div
               className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-              style={{ borderBottom: "1px solid #E7E7E7" }}>
+              style={{ borderBottom: "1px solid #E7E7E7" }}
+            >
               <div className="post__main__content__like-comment__likes d-flex">
                 <PopUpSignIn
                   onClick={(e) => {
                     e.stopPropagation();
-                  }}>
+                  }}
+                >
                   {mouseOverHeart || mouseClickHeart ? (
                     <HeartFilled
                       onClick={() => {

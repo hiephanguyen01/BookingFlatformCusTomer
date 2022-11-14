@@ -11,7 +11,7 @@ import {
   Select,
   Slider,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import EmptyPage from "../../components/layouts/EmptyPage";
@@ -57,6 +57,8 @@ const categories = [
 const FilterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const ref = useRef(null);
+  console.log(ref, ref?.current?.offsetTop);
   const querySearch = queryString.parse(location?.search);
 
   const dispatch = useDispatch();
@@ -71,18 +73,12 @@ const FilterPage = () => {
       setProvinces(res.data);
     })();
     initState();
-    console.log(123);
   }, []);
 
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
         keyString: querySearch?.keyString || "",
-        // OrderByTime: -1,
-        // OrderByTimeFrom: convertDateSendToDB(new Date()),
-        // OrderByTimeTo: convertDateSendToDB(new Date()),
-        // OrderByDateFrom: convertDateSendToDB(new Date()),
-        // OrderByDateTo: convertDateSendToDB(new Date()),
         category: Number(querySearch?.category),
         priceOption: Number(querySearch?.priceOption),
         price1: undefined,
@@ -166,6 +162,7 @@ const FilterPage = () => {
   };
   const onChangePage = (value) => {
     dispatch(getFilterStudioPost(5, value, filter), {}, navigate);
+    window.scrollTo({ behavior: "smooth", top: ref.current.offsetTop });
   };
   const handleClearFilter = () => {
     dispatch(
@@ -355,7 +352,11 @@ const FilterPage = () => {
             ) : !studioPostList?.length ? (
               <EmptyPage />
             ) : (
-              <div style={{ backgroundColor: "#fff" }} className="px-15 py-20">
+              <div
+                ref={ref}
+                style={{ backgroundColor: "#fff" }}
+                className="px-15 py-20"
+              >
                 {studioPostList?.map((val) => (
                   <FilterCard
                     data={val}

@@ -297,6 +297,15 @@
   }
 }
 
+.btn-send-comment {
+  position: absolute;
+  right: 0%;
+  top: 15px;
+  transform: translate(-50%, -50%);
+  width: 35px;
+  height: 35px;
+}
+
 .ant-popover-inner-content {
   padding: 0 !important;
 }
@@ -403,7 +412,7 @@
         }
       }
 
-      .post__middle {
+      .comment_wrapper {
         padding-bottom: 18px;
         border-bottom: 1px solid #e7e7e7;
 
@@ -411,8 +420,16 @@
           color: "#E22828";
         }
 
-        .post__middle__right-side {
-          width: auto;
+        .avt {
+          object-fit: contain;
+          height: fit-content;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+        }
+
+        .comment_default_wrapper {
+          width: 100%;
 
           ul {
             display: flex;
@@ -421,66 +438,98 @@
             li {
               padding: 8px 11px;
               // margin-bottom: 10px;
-              display: inline-block;
+              display: flex;
+              flex-wrap: wrap;
               margin: 0 0 10px 10px;
+
+              width: fit-content;
+              padding: 11px 8px 11px 8px;
+              box-shadow: 0.5px 1px 4px rgba(0, 0, 0, 0.16);
+              border-radius: 8px;
               cursor: pointer;
+
+              &:first-child {
+                margin-left: 16px;
+              }
+
+              &.active {
+                background-color: #96fde5;
+              }
             }
           }
 
-          .post__middle__right-side__choose-service {
+          .comment_default__choose-service {
             margin-top: 8px;
-          }
-        }
-      }
+            width: fit-content;
+            border: 1px dashed #1fcba2;
+            margin-left: 16px;
 
-      .post_slider_container {
-        margin-top: 20px;
-        height: 80px;
-
-        .post_slider {
-          height: 100%;
-
-          .post_slider_item {
-            height: 100%;
-            border: 1px solid #e7e7e7;
+            padding: 12px 91px 12px 83px;
             border-radius: 8px;
-            overflow: hidden;
+            cursor: pointer;
 
-            text-align: start;
-
-            // cursor: pointer;
-
-            &_name {
-              font-weight: 400;
-              font-size: 12px;
-              line-height: 16px;
-              color: $neutral-500;
+            svg {
+              margin-right: 8px;
             }
 
-            &_description {
-              font-weight: 400;
+            p {
+              color: $secondary-800;
               font-size: 14px;
+              font-weight: 400;
               line-height: 19px;
-              color: $neutral-700;
-            }
-          }
-
-          .swiper-button-prev,
-          .swiper-button-next {
-            width: 36px;
-            height: 36px;
-            background: #ffffff;
-            box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.18);
-            border-radius: 50%;
-
-            &::after {
-              font-size: 18px;
-              color: #000000;
-              font-weight: 900;
             }
           }
         }
       }
+
+      // .post_slider_container {
+      //   margin-top: 20px;
+      //   height: 80px;
+
+      //   .post_slider {
+      //     height: 100%;
+
+      //     .post_slider_item {
+      //       height: 100%;
+      //       border: 1px solid #e7e7e7;
+      //       border-radius: 8px;
+      //       overflow: hidden;
+
+      //       text-align: start;
+
+      //       // cursor: pointer;
+
+      //       &_name {
+      //         font-weight: 400;
+      //         font-size: 12px;
+      //         line-height: 16px;
+      //         color: $neutral-500;
+      //       }
+
+      //       &_description {
+      //         font-weight: 400;
+      //         font-size: 14px;
+      //         line-height: 19px;
+      //         color: $neutral-700;
+      //       }
+      //     }
+
+      //     .swiper-button-prev,
+      //     .swiper-button-next {
+      //       width: 36px;
+      //       height: 36px;
+      //       background: #ffffff;
+      //       box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.18);
+      //       border-radius: 50%;
+
+      //       &::after {
+      //         font-size: 18px;
+      //         color: #000000;
+      //         font-weight: 900;
+      //       }
+      //     }
+      //   }
+      // }
     }
   }
 }

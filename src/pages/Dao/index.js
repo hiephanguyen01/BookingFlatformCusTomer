@@ -18,7 +18,10 @@ import {
   getAllPostDaoAction,
   getLikePostList,
 } from "../../stores/actions/PostDaoAction";
-import { GET_LIST_POST } from "../../stores/types/PostDaoType";
+import {
+  GET_LIST_POST,
+  GET_PAGINATE_POSIBILITY,
+} from "../../stores/types/PostDaoType";
 import "./dao.scss";
 import { postDaoService } from "../../services/PostDaoService";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
@@ -72,7 +75,7 @@ const Dao = () => {
   const [filesDrive, setFilesDrive] = useState([]);
   const [filter, setFilter] = useState({
     page: 1,
-    limit: 3,
+    limit: 5,
     tags: [],
   });
   const [post, setPost] = useState({
@@ -249,9 +252,13 @@ const Dao = () => {
   //   });
   // }, [listPost]);
 
-  const getData = (loadMore) => {
-    setFilter({ ...filter, page: filter.page + 1 });
-    // setPage(() => page + 1);
+  const getData = () => {
+    dispatch(
+      getAllPostDaoAction(listPost, {
+        ...filter,
+        page: pagination.currentPage + 1,
+      })
+    );
   };
   // useEffect(() => {
   //   getData();
@@ -267,18 +274,14 @@ const Dao = () => {
     });
   }
   useEffect(() => {
-    // const newFilter = { ...filter, page: filter.page !== 1 ? };
-    dispatch(getAllPostDaoAction(listPost, filter));
-  }, [filter.page]);
-  // console.log(files);
-  useEffect(() => {
-    const newFilter = { ...filter, page: 1 };
-    setFilter(newFilter);
-    dispatch(getAllPostDaoAction(listPost, newFilter));
-  }, [filter.tags.length]);
+    dispatch(
+      getAllPostDaoAction([], {
+        ...filter,
+      })
+    );
+  }, [filter]);
 
   useEffect(() => {
-    getData();
     dispatch(getLikePostList(currentUser?.id)); // 1 là user id
 
     if (Notification.permission !== "granted") {
@@ -286,7 +289,11 @@ const Dao = () => {
     }
 
     return () => {
-      dispatch({ type: GET_LIST_POST, data: [] });
+      // dispatch({ type: GET_LIST_POST, data: [] });
+      // dispatch({
+      //   type: GET_PAGINATE_POSIBILITY,
+      //   data: {},
+      // });
     };
   }, [currentUser]);
 
@@ -351,7 +358,9 @@ const Dao = () => {
         <ul id="infinity-list-post-dao">
           <InfiniteScroll
             dataLength={listPost.length} //This is important field to render the next data
-            next={getData}
+            next={() => {
+              getData();
+            }}
             hasMore={pagination.hasNextPage}
             loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
             endMessage={

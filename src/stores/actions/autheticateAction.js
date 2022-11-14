@@ -298,10 +298,15 @@ export const getCurrentUser = () => async (dispatch) => {
   dispatch({ type: AUTHING, payload: false });
 };
 
-export const logOut = (navigate) => (dispatch) => {
-  signOut(auth);
-  navigate("/auth/sign-in");
-  setAuthToken(null);
-  dispatch({ type: SET_USER, payload: null });
-  localStorage.removeItem("token");
+export const logOut = (navigate) => async (dispatch) => {
+  try {
+    await authenticateService.logout();
+    signOut(auth);
+    navigate("/auth/sign-in");
+    setAuthToken(null);
+    dispatch({ type: SET_USER, payload: null });
+    localStorage.removeItem("token");
+  } catch (error) {
+    console.log(error);
+  }
 };

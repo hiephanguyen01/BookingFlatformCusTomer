@@ -5,6 +5,7 @@ import "./table.scss";
 import SelectTimeOptionService from "../SelectTimeOptionService/SelectTimeOptionService";
 import { useSelector } from "react-redux";
 import { ExclamationCircleOutlined, LoadingOutlined } from "@ant-design/icons";
+import { useRef } from "react";
 
 const Index = ({
   column,
@@ -17,6 +18,7 @@ const Index = ({
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const ref = useRef(null);
 
   useEffect(() => {}, [filterService]);
 
@@ -26,10 +28,14 @@ const Index = ({
     setTimeout(() => {
       setLoading(false);
     }, 500);
+    // console.log(ref.current.);
+    ref.current.scrollIntoView();
+    console.log(ref.current);
+    // window.scrollTo({ behavior: "smooth", top: ref.current.offsetTop });
   };
 
   return (
-    <div className={`w-100 table ${className}`} style={{ ...style }}>
+    <div className={`w-100 table ${className}`} style={{ ...style }} ref={ref}>
       <Row>
         <div
           className="px-24 py-22 mb-12 w-100"

@@ -253,7 +253,7 @@ const AccountInfo = () => {
                       );
                     }}
                     style={{}}
-                    disabled={providerId === "facebook.com" && true}
+                    disabled={UserMe.FacebookToken && true}
                     checked={checkedLinkFB}
                   />
                 </div>
@@ -284,7 +284,7 @@ const AccountInfo = () => {
                       );
                     }}
                     // defaultChecked={false}
-                    disabled={providerId === "google.com" && true}
+                    disabled={UserMe.TokenEmail && true}
                     checked={checkedLinkGoogle}
                     style={{}}
                   />

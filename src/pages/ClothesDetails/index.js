@@ -719,7 +719,18 @@ const Index = () => {
                       </div>
                     </div>
                     <div className="w-100 d-flex justify-content-between">
-                      <Button className="w-60 h-48px d-flex justify-content-center align-items-center btn_add">
+                      <Button
+                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                        onClick={() =>
+                          toastMessage(
+                            "Chức năng này đang phát triển!",
+                            "info",
+                            1,
+                            "",
+                            {}
+                          )
+                        }
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>

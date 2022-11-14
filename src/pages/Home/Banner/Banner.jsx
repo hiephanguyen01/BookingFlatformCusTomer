@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Autoplay, Lazy, Navigation, Pagination, Parallax } from "swiper";
 import "swiper/css";
 import "swiper/css/bundle";
