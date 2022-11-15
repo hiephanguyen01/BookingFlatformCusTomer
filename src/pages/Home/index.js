@@ -158,7 +158,7 @@ export const Home = () => {
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   // const [chooseCate, setChooseCate] = useState();
-  const [provinces, setProvinces] = useState([]);
+  // const [provinces, setProvinces] = useState([]);
 
   const navigate = useNavigate();
   const {
@@ -171,10 +171,10 @@ export const Home = () => {
   } = useSelector((state) => state.topOrderCategoryReducer);
 
   useEffect(() => {
-    (async () => {
-      const res = await studioPostService.getAllProvince();
-      setProvinces(res.data);
-    })();
+    // (async () => {
+    //   const res = await studioPostService.getAllProvince();
+    //   setProvinces(res.data);
+    // })();
     dispatch(getTop10OrderStudioPostAction(1));
     dispatch(getTop10OrderPhotographerAction(2));
     dispatch(getTop10OrderClothesAction(3));
@@ -226,7 +226,6 @@ export const Home = () => {
               key={item.id}
               className={cx("box")}
               onClick={() => {
-                // setChooseCate(item.id);
                 handleClickCategory(item.id);
               }}
             >

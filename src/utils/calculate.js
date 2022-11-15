@@ -69,7 +69,7 @@ export const calTime = (timeFrom, timeTo) => {
   for (let i = hourFrom; i <= hourTo; i++) {
     if (i === hourFrom) {
       sumMinus += 60 - minusFrom;
-    } else if (i === hourTo) {
+    } else if (i === hourTo && minusTo > 0) {
       sumMinus += minusTo;
     } else {
       sumMinus += 60;

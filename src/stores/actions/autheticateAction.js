@@ -59,7 +59,7 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
     dispatch({ type: PROVIDER_ID, payload: resp.data.providerId });
-    navigate("/home/dao");
+    // navigate("/home/dao");
   } catch (error) {
     if (error.code === "auth/account-exists-with-different-credential") {
       console.log({ error }, error.customData.email);
@@ -74,7 +74,7 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
       setAuthToken(respError.data.token);
       dispatch({ type: SET_USER, payload: respError.data.data });
       dispatch({ type: PROVIDER_ID, payload: respError.data.providerId });
-      navigate("/home/dao");
+      // navigate("/home/dao");
     } else {
       openNotificationWithIcon("error", "Login fail", "please try again");
     }
@@ -95,7 +95,7 @@ export const googleSignIn = (navigate) => async (dispatch) => {
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
     dispatch({ type: PROVIDER_ID, payload: resp.data.providerId });
-    navigate("/home/dao");
+    // navigate("/home/dao");
   } catch (error) {
     openNotificationWithIcon("error", "Login fail", "please try again");
   }

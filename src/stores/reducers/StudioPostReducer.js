@@ -37,7 +37,7 @@ const initialState = {
   },
   studioDetail1: [],
   studioNear: [],
-  studioDetail: [],
+  studioDetail: {},
   listLikedCategory1: [],
   listLikedCategory3: [],
   listLikedCategory2: [],

@@ -162,7 +162,7 @@ const FilterPage = () => {
   };
   const onChangePage = (value) => {
     dispatch(getFilterStudioPost(5, value, filter), {}, navigate);
-    window.scrollTo({ behavior: "smooth", top: ref.current.offsetTop });
+    window.scrollTo({ top: ref.current.offsetTop });
   };
   const handleClearFilter = () => {
     dispatch(

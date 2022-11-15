@@ -42,7 +42,9 @@ const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
         {data?.map((item, index) => (
           <SwiperSlide key={index} className="post_slider_item w-100">
             <a
-              href={`${convertCategory(item.category)}/${item.id}`}
+              href={`${window.location.origin}/home/${convertCategory(
+                item.category
+              )}/${item.id}`}
               className="h-100 w-100 wrapper"
             >
               <img

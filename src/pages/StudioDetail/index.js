@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -65,6 +65,7 @@ export const StudioDetail = () => {
     listStudioSimilar,
     promotionCode,
     filterService,
+    loading,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
@@ -83,35 +84,11 @@ export const StudioDetail = () => {
       }
       return [...arr, item];
     }, []);
-  useEffect(() => {
-    // let timeOut;
 
-    // timeOut = setTimeout(() => {
-    //   dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
-    // }, 2000);
-    // dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
-    // if (
-    //   promotionCode
-    //     ?.filter(
-    //       (item) => item.SaleCode.DateTimeExpire > new Date().toISOString()
-    //     )
-    //     ?.reduce((arr, item) => {
-    //       if (
-    //         promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id)
-    //           .length > 0
-    //       ) {
-    //         return [...arr];
-    //       }
-    //       return [...arr, item];
-    //     }, []).length > 0
-    // ) {
-    //   timeOut = setTimeout(() => {
-    //     dispatch({ type: SHOW_MODAL, Component: <Voucher /> });
-    //   }, 2000);
-    // }
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
-      // clearTimeout(timeOut);
     };
   }, []);
 
@@ -474,7 +451,7 @@ export const StudioDetail = () => {
         }
         title={studioDetail?.data?.Name}
       />
-      {false ? (
+      {Object.keys(studioDetail).length <= 0 ? (
         <div
           style={{
             width: "100%",

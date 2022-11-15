@@ -41,6 +41,10 @@ import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { Report } from "../StudioDetail/Report";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
+import {
+  SET_PROMOTION_CODE,
+  SET_STUDIO_DETAIL,
+} from "../../stores/types/studioPostType";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 7 },
@@ -93,6 +97,14 @@ const PhotographerDetail = () => {
     dispatch(getPromotionCodeUserSave());
     dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
   }, [studioDetail]);
+
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+    return () => {
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
+    };
+  }, []);
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -324,7 +336,7 @@ const PhotographerDetail = () => {
         type="article"
         imgAlt="Booking Studio Details"
       />
-      {loading ? (
+      {Object.keys(studioDetail).length <= 0 ? (
         <div
           style={{
             width: "100%",

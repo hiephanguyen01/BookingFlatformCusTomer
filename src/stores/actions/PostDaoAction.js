@@ -28,7 +28,6 @@ export const getAllPostDaoAction = (currentListPost = [], filter) => {
       //     data: temp,
       //   });
       // }
-      console.log(currentListPost, filter, data);
       let temp = [...currentListPost, ...data.data];
       dispatch({
         type: GET_LIST_POST,

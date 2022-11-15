@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row, Popover } from "antd";
+import { Col, Row, Popover, message } from "antd";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
 import {
   HeartFilled,
   HeartOutlined,
+  HeartTwoTone,
   MoreOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
+import sendComment from "../../assets/svg/sendComment.svg";
 
 import "./postDetail.scss";
 import "swiper/css";
@@ -20,22 +22,39 @@ import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
 import img1 from "../../assets/dao/Frame 180.png";
 import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
 import {
+  getAllDefaultComments,
+  getLikePostList,
   getPostDaoByIdAction,
   likePost,
 } from "../../stores/actions/PostDaoAction";
+import { ReactComponent as Info } from "../../assets/dao/info.svg";
+import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
+import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
+import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import ReportPost from "../../components/ReportPostDao";
 import { convertTime } from "../../utils/convert";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import ModalChooseService from "../../components/DaoPost/components/ModalChooseService/ModalChooseService";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import CommentSlider from "../../components/CommentSlider/CommentSlider";
+import toastMessage from "../../components/ToastMessage";
+import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
+import { postDaoService } from "../../services/PostDaoService";
+import { cancelSavePost } from "../../stores/actions/userAction";
+import { userService } from "../../services/UserService";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 const PostDetail = () => {
+  console.log(window.location);
+  const type = "post";
   const { postId } = useParams();
   const dispatch = useDispatch();
 
-  const { postDetail, likePostList } = useSelector(
-    (state) => state.postDaoReducer
-  );
+  const { postDetail, likePostList, defaultComments, relatedService } =
+    useSelector((state) => state.postDaoReducer);
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
@@ -43,17 +62,165 @@ const PostDetail = () => {
     useState(false);
   const [commentsClick, setCommentsClick] = useState(false);
 
-  console.log(postDetail);
+  const [post, setPost] = useState({ ...postDetail });
+  const [comments, setComments] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [chooseCommentDefault, setChooseCommentDefault] = useState({});
+
+  const moreOptionOnEachPost = [
+    { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
+    { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
+    { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
+    {
+      icon: <PostSave />,
+      title: type === "post" ? "Lưu bài viết" : "Hủy lưu",
+      id: 4,
+    },
+  ];
+
+  const [moreOptionModal, setMoreOptionModal] = useState(false);
+
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
-
+    dispatch(getAllDefaultComments());
+    getComments(1);
     return () => {
       dispatch({ type: "DELETE_DETAIL_POST", data: {} });
     };
   }, []);
 
+  useEffect(() => {
+    dispatch(getLikePostList(currentUser?.id));
+  }, [currentUser]);
+
+  useEffect(() => {
+    setPost({ ...postDetail });
+  }, [postDetail]);
+
+  const handleShowModalChooseService = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <ModalChooseService hasTags={post.Tags} PostId={post.Id} />,
+    });
+  };
+
+  const getComments = async (currentPage) => {
+    try {
+      const { data } = await postDaoService.getComments(
+        postId,
+        currentPage || 1,
+        5
+      );
+      if (currentPage === 1) {
+        setComments([...data.data]);
+        setPagination(data.pagination);
+      } else {
+        setComments([...comments, ...data.data]);
+        setPagination(data.pagination);
+      }
+    } catch (error) {
+      console.log(window.locationerror);
+    }
+  };
+
+  const handleSendComment = async () => {
+    if (currentUser) {
+      if (
+        relatedService.length > 0 ||
+        chooseCommentDefault.Content !== undefined
+      ) {
+        const newData = relatedService.reduce(
+          (arr, item) => [
+            ...arr,
+            { category: item.category, serviceId: item.id },
+          ],
+          []
+        );
+        try {
+          // console.log(window.locationJSON.stringify(newData));
+          const res = await postDaoService.createComment({
+            PostId: postDetail.Id,
+            Content: chooseCommentDefault.Content || "",
+            Services: JSON.stringify(newData),
+          });
+          if (res) {
+            getComments(1);
+            setPost({ ...post, TotalComments: post.TotalComments + 1 });
+            // setComments([res.data, ...comments]);
+            dispatch({ type: SET_RELATED_SERVICE, data: [] });
+          }
+        } catch (error) {
+          toastMessage("Add related service fail!", "error");
+        }
+      } else {
+        toastMessage(
+          "Vui lòng chọn bình luận hoặc dịch vụ liên quan!",
+          "warning"
+        );
+      }
+    }
+  };
+
+  const handleSeeMoreComment = () => {
+    getComments(pagination.currentPage + 1);
+  };
+
+  const handleAddComment = (cmt) => {
+    if (chooseCommentDefault.id === cmt.id) {
+      setChooseCommentDefault({});
+    } else {
+      setChooseCommentDefault(cmt);
+    }
+  };
+
+  const handleMoreOptionClick = async (itm) => {
+    switch (itm.id) {
+      case 1:
+        setIsReportPostModalVisible(true);
+        setIsModalOptionDetail(false);
+        break;
+      case 2:
+        setIsModalOptionDetail(false);
+        message.success("Đã bật thông báo về bài viết này");
+        break;
+      case 3:
+        setIsModalOptionDetail(false);
+        message.success("Đã sao chép liên kết");
+        break;
+      case 4:
+        try {
+          if (type !== "post") {
+            dispatch(cancelSavePost(currentUser?.id, postId));
+            toastMessage("Hủy lưu bài viết thành công!", "success");
+          } else {
+            await userService.savePost(currentUser.id, postId);
+            toastMessage("Lưu bài viết thành công!", "success");
+          }
+        } catch (error) {
+          toastMessage(error.response.data.message, "warn");
+        }
+        setIsModalOptionDetail(false);
+        break;
+      default:
+        break;
+    }
+
+    // setIsModalVisible(false);
+  };
+
   const checkLikePost = () =>
-    likePostList?.filter((itm) => itm.PostId === postId).length > 0;
+    likePostList?.filter((itm) => itm.PostId === Number(postId)).length > 0;
+
+  const handleLike = () => {
+    if (currentUser) {
+      if (checkLikePost()) {
+        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
+      } else {
+        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+      }
+      dispatch(likePost(currentUser?.id, postId)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+    }
+  };
 
   //   const moreOptionOnEachPost = [
   //     { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
@@ -90,7 +257,7 @@ const PostDetail = () => {
             modules={[Pagination, Navigation]}
             className="swiperPostDetail"
           >
-            {postDetail?.Image?.map((img, index) => (
+            {post?.Image?.map((img, index) => (
               <SwiperSlide
                 key={index}
                 style={{ background: "#1D2226", padding: "90px 0" }}
@@ -105,14 +272,14 @@ const PostDetail = () => {
           </Swiper>
         </Col>
         <Col span={8} className="px-23 py-30 col-right">
-          <header className="post__main__info d-flex justify-content-between align-posts-center">
-            <div className="d-flex justify-content-between align-posts-center">
-              <img src={convertImage(postDetail?.Avatar)} alt="" />
-              <div className="post__main__info__nametime">
-                <p className="post__main__info__nametime__name">
-                  {postDetail?.Fullname}
+          <header className="post_detail_info d-flex justify-content-between align-posts-center">
+            <div className="d-flex justify-content-between align-items-center">
+              <img src={convertImage(post?.Avatar)} alt="" className="avt" />
+              <div className="ms-10">
+                <p className="post_detail_info_name">{post?.Fullname}</p>
+                <p className="post_detail_info_time">
+                  {convertTime(post?.CreationTime)}
                 </p>
-                <p>{convertTime(postDetail?.CreationTime)}</p>
               </div>
             </div>
             <div>
@@ -120,14 +287,36 @@ const PostDetail = () => {
                 placement="leftTop"
                 content={
                   <div className="more-option-modal">
-                    {/* {moreOptionOnEachPost.map((itm, idx) => (
-                      <li onClick={handleMoreOptionClick} key={idx}>
-                        <div className="container d-flex">
-                          <div>{itm.icon}</div>
-                          <p>{itm.title}</p>
-                        </div>
-                      </li>
-                    ))} */}
+                    {moreOptionOnEachPost.map((itm, idx) => (
+                      <>
+                        {itm.id === 3 ? (
+                          <li
+                            onClick={() => handleMoreOptionClick(itm)}
+                            key={idx}
+                          >
+                            <CopyToClipboard
+                              onCopy={() => {}}
+                              text={`${window.location.origin}/home/dao/posts/${postId}`}
+                            >
+                              <div className="container d-flex">
+                                <div>{itm.icon}</div>
+                                <p>{itm.title}</p>
+                              </div>
+                            </CopyToClipboard>
+                          </li>
+                        ) : (
+                          <li
+                            onClick={() => handleMoreOptionClick(itm)}
+                            key={idx}
+                          >
+                            <div className="container d-flex">
+                              <div>{itm.icon}</div>
+                              <p>{itm.title}</p>
+                            </div>
+                          </li>
+                        )}
+                      </>
+                    ))}
                   </div>
                 }
                 trigger="click"
@@ -141,30 +330,27 @@ const PostDetail = () => {
               <ReportPost
                 isReportPostModalVisible={isReportPostModalVisible}
                 setIsReportPostModalVisible={setIsReportPostModalVisible}
+                postId={postId}
               />
             </div>
           </header>
-          <div className="post__main__content__tags d-flex align-posts-center">
-            {postDetail?.Tags?.split(",").map((post, idx) => (
+          <div className="post_detail_tags d-flex align-posts-center">
+            {post?.Tags?.split(",").map((post, idx) => (
               <li key={idx}>#{post}</li>
             ))}
           </div>
-          <div className="post__main__content__description">
-            <p>{postDetail?.Description}</p>
+          <div className="post_detail_description">
+            <p>{post?.Description}</p>
           </div>
           <div
             className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
             style={{ borderBottom: "1px solid #E7E7E7" }}
           >
             <div className="post__main__content__like-comment__likes d-flex">
-              <PopUpSignIn
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                {mouseOverHeart || checkLikePost() || mouseClickHeart ? (
+              <PopUpSignIn onClick={(e) => {}}>
+                {mouseOverHeart || checkLikePost() ? (
                   <HeartFilled
-                    onClick={likePost}
+                    onClick={handleLike}
                     style={{
                       fontSize: "20px",
                       color: "#E22828",
@@ -174,6 +360,7 @@ const PostDetail = () => {
                   />
                 ) : (
                   <HeartOutlined
+                    onClick={handleLike}
                     style={{
                       color: "#828282",
                       fontSize: "20px",
@@ -184,217 +371,139 @@ const PostDetail = () => {
                   />
                 )}
               </PopUpSignIn>
-
               <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
-                {postDetail?.TotalLikes}
+                {post?.TotalLikes}
               </p>
             </div>
             <div className="post__main__content__like-comment__comments d-flex">
-              <PopUpSignIn
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <Comments className="active" style={{ color: "#E22828" }} />
-              </PopUpSignIn>
+              <Comments className="active" style={{ color: "#E22828" }} />
               <p className={`${commentsClick ? "active" : ""}`}>
-                {postDetail?.TotalComments}
+                {post?.TotalComments}
               </p>
             </div>
           </div>
-          <section className="post__middle">
+          <section className="post_detail_comment">
             <div className="d-flex">
-              <img src={img1} alt="" />
-              <div className="post__middle__right-side">
-                <ul className="d-flex align-posts-center">
-                  <li>Bên mình có nhé</li>
-                  <li>Vào trang mình xem thử nhé</li>
-                  <li>Bên mình đang khuyến mãi luôn ạ</li>
-                </ul>
-                <div className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center">
-                  <PlusOutlined
-                    style={{ color: "#03AC84", fontSize: "14px" }}
+              {currentUser?.Image && (
+                <img src={currentUser?.Image} alt="" className="avt" />
+              )}
+              <div className="post_detail_choose_comment d-flex">
+                <div className="">
+                  <ul className="d-flex align-items-center">
+                    {defaultComments?.map((item) => (
+                      <li
+                        key={item.id}
+                        className={
+                          chooseCommentDefault.id === item.id && "active"
+                        }
+                        onClick={() => handleAddComment(item)}
+                      >
+                        {item.Content}
+                      </li>
+                    ))}
+                  </ul>
+                  <div
+                    className="post_detail_choose_service d-flex justify-content-center align-items-center"
+                    onClick={handleShowModalChooseService}
+                  >
+                    <PlusOutlined
+                      style={{ color: "#03AC84", fontSize: "14px" }}
+                    />
+                    <p>Chọn dịch vụ liên quan</p>
+                  </div>
+                </div>
+                <PopUpSignIn onClick={(e) => {}}>
+                  <img
+                    src={sendComment}
+                    style={{ borderRadius: "0", cursor: "pointer" }}
+                    className="mt-5 btn-send-comment"
+                    alt=""
+                    onClick={handleSendComment}
                   />
-                  <p>Chọn dịch vụ liên quan</p>
-                </div>
+                </PopUpSignIn>
               </div>
             </div>
+            {relatedService.length > 0 && (
+              <div className="w-100 pe-20">
+                <CommentSlider data={relatedService} slidesPerView={1.5} />
+              </div>
+            )}
           </section>
-          <div className="comment_post">
-            <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
-              <div className="d-flex justify-content-between align-posts-center">
-                <img src={convertImage(postDetail?.Avatar)} alt="" />
-                <div className="post__main__info__nametime">
-                  <p className="post__main__info__nametime__name">
-                    {postDetail?.Fullname}
-                  </p>
-                  <p>2 giờ</p>
+          {comments
+            ?.sort((a, b) => b.createdAt - a.createdAt)
+            .map((comment) => (
+              <div key={comment.id} className="comment_post">
+                <header className="post_detail_info d-flex justify-content-between align-posts-center mt-18">
+                  <div className="d-flex justify-content-between align-posts-center">
+                    <img
+                      src={convertImage(comment?.BookingUser?.Image)}
+                      alt=""
+                      className="avt"
+                    />
+                    <div className="ms-10">
+                      <p className="post_detail_info_name">
+                        {comment?.BookingUser?.Fullname}
+                      </p>
+                      <p className="post_detail_info_time">
+                        {convertTime(comment?.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                </header>
+                {comment.Content && (
+                  <div
+                    style={{
+                      marginLeft: "40px",
+                      marginTop: "15px",
+                    }}
+                    className="post__comments__detail__content"
+                  >
+                    {comment.Content}
+                  </div>
+                )}
+                {comment?.services?.length > 0 && (
+                  <CommentSlider data={comment.services} slidesPerView={1.5} />
+                )}
+                <div
+                  className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
+                  style={{ borderBottom: "1px solid #E7E7E7" }}
+                >
+                  <div className="post__main__content__like-comment__likes d-flex">
+                    <PopUpSignIn onClick={(e) => {}}>
+                      {false ? (
+                        <HeartFilled
+                          // onClick={() => handleLike()}
+                          style={{
+                            fontSize: "20px",
+                            color: "#E22828",
+                            marginBottom: "2px",
+                          }}
+                          // onMouseLeave={() => setMouseOverHeart(false)}
+                        />
+                      ) : (
+                        <HeartOutlined
+                          style={{
+                            color: "#828282",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            marginBottom: "2px",
+                          }}
+                          // onMouseOver={() => setMouseOverHeart(true)}
+                        />
+                      )}
+                    </PopUpSignIn>
+                    <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+                      {comment?.TotalLikes || 0}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </header>
-            <div className="post_slider_container">
-              <Swiper
-                slidesPerView={"1.4"}
-                spaceBetween={15}
-                // pagination={{
-                //   clickable: true,
-                // }}
-                navigation={true}
-                modules={[Navigation, Pagination]}
-                className="post_slider"
-              >
-                {[0, 1, 2].map((item, idx) => (
-                  <SwiperSlide key={idx} className="post_slider_item">
-                    <a href="#" className="h-100">
-                      <div className="d-flex h-100">
-                        <img
-                          src={imgSwiper1}
-                          className="me-12"
-                          style={{ width: "100px", objectFit: "cover" }}
-                        />
-                        <div className="py-5 ">
-                          <div className="post_slider_item_name mb-5">
-                            BOOKINGSTUDIO.VN
-                          </div>
-                          <div className="post_slider_item_description">
-                            Studio Wisteria chuyên cung cấp dịch vụ chụp hình
-                            cưới...
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+            ))}
+          {pagination.hasNextPage && (
+            <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
+              Xem thêm bình luận
             </div>
-            <div
-              className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-              style={{ borderBottom: "1px solid #E7E7E7" }}
-            >
-              <div
-                className="post__main__content__like-comment__likes d-flex"
-                onClick={() => console.log(123)}
-              >
-                <PopUpSignIn
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  {mouseOverHeart || mouseClickHeart ? (
-                    <HeartFilled
-                      onClick={() => setMouseClickHeart(!mouseClickHeart)}
-                      style={{
-                        fontSize: "20px",
-                        color: "#E22828",
-                        marginBottom: "2px",
-                      }}
-                      onMouseLeave={() => setMouseOverHeart(false)}
-                    />
-                  ) : (
-                    <HeartOutlined
-                      style={{
-                        color: "#828282",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                        marginBottom: "2px",
-                      }}
-                      onMouseOver={() => setMouseOverHeart(true)}
-                    />
-                  )}
-                </PopUpSignIn>
-                <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
-                  {postDetail?.TotalLikes}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="comment_post">
-            <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
-              <div className="d-flex justify-content-between align-posts-center">
-                <img src={convertImage(postDetail?.Avatar)} alt="" />
-                <div className="post__main__info__nametime">
-                  <p className="post__main__info__nametime__name">
-                    {postDetail?.Fullname}
-                  </p>
-                  <p>2 giờ</p>
-                </div>
-              </div>
-            </header>
-            <div className="post_slider_container">
-              <Swiper
-                slidesPerView={"1.4"}
-                spaceBetween={15}
-                // pagination={{
-                //   clickable: true,
-                // }}
-                navigation={true}
-                modules={[Navigation, Pagination]}
-                className="post_slider"
-              >
-                {[0, 1, 2].map((item, idx) => (
-                  <SwiperSlide key={idx} className="post_slider_post">
-                    <a href="#">
-                      <div className="d-flex h-100">
-                        <img
-                          src={imgSwiper1}
-                          className="h-100 me-12"
-                          style={{ objectFit: "contain" }}
-                        />
-                        <div className="py-3">
-                          <div className="post_slider_post_name mb-5">
-                            BOOKINGSTUDIO.VN
-                          </div>
-                          <div className="post_slider_post_description">
-                            Studio Wisteria chuyên cung cấp dịch vụ chụp hình
-                            cưới chuyên...
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-            <div
-              className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-              style={{ borderBottom: "1px solid #E7E7E7" }}
-            >
-              <div className="post__main__content__like-comment__likes d-flex">
-                <PopUpSignIn
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  {mouseOverHeart || mouseClickHeart ? (
-                    <HeartFilled
-                      onClick={() => {
-                        setMouseClickHeart(!mouseClickHeart);
-                      }}
-                      style={{
-                        fontSize: "20px",
-                        color: "#E22828",
-                        marginBottom: "2px",
-                      }}
-                      onMouseLeave={() => setMouseOverHeart(false)}
-                    />
-                  ) : (
-                    <HeartOutlined
-                      style={{
-                        color: "#828282",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                        marginBottom: "2px",
-                      }}
-                      onMouseOver={() => setMouseOverHeart(true)}
-                    />
-                  )}
-                </PopUpSignIn>
-                <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
-                  {postDetail?.TotalLikes}
-                </p>
-              </div>
-            </div>
-          </div>
+          )}
         </Col>
       </Row>
     </div>

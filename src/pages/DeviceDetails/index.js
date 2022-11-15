@@ -33,7 +33,10 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { SlideCard } from "../StudioDetail/SlideCard";
 // import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
-import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import {
+  SET_PROMOTION_CODE,
+  SET_STUDIO_DETAIL,
+} from "../../stores/types/studioPostType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 // import Voucher from "../../components/Voucher";
 import { Report } from "../StudioDetail/Report";
@@ -84,7 +87,9 @@ const Index = () => {
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
+      dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
     };
   }, []);
@@ -116,7 +121,7 @@ const Index = () => {
         type="article"
         imgAlt="Booking Studio Details"
       />
-      {loading ? (
+      {Object.keys(studioDetail).length <= 0 ? (
         <div
           style={{
             width: "100%",

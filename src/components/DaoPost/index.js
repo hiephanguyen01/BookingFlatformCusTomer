@@ -138,13 +138,10 @@ const DaoPost = (props) => {
 
   const handleLike = () => {
     if (currentUser) {
-      const flag = mouseClickHeart;
-      if (flag) {
+      if (checkLikePost()) {
         setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
-        setMouseClickHeart(false);
       } else {
         setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
-        setMouseClickHeart(true);
       }
 
       // if (checkLikePost()) {
@@ -176,15 +173,18 @@ const DaoPost = (props) => {
     switch (itm.id) {
       case 1:
         setIsReportPostModalVisible(true);
+        setIsModalOptionDetail(false);
         setMoreOptionModal(false);
         break;
       case 2:
-        message.success("Đã bật thông báo về bài viết này");
+        setIsModalOptionDetail(false);
         setMoreOptionModal(false);
+        message.success("Đã bật thông báo về bài viết này");
         break;
       case 3:
-        message.success("Đã sao chép liên kết");
+        setIsModalOptionDetail(false);
         setMoreOptionModal(false);
+        message.success("Đã sao chép liên kết");
         break;
       case 4:
         try {
@@ -195,11 +195,11 @@ const DaoPost = (props) => {
             await userService.savePost(currentUser.id, Id);
             toastMessage("Lưu bài viết thành công!", "success");
           }
-          setMoreOptionModal(false);
         } catch (error) {
           toastMessage(error.response.data.message, "warn");
-          setMoreOptionModal(false);
         }
+        setIsModalOptionDetail(false);
+        setMoreOptionModal(false);
         break;
       default:
         break;
@@ -238,6 +238,7 @@ const DaoPost = (props) => {
       Component: <ModalChooseService hasTags={Tags} PostId={Id} />,
     });
   };
+
   const handleAddComment = (cmt) => {
     if (chooseCommentDefault.id === cmt.id) {
       setChooseCommentDefault({});
@@ -247,38 +248,40 @@ const DaoPost = (props) => {
   };
 
   const handleSendComment = async () => {
-    if (
-      relatedService.length > 0 ||
-      chooseCommentDefault.Content !== undefined
-    ) {
-      const newData = relatedService.reduce(
-        (arr, item) => [
-          ...arr,
-          { category: item.category, serviceId: item.id },
-        ],
-        []
-      );
-      try {
-        // console.log(JSON.stringify(newData));
-        const res = await postDaoService.createComment({
-          PostId: Id,
-          Content: chooseCommentDefault.Content || "",
-          Services: JSON.stringify(newData),
-        });
-        if (res) {
-          getComments(1);
-          setPost({ ...post, TotalComments: post.TotalComments + 1 });
-          // setComments([res.data, ...comments]);
-          dispatch({ type: SET_RELATED_SERVICE, data: [] });
+    if (currentUser) {
+      if (
+        relatedService.length > 0 ||
+        chooseCommentDefault.Content !== undefined
+      ) {
+        const newData = relatedService.reduce(
+          (arr, item) => [
+            ...arr,
+            { category: item.category, serviceId: item.id },
+          ],
+          []
+        );
+        try {
+          // console.log(JSON.stringify(newData));
+          const res = await postDaoService.createComment({
+            PostId: Id,
+            Content: chooseCommentDefault.Content || "",
+            Services: JSON.stringify(newData),
+          });
+          if (res) {
+            getComments(1);
+            setPost({ ...post, TotalComments: post.TotalComments + 1 });
+            // setComments([res.data, ...comments]);
+            dispatch({ type: SET_RELATED_SERVICE, data: [] });
+          }
+        } catch (error) {
+          toastMessage("Add related service fail!", "error");
         }
-      } catch (error) {
-        toastMessage("Add related service fail!", "error");
+      } else {
+        toastMessage(
+          "Vui lòng chọn bình luận hoặc dịch vụ liên quan!",
+          "warning"
+        );
       }
-    } else {
-      toastMessage(
-        "Vui lòng chọn bình luận hoặc dịch vụ liên quan!",
-        "warning"
-      );
     }
   };
 
@@ -441,17 +444,34 @@ const DaoPost = (props) => {
               content={
                 <div className="more-option-modal">
                   {moreOptionOnEachPost.map((itm, idx) => (
-                    <li onClick={() => handleMoreOptionClick(itm)} key={idx}>
-                      <CopyToClipboard
-                        onCopy={() => {}}
-                        text={`${window.location.href}/posts/${Id}`}
-                      >
-                        <div className="container d-flex">
-                          <div>{itm.icon}</div>
-                          <p>{itm.title}</p>
-                        </div>
-                      </CopyToClipboard>
-                    </li>
+                    <>
+                      {itm.id === 3 ? (
+                        <li
+                          onClick={() => handleMoreOptionClick(itm)}
+                          key={idx}
+                        >
+                          <CopyToClipboard
+                            onCopy={() => {}}
+                            text={`${window.location.origin}/home/dao/posts/${Id}`}
+                          >
+                            <div className="container d-flex">
+                              <div>{itm.icon}</div>
+                              <p>{itm.title}</p>
+                            </div>
+                          </CopyToClipboard>
+                        </li>
+                      ) : (
+                        <li
+                          onClick={() => handleMoreOptionClick(itm)}
+                          key={idx}
+                        >
+                          <div className="container d-flex">
+                            <div>{itm.icon}</div>
+                            <p>{itm.title}</p>
+                          </div>
+                        </li>
+                      )}
+                    </>
                   ))}
                 </div>
               }
@@ -549,12 +569,34 @@ const DaoPost = (props) => {
                         content={
                           <div className="more-option-modal">
                             {moreOptionOnEachPost.map((itm, idx) => (
-                              <li onClick={handleMoreOptionClick} key={idx}>
-                                <div className="container d-flex">
-                                  <div>{itm.icon}</div>
-                                  <p>{itm.title}</p>
-                                </div>
-                              </li>
+                              <>
+                                {itm.id === 3 ? (
+                                  <li
+                                    onClick={() => handleMoreOptionClick(itm)}
+                                    key={idx}
+                                  >
+                                    <CopyToClipboard
+                                      onCopy={() => {}}
+                                      text={`${window.location.origin}/home/dao/posts/${Id}`}
+                                    >
+                                      <div className="container d-flex">
+                                        <div>{itm.icon}</div>
+                                        <p>{itm.title}</p>
+                                      </div>
+                                    </CopyToClipboard>
+                                  </li>
+                                ) : (
+                                  <li
+                                    onClick={() => handleMoreOptionClick(itm)}
+                                    key={idx}
+                                  >
+                                    <div className="container d-flex">
+                                      <div>{itm.icon}</div>
+                                      <p>{itm.title}</p>
+                                    </div>
+                                  </li>
+                                )}
+                              </>
                             ))}
                           </div>
                         }
@@ -571,6 +613,7 @@ const DaoPost = (props) => {
                         setIsReportPostModalVisible={
                           setIsReportPostModalVisible
                         }
+                        postId={Id}
                       />
                     </div>
                   </header>
@@ -588,9 +631,7 @@ const DaoPost = (props) => {
                   >
                     <div className="post__main__content__like-comment__likes d-flex">
                       <PopUpSignIn onClick={(e) => {}}>
-                        {mouseOverHeart ||
-                        checkLikePost() ||
-                        mouseClickHeart ? (
+                        {checkLikePost() ? (
                           <HeartFilled
                             onClick={handleLike}
                             style={{
@@ -619,12 +660,10 @@ const DaoPost = (props) => {
                       </p>
                     </div>
                     <div className="post__main__content__like-comment__comments d-flex">
-                      <PopUpSignIn onClick={(e) => {}}>
-                        <Comments
-                          className="active"
-                          style={{ color: "#E22828" }}
-                        />
-                      </PopUpSignIn>
+                      <Comments
+                        className="active"
+                        style={{ color: "#E22828" }}
+                      />
                       <p className={`${commentsClick ? "active" : ""}`}>
                         {TotalComments}
                       </p>
@@ -674,13 +713,15 @@ const DaoPost = (props) => {
                             />
                           </div>
                         )}
-                        <img
-                          src={sendComment}
-                          style={{ borderRadius: "0", cursor: "pointer" }}
-                          className="mt-5 btn-send-comment"
-                          alt=""
-                          onClick={handleSendComment}
-                        />
+                        <PopUpSignIn onClick={(e) => {}}>
+                          <img
+                            src={sendComment}
+                            style={{ borderRadius: "0", cursor: "pointer" }}
+                            className="mt-5 btn-send-comment"
+                            alt=""
+                            onClick={handleSendComment}
+                          />
+                        </PopUpSignIn>
                       </div>
                     </div>
                   </section>
@@ -691,12 +732,15 @@ const DaoPost = (props) => {
                         <div key={index}>
                           <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
                             <div className="d-flex justify-content-between align-posts-center">
-                              <img src={convertImage(Avatar)} alt="" />
+                              <img
+                                src={convertImage(comment?.BookingUser?.Image)}
+                                alt=""
+                              />
                               <div className="post__main__info__nametime">
                                 <p className="post__main__info__nametime__name">
-                                  {Fullname}
+                                  {comment?.BookingUser?.Fullname}
                                 </p>
-                                <p>{convertTime(comment.createdAt)}</p>
+                                <p>{convertTime(comment?.createdAt)}</p>
                               </div>
                             </div>
                           </header>
@@ -716,46 +760,6 @@ const DaoPost = (props) => {
                               data={comment.services}
                               slidesPerView={1.5}
                             />
-                            // <div className="post_slider_container">
-                            //   <Swiper
-                            //     slidesPerView={"1.4"}
-                            //     spaceBetween={15}
-                            //     // pagination={{
-                            //     //   clickable: true,
-                            //     // }}
-                            //     navigation={true}
-                            //     modules={[Navigation, Pagination]}
-                            //     className="post_slider"
-                            //   >
-                            //     {comment?.services?.map((item, index) => (
-                            //       <SwiperSlide
-                            //         key={index}
-                            //         className="post_slider_item"
-                            //       >
-                            //         <a href="#" className="h-100">
-                            //           <div className="d-flex h-100">
-                            //             <img
-                            //               src={convertImage(item.Image[0])}
-                            //               className="me-12"
-                            //               style={{
-                            //                 width: "100px",
-                            //                 objectFit: "cover",
-                            //               }}
-                            //             />
-                            //             <div className="py-5 ">
-                            //               <div className="post_slider_item_name mb-5">
-                            //                 {item.Name}
-                            //               </div>
-                            //               <div className="post_slider_item_description">
-                            //                 {item.Description}
-                            //               </div>
-                            //             </div>
-                            //           </div>
-                            //         </a>
-                            //       </SwiperSlide>
-                            //     ))}
-                            //   </Swiper>
-                            // </div>
                           )}
 
                           <div
@@ -823,7 +827,7 @@ const DaoPost = (props) => {
           <div className="post__main__content__like-comment d-flex align-posts-center">
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn onClick={(e) => {}}>
-                {mouseOverHeart || mouseClickHeart ? (
+                {mouseOverHeart || checkLikePost() ? (
                   <HeartFilled
                     onClick={handleLike}
                     style={{
@@ -851,19 +855,17 @@ const DaoPost = (props) => {
               </p>
             </div>
             <div className="post__main__content__like-comment__comments d-flex">
-              <PopUpSignIn onClick={(e) => {}}>
-                <Comments
-                  onClick={() => {
-                    dispatch({ type: SET_RELATED_SERVICE, data: [] });
-                    setCommentsClick(!commentsClick);
-                    if (comments.length <= 0) {
-                      getComments(1);
-                    }
-                  }}
-                  className={`${commentsClick ? "active" : ""}`}
-                  style={commentsClick ? { color: "#E22828" } : {}}
-                />
-              </PopUpSignIn>
+              <Comments
+                onClick={() => {
+                  dispatch({ type: SET_RELATED_SERVICE, data: [] });
+                  setCommentsClick(!commentsClick);
+                  if (comments.length <= 0) {
+                    getComments(1);
+                  }
+                }}
+                className={`${commentsClick ? "active" : ""}`}
+                style={commentsClick ? { color: "#E22828" } : {}}
+              />
               <p className={`${commentsClick ? "active" : ""}`}>
                 {TotalComments}
               </p>
@@ -904,13 +906,19 @@ const DaoPost = (props) => {
               </div>
             )}
           </div>
-          <img
-            src={sendComment}
-            style={{ borderRadius: "0", cursor: "pointer" }}
-            className="mt-5 btn-send-comment"
-            alt=""
-            onClick={handleSendComment}
-          />
+          <PopUpSignIn
+            onClick={(e) => {
+              e.prevent();
+            }}
+          >
+            <img
+              src={sendComment}
+              style={{ borderRadius: "0", cursor: "pointer" }}
+              className="mt-5 btn-send-comment"
+              alt=""
+              onClick={handleSendComment}
+            />
+          </PopUpSignIn>
         </div>
       </section>
       <section

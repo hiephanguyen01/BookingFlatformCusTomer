@@ -30,8 +30,6 @@ const Index = ({
     }, 500);
     // console.log(ref.current.);
     ref.current.scrollIntoView();
-    console.log(ref.current);
-    // window.scrollTo({ behavior: "smooth", top: ref.current.offsetTop });
   };
 
   return (

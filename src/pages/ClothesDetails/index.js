@@ -46,7 +46,10 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import "./clothesDetails.scss";
 
-import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import {
+  SET_PROMOTION_CODE,
+  SET_STUDIO_DETAIL,
+} from "../../stores/types/studioPostType";
 import Voucher from "../../components/Voucher";
 import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import PromotionList from "../../components/PromotionList/PromotionList";
@@ -122,16 +125,10 @@ const Index = () => {
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
-    // let timeOut;
-    // timeOut = setTimeout(() => {
-    //   dispatch({
-    //     type: SHOW_MODAL,
-    //     Component: <Voucher />,
-    //   });
-    // }, 2000);
-
+    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
       // clearTimeout(timeOut);
     };
   }, []);
@@ -447,7 +444,7 @@ const Index = () => {
         type="article"
         imgAlt="Booking Studio Details"
       />
-      {!loading ? (
+      {Object.keys(studioDetail).length > 0 ? (
         <div className="container_detail">
           <div className="costume_container">
             <div className="wrapper_banner">

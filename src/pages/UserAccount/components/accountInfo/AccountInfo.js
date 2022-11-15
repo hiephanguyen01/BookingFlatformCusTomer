@@ -189,7 +189,11 @@ const AccountInfo = () => {
           }}
         >
           <Col lg={12} sm={24}>
-            <EditText label="Mật khẩu hiện tại" isPass={true} />
+            <EditText
+              label="Mật khẩu hiện tại"
+              isPass={true}
+              autocomplete="new-password"
+            />
             <TextInput label="Mật khẩu mới" isPass={true} />
           </Col>
           <Col lg={12} sm={24}>
