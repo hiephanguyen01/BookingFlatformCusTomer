@@ -1,9 +1,12 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Col, Modal, Row, Switch } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import sha256 from "crypto-js/sha256";
+import Base64 from "crypto-js/enc-base64";
 import noBody from "../../../../assets/img/no-body.png";
 import imgFB from "../../../../assets/img/userAccount/facebook (4) 1facebook.png";
 import imgGG from "../../../../assets/img/userAccount/google 1google.png";
@@ -20,6 +23,14 @@ import {
 } from "../../../../stores/actions/autheticateAction";
 import { convertImage } from "../../../../utils/convertImage";
 import "./accountInfo.scss";
+
+const code_verifier = "h57bycdwryntewreomnbSyDrAG4kX7BeqS7g-luzvBE";
+const code_challenge = Base64.stringify(sha256(code_verifier))
+  .replace(/=/g, "")
+  .replace(/\+/g, "-")
+  .replace(/\//g, "_");
+const redirect_uri = window.location.origin + "/home";
+
 const AccountInfo = () => {
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
@@ -50,7 +61,7 @@ const AccountInfo = () => {
       setFile(newFile);
     }
   };
-  const onChangeCheck = (checked) => {
+  const onChangeCheck = async (checked) => {
     /* console.log(`switch to ${checked}`); */
   };
   const handleCancel = () => {
@@ -193,7 +204,7 @@ const AccountInfo = () => {
             <EditText
               label="Mật khẩu hiện tại"
               isPass={true}
-              autocomplete="new-password"
+              autoComplete="new-password"
             />
             <TextInput label="Mật khẩu mới" isPass={true} />
           </Col>
@@ -223,12 +234,17 @@ const AccountInfo = () => {
                   <span className="AccountInfo__social__itm">
                     Liên Kết Zalo
                   </span>
-                  <Switch
-                    defaultChecked={false}
-                    onChange={onChangeCheck}
-                    style={{}}
-                    disabled={true}
-                  />
+                  <a
+                    href={`https://oauth.zaloapp.com/v4/permission?app_id=934722658638520488&redirect_uri=${"https://145d-2001-ee0-4f08-3fc0-dc13-a76d-cb68-456.ap.ngrok.io/home"}&code_challenge=${code_challenge}&state=access_profile`}
+                    alt="#"
+                  >
+                    <Switch
+                      defaultChecked={false}
+                      onChange={onChangeCheck}
+                      style={{}}
+                      // disabled={true}
+                    />
+                  </a>
                 </div>
               </div>
               <div
