@@ -21,7 +21,10 @@ import img1 from "../../assets/dao/Frame 180.png";
 import sendComment from "../../assets/svg/sendComment.svg";
 import ReportPost from "../ReportPostDao";
 import { useDispatch, useSelector } from "react-redux";
-import { likePost } from "../../stores/actions/PostDaoAction";
+import {
+  createLikeCommentDao,
+  likePost,
+} from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
 import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
@@ -33,6 +36,7 @@ import { postDaoService } from "../../services/PostDaoService";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
 import CommentSlider from "../CommentSlider/CommentSlider";
+import noBody from "../../assets/img/no-body.png";
 import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
 
 const DaoPost = (props) => {
@@ -88,6 +92,8 @@ const DaoPost = (props) => {
         currentPage || 1,
         5
       );
+      // setComments(data.data);
+      // setPagination(data.pagination);
       if (currentPage === 1) {
         setComments([...data.data]);
         setPagination(data.pagination);
@@ -102,7 +108,12 @@ const DaoPost = (props) => {
   useEffect(() => {
     setPost({ ...item });
   }, [item]);
-
+  const handlerLikeComment = (id) => {
+    // getComments(1);
+    // setPost({ ...post, TotalComments: post.TotalComments + 1 });
+    console.log("cliudsadjshajkdsa");
+    dispatch(createLikeCommentDao({ CommentId: id }, item.Id, setComments));
+  };
   // useEffect(() => {
   // if (!visible) {
   //   setChooseCommentDefault({});
@@ -524,6 +535,7 @@ const DaoPost = (props) => {
                         style={{ background: "#1D2226", padding: "90px 0" }}>
                         <img
                           src={convertImage(img)}
+                          alt=""
                           className="w-100 h-100"
                           style={{ objectFit: "contain" }}
                         />
@@ -734,10 +746,51 @@ const DaoPost = (props) => {
                             </div>
                           )}
                           {comment?.services?.length > 0 && (
-                            <CommentSlider
-                              data={comment.services}
-                              slidesPerView={1.5}
-                            />
+                            <div className="post_slider_container">
+                              <Swiper
+                                slidesPerView={"1.4"}
+                                spaceBetween={15}
+                                // pagination={{
+                                //   clickable: true,
+                                // }}
+                                navigation={true}
+                                modules={[Navigation, Pagination]}
+                                className="post_slider"
+                              >
+                                {comment?.services?.map((item, index) => (
+                                  <SwiperSlide
+                                    key={index}
+                                    className="post_slider_item"
+                                  >
+                                    <a href="#" className="h-100">
+                                      <div className="d-flex h-100">
+                                        <img
+                                          src={convertImage(item.Image[0])}
+                                          alt=""
+                                          className="me-12"
+                                          style={{
+                                            width: "100px",
+                                            objectFit: "cover",
+                                          }}
+                                        />
+                                        <div className="py-5 ">
+                                          <div className="post_slider_item_name mb-5">
+                                            {item.Name}
+                                          </div>
+                                          <div className="post_slider_item_description">
+                                            {item.Description}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </a>
+                                  </SwiperSlide>
+                                ))}
+                              </Swiper>
+                              <CommentSlider
+                                data={comment.services}
+                                slidesPerView={1.5}
+                              />
+                            </div>
                           )}
 
                           <div
@@ -747,7 +800,9 @@ const DaoPost = (props) => {
                               className="post__main__content__like-comment__likes d-flex"
                               onClick={() => console.log(123)}>
                               <PopUpSignIn onClick={(e) => {}}>
-                                {false ? (
+                                {comment?.Likes?.some(
+                                  (item) => item?.UserId == currentUser?.id
+                                ) ? (
                                   <HeartFilled
                                     // onClick={() =>
                                     //   setMouseClickHeart(!mouseClickHeart)
@@ -757,6 +812,7 @@ const DaoPost = (props) => {
                                       color: "#E22828",
                                       marginBottom: "2px",
                                     }}
+                                    onClick={() => handlerLikeComment()}
                                     // onMouseLeave={() => setMouseOverHeart(false)}
                                   />
                                 ) : (
@@ -767,6 +823,7 @@ const DaoPost = (props) => {
                                       cursor: "pointer",
                                       marginBottom: "2px",
                                     }}
+                                    onClick={() => handlerLikeComment()}
                                     // onMouseOver={() => setMouseOverHeart(true)}
                                   />
                                 )}
@@ -774,8 +831,9 @@ const DaoPost = (props) => {
                               <p
                                 style={
                                   mouseClickHeart ? { color: "#E22828" } : {}
-                                }>
-                                {TotalLikes}
+                                }
+                              >
+                                {comment?.TotalLike}
                               </p>
                             </div>
                           </div>
@@ -904,7 +962,13 @@ const DaoPost = (props) => {
               <div className="post__comments__detail__info d-flex align-posts-center">
                 <img
                   className="post__comments__detail__info_avatar"
-                  src={cmt.BookingUser.Image}
+                  // src={cmt.BookingUser.Image}
+                  // alt=""
+                  src={
+                    cmt.BookingUser.Image.trim() !== ""
+                      ? cmt.BookingUser.Image
+                      : noBody
+                  }
                   alt=""
                 />
                 <div
@@ -928,12 +992,14 @@ const DaoPost = (props) => {
                   <CommentSlider data={cmt?.services} />
                 </div>
               )}
+
               <div className="d-flex" style={{ marginTop: "22px" }}>
-                {false ? (
+                {cmt?.Likes?.some((item) => item?.UserId == currentUser?.id) ? (
                   <HeartFilled
                     // onClick={() =>
                     //   setMouseClickHeart(!mouseClickHeart)
                     // }
+                    onClick={() => handlerLikeComment(cmt?.id)}
                     style={{
                       fontSize: "20px",
                       color: "#E22828",
@@ -942,74 +1008,22 @@ const DaoPost = (props) => {
                     // onMouseLeave={() => setMouseOverHeart(false)}
                   />
                 ) : (
-                  <>
-                    <HeartOutlined
-                      style={{
-                        color: "#828282",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                        marginBottom: "2px",
-                      }}
-                      // onMouseOver={() => setMouseOverHeart(true)}
-                    />
-                    {/* <div
-                      style={{ marginLeft: "10px" }}
-                      className="post__comments__detail__info__nametime"
-                    >
-                      <p className="post__comments__detail__info__nametime__name">
-                        {cmt.BookingUser.Fullname}
-                      </p>
-                      <p>{convertTime(cmt.createdAt)}</p>
-                    </div> */}
-                  </>
-                )}
-                {/* {cmt?.Content && (
-                  <div
-                    style={{ marginLeft: "40px", marginTop: "5px" }}
-                    className="post__comments__detail__content"
-                  >
-                    {cmt.Content}
-                  </div>
-                )}
-                {cmt?.services?.length > 0 && (
-                  <div className="w-100">
-                    <CommentSlider data={cmt?.services} />
-                  </div>
-                )}
-                {/* <div className="d-flex" style={{ marginTop: "22px" }}>
-                  {cmt?.Likes?.some(
-                    (item) => item?.UserId == currentUser?.id
-                  ) ? (
-                    <HeartFilled
-                      // onClick={() =>
-                      //   setMouseClickHeart(!mouseClickHeart)
-                      // }
-                      onClick={() => handlerLikeComment(cmt?.id)}
-                      style={{
-                        fontSize: "20px",
-                        color: "#E22828",
-                        marginBottom: "2px",
-                      }}
-                      // onMouseLeave={() => setMouseOverHeart(false)}
-                    />
-                  ) : (
-                    <HeartOutlined
-                      style={{
-                        color: "#828282",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                        marginBottom: "2px",
-                      }}
-                      onClick={() => handlerLikeComment(cmt?.id)}
+                  <HeartOutlined
+                    style={{
+                      color: "#828282",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                      marginBottom: "2px",
+                    }}
+                    onClick={() => handlerLikeComment(cmt?.id)}
 
-                      // onMouseOver={() => setMouseOverHeart(true)}
-                    />
-                  )}
-                  <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                    {cmt?.TotalLike}
-                  </p>
-                </div> */}{" "}
-                2
+                    // onMouseOver={() => setMouseOverHeart(true)}
+                  />
+                )}
+                <p style={{ paddingLeft: "5px", color: "#E22828" }}>
+                  {cmt?.TotalLike}
+                </p>
+
               </div>
             </div>
           ))}
