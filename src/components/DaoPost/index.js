@@ -942,19 +942,74 @@ const DaoPost = (props) => {
                     // onMouseLeave={() => setMouseOverHeart(false)}
                   />
                 ) : (
-                  <HeartOutlined
-                    style={{
-                      color: "#828282",
-                      fontSize: "20px",
-                      cursor: "pointer",
-                      marginBottom: "2px",
-                    }}
-                    // onMouseOver={() => setMouseOverHeart(true)}
-                  />
+                  <>
+                    <HeartOutlined
+                      style={{
+                        color: "#828282",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        marginBottom: "2px",
+                      }}
+                      // onMouseOver={() => setMouseOverHeart(true)}
+                    />
+                    {/* <div
+                      style={{ marginLeft: "10px" }}
+                      className="post__comments__detail__info__nametime"
+                    >
+                      <p className="post__comments__detail__info__nametime__name">
+                        {cmt.BookingUser.Fullname}
+                      </p>
+                      <p>{convertTime(cmt.createdAt)}</p>
+                    </div> */}
+                  </>
                 )}
-                <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                  {post.TotalLikes}
-                </p>
+                {/* {cmt?.Content && (
+                  <div
+                    style={{ marginLeft: "40px", marginTop: "5px" }}
+                    className="post__comments__detail__content"
+                  >
+                    {cmt.Content}
+                  </div>
+                )}
+                {cmt?.services?.length > 0 && (
+                  <div className="w-100">
+                    <CommentSlider data={cmt?.services} />
+                  </div>
+                )}
+                {/* <div className="d-flex" style={{ marginTop: "22px" }}>
+                  {cmt?.Likes?.some(
+                    (item) => item?.UserId == currentUser?.id
+                  ) ? (
+                    <HeartFilled
+                      // onClick={() =>
+                      //   setMouseClickHeart(!mouseClickHeart)
+                      // }
+                      onClick={() => handlerLikeComment(cmt?.id)}
+                      style={{
+                        fontSize: "20px",
+                        color: "#E22828",
+                        marginBottom: "2px",
+                      }}
+                      // onMouseLeave={() => setMouseOverHeart(false)}
+                    />
+                  ) : (
+                    <HeartOutlined
+                      style={{
+                        color: "#828282",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        marginBottom: "2px",
+                      }}
+                      onClick={() => handlerLikeComment(cmt?.id)}
+
+                      // onMouseOver={() => setMouseOverHeart(true)}
+                    />
+                  )}
+                  <p style={{ paddingLeft: "5px", color: "#E22828" }}>
+                    {cmt?.TotalLike}
+                  </p>
+                </div> */}{" "}
+                2
               </div>
             </div>
           ))}
