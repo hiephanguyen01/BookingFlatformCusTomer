@@ -36,24 +36,30 @@ import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import PromotionList from "../../components/PromotionList/PromotionList";
-import { calTime } from "../../utils/calculate";
+import { calDate, calTime } from "../../utils/calculate";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
-import { setFilterStudioService } from "../../stores/actions/studioPostAction";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
-import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { Report } from "../StudioDetail/Report";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
+import {
+  SET_PROMOTION_CODE,
+  SET_STUDIO_DETAIL,
+} from "../../stores/types/studioPostType";
 
 const COLUMN = [
-  { title: "Dịch vụ", size: 5 },
-  { title: "Mô tả", size: 8 },
-  { title: "Giá cho thời gian bạn đã chọn ", size: 7 },
-  { title: "Chọn dịch vụ", size: 4 },
+  { title: "Dịch vụ", size: 7 },
+  { title: "Chọn thời gian", size: 10 },
+  { title: "Chọn dịch vụ", size: 7 },
 ];
 
 const PhotographerDetail = () => {
-  const { studioDetail, loading, filter, listStudioSimilar, promotionCode } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail,
+    loading,
+    listStudioSimilar,
+    promotionCode,
+    filterService,
+  } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -63,7 +69,6 @@ const PhotographerDetail = () => {
     "photographer"
       ? 2
       : undefined;
-  console.log(calTime(filter.OrderByDateFrom, filter.OrderByDateTo));
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -94,167 +99,175 @@ const PhotographerDetail = () => {
   }, [studioDetail]);
 
   useEffect(() => {
-    // dispatch(
-    //   setFilterStudioService(5, 1, {
-    //     OrderByTime: filter.OrderByTime,
-    //     OrderByTimeFrom: filter.OrderByTimeFrom,
-    //     OrderByTimeTo: filter.OrderByTimeTo,
-    //     OrderByDateFrom: filter.OrderByDateFrom,
-    //     OrderByDateTo: filter.OrderByDateTo,
-    //   })
-    // );
-    // let timeOut;
-    // timeOut = setTimeout(() => {
-    //   dispatch({
-    //     type: SHOW_MODAL,
-    //     Component: <Voucher />,
-    //   });
-    // }, 2000);
-    // if (
-    //   promotionCode
-    //     ?.filter(
-    //       (item) => item.SaleCode.DateTimeExpire > new Date().toISOString()
-    //     )
-    //     ?.reduce((arr, item) => {
-    //       if (
-    //         promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id)
-    //           .length > 0
-    //       ) {
-    //         return [...arr];
-    //       }
-    //       return [...arr, item];
-    //     }, []).length > 0
-    // ) {
-    //   timeOut = setTimeout(() => {
-    //     dispatch({
-    //       type: SHOW_MODAL,
-    //       Component: <Voucher />,
-    //     });
-    //   }, 2000);
-    // }
+    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
-      // dispatch({ type: SET_PROMOTION_CODE_USER_SAVE, data: [] });
-      // dispatch({ type: SET_PROMOTION_CODE, data: [] });
-      // clearTimeout(timeOut);
+      dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
     };
   }, []);
 
-  const handleChooseService = (data) => {
-    if (chooseService.filter((itm) => itm.id === data.id).length > 0) {
-      setChooseService([]);
-    } else {
-      setChooseService([{ ...data }]);
-    }
-  };
-  console.log(chooseService);
   const ROW = (dataSource = []) => {
-    console.log(chooseService);
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
         {
+          key: "title",
           render: () => (
-            <>
+            <div style={{}}>
               <img
+                alt="as"
+                style={{ width: "100%", borderRadius: " 6px" }}
                 src={`${
                   data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
                 }`}
-                style={{ width: "100%", marginBottom: "20px" }}
-                alt=""
               />
-              <div className="text-medium-se">{`${data.Name}`}</div>
-            </>
-          ),
-        },
-        {
-          render: () => <p>{data.Description}</p>,
-        },
-        {
-          render: () => (
-            <>
-              <div className="d-flex align-items-center">
-                <h4
-                  className="me-10"
-                  style={{
-                    marginBottom: "0",
-                    color: "#E22828",
-                  }}
-                >
-                  {convertPrice(data.Sales)}đ
-                </h4>
-                <div
-                  style={{
-                    fontWeight: "400",
-                    fontSize: "12px",
-                    lineHeight: "16px",
-                    color: "#828282",
-                    textDecoration: "line-through",
-                  }}
-                >
-                  {convertPrice(data.Price)}đ
-                </div>
+              <div
+                style={{
+                  marginTop: "10px",
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                {data.Name}
               </div>
               <div
-                className="mb-8 mt-4"
+                className="mt-10"
                 style={{
+                  color: "#616161",
+                  fontSize: "16px",
                   fontWeight: "400",
-                  fontSize: "12px",
-                  lineHeight: "16px",
-                  color: "#828282",
                 }}
               >
-                Bao gồm 50.000đ thuế và phí
+                {data.Description}
               </div>
-              <span
-                className="text-medium-se"
-                style={{
-                  background: "#E22828",
-                  borderRadius: "4px",
-                  padding: "3px 10px",
-                  color: "#ffffff",
-                }}
-              >
-                Giảm {`${Math.floor(100 - (data.Sales / data.Price) * 100)}`}%
-              </span>
-            </>
+            </div>
           ),
         },
         {
+          key: "desc",
+          render: () => {
+            return <SelectTimeOptionService service={data} />;
+          },
+        },
+        {
+          key: "currency",
           render: () => (
             <>
-              {chooseService.filter((itm) => itm.id === data.id).length > 0 ? (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    backgroundColor: "#E7E7E7",
-                    padding: "15px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Bỏ chọn
-                </span>
-              ) : (
-                <span
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    border: "1px solid #E22828",
-                    color: "#E22828",
-                    padding: "13px 25px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Chọn
-                </span>
+              {filterService.OrderByTime !== -1 && (
+                <div className="mb-20">
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                    <span
+                      style={{
+                        color: "#828282",
+                        textDecoration: "line-through",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {filterService.OrderByTime === 1 &&
+                        data?.PriceByHour?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      {filterService.OrderByTime === 0 &&
+                        data?.PriceByDate?.toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      color: "#828282",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    {data.PriceNote}
+                  </p>
+                  <button
+                    style={{
+                      padding: "3px 21px",
+                      background: "#E22828",
+                      color: "#ffff",
+                      border: " 1px solid #E22828",
+                      borderRadius: " 8px",
+                    }}
+                  >
+                    Giảm 50%{" "}
+                  </button>
+                </div>
               )}
+              <div className="">
+                {chooseService.filter((item) => item.id === data.id).length >
+                0 ? (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      backgroundColor: "#E7E7E7",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Bỏ chọn
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "13px 25px",
+
+                      border: "1px solid #E22828",
+                      color: "#E22828",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Chọn
+                  </div>
+                )}
+              </div>
             </>
           ),
         },
@@ -262,12 +275,31 @@ const PhotographerDetail = () => {
     }
   };
 
+  const handleChooseService = (data) => {
+    if (
+      (filterService.OrderByTime === 0 &&
+        filterService.OrderByDateFrom !== "" &&
+        filterService.OrderByDateTo !== "") ||
+      (filterService.OrderByTime === 1 &&
+        filterService.OrderByTimeFrom !== "" &&
+        filterService.OrderByTimeTo !== "")
+    ) {
+      if (chooseService.filter((item) => item.id === data.id).length > 0) {
+        setChooseService([]);
+      } else {
+        setChooseService([{ ...data }]);
+      }
+    } else {
+      toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
+    }
+  };
+
   const handleBook = () => {
-    if (chooseService.length > 0 && filter.OrderByTime !== -1) {
+    if (chooseService.length > 0 && filterService.OrderByTime !== -1) {
       dispatch(chooseServiceAction(chooseService));
       navigate("order");
     } else {
-      if (filter.OrderByTime === -1) {
+      if (filterService.OrderByTime === -1) {
         toastMessage("Bạn cần chọn thời gian!", "warn");
       } else if (chooseService.length <= 0) {
         toastMessage("Bạn cần chọn dịch vụ!", "warn");
@@ -304,7 +336,7 @@ const PhotographerDetail = () => {
         type="article"
         imgAlt="Booking Studio Details"
       />
-      {loading ? (
+      {Object.keys(studioDetail).length <= 0 ? (
         <div
           style={{
             width: "100%",
@@ -523,66 +555,102 @@ const PhotographerDetail = () => {
                           color: "#222222",
                         }}
                       >
-                        Đã chọn {chooseService.length} sản phẩm
+                        Đã chọn {chooseService.length} dịch vụ
                       </div>
                       {chooseService.length > 0 && (
-                        <div
+                        <span
                           style={{
-                            fontWeight: "400",
-                            fontSize: "16px",
-                            lineHeight: "22px",
-                            textDecorationLine: "line-through",
+                            textDecoration: "line-through",
+                            fontSize: " 16px",
                             color: "#828282",
                           }}
                         >
-                          {`${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) =>
-                                total +
-                                item.Price *
-                                  calTime(
-                                    filter.OrderByTimeFrom,
-                                    filter.OrderByTimeTo
-                                  ),
-                              0
-                            )
-                          )}`}
+                          {filterService.OrderByTime === 1 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByHour *
+                                    calTime(
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}`}
+                          {filterService.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByDate *
+                                    calDate(
+                                      filterService.OrderByDateFrom,
+                                      filterService.OrderByDateTo
+                                    ),
+                                0
+                              )
+                            )}`}
                           đ
-                        </div>
+                        </span>
                       )}
                     </div>
                     <div className="d-flex justify-content-between mb-26">
                       <div className="text-medium-re">
                         Bao gồm 50.000đ thuế và phí
                       </div>
-                      <div
-                        style={{
-                          fontWeight: "700",
-                          fontSize: "20px",
-                          lineHeight: "27px",
-                          /* Primary/Red 700 */
-                          color: "#E22828",
-                        }}
-                      >
-                        {`${convertPrice(
-                          chooseService?.reduce(
-                            (total, item) =>
-                              total +
-                              item.Sales *
-                                calTime(
-                                  filter.OrderByTimeFrom,
-                                  filter.OrderByTimeTo
-                                ),
-                            0
-                          )
-                        )}`}
-                        đ
-                      </div>
+                      {chooseService.length > 0 && (
+                        <div
+                          style={{
+                            fontWeight: "700",
+                            fontSize: "20px",
+                            lineHeight: "27px",
+                            /* Primary/Red 700 */
+                            color: "#E22828",
+                          }}
+                        >
+                          {filterService.OrderByTime === 1 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByHour *
+                                    calTime(
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}`}
+                          {filterService.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByDate *
+                                    calDate(
+                                      filterService.OrderByDateFrom,
+                                      filterService.OrderByDateTo
+                                    ),
+                                0
+                              )
+                            )}`}
+                          đ
+                        </div>
+                      )}
                     </div>
                     <div className="w-100 d-flex justify-content-between">
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        onClick={handleAddCart}
+                        onClick={() =>
+                          toastMessage(
+                            "Chức năng này đang phát triển!",
+                            "info",
+                            1,
+                            "",
+                            {}
+                          )
+                        }
                         // disabled={chooseService.length > 0 ? false : true}
                       >
                         <ShoppingCartOutlined />
@@ -591,11 +659,7 @@ const PhotographerDetail = () => {
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                        // disabled={
-                        //   chooseService.length > 0 && filter.OrderByTime !== -1
-                        //     ? false
-                        //     : true
-                        // }
+                        disabled={chooseService.length > 0 ? false : true}
                       >
                         Đặt ngay
                       </Button>

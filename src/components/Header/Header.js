@@ -28,6 +28,7 @@ import { convertImage } from "../../utils/convertImage";
 import { ImageDetect } from "../ImageDetect/ImageDetect";
 import SearchButton from "../layouts/SearchButton";
 import "./Header.scss";
+import toastMessage from "../ToastMessage";
 const { Option } = Select;
 const Header = () => {
   const [provinces, setProvinces] = useState([]);
@@ -162,20 +163,20 @@ const Header = () => {
   const onFinish = (values) => {
     const newFilter = {
       ...filter,
-      category: values.category,
+      category: values.category || 1,
       provinceIds: values?.province ? [values.province] : [],
       keyString: values.keyString,
       priceOption: values.price,
     };
-    dispatch(getFilterStudioPost(5, 1, newFilter, user));
+    dispatch(getFilterStudioPost(5, 1, newFilter, user, navigate));
     setVisible(false);
-    const tempFilter = {
-      category: values.category,
-      provinceIds: values?.province ? [values.province] : [],
-      keyString: values.keyString,
-      priceOption: values.price,
-    };
-    navigate(`/home/filter?${queryString.stringify(tempFilter)}`);
+    // const tempFilter = {
+    //   category: values.category,
+    //   provinceIds: values?.province ? [values.province] : [],
+    //   keyString: values.keyString,
+    //   priceOption: values.price,
+    // };
+    // navigate(`/home/filter?${queryString.stringify(tempFilter)}`);
   };
   const handleSignOut = () => {
     dispatch(logOut(navigate));
@@ -275,7 +276,13 @@ const Header = () => {
             <img src={DaoIcon} alt="" />
             <p>Dạo</p>
           </div>
-          <Link to={"cart"} className="tip">
+          <Link
+            to={"#"}
+            className="tip"
+            onClick={() =>
+              toastMessage("Chức năng này đang phát triển!", "info", 1, "", {})
+            }
+          >
             <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
             <p style={{ color: "#828282" }}>Giỏ hàng</p>
           </Link>
