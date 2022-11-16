@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import DaoPost from "../../../../components/DaoPost";
-import { userService } from "../../../../services/UserService";
+// import { userService } from "../../../../services/UserService";
 import { getLikePostList } from "../../../../stores/actions/PostDaoAction";
-import {
-  getListPosts,
-  getSavedPostList,
-} from "../../../../stores/actions/userAction";
+import { getListPosts } from "../../../../stores/actions/userAction";
 import "../PostsSaved/PostSaved";
 const Posts = () => {
   const dispatch = useDispatch();

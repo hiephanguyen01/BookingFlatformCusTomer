@@ -1,8 +1,8 @@
-import { AutoComplete } from "antd";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
 import { bannerService } from "../../services/Banner";
 import logoImg from "../../../src/assets/img/Logo1.png";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
@@ -31,7 +31,6 @@ import Banner from "./Banner/Banner";
 import styles from "./home.module.scss";
 
 const cx = classNames.bind(styles);
-const { Option } = AutoComplete;
 
 // ----------------------đừng xoá nhé ---------------------------------
 // export const Home = () => {
@@ -155,11 +154,11 @@ const { Option } = AutoComplete;
 //       </Modal>
 
 export const Home = () => {
-  const { filter, loading } = useSelector((state) => state.studioPostReducer);
+  const { filter } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-  const [chooseCate, setChooseCate] = useState();
-  const [provinces, setProvinces] = useState([]);
+  // const [chooseCate, setChooseCate] = useState();
+  // const [provinces, setProvinces] = useState([]);
 
   const navigate = useNavigate();
   const {
@@ -172,10 +171,10 @@ export const Home = () => {
   } = useSelector((state) => state.topOrderCategoryReducer);
 
   useEffect(() => {
-    (async () => {
-      const res = await studioPostService.getAllProvince();
-      setProvinces(res.data);
-    })();
+    // (async () => {
+    //   const res = await studioPostService.getAllProvince();
+    //   setProvinces(res.data);
+    // })();
     dispatch(getTop10OrderStudioPostAction(1));
     dispatch(getTop10OrderPhotographerAction(2));
     dispatch(getTop10OrderClothesAction(3));
@@ -201,7 +200,7 @@ export const Home = () => {
       category: categoryId,
     };
     dispatch(getFilterStudioPost(5, 1, newFilter));
-    navigate("/home/filter");
+    navigate(`/home/filter?${queryString.stringify(newFilter)}`);
   };
   const [banners, setBannerList] = useState([]);
   useEffect(() => {
@@ -225,11 +224,11 @@ export const Home = () => {
           {CATEGORIES.map((item) => (
             <div
               key={item.id}
-              className={cx("box", `${chooseCate === item.id && "active"}`)}
+              className={cx("box")}
               onClick={() => {
-                setChooseCate(item.id);
                 handleClickCategory(item.id);
-              }}>
+              }}
+            >
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>

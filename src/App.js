@@ -30,6 +30,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsUse from "./pages/TermsUse/TermsUse";
 import Success from "./components/Email/Success";
 import { VerifyOtp } from "./components/Modal/verifyOtp/VerifyOtp";
+import DetectApp from "./pages/DetectApp/DetectApp";
 import Verify from "./pages/Verify/Verify";
 
 function App() {
@@ -67,7 +68,8 @@ function App() {
             <CustomerLayout>
               <Verify />
             </CustomerLayout>
-          }></Route>
+          }
+        ></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route
@@ -76,7 +78,8 @@ function App() {
               <ProtectedRouter>
                 <UserAccount />
               </ProtectedRouter>
-            }></Route>
+            }
+          ></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />
@@ -92,6 +95,7 @@ function App() {
           <Route path="confirm-order/*" element={<UpdateConfirm />} />
           <Route path="privacy-policy/*" element={<PrivacyPolicy />}></Route>
           <Route path="terms-use/*" element={<TermsUse />}></Route>
+          <Route path="detect-app" element={<DetectApp />}></Route>
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}

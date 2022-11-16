@@ -10,6 +10,9 @@ class AuthenticateService extends BaseService {
   loginByPhoneNumber = (data) => {
     return this.post(`/api/booking-user/login`, data);
   };
+  logout = () => {
+    return this.get(`/api/booking-user/logout`);
+  };
   socialAccountLink = (data) => {
     return this.post(`/api/booking-user/social-account-link`, data);
   };

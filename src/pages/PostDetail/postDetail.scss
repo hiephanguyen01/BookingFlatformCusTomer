@@ -2,7 +2,8 @@
 
 .postDetail {
     background-color: rgb(29, 34, 38);
-    height: 90vh;
+    height: 85vh;
+    overflow: hidden;
 
     .swiperPostDetail {
         height: 85vh;
@@ -24,86 +25,131 @@
 
     .col-right {
         background-color: #fff;
-        height: 90vh;
+        height: 85vh;
         overflow-Y: scroll;
         position: relative;
 
-        .post__middle {
+
+        .post_detail_info {
+
+            .avt {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+
+            }
+
+            &_name {
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 19px;
+                color: $neutral-500;
+            }
+
+            &_time {
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 16px;
+                color: $neutral-500;
+            }
+        }
+
+        .post_detail_tags {
+            margin-top: 13px;
+            list-style: none;
+
+            li {
+                color: $secondary-800;
+                margin-right: 8px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .post_detail_description {
+            p {
+                margin-top: 10px;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 22px;
+            }
+        }
+
+        .post_detail_comment {
             padding-bottom: 18px;
             border-bottom: 1px solid #E7E7E7;
+            width: 100%;
 
             &.active {
                 color: "#E22828",
             }
 
-            .post__middle__right-side {
-                width: auto;
+            .avt {
+                object-fit: contain;
+                height: fit-content;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+            }
+
+            .post_detail_choose_comment {
 
                 ul {
                     display: flex;
                     flex-wrap: wrap;
+                    gap: 10px;
 
                     li {
-                        padding: 8px 11px;
-                        // margin-bottom: 10px;
-                        display: inline-block;
-                        margin: 0 0 10px 10px;
-                        cursor: pointer;
-                    }
+                        width: fit-content;
+                        padding: 11px 8px 11px 8px;
+                        box-shadow: 0.5px 1px 4px rgba(0, 0, 0, 0.16);
+                        border-radius: 8px;
 
-                }
-
-                .post__middle__right-side__choose-service {
-                    margin-top: 8px;
-                }
-            }
-        }
-
-        .post_slider_container {
-            margin-top: 20px;
-            height: 80px;
-
-            .post_slider {
-                height: 100%;
-
-                .post_slider_item {
-                    height: 100%;
-                    border: 1px solid #E7E7E7;
-                    border-radius: 8px;
-                    overflow: hidden;
-
-                    text-align: start;
-
-                    // cursor: pointer;
-
-                    &_name {
-                        font-weight: 400;
-                        font-size: 12px;
-                        line-height: 16px;
-                        color: $neutral-500;
-                    }
-
-                    &_description {
-                        font-weight: 400;
                         font-size: 14px;
+                        font-weight: 400;
                         line-height: 19px;
-                        color: $neutral-700;
+                        margin-left: 10px;
+
+                        cursor: pointer;
+
+                        &:first-child {
+                            margin-left: 16px;
+                        }
+
+                        &.active {
+                            background-color: #96fde5;
+                        }
                     }
                 }
 
-                .swiper-button-prev,
-                .swiper-button-next {
-                    width: 36px;
-                    height: 36px;
-                    background: #FFFFFF;
-                    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.18);
-                    border-radius: 50%;
+                .post_detail_choose_service {
+                    width: fit-content;
+                    margin-top: 18px;
+                    border: 1px dashed #1fcba2;
+                    margin-left: 16px;
+                    padding: 12px 91px 12px 83px;
+                    border-radius: 8px;
+                    cursor: pointer;
 
-                    &::after {
-                        font-size: 18px;
-                        color: #000000;
-                        font-weight: 900;
+                    svg {
+                        margin-right: 8px;
                     }
+
+                    p {
+                        color: $secondary-800;
+                        font-size: 14px;
+                        font-weight: 400;
+                        line-height: 19px;
+                    }
+                }
+
+                .btn-send-comment {
+                    position: relative;
+                    
+                    width: 35px;
+                    height: 35px;
                 }
             }
         }
