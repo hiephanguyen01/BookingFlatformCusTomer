@@ -39,7 +39,6 @@ import CommentSlider from "../CommentSlider/CommentSlider";
 import noBody from "../../assets/img/no-body.png";
 import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
 
-
 const DaoPost = (props) => {
   const dispatch = useDispatch();
   const currentUser = useSelector(
@@ -94,7 +93,7 @@ const DaoPost = (props) => {
         5
       );
       setComments(data.data);
-      setPagination(data.pagination)
+      setPagination(data.pagination);
       if (currentPage === 1) {
         setComments([...data.data]);
         setPagination(data.pagination);
@@ -809,10 +808,6 @@ const DaoPost = (props) => {
                                 ))}
                               </Swiper>
                             </div>
-                            {/* <CommentSlider
-                              data={comment.services}
-                              slidesPerView={1.5}
-                            />*/}
                           )}
 
                           <div
@@ -1032,25 +1027,27 @@ const DaoPost = (props) => {
                     // onMouseLeave={() => setMouseOverHeart(false)}
                   />
                 ) : (
-                  <HeartOutlined
-                    style={{
-                      color: "#828282",
-                      fontSize: "20px",
-                      cursor: "pointer",
-                      marginBottom: "2px",
-                    }}
-                    // onMouseOver={() => setMouseOverHeart(true)}
-                  />
-                  <div
-                    style={{ marginLeft: "10px" }}
-                    className="post__comments__detail__info__nametime"
-                  >
-                    <p className="post__comments__detail__info__nametime__name">
-                      {cmt.BookingUser.Fullname}
-                    </p>
-                    <p>{convertTime(cmt.createdAt)}</p>
-                  </div>
-                </div>
+                  <>
+                    <HeartOutlined
+                      style={{
+                        color: "#828282",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        marginBottom: "2px",
+                      }}
+                      // onMouseOver={() => setMouseOverHeart(true)}
+                    />
+                    <div
+                      style={{ marginLeft: "10px" }}
+                      className="post__comments__detail__info__nametime"
+                    >
+                      <p className="post__comments__detail__info__nametime__name">
+                        {cmt.BookingUser.Fullname}
+                      </p>
+                      <p>{convertTime(cmt.createdAt)}</p>
+                    </div>
+                  </>
+                )}
                 {cmt?.Content && (
                   <div
                     style={{ marginLeft: "40px", marginTop: "5px" }}
@@ -1098,8 +1095,9 @@ const DaoPost = (props) => {
                   </p>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
+
         {pagination.hasNextPage && (
           <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
             Xem thêm bình luận
