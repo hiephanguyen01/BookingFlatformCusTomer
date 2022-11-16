@@ -49,7 +49,6 @@ const AccountInfo = () => {
 
   const dispatch = useDispatch();
   const myImg = convertImage(UserMe?.Image);
-  console.log(myImg);
   const [visible, setVisible] = useState(false);
   const [infoUser, setInfoUser] = useState(UserMe);
   const [loading, setLoading] = useState(false);
@@ -173,7 +172,7 @@ const AccountInfo = () => {
                   Email đã được xác nhận
                 </p>
               ) : UserMe?.Email?.trim() !== " " ? (
-                <p style={{ color: "red", paddingLeft: "39.703px!important" }}>
+                <p style={{ color: "red", paddingLeft: "39.703px" }}>
                   Vui lòng kiểm trả email để xác thực email.
                 </p>
               ) : (
@@ -236,13 +235,15 @@ const AccountInfo = () => {
                   </span>
                   <a
                     href={`https://oauth.zaloapp.com/v4/permission?app_id=934722658638520488&redirect_uri=${"https://145d-2001-ee0-4f08-3fc0-dc13-a76d-cb68-456.ap.ngrok.io/home"}&code_challenge=${code_challenge}&state=access_profile`}
-                  ></a>
-                  <Switch
-                    defaultChecked={false}
-                    onChange={onChangeCheck}
-                    style={{}}
-                    // disabled={true}
-                  />
+                    alt="#"
+                  >
+                    <Switch
+                      defaultChecked={false}
+                      onChange={onChangeCheck}
+                      style={{}}
+                      // disabled={true}
+                    />
+                  </a>
                 </div>
               </div>
               <div

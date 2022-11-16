@@ -1037,7 +1037,7 @@ const DaoPost = (props) => {
                       }}
                       // onMouseOver={() => setMouseOverHeart(true)}
                     />
-                    <div
+                    {/* <div
                       style={{ marginLeft: "10px" }}
                       className="post__comments__detail__info__nametime"
                     >
@@ -1045,10 +1045,10 @@ const DaoPost = (props) => {
                         {cmt.BookingUser.Fullname}
                       </p>
                       <p>{convertTime(cmt.createdAt)}</p>
-                    </div>
+                    </div> */}
                   </>
                 )}
-                {cmt?.Content && (
+                {/* {cmt?.Content && (
                   <div
                     style={{ marginLeft: "40px", marginTop: "5px" }}
                     className="post__comments__detail__content"
@@ -1061,7 +1061,7 @@ const DaoPost = (props) => {
                     <CommentSlider data={cmt?.services} />
                   </div>
                 )}
-                <div className="d-flex" style={{ marginTop: "22px" }}>
+                {/* <div className="d-flex" style={{ marginTop: "22px" }}>
                   {cmt?.Likes?.some(
                     (item) => item?.UserId == currentUser?.id
                   ) ? (
@@ -1093,7 +1093,8 @@ const DaoPost = (props) => {
                   <p style={{ paddingLeft: "5px", color: "#E22828" }}>
                     {cmt?.TotalLike}
                   </p>
-                </div>
+                </div> */}{" "}
+                2
               </div>
             </div>
           ))}
