@@ -51,7 +51,7 @@ const Option = ({ option, disabled, service }) => {
   }
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
-    if (dString && filterService.OrderByTime === 0) {
+    if (dString && filterService.OrderByTime === 1) {
       let hl = service?.Bookings?.filter((item) => {
         const dates = dateRange(
           moment(item.OrderByTimeFrom).format("l"),
@@ -66,7 +66,7 @@ const Option = ({ option, disabled, service }) => {
       dispatch(
         setFilterStudioService(5, 1, {
           ...filterService,
-          OrderByTime: 0,
+          OrderByTime: 1,
           OrderByTimeFrom:
             convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
           OrderByTimeTo:
