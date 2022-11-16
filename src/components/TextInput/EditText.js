@@ -15,7 +15,7 @@ const EditText = ({
   error = false,
   value,
   type,
-  autocomplete,
+  autoComplete,
 }) => {
   return (
     <div
@@ -50,7 +50,7 @@ const EditText = ({
             color: "#222222",
             ...styleInput,
           }}
-          autocomplete={autocomplete}
+          autoComplete={autoComplete}
         />
       ) : (
         <Input
@@ -75,7 +75,7 @@ const EditText = ({
             color: "#222222",
             ...styleInput,
           }}
-          autocomplete={autocomplete}
+          autoComplete={autoComplete}
         />
       )}
     </div>
