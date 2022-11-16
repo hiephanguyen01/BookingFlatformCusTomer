@@ -420,6 +420,7 @@ const Dao = () => {
               <div key={index} style={{ position: "relative" }}>
                 <img
                   src={item.preview}
+                  alt=""
                   className="w-76px h-76px"
                   style={{
                     objectFit: "cover",
