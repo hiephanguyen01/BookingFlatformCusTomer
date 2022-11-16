@@ -35,7 +35,7 @@ export const Footer = ({
   post,
 }) => {
   const [visible, setVisible] = useState(false);
-  const [data, setDate] = useState([]);
+  // const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ export const Footer = ({
   const handleCancelOrder = async () => {
     try {
       const formData = new FormData();
-      formData.append("BookingStatus", 4);
+      formData.append("BookingStatus", 2);
       formData.append("Category", Category);
       const response = await orderService.updateOrder(formData, IdentifyCode);
       const newPageBooking = pageBooking.filter(
@@ -88,7 +88,8 @@ export const Footer = ({
       dispatch({ type: TOGGLE_STATE, payload: error.response.data.message.id });
     }
   };
-  switch (status) {
+  console.log(+status);
+  switch (+status) {
     case 1:
       return (
         <div className="FooterStatus__wait">

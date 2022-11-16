@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Autoplay, Lazy, Navigation, Pagination, Parallax } from "swiper";
 import "swiper/css";
 import "swiper/css/bundle";
@@ -23,7 +23,8 @@ const Banner = ({ banners }) => {
           return (
             banner.IsVisible && (
               <SwiperSlide key={banner.id}>
-                <div data-swiper-parallax="-300" className="banner">
+               <a href={banner.Description}>
+               <div data-swiper-parallax="-300" className="banner">
                   <img
                     data-swiper-parallax="-300"
                     slot="container-start"
@@ -39,6 +40,7 @@ const Banner = ({ banners }) => {
                   </div>
                 </div>
                 <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+               </a>
               </SwiperSlide>
             )
           );

@@ -4,7 +4,7 @@ import {
   StarFilled,
 } from "@ant-design/icons";
 import { Divider, Pagination, Rate } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import images from "../../assets/images";
 import imgCmt from "../../assets/images/deviceImg.png";
@@ -24,6 +24,7 @@ const STAR_LIST = [
 ];
 const pageSize = 5;
 const Index = ({ data = [], className }) => {
+  const ref = useRef(null);
   const [chooseRating, setChooseRating] = useState(0);
   const [state, setState] = useState({
     values: [],
@@ -57,7 +58,7 @@ const Index = ({ data = [], className }) => {
     }
   }, [chooseRating, data]);
   const handleChange = (page) => {
-    console.log("page", page);
+    ref.current.scrollIntoView();
     setState((prev) => ({
       ...prev,
       current: page,
@@ -69,7 +70,7 @@ const Index = ({ data = [], className }) => {
 
   return (
     <>
-      <div className={`rating ${className}`}>
+      <div ref={ref} className={`rating ${className}`}>
         <h3>Đánh giá</h3>
         <div className="rate d-flex align-items-center">
           <Rate
