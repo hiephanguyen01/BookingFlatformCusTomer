@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { convertImage } from "../../utils/convertImage";
 
-const CommentSlider = ({ data = [] }) => {
+const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
   const convertCategory = (category) => {
     switch (category) {
       case 1:
@@ -30,7 +30,7 @@ const CommentSlider = ({ data = [] }) => {
   return (
     <div className="post_slider_container">
       <Swiper
-        slidesPerView={"2.5"}
+        slidesPerView={slidesPerView}
         spaceBetween={15}
         // pagination={{
         //   clickable: true,
@@ -40,14 +40,17 @@ const CommentSlider = ({ data = [] }) => {
         className="post_slider"
       >
         {data?.map((item, index) => (
-          <SwiperSlide key={index} className="post_slider_item">
+          <SwiperSlide key={index} className="post_slider_item w-100">
             <a
-              href={`${convertCategory(item.category)}/${item.id}`}
-              className="h-100"
+              href={`${window.location.origin}/home/${convertCategory(
+                item.category
+              )}/${item.id}`}
+              className="h-100 w-100 wrapper"
             >
               <div className="d-flex h-100">
                 <img
                   src={convertImage(item.Image[0])}
+                  alt=""
                   className="me-12"
                   style={{ width: "100px", objectFit: "cover" }}
                 />

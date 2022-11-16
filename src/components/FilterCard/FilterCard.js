@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
+import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertImage } from "../../utils/convertImage";
 import "./FilterCard.scss";
 const FilterCard = ({ data, category }) => {
@@ -68,7 +69,20 @@ const FilterCard = ({ data, category }) => {
       {data && (
         <div
           className="FilterCard"
-          onClick={() => navigate(`/home/${category.value}/${data.id}`)}>
+          onClick={() => {
+            dispatch({
+              type: SET_FILTER_SERVICE,
+              payload: {
+                OrderByTime: -1,
+                OrderByTimeFrom: "",
+                OrderByTimeTo: "",
+                OrderByDateFrom: "",
+                OrderByDateTo: "",
+              },
+            });
+            navigate(`/home/${category.value}/${data.id}`);
+          }}
+        >
           <div className="groupImage">
             <div onClick={handleChangeLike} className={"like"}>
               {value?.findIndex((item) => item.id === data.id) > -1 ? (
@@ -112,31 +126,29 @@ const FilterCard = ({ data, category }) => {
             </div>
           </div>
           <div className="text">
-            <div
-              className="d-flex align-items-center"
-              style={{ padding: "17px 10px 10px 17px" }}>
+            <div className="d-flex align-items-center mb-8">
               <p className="title">{data.Name}</p>
               <CheckCircleTwoTone
                 style={{ fontSize: "20px" }}
+                className="pb-4"
                 twoToneColor="#52c41a"
               />
             </div>
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="description">
+            <div className="d-flex justify-content-between align-items-center mb-8">
+              <p className="description">
                 <img src={Logo3} alt="" /> {data.Address}
-              </div>
-              <p>
+              </p>
+              <d>
                 <StarOutlined
                   style={{ color: "#F8D93A" }}
-                  className="me-5"
                   twoToneColor="#F8D93A"
                 />
                 {data.TotalRate} ({data.NumberOfRating})
-              </p>
+              </d>
             </div>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center mb-8">
               <p className="description-category">
-                <img src={Logo2} alt="" /> {category.name}
+                <img src={Logo2} alt="" className="pb-3" /> {category.name}
               </p>
               <p>Đã đặt {data.BookingCount}</p>
             </div>

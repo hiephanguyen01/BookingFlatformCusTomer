@@ -11,7 +11,7 @@ export const AuthPage = () => {
   return (
     <AuthLayout>
       <Routes>
-        <Route path = "*" element={<Navigate to="sign-up"/>} />
+        <Route path="*" element={<Navigate to="sign-up" />} />
         <Route path="sign-up" element={<SignUp></SignUp>}></Route>
         <Route
           path="sign-up/phone"
@@ -19,7 +19,8 @@ export const AuthPage = () => {
             <ProtectedRouter>
               <SignUpWithPhone
                 backLink="/auth/sign-up"
-                nextLink="/auth/sign-up/set-password"></SignUpWithPhone>
+                nextLink="/auth/sign-up/set-password"
+              ></SignUpWithPhone>
             </ProtectedRouter>
           }
         />
@@ -31,7 +32,8 @@ export const AuthPage = () => {
                 backLink="/auth/sign-up/phone"
                 nextLink="/"
                 submit="Đăng ký"
-                header="Thiết lập mật khẩu"></SetPassword>
+                header="Thiết lập mật khẩu"
+              ></SetPassword>
             </ProtectedRouter>
           }
         />
@@ -45,7 +47,8 @@ export const AuthPage = () => {
           element={
             <SignUpWithPhone
               backLink="/auth/sign-in/forgot-password"
-              nextLink="/auth/sign-in/forgot-password/set-password"></SignUpWithPhone>
+              nextLink="/auth/sign-in/forgot-password/set-password"
+            ></SignUpWithPhone>
           }
         />
         <Route
@@ -56,7 +59,8 @@ export const AuthPage = () => {
                 backLink="/auth/sign-in/forgot-password/phone"
                 nextLink="/"
                 submit="Đặt lại mật khẩu"
-                header="Đặt lại mật khẩu"></SetPassword>
+                header="Đặt lại mật khẩu"
+              ></SetPassword>
             </ProtectedRouter>
           }
         />

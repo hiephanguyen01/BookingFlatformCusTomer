@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 export const FooterRating = ({ id, setVisible, visible }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  console.log("djkhsakjdhskja", data);
   useEffect(() => {
     (async () => {
       try {
@@ -22,7 +23,7 @@ export const FooterRating = ({ id, setVisible, visible }) => {
       } catch (error) {
         setLoading(false);
         console.log(error);
-      } 
+      }
     })();
   }, [id, visible]);
   if (loading) {

@@ -144,7 +144,8 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
       <div className="w-100">
         <div
           className="mb-15 d-flex "
-          style={{ gap: "10px", flexWrap: "wrap" }}>
+          style={{ gap: "10px", flexWrap: "wrap" }}
+        >
           {/* <ImgRate setData={setData} /> <ImgRate  setData={setData} /> <ImgRate  setData={setData} /> <ImgRate  setData={setData}  /> <ImgRate  setData={setData}  />{" "}
           <VideoRate /> */}
           <UploadImage
@@ -155,7 +156,8 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
               border: "0.6px dashed #1FCBA2",
               borderRadius: "10px",
             }}
-            multiple={true}>
+            multiple={true}
+          >
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
           </UploadImage>
           {/* <GoogleDrivePicker files={filesDrive} setFiles={setFilesDrive} /> */}
@@ -193,14 +195,16 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
       <div className="FooterStatus__complete__modal__body__confirm">
         <button
           onClick={onCancel}
-          className="FooterStatus__complete__modal__body__confirm__1">
+          className="FooterStatus__complete__modal__body__confirm__1"
+        >
           Hủy
         </button>
         <button
           onClick={() => {
             onsubmit();
           }}
-          className="FooterStatus__complete__modal__body__confirm__2">
+          className="FooterStatus__complete__modal__body__confirm__2"
+        >
           Lưu
         </button>
       </div>

@@ -106,7 +106,6 @@
     font-weight: 700;
     font-size: 20px;
     display: -webkit-box;
-    // flex: 1;
 
     line-height: 22px;
     -webkit-line-clamp: 1;
@@ -114,11 +113,10 @@
     overflow: hidden;
 
     text-overflow: ellipsis;
-    max-width: 440px;
+    // max-width: 440px;
   }
 
   p.description {
-    padding: 5px 0 0 17px;
     font-weight: 400;
     display: -webkit-box;
     font-size: 14px;
@@ -133,7 +131,6 @@
   }
 
   p.description-category {
-    padding: 5px 0 0 17px;
     font-weight: 400;
     font-size: 14px;
   }
@@ -146,6 +143,6 @@
 
   .text {
     width: 100%;
-    padding-right: 10px;
+    padding: 10px 17px;
   }
 }

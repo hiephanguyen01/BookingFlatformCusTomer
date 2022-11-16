@@ -1,15 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {
-  Link,
-  Button,
-  Element,
-  Events,
-  animateScroll as scroll,
-  scrollSpy,
-  scroller,
-} from "react-scroll";
+import { Link } from "react-scroll";
 
 import "./helpCenterAside.scss";
 
@@ -42,8 +34,8 @@ const ITEM_USER_ACCOUNT_ASIDE = [
 ];
 
 const HelpCenterAside = ({ children, ref }) => {
-  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-  const { pathname } = useLocation();
+  // const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  // const { pathname } = useLocation();
   // console.log(pathname.split("/")[4]);
   const AsideItems = ({ item, ref, index }) => {
     return (
@@ -66,7 +58,8 @@ const HelpCenterAside = ({ children, ref }) => {
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
-          }}>
+          }}
+        >
           {item.icon}
           <span
           // style={

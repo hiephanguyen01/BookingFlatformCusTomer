@@ -5,6 +5,12 @@ import { orderService } from "../../../../services/OrderService";
 import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";
 import "./orderStatus.scss";
 const { TabPane } = Tabs;
+const keyF = {
+  1: { BookingStatus: 4, PaymentStatus: 1 },
+  2: { BookingStatus: 4, PaymentStatus: [4, 3, 2] },
+  3: { BookingStatus: 1, PaymentStatus: 3 },
+  4: { BookingStatus: 2 },
+};
 const OrderStatus = () => {
   const [booking, setBooking] = useState([]);
   const [filter, setFilter] = useState([]);
@@ -22,7 +28,7 @@ const OrderStatus = () => {
   });
   const onChange = (key) => {
     setFilter([]);
-    setParams({ ...params, BookingStatus: key });
+    setParams({ ...params, ...keyF[key], key });
   };
   const handleChange = (current, pageSize) => {
     const last = current * pageSize;
@@ -91,7 +97,7 @@ const OrderStatus = () => {
         ) : (
           <Tabs
             className="tab_search"
-            defaultActiveKey={params.BookingStatus}
+            defaultActiveKey={params.key}
             onChange={onChange}
             tabBarExtraContent={{
               right: (
@@ -108,6 +114,7 @@ const OrderStatus = () => {
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
                     id={item.id}
+                    BookingStatus={params.key}
                     key={idx}
                     item={item}
                     pageBooking={pageBooking}
@@ -120,6 +127,7 @@ const OrderStatus = () => {
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
                     id={item.id}
+                    BookingStatus={params.key}
                     key={idx}
                     item={item}
                     pageBooking={pageBooking}
@@ -132,6 +140,7 @@ const OrderStatus = () => {
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
                     id={item.id}
+                    BookingStatus={params.key}
                     key={idx}
                     item={item}
                     pageBooking={pageBooking}
@@ -144,6 +153,7 @@ const OrderStatus = () => {
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
                     id={item.id}
+                    BookingStatus={params.key}
                     key={idx}
                     item={item}
                     booking={booking}

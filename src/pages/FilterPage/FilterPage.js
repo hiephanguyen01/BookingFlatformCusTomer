@@ -10,14 +10,11 @@ import {
   Row,
   Select,
   Slider,
-  TimePicker,
 } from "antd";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import EmptyPage from "../../components/layouts/EmptyPage";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { convertDateSendToDB, convertPrice } from "../../utils/convert";
@@ -47,24 +44,22 @@ const categories = [
     name: "Make up",
   },
   {
-    id: 6,
-    value: "model",
-    name: "Người mẫu",
-  },
-  {
     id: 5,
     value: "device",
     name: "Thiết bị",
+  },
+  {
+    id: 6,
+    value: "model",
+    name: "Người mẫu",
   },
 ];
 const FilterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const ref = useRef(null);
+  console.log(ref, ref?.current?.offsetTop);
   const querySearch = queryString.parse(location?.search);
-  console.log(querySearch);
-
-  const [date, setDate] = useState(convertDateSendToDB(new Date()));
-  const [time, setTime] = useState([]);
 
   const dispatch = useDispatch();
   const [form] = Form.useForm();
@@ -78,18 +73,12 @@ const FilterPage = () => {
       setProvinces(res.data);
     })();
     initState();
-    console.log(123);
   }, []);
 
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
         keyString: querySearch?.keyString || "",
-        // OrderByTime: -1,
-        // OrderByTimeFrom: convertDateSendToDB(new Date()),
-        // OrderByTimeTo: convertDateSendToDB(new Date()),
-        // OrderByDateFrom: convertDateSendToDB(new Date()),
-        // OrderByDateTo: convertDateSendToDB(new Date()),
         category: Number(querySearch?.category),
         priceOption: Number(querySearch?.priceOption),
         price1: undefined,
@@ -173,6 +162,7 @@ const FilterPage = () => {
   };
   const onChangePage = (value) => {
     dispatch(getFilterStudioPost(5, value, filter), {}, navigate);
+    window.scrollTo({ behavior: "smooth", top: ref.current.offsetTop });
   };
   const handleClearFilter = () => {
     dispatch(
@@ -199,21 +189,7 @@ const FilterPage = () => {
     );
     form.resetFields();
   };
-  const handleOnchangeHour = (t, timeString) => {
-    setTime(timeString);
-    if (date !== "") {
-      dispatch(
-        getFilterStudioPost(5, 1, {
-          ...filter,
-          OrderByTime: 1,
-          OrderByTimeFrom:
-            convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
-          OrderByTimeTo:
-            convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
-        })
-      );
-    }
-  };
+
   return (
     <div className="FilterPage">
       <div className="container">
@@ -376,7 +352,11 @@ const FilterPage = () => {
             ) : !studioPostList?.length ? (
               <EmptyPage />
             ) : (
-              <div style={{ backgroundColor: "#fff" }} className="px-15 py-20">
+              <div
+                ref={ref}
+                style={{ backgroundColor: "#fff" }}
+                className="px-15 py-20"
+              >
                 {studioPostList?.map((val) => (
                   <FilterCard
                     data={val}

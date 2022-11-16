@@ -1,6 +1,17 @@
 @import "../../App.scss";
 
 .table {
+
+    .warning-choose-time {
+        color: #E22828;
+        border: 1px solid #E22828;
+        display: inline-block;
+        padding: 2px 5px;
+        border-radius: 5px;
+        font-weight: bolder;
+        margin-bottom: 20px;
+    }
+
     &-header {
         background-color: $neutral-50;
         padding: 14px 0px;

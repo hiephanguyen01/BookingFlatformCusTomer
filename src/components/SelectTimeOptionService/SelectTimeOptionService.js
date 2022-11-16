@@ -51,7 +51,7 @@ const Option = ({ option, disabled, service }) => {
   }
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
-    if (dString && option === 0) {
+    if (dString && filterService.OrderByTime === 1) {
       let hl = service?.Bookings?.filter((item) => {
         const dates = dateRange(
           moment(item.OrderByTimeFrom).format("l"),
@@ -59,13 +59,14 @@ const Option = ({ option, disabled, service }) => {
         );
         return dates.includes(moment(dString).format("l"));
       });
+      console.log(hl);
       setDisableHour(hl);
     }
     if (time.length > 0) {
       dispatch(
         setFilterStudioService(5, 1, {
           ...filterService,
-          OrderByTime: 0,
+          OrderByTime: 1,
           OrderByTimeFrom:
             convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
           OrderByTimeTo:
@@ -146,6 +147,7 @@ const Option = ({ option, disabled, service }) => {
         return remove_duplicates_es6(acc);
       }, []);
     }
+    console.log(array);
     return array;
   };
   switch (Number(filterService.OrderByTime)) {
@@ -198,7 +200,7 @@ const Option = ({ option, disabled, service }) => {
               marginBottom: "10px",
             }}
           >
-            <div className="" style={{ width: "200px" }}>
+            <div className="" style={{ width: "160px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
                 onChange={handleOnchangeHour}
@@ -265,16 +267,15 @@ const Option = ({ option, disabled, service }) => {
 const SelectTimeOptionService = ({ disabled, service }) => {
   const [data, setData] = useState(service);
   const { filterService } = useSelector((state) => state.studioPostReducer);
-  const [selection, setSelection] = useState(filterService.OrderByTime);
+  // const [selection, setSelection] = useState(filterService.OrderByTime);
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setData(service);
+  }, [service]);
+
   const handleOnChangeSelection = (e) => {
-    setSelection(e.target.value);
-    // dispatch({
-    //   type: SET_FILTER_SERVICE,
-    //   payload: { ...filterService, OrderByTime: e.target.value },
-    // });
     dispatch(
       setFilterStudioService(5, 1, {
         ...filterService,
@@ -282,16 +283,14 @@ const SelectTimeOptionService = ({ disabled, service }) => {
       })
     );
   };
-  useEffect(() => {
-    setData(service);
-  }, [service]);
+
   return (
     <div className="selectTimeOptionServiceContainer mb-20">
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}
         style={{ padding: "0 0 20px" }}
-        value={selection}
+        value={filterService.OrderByTime}
         disabled={disabled}
       >
         <Space direction="vertical">
@@ -299,7 +298,7 @@ const SelectTimeOptionService = ({ disabled, service }) => {
           <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
-      <Option service={data} option={selection} disabled={disabled} />
+      <Option service={data} disabled={disabled} />
     </div>
   );
 };

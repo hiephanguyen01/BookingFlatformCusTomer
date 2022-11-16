@@ -11,6 +11,7 @@ import { orderService } from "../../services/OrderService";
 import { convertImage } from "../../utils/convertImage";
 
 const Index = () => {
+  const [checkoutDisable, setCheckoutDisable] = useState(false);
   const location = useLocation();
   // console.log(location);
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    const getPartner = async () => {
+    (async () => {
       try {
         const response = await partnerService.getPartnerDetail(
           location?.state?.TenantId
@@ -61,8 +62,13 @@ const Index = () => {
       } catch (error) {
         toastMessage("Lấy thông tin partner thất bại!", "error");
       }
+    })();
+
+    const timer = setTimeout(() => setCheckoutDisable(true), 5000);
+
+    return () => {
+      clearTimeout(timer);
     };
-    getPartner();
   }, []);
 
   const onChangeFile = (e) => {
@@ -238,7 +244,9 @@ const Index = () => {
             </UploadImage>
           </div>
           <div
-            className="btn_update text-medium-se mb-30 "
+            className={`btn_update text-medium-se mb-30 ${
+              checkoutDisable && "disable-checkout"
+            }`}
             onClick={handleClickBtnUpdate}
           >
             Cập nhật minh chứng

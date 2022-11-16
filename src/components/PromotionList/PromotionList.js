@@ -43,6 +43,7 @@ const PromotionList = ({ data }) => {
               className="promotion-list-item active"
               //   onClick={handleViewDetailPromo}
               onClick={showPromotion}
+              style={{ cursor: "pointer" }}
             >
               {item?.SaleCode?.TypeReduce === 1
                 ? `Giảm ${numberSlice(item?.SaleCode?.ReduceValue)}K`
