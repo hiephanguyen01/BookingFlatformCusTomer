@@ -30,13 +30,9 @@ const DaoPostSearchModal = (props) => {
       : [];
 
   useEffect(() => {
-    // console.log("Giờ mới call API! ");
     if (pagination.total > 0) {
       dispatch(getAllPostDaoAction(pagination.total));
     }
-    // return () => {
-    //     dispatch({ type: GET_SEARCH_LIST_POST, data: [] });
-    //   };
   }, [pagination.total]);
   return (
     <Modal

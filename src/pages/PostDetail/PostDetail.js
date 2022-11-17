@@ -6,7 +6,6 @@ import { Pagination, Navigation } from "swiper";
 import {
   HeartFilled,
   HeartOutlined,
-  HeartTwoTone,
   MoreOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -18,8 +17,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import { convertImage } from "../../utils/convertImage";
-import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
-import img1 from "../../assets/dao/Frame 180.png";
 import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
 import {
   getAllDefaultComments,
@@ -47,7 +44,6 @@ import { userService } from "../../services/UserService";
 import CopyToClipboard from "react-copy-to-clipboard";
 
 const PostDetail = () => {
-  console.log(window.location);
   const type = "post";
   const { postId } = useParams();
   const dispatch = useDispatch();
@@ -78,7 +74,7 @@ const PostDetail = () => {
     },
   ];
 
-  const [moreOptionModal, setMoreOptionModal] = useState(false);
+  // const [moreOptionModal, setMoreOptionModal] = useState(false);
 
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
@@ -87,11 +83,11 @@ const PostDetail = () => {
     return () => {
       dispatch({ type: "DELETE_DETAIL_POST", data: {} });
     };
-  }, []);
+  }, [dispatch, postId]);
 
   useEffect(() => {
     dispatch(getLikePostList(currentUser?.id));
-  }, [currentUser]);
+  }, [currentUser, dispatch]);
 
   useEffect(() => {
     setPost({ ...postDetail });
@@ -119,7 +115,7 @@ const PostDetail = () => {
         setPagination(data.pagination);
       }
     } catch (error) {
-      console.log(window.locationerror);
+      console.log(error);
     }
   };
 
@@ -266,6 +262,7 @@ const PostDetail = () => {
                   src={convertImage(img)}
                   className="w-100 h-100"
                   style={{ objectFit: "contain" }}
+                  alt=""
                 />
               </SwiperSlide>
             ))}

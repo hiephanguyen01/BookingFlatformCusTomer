@@ -81,7 +81,6 @@ export const ChatContentAdmin = React.memo(({ info }) => {
       message.trim() !== "" &&
       files.length !== 0
     ) {
-      console.log("case3");
       e.preventDefault();
       setMessage("");
       socket.emit("send_message_admin", messText);
@@ -119,7 +118,6 @@ export const ChatContentAdmin = React.memo(({ info }) => {
     }
     setFiles([...newFiles]);
     scrollToBottom();
-    console.log(newFiles);
   };
   const handleRemoveImage = (index) => {
     const newFiles = [...files];
@@ -186,7 +184,6 @@ export const ChatContentAdmin = React.memo(({ info }) => {
   }, [socket, id]);
   const renderMess = (itm) => {
     if (itm.Type !== "text") {
-      console.log(itm);
       return (
         <img
           onLoad={() => scrollToBottom()}

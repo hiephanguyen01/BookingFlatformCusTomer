@@ -1,4 +1,4 @@
-import { InfoCircleOutlined, WarningOutlined } from "@ant-design/icons";
+import { WarningOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
 import React from "react";
 import "./textInput.scss";
@@ -39,7 +39,6 @@ const TextInput = ({
           name={name}
           value={value}
           onChange={onChange}
-          
           style={{
             width: "100%",
             height: "50px",

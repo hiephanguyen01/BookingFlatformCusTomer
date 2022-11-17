@@ -1,6 +1,5 @@
 import { Button, Divider } from "antd";
 import React, { useEffect, useState } from "react";
-import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import vietnam from "../../../assets/imgAuth/vietnam.png";
@@ -24,7 +23,7 @@ export const SignUp = ({ onClickSignUp }) => {
     if (user?.Email) {
       navigate("/home/dao");
     }
-  }, [user]);
+  }, [user, navigate]);
   return (
     <>
       <div style={{ marginBottom: "52px" }}>

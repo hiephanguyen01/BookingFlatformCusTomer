@@ -33,7 +33,6 @@ export const getAllOrderByUserId = () => async (dispatch) => {
 export const getTotalOrder = async (id, category) => {
   try {
     const { data } = await orderService.getTotalOrderOfStudio(id, category);
-    console.log(data.payload.count);
     return data.payload.count;
   } catch (err) {
     console.error(err);

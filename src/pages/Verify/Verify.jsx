@@ -26,7 +26,7 @@ const Verify = () => {
         setMessage("Xác nhận email thất bại, vui lòng kiểm tra lại!");
       }
     })();
-  }, []);
+  }, [dispatch, token]);
 
   return (
     <div

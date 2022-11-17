@@ -22,7 +22,6 @@ const GoogleDrivePicker = ({ files, setFiles }) => {
         if (d.action === "cancel") {
         }
         if (d.docs !== undefined) {
-          console.log(d);
           const newFiles = d.docs.reduce((newArr, item) => {
             if (item.mimeType.split("/")[0] === "image") {
               return [
@@ -35,7 +34,6 @@ const GoogleDrivePicker = ({ files, setFiles }) => {
             }
             return [...newArr];
           }, []);
-          console.log(newFiles);
           setFiles([...files, ...newFiles]);
         }
       },

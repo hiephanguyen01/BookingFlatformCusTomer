@@ -1,7 +1,6 @@
 import {
   CheckCircleOutlined,
   DownOutlined,
-  ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
@@ -9,7 +8,7 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Menu, Popover, Rate, Row } from "antd";
+import { Button, Col, Popover, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -21,10 +20,7 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 // import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import {
-  addOrder,
-  chooseServiceAction,
-} from "../../stores/actions/OrderAction";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import {
   getLikeStudioPostAction,
   getStudioSimilarAction,
@@ -53,13 +49,8 @@ const COLUMN = [
   { title: "Chọn dịch vụ", size: 7 },
 ];
 const Index = () => {
-  const {
-    studioDetail,
-    loading,
-    listStudioSimilar,
-    promotionCode,
-    filterService,
-  } = useSelector((state) => state.studioPostReducer);
+  const { studioDetail, listStudioSimilar, promotionCode, filterService } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -100,7 +91,7 @@ const Index = () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
     };
-  }, []);
+  }, [dispatch]);
 
   const handleReport = () => {
     dispatch({
@@ -109,25 +100,25 @@ const Index = () => {
     });
   };
 
-  const menu_report = (
-    <Menu
-      items={[
-        {
-          label: (
-            <div
-              onClick={() =>
-                dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }
-            >
-              <ExclamationCircleOutlined className="me-10" />
-              Báo cáo
-            </div>
-          ),
-          key: "0",
-        },
-      ]}
-    />
-  );
+  // const menu_report = (
+  //   <Menu
+  //     items={[
+  //       {
+  //         label: (
+  //           <div
+  //             onClick={() =>
+  //               dispatch({ type: SHOW_MODAL, Component: <Report /> })
+  //             }
+  //           >
+  //             <ExclamationCircleOutlined className="me-10" />
+  //             Báo cáo
+  //           </div>
+  //         ),
+  //         key: "0",
+  //       },
+  //     ]}
+  //   />
+  // );
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -318,7 +309,7 @@ const Index = () => {
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0 && filterService.OrderByTime !== -1) {
+    if (chooseService.length > 0) {
       dispatch(chooseServiceAction(chooseService));
       navigate("order");
     } else {
@@ -330,14 +321,15 @@ const Index = () => {
     }
   };
 
-  const handleAddCart = () => {
-    if (chooseService.length > 0) {
-      dispatch(addOrder(cate, chooseService));
-      toastMessage("Đã thêm vào giỏ hàng!", "success");
-    } else {
-      toastMessage("Bạn cần chọn dịch vụ!", "warn");
-    }
-  };
+  // const handleAddCart = () => {
+  //   if (chooseService.length > 0) {
+  //     dispatch(addOrder(cate, chooseService));
+  //     toastMessage("Đã thêm vào giỏ hàng!", "success");
+  //   } else {
+  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
+  //   }
+  // };
+
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");
     dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
@@ -511,10 +503,11 @@ const Index = () => {
                       </div>
                     </div>
                     <iframe
+                      title="map"
                       style={{ width: "100%", height: "220px", border: "0" }}
                       src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
                       loading="lazy"
-                      referrerpolicy="no-referrer-when-downgrade"
+                      referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
                   </div>
                 </Col>

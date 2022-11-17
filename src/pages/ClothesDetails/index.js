@@ -1,6 +1,5 @@
 import {
   CheckCircleOutlined,
-  ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
@@ -9,17 +8,7 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import {
-  Button,
-  Col,
-  Dropdown,
-  Menu,
-  Popover,
-  Rate,
-  Row,
-  Select,
-  Space,
-} from "antd";
+import { Button, Col, Popover, Rate, Row, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -29,7 +18,6 @@ import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
-import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
@@ -50,8 +38,6 @@ import {
   SET_PROMOTION_CODE,
   SET_STUDIO_DETAIL,
 } from "../../stores/types/studioPostType";
-import Voucher from "../../components/Voucher";
-import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
@@ -83,7 +69,6 @@ const Index = () => {
   const {
     studioDetail,
     filter,
-    loading,
     listStudioSimilar,
     promotionCode,
     filterService,
@@ -131,7 +116,7 @@ const Index = () => {
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
       // clearTimeout(timeOut);
     };
-  }, []);
+  }, [dispatch]);
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -156,25 +141,25 @@ const Index = () => {
     });
   };
 
-  const menu = (
-    <Menu
-      items={[
-        {
-          label: (
-            <div
-              onClick={() =>
-                dispatch({ type: SHOW_MODAL, Component: <Report /> })
-              }
-            >
-              <ExclamationCircleOutlined className="me-10" />
-              Báo cáo
-            </div>
-          ),
-          key: "0",
-        },
-      ]}
-    />
-  );
+  // const menu = (
+  //   <Menu
+  //     items={[
+  //       {
+  //         label: (
+  //           <div
+  //             onClick={() =>
+  //               dispatch({ type: SHOW_MODAL, Component: <Report /> })
+  //             }
+  //           >
+  //             <ExclamationCircleOutlined className="me-10" />
+  //             Báo cáo
+  //           </div>
+  //         ),
+  //         key: "0",
+  //       },
+  //     ]}
+  //   />
+  // );
 
   const ROW = (dataSource = []) => {
     if (dataSource?.length > 0) {
@@ -587,6 +572,7 @@ const Index = () => {
                               : REACT_APP_DB_BASE_URL_IMG + "/" + imgPost
                           }`}
                           className="avatar"
+                          alt=""
                         />
                         <div className="">
                           <div className="desc_col_right_title">
@@ -597,6 +583,7 @@ const Index = () => {
                             <img
                               src={svgLocation}
                               style={{ marginRight: "6px" }}
+                              alt=""
                             />
                             {studioDetail?.shop?.Address}
                           </div>

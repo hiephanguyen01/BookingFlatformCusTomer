@@ -34,13 +34,11 @@ const CODE_CHALLENGE = Base64.stringify(sha256(CODE_VERIFIER))
   .replace(/=/g, "")
   .replace(/\+/g, "-")
   .replace(/\//g, "_");
-const redirect_uri = window.location.origin + "/home";
 
 const AccountInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-  const { providerId } = useSelector((state) => state.authenticateReducer);
   const [checkedLinkGoogle, setCheckedLinkGoogle] = useState(
     UserMe?.GoogleEmail ? true : false
   );
@@ -110,21 +108,22 @@ const AccountInfo = () => {
             zaloPicture: getInfo.data.picture.data.url,
           });
           dispatch({ type: SET_USER, payload: link.data.data });
-          console.log(getInfo.data, link.data);
         } catch (error) {}
       };
       linkZalo();
       // window.location = window.location.origin + "/home/user/accountInfo";
     }
     // window.location = window.location.origin + "/home/user/accountInfo";
-  }, [checkedLinkZalo]);
-  console.log(queryString.parse(location.search));
+  }, [checkedLinkZalo, dispatch, location.search]);
+  console.log(window.location);
 
   const onChangeCheck = async (checked) => {
     /* console.log(`switch to ${checked}`); */
     setCheckedLinkZalo(checked);
     if (checked) {
-      window.location = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${window.location.href}&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
+      window.location.href = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${
+        window.location.origin + "/home/user/accountInfo"
+      }&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
     } else {
       const link = await authenticateService.zaloLink({
         zaloId: "",
@@ -132,8 +131,6 @@ const AccountInfo = () => {
         zaloPicture: "",
       });
       dispatch({ type: SET_USER, payload: link.data.data });
-      window.location.replace =
-        window.location.origin + "/home/user/accountInfo";
     }
   };
   const handleCancel = () => {

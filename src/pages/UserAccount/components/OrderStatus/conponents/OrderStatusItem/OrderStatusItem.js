@@ -21,7 +21,6 @@ const OrderStatusItem = ({
   id,
   BookingStatus,
 }) => {
-  console.log("itembokigndnsa", item);
   const [post, setPost] = useState();
   const navigate = useNavigate();
   let {
@@ -58,7 +57,7 @@ const OrderStatusItem = ({
         console.log(error);
       }
     })();
-  }, [TenantId]);
+  }, [TenantId, category]);
   const navigateToDetail = () => {
     switch (category) {
       case 1:
@@ -91,7 +90,8 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}>
+            onClick={navigateToDetail}
+          >
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}

@@ -15,7 +15,7 @@ export const SignIn = ({ onClickPop }) => {
     if (user) {
       navigate("/home/dao");
     }
-  }, [user]);
+  }, [user, navigate]);
   const onFinish = (values) => {
     dispatch(LoginWithPhoneNumber(values, navigate));
   };

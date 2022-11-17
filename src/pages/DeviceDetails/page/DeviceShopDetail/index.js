@@ -23,9 +23,7 @@ const ASIDE_CATEGORY_ITEM = [
   { value: 3, name: "Khác" },
 ];
 
-const onShowSizeChange = (current, pageSize) => {
-  /* console.log(current, pageSize); */
-};
+const onShowSizeChange = (current, pageSize) => {};
 
 const Index = () => {
   const [chooseAsideCategory, setChooseAsideCategory] = useState(0);
@@ -47,6 +45,7 @@ const Index = () => {
                 src={imgPost}
                 style={{ height: "280px" }}
                 className="me-32"
+                alt=""
               />
             </Col>
             <Col lg={16} sm={24}>
@@ -55,7 +54,11 @@ const Index = () => {
                 <CheckCircleOutlined className="check_circle pt-10 ms-10" />
               </div>
               <div className="location">
-                <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
+                <img
+                  src={svgLocation}
+                  style={{ marginRight: "0.5rem" }}
+                  alt=""
+                />
                 Quận 1, TPHCM
               </div>
               <div className="d-flex align-items-center mb-20">
