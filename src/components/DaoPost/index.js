@@ -23,7 +23,9 @@ import ReportPost from "../ReportPostDao";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createLikeCommentDao,
+  getAllNotificationDaoAction,
   likePost,
+  toggleNotificationDaoAction,
 } from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
 import { userService } from "../../services/UserService";
@@ -45,9 +47,10 @@ const DaoPost = (props) => {
     (state) => state.authenticateReducer.currentUser
   );
 
-  const { defaultComments, relatedService } = useSelector(
+  const { defaultComments, relatedService, listNotificationUser } = useSelector(
     (state) => state.postDaoReducer
   );
+  console.log("listNotificationDao", listNotificationUser);
 
   const { visible } = useSelector((state) => state.modalReducer);
 
@@ -108,17 +111,17 @@ const DaoPost = (props) => {
   useEffect(() => {
     setPost({ ...item });
   }, [item]);
+  useEffect(() => {
+    dispatch(getAllNotificationDaoAction());
+  }, []);
   const handlerLikeComment = (id) => {
     // getComments(1);
     // setPost({ ...post, TotalComments: post.TotalComments + 1 });
     console.log("cliudsadjshajkdsa");
-    dispatch(createLikeCommentDao({ CommentId: id }, item.Id, setComments,pagination));
+    dispatch(
+      createLikeCommentDao({ CommentId: id }, item.Id, setComments, pagination)
+    );
   };
-  // useEffect(() => {
-  // if (!visible) {
-  //   setChooseCommentDefault({});
-  // }
-  // }, [visible]);
 
   const moreOptionOnEachPost = [
     { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
@@ -190,6 +193,7 @@ const DaoPost = (props) => {
       case 2:
         setIsModalOptionDetail(false);
         setMoreOptionModal(false);
+        dispatch(toggleNotificationDaoAction({ PostId: Id }));
         message.success("Đã bật thông báo về bài viết này");
         break;
       case 3:
@@ -472,15 +476,47 @@ const DaoPost = (props) => {
                           </CopyToClipboard>
                         </li>
                       ) : (
-                        <li
-                          onClick={() => handleMoreOptionClick(itm)}
-                          key={idx}
-                        >
-                          <div className="container d-flex">
-                            <div>{itm.icon}</div>
-                            <p>{itm.title}</p>
-                          </div>
-                        </li>
+                        <>
+                          {itm.id === 2 ? (
+                            <>
+                              {listNotificationUser?.some(
+                                (item) =>
+                                  item?.UserId === currentUser?.id &&
+                                  item.PostId === Id
+                              ) ? (
+                                <li
+                                  onClick={() => handleMoreOptionClick(itm)}
+                                  key={idx}
+                                >
+                                  <div className="container d-flex">
+                                    <div>{itm.icon}</div>
+                                    <p>Tắt thông báo về bài viết này</p>
+                                  </div>
+                                </li>
+                              ) : (
+                                <li
+                                  onClick={() => handleMoreOptionClick(itm)}
+                                  key={idx}
+                                >
+                                  <div className="container d-flex">
+                                    <div>{itm.icon}</div>
+                                    <p>{itm.title}</p>
+                                  </div>
+                                </li>
+                              )}
+                            </>
+                          ) : (
+                            <li
+                              onClick={() => handleMoreOptionClick(itm)}
+                              key={idx}
+                            >
+                              <div className="container d-flex">
+                                <div>{itm.icon}</div>
+                                <p>{itm.title}</p>
+                              </div>
+                            </li>
+                          )}
+                        </>
                       )}
                     </>
                   ))}
@@ -772,45 +808,6 @@ const DaoPost = (props) => {
                             )}
                             {comment?.services?.length > 0 && (
                               <div className="post_slider_container">
-                                {/* <Swiper
-                                  slidesPerView={"1.4"}
-                                  spaceBetween={15}
-                                  // pagination={{
-                                  //   clickable: true,
-                                  // }}
-                                  navigation={true}
-                                  modules={[Navigation, Pagination]}
-                                  className="post_slider"
-                                >
-                                  {comment?.services?.map((item, index) => (
-                                    <SwiperSlide
-                                      key={index}
-                                      className="post_slider_item"
-                                    >
-                                      <a href="#" className="h-100">
-                                        <div className="d-flex h-100">
-                                          <img
-                                            src={convertImage(item.Image[0])}
-                                            alt=""
-                                            className="me-12"
-                                            style={{
-                                              width: "100px",
-                                              objectFit: "cover",
-                                            }}
-                                          />
-                                          <div className="py-5 ">
-                                            <div className="post_slider_item_name mb-5">
-                                              {item.Name}
-                                            </div>
-                                            <div className="post_slider_item_description">
-                                              {item.Description}
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </a>
-                                    </SwiperSlide>
-                                  ))}
-                                </Swiper> */}
                                 <CommentSlider
                                   data={comment.services}
                                   slidesPerView={1.5}
@@ -1003,9 +1000,7 @@ const DaoPost = (props) => {
                     className="post__comments__detail__info_avatar"
                     // src={cmt.BookingUser.Image}
                     // alt=""
-                    src={
-                      convertImage(cmt.BookingUser.Image)
-                    }
+                    src={convertImage(cmt.BookingUser.Image)}
                     alt=""
                   />
                   <div
