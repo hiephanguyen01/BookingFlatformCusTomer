@@ -57,6 +57,7 @@ const AccountInfo = () => {
 
   const dispatch = useDispatch();
   const myImg = convertImage(UserMe?.Image);
+  console.log(myImg);
   const [visible, setVisible] = useState(false);
   const [infoUser, setInfoUser] = useState(UserMe);
   const [loading, setLoading] = useState(false);
@@ -241,7 +242,7 @@ const AccountInfo = () => {
                   Email đã được xác nhận
                 </p>
               ) : UserMe?.Email?.trim() !== " " ? (
-                <p style={{ color: "red", paddingLeft: "39.703px" }}>
+                <p style={{ color: "red", paddingLeft: "39.703px!important" }}>
                   Vui lòng kiểm trả email để xác thực email.
                 </p>
               ) : (
