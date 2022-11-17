@@ -112,7 +112,7 @@ const DaoPost = (props) => {
     // getComments(1);
     // setPost({ ...post, TotalComments: post.TotalComments + 1 });
     console.log("cliudsadjshajkdsa");
-    dispatch(createLikeCommentDao({ CommentId: id }, item.Id, setComments));
+    dispatch(createLikeCommentDao({ CommentId: id }, item.Id, setComments,pagination));
   };
   // useEffect(() => {
   // if (!visible) {
@@ -308,7 +308,8 @@ const DaoPost = (props) => {
             key={idx}
             md={tempCount === 1 ? 24 : 12}
             xs={24}
-            onClick={() => handleImageModal(img)}>
+            onClick={() => handleImageModal(img)}
+          >
             <img
               style={{
                 width: "100%",
@@ -336,7 +337,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={24}
                 xs={24}
-                onClick={() => handleImageModal(img)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -356,7 +358,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(img)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <img
                   style={{
                     width: "100%",
@@ -405,7 +408,8 @@ const DaoPost = (props) => {
                 key={idx}
                 md={12}
                 xs={24}
-                onClick={() => handleImageModal(img)}>
+                onClick={() => handleImageModal(img)}
+              >
                 <div className="image-container">
                   {idx === 3 && (
                     <div className="fourth-image-overlay d-flex justify-content-center align-items-center">
@@ -455,10 +459,12 @@ const DaoPost = (props) => {
                       {itm.id === 3 ? (
                         <li
                           onClick={() => handleMoreOptionClick(itm)}
-                          key={idx}>
+                          key={idx}
+                        >
                           <CopyToClipboard
                             onCopy={() => {}}
-                            text={`${window.location.origin}/home/dao/posts/${Id}`}>
+                            text={`${window.location.origin}/home/dao/posts/${Id}`}
+                          >
                             <div className="container d-flex">
                               <div>{itm.icon}</div>
                               <p>{itm.title}</p>
@@ -468,7 +474,8 @@ const DaoPost = (props) => {
                       ) : (
                         <li
                           onClick={() => handleMoreOptionClick(itm)}
-                          key={idx}>
+                          key={idx}
+                        >
                           <div className="container d-flex">
                             <div>{itm.icon}</div>
                             <p>{itm.title}</p>
@@ -481,7 +488,8 @@ const DaoPost = (props) => {
               }
               trigger="click"
               visible={moreOptionModal}
-              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}>
+              onVisibleChange={(newVisible) => setMoreOptionModal(newVisible)}
+            >
               <MoreOutlined style={{ fontSize: "24px" }} />
             </Popover>
             <ReportPost
@@ -514,11 +522,13 @@ const DaoPost = (props) => {
                 backgroundColor: "transparent",
               }}
               style={{ overflow: "hidden" }}
-              zIndex={999}>
+              zIndex={999}
+            >
               <Row>
                 <Col
                   span={16}
-                  style={{ backgroundColor: "#1D2226", height: "100%" }}>
+                  style={{ backgroundColor: "#1D2226", height: "100%" }}
+                >
                   <Swiper
                     slidesPerView={1}
                     spaceBetween={30}
@@ -528,11 +538,13 @@ const DaoPost = (props) => {
                     // }}
                     navigation={true}
                     modules={[Pagination, Navigation]}
-                    className="swiperPostDetail">
+                    className="swiperPostDetail"
+                  >
                     {Image?.map((img, index) => (
                       <SwiperSlide
                         key={index}
-                        style={{ background: "#1D2226", padding: "90px 0" }}>
+                        style={{ background: "#1D2226", padding: "90px 0" }}
+                      >
                         <img
                           src={convertImage(img)}
                           alt=""
@@ -551,7 +563,8 @@ const DaoPost = (props) => {
                     overflowX: "hidden",
                     position: "relative",
                     height: "100vh",
-                  }}>
+                  }}
+                >
                   <header className="post__main__info d-flex justify-content-between align-posts-center">
                     <div className="d-flex justify-content-between align-posts-center">
                       <img src={convertImage(Avatar)} alt="" />
@@ -572,10 +585,12 @@ const DaoPost = (props) => {
                                 {itm.id === 3 ? (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}>
+                                    key={idx}
+                                  >
                                     <CopyToClipboard
                                       onCopy={() => {}}
-                                      text={`${window.location.origin}/home/dao/posts/${Id}`}>
+                                      text={`${window.location.origin}/home/dao/posts/${Id}`}
+                                    >
                                       <div className="container d-flex">
                                         <div>{itm.icon}</div>
                                         <p>{itm.title}</p>
@@ -585,7 +600,8 @@ const DaoPost = (props) => {
                                 ) : (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}>
+                                    key={idx}
+                                  >
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>{itm.title}</p>
@@ -600,7 +616,8 @@ const DaoPost = (props) => {
                         visible={isModalOptionDetail}
                         onVisibleChange={(newVisible) =>
                           setIsModalOptionDetail(newVisible)
-                        }>
+                        }
+                      >
                         <MoreOutlined style={{ fontSize: "24px" }} />
                       </Popover>
                       <ReportPost
@@ -622,7 +639,8 @@ const DaoPost = (props) => {
                   </div>
                   <div
                     className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-                    style={{ borderBottom: "1px solid #E7E7E7" }}>
+                    style={{ borderBottom: "1px solid #E7E7E7" }}
+                  >
                     <div className="post__main__content__like-comment__likes d-flex">
                       <PopUpSignIn onClick={(e) => {}}>
                         {checkLikePost() ? (
@@ -675,7 +693,8 @@ const DaoPost = (props) => {
                         style={{
                           width: "100px !important",
                           position: "relative",
-                        }}>
+                        }}
+                      >
                         <ul className="d-flex align-posts-center">
                           {defaultComments.map((item, index) => (
                             <li
@@ -683,14 +702,16 @@ const DaoPost = (props) => {
                               className={
                                 chooseCommentDefault.id === item.id && "active"
                               }
-                              onClick={() => handleAddComment(item)}>
+                              onClick={() => handleAddComment(item)}
+                            >
                               {item.Content}
                             </li>
                           ))}
                         </ul>
                         <div
                           className="comment_default__choose-service d-flex justify-content-center align-posts-center"
-                          onClick={handleShowModalChooseService}>
+                          onClick={handleShowModalChooseService}
+                        >
                           <PlusOutlined
                             style={{ color: "#03AC84", fontSize: "14px" }}
                           />
@@ -720,130 +741,141 @@ const DaoPost = (props) => {
                     {comments
                       .sort((a, b) => b.createdAt - a.createdAt)
                       .map((comment, index) => {
-                        console.log("modalcommet",comment)
-                        return <div key={index}>
-                          <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
-                            <div className="d-flex justify-content-between align-posts-center">
-                              <img
-                                src={convertImage(comment?.BookingUser?.Image)}
-                                alt=""
-                              />
-                              <div className="post__main__info__nametime">
-                                <p className="post__main__info__nametime__name">
-                                  {comment?.BookingUser?.Fullname}
-                                </p>
-                                <p>{convertTime(comment?.createdAt)}</p>
+                        return (
+                          <div key={index}>
+                            <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
+                              <div className="d-flex justify-content-between align-posts-center">
+                                <img
+                                  src={convertImage(
+                                    comment?.BookingUser?.Image
+                                  )}
+                                  alt=""
+                                />
+                                <div className="post__main__info__nametime">
+                                  <p className="post__main__info__nametime__name">
+                                    {comment?.BookingUser?.Fullname}
+                                  </p>
+                                  <p>{convertTime(comment?.createdAt)}</p>
+                                </div>
                               </div>
-                            </div>
-                          </header>
-                          {comment.Content && (
-                            <div
-                              style={{
-                                marginLeft: "40px",
-                                marginTop: "15px",
-                              }}
-                              className="post__comments__detail__content">
-                              {comment.Content}
-                            </div>
-                          )}
-                          {comment?.services?.length > 0 && (
-                            <div className="post_slider_container">
-                              <Swiper
-                                slidesPerView={"1.4"}
-                                spaceBetween={15}
-                                // pagination={{
-                                //   clickable: true,
-                                // }}
-                                navigation={true}
-                                modules={[Navigation, Pagination]}
-                                className="post_slider"
+                            </header>
+                            {comment.Content && (
+                              <div
+                                style={{
+                                  marginLeft: "40px",
+                                  marginTop: "15px",
+                                }}
+                                className="post__comments__detail__content"
                               >
-                                {comment?.services?.map((item, index) => (
-                                  <SwiperSlide
-                                    key={index}
-                                    className="post_slider_item"
-                                  >
-                                    <a href="#" className="h-100">
-                                      <div className="d-flex h-100">
-                                        <img
-                                          src={convertImage(item.Image[0])}
-                                          alt=""
-                                          className="me-12"
-                                          style={{
-                                            width: "100px",
-                                            objectFit: "cover",
-                                          }}
-                                        />
-                                        <div className="py-5 ">
-                                          <div className="post_slider_item_name mb-5">
-                                            {item.Name}
-                                          </div>
-                                          <div className="post_slider_item_description">
-                                            {item.Description}
+                                {comment.Content}
+                              </div>
+                            )}
+                            {comment?.services?.length > 0 && (
+                              <div className="post_slider_container">
+                                {/* <Swiper
+                                  slidesPerView={"1.4"}
+                                  spaceBetween={15}
+                                  // pagination={{
+                                  //   clickable: true,
+                                  // }}
+                                  navigation={true}
+                                  modules={[Navigation, Pagination]}
+                                  className="post_slider"
+                                >
+                                  {comment?.services?.map((item, index) => (
+                                    <SwiperSlide
+                                      key={index}
+                                      className="post_slider_item"
+                                    >
+                                      <a href="#" className="h-100">
+                                        <div className="d-flex h-100">
+                                          <img
+                                            src={convertImage(item.Image[0])}
+                                            alt=""
+                                            className="me-12"
+                                            style={{
+                                              width: "100px",
+                                              objectFit: "cover",
+                                            }}
+                                          />
+                                          <div className="py-5 ">
+                                            <div className="post_slider_item_name mb-5">
+                                              {item.Name}
+                                            </div>
+                                            <div className="post_slider_item_description">
+                                              {item.Description}
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    </a>
-                                  </SwiperSlide>
-                                ))}
-                              </Swiper>
-                              <CommentSlider
-                                data={comment.services}
-                                slidesPerView={1.5}
-                              />
-                            </div>
-                          )}
+                                      </a>
+                                    </SwiperSlide>
+                                  ))}
+                                </Swiper> */}
+                                <CommentSlider
+                                  data={comment.services}
+                                  slidesPerView={1.5}
+                                />
+                              </div>
+                            )}
 
-                          <div
-                            className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
-                            style={{ borderBottom: "1px solid #E7E7E7" }}>
                             <div
-                              className="post__main__content__like-comment__likes d-flex"
-                              onClick={() => console.log(123)}>
-                              <PopUpSignIn onClick={(e) => {}}>
-                                {comment?.Likes?.some(
-                                  (item) => item?.UserId == currentUser?.id
-                                ) ? (
-                                  <HeartFilled
-                                    // onClick={() =>
-                                    //   setMouseClickHeart(!mouseClickHeart)
-                                    // }
-                                    style={{
-                                      fontSize: "20px",
-                                      color: "#E22828",
-                                      marginBottom: "2px",
-                                    }}
-                                    onClick={() => handlerLikeComment(comment?.id)}
-                                    // onMouseLeave={() => setMouseOverHeart(false)}
-                                  />
-                                ) : (
-                                  <HeartOutlined
-                                    style={{
-                                      color: "#828282",
-                                      fontSize: "20px",
-                                      cursor: "pointer",
-                                      marginBottom: "2px",
-                                    }}
-                                    onClick={() => handlerLikeComment(comment?.id)}
-                                    // onMouseOver={() => setMouseOverHeart(true)}
-                                  />
-                                )}
-                              </PopUpSignIn>
-                              <p
-                                style={
-                                  mouseClickHeart ? { color: "#E22828" } : {}
-                                }
+                              className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
+                              style={{ borderBottom: "1px solid #E7E7E7" }}
+                            >
+                              <div
+                                className="post__main__content__like-comment__likes d-flex"
+                                onClick={() => console.log(123)}
                               >
-                                {comment?.TotalLike}
-                              </p>
+                                <PopUpSignIn onClick={(e) => {}}>
+                                  {comment?.Likes?.some(
+                                    (item) => item?.UserId == currentUser?.id
+                                  ) ? (
+                                    <HeartFilled
+                                      // onClick={() =>
+                                      //   setMouseClickHeart(!mouseClickHeart)
+                                      // }
+                                      style={{
+                                        fontSize: "20px",
+                                        color: "#E22828",
+                                        marginBottom: "2px",
+                                      }}
+                                      onClick={() =>
+                                        handlerLikeComment(comment?.id)
+                                      }
+                                      // onMouseLeave={() => setMouseOverHeart(false)}
+                                    />
+                                  ) : (
+                                    <HeartOutlined
+                                      style={{
+                                        color: "#828282",
+                                        fontSize: "20px",
+                                        cursor: "pointer",
+                                        marginBottom: "2px",
+                                      }}
+                                      onClick={() =>
+                                        handlerLikeComment(comment?.id)
+                                      }
+                                      // onMouseOver={() => setMouseOverHeart(true)}
+                                    />
+                                  )}
+                                </PopUpSignIn>
+                                <p
+                                  style={
+                                    mouseClickHeart ? { color: "#E22828" } : {}
+                                  }
+                                >
+                                  {comment?.TotalLike}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        );
                       })}
                     {pagination.hasNextPage && (
                       <div
                         className="btn-see-more-cmt"
-                        onClick={handleSeeMoreComment}>
+                        onClick={handleSeeMoreComment}
+                      >
                         Xem thêm bình luận
                       </div>
                     )}
@@ -907,7 +939,8 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__middle" : "post__middle d-none"}>
+        className={commentsClick ? "post__middle" : "post__middle d-none"}
+      >
         <hr color="#E7E7E7" className="mb-20" />
         <div className="d-flex w-100" style={{ position: "relative" }}>
           <img className="avt" src={img1} alt="" />
@@ -919,14 +952,16 @@ const DaoPost = (props) => {
                   className={`${
                     chooseCommentDefault.id === item.id && "active"
                   } d-select`}
-                  onClick={() => handleAddComment(item)}>
+                  onClick={() => handleAddComment(item)}
+                >
                   {item.Content}
                 </li>
               ))}
             </ul>
             <div
               className="post__middle__right-side__choose-service d-flex justify-content-center align-posts-center"
-              onClick={handleShowModalChooseService}>
+              onClick={handleShowModalChooseService}
+            >
               <PlusOutlined style={{ color: "#03AC84", fontSize: "14px" }} />
               <p className="d-select">Chọn dịch vụ liên quan</p>
             </div>
@@ -939,7 +974,8 @@ const DaoPost = (props) => {
           <PopUpSignIn
             onClick={(e) => {
               e.prevent();
-            }}>
+            }}
+          >
             <img
               src={sendComment}
               style={{ borderRadius: "0", cursor: "pointer" }}
@@ -951,83 +987,87 @@ const DaoPost = (props) => {
         </div>
       </section>
       <section
-        className={commentsClick ? "post__comments" : "post__comments d-none"}>
+        className={commentsClick ? "post__comments" : "post__comments d-none"}
+      >
         <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
         {comments
           .sort((a, b) => b.createdAt - a.createdAt)
-          .map((cmt, idx) => (
-            <div key={cmt.id} className="post__comments__detail">
-              {idx !== 0 && (
-                <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
-              )}
-              <div className="post__comments__detail__info d-flex align-posts-center">
-                <img
-                  className="post__comments__detail__info_avatar"
-                  // src={cmt.BookingUser.Image}
-                  // alt=""
-                  src={
-                    cmt.BookingUser.Image.trim() !== ""
-                      ? cmt.BookingUser.Image
-                      : noBody
-                  }
-                  alt=""
-                />
-                <div
-                  style={{ marginLeft: "10px" }}
-                  className="post__comments__detail__info__nametime">
-                  <p className="post__comments__detail__info__nametime__name">
-                    {cmt.BookingUser.Fullname}
-                  </p>
-                  <p>{convertTime(cmt.createdAt)}</p>
-                </div>
-              </div>
-              {cmt?.Content && (
-                <div
-                  style={{ marginLeft: "40px", marginTop: "5px" }}
-                  className="post__comments__detail__content">
-                  {cmt.Content}
-                </div>
-              )}
-              {cmt?.services?.length > 0 && (
-                <div className="w-100">
-                  <CommentSlider data={cmt?.services} />
-                </div>
-              )}
-
-              <div className="d-flex" style={{ marginTop: "22px" }}>
-                {cmt?.Likes?.some((item) => item?.UserId == currentUser?.id) ? (
-                  <HeartFilled
-                    // onClick={() =>
-                    //   setMouseClickHeart(!mouseClickHeart)
-                    // }
-                    onClick={() => handlerLikeComment(cmt?.id)}
-                    style={{
-                      fontSize: "20px",
-                      color: "#E22828",
-                      marginBottom: "2px",
-                    }}
-                    // onMouseLeave={() => setMouseOverHeart(false)}
-                  />
-                ) : (
-                  <HeartOutlined
-                    style={{
-                      color: "#828282",
-                      fontSize: "20px",
-                      cursor: "pointer",
-                      marginBottom: "2px",
-                    }}
-                    onClick={() => handlerLikeComment(cmt?.id)}
-
-                    // onMouseOver={() => setMouseOverHeart(true)}
-                  />
+          .map((cmt, idx) => {
+            return (
+              <div key={cmt.id} className="post__comments__detail">
+                {idx !== 0 && (
+                  <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
                 )}
-                <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                  {cmt?.TotalLike}
-                </p>
+                <div className="post__comments__detail__info d-flex align-posts-center">
+                  <img
+                    className="post__comments__detail__info_avatar"
+                    // src={cmt.BookingUser.Image}
+                    // alt=""
+                    src={
+                      convertImage(cmt.BookingUser.Image)
+                    }
+                    alt=""
+                  />
+                  <div
+                    style={{ marginLeft: "10px" }}
+                    className="post__comments__detail__info__nametime"
+                  >
+                    <p className="post__comments__detail__info__nametime__name">
+                      {cmt.BookingUser.Fullname}
+                    </p>
+                    <p>{convertTime(cmt.createdAt)}</p>
+                  </div>
+                </div>
+                {cmt?.Content && (
+                  <div
+                    style={{ marginLeft: "40px", marginTop: "5px" }}
+                    className="post__comments__detail__content"
+                  >
+                    {cmt.Content}
+                  </div>
+                )}
+                {cmt?.services?.length > 0 && (
+                  <div className="w-100">
+                    <CommentSlider data={cmt?.services} />
+                  </div>
+                )}
 
+                <div className="d-flex" style={{ marginTop: "22px" }}>
+                  {cmt?.Likes?.some(
+                    (item) => item?.UserId === currentUser?.id
+                  ) ? (
+                    <HeartFilled
+                      // onClick={() =>
+                      //   setMouseClickHeart(!mouseClickHeart)
+                      // }
+                      onClick={() => handlerLikeComment(cmt?.id)}
+                      style={{
+                        fontSize: "20px",
+                        color: "#E22828",
+                        marginBottom: "2px",
+                      }}
+                      // onMouseLeave={() => setMouseOverHeart(false)}
+                    />
+                  ) : (
+                    <HeartOutlined
+                      style={{
+                        color: "#828282",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        marginBottom: "2px",
+                      }}
+                      onClick={() => handlerLikeComment(cmt?.id)}
+
+                      // onMouseOver={() => setMouseOverHeart(true)}
+                    />
+                  )}
+                  <p style={{ paddingLeft: "5px", color: "#E22828" }}>
+                    {cmt?.TotalLike}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         {pagination.hasNextPage && (
           <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
             Xem thêm bình luận
