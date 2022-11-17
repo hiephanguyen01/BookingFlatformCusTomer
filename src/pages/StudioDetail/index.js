@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -65,7 +65,6 @@ export const StudioDetail = () => {
     listStudioSimilar,
     promotionCode,
     filterService,
-    loading,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
@@ -90,12 +89,12 @@ export const StudioDetail = () => {
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getPromotionCodeUserSave());
     dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
-  }, [studioDetail]);
+  }, [studioDetail, dispatch]);
 
   useEffect(() => {
     if (currentUser !== null) {
@@ -111,7 +110,7 @@ export const StudioDetail = () => {
     return () => {
       dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
     };
-  }, []);
+  }, [dispatch]);
 
   const handleReport = () => {
     dispatch({
@@ -400,29 +399,11 @@ export const StudioDetail = () => {
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0 && filterService.OrderByTime !== -1) {
-      if (filterService.OrderByTime === 0) {
-        if (
-          calTimeMinus(
-            filterService.OrderByTimeFrom,
-            filterService.OrderByTimeTo
-          ) >= 60
-        ) {
-          dispatch(chooseServiceAction(chooseService));
-          navigate("order");
-        } else {
-          toastMessage("Thời gian đặt tối thiểu là 60 phút!", "warn");
-        }
-      } else {
-        dispatch(chooseServiceAction(chooseService));
-        navigate("order");
-      }
+    if (chooseService.length > 0) {
+      dispatch(chooseServiceAction(chooseService));
+      navigate("order");
     } else {
-      if (filterService.OrderByTime === -1) {
-        toastMessage("Bạn cần chọn thời gian!", "warn");
-      } else if (chooseService.length <= 0) {
-        toastMessage("Bạn cần chọn dịch vụ!", "warn");
-      }
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
   // const handleAddCart = () => {
@@ -589,6 +570,7 @@ export const StudioDetail = () => {
                     <div className="mapouter">
                       <div className="gmap_canvas">
                         <iframe
+                          title="map"
                           className="gmap_iframe"
                           width="100%"
                           frameBorder={0}

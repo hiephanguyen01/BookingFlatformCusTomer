@@ -164,6 +164,7 @@ const Index = () => {
                                   src={item.image}
                                   className="w-76px h-100"
                                   style={{ objectFit: "cover" }}
+                                  alt=""
                                 />
                               </div>
                               <label className="checkbox_label">
@@ -228,7 +229,7 @@ const Index = () => {
               >
                 <div>Chọn mã khuyến mãi</div>
                 <Dropdown overlay={menu}>
-                  <a onClick={(e) => e.preventDefault()}>
+                  <a onClick={(e) => e.preventDefault()} href="/#">
                     <Space>
                       2 Mã khuyến mãi
                       <RightOutlined />

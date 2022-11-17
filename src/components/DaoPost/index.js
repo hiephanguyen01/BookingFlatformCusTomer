@@ -52,17 +52,14 @@ const DaoPost = (props) => {
   );
   console.log("listNotificationDao", listNotificationUser);
 
-  const { visible } = useSelector((state) => state.modalReducer);
-
   const { item, likePostList, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
-  const [likeCmt, setLikeCmt] = useState([]);
   const [mouseOverHeart, setMouseOverHeart] = useState(false);
   const [mouseClickHeart, setMouseClickHeart] = useState(
     likePostList?.filter((itm) => itm.PostId === item.Id).length > 0
   );
   const [commentsClick, setCommentsClick] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [moreOptionModal, setMoreOptionModal] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
   const [isModalVisibleDetail, setIsModalVisibleDetail] = useState(false);
@@ -72,7 +69,6 @@ const DaoPost = (props) => {
 
   const {
     Id,
-    Username,
     Fullname,
     Description,
     Avatar,
@@ -80,11 +76,9 @@ const DaoPost = (props) => {
     Tags,
     TotalComments,
     Image,
-    // comments,
     CreationTime,
   } = post;
 
-  const [showComment, setShowComment] = useState([]);
   const [comments, setComments] = useState([]);
   const [pagination, setPagination] = useState({});
   const [chooseCommentDefault, setChooseCommentDefault] = useState({});
@@ -169,19 +163,19 @@ const DaoPost = (props) => {
     }
   };
 
-  const handleLikeCmt = () => {
-    if (currentUser) {
-      if (checkLikePost()) {
-        // dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
-        setMouseClickHeart(false);
-        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
-      } else {
-        dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
-        setMouseClickHeart(true);
-        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
-      }
-    }
-  };
+  // const handleLikeCmt = () => {
+  //   if (currentUser) {
+  //     if (checkLikePost()) {
+  //       // dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+  //       setMouseClickHeart(false);
+  //       setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
+  //     } else {
+  //       dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+  //       setMouseClickHeart(true);
+  //       setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+  //     }
+  //   }
+  // };
 
   const handleMoreOptionClick = async (itm) => {
     switch (itm.id) {
@@ -219,8 +213,7 @@ const DaoPost = (props) => {
       default:
         break;
     }
-
-    setIsModalVisible(false);
+    // setIsModalVisible(false);
   };
 
   const checkLikePost = () =>
@@ -333,7 +326,6 @@ const DaoPost = (props) => {
     ImageSection = (
       <Row gutter={[16, 16]}>
         {Image.map((img, idx) => {
-          // console.log(idx);
           if (idx === 0) {
             //Kiểm tra cái idx này sau khi nhét API vào (Không xóa)
             return (
@@ -586,6 +578,7 @@ const DaoPost = (props) => {
                           alt=""
                           className="w-100 h-100"
                           style={{ objectFit: "contain" }}
+                          alt=""
                         />
                       </SwiperSlide>
                     ))}

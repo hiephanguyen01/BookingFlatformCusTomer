@@ -6,7 +6,6 @@ import { Pagination, Navigation } from "swiper";
 import {
   HeartFilled,
   HeartOutlined,
-  HeartTwoTone,
   MoreOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -18,8 +17,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import { convertImage } from "../../utils/convertImage";
-import imgSwiper1 from "../../assets/dao/Frame 163.jpg";
-import img1 from "../../assets/dao/Frame 180.png";
 import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
 import {
   createLikeCommentDao,
@@ -86,7 +83,7 @@ console.log("postId",postId)
     },
   ];
 
-  const [moreOptionModal, setMoreOptionModal] = useState(false);
+  // const [moreOptionModal, setMoreOptionModal] = useState(false);
 
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
@@ -95,12 +92,10 @@ console.log("postId",postId)
     return () => {
       dispatch({ type: "DELETE_DETAIL_POST", data: {} });
     };
-  }, []);
+  }, [dispatch, postId]);
 
   useEffect(() => {
     dispatch(getLikePostList(currentUser?.id));
-  }, [currentUser]);
-  useEffect(() => {
     dispatch(getAllNotificationDaoAction());
   }, []);
 
@@ -136,7 +131,7 @@ console.log("postId",postId)
         setPagination(data.pagination);
       }
     } catch (error) {
-      console.log(window.locationerror);
+      console.log(error);
     }
   };
 
@@ -286,6 +281,7 @@ console.log("postId",postId)
                   className="w-100 h-100"
                   alt=""
                   style={{ objectFit: "contain" }}
+                  alt=""
                 />
               </SwiperSlide>
             ))}

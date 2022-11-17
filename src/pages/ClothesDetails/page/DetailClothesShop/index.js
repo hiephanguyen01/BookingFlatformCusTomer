@@ -23,8 +23,7 @@ const ASIDE_CATEGORY_ITEM = [
   { value: 3, name: "Khác" },
 ];
 
-const onShowSizeChange = (current, pageSize) => {
-};
+const onShowSizeChange = (current, pageSize) => {};
 
 const Index = () => {
   const [chooseAsideCategory, setChooseAsideCategory] = useState(0);
@@ -46,6 +45,7 @@ const Index = () => {
                 src={imgPost}
                 style={{ height: "280px" }}
                 className="me-32"
+                alt=""
               />
             </Col>
             <Col lg={16} sm={24}>
@@ -54,7 +54,11 @@ const Index = () => {
                 <CheckCircleOutlined className="check_circle pt-10 ms-10" />
               </div>
               <div className="location">
-                <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
+                <img
+                  src={svgLocation}
+                  style={{ marginRight: "0.5rem" }}
+                  alt=""
+                />
                 Quận 1, TPHCM
               </div>
               <div className="d-flex align-items-center mb-20">
@@ -91,7 +95,7 @@ const Index = () => {
             <Tabs defaultActiveKey="1" onChange={{}}>
               {TAGS.map((tag, index) => (
                 <Tabs.TabPane tab={tag.value} key={tag.id}>
-                  {tag.id == 1 && (
+                  {Number(tag.id) === 1 && (
                     <Row style={{}}>
                       <div className="wrap_card w-100 mb-40" style={{}}>
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
@@ -108,7 +112,7 @@ const Index = () => {
                       </div>
                     </Row>
                   )}
-                  {tag.id == 2 && (
+                  {Number(tag.id) === 2 && (
                     <Row className="tab_category">
                       <Col span={4} className="pe-20">
                         <div className="header_aside_category mt-20">
@@ -150,8 +154,8 @@ const Index = () => {
                     </Row>
                   )}
 
-                  {tag.id == 3 && <>{tag.value}</>}
-                  {tag.id == 4 && <>{tag.value}</>}
+                  {Number(tag.id) === 3 && <>{tag.value}</>}
+                  {Number(tag.id) === 4 && <>{tag.value}</>}
                 </Tabs.TabPane>
               ))}
             </Tabs>

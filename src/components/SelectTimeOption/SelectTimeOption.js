@@ -8,7 +8,7 @@ import { convertDateSendToDB } from "../../utils/convert";
 import "./selectTimeOption.scss";
 
 const Option = ({ option, disabled }) => {
-  const { filter } = useSelector((state) => state.studioPostReducer);
+  const { filterService } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
   const [time, setTime] = useState([]);
@@ -17,8 +17,7 @@ const Option = ({ option, disabled }) => {
     if (time.length > 0) {
       dispatch(
         getFilterStudioPost(5, 1, {
-          ...filter,
-          OrderByTime: 0,
+          ...filterService,
           OrderByTimeFrom:
             convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
           OrderByTimeTo:
@@ -29,13 +28,11 @@ const Option = ({ option, disabled }) => {
   };
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
-    console.log(timeString);
 
     if (date !== "") {
       dispatch(
         getFilterStudioPost(5, 1, {
-          ...filter,
-          OrderByTime: 0,
+          ...filterService,
           OrderByTimeFrom:
             convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
           OrderByTimeTo:
@@ -48,15 +45,14 @@ const Option = ({ option, disabled }) => {
     // setDates(datesString);
     dispatch(
       getFilterStudioPost(5, 1, {
-        ...filter,
-        OrderByTime: 1,
+        ...filterService,
         OrderByDateFrom: convertDateSendToDB(datesString[0]),
         OrderByDateTo: convertDateSendToDB(datesString[1]),
       })
     );
   };
 
-  switch (Number(filter.OrderByTime)) {
+  switch (Number(filterService?.OrderByTime)) {
     case 1:
       return (
         <div className="timeContainer">
@@ -71,7 +67,10 @@ const Option = ({ option, disabled }) => {
           >
             <DatePicker
               onChange={handleOnchangeDate}
-              defaultValue={moment(filter?.OrderByTimeFrom, "YYYY-MM-DD")}
+              defaultValue={moment(
+                filterService?.OrderByTimeFrom,
+                "YYYY-MM-DD"
+              )}
               disabled={disabled}
               disabledDate={(current) => {
                 return current && current <= moment().subtract(1, "days");
@@ -93,8 +92,8 @@ const Option = ({ option, disabled }) => {
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 defaultValue={[
-                  moment(filter.OrderByTimeFrom.slice(11, 16), "HH:mm"),
-                  moment(filter.OrderByTimeTo.slice(11, 16), "HH:mm"),
+                  moment(filterService?.OrderByTimeFrom.slice(11, 16), "HH:mm"),
+                  moment(filterService?.OrderByTimeTo.slice(11, 16), "HH:mm"),
                 ]}
                 disabled={disabled}
                 minuteStep={60}
@@ -118,8 +117,8 @@ const Option = ({ option, disabled }) => {
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
               defaultValue={[
-                moment(filter?.OrderByDateFrom, "YYYY-MM-DD"),
-                moment(filter?.OrderByDateTo, "YYYY-MM-DD"),
+                moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
+                moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
               ]}
               disabled={disabled}
               disabledDate={(current) => {
@@ -135,8 +134,8 @@ const Option = ({ option, disabled }) => {
 };
 
 const SelectTimeOption = ({ disabled }) => {
-  const { filter } = useSelector((state) => state.studioPostReducer);
-  const [selection, setSelection] = useState(filter.OrderByTime);
+  const { filterService } = useSelector((state) => state.studioPostReducer);
+  const [selection, setSelection] = useState(filterService?.OrderByTime);
 
   const dispatch = useDispatch();
 
@@ -144,7 +143,7 @@ const SelectTimeOption = ({ disabled }) => {
     setSelection(e.target.value);
     dispatch(
       getFilterStudioPost(5, 1, {
-        ...filter,
+        ...filterService,
         OrderByTime: e.target.value,
       })
     );

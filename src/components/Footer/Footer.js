@@ -46,7 +46,7 @@ const Footer = () => {
                           maxWidth: "100%",
                           width: "100%",
                         }}
-                        value={window.location.host + "/home/detect-app"}
+                        value={window.location.origin + "/home/detect-app"}
                         // viewBox={`0 0 256 256`}
                       />
                     </div>
@@ -54,14 +54,14 @@ const Footer = () => {
                   <div>
                     <a
                       href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
-                      target="_blank"
+                      target="_blank" rel="noreferrer"
                     >
                       <img src={Android} alt="" className="h-40px px-3" />
                     </a>
                     <a
                       href="https://apps.apple.com/vn/app/booking-studio/id1563362722"
                       target="_blank"
-                      className=""
+                      className="" rel="noreferrer"
                     >
                       <img
                         src={Ios}
@@ -82,7 +82,7 @@ const Footer = () => {
               <Col sm={24} md={12} lg={6}>
                 <p className="title">VỀ CHÚNG TÔI</p>
                 <ul className="pt-10">
-                  <a href="https://vnplus.vn" alt="" target="_blank">
+                  <a href="https://vnplus.vn" alt="" target="_blank" rel="noreferrer">
                     <li className="item mt-20"> Giới thiệu VNPLUS</li>
                   </a>
                   <li className="mt-20">

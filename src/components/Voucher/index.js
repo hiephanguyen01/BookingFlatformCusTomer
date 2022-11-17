@@ -40,7 +40,7 @@ const Index = () => {
     // ) {
     //   dispatch({ type: HIDE_MODAL });
     // }
-  }, [studioDetail]);
+  }, [studioDetail, dispatch]);
 
   const handleChooseVoucher = (code) => {
     const newSavePromo = [...savePromo];

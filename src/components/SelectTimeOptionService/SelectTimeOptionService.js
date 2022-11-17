@@ -1,13 +1,11 @@
-import { DatePicker, Form, Radio, Slider, Space, TimePicker } from "antd";
+import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
-import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertDateSendToDB } from "../../utils/convert";
 
 import "./selectTimeOptionService.scss";
-const format = "DD.MM.YYYY HH:mm";
 
 function dateRange(startDate, endDate, steps = 1) {
   const dateArray = [];
@@ -37,18 +35,18 @@ const Option = ({ option, disabled, service }) => {
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
-  const [data, setData] = useState(service);
+  // const [data, setData] = useState(service);
   const [disableHour, setDisableHour] = useState([]);
   const [time, setTime] = useState([]);
 
-  function firstAndLast(array) {
-    const firstItem = array[0];
-    const lastItem = array[array.length - 1];
+  // function firstAndLast(array) {
+  //   const firstItem = array[0];
+  //   const lastItem = array[array.length - 1];
 
-    const objOutput = [firstItem, lastItem];
+  //   const objOutput = [firstItem, lastItem];
 
-    return objOutput;
-  }
+  //   return objOutput;
+  // }
   const handleOnchangeDate = (d, dString) => {
     setDate(dString);
     if (dString && filterService.OrderByTime === 1) {
@@ -59,7 +57,6 @@ const Option = ({ option, disabled, service }) => {
         );
         return dates.includes(moment(dString).format("l"));
       });
-      console.log(hl);
       setDisableHour(hl);
     }
     if (time.length > 0) {
@@ -113,16 +110,16 @@ const Option = ({ option, disabled, service }) => {
       })
     );
   };
-  const disabledDates = [
-    {
-      start: moment("19.10.20222 13:00", format),
-      end: moment("19.10.2022 15:00", format),
-    },
-    {
-      start: moment("21.10.20222 13:00", format),
-      end: moment("27.10.2022 15:00", format),
-    },
-  ];
+  // const disabledDates = [
+  //   {
+  //     start: moment("19.10.20222 13:00", format),
+  //     end: moment("19.10.2022 15:00", format),
+  //   },
+  //   {
+  //     start: moment("21.10.20222 13:00", format),
+  //     end: moment("27.10.2022 15:00", format),
+  //   },
+  // ];
 
   function uniqueInOrder(x) {
     return (Array.isArray(x) ? x : x.split("")).filter(
@@ -170,6 +167,7 @@ const Option = ({ option, disabled, service }) => {
               //   filterService?.OrderByTimeFrom,
               //   "YYYY-MM-DD"
               // )}
+              allowClear={false}
               inputReadOnly={true}
               disabled={disabled}
               disabledDate={(current) => {

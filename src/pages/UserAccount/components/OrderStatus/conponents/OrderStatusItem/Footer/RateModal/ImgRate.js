@@ -3,7 +3,6 @@ import UploadImage from "../../../../../../../../components/UploadImage";
 import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
 export const ImgRate = ({ setData }) => {
   const [files, setFiles] = useState([]);
-  console.log(files);
   const onChangeFile = (e) => {
     if (files.length <= 1) {
       const newFiles = [...files];

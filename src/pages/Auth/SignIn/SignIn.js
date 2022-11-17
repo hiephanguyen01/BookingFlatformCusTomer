@@ -12,10 +12,10 @@ export const SignIn = ({ onClickPop }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    if (user?.Email) {
+    if (user) {
       navigate("/home/dao");
     }
-  }, [user]);
+  }, [user, navigate]);
   const onFinish = (values) => {
     dispatch(LoginWithPhoneNumber(values, navigate));
   };

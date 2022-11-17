@@ -49,7 +49,6 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
   try {
     dispatch({ type: SET_LOADING, payload: true });
     const res = await signInWithPopup(auth, provider);
-    console.log(res);
     const resp = await authenticateService.authenticate({
       ...res.user,
       ...res.user.providerData[0],
@@ -62,7 +61,6 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
     // navigate("/home/dao");
   } catch (error) {
     if (error.code === "auth/account-exists-with-different-credential") {
-      console.log({ error }, error.customData.email);
       // const firstPopupProviderMethod = providers.find((p) =>
       //   supportedPopupSignInMethods.includes(p)
       // );
@@ -162,12 +160,10 @@ export const facebookLink =
         );
       } else {
         res = await signInWithPopup(auth, provider);
-        console.log(res);
         resp = await authenticateService.socialAccountLink({
           ...res.user,
           ...res.user.providerData[0],
         });
-        console.log(resp);
         openNotificationWithIcon(
           "success",
           "Successfully linked facebook account"
@@ -176,7 +172,6 @@ export const facebookLink =
       setCheckedLink(!checkedLink);
       dispatch({ type: SET_USER, payload: resp.data.data });
     } catch (error) {
-      console.log(error);
       if (error.code === "auth/account-exists-with-different-credential") {
         try {
           const respError = await authenticateService.socialAccountLink({

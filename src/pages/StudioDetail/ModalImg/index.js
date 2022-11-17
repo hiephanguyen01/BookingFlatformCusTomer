@@ -17,7 +17,6 @@ import { CloseOutlined } from "@ant-design/icons";
 export const ModalImage = ({ data }) => {
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  /* console.log(thumbsSwiper); */
   return (
     <div
       style={{
@@ -26,7 +25,8 @@ export const ModalImage = ({ data }) => {
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-      }}>
+      }}
+    >
       <h3>ALBUM CHỤP PHONG CẢNH</h3>
       <div onClick={() => dispatch({ type: HIDE_MODAL })} className={"close"}>
         <CloseOutlined style={{ fontSize: "22px" }} />
@@ -46,7 +46,8 @@ export const ModalImage = ({ data }) => {
           }}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Navigation, Pagination, Thumbs]}
-          className="mySwiper2">
+          className="mySwiper2"
+        >
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
@@ -65,7 +66,8 @@ export const ModalImage = ({ data }) => {
           height: "108px",
           padding: "0 40px",
           marginTop: "30px",
-        }}>
+        }}
+      >
         <Swiper
           onSwiper={setThumbsSwiper}
           spaceBetween={10}
@@ -73,13 +75,15 @@ export const ModalImage = ({ data }) => {
           //   freeMode={true}
           watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Thumbs]}
-          className="mySwiper">
+          className="mySwiper"
+        >
           {data?.map((item, idx) => {
             return (
               <SwiperSlide
                 key={idx}
                 className="slide-item"
-                style={{ width: "187px", height: "108px" }}>
+                style={{ width: "187px", height: "108px" }}
+              >
                 <img
                   style={{
                     width: "187px",

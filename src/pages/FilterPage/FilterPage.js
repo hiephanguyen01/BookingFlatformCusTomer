@@ -17,7 +17,7 @@ import FilterCard from "../../components/FilterCard/FilterCard";
 import EmptyPage from "../../components/layouts/EmptyPage";
 import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
-import { convertDateSendToDB, convertPrice } from "../../utils/convert";
+import { convertPrice } from "../../utils/convert";
 import queryString from "query-string";
 import "./FilterPage.scss";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -1,4 +1,3 @@
-import { ArrowUpOutlined } from "@ant-design/icons";
 import { BackTop } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -24,31 +23,29 @@ import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import PostDetail from "./pages/PostDetail/PostDetail";
 import { getCurrentUser } from "./stores/actions/autheticateAction";
 import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
-import Support from "./pages/UserAccount/components/support/Support";
 import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsUse from "./pages/TermsUse/TermsUse";
 import Success from "./components/Email/Success";
-import { VerifyOtp } from "./components/Modal/verifyOtp/VerifyOtp";
 import DetectApp from "./pages/DetectApp/DetectApp";
 import Verify from "./pages/Verify/Verify";
 
 function App() {
   const dispatch = useDispatch();
 
-  const style = {
-    height: 40,
-    width: 40,
-    lineHeight: "40px",
-    borderRadius: "50%",
-    backgroundColor: "#E22828",
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 20,
-  };
+  // const style = {
+  //   height: 40,
+  //   width: 40,
+  //   lineHeight: "40px",
+  //   borderRadius: "50%",
+  //   backgroundColor: "#E22828",
+  //   color: "#fff",
+  //   textAlign: "center",
+  //   fontSize: 20,
+  // };
   useEffect(() => {
     dispatch(getCurrentUser());
-  }, []);
+  }, [dispatch]);
   // Warning  Add <ProtectedRouter></ProtectedRouter> when create Route //
   return (
     <div className="App">
@@ -60,7 +57,7 @@ function App() {
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
-        <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
+        <Route path="/auth/*" element={<AuthPage />}></Route>
         <Route path="/test" element={<Success />}></Route>
         <Route
           path="/verify/:token"

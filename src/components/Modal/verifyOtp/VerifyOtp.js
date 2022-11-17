@@ -6,7 +6,6 @@ import classNames from "classnames/bind";
 import { Button } from "antd";
 import { useDispatch } from "react-redux";
 import { HIDE_MODAL } from "../../../stores/types/modalTypes";
-import { async } from "@firebase/util";
 import { studioPostService } from "../../../services/StudioPostService";
 const StyledReactInputVerificationCode = styled.div`
   display: flex;
@@ -33,7 +32,6 @@ export const VerifyOtp = ({ setValid, email }) => {
   const [isInvalid, setIsInvalid] = useState(false);
   const [countDown, setCountDown] = React.useState(60);
   const dispatch = useDispatch();
-  console.log(value.length);
   useEffect(() => {
     let timerId = setInterval(() => {
       setCountDown((countDown) => countDown - 1);
@@ -53,7 +51,7 @@ export const VerifyOtp = ({ setValid, email }) => {
       return;
     }
     return () => clearInterval(timerId);
-  }, []);
+  }, [countDown]);
 
   const hanleChange = (data) => {
     // setValue(data);
@@ -63,14 +61,12 @@ export const VerifyOtp = ({ setValid, email }) => {
   const onSubmit = async () => {
     try {
       setValid(true);
-      const data = await studioPostService.verifyCodeEmail({
+      await studioPostService.verifyCodeEmail({
         VerifyCode: value,
       });
-      console.log(data);
       dispatch({ type: HIDE_MODAL });
       setValue("");
     } catch (error) {
-      console.log("loiroi");
       setIsInvalid(true);
       setValid(false);
     }

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { Col, Row, Button, Modal } from "antd";
-import { Route, Routes, Navigate } from "react-router-dom";
 import Aside from "./components/HelpCenterAside/HelpCenterAside";
 
 import "./helpCenter.scss";
@@ -11,9 +10,7 @@ const HelpCenterPage = () => {
   const [modal1Open, setModal1Open] = useState(false);
   const [modal2Open, setModal2Open] = useState(false);
   const ref = useRef(null);
-  useEffect(() => {
-    console.log(ref.current);
-  }, [ref]);
+  useEffect(() => {}, [ref]);
   return (
     // <div className="help-center-container">
     <div

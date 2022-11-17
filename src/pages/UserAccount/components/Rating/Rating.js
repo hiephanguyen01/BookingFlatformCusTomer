@@ -11,7 +11,6 @@ const Rating = () => {
     (async () => {
       //truyen id cua thang user vo
       const { data } = await userService.getListRatings();
-      console.log(data);
       setMyRatings(data);
     })();
   }, []);
