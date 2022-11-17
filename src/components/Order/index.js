@@ -72,9 +72,7 @@ const Index = ({ linkTo = "" }) => {
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
 
-    //Get Register Partner Detail of this StudioPost in order to retrieve the value of PaymentTypeOnline column ****
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
-    // *************************************************************************************************************
     window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
@@ -98,7 +96,7 @@ const Index = ({ linkTo = "" }) => {
         const priceByHour = chooseServiceList?.reduce(
           (total, service) =>
             total +
-            (service?.Sales || service?.Price || service?.PriceByHour) *
+            service?.PriceByHour *
               calTime(
                 filterService?.OrderByTimeFrom,
                 filterService?.OrderByTimeTo
