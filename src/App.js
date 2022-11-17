@@ -60,7 +60,7 @@ function App() {
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
-        <Route path="/auth/*" element={<AuthPage></AuthPage>}></Route>
+        <Route path="/auth/*" element={<AuthPage />}></Route>
         <Route path="/test" element={<Success />}></Route>
         <Route
           path="/verify/:token"

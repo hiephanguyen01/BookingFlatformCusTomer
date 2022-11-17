@@ -3,10 +3,11 @@ import { Button, Col, Modal, Row, Switch } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import sha256 from "crypto-js/sha256";
 import Base64 from "crypto-js/enc-base64";
+import queryString from "query-string";
 import noBody from "../../../../assets/img/no-body.png";
 import imgFB from "../../../../assets/img/userAccount/facebook (4) 1facebook.png";
 import imgGG from "../../../../assets/img/userAccount/google 1google.png";
@@ -23,20 +24,28 @@ import {
 } from "../../../../stores/actions/autheticateAction";
 import { convertImage } from "../../../../utils/convertImage";
 import "./accountInfo.scss";
+import { authenticateService } from "../../../../services/AuthenticateService";
+import { SET_USER } from "../../../../stores/types/authType";
 
-const code_verifier = "h57bycdwryntewreomnbSyDrAG4kX7BeqS7g-luzvBE";
-const code_challenge = Base64.stringify(sha256(code_verifier))
+const APP_ID = "934722658638520488";
+const SECRET_KEY = "9D1oI4FcpFbS5GmQrK8K";
+const CODE_VERIFIER = "h57bycdwryntewreomnbSyDrAG4kX7BeqS7g-luzvBE";
+const CODE_CHALLENGE = Base64.stringify(sha256(CODE_VERIFIER))
   .replace(/=/g, "")
   .replace(/\+/g, "-")
   .replace(/\//g, "_");
 const redirect_uri = window.location.origin + "/home";
 
 const AccountInfo = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const { providerId } = useSelector((state) => state.authenticateReducer);
   const [checkedLinkGoogle, setCheckedLinkGoogle] = useState(
     UserMe?.GoogleEmail ? true : false
+  );
+  const [checkedLinkZalo, setCheckedLinkZalo] = useState(
+    UserMe?.ZaloId ? true : false
   );
   const [checkedLinkFB, setCheckedLinkFB] = useState(
     UserMe?.FacebookEmail ? true : false
@@ -45,6 +54,7 @@ const AccountInfo = () => {
   useEffect(() => {
     setCheckedLinkFB(UserMe?.FacebookEmail ? true : false);
     setCheckedLinkGoogle(UserMe?.GoogleEmail ? true : false);
+    setCheckedLinkZalo(UserMe?.ZaloId ? true : false);
   }, [UserMe]);
 
   const dispatch = useDispatch();
@@ -61,8 +71,70 @@ const AccountInfo = () => {
       setFile(newFile);
     }
   };
+  useEffect(() => {
+    const params = queryString.parse(location.search);
+    if (Object.keys(params).length > 0) {
+      let data = {
+        app_id: APP_ID,
+        code: params.code,
+        grant_type: "authorization_code",
+        code_verifier: CODE_VERIFIER,
+      };
+      data = Object.keys(data)
+        .reduce((newData, d) => [...newData, `${d}=${data[d]}`], [])
+        .join("&");
+
+      const linkZalo = async () => {
+        try {
+          const res = await axios.post(
+            "https://oauth.zaloapp.com/v4/access_token",
+            data,
+            {
+              headers: {
+                secret_key: SECRET_KEY,
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            }
+          );
+          const getInfo = await axios.get(
+            "https://graph.zalo.me/v2.0/me?fields=id,birthday,name,gender,picture",
+            {
+              headers: {
+                access_token: res.data.access_token,
+              },
+            }
+          );
+          const link = await authenticateService.zaloLink({
+            zaloId: getInfo.data.id,
+            zaloName: getInfo.data.name,
+            zaloPicture: getInfo.data.picture.data.url,
+          });
+          dispatch({ type: SET_USER, payload: link.data.data });
+          console.log(getInfo.data, link.data);
+        } catch (error) {}
+      };
+      linkZalo();
+      // window.location = window.location.origin + "/home/user/accountInfo";
+    }
+    // window.location = window.location.origin + "/home/user/accountInfo";
+  }, [checkedLinkZalo]);
+  console.log(queryString.parse(location.search));
+
   const onChangeCheck = async (checked) => {
     /* console.log(`switch to ${checked}`); */
+    setCheckedLinkZalo(checked);
+    if (checked) {
+      window.location = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${window.location.href}&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
+    } else {
+      const link = await authenticateService.zaloLink({
+        zaloId: "",
+        zaloName: "",
+        zaloPicture: "",
+      });
+      dispatch({ type: SET_USER, payload: link.data.data });
+      window.location.replace =
+        window.location.origin + "/home/user/accountInfo";
+    }
   };
   const handleCancel = () => {
     setVisible(false);
@@ -234,17 +306,17 @@ const AccountInfo = () => {
                   <span className="AccountInfo__social__itm">
                     Liên Kết Zalo
                   </span>
-                  <a
+                  {/* <a
                     href={`https://oauth.zaloapp.com/v4/permission?app_id=934722658638520488&redirect_uri=${"https://145d-2001-ee0-4f08-3fc0-dc13-a76d-cb68-456.ap.ngrok.io/home"}&code_challenge=${code_challenge}&state=access_profile`}
                     alt="#"
-                  >
-                    <Switch
-                      defaultChecked={false}
-                      onChange={onChangeCheck}
-                      style={{}}
-                      // disabled={true}
-                    />
-                  </a>
+                  > */}
+                  <Switch
+                    checked={checkedLinkZalo}
+                    onChange={onChangeCheck}
+                    style={{}}
+                    // disabled={true}
+                  />
+                  {/* </a> */}
                 </div>
               </div>
               <div

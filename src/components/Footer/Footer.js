@@ -19,6 +19,7 @@ const QR_URL = `http://localhost:3000/home/detect-app`;
 
 const Footer = () => {
   const location = useLocation();
+  console.log(window.location);
 
   return (
     <>
@@ -46,7 +47,7 @@ const Footer = () => {
                           maxWidth: "100%",
                           width: "100%",
                         }}
-                        value={window.location.host + "/home/detect-app"}
+                        value={window.location.origin + "/home/detect-app"}
                         // viewBox={`0 0 256 256`}
                       />
                     </div>
