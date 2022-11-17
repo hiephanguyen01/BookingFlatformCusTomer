@@ -25,7 +25,7 @@ const setAuthToken = (token) => {
     delete axios.defaults.headers["Authorization"];
   }
 };
-const openNotificationWithIcon = (type, message, description) => {
+export const openNotificationWithIcon = (type, message, description) => {
   notification[type]({
     message: message,
     description,
