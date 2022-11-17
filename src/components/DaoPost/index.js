@@ -740,8 +740,9 @@ const DaoPost = (props) => {
                   <div className="comment_post">
                     {comments
                       .sort((a, b) => b.createdAt - a.createdAt)
-                      .map((comment, index) => (
-                        <div key={index}>
+                      .map((comment, index) => {
+                        console.log("modalcommet",comment)
+                        return <div key={index}>
                           <header className="post__main__info d-flex justify-content-between align-posts-center mt-18">
                             <div className="d-flex justify-content-between align-posts-center">
                               <img
@@ -836,7 +837,7 @@ const DaoPost = (props) => {
                                       color: "#E22828",
                                       marginBottom: "2px",
                                     }}
-                                    onClick={() => handlerLikeComment()}
+                                    onClick={() => handlerLikeComment(comment?.id)}
                                     // onMouseLeave={() => setMouseOverHeart(false)}
                                   />
                                 ) : (
@@ -847,7 +848,7 @@ const DaoPost = (props) => {
                                       cursor: "pointer",
                                       marginBottom: "2px",
                                     }}
-                                    onClick={() => handlerLikeComment()}
+                                    onClick={() => handlerLikeComment(comment?.id)}
                                     // onMouseOver={() => setMouseOverHeart(true)}
                                   />
                                 )}
@@ -862,7 +863,7 @@ const DaoPost = (props) => {
                             </div>
                           </div>
                         </div>
-                      ))}
+                      })}
                     {pagination.hasNextPage && (
                       <div
                         className="btn-see-more-cmt"
