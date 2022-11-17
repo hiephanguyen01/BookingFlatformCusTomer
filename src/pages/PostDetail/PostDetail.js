@@ -50,7 +50,7 @@ const PostDetail = () => {
   const type = "post";
   const { postId } = useParams();
   const dispatch = useDispatch();
-console.log("postId",postId)
+  console.log("postId", postId);
   const {
     postDetail,
     likePostList,
@@ -83,7 +83,7 @@ console.log("postId",postId)
     },
   ];
 
-  // const [moreOptionModal, setMoreOptionModal] = useState(false);
+  const [moreOptionModal, setMoreOptionModal] = useState(false);
 
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
@@ -269,19 +269,16 @@ console.log("postId",postId)
             // }}
             navigation={true}
             modules={[Pagination, Navigation]}
-            className="swiperPostDetail"
-          >
+            className="swiperPostDetail">
             {post?.Image?.map((img, index) => (
               <SwiperSlide
                 key={index}
-                style={{ background: "#1D2226", padding: "90px 0" }}
-              >
+                style={{ background: "#1D2226", padding: "90px 0" }}>
                 <img
                   src={convertImage(img)}
                   className="w-100 h-100"
                   alt=""
                   style={{ objectFit: "contain" }}
-                  alt=""
                 />
               </SwiperSlide>
             ))}
@@ -308,12 +305,10 @@ console.log("postId",postId)
                         {itm.id === 3 ? (
                           <li
                             onClick={() => handleMoreOptionClick(itm)}
-                            key={idx}
-                          >
+                            key={idx}>
                             <CopyToClipboard
                               onCopy={() => {}}
-                              text={`${window.location.origin}/home/dao/posts/${postId}`}
-                            >
+                              text={`${window.location.origin}/home/dao/posts/${postId}`}>
                               <div className="container d-flex">
                                 <div>{itm.icon}</div>
                                 <p>{itm.title}</p>
@@ -331,8 +326,7 @@ console.log("postId",postId)
                                 ) ? (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}
-                                  >
+                                    key={idx}>
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>Tắt thông báo về bài viết này</p>
@@ -341,8 +335,7 @@ console.log("postId",postId)
                                 ) : (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}
-                                  >
+                                    key={idx}>
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>{itm.title}</p>
@@ -353,8 +346,7 @@ console.log("postId",postId)
                             ) : (
                               <li
                                 onClick={() => handleMoreOptionClick(itm)}
-                                key={idx}
-                              >
+                                key={idx}>
                                 <div className="container d-flex">
                                   <div>{itm.icon}</div>
                                   <p>{itm.title}</p>
@@ -371,8 +363,7 @@ console.log("postId",postId)
                 visible={isModalOptionDetail}
                 onVisibleChange={(newVisible) =>
                   setIsModalOptionDetail(newVisible)
-                }
-              >
+                }>
                 <MoreOutlined style={{ fontSize: "24px" }} />
               </Popover>
               <ReportPost
@@ -392,8 +383,7 @@ console.log("postId",postId)
           </div>
           <div
             className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-            style={{ borderBottom: "1px solid #E7E7E7" }}
-          >
+            style={{ borderBottom: "1px solid #E7E7E7" }}>
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn onClick={(e) => {}}>
                 {mouseOverHeart || checkLikePost() ? (
@@ -444,16 +434,14 @@ console.log("postId",postId)
                         className={
                           chooseCommentDefault.id === item.id && "active"
                         }
-                        onClick={() => handleAddComment(item)}
-                      >
+                        onClick={() => handleAddComment(item)}>
                         {item.Content}
                       </li>
                     ))}
                   </ul>
                   <div
                     className="post_detail_choose_service d-flex justify-content-center align-items-center"
-                    onClick={handleShowModalChooseService}
-                  >
+                    onClick={handleShowModalChooseService}>
                     <PlusOutlined
                       style={{ color: "#03AC84", fontSize: "14px" }}
                     />
@@ -504,8 +492,7 @@ console.log("postId",postId)
                       marginLeft: "40px",
                       marginTop: "15px",
                     }}
-                    className="post__comments__detail__content"
-                  >
+                    className="post__comments__detail__content">
                     {comment.Content}
                   </div>
                 )}
@@ -514,8 +501,7 @@ console.log("postId",postId)
                 )}
                 <div
                   className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-                  style={{ borderBottom: "1px solid #E7E7E7" }}
-                >
+                  style={{ borderBottom: "1px solid #E7E7E7" }}>
                   <div className="post__main__content__like-comment__likes d-flex">
                     <PopUpSignIn onClick={(e) => {}}>
                       {comment?.Likes?.some(
