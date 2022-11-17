@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 export const FooterRating = ({ id, setVisible, visible }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log("djkhsakjdhskja", data);
   useEffect(() => {
     (async () => {
       try {
@@ -17,7 +16,6 @@ export const FooterRating = ({ id, setVisible, visible }) => {
             Authorization: "Bearer " + localStorage.getItem("token"),
           }, //JWT
         });
-        console.log("first", data.data);
         setData(data.data);
         setLoading(false);
       } catch (error) {

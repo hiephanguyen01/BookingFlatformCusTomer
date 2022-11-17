@@ -28,7 +28,7 @@ import {
 import { convertPrice } from "../../utils/convert";
 import toastMessage from "../../components/ToastMessage";
 import {
-  addOrder,
+  // addOrder,
   chooseServiceAction,
 } from "../../stores/actions/OrderAction";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
@@ -53,13 +53,8 @@ const COLUMN = [
 ];
 
 const PhotographerDetail = () => {
-  const {
-    studioDetail,
-    loading,
-    listStudioSimilar,
-    promotionCode,
-    filterService,
-  } = useSelector((state) => state.studioPostReducer);
+  const { studioDetail, listStudioSimilar, promotionCode, filterService } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -96,7 +91,7 @@ const PhotographerDetail = () => {
   useEffect(() => {
     dispatch(getPromotionCodeUserSave());
     dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
-  }, [studioDetail]);
+  }, [studioDetail, dispatch]);
 
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
@@ -104,7 +99,7 @@ const PhotographerDetail = () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
     };
-  }, []);
+  }, [dispatch]);
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -307,14 +302,14 @@ const PhotographerDetail = () => {
     }
   };
 
-  const handleAddCart = () => {
-    if (chooseService.length > 0) {
-      dispatch(addOrder(cate, chooseService));
-      toastMessage("Đã thêm vào giỏ hàng!", "success");
-    } else {
-      toastMessage("Bạn cần chọn dịch vụ!", "warn");
-    }
-  };
+  // const handleAddCart = () => {
+  //   if (chooseService.length > 0) {
+  //     dispatch(addOrder(cate, chooseService));
+  //     toastMessage("Đã thêm vào giỏ hàng!", "success");
+  //   } else {
+  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
+  //   }
+  // };
   const handleChangeLike = (e) => {
     e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
@@ -496,7 +491,8 @@ const PhotographerDetail = () => {
                   <div className="mapouter mt-10">
                     <div className="gmap_canvas">
                       <iframe
-                        key={"aefwr"}
+                        title="map"
+                        key="map"
                         className="gmap_iframe"
                         width="380px"
                         height=""

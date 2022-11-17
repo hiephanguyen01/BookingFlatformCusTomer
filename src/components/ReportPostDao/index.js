@@ -1,6 +1,6 @@
 import "./reportPostDao.scss";
 import { useState } from "react";
-import { Modal, Input, Radio, Space } from "antd";
+import { Modal, Radio, Space } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { reportService } from "../../services/ReportService";
 
@@ -30,20 +30,17 @@ const ReportPost = (props) => {
     setAfterReport(false);
   };
   const handleOk = async () => {
-    console.log(valueText, props.postId);
     try {
       if (value === 6) {
         const data1 = await reportService.createReportDao({
           PostId: Number(props.postId),
           Content: valueText,
         });
-        console.log(data1);
       } else {
         const data1 = await reportService.createReportDao({
           PostId: Number(props.postId),
           Content: value,
         });
-        console.log(data1);
       }
       props.setIsReportPostModalVisible(false);
       setAfterReport(true);

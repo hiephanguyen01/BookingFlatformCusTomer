@@ -12,12 +12,11 @@ const Posts = () => {
   const { savedPostList } = useSelector((state) => state.userReducer);
   const { likePostList } = useSelector((state) => state.postDaoReducer);
   const [savedPosts, setSavedPosts] = useState([...savedPostList]);
-  console.log(savedPostList);
 
   useEffect(() => {
     dispatch(getListPosts(19, 1));
     dispatch(getLikePostList(UserMe.id));
-  }, []);
+  }, [dispatch, UserMe.id]);
   useEffect(() => {
     setSavedPosts([...savedPostList]);
   }, [savedPostList]);

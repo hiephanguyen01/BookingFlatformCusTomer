@@ -16,12 +16,10 @@ import { TOGGLE_STATE } from "../../../stores/types/messType";
 export const ChatBody = React.memo(() => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const getToggleState = useSelector((state) => state.chatReducer.toggleState);
-  console.log(getToggleState);
   const updateConversation = useSelector(findConverSelector);
   const flagCreateConver = useSelector(createConverFlagSelector);
   const dispatch = useDispatch();
   const [toggleState, setToggleState] = useState(getToggleState);
-  console.log(toggleState);
   const initMountStateUser = useRef([]);
   const [infoChatAdmin, setInfoChatAdmin] = useState();
   const [conversation, setConversation] = useState(initMountStateUser.current);
@@ -63,20 +61,20 @@ export const ChatBody = React.memo(() => {
       setToggleState(res.data.data[0].id);
       dispatch({ type: TOGGLE_STATE, payload: res.data.data[0].id });
     })();
-  }, []);
+  }, [UserMe?.id, dispatch]);
   useEffect(() => {
     if (flagCreateConver) {
       setToggleState(flagCreateConver);
       dispatch({ type: TOGGLE_STATE, payload: flagCreateConver });
     }
-  }, [flagCreateConver]);
+  }, [flagCreateConver, dispatch]);
 
   useEffect(() => {
     (async () => {
       const res = await chatService.getConversationVsAdmin(UserMe.id, 0);
       setInfoChatAdmin(res.data.data);
     })();
-  }, []);
+  }, [UserMe?.id]);
   useEffect(() => {
     if (updateConversation) {
       (async () => {
@@ -107,7 +105,7 @@ export const ChatBody = React.memo(() => {
         }
       })();
     }
-  }, [updateConversation]);
+  }, [updateConversation, dispatch]);
   useEffect(() => {
     socket.on("receive_message", () => {
       (async () => {
@@ -131,8 +129,7 @@ export const ChatBody = React.memo(() => {
         }
       })();
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [UserMe?.id]);
   return (
     <div className="Chat__body">
       <div className="Chat__body__user">

@@ -14,7 +14,7 @@ const PostSaved = () => {
   useEffect(() => {
     dispatch(getSavedPostList(19, 1, UserMe.id));
     dispatch(getLikePostList(UserMe.id));
-  }, []);
+  }, [dispatch, UserMe.id]);
   useEffect(() => {
     setSavedPosts([...savedPostList]);
   }, [savedPostList]);

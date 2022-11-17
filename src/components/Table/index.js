@@ -1,20 +1,12 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Pagination, Row } from "antd";
 
 import "./table.scss";
-import SelectTimeOptionService from "../SelectTimeOptionService/SelectTimeOptionService";
 import { useSelector } from "react-redux";
 import { ExclamationCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useRef } from "react";
 
-const Index = ({
-  column,
-  row = [],
-  rowNumber = 5,
-  className = "",
-  style,
-  service,
-}) => {
+const Index = ({ column, row = [], rowNumber = 5, className = "", style }) => {
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -28,7 +20,6 @@ const Index = ({
     setTimeout(() => {
       setLoading(false);
     }, 500);
-    // console.log(ref.current.);
     ref.current.scrollIntoView();
   };
 

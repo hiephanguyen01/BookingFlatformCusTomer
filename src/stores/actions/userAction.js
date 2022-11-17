@@ -9,7 +9,6 @@ export const getSavedPostList = (limit, page, userId) => async (dispatch) => {
   dispatch({ type: SET_LOADING, payload: true });
   try {
     const { data } = await userService.getSavedPostList(userId, page, limit);
-    console.log(data.data.map((val) => val.savedPost));
     dispatch({
       type: SET_SAVED_POST_LIST,
       payload: data.data.map((val) => val.savedPost),
@@ -25,7 +24,6 @@ export const getListPosts = (limit, page) => async (dispatch) => {
   dispatch({ type: SET_LOADING, payload: true });
   try {
     const { data } = await userService.getListPosts(page, limit);
-    console.log(data);
     dispatch({
       type: SET_SAVED_POST_LIST,
       payload: data.data,

@@ -50,7 +50,6 @@ export default function usePushNotifications() {
   const onClickSusbribeToPushNotification = async () => {
     setLoading(true);
     setError(false);
-    console.log("trước khi chạy service worker");
     // const subscription = await serviceWorker.createNotificationSubscription();
     serviceWorker
       .createNotificationSubscription()
@@ -73,15 +72,6 @@ export default function usePushNotifications() {
         setError(err);
         setLoading(false);
       });
-    // console.log(subscription);
-
-    // if (subscription) {
-    //   setUserSubscription(subscription);
-    //   setLoading(false);
-    // } else {
-    //   //   setError(err);
-    //   setLoading(false);
-    // }
   };
 
   const onClickSendSubscriptionToPushServer = () => {

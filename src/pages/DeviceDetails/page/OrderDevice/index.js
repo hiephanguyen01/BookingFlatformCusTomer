@@ -8,8 +8,7 @@ import Voucher from "./components/Voucher";
 import { SHOW_MODAL } from "../../../../stores/types/modalTypes";
 
 const Index = () => {
-  const [chooseVoucher, setChooseVoucher] = useState([]);
-  /* console.log(chooseVoucher); */
+  const [, setChooseVoucher] = useState([]);
   const dispatch = useDispatch();
   const handleOnClickModal = () => {
     dispatch({

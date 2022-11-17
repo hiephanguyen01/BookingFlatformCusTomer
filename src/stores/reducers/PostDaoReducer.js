@@ -18,6 +18,7 @@ const initialState = {
   selectSearch: [],
   defaultComments: [],
   relatedService: [],
+  listNotificationUser: [],
 };
 export const postDaoReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -59,6 +60,10 @@ export const postDaoReducer = (state = initialState, action) => {
     }
     case SET_RELATED_SERVICE: {
       return { ...state, relatedService: action.data };
+    }
+    case "SET_LIST_NOTIFICATION_USER": {
+      console.log("reducẻ", action.data);
+      return { ...state, listNotificationUser: action.data };
     }
     default:
       return state;

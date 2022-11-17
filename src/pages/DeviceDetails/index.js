@@ -44,13 +44,8 @@ import SelectTimeOptionService from "../../components/SelectTimeOptionService/Se
 import toastMessage from "../../components/ToastMessage";
 
 const Index = () => {
-  const {
-    studioDetail,
-    loading,
-    listStudioSimilar,
-    promotionCode,
-    filterService,
-  } = useSelector((state) => state.studioPostReducer);
+  const { studioDetail, listStudioSimilar, promotionCode, filterService } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
 
   const { id } = useParams();
@@ -92,7 +87,7 @@ const Index = () => {
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
     };
-  }, []);
+  }, [dispatch]);
 
   const handleChangeLike = (e) => {
     if (!currentUser) navigate("/auth/sign-in");
@@ -232,7 +227,11 @@ const Index = () => {
                 </div>
               </div>
               <div className="location">
-                <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
+                <img
+                  src={svgLocation}
+                  style={{ marginRight: "0.5rem" }}
+                  alt=""
+                />
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
@@ -273,7 +272,7 @@ const Index = () => {
                   >
                     <div className="desc_col_right">
                       <div className="d-flex mb-30" style={{}}>
-                        <img src={imgPost} className="avatar" />
+                        <img src={imgPost} className="avatar" alt="" />
                         <div className="">
                           <div className="desc_col_right_title">
                             {studioDetail?.shop?.Name}
@@ -286,6 +285,7 @@ const Index = () => {
                             <img
                               src={svgLocation}
                               style={{ marginRight: "6px" }}
+                              alt=""
                             />
                             {studioDetail?.shop?.Address}
                           </div>

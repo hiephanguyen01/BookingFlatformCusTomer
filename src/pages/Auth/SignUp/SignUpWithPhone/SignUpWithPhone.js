@@ -72,7 +72,7 @@ export const SignUpWithPhone = ({
     if (phoneNum === "1") {
       navigate("/auth/sign-up");
     }
-  }, []);
+  }, [navigate, phoneNum]);
   useEffect(() => {
     let i = countDown;
     let timerId = setInterval(() => {
@@ -81,7 +81,7 @@ export const SignUpWithPhone = ({
       if (i <= 0) clearInterval(timerId);
     }, 1000);
     return () => clearInterval(timerId);
-  }, []);
+  }, [countDown]);
 
   return (
     <div className="SignUpWithPhone">

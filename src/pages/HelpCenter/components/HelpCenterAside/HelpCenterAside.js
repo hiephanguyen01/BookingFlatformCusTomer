@@ -1,6 +1,4 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Link } from "react-scroll";
 
 import "./helpCenterAside.scss";

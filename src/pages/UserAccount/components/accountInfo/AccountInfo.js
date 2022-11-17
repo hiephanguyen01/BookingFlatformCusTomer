@@ -21,6 +21,7 @@ import {
   getCurrentUser,
   googleLink,
   logOut,
+  openNotificationWithIcon,
 } from "../../../../stores/actions/autheticateAction";
 import { convertImage } from "../../../../utils/convertImage";
 import "./accountInfo.scss";
@@ -34,13 +35,11 @@ const CODE_CHALLENGE = Base64.stringify(sha256(CODE_VERIFIER))
   .replace(/=/g, "")
   .replace(/\+/g, "-")
   .replace(/\//g, "_");
-const redirect_uri = window.location.origin + "/home";
 
 const AccountInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-  const { providerId } = useSelector((state) => state.authenticateReducer);
   const [checkedLinkGoogle, setCheckedLinkGoogle] = useState(
     UserMe?.GoogleEmail ? true : false
   );
@@ -56,6 +55,9 @@ const AccountInfo = () => {
     setCheckedLinkGoogle(UserMe?.GoogleEmail ? true : false);
     setCheckedLinkZalo(UserMe?.ZaloId ? true : false);
   }, [UserMe]);
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  }, []);
 
   const dispatch = useDispatch();
   const myImg = convertImage(UserMe?.Image);
@@ -110,21 +112,22 @@ const AccountInfo = () => {
             zaloPicture: getInfo.data.picture.data.url,
           });
           dispatch({ type: SET_USER, payload: link.data.data });
-          console.log(getInfo.data, link.data);
         } catch (error) {}
       };
       linkZalo();
       // window.location = window.location.origin + "/home/user/accountInfo";
     }
     // window.location = window.location.origin + "/home/user/accountInfo";
-  }, [checkedLinkZalo]);
-  console.log(queryString.parse(location.search));
+  }, [checkedLinkZalo, dispatch, location.search]);
+  console.log(window.location);
 
   const onChangeCheck = async (checked) => {
     /* console.log(`switch to ${checked}`); */
     setCheckedLinkZalo(checked);
     if (checked) {
-      window.location = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${window.location.href}&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
+      window.location.href = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${
+        window.location.origin + "/home/user/accountInfo"
+      }&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
     } else {
       const link = await authenticateService.zaloLink({
         zaloId: "",
@@ -132,8 +135,6 @@ const AccountInfo = () => {
         zaloPicture: "",
       });
       dispatch({ type: SET_USER, payload: link.data.data });
-      window.location.replace =
-        window.location.origin + "/home/user/accountInfo";
     }
   };
   const handleCancel = () => {
@@ -151,9 +152,25 @@ const AccountInfo = () => {
   const handleChangeValue = (name, value) => {
     setInfoUser({ ...infoUser, [name]: value });
   };
+  function isVietnamesePhoneNumber(number) {
+    return /((^(\+84|84|0|0084){1})(3|5|7|8|9))+([0-9]{8})$/.test(number);
+  }
   const saveChange = async () => {
     setLoading(true);
     try {
+      console.log(infoUser.Phone);
+      console.log(
+        /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(infoUser.Phone)
+      );
+      if (!isVietnamesePhoneNumber(infoUser.Phone)) {
+        setLoading(false);
+
+        return openNotificationWithIcon(
+          "error",
+          "Fail",
+          "Vui lòng kiểm tra lại số điện thoại"
+        );
+      }
       const formData = new FormData();
       delete file.preview;
       for (let key in infoUser) {
@@ -166,8 +183,13 @@ const AccountInfo = () => {
       await userService.saveInfo(formData);
       dispatch(getCurrentUser());
       setLoading(false);
+      openNotificationWithIcon("success", "Done", "Saved");
     } catch (error) {
-      console.log("fail");
+      openNotificationWithIcon(
+        "error",
+        "Please try again",
+        error.response.data.message
+      );
       setLoading(false);
     }
   };
@@ -240,8 +262,7 @@ const AccountInfo = () => {
               />
               {UserMe?.IsActiveEmail ? (
                 <p
-                  style={{ color: "green", paddingLeft: "39.703px!important" }}
-                >
+                  style={{ color: "green", paddingLeft: "39.703px!important" }}>
                   Email đã được xác nhận
                 </p>
               ) : UserMe?.Email?.trim() !== " " ? (
@@ -270,8 +291,7 @@ const AccountInfo = () => {
           style={{
             borderBottom: "1px solid #CACACA",
             paddingBottom: "1rem",
-          }}
-        >
+          }}>
           <Col lg={12} sm={24}>
             <EditText
               label="Mật khẩu hiện tại"
@@ -290,8 +310,7 @@ const AccountInfo = () => {
             style={{
               borderBottom: "1px solid #CACACA",
               paddingBottom: "2rem",
-            }}
-          >
+            }}>
             <Col span={12}>
               <div className="d-flex container justify-content-center align-items-center mb-30">
                 <img
@@ -301,8 +320,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết Zalo
                   </span>
@@ -321,8 +339,7 @@ const AccountInfo = () => {
               </div>
               <div
                 className="d-flex container justify-content-center align-items-center"
-                style={{ marginBottom: "30px" }}
-              >
+                style={{ marginBottom: "30px" }}>
                 <img
                   src={imgFB}
                   alt=""
@@ -330,8 +347,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết facebook
                   </span>
@@ -360,8 +376,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết google
                   </span>
@@ -398,8 +413,7 @@ const AccountInfo = () => {
               type="primary"
               ghost
               className="AccountInfo__delete__container__button"
-              onClick={() => setVisible(true)}
-            >
+              onClick={() => setVisible(true)}>
               <span>Xóa tài khoản</span>
             </Button>
           </div>
@@ -410,7 +424,7 @@ const AccountInfo = () => {
             type="primary"
             className="AccountInfo__save"
             onClick={saveChange}
-          >
+            disabled={loading}>
             {loading && <ClipLoader color="#fff" size={20} />} Lưu thay đổi
           </Button>
         </div>
@@ -424,15 +438,13 @@ const AccountInfo = () => {
         // height={400}
         closable={false}
         className="AccountInfo__delete__modal"
-        footer={false}
-      >
+        footer={false}>
         <div className="AccountInfo__delete__modal__header">
           Bạn có chắc muốn xóa tài khoản này?
         </div>
         <div
           className="AccountInfo__delete__modal__content"
-          style={{ color: "#000" }}
-        >
+          style={{ color: "#000" }}>
           <div className="mb-20">
             Bằng cách bấm vào nút “Xóa tài khoản”, bạn tự nguyện chọn xóa bỏ tài
             khoản của mình hoàn toàn và không thể thay đổi được, và bạn đồng ý
@@ -446,8 +458,7 @@ const AccountInfo = () => {
               listStyleType: "disc",
               color: "#E22828",
               fontWeight: "600",
-            }}
-          >
+            }}>
             <li>Xóa bỏ tất cả thông tin trên hồ sơ của bạn</li>
             <li>Xóa bỏ tất cả thông tin về các đơn đặt phòng trước đây </li>
           </ul>
@@ -462,14 +473,12 @@ const AccountInfo = () => {
         <div className="AccountInfo__delete__modal__group__btn">
           <button
             className="AccountInfo__delete__modal__group__btn__cancel"
-            onClick={handleCancel}
-          >
+            onClick={handleCancel}>
             Hủy
           </button>
           <button
             className="AccountInfo__delete__modal__group__btn__delete"
-            onClick={handleDelete}
-          >
+            onClick={handleDelete}>
             Xóa
           </button>
         </div>
