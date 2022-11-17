@@ -51,7 +51,7 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
         return false;
       }
     });
-  }, [socket, info]);
+  }, [info]);
   return (
     <div
       className={toggleState === 1000000 ? "User  User__current " : "User "}
@@ -60,8 +60,7 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
         setIsRead(true);
         if (lastMessage.CustomerId === -1 && lastMessage.IsRead === false) {
           (async () => {
-            const res = await chatService.readMessageAdmin(lastMessage.id);
-            console.log("res", res);
+            await chatService.readMessageAdmin(lastMessage.id);
           })();
         }
       }}

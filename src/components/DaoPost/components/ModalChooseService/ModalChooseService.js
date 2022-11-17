@@ -10,13 +10,11 @@ import { postDaoService } from "../../../../services/PostDaoService";
 import { convertImage } from "../../../../utils/convertImage";
 import { convertPrice } from "../../../../utils/convert";
 import { setRelatedService } from "../../../../stores/actions/PostDaoAction";
-import toastMessage from "../../../ToastMessage";
 
 const ModalChooseService = ({ hasTags, PostId }) => {
   const { relatedService } = useSelector((state) => state.postDaoReducer);
   const [options, setOptions] = useState([]);
   const [services, setServices] = useState([]);
-  const [filterService, setFilterService] = useState([]);
   const [selectService, setSelectService] = useState([...relatedService]);
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
@@ -107,7 +105,6 @@ const ModalChooseService = ({ hasTags, PostId }) => {
           }
           size="large"
           placeholder="Tìm studio, người mẫu,..."
-          //   onChange={(e) => console.log(e.target.value)}
         />
       </AutoComplete>
       {/* <AutoComplete

@@ -45,7 +45,7 @@ export const Footer = ({
       const formData = new FormData();
       formData.append("BookingStatus", 2);
       formData.append("Category", Category);
-      const response = await orderService.updateOrder(formData, IdentifyCode);
+      await orderService.updateOrder(formData, IdentifyCode);
       const newPageBooking = pageBooking.filter(
         (item) => item.IdentifyCode !== IdentifyCode
       );
@@ -88,7 +88,6 @@ export const Footer = ({
       dispatch({ type: TOGGLE_STATE, payload: error.response.data.message.id });
     }
   };
-  console.log(+status);
   switch (+status) {
     case 1:
       return (

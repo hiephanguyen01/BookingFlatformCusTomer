@@ -171,6 +171,7 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
                     objectFit: "cover",
                     borderRadius: "10px",
                   }}
+                  alt=""
                 />
                 <CloseCircleOutlined
                   className="btn_close"

@@ -14,9 +14,7 @@ import React from "react";
 import "./bookStudio.scss";
 import imgStudio from "../../assets/dao/Frame 163.jpg";
 import TextInput from "../../components/TextInput/TextInput";
-import { useSelector } from "react-redux";
 const Index = () => {
-  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const onClick = ({ key }) => {
     // message.info(`Click on item ${key}`);
   };
@@ -88,6 +86,7 @@ const Index = () => {
                 <img
                   src={imgStudio}
                   style={{ height: "100%", marginRight: "20px" }}
+                  alt=""
                 />
                 <div>
                   <span className="text-middle">Váy cưới mã 01</span>
@@ -171,6 +170,7 @@ const Index = () => {
                 <img
                   src={imgStudio}
                   style={{ height: "100%", marginRight: "20px" }}
+                  alt=""
                 />
                 <div>
                   <span className="text-middle">Váy cưới mã 01</span>
@@ -238,7 +238,7 @@ const Index = () => {
             >
               <div>Chọn mã khuyến mãi</div>
               <Dropdown overlay={menu}>
-                <a onClick={(e) => e.preventDefault()}>
+                <a onClick={(e) => e.preventDefault()} href="/#">
                   <Space>
                     2 Mã khuyến mãi
                     <RightOutlined />

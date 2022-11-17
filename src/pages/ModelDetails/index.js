@@ -52,13 +52,8 @@ const COLUMN = [
 ];
 
 const Index = () => {
-  const {
-    studioDetail,
-    loading,
-    listStudioSimilar,
-    promotionCode,
-    filterService,
-  } = useSelector((state) => state.studioPostReducer);
+  const { studioDetail, listStudioSimilar, promotionCode, filterService } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -98,7 +93,7 @@ const Index = () => {
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
     };
-  }, []);
+  }, [dispatch]);
 
   // useEffect(() => {
   //   window.scrollTo({ behavior: "smooth", top: 0 });
@@ -437,7 +432,11 @@ const Index = () => {
                 </div>
               </div>
               <div className="location">
-                <img src={svgLocation} style={{ marginRight: "0.5rem" }} />
+                <img
+                  src={svgLocation}
+                  style={{ marginRight: "0.5rem" }}
+                  alt=""
+                />
                 {studioDetail?.data?.Address}
               </div>
               <div className="d-flex align-items-center mb-20">
@@ -494,7 +493,11 @@ const Index = () => {
                         className="text-medium-re"
                         style={{ marginBottom: "15px" }}
                       >
-                        <img src={svgLocation} style={{ marginRight: "6px" }} />
+                        <img
+                          src={svgLocation}
+                          style={{ marginRight: "6px" }}
+                          alt=""
+                        />
                         {studioDetail?.data?.Address}
                       </div>
                     </div>
@@ -503,6 +506,7 @@ const Index = () => {
                       src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
+                      title="map"
                     ></iframe>
                   </div>
                 </Col>

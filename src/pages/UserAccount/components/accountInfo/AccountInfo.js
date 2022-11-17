@@ -34,13 +34,11 @@ const CODE_CHALLENGE = Base64.stringify(sha256(CODE_VERIFIER))
   .replace(/=/g, "")
   .replace(/\+/g, "-")
   .replace(/\//g, "_");
-const redirect_uri = window.location.origin + "/home";
 
 const AccountInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-  const { providerId } = useSelector((state) => state.authenticateReducer);
   const [checkedLinkGoogle, setCheckedLinkGoogle] = useState(
     UserMe?.GoogleEmail ? true : false
   );
@@ -115,7 +113,7 @@ const AccountInfo = () => {
       // window.location = window.location.origin + "/home/user/accountInfo";
     }
     // window.location = window.location.origin + "/home/user/accountInfo";
-  }, [checkedLinkZalo]);
+  }, [checkedLinkZalo, dispatch, location.search]);
   console.log(window.location);
 
   const onChangeCheck = async (checked) => {

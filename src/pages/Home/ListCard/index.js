@@ -1,7 +1,7 @@
 import { Col, Pagination, Row } from "antd";
 import classNames from "classnames/bind";
 import React, { memo, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Card } from "../../../components/Card";
 // import { getAllStudioLikedAction1 } from "../../../stores/actions/studioPostAction";
 import styles from "./ListCard.module.scss";
@@ -18,7 +18,6 @@ const ListItem = ({ category }) => {
   // const dispatch = useDispatch();
   const { listLikedUser } = useSelector((state) => state.studioPostReducer);
   const { values, current, minIndex, maxIndex } = state;
-  console.log(listLikedUser);
   useEffect(() => {
     setState({
       values: listLikedUser,
@@ -29,7 +28,6 @@ const ListItem = ({ category }) => {
   }, [listLikedUser]);
 
   const handleChange = (page) => {
-    console.log(page);
     setState({
       ...state,
       current: page,

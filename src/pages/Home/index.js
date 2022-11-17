@@ -6,7 +6,6 @@ import queryString from "query-string";
 import { bannerService } from "../../services/Banner";
 import logoImg from "../../../src/assets/img/Logo1.png";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { studioPostService } from "../../services/StudioPostService";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import {
   getAllStudioLikedAction1,

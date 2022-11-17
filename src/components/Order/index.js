@@ -1,6 +1,5 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Row } from "antd";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -14,11 +13,7 @@ import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
 import { calDate, calTime } from "../../utils/calculate";
-import {
-  convertDateSendToDB,
-  convertPrice,
-  convertTimeSendDB,
-} from "../../utils/convert";
+import { convertPrice, convertTimeSendDB } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
@@ -36,7 +31,7 @@ const Index = ({ linkTo = "" }) => {
     (state) => state.promoCodeReducer
   );
   console.log("first,", chooseServiceList);
-  const { studioDetail, filter } = useSelector(
+  const { studioDetail, filterService } = useSelector(
     (state) => state.studioPostReducer
   );
   const [infoUser, setInfoUser] = useState();
@@ -80,7 +75,7 @@ const Index = ({ linkTo = "" }) => {
     //Get Register Partner Detail of this StudioPost in order to retrieve the value of PaymentTypeOnline column ****
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
     // *************************************************************************************************************
-
+    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
     };
@@ -98,13 +93,16 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const calculatePrice = () => {
-    switch (filter.OrderByTime) {
+    switch (filterService?.OrderByTime) {
       case 1:
         const priceByHour = chooseServiceList?.reduce(
           (total, service) =>
             total +
             (service?.Sales || service?.Price || service?.PriceByHour) *
-              calTime(filter?.OrderByTimeFrom, filter?.OrderByTimeTo),
+              calTime(
+                filterService?.OrderByTimeFrom,
+                filterService?.OrderByTimeTo
+              ),
           0
         );
         if (choosePromotionUser?.TypeReduce === 1) {
@@ -124,7 +122,10 @@ const Index = ({ linkTo = "" }) => {
             (total, service) =>
               total +
               (service.Sales || service.Price || service.PriceByDate) *
-                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+                calDate(
+                  filterService?.OrderByDateFrom,
+                  filterService?.OrderByDateTo
+                ),
             0
           ) || 0;
         if (choosePromotionUser?.TypeReduce === 1) {
@@ -157,12 +158,14 @@ const Index = ({ linkTo = "" }) => {
 
         //**************************************
 
-        if (filter.OrderByTime === 0) {
+        if (filterService?.OrderByTime === 0) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom: convertTimeSendDB(filter.OrderByDateFrom),
-              OrderByDateTo: convertTimeSendDB(filter.OrderByDateTo),
+              OrderByDateFrom: convertTimeSendDB(
+                filterService?.OrderByDateFrom
+              ),
+              OrderByDateTo: convertTimeSendDB(filterService?.OrderByDateTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -178,23 +181,28 @@ const Index = ({ linkTo = "" }) => {
             const response = await orderService.addOrder({
               ...newData,
               numberOfTime: `${calDate(
-                filter.OrderByDateFrom,
-                filter.OrderByDateTo
+                filterService?.OrderByDateFrom,
+                filterService?.OrderByDateTo
               )} ngày`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByDate) *
-                calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+                calDate(
+                  filterService?.OrderByDateFrom,
+                  filterService?.OrderByDateTo
+                ),
             });
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
           }
-        } else if (filter.OrderByTime === 1) {
+        } else if (filterService?.OrderByTime === 1) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 1,
-              OrderByTimeFrom: convertTimeSendDB(filter.OrderByTimeFrom),
-              OrderByTimeTo: convertTimeSendDB(filter.OrderByTimeTo),
+              OrderByTimeFrom: convertTimeSendDB(
+                filterService?.OrderByTimeFrom
+              ),
+              OrderByTimeTo: convertTimeSendDB(filterService?.OrderByTimeTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -210,13 +218,16 @@ const Index = ({ linkTo = "" }) => {
             const response = await orderService.addOrder({
               ...newData,
               numberOfTime: `${calTime(
-                filter.OrderByTimeFrom,
-                filter.OrderByTimeTo
+                filterService?.OrderByTimeFrom,
+                filterService?.OrderByTimeTo
               )} giờ`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByHour) *
-                calTime(filter.OrderByTimeFrom, filter.OrderByTimeTo),
+                calTime(
+                  filterService?.OrderByTimeFrom,
+                  filterService?.OrderByTimeTo
+                ),
             });
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
@@ -295,9 +306,9 @@ const Index = ({ linkTo = "" }) => {
                           Trắng, size S, Số lượng 1
                         </div> */}
                         <div className="text-middle mt-8">
-                          {filter.OrderByTime === 1 &&
+                          {filterService?.OrderByTime === 1 &&
                             convertPrice(item.Sales || item.PriceByHour)}
-                          {filter.OrderByTime === 0 &&
+                          {filterService?.OrderByTime === 0 &&
                             convertPrice(item.Sales || item.PriceByDate)}
                           đ
                         </div>
@@ -311,7 +322,7 @@ const Index = ({ linkTo = "" }) => {
                     >
                       Khung giờ bạn muốn đặt
                     </div>
-                    <SelectTimeOption disabled="true" />
+                    <SelectTimeOption disabled={true} />
                   </div>
                 </>
               ))}
@@ -375,28 +386,28 @@ const Index = ({ linkTo = "" }) => {
                       marginBottom: "12px",
                     }}
                   >
-                    {filter.OrderByTime === 1 &&
+                    {filterService?.OrderByTime === 1 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
                           (total, service) =>
                             total +
                             (service.Price || service.PriceByHour) *
                               calTime(
-                                filter.OrderByTimeFrom,
-                                filter.OrderByTimeTo
+                                filterService?.OrderByTimeFrom,
+                                filterService?.OrderByTimeTo
                               ),
                           0
                         )
                       )}`}
-                    {filter.OrderByTime === 0 &&
+                    {filterService?.OrderByTime === 0 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
                           (total, service) =>
                             total +
                             (service.Price || service.PriceByDate) *
                               calDate(
-                                filter.OrderByDateFrom,
-                                filter.OrderByDateTo
+                                filterService?.OrderByDateFrom,
+                                filterService?.OrderByDateTo
                               ),
                           0
                         )
@@ -470,7 +481,7 @@ const Index = ({ linkTo = "" }) => {
               />
             </div>
             {infoUser?.IsActiveEmail &&
-            infoUser?.Email.trim() === user?.Email.trim() ? (
+            infoUser?.Email?.trim() === user?.Email?.trim() ? (
               <div style={{ color: "green" }}>
                 <span>Đã được xác thực </span>
                 <CheckCircleOutlined color="green" />
@@ -511,7 +522,7 @@ const Index = ({ linkTo = "" }) => {
             style={{ marginTop: "35px" }}
           >
             {infoUser?.IsActiveEmail &&
-            infoUser?.Email.trim() === user?.Email.trim() ? (
+            infoUser?.Email?.trim() === user?.Email?.trim() ? (
               <PopUpSignIn
                 onClick={(e) => {
                   handleOnClickOrder();

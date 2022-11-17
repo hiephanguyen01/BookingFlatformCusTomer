@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Collapse } from "antd";
 import "./helpCenterContent.scss";
-import { CaretRightOutlined, UpOutlined } from "@ant-design/icons";
+import { UpOutlined } from "@ant-design/icons";
 import { askedQuestions } from "../../../../services/AskedQuestions";
 import { Element } from "react-scroll";
 

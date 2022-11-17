@@ -1,7 +1,6 @@
 import { Row } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { LightBox } from "react-lightbox-pack";
 
 import "./imagePost.scss";
 import { ModalImage } from "../ModalImg";
