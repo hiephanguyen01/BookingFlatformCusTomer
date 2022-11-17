@@ -149,7 +149,7 @@ const Index = ({ linkTo = "" }) => {
         // handleSendOtp(phoneNumber, Navigate, "", null, null);
         return;
       }
-      if (Boolean(isEmpty())) {
+      if (isEmpty()) {
         let IdentifyCode = [],
           TenantId;
 
@@ -319,7 +319,7 @@ const Index = ({ linkTo = "" }) => {
               <div className="text-title" style={{ marginBottom: "8px" }}>
                 Phương thức thanh toán
               </div>
-              {Boolean(partnerDetail?.PaymentTypeOnline) ? (
+              {partnerDetail?.PaymentTypeOnline ? (
                 <p className="text-description" style={{ color: "#222222" }}>
                   Thanh toán online (E-banking, Visa, Mastercard)
                 </p>

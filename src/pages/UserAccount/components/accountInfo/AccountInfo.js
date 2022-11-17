@@ -109,7 +109,6 @@ const AccountInfo = () => {
             zaloPicture: getInfo.data.picture.data.url,
           });
           dispatch({ type: SET_USER, payload: link.data.data });
-          console.log(getInfo.data, link.data);
         } catch (error) {}
       };
       linkZalo();
@@ -117,13 +116,15 @@ const AccountInfo = () => {
     }
     // window.location = window.location.origin + "/home/user/accountInfo";
   }, [checkedLinkZalo]);
-  console.log(queryString.parse(location.search));
+  console.log(window.location);
 
   const onChangeCheck = async (checked) => {
     /* console.log(`switch to ${checked}`); */
     setCheckedLinkZalo(checked);
     if (checked) {
-      window.location = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${window.location.href}&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
+      window.location.href = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${
+        window.location.origin + "/home/user/accountInfo"
+      }&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
     } else {
       const link = await authenticateService.zaloLink({
         zaloId: "",
@@ -131,8 +132,6 @@ const AccountInfo = () => {
         zaloPicture: "",
       });
       dispatch({ type: SET_USER, payload: link.data.data });
-      window.location.replace =
-        window.location.origin + "/home/user/accountInfo";
     }
   };
   const handleCancel = () => {
