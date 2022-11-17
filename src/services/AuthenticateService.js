@@ -19,6 +19,9 @@ class AuthenticateService extends BaseService {
   cancelSocialAccountLink = (data) => {
     return this.post(`/api/booking-user/cancel-social-account-link`, data);
   };
+  zaloLink = (data) => {
+    return this.post(`/api/booking-user/zalo-link`, data);
+  };
   me = () => {
     return this.get(`/api/booking-user/me`);
   };

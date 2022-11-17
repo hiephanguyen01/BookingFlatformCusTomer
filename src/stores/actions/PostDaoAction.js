@@ -130,13 +130,17 @@ export const getAllDefaultComments = () => {
   };
 };
 
-export const createLikeCommentDao = (data1, id, setComments) => {
+export const createLikeCommentDao = (data1, id, setComments, pagination) => {
   console.log("disaidsai", id);
   console.log(data1);
   return async (dispatch) => {
     try {
       await postDaoService.createLikeComment(data1);
-      const { data } = await postDaoService.getComments(id, 1, 5);
+      const { data } = await postDaoService.getComments(
+        id,
+        1,
+        5 * pagination?.currentPage
+      );
       console.log(data);
       setComments(data.data);
       // getComments(1);
