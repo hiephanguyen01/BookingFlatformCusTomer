@@ -159,3 +159,26 @@ export const setRelatedService = (data) => {
     }
   };
 };
+
+export const toggleNotificationDaoAction = (data) => {
+  return async (dispatch) => {
+    try {
+      await postDaoService.toggleNotificationDao(data);
+      dispatch(getAllNotificationDaoAction());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getAllNotificationDaoAction = () => {
+  return async (dispatch) => {
+    try {
+      const {data} = await postDaoService.getAllNotificationDao();
+      console.log(data.data)
+      dispatch({ type: "SET_LIST_NOTIFICATION_USER", data: data.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
