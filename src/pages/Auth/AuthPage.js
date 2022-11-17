@@ -12,7 +12,7 @@ export const AuthPage = () => {
     <AuthLayout>
       <Routes>
         <Route path="*" element={<Navigate to="sign-up" />} />
-        <Route path="sign-up" element={<SignUp></SignUp>}></Route>
+        <Route path="sign-up" element={<SignUp />}></Route>
         <Route
           path="sign-up/phone"
           element={
