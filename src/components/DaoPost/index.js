@@ -31,7 +31,6 @@ import { convertTime } from "../../utils/convert";
 import { userService } from "../../services/UserService";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { convertImage } from "../../utils/convertImage";
-import CopyToClipboard from "react-copy-to-clipboard";
 import toastMessage from "../ToastMessage";
 import { cancelSavePost } from "../../stores/actions/userAction";
 import { postDaoService } from "../../services/PostDaoService";
