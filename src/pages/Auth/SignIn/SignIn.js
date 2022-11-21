@@ -45,8 +45,7 @@ export const SignIn = ({ onClickPop }) => {
         <Form.Item
           key={1}
           name="phoneNumber"
-          rules={[{ required: true, message: "Không được bỏ trống" }]}
-        >
+          rules={[{ required: true, message: "Không được bỏ trống" }]}>
           <Input
             size="large"
             className="input-phone"
@@ -56,8 +55,7 @@ export const SignIn = ({ onClickPop }) => {
         <Form.Item
           key={2}
           name="password"
-          rules={[{ required: true, message: "Không được bỏ trống" }]}
-        >
+          rules={[{ required: true, message: "Không được bỏ trống" }]}>
           <Input.Password
             size="large"
             placeholder="Mật khẩu"
@@ -83,8 +81,7 @@ export const SignIn = ({ onClickPop }) => {
             size="large"
             style={{ width: "100%", borderRadius: "10px" }}
             type="primary"
-            htmlType="submit"
-          >
+            htmlType="submit">
             Đăng nhập
           </Button>
         </Form.Item>
@@ -97,8 +94,7 @@ export const SignIn = ({ onClickPop }) => {
         {onClickPop ? (
           <span
             className="dont-have-account-button"
-            onClick={() => onClickPop(5)}
-          >
+            onClick={() => onClickPop(5)}>
             Đăng ký
           </span>
         ) : (

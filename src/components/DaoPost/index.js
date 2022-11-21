@@ -623,15 +623,55 @@ const DaoPost = (props) => {
                                     </div>
                                   </li>
                                 ) : (
-                                  <li
-                                    onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}
-                                  >
-                                    <div className="container d-flex">
-                                      <div>{itm.icon}</div>
-                                      <p>{itm.title}</p>
-                                    </div>
-                                  </li>
+                                  <>
+                                    {itm.id === 2 ? (
+                                      <>
+                                        {listNotificationUser?.some(
+                                          (item) =>
+                                            item?.UserId == currentUser?.id &&
+                                            item.PostId == Id
+                                        ) ? (
+                                          <li
+                                            onClick={() =>
+                                              handleMoreOptionClick(itm)
+                                            }
+                                            key={idx}
+                                          >
+                                            <div className="container d-flex">
+                                              <div>{itm.icon}</div>
+                                              <p>
+                                                Tắt thông báo về bài viết này
+                                              </p>
+                                            </div>
+                                          </li>
+                                        ) : (
+                                          <li
+                                            onClick={() =>
+                                              handleMoreOptionClick(itm)
+                                            }
+                                            key={idx}
+                                          >
+                                            <div className="container d-flex">
+                                              <div>{itm.icon}</div>
+                                              <p>{itm.title}</p>
+                                            </div>
+                                          </li>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <li
+                                        onClick={() =>
+                                          handleMoreOptionClick(itm)
+                                        }
+                                        key={idx}
+                                      >
+                                        <div className="container d-flex">
+                                          <div>{itm.icon}</div>
+                                          <p>{itm.title}</p>
+                                        </div>
+                                      </li>
+                                    )}
+                                  </>
                                 )}
                               </>
                             ))}
