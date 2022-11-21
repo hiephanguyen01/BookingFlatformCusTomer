@@ -51,6 +51,7 @@ const EditText = ({
             ...styleInput,
           }}
           autoComplete={autoComplete}
+          name={name}
         />
       ) : (
         <Input

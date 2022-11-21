@@ -126,7 +126,6 @@ const Option = ({ option, disabled, service }) => {
         return remove_duplicates_es6(acc);
       }, []);
     }
-    console.log(array);
     return array;
   };
   switch (Number(filterService.OrderByTime)) {
@@ -145,6 +144,11 @@ const Option = ({ option, disabled, service }) => {
             <DatePicker
               onChange={handleOnchangeDate}
               status={"error"}
+              // defaultValue={moment(
+              //   filterService?.OrderByTimeFrom || new Date(),
+              //   "YYYY-MM-DD"
+              // )}
+              // value={moment(filterService?.OrderByTimeFrom, "YYYY-MM-DD")}
               // format={"DD/MM/YYYY"}
               allowClear={false}
               inputReadOnly={true}
@@ -183,8 +187,8 @@ const Option = ({ option, disabled, service }) => {
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 // defaultValue={[
-                //   moment(filterService.OrderByTimeFrom.slice(11, 16), "HH"),
-                //   moment(filterService.OrderByTimeTo.slice(11, 16), "HH"),
+                //   moment(filterService?.OrderByTimeFrom.slice(11, 16), "HH"),
+                //   moment(filterService?.OrderByTimeTo.slice(11, 16), "HH"),
                 // ]}
                 inputReadOnly={true}
                 disabledTime={(date, type) => ({
