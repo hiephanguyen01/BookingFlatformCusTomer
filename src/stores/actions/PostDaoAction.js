@@ -10,10 +10,11 @@ import { postDaoService } from "../../services/PostDaoService";
 export const getAllPostDaoAction = (currentListPost = [], filter) => {
   return async (dispatch) => {
     try {
+      console.log(filter);
       const { data } = await postDaoService.getAllPost(
         filter?.limit,
         filter?.page,
-        filter?.tags.join(",")
+        filter?.tags?.join(",")
       );
       // if (filter.page === 1) {
       //   let temp = [...data.data];
@@ -28,6 +29,7 @@ export const getAllPostDaoAction = (currentListPost = [], filter) => {
       //     data: temp,
       //   });
       // }
+      console.log(data.data);
       let temp = [...currentListPost, ...data.data];
       dispatch({
         type: GET_LIST_POST,
@@ -172,7 +174,6 @@ export const getAllNotificationDaoAction = () => {
   return async (dispatch) => {
     try {
       const { data } = await postDaoService.getAllNotificationDao();
-      console.log(data.data);
       dispatch({ type: "SET_LIST_NOTIFICATION_USER", data: data.data });
     } catch (error) {
       console.log(error);

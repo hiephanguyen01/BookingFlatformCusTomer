@@ -50,6 +50,8 @@ const AccountInfo = () => {
     UserMe?.FacebookEmail ? true : false
   );
 
+  const [confirmPass, setConfirmPass] = useState("");
+
   useEffect(() => {
     setCheckedLinkFB(UserMe?.FacebookEmail ? true : false);
     setCheckedLinkGoogle(UserMe?.GoogleEmail ? true : false);
@@ -158,7 +160,7 @@ const AccountInfo = () => {
   const saveChange = async () => {
     setLoading(true);
     try {
-      console.log(infoUser.Phone);
+      console.log(infoUser);
       console.log(
         /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(infoUser.Phone)
       );
@@ -169,6 +171,15 @@ const AccountInfo = () => {
           "error",
           "Fail",
           "Vui lòng kiểm tra lại số điện thoại"
+        );
+      }
+      if (infoUser.password !== confirmPass) {
+        setLoading(false);
+
+        return openNotificationWithIcon(
+          "error",
+          "Fail",
+          "Vui lòng kiểm tra lại mật khẩu xác nhận!"
         );
       }
       const formData = new FormData();
@@ -262,7 +273,8 @@ const AccountInfo = () => {
               />
               {UserMe?.IsActiveEmail ? (
                 <p
-                  style={{ color: "green", paddingLeft: "39.703px!important" }}>
+                  style={{ color: "green", paddingLeft: "39.703px!important" }}
+                >
                   Email đã được xác nhận
                 </p>
               ) : UserMe?.Email?.trim() !== " " ? (
@@ -291,17 +303,34 @@ const AccountInfo = () => {
           style={{
             borderBottom: "1px solid #CACACA",
             paddingBottom: "1rem",
-          }}>
+          }}
+        >
           <Col lg={12} sm={24}>
             <EditText
               label="Mật khẩu hiện tại"
               isPass={true}
               autoComplete="new-password"
+              value={infoUser.passwordCurrent}
+              name="passwordCurrent"
+              onChange={(e) => {
+                handleChangeValue(e.target.name, e.target.value);
+              }}
             />
-            <TextInput label="Mật khẩu mới" isPass={true} />
+            <TextInput
+              label="Mật khẩu mới"
+              isPass={true}
+              value={infoUser.password}
+              name="password"
+              onChange={(e) => handleChangeValue(e.target.name, e.target.value)}
+            />
           </Col>
           <Col lg={12} sm={24}>
-            <TextInput label="Nhập lại mật khẩu mới" isPass={true} />
+            <TextInput
+              label="Nhập lại mật khẩu mới"
+              isPass={true}
+              value={confirmPass}
+              onChange={(e) => setConfirmPass(e.target.value)}
+            />
           </Col>
         </Row>
         <div style={{ padding: "1.5rem 0" }}>
@@ -310,7 +339,8 @@ const AccountInfo = () => {
             style={{
               borderBottom: "1px solid #CACACA",
               paddingBottom: "2rem",
-            }}>
+            }}
+          >
             <Col span={12}>
               <div className="d-flex container justify-content-center align-items-center mb-30">
                 <img
@@ -320,14 +350,11 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}>
+                  style={{ flex: "1" }}
+                >
                   <span className="AccountInfo__social__itm">
                     Liên Kết Zalo
                   </span>
-                  {/* <a
-                    href={`https://oauth.zaloapp.com/v4/permission?app_id=934722658638520488&redirect_uri=${"https://145d-2001-ee0-4f08-3fc0-dc13-a76d-cb68-456.ap.ngrok.io/home"}&code_challenge=${code_challenge}&state=access_profile`}
-                    alt="#"
-                  > */}
                   <Switch
                     checked={checkedLinkZalo}
                     onChange={onChangeCheck}
@@ -339,7 +366,8 @@ const AccountInfo = () => {
               </div>
               <div
                 className="d-flex container justify-content-center align-items-center"
-                style={{ marginBottom: "30px" }}>
+                style={{ marginBottom: "30px" }}
+              >
                 <img
                   src={imgFB}
                   alt=""
@@ -347,7 +375,8 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}>
+                  style={{ flex: "1" }}
+                >
                   <span className="AccountInfo__social__itm">
                     Liên Kết facebook
                   </span>
@@ -376,7 +405,8 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}>
+                  style={{ flex: "1" }}
+                >
                   <span className="AccountInfo__social__itm">
                     Liên Kết google
                   </span>
@@ -413,7 +443,8 @@ const AccountInfo = () => {
               type="primary"
               ghost
               className="AccountInfo__delete__container__button"
-              onClick={() => setVisible(true)}>
+              onClick={() => setVisible(true)}
+            >
               <span>Xóa tài khoản</span>
             </Button>
           </div>
@@ -424,7 +455,8 @@ const AccountInfo = () => {
             type="primary"
             className="AccountInfo__save"
             onClick={saveChange}
-            disabled={loading}>
+            disabled={loading}
+          >
             {loading && <ClipLoader color="#fff" size={20} />} Lưu thay đổi
           </Button>
         </div>
@@ -438,13 +470,15 @@ const AccountInfo = () => {
         // height={400}
         closable={false}
         className="AccountInfo__delete__modal"
-        footer={false}>
+        footer={false}
+      >
         <div className="AccountInfo__delete__modal__header">
           Bạn có chắc muốn xóa tài khoản này?
         </div>
         <div
           className="AccountInfo__delete__modal__content"
-          style={{ color: "#000" }}>
+          style={{ color: "#000" }}
+        >
           <div className="mb-20">
             Bằng cách bấm vào nút “Xóa tài khoản”, bạn tự nguyện chọn xóa bỏ tài
             khoản của mình hoàn toàn và không thể thay đổi được, và bạn đồng ý
@@ -458,7 +492,8 @@ const AccountInfo = () => {
               listStyleType: "disc",
               color: "#E22828",
               fontWeight: "600",
-            }}>
+            }}
+          >
             <li>Xóa bỏ tất cả thông tin trên hồ sơ của bạn</li>
             <li>Xóa bỏ tất cả thông tin về các đơn đặt phòng trước đây </li>
           </ul>
@@ -473,12 +508,14 @@ const AccountInfo = () => {
         <div className="AccountInfo__delete__modal__group__btn">
           <button
             className="AccountInfo__delete__modal__group__btn__cancel"
-            onClick={handleCancel}>
+            onClick={handleCancel}
+          >
             Hủy
           </button>
           <button
             className="AccountInfo__delete__modal__group__btn__delete"
-            onClick={handleDelete}>
+            onClick={handleDelete}
+          >
             Xóa
           </button>
         </div>

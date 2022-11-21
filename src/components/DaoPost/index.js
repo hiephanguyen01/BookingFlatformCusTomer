@@ -50,7 +50,6 @@ const DaoPost = (props) => {
   const { defaultComments, relatedService, listNotificationUser } = useSelector(
     (state) => state.postDaoReducer
   );
-  console.log("listNotificationDao", listNotificationUser);
 
   const { item, likePostList, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
@@ -453,18 +452,18 @@ const DaoPost = (props) => {
                     <>
                       {itm.id === 3 ? (
                         <li
-                          onClick={() => handleMoreOptionClick(itm)}
                           key={idx}
+                          onClick={(e) => {
+                            navigator.clipboard.writeText(
+                              `${window.location.origin}/home/dao/posts/${Id}`
+                            );
+                            handleMoreOptionClick(itm);
+                          }}
                         >
-                          <CopyToClipboard
-                            onCopy={() => {}}
-                            text={`${window.location.origin}/home/dao/posts/${Id}`}
-                          >
-                            <div className="container d-flex">
-                              <div>{itm.icon}</div>
-                              <p>{itm.title}</p>
-                            </div>
-                          </CopyToClipboard>
+                          <div className="container d-flex">
+                            <div>{itm.icon}</div>
+                            <p>{itm.title}</p>
+                          </div>
                         </li>
                       ) : (
                         <>
@@ -611,18 +610,18 @@ const DaoPost = (props) => {
                               <>
                                 {itm.id === 3 ? (
                                   <li
-                                    onClick={() => handleMoreOptionClick(itm)}
+                                    onClick={(e) => {
+                                      navigator.clipboard.writeText(
+                                        `${window.location.origin}/home/dao/posts/${Id}`
+                                      );
+                                      handleMoreOptionClick(itm);
+                                    }}
                                     key={idx}
                                   >
-                                    <CopyToClipboard
-                                      onCopy={() => {}}
-                                      text={`${window.location.origin}/home/dao/posts/${Id}`}
-                                    >
-                                      <div className="container d-flex">
-                                        <div>{itm.icon}</div>
-                                        <p>{itm.title}</p>
-                                      </div>
-                                    </CopyToClipboard>
+                                    <div className="container d-flex">
+                                      <div>{itm.icon}</div>
+                                      <p>{itm.title}</p>
+                                    </div>
                                   </li>
                                 ) : (
                                   <li

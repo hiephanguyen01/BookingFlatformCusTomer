@@ -89,7 +89,7 @@ const Dao = () => {
 
   useEffect(() => {
     dispatch(getAllDefaultComments());
-  }, [dispatch]);
+  }, []);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];
@@ -256,10 +256,6 @@ const Dao = () => {
       })
     );
   };
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   //Intergrate notification
   function askPermission() {
     // Notification
@@ -270,12 +266,13 @@ const Dao = () => {
     });
   }
   useEffect(() => {
+    console.log(123);
     dispatch(
       getAllPostDaoAction([], {
         ...filter,
       })
     );
-  }, [filter, dispatch]);
+  }, [filter.tags.length]);
 
   useEffect(() => {
     dispatch(getLikePostList(currentUser?.id)); // 1 là user id
@@ -291,7 +288,7 @@ const Dao = () => {
       //   data: {},
       // });
     };
-  }, [currentUser, dispatch]);
+  }, [currentUser]);
 
   return (
     <section className="dao d-flex justify-content-center">
