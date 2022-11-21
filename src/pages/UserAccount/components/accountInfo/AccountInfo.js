@@ -1,7 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Col, Modal, Row, Switch } from "antd";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
@@ -30,11 +30,20 @@ import { SET_USER } from "../../../../stores/types/authType";
 
 const APP_ID = "934722658638520488";
 const SECRET_KEY = "9D1oI4FcpFbS5GmQrK8K";
-const CODE_VERIFIER = "h57bycdwryntewreomnbSyDrAG4kX7BeqS7g-luzvBE";
-const CODE_CHALLENGE = Base64.stringify(sha256(CODE_VERIFIER))
-  .replace(/=/g, "")
-  .replace(/\+/g, "-")
-  .replace(/\//g, "_");
+const CODE_VERIFIER = "h57bycdwryntewreomnbSyDrAG4-kX7BeqS7gluzvBE";
+const generate_code_verifier = () => {
+  let result = "";
+  const characters = CODE_VERIFIER;
+  const charactersLength = characters.length;
+  for (var i = 0; i < 43; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+// const CODE_CHALLENGE = Base64.stringify(sha256(CODE_VERIFIER))
+//   .replace(/=/g, "")
+//   .replace(/\+/g, "-")
+//   .replace(/\//g, "_");
 
 const AccountInfo = () => {
   const location = useLocation();
@@ -61,6 +70,12 @@ const AccountInfo = () => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, []);
 
+  const code_challenge = (code_verifier) =>
+    Base64.stringify(sha256(code_verifier))
+      .replace(/=/g, "")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+
   const dispatch = useDispatch();
   const myImg = convertImage(UserMe?.Image);
   console.log(myImg);
@@ -82,8 +97,9 @@ const AccountInfo = () => {
         app_id: APP_ID,
         code: params.code,
         grant_type: "authorization_code",
-        code_verifier: CODE_VERIFIER,
+        code_verifier: localStorage.getItem("code_verifier"),
       };
+      localStorage.removeItem("code_verifier");
       data = Object.keys(data)
         .reduce((newData, d) => [...newData, `${d}=${data[d]}`], [])
         .join("&");
@@ -120,16 +136,20 @@ const AccountInfo = () => {
       // window.location = window.location.origin + "/home/user/accountInfo";
     }
     // window.location = window.location.origin + "/home/user/accountInfo";
-  }, [checkedLinkZalo, dispatch, location.search]);
-  console.log(window.location);
-
+  }, [checkedLinkZalo]);
+  console.log(
+    code_challenge(generate_code_verifier(43)),
+    generate_code_verifier(43)
+  );
   const onChangeCheck = async (checked) => {
     /* console.log(`switch to ${checked}`); */
     setCheckedLinkZalo(checked);
     if (checked) {
+      const codeVerifier = generate_code_verifier();
       window.location.href = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${
         window.location.origin + "/home/user/accountInfo"
-      }&code_challenge=${CODE_CHALLENGE}&state=access_profile`;
+      }&code_challenge=${code_challenge(codeVerifier)}&state=access_profile`;
+      localStorage.setItem("code_verifier", codeVerifier);
     } else {
       const link = await authenticateService.zaloLink({
         zaloId: "",
