@@ -131,8 +131,6 @@ export const getAllDefaultComments = () => {
 };
 
 export const createLikeCommentDao = (data1, id, setComments, pagination) => {
-  console.log("disaidsai", id);
-  console.log(data1);
   return async (dispatch) => {
     try {
       await postDaoService.createLikeComment(data1);
@@ -141,7 +139,6 @@ export const createLikeCommentDao = (data1, id, setComments, pagination) => {
         1,
         5 * pagination?.currentPage
       );
-      console.log(data);
       setComments(data.data);
       // getComments(1);
       // dispatch(getAllDefaultComments);
@@ -174,8 +171,8 @@ export const toggleNotificationDaoAction = (data) => {
 export const getAllNotificationDaoAction = () => {
   return async (dispatch) => {
     try {
-      const {data} = await postDaoService.getAllNotificationDao();
-      console.log(data.data)
+      const { data } = await postDaoService.getAllNotificationDao();
+      console.log(data.data);
       dispatch({ type: "SET_LIST_NOTIFICATION_USER", data: data.data });
     } catch (error) {
       console.log(error);

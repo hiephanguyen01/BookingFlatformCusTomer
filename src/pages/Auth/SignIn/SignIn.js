@@ -12,7 +12,7 @@ export const SignIn = ({ onClickPop }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    if (user) {
+    if (user?.Email) {
       navigate("/home/dao");
     }
   }, [user, navigate]);
