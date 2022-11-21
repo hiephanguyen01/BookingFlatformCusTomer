@@ -13,6 +13,7 @@ const Option = ({ option, disabled }) => {
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
   const [time, setTime] = useState([]);
   const handleOnchangeDate = (d, dString) => {
+    
     setDate(dString);
     if (time.length > 0) {
       dispatch(
@@ -71,6 +72,7 @@ const Option = ({ option, disabled }) => {
                 filterService?.OrderByTimeFrom,
                 "YYYY-MM-DD"
               )}
+              // format={"DD/MM/YYYY"}
               disabled={disabled}
               disabledDate={(current) => {
                 return current && current <= moment().subtract(1, "days");
@@ -91,7 +93,7 @@ const Option = ({ option, disabled }) => {
                 format="HH:mm"
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
-                defaultValue={[
+                value={[
                   moment(filterService?.OrderByTimeFrom.slice(11, 16), "HH:mm"),
                   moment(filterService?.OrderByTimeTo.slice(11, 16), "HH:mm"),
                 ]}
@@ -117,9 +119,10 @@ const Option = ({ option, disabled }) => {
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
               defaultValue={[
-                moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
-                moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
+                moment(filterService?.OrderByDateFrom),
+                moment(filterService?.OrderByDateTo),
               ]}
+              // format="DD/MM/YYYY"
               disabled={disabled}
               disabledDate={(current) => {
                 return current && current <= moment().subtract(1, "days");

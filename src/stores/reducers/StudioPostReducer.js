@@ -17,6 +17,7 @@ import {
   SET_PROMOTION_CODE,
   SET_FILTER_SERVICE,
   LOADING_SERVICE,
+  SET_SERVICE_SELECT,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -68,6 +69,7 @@ const initialState = {
         OrderByDateTo: "",
       },
   loadingService: false,
+  serviceSelected: null,
 };
 
 export const studioPostReducer = (state = initialState, action) => {
@@ -162,6 +164,12 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         filterService: { ...action.payload },
+      };
+    case SET_SERVICE_SELECT:
+      console.log(action.payload);
+      return {
+        ...state,
+        serviceSelected: action.payload,
       };
     default:
       return state;
