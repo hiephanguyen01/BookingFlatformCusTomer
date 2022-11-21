@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 const keyF = {
   1: { BookingStatus: 4, PaymentStatus: 1 },
   2: { BookingStatus: 4, PaymentStatus: [4, 3, 2] },
-  3: { BookingStatus: [1, 3], PaymentStatus: 3 },
+  3: { BookingStatus: 1, PaymentStatus: [3, 4] },
   4: { BookingStatus: 2 },
 };
 const OrderStatus = () => {
