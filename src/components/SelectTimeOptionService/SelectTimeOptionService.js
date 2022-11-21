@@ -1,8 +1,9 @@
 import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
+import { SET_SERVICE_SELECT } from "../../stores/types/studioPostType";
 import { convertDateSendToDB } from "../../utils/convert";
 
 import "./selectTimeOptionService.scss";
@@ -31,23 +32,25 @@ function dateRangeHour(startDate, endDate) {
   }
   return dateArray;
 }
+
+function uniqueInOrder(x) {
+  return (Array.isArray(x) ? x : x.split("")).filter((c, i) => c !== x[i + 1]);
+}
+
+function remove_duplicates_es6(arr) {
+  let s = new Set(arr);
+  let it = s.values();
+  return Array.from(it);
+}
 const Option = ({ option, disabled, service }) => {
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
-  // const [data, setData] = useState(service);
   const [disableHour, setDisableHour] = useState([]);
   const [time, setTime] = useState([]);
 
-  // function firstAndLast(array) {
-  //   const firstItem = array[0];
-  //   const lastItem = array[array.length - 1];
-
-  //   const objOutput = [firstItem, lastItem];
-
-  //   return objOutput;
-  // }
   const handleOnchangeDate = (d, dString) => {
+    console.log("dang chin", service.id);
     setDate(dString);
     if (dString && filterService.OrderByTime === 1) {
       let hl = service?.Bookings?.filter((item) => {
@@ -110,28 +113,7 @@ const Option = ({ option, disabled, service }) => {
       })
     );
   };
-  // const disabledDates = [
-  //   {
-  //     start: moment("19.10.20222 13:00", format),
-  //     end: moment("19.10.2022 15:00", format),
-  //   },
-  //   {
-  //     start: moment("21.10.20222 13:00", format),
-  //     end: moment("27.10.2022 15:00", format),
-  //   },
-  // ];
 
-  function uniqueInOrder(x) {
-    return (Array.isArray(x) ? x : x.split("")).filter(
-      (c, i) => c !== x[i + 1]
-    );
-  }
-
-  function remove_duplicates_es6(arr) {
-    let s = new Set(arr);
-    let it = s.values();
-    return Array.from(it);
-  }
   const getDisabledHours = (date, type) => {
     let array = [];
     if (disableHour?.length > 0) {
@@ -144,7 +126,6 @@ const Option = ({ option, disabled, service }) => {
         return remove_duplicates_es6(acc);
       }, []);
     }
-    console.log(array);
     return array;
   };
   switch (Number(filterService.OrderByTime)) {
@@ -164,9 +145,11 @@ const Option = ({ option, disabled, service }) => {
               onChange={handleOnchangeDate}
               status={"error"}
               // defaultValue={moment(
-              //   filterService?.OrderByTimeFrom,
+              //   filterService?.OrderByTimeFrom || new Date(),
               //   "YYYY-MM-DD"
               // )}
+              // value={moment(filterService?.OrderByTimeFrom, "YYYY-MM-DD")}
+              // format={"DD/MM/YYYY"}
               allowClear={false}
               inputReadOnly={true}
               disabled={disabled}
@@ -204,8 +187,8 @@ const Option = ({ option, disabled, service }) => {
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 // defaultValue={[
-                //   moment(filterService.OrderByTimeFrom.slice(11, 16), "HH"),
-                //   moment(filterService.OrderByTimeTo.slice(11, 16), "HH"),
+                //   moment(filterService?.OrderByTimeFrom.slice(11, 16), "HH"),
+                //   moment(filterService?.OrderByTimeTo.slice(11, 16), "HH"),
                 // ]}
                 inputReadOnly={true}
                 disabledTime={(date, type) => ({
@@ -232,6 +215,7 @@ const Option = ({ option, disabled, service }) => {
               //   moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
               //   moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
               // ]}
+              // format={"DD/MM/YYYY"}
               disabled={disabled}
               inputReadOnly={true}
               disabledDate={(current) => {
@@ -262,11 +246,14 @@ const Option = ({ option, disabled, service }) => {
   }
 };
 
-const SelectTimeOptionService = ({ disabled, service }) => {
+const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   const [data, setData] = useState(service);
   const { filterService } = useSelector((state) => state.studioPostReducer);
   // const [selection, setSelection] = useState(filterService.OrderByTime);
-
+  const handlerServiceSelect = (data) => {
+    console.log(data.id);
+    // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
+  };
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -283,7 +270,7 @@ const SelectTimeOptionService = ({ disabled, service }) => {
   };
 
   return (
-    <div className="selectTimeOptionServiceContainer mb-20">
+    <div onClick={()=>  dispatch({ type: SET_SERVICE_SELECT, payload: service.id })} className="selectTimeOptionServiceContainer mb-20">
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}

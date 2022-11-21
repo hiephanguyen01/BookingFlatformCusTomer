@@ -14,9 +14,7 @@ import { Button } from "antd";
 
 const Index = () => {
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
-  const { studioDetail, filter } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { filterService } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
 
   const [choose, setChoose] = useState({ ...promoCodeUserSave });
@@ -27,23 +25,29 @@ const Index = () => {
 
   const priceOrder = () => {
     let price = 0;
-    switch (filter.OrderByTime) {
-      case 0:
-        price = chooseServiceList?.reduce(
-          (total, service) =>
-            total +
-            (service.Sales || service.Price || service.PriceByHour) *
-              calTime(filter.OrderByTimeFrom, filter.OrderByTimeTo),
-          0
-        );
-        return price;
-
+    switch (filterService?.OrderByTime) {
       case 1:
         price = chooseServiceList?.reduce(
           (total, service) =>
             total +
-            (service.Sales || service.Price || service.PriceByDate) *
-              calDate(filter.OrderByDateFrom, filter.OrderByDateTo),
+            service.PriceByHour *
+              calTime(
+                filterService?.OrderByTimeFrom,
+                filterService?.OrderByTimeTo
+              ),
+          0
+        );
+        return price;
+
+      case 0:
+        price = chooseServiceList?.reduce(
+          (total, service) =>
+            total +
+            service.PriceByDate *
+              calDate(
+                filterService?.OrderByDateFrom,
+                filterService?.OrderByDateTo
+              ),
           0
         );
         return price;
@@ -64,6 +68,7 @@ const Index = () => {
   };
 
   const disabledApply = (minApply) => priceOrder() < minApply;
+
   return (
     <div className="promotion_container">
       <div
@@ -82,7 +87,11 @@ const Index = () => {
             <div className="promotion_wrap">
               <div className="promotion_content">
                 <div className="promotion_code">{item.SaleCode}</div>
-                <div className="promotion_desc">{item.Note}</div>
+                <div className="promotion_desc">{`Giảm ${
+                  item.TypeReduce === 1
+                    ? `${convertPrice(item.ReduceValue / 1000)}K`
+                    : `${item.ReduceValue}%`
+                } cho mọi đơn đặt`}</div>
                 <div className="promotion_value">
                   <span className="me-5">
                     Đơn tối thiểu: {convertPrice(item.MinApply)}đ

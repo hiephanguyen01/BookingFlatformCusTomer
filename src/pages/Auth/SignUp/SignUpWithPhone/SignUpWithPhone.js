@@ -93,8 +93,7 @@ export const SignUpWithPhone = ({
         ) : onClickSignUp ? (
           <button
             className="back-button-sign-up"
-            onClick={() => onClickSignUp(5)}
-          >
+            onClick={() => onClickSignUp(5)}>
             <img alt="back" src={back} style={{ height: "16px" }} />
           </button>
         ) : (
@@ -129,7 +128,7 @@ export const SignUpWithPhone = ({
           đảm bảo bạn nhập đúng mã số.
         </div>
       )}
-      {countDown ? (
+      {countDown > 0 ? (
         <div>Vui lòng chờ {countDown} giây để gửi lại mã</div>
       ) : (
         <div>
@@ -146,8 +145,7 @@ export const SignUpWithPhone = ({
               }, 1000);
 
               return () => clearInterval(timerId);
-            }}
-          >
+            }}>
             Gửi lại
           </button>
         </div>
@@ -161,8 +159,7 @@ export const SignUpWithPhone = ({
           ) : onClickSignUp ? (
             <button
               className="continue-sign-up"
-              onClick={() => onClickSignUp(7)}
-            >
+              onClick={() => onClickSignUp(7)}>
               Tiếp tục
             </button>
           ) : (

@@ -33,7 +33,10 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import {
+  SET_PROMOTION_CODE,
+  SET_SERVICE_SELECT,
+} from "../../stores/types/studioPostType";
 import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
@@ -65,7 +68,9 @@ export const StudioDetail = () => {
     listStudioSimilar,
     promotionCode,
     filterService,
+    serviceSelected,
   } = useSelector((state) => state.studioPostReducer);
+  console.log("serviceSelected", serviceSelected);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -118,6 +123,10 @@ export const StudioDetail = () => {
       Component: <Report category={cate} postId={id} />,
     });
   };
+  const handlerServiceSelect = (data) => {
+    console.log(data.id);
+    // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
+  };
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -139,14 +148,16 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}>
+                }}
+              >
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
                     minWidth: "60px",
-                  }}>
+                  }}
+                >
                   Phòng
                 </span>
                 <span
@@ -162,7 +173,8 @@ export const StudioDetail = () => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     height: "18px",
-                  }}>
+                  }}
+                >
                   {data.Name}
                 </span>
               </div>
@@ -172,13 +184,15 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}>
+                }}
+              >
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   Diện tích
                 </span>
                 <span
@@ -186,7 +200,8 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}>
+                  }}
+                >
                   {data.Area}
                 </span>
               </div>
@@ -196,14 +211,16 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}>
+                }}
+              >
                 <div
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
                     minWidth: "100px",
-                  }}>
+                  }}
+                >
                   Phong cách
                 </div>
                 <div
@@ -219,7 +236,8 @@ export const StudioDetail = () => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     height: "18px",
-                  }}>
+                  }}
+                >
                   {data.Style}
                 </div>
               </div>
@@ -229,7 +247,8 @@ export const StudioDetail = () => {
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}>
+                }}
+              >
                 {data.Description}
               </div>
             </div>
@@ -237,8 +256,19 @@ export const StudioDetail = () => {
         },
         {
           key: "desc",
-          render: () => {
-            return <SelectTimeOptionService service={data} />;
+          render: (item) => {
+            return (
+              <SelectTimeOptionService
+                disabled={
+                  serviceSelected === null
+                    ? false
+                    : data.id == serviceSelected
+                    ? false
+                    : true
+                }
+                service={data}
+              />
+            );
           },
         },
         {
@@ -253,13 +283,15 @@ export const StudioDetail = () => {
                       gap: "10px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}>
+                    }}
+                  >
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -277,7 +309,8 @@ export const StudioDetail = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -295,25 +328,15 @@ export const StudioDetail = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
-                    {data.PriceNote}
-                  </p>
-                  {/* <button
-                    style={{
-                      padding: "3px 21px",
-                      background: "#E22828",
-                      color: "#ffff",
-                      border: " 1px solid #E22828",
-                      borderRadius: " 8px",
                     }}
                   >
-                    Giảm 50%{" "}
-                  </button> */}
+                    {data.PriceNote}
+                  </p>
                 </div>
               )}
               <div className="">
                 {chooseService.filter((item) => item.id === data.id).length >
-                0 ? (
+                0 && serviceSelected ==data.id ? (
                   <div
                     onClick={() => handleChooseService(data)}
                     style={{
@@ -329,7 +352,8 @@ export const StudioDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Bỏ chọn
                   </div>
                 ) : (
@@ -349,7 +373,8 @@ export const StudioDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Chọn
                   </div>
                 )}
@@ -362,8 +387,14 @@ export const StudioDetail = () => {
   };
 
   const [chooseService, setChooseService] = useState([]);
+  console.log("chooseService", chooseService);
 
   const handleChooseService = (data) => {
+    if (data.id != serviceSelected) {
+      toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
+      return;
+    }
+    console.log("chọn", data);
     if (
       (filterService.OrderByTime === 0 &&
         filterService.OrderByDateFrom !== "" &&
@@ -422,7 +453,8 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -430,7 +462,8 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -450,7 +483,8 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}>
+                      }}
+                    >
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -473,23 +507,27 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}>
+                          }}
+                        >
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}>
+                            }}
+                          >
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click">
+                      trigger="click"
+                    >
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -502,11 +540,13 @@ export const StudioDetail = () => {
                   <Rate
                     disabled
                     allowHalf
-                    value={studioDetail?.data?.TotalRate}></Rate>
+                    value={studioDetail?.data?.TotalRate}
+                  ></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}>
+                    style={{ fontSize: "15px" }}
+                  >
                     {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
@@ -566,7 +606,8 @@ export const StudioDetail = () => {
                             textDecoration: "line-through",
                             fontSize: " 16px",
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           {filterService.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseService?.reduce(
@@ -603,7 +644,8 @@ export const StudioDetail = () => {
                           color: "#E22828",
                           fontSize: "20px",
                           fontWeight: "700",
-                        }}>
+                        }}
+                      >
                         {filterService.OrderByTime === 1 &&
                           `${convertPrice(
                             chooseService?.reduce(
@@ -644,14 +686,16 @@ export const StudioDetail = () => {
                             "",
                             {}
                           )
-                        }>
+                        }
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}>
+                        disabled={chooseService.length > 0 ? false : true}
+                      >
                         Đặt ngay
                       </Button>
                     </div>
