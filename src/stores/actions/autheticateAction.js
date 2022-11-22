@@ -78,7 +78,11 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
       dispatch({ type: PROVIDER_ID, payload: respError.data.providerId });
       // navigate("/home/dao");
     } else {
-      openNotificationWithIcon("error", "Login fail", "please try again");
+      openNotificationWithIcon(
+        "error",
+        "Đăng nhập thất bại!",
+        "Vui lòng thử lại!"
+      );
     }
   }
   dispatch({ type: SET_LOADING, payload: false });
@@ -99,7 +103,11 @@ export const googleSignIn = (navigate) => async (dispatch) => {
     dispatch({ type: PROVIDER_ID, payload: resp.data.providerId });
     // navigate("/home/dao");
   } catch (error) {
-    openNotificationWithIcon("error", "Login fail", "please try again");
+    openNotificationWithIcon(
+      "error",
+      "Đăng nhập thất bại",
+      "Vui lòng thử lại!"
+    );
   }
   dispatch({ type: SET_LOADING, payload: false });
 };
@@ -116,7 +124,7 @@ export const googleLink =
         });
         openNotificationWithIcon(
           "success",
-          "Successfully unlinked google account"
+          "Hủy liên kết tài khoản google thành công!"
         );
       } else {
         res = await signInWithPopup(auth, provider);
@@ -126,7 +134,7 @@ export const googleLink =
         });
         openNotificationWithIcon(
           "success",
-          "Successfully linked google account"
+          "Liên kiết tài khoản google thành công!"
         );
       }
 
@@ -141,7 +149,7 @@ export const googleLink =
       openNotificationWithIcon(
         "error",
         error.response.data.message,
-        "please try again"
+        "Vui lòng thử lại!"
       );
       setCheckedLink(checkedLink);
     }
@@ -160,7 +168,7 @@ export const facebookLink =
         });
         openNotificationWithIcon(
           "success",
-          "Successfully unlinked facebook account"
+          "Hủy liên kết tài khoản facebook thành công!"
         );
       } else {
         res = await signInWithPopup(auth, provider);
@@ -170,7 +178,7 @@ export const facebookLink =
         });
         openNotificationWithIcon(
           "success",
-          "Successfully linked facebook account"
+          "Liên kết tài khoản facebook thành công!"
         );
       }
       setCheckedLink(!checkedLink);
@@ -189,14 +197,14 @@ export const facebookLink =
           openNotificationWithIcon(
             "error",
             error.response.data.message,
-            "please try again"
+            "Vui lòng thử lại!"
           );
         }
       } else {
         openNotificationWithIcon(
           "error",
           error.response.data.message,
-          "please try again"
+          "Vui lòng thử lại!"
         );
       }
     }
@@ -264,7 +272,11 @@ export const login = (data) => async (dispatch) => {
     dispatch({ type: SET_USER, payload: res.data.user });
     localStorage.setItem("token", res.data.token);
   } catch (error) {
-    openNotificationWithIcon("error", "Login fail", "please try again");
+    openNotificationWithIcon(
+      "error",
+      "Đăng nhập thấy bại!",
+      "Vui lòng thử lại!"
+    );
   }
   dispatch({ type: SET_LOADING, payload: false });
 };

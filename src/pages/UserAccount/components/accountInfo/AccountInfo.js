@@ -196,15 +196,20 @@ const AccountInfo = () => {
           "Vui lòng kiểm tra lại số điện thoại"
         );
       }
-      // if (password.passwordCurrent !== "" && password.newPass !== confirmPass) {
-      //   setLoading(false);
+      if (
+        password.passwordCurrent !== "" &&
+        password.newPass !== confirmPass &&
+        password.newPass !== ""
+        // /^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$/.test(password.newPass)
+      ) {
+        setLoading(false);
 
-      //   return openNotificationWithIcon(
-      //     "error",
-      //     "Fail",
-      //     "Vui lòng kiểm tra lại mật khẩu!"
-      //   );
-      // }
+        return openNotificationWithIcon(
+          "error",
+          "Fail",
+          "Vui lòng kiểm tra lại mật khẩu!"
+        );
+      }
       const formData = new FormData();
       delete file.preview;
       for (let key in infoUser) {
@@ -214,6 +219,8 @@ const AccountInfo = () => {
           formData.append("Image", file);
         }
       }
+      formData.append("passwordCurrent", password.passwordCurrent);
+      formData.append("password", password.newPass);
       await userService.saveInfo(formData);
       dispatch(getCurrentUser());
       setLoading(false);
