@@ -49,6 +49,10 @@ const AccountInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  const [password, setPassword] = useState({
+    passwordCurrent: "",
+    newPass: "",
+  });
   const [checkedLinkGoogle, setCheckedLinkGoogle] = useState(
     UserMe?.GoogleEmail ? true : false
   );
@@ -78,7 +82,6 @@ const AccountInfo = () => {
 
   const dispatch = useDispatch();
   const myImg = convertImage(UserMe?.Image);
-  console.log(myImg);
   const [visible, setVisible] = useState(false);
   const [infoUser, setInfoUser] = useState(UserMe);
   const [loading, setLoading] = useState(false);
@@ -99,11 +102,9 @@ const AccountInfo = () => {
         grant_type: "authorization_code",
         code_verifier: localStorage.getItem("code_verifier"),
       };
-      localStorage.removeItem("code_verifier");
       data = Object.keys(data)
         .reduce((newData, d) => [...newData, `${d}=${data[d]}`], [])
         .join("&");
-
       const linkZalo = async () => {
         try {
           const res = await axios.post(
@@ -130,33 +131,35 @@ const AccountInfo = () => {
             zaloPicture: getInfo.data.picture.data.url,
           });
           dispatch({ type: SET_USER, payload: link.data.data });
+          openNotificationWithIcon("success", "Liên kết zalo thành công!");
         } catch (error) {}
       };
       linkZalo();
-      // window.location = window.location.origin + "/home/user/accountInfo";
+      localStorage.removeItem("code_verifier");
     }
-    // window.location = window.location.origin + "/home/user/accountInfo";
-  }, [checkedLinkZalo]);
-  console.log(
-    code_challenge(generate_code_verifier(43)),
-    generate_code_verifier(43)
-  );
+  }, [location.search]);
+
   const onChangeCheck = async (checked) => {
-    /* console.log(`switch to ${checked}`); */
-    setCheckedLinkZalo(checked);
     if (checked) {
       const codeVerifier = generate_code_verifier();
+      localStorage.setItem("code_verifier", codeVerifier);
       window.location.href = `https://oauth.zaloapp.com/v4/permission?app_id=${APP_ID}&redirect_uri=${
         window.location.origin + "/home/user/accountInfo"
       }&code_challenge=${code_challenge(codeVerifier)}&state=access_profile`;
-      localStorage.setItem("code_verifier", codeVerifier);
+      setCheckedLinkZalo(checked);
     } else {
-      const link = await authenticateService.zaloLink({
-        zaloId: "",
-        zaloName: "",
-        zaloPicture: "",
-      });
-      dispatch({ type: SET_USER, payload: link.data.data });
+      try {
+        const link = await authenticateService.zaloLink({
+          zaloId: "",
+          zaloName: "",
+          zaloPicture: "",
+        });
+        setCheckedLinkZalo(checked);
+        dispatch({ type: SET_USER, payload: link.data.data });
+        openNotificationWithIcon("success", "Hủy liên kết zalo thành công!");
+      } catch (error) {
+        openNotificationWithIcon("warning", error.response.data.message);
+      }
     }
   };
   const handleCancel = () => {
@@ -180,10 +183,10 @@ const AccountInfo = () => {
   const saveChange = async () => {
     setLoading(true);
     try {
-      console.log(infoUser);
-      console.log(
-        /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(infoUser.Phone)
-      );
+      // console.log(infoUser);
+      // console.log(
+      //   /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(infoUser.Phone)
+      // );
       if (!isVietnamesePhoneNumber(infoUser.Phone)) {
         setLoading(false);
 
@@ -193,15 +196,15 @@ const AccountInfo = () => {
           "Vui lòng kiểm tra lại số điện thoại"
         );
       }
-      if (infoUser.password !== confirmPass) {
-        setLoading(false);
+      // if (password.passwordCurrent !== "" && password.newPass !== confirmPass) {
+      //   setLoading(false);
 
-        return openNotificationWithIcon(
-          "error",
-          "Fail",
-          "Vui lòng kiểm tra lại mật khẩu xác nhận!"
-        );
-      }
+      //   return openNotificationWithIcon(
+      //     "error",
+      //     "Fail",
+      //     "Vui lòng kiểm tra lại mật khẩu!"
+      //   );
+      // }
       const formData = new FormData();
       delete file.preview;
       for (let key in infoUser) {
@@ -319,40 +322,44 @@ const AccountInfo = () => {
             </Col>
           </Row>
         </div>
-        <Row
-          style={{
-            borderBottom: "1px solid #CACACA",
-            paddingBottom: "1rem",
-          }}
-        >
-          <Col lg={12} sm={24}>
-            <EditText
-              label="Mật khẩu hiện tại"
-              isPass={true}
-              autoComplete="new-password"
-              value={infoUser.passwordCurrent}
-              name="passwordCurrent"
-              onChange={(e) => {
-                handleChangeValue(e.target.name, e.target.value);
-              }}
-            />
-            <TextInput
-              label="Mật khẩu mới"
-              isPass={true}
-              value={infoUser.password}
-              name="password"
-              onChange={(e) => handleChangeValue(e.target.name, e.target.value)}
-            />
-          </Col>
-          <Col lg={12} sm={24}>
-            <TextInput
-              label="Nhập lại mật khẩu mới"
-              isPass={true}
-              value={confirmPass}
-              onChange={(e) => setConfirmPass(e.target.value)}
-            />
-          </Col>
-        </Row>
+        {!UserMe.FacebookToken && !UserMe.TokenEmail && (
+          <Row
+            style={{
+              borderBottom: "1px solid #CACACA",
+              paddingBottom: "1rem",
+            }}
+          >
+            <Col lg={12} sm={24}>
+              <EditText
+                label="Mật khẩu hiện tại"
+                isPass={true}
+                autoComplete="new-password"
+                value={password.passwordCurrent}
+                // name="passwordCurrent"
+                onChange={(e) => {
+                  setPassword({ ...password, passwordCurrent: e.target.value });
+                }}
+              />
+              <TextInput
+                label="Mật khẩu mới"
+                isPass={true}
+                value={password.newPass}
+                // name="password"
+                onChange={(e) =>
+                  setPassword({ ...password, newPass: e.target.value })
+                }
+              />
+            </Col>
+            <Col lg={12} sm={24}>
+              <TextInput
+                label="Nhập lại mật khẩu mới"
+                isPass={true}
+                value={confirmPass}
+                onChange={(e) => setConfirmPass(e.target.value)}
+              />
+            </Col>
+          </Row>
+        )}
         <div style={{ padding: "1.5rem 0" }}>
           <div className="AccountInfo__social">Liên kết mạng xã hội</div>
           <Row

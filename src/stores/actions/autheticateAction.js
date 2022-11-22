@@ -49,9 +49,13 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
   try {
     dispatch({ type: SET_LOADING, payload: true });
     const res = await signInWithPopup(auth, provider);
+    // const resp = await authenticateService.authenticate({
+    //   ...res.user,
+    //   ...res.user.providerData[0],
+    // });
     const resp = await authenticateService.authenticate({
-      ...res.user,
-      ...res.user.providerData[0],
+      ...res["_tokenResponse"],
+      providerId: res["_tokenResponse"].providerId,
     });
 
     localStorage.setItem("token", resp.data.token);
