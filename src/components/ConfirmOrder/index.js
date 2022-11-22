@@ -64,7 +64,7 @@ const Index = () => {
       }
     })();
 
-    const timer = setTimeout(() => setCheckoutDisable(true), 5000);
+    const timer = setTimeout(() => setCheckoutDisable(true), 900000);
 
     return () => {
       clearTimeout(timer);
@@ -112,8 +112,7 @@ const Index = () => {
   return (
     <div
       className="py-12"
-      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
-    >
+      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}>
       <div className="confirm_order_container">
         <div className="border_bottom">
           <div className="confirm_title">
@@ -135,8 +134,7 @@ const Index = () => {
             <div
               onClick={handleCopyToClipboard}
               className="text-medium-re"
-              style={{ color: "#03AC84", cursor: "pointer" }}
-            >
+              style={{ color: "#03AC84", cursor: "pointer" }}>
               SAO CHÉP
             </div>
           </div>
@@ -154,8 +152,7 @@ const Index = () => {
           <div className="d-flex justify-content-between mb-18">
             <div
               className=" text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Số tài khoản:
             </div>
             <div
@@ -164,16 +161,14 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               {partner.BankAccount}
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Ngân hàng:
             </div>
             <div
@@ -182,16 +177,14 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               {partner.BankBranchName}
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Tên thụ hưởng:
             </div>
             <div
@@ -200,16 +193,14 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               {partner.BankAccountOwnerName}
             </div>
           </div>
           <div className="d-flex justify-content-between">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Nội dung chuyển khoản:
             </div>
             <div
@@ -218,8 +209,7 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               {location?.state?.IdentifyCode}
             </div>
           </div>
@@ -238,8 +228,7 @@ const Index = () => {
               multiple={true}
               image={
                 file.preview || convertImage(location?.state?.EvidenceImage)
-              }
-            >
+              }>
               <div className="btn_upload">Tải ảnh lên</div>
             </UploadImage>
           </div>
@@ -247,8 +236,7 @@ const Index = () => {
             className={`btn_update text-medium-se mb-30 ${
               checkoutDisable && "disable-checkout"
             }`}
-            onClick={handleClickBtnUpdate}
-          >
+            onClick={handleClickBtnUpdate}>
             Cập nhật minh chứng
           </div>
           <div className="d-flex">
