@@ -24,7 +24,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createLikeCommentDao,
   getAllNotificationDaoAction,
-  likePost,
   toggleNotificationDaoAction,
 } from "../../stores/actions/PostDaoAction";
 import { convertTime } from "../../utils/convert";
@@ -37,7 +36,6 @@ import { postDaoService } from "../../services/PostDaoService";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
 import CommentSlider from "../CommentSlider/CommentSlider";
-import noBody from "../../assets/img/no-body.png";
 import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
 
 const DaoPost = (props) => {
@@ -50,12 +48,12 @@ const DaoPost = (props) => {
     (state) => state.postDaoReducer
   );
 
-  const { item, likePostList, type = "post" } = props;
+  const { item, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
-  const [mouseOverHeart, setMouseOverHeart] = useState(false);
-  const [mouseClickHeart, setMouseClickHeart] = useState(
-    likePostList?.filter((itm) => itm.PostId === item.Id).length > 0
-  );
+  // const [mouseOverHeart, setMouseOverHeart] = useState(false);
+  // const [mouseClickHeart, setMouseClickHeart] = useState(
+  //   likePostList?.filter((itm) => itm.PostId === post.id).length > 0
+  // );
   const [commentsClick, setCommentsClick] = useState(false);
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [moreOptionModal, setMoreOptionModal] = useState(false);
@@ -63,13 +61,11 @@ const DaoPost = (props) => {
   const [isModalVisibleDetail, setIsModalVisibleDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
-  const [imageInModal, setImageInModal] = useState("");
+  // const [imageInModal, setImageInModal] = useState("");
 
   const {
-    Id,
-    Fullname,
+    id,
     Description,
-    Avatar,
     TotalLikes,
     Tags,
     TotalComments,
@@ -83,12 +79,10 @@ const DaoPost = (props) => {
   const getComments = async (currentPage) => {
     try {
       const { data } = await postDaoService.getComments(
-        item.Id,
+        post.id,
         currentPage || 1,
         5
       );
-      // setComments(data.data);
-      // setPagination(data.pagination);
       if (currentPage === 1) {
         setComments([...data.data]);
         setPagination(data.pagination);
@@ -103,14 +97,15 @@ const DaoPost = (props) => {
   useEffect(() => {
     setPost({ ...item });
   }, [item]);
+
   useEffect(() => {
     dispatch(getAllNotificationDaoAction());
-  }, []);
+  }, [dispatch]);
   const handlerLikeComment = (id) => {
     // getComments(1);
     // setPost({ ...post, TotalComments: post.TotalComments + 1 });
     dispatch(
-      createLikeCommentDao({ CommentId: id }, item.Id, setComments, pagination)
+      createLikeCommentDao({ CommentId: id }, post.id, setComments, pagination)
     );
   };
 
@@ -126,7 +121,7 @@ const DaoPost = (props) => {
   ];
 
   const handleImageModal = (url) => {
-    setImageInModal(url);
+    // setImageInModal(url);
     setIsModalVisibleDetail(true);
     if (comments.length <= 0) {
       getComments(1);
@@ -141,14 +136,19 @@ const DaoPost = (props) => {
     setIsModalVisibleDetail(false);
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (currentUser) {
-      if (checkLikePost()) {
-        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
-      } else {
-        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+      // dispatch(likePost(currentUser?.id, post.id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+      try {
+        await postDaoService.createLike({
+          PostId: post.id,
+          UserId: currentUser.id,
+        });
+        const res = await postDaoService.getPostById(post.id);
+        setPost(res.data);
+      } catch (error) {
+        console.log(error);
       }
-
       // if (checkLikePost()) {
       //   setMouseClickHeart(false);
       //   setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
@@ -156,18 +156,18 @@ const DaoPost = (props) => {
       //   setMouseClickHeart(true);
       //   setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
       // }
-      dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+      // console.log(currentUser.id, post.id);
     }
   };
 
   // const handleLikeCmt = () => {
   //   if (currentUser) {
   //     if (checkLikePost()) {
-  //       // dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+  //       // dispatch(likePost(currentUser?.id, id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
   //       setMouseClickHeart(false);
   //       setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
   //     } else {
-  //       dispatch(likePost(currentUser?.id, Id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
+  //       dispatch(likePost(currentUser?.id, id)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
   //       setMouseClickHeart(true);
   //       setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
   //     }
@@ -184,7 +184,7 @@ const DaoPost = (props) => {
       case 2:
         setIsModalOptionDetail(false);
         setMoreOptionModal(false);
-        dispatch(toggleNotificationDaoAction({ PostId: Id }));
+        dispatch(toggleNotificationDaoAction({ PostId: id }));
         message.success("Đã bật thông báo về bài viết này");
         break;
       case 3:
@@ -195,10 +195,10 @@ const DaoPost = (props) => {
       case 4:
         try {
           if (type !== "post") {
-            dispatch(cancelSavePost(currentUser?.id, Id));
+            dispatch(cancelSavePost(currentUser?.id, id));
             toastMessage("Hủy lưu bài viết thành công!", "success");
           } else {
-            await userService.savePost(currentUser.id, Id);
+            await userService.savePost(currentUser.id, id);
             toastMessage("Lưu bài viết thành công!", "success");
           }
         } catch (error) {
@@ -212,9 +212,6 @@ const DaoPost = (props) => {
     }
     // setIsModalVisible(false);
   };
-
-  const checkLikePost = () =>
-    likePostList?.filter((itm) => itm.PostId === Id).length > 0;
 
   let ImageSection = null;
   let tempCount = Image?.length;
@@ -240,7 +237,7 @@ const DaoPost = (props) => {
   const handleShowModalChooseService = () => {
     dispatch({
       type: SHOW_MODAL,
-      Component: <ModalChooseService hasTags={Tags} PostId={Id} />,
+      Component: <ModalChooseService hasTags={Tags} PostId={id} />,
     });
   };
 
@@ -268,7 +265,7 @@ const DaoPost = (props) => {
         try {
           // console.log(JSON.stringify(newData));
           const res = await postDaoService.createComment({
-            PostId: Id,
+            PostId: id,
             Content: chooseCommentDefault.Content || "",
             Services: JSON.stringify(newData),
           });
@@ -427,6 +424,7 @@ const DaoPost = (props) => {
               </Col>
             );
           }
+          return null;
         })}
       </Row>
     );
@@ -436,9 +434,11 @@ const DaoPost = (props) => {
       <section className="post__main d-flex flex-column">
         <header className="post__main__info d-flex justify-content-between align-posts-center">
           <div className="d-flex justify-content-between align-posts-center">
-            <img src={convertImage(Avatar)} alt="" />
+            <img src={convertImage(post.BookingUser.Image)} alt="" />
             <div className="post__main__info__nametime">
-              <p className="post__main__info__nametime__name">{Fullname}</p>
+              <p className="post__main__info__nametime__name">
+                {post.BookingUser.Fullname}
+              </p>
               <p>{convertTime(CreationTime)}</p>
             </div>
           </div>
@@ -454,7 +454,7 @@ const DaoPost = (props) => {
                           key={idx}
                           onClick={(e) => {
                             navigator.clipboard.writeText(
-                              `${window.location.origin}/home/dao/posts/${Id}`
+                              `${window.location.origin}/home/dao/posts/${id}`
                             );
                             handleMoreOptionClick(itm);
                           }}
@@ -471,7 +471,7 @@ const DaoPost = (props) => {
                               {listNotificationUser?.some(
                                 (item) =>
                                   item?.UserId === currentUser?.id &&
-                                  item.PostId === Id
+                                  item.PostId === id
                               ) ? (
                                 <li
                                   onClick={() => handleMoreOptionClick(itm)}
@@ -520,7 +520,7 @@ const DaoPost = (props) => {
             <ReportPost
               isReportPostModalVisible={isReportPostModalVisible}
               setIsReportPostModalVisible={setIsReportPostModalVisible}
-              postId={Id}
+              postId={id}
             />
           </div>
         </header>
@@ -592,10 +592,10 @@ const DaoPost = (props) => {
                 >
                   <header className="post__main__info d-flex justify-content-between align-posts-center">
                     <div className="d-flex justify-content-between align-posts-center">
-                      <img src={convertImage(Avatar)} alt="" />
+                      <img src={convertImage(post.BookingUser.Image)} alt="" />
                       <div className="post__main__info__nametime">
                         <p className="post__main__info__nametime__name">
-                          {Fullname}
+                          {post.BookingUser.Fullname}
                         </p>
                         <p>{convertTime(CreationTime)}</p>
                       </div>
@@ -611,7 +611,7 @@ const DaoPost = (props) => {
                                   <li
                                     onClick={(e) => {
                                       navigator.clipboard.writeText(
-                                        `${window.location.origin}/home/dao/posts/${Id}`
+                                        `${window.location.origin}/home/dao/posts/${id}`
                                       );
                                       handleMoreOptionClick(itm);
                                     }}
@@ -628,8 +628,8 @@ const DaoPost = (props) => {
                                       <>
                                         {listNotificationUser?.some(
                                           (item) =>
-                                            item?.UserId == currentUser?.id &&
-                                            item.PostId == Id
+                                            item?.UserId === currentUser?.id &&
+                                            item.PostId === id
                                         ) ? (
                                           <li
                                             onClick={() =>
@@ -690,7 +690,7 @@ const DaoPost = (props) => {
                         setIsReportPostModalVisible={
                           setIsReportPostModalVisible
                         }
-                        postId={Id}
+                        postId={id}
                       />
                     </div>
                   </header>
@@ -708,7 +708,9 @@ const DaoPost = (props) => {
                   >
                     <div className="post__main__content__like-comment__likes d-flex">
                       <PopUpSignIn onClick={(e) => {}}>
-                        {checkLikePost() ? (
+                        {post.Loves.some(
+                          (item) => item.UserId === currentUser?.id
+                        ) ? (
                           <HeartFilled
                             onClick={handleLike}
                             style={{
@@ -716,7 +718,7 @@ const DaoPost = (props) => {
                               color: "#E22828",
                               marginBottom: "2px",
                             }}
-                            onMouseLeave={() => setMouseOverHeart(false)}
+                            // onMouseLeave={() => setMouseOverHeart(false)}
                           />
                         ) : (
                           <HeartOutlined
@@ -727,12 +729,20 @@ const DaoPost = (props) => {
                               cursor: "pointer",
                               marginBottom: "2px",
                             }}
-                            onMouseOver={() => setMouseOverHeart(true)}
+                            // onMouseOver={() => setMouseOverHeart(true)}
                           />
                         )}
                       </PopUpSignIn>
 
-                      <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+                      <p
+                        style={
+                          post.Loves.some(
+                            (item) => item.UserId === currentUser?.id
+                          )
+                            ? { color: "#E22828" }
+                            : {}
+                        }
+                      >
                         {TotalLikes}
                       </p>
                     </div>
@@ -854,7 +864,7 @@ const DaoPost = (props) => {
                               >
                                 <PopUpSignIn onClick={(e) => {}}>
                                   {comment?.Likes?.some(
-                                    (item) => item?.UserId == currentUser?.id
+                                    (item) => item?.UserId === currentUser?.id
                                   ) ? (
                                     <HeartFilled
                                       // onClick={() =>
@@ -887,7 +897,11 @@ const DaoPost = (props) => {
                                 </PopUpSignIn>
                                 <p
                                   style={
-                                    mouseClickHeart ? { color: "#E22828" } : {}
+                                    comment?.Likes?.some(
+                                      (item) => item?.UserId === currentUser?.id
+                                    )
+                                      ? { color: "#E22828" }
+                                      : {}
                                   }
                                 >
                                   {comment?.TotalLike}
@@ -918,7 +932,7 @@ const DaoPost = (props) => {
           <div className="post__main__content__like-comment d-flex align-posts-center">
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn onClick={(e) => {}}>
-                {mouseOverHeart || checkLikePost() ? (
+                {post.Loves.some((item) => item.UserId === currentUser?.id) ? (
                   <HeartFilled
                     onClick={handleLike}
                     style={{
@@ -926,7 +940,7 @@ const DaoPost = (props) => {
                       color: "#E22828",
                       marginBottom: "2px",
                     }}
-                    onMouseLeave={() => setMouseOverHeart(false)}
+                    // onMouseLeave={() => setMouseOverHeart(false)}
                   />
                 ) : (
                   <HeartOutlined
@@ -937,11 +951,17 @@ const DaoPost = (props) => {
                       cursor: "pointer",
                       marginBottom: "2px",
                     }}
-                    onMouseOver={() => setMouseOverHeart(true)}
+                    // onMouseOver={() => setMouseOverHeart(true)}
                   />
                 )}
               </PopUpSignIn>
-              <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+              <p
+                style={
+                  post.Loves.some((item) => item.UserId === currentUser?.id)
+                    ? { color: "#E22828" }
+                    : {}
+                }
+              >
                 {TotalLikes}
               </p>
             </div>

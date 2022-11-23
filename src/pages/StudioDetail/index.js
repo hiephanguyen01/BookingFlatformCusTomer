@@ -33,11 +33,8 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import {
-  SET_PROMOTION_CODE,
-  SET_SERVICE_SELECT,
-} from "../../stores/types/studioPostType";
-import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
+import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 // import { openNotification } from "../../utils/Notification";
@@ -70,7 +67,6 @@ export const StudioDetail = () => {
     filterService,
     serviceSelected,
   } = useSelector((state) => state.studioPostReducer);
-  console.log("serviceSelected", serviceSelected);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -123,10 +119,10 @@ export const StudioDetail = () => {
       Component: <Report category={cate} postId={id} />,
     });
   };
-  const handlerServiceSelect = (data) => {
-    console.log(data.id);
-    // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
-  };
+  // const handlerServiceSelect = (data) => {
+  //   console.log(data.id);
+  //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
+  // };
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -262,7 +258,7 @@ export const StudioDetail = () => {
                 disabled={
                   serviceSelected === null
                     ? false
-                    : data.id == serviceSelected
+                    : data.id === serviceSelected
                     ? false
                     : true
                 }
@@ -336,7 +332,7 @@ export const StudioDetail = () => {
               )}
               <div className="">
                 {chooseService.filter((item) => item.id === data.id).length >
-                0 && serviceSelected ==data.id ? (
+                  0 && serviceSelected === data.id ? (
                   <div
                     onClick={() => handleChooseService(data)}
                     style={{
@@ -390,11 +386,10 @@ export const StudioDetail = () => {
   console.log("chooseService", chooseService);
 
   const handleChooseService = (data) => {
-    if (data.id != serviceSelected) {
+    if (data.id !== serviceSelected) {
       toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
       return;
     }
-    console.log("chọn", data);
     if (
       (filterService.OrderByTime === 0 &&
         filterService.OrderByDateFrom !== "" &&

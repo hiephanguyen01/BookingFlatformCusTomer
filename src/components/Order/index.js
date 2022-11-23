@@ -1,5 +1,5 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Row } from "antd";
+import { Button, Col, Input, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -79,7 +79,7 @@ const Index = ({ linkTo = "" }) => {
         type: HIDE_MODAL,
       });
     };
-  }, []);
+  }, [cate, dispatch, id, studioDetail, user]);
 
   const isEmpty = () => {
     if (
