@@ -1,7 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Col, Modal, Row, Switch } from "antd";
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
@@ -137,7 +137,7 @@ const AccountInfo = () => {
       linkZalo();
       localStorage.removeItem("code_verifier");
     }
-  }, [location.search]);
+  }, [location.search, dispatch]);
 
   const onChangeCheck = async (checked) => {
     if (checked) {
