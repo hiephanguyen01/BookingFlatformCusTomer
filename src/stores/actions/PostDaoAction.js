@@ -10,7 +10,6 @@ import { postDaoService } from "../../services/PostDaoService";
 export const getAllPostDaoAction = (currentListPost = [], filter) => {
   return async (dispatch) => {
     try {
-      console.log(filter);
       const { data } = await postDaoService.getAllPost(
         filter?.limit,
         filter?.page,
@@ -29,7 +28,6 @@ export const getAllPostDaoAction = (currentListPost = [], filter) => {
       //     data: temp,
       //   });
       // }
-      console.log(data.data);
       let temp = [...currentListPost, ...data.data];
       dispatch({
         type: GET_LIST_POST,
@@ -105,21 +103,21 @@ export const getLikePostList = (userId) => {
   };
 };
 
-export const likePost = (userId, postId) => {
-  return async (dispatch) => {
-    try {
-      const { data } = await postDaoService.createLike({
-        PostId: postId,
-        UserId: userId,
-      });
-      dispatch({ type: "GET_LIKE", data: data.data });
-      const res = await postDaoService.getLike(userId);
-      dispatch({ type: "GET_LIKE_POST_LIST", data: res.data.data });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-};
+// export const likePost = (userId, postId) => {
+//   return async (dispatch) => {
+//     try {
+//       const { data } = await postDaoService.createLike({
+//         PostId: postId,
+//         UserId: userId,
+//       });
+//       // dispatch({ type: "GET_LIKE", data: data.data });
+//       // const res = await postDaoService.getLike(userId);
+//       // dispatch({ type: "GET_LIKE_POST_LIST", data: res.data.data });
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+// };
 
 export const getAllDefaultComments = () => {
   return async (dispatch) => {
