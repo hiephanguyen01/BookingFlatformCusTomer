@@ -18,7 +18,6 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import queryString from "query-string";
 import DaoIcon from "../../assets/header/DaoIcon.svg";
 import Logo from "../../assets/header/Logo.svg";
 import { ReactComponent as SearchIcon } from "../../assets/header/SearchIcon.svg";
@@ -27,7 +26,6 @@ import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { convertImage } from "../../utils/convertImage";
-import { ImageDetect } from "../ImageDetect/ImageDetect";
 import SearchButton from "../layouts/SearchButton";
 import "./Header.scss";
 import toastMessage from "../ToastMessage";
