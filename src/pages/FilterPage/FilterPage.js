@@ -74,7 +74,7 @@ const FilterPage = () => {
     })();
     initState();
   }, []);
-
+  console.log(studioPostList);
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
@@ -133,6 +133,7 @@ const FilterPage = () => {
     );
   };
   const onChangePriceOption = (e) => {
+    console.log(123);
     dispatch(
       getFilterStudioPost(
         5,
@@ -171,11 +172,6 @@ const FilterPage = () => {
         1,
         {
           keyString: "",
-          // OrderByTime: -1,
-          // OrderByTimeFrom: convertDateSendToDB(new Date()),
-          // OrderByTimeTo: convertDateSendToDB(new Date()),
-          // OrderByDateFrom: convertDateSendToDB(new Date()),
-          // OrderByDateTo: convertDateSendToDB(new Date()),
           category: 1,
           priceOption: 1,
           price1: undefined,
@@ -279,7 +275,10 @@ const FilterPage = () => {
                 <Divider />
                 <Form.Item label="Giá" name="price">
                   <div className="filter_price_container">
-                    <Radio.Group onChange={onChangePriceOption}>
+                    <Radio.Group
+                      onChange={onChangePriceOption}
+                      value={filter.priceOption}
+                    >
                       <Row>
                         <Col span={24}>
                           <Radio value={2}>Giá cao nhất</Radio>
@@ -310,7 +309,10 @@ const FilterPage = () => {
                 <p className="text">Đánh giá</p>
                 <Form.Item name="ratingOption">
                   <div className="filter_rating_container">
-                    <Radio.Group onChange={onChangeRateOption}>
+                    <Radio.Group
+                      onChange={onChangeRateOption}
+                      value={filter.ratingOption}
+                    >
                       <Row>
                         <Col span={24}>
                           <Radio value={1}>Đánh giá nhiều nhất</Radio>
