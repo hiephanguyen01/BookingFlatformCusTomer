@@ -7,8 +7,8 @@
   padding-bottom: 12px;
 
   &__container {
-    width: 54%;
-
+    width: #{"min(100% - 1em, 825px)"};
+    margin-inline: auto;
     &__header,
     article {
       width: 100%;
@@ -100,9 +100,7 @@
 }
 
 .modalDao {
-  max-width: 700px !important;
-  width: 700px !important;
-
+  min-width: 300px !important;
   .ant-modal-header {
     border-radius: 10px !important;
   }
@@ -146,7 +144,8 @@
   padding: 9px 14px;
   background: $neutral-50;
   border-radius: 12px;
-  margin-right: 12px;
+  margin-right: 12px !important;
+  margin-bottom: 12px !important;
 
   cursor: pointer;
 }

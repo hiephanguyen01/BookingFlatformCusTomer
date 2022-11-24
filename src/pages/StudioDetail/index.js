@@ -7,12 +7,13 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Popover, Rate } from "antd";
+import { Affix, Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import ReactStickyBox from "react-sticky-box";
 import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
@@ -53,6 +54,7 @@ const cx = classNames.bind(styles);
 
 export const StudioDetail = () => {
   const { id } = useParams();
+  const setContainer = useRef(null);
   const { pathname } = useLocation();
   // State
   const dispatch = useDispatch();
@@ -91,6 +93,9 @@ export const StudioDetail = () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
     };
   }, [dispatch]);
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  }, [id]);
 
   useEffect(() => {
     dispatch(getPromotionCodeUserSave());
@@ -144,16 +149,14 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
                     minWidth: "60px",
-                  }}
-                >
+                  }}>
                   Phòng
                 </span>
                 <span
@@ -169,8 +172,7 @@ export const StudioDetail = () => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     height: "18px",
-                  }}
-                >
+                  }}>
                   {data.Name}
                 </span>
               </div>
@@ -180,15 +182,13 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <span
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   Diện tích
                 </span>
                 <span
@@ -196,8 +196,7 @@ export const StudioDetail = () => {
                     color: "#3F3F3F",
                     fontSize: "16px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   {data.Area}
                 </span>
               </div>
@@ -207,16 +206,14 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
+                }}>
                 <div
                   style={{
                     color: "#616161",
                     fontSize: "16px",
                     fontWeight: "400",
                     minWidth: "100px",
-                  }}
-                >
+                  }}>
                   Phong cách
                 </div>
                 <div
@@ -232,8 +229,7 @@ export const StudioDetail = () => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     height: "18px",
-                  }}
-                >
+                  }}>
                   {data.Style}
                 </div>
               </div>
@@ -243,8 +239,7 @@ export const StudioDetail = () => {
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}
-              >
+                }}>
                 {data.Description}
               </div>
             </div>
@@ -279,15 +274,13 @@ export const StudioDetail = () => {
                       gap: "10px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}
-                  >
+                    }}>
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -305,8 +298,7 @@ export const StudioDetail = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -324,15 +316,14 @@ export const StudioDetail = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {data.PriceNote}
                   </p>
                 </div>
               )}
               <div className="">
                 {chooseService.filter((item) => item.id === data.id).length >
-                  0 && serviceSelected === data.id ? (
+                  0 && serviceSelected == data.id ? (
                   <div
                     onClick={() => handleChooseService(data)}
                     style={{
@@ -348,8 +339,7 @@ export const StudioDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Bỏ chọn
                   </div>
                 ) : (
@@ -369,8 +359,7 @@ export const StudioDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Chọn
                   </div>
                 )}
@@ -448,8 +437,7 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -457,8 +445,7 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -478,8 +465,7 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -502,27 +488,23 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}
-                        >
+                          }}>
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}
-                          >
+                            }}>
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
+                              style={{ fontSize: "18px", fontWeight: "bold" }}>
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click"
-                    >
+                      trigger="click">
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -535,13 +517,11 @@ export const StudioDetail = () => {
                   <Rate
                     disabled
                     allowHalf
-                    value={studioDetail?.data?.TotalRate}
-                  ></Rate>
+                    value={studioDetail?.data?.TotalRate}></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}
-                  >
+                    style={{ fontSize: "15px" }}>
                     {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
@@ -592,17 +572,56 @@ export const StudioDetail = () => {
                       </div>
                     </div>
                   </div>
-                  <div className={cx("order")}>
-                    <div className={cx("item")}>
-                      <h3>Đã chọn {chooseService.length} phòng</h3>
-                      {chooseService.length > 0 && (
+                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                    <div className={cx("order")}>
+                      <div className={cx("item")}>
+                        <h3>Đã chọn {chooseService.length} phòng</h3>
+                        {chooseService.length > 0 && (
+                          <span
+                            style={{
+                              textDecoration: "line-through",
+                              fontSize: " 16px",
+                              color: "#828282",
+                            }}>
+                            {filterService.OrderByTime === 1 &&
+                              `${convertPrice(
+                                chooseService?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByHour *
+                                      calTime(
+                                        filterService.OrderByTimeFrom,
+                                        filterService.OrderByTimeTo
+                                      ),
+                                  0
+                                )
+                              )}đ`}
+                            {filterService.OrderByTime === 0 &&
+                              `${convertPrice(
+                                chooseService?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByDate *
+                                      calDate(
+                                        filterService.OrderByDateFrom,
+                                        filterService.OrderByDateTo
+                                      ),
+                                  0
+                                )
+                              )}đ`}
+                          </span>
+                        )}
+                      </div>
+                      <div className={cx("item")}>
+                        <span className="mt-3">
+                          Bao gồm 50.000đ thuế và phí{" "}
+                        </span>
                         <span
                           style={{
-                            textDecoration: "line-through",
-                            fontSize: " 16px",
-                            color: "#828282",
-                          }}
-                        >
+                            color: "#E22828",
+                            fontSize: "20px",
+                            fontWeight: "700",
+                          }}>
                           {filterService.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseService?.reduce(
@@ -630,73 +649,35 @@ export const StudioDetail = () => {
                               )
                             )}đ`}
                         </span>
-                      )}
-                    </div>
-                    <div className={cx("item")}>
-                      <span className="mt-3">Bao gồm 50.000đ thuế và phí </span>
-                      <span
-                        style={{
-                          color: "#E22828",
-                          fontSize: "20px",
-                          fontWeight: "700",
-                        }}
-                      >
-                        {filterService.OrderByTime === 1 &&
-                          `${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) =>
-                                total +
-                                item.PriceByHour *
-                                  calTime(
-                                    filterService.OrderByTimeFrom,
-                                    filterService.OrderByTimeTo
-                                  ),
-                              0
+                      </div>
+                      <div className="w-100 d-flex justify-content-between mt-20">
+                        <Button
+                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                          disabled={chooseService.length > 0 ? false : true}
+                          onClick={() =>
+                            toastMessage(
+                              "Chức năng này đang phát triển!",
+                              "info",
+                              1,
+                              "",
+                              {}
                             )
-                          )}đ`}
-                        {filterService.OrderByTime === 0 &&
-                          `${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) =>
-                                total +
-                                item.PriceByDate *
-                                  calDate(
-                                    filterService.OrderByDateFrom,
-                                    filterService.OrderByDateTo
-                                  ),
-                              0
-                            )
-                          )}đ`}
-                      </span>
+                          }>
+                          <ShoppingCartOutlined />
+                          Thêm vào giỏ hàng
+                        </Button>
+                        <Button
+                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                          onClick={handleBook}
+                          disabled={chooseService.length > 0 ? false : true}>
+                          Đặt ngay
+                        </Button>
+                      </div>
                     </div>
-                    <div className="w-100 d-flex justify-content-between mt-20">
-                      <Button
-                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        disabled={chooseService.length > 0 ? false : true}
-                        onClick={() =>
-                          toastMessage(
-                            "Chức năng này đang phát triển!",
-                            "info",
-                            1,
-                            "",
-                            {}
-                          )
-                        }
-                      >
-                        <ShoppingCartOutlined />
-                        Thêm vào giỏ hàng
-                      </Button>
-                      <Button
-                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
-                        Đặt ngay
-                      </Button>
-                    </div>
-                  </div>
+                  </ReactStickyBox>
                 </div>
               </div>
+
               <SlideCard
                 data={listStudioSimilar ?? listStudioSimilar}
                 category={{ name: "studio", id: 1 }}

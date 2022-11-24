@@ -46,8 +46,7 @@ const DaoPostSearchModal = (props) => {
           Xong
         </button>,
       ]}
-      style={{ padding: "35px 24px 35px 24px" }}
-    >
+      style={{ padding: "35px 24px 35px 24px" }}>
       <Input
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
