@@ -92,7 +92,7 @@ const Dao = () => {
 
   useEffect(() => {
     dispatch(getAllDefaultComments());
-  }, []);
+  }, [dispatch]);
 
   const onChangeFile = (e) => {
     const newFiles = [...files];
@@ -230,13 +230,12 @@ const Dao = () => {
     });
   }
   useEffect(() => {
-    console.log(123);
     dispatch(
       getAllPostDaoAction([], {
         ...filter,
       })
     );
-  }, [filter.tags.length]);
+  }, [filter, dispatch]);
 
   useEffect(() => {
     dispatch(getLikePostList(currentUser?.id)); // 1 là user id
@@ -248,7 +247,7 @@ const Dao = () => {
     return () => {
       dispatch({ type: GET_LIST_POST, data: [] });
     };
-  }, [currentUser]);
+  }, [currentUser, dispatch]);
 
   return (
     <section className="dao d-flex justify-content-center">

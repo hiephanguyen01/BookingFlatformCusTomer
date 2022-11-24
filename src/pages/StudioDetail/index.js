@@ -69,7 +69,6 @@ export const StudioDetail = () => {
     filterService,
     serviceSelected,
   } = useSelector((state) => state.studioPostReducer);
-  console.log("serviceSelected", serviceSelected);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -125,10 +124,10 @@ export const StudioDetail = () => {
       Component: <Report category={cate} postId={id} />,
     });
   };
-  const handlerServiceSelect = (data) => {
-    console.log(data.id);
-    // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
-  };
+  // const handlerServiceSelect = (data) => {
+  //   console.log(data.id);
+  //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
+  // };
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -254,7 +253,7 @@ export const StudioDetail = () => {
                 disabled={
                   serviceSelected === null
                     ? false
-                    : data.id == serviceSelected
+                    : data.id === serviceSelected
                     ? false
                     : true
                 }
@@ -376,11 +375,10 @@ export const StudioDetail = () => {
   console.log("chooseService", chooseService);
 
   const handleChooseService = (data) => {
-    if (data.id != serviceSelected) {
+    if (data.id !== serviceSelected) {
       toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
       return;
     }
-    console.log("chọn", data);
     if (
       (filterService.OrderByTime === 0 &&
         filterService.OrderByDateFrom !== "" &&

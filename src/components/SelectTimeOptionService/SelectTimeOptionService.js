@@ -1,6 +1,6 @@
 import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_SERVICE_SELECT } from "../../stores/types/studioPostType";
@@ -250,10 +250,10 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   const [data, setData] = useState(service);
   const { filterService } = useSelector((state) => state.studioPostReducer);
   // const [selection, setSelection] = useState(filterService.OrderByTime);
-  const handlerServiceSelect = (data) => {
-    console.log(data.id);
-    // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
-  };
+  // const handlerServiceSelect = (data) => {
+  //   console.log(data.id);
+  //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
+  // };
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -270,7 +270,12 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   };
 
   return (
-    <div onClick={()=>  dispatch({ type: SET_SERVICE_SELECT, payload: service.id })} className="selectTimeOptionServiceContainer mb-20">
+    <div
+      onClick={() =>
+        dispatch({ type: SET_SERVICE_SELECT, payload: service.id })
+      }
+      className="selectTimeOptionServiceContainer mb-20"
+    >
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}
