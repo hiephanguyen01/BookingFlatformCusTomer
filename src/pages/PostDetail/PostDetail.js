@@ -52,12 +52,9 @@ const PostDetail = () => {
     useSelector((state) => state.postDaoReducer);
 
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  // const [mouseOverHeart, setMouseOverHeart] = useState(false);
-  // const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
-  // const [commentsClick, setCommentsClick] = useState(false);
 
   const [post, setPost] = useState({ ...postDetail });
   const [comments, setComments] = useState([]);
