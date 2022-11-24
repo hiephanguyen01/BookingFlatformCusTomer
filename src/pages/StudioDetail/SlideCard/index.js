@@ -47,8 +47,7 @@ export const SlideCard = ({ title, data, category }) => {
                 spaceBetween: 10,
               },
             }}
-            modules={[Navigation, Autoplay]}
-          >
+            modules={[Navigation, Autoplay]}>
             {data &&
               data.map((item, idx) => {
                 return (
