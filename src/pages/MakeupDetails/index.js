@@ -42,12 +42,17 @@ import {
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
-
+import ReactStickyBox from "react-sticky-box";
+import styles from "./Detail.module.scss";
+import images from "../../assets/images";
+import classNames from "classnames/bind";
 const COLUMN = [
   { title: "Dịch vụ", size: 7 },
   { title: "Chọn thời gian", size: 10 },
   { title: "Chọn dịch vụ", size: 7 },
 ];
+const cx = classNames.bind(styles);
+
 const Index = () => {
   const { studioDetail, listStudioSimilar, promotionCode, filterService } =
     useSelector((state) => state.studioPostReducer);
@@ -92,6 +97,9 @@ const Index = () => {
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
     };
   }, [dispatch]);
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  }, [id]);
 
   const handleReport = () => {
     dispatch({
@@ -140,8 +148,7 @@ const Index = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 {data.Name}
               </div>
               <div
@@ -150,8 +157,7 @@ const Index = () => {
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}
-              >
+                }}>
                 {data.Description}
               </div>
             </div>
@@ -175,15 +181,13 @@ const Index = () => {
                       gap: "5px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}
-                  >
+                    }}>
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -201,8 +205,7 @@ const Index = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -220,8 +223,7 @@ const Index = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {data.PriceNote}
                   </p>
                   {/* <button
@@ -255,8 +257,7 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Bỏ chọn
                   </div>
                 ) : (
@@ -276,8 +277,7 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Chọn
                   </div>
                 )}
@@ -331,8 +331,9 @@ const Index = () => {
   // };
 
   const handleChangeLike = (e) => {
-    if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    if (currentUser) {
+      dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    }
   };
 
   return (
@@ -350,8 +351,7 @@ const Index = () => {
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}
-              >
+                style={{ marginBottom: "11px" }}>
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -360,8 +360,7 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}
-                  >
+                    }}>
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{
@@ -405,27 +404,23 @@ const Index = () => {
                           flexDirection: "column",
                           gap: "10px",
                           padding: "10px",
-                        }}
-                      >
+                        }}>
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
                             cursor: "pointer",
-                          }}
-                        >
+                          }}>
                           <WarningOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Báo cáo
                           </span>
                         </div>
                       </div>
                     }
-                    trigger="click"
-                  >
+                    trigger="click">
                     <MoreOutlined
                       style={{
                         fontSize: "25px",
@@ -442,7 +437,7 @@ const Index = () => {
                 />
                 {studioDetail?.data?.Address}
               </div>
-              <div className="d-flex align-items-center mb-20">
+              <div className="d-flex align-items-center mb-15">
                 <Rate
                   disabled
                   allowHalf
@@ -457,107 +452,58 @@ const Index = () => {
               </div>
               <ImagePost data={studioDetail?.data?.Image} />
             </div>
-            <div className="wrapper_description">
-              <Row style={{ height: "100%" }}>
-                <Col
-                  lg={16}
-                  sm={24}
-                  style={{ paddingRight: "0.25rem", height: "100%" }}
-                  className="mb-12"
-                >
-                  <div className="desc_col_left mb-12">
-                    <ReadMoreDesc title="Mô tả">
-                      {studioDetail?.data?.Description}
-                    </ReadMoreDesc>
+            <div className={cx("box2")}>
+              <div className={cx("left")}>
+                <div className={cx("description")}>
+                  <ReadMoreDesc title="Chi tiết sản phẩm">
+                    {studioDetail?.data?.Description}
+                  </ReadMoreDesc>
+                </div>
+                <div className={cx("sale")}>
+                  <PromotionList data={filter_promo} />
+                </div>
+
+                <div className={cx("")}>
+                  <Table column={COLUMN} row={ROW(studioDetail?.service)} />
+                </div>
+
+                <div className={cx("rating")}>
+                  <CommentRating data={studioDetail} className="mb-43 mt-12" />
+                </div>
+              </div>
+              <div className={cx("right")}>
+                <div className={cx("map")}>
+                  <h3>Xem trên bản đồ</h3>
+                  <div className={cx("address")}>
+                    <img src={images.address} alt="" />
+                    <span>{studioDetail?.data?.Address}</span>
                   </div>
-                  <div
-                    className="py-26 px-18"
-                    style={{
-                      backgroundColor: "#ffffff",
-                    }}
-                  >
-                    <PromotionList data={filter_promo} />
+                  <div className="mapouter">
+                    {/* <div className="gmap_canvas">
+                      <iframe
+                        title="map"
+                        className="gmap_iframe"
+                        width="100%"
+                        frameBorder={0}
+                        scrolling="no"
+                        marginHeight={0}
+                        marginWidth={0}
+                        src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                      />
+                    </div> */}
                   </div>
-                </Col>
-                <Col
-                  lg={8}
-                  sm={24}
-                  style={{ paddingLeft: "0.25rem", height: "100%" }}
-                  className="mb-12"
-                >
-                  <div className="desc_col_right">
-                    <div className="">
-                      <div className="desc_col_right_title">
-                        Xem trên bản đồ
-                      </div>
-                      <div
-                        className="text-medium-re"
-                        style={{ marginBottom: "15px" }}
-                      >
-                        <img
-                          src={svgLocation}
-                          style={{ marginRight: "6px" }}
-                          alt=""
-                        />
-                        {studioDetail?.data?.Address}
-                      </div>
-                    </div>
-                    <iframe
-                      title="map"
-                      style={{ width: "100%", height: "220px", border: "0" }}
-                      src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                  </div>
-                </Col>
-              </Row>
-            </div>
-            <div className="w-100 mb-12 wrapper_list_costume">
-              <Row>
-                <Col
-                  lg={16}
-                  sm={24}
-                  style={{ paddingRight: "0.25rem" }}
-                  className="col_left"
-                >
-                  <div
-                    className=" py-22 mb-12 h-100"
-                    style={{
-                      backgroundColor: "#ffffff",
-                    }}
-                  >
-                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                  </div>
-                </Col>
-                <Col lg={8} sm={24} style={{ paddingLeft: "0.25rem" }}>
-                  <div
-                    style={{
-                      padding: "24px 26px",
-                      backgroundColor: "#ffffff",
-                      // height: "100%",
-                    }}
-                  >
-                    <div className="d-flex justify-content-between mb-12">
-                      <div
-                        className=""
-                        style={{
-                          fontWeight: "600",
-                          fontSize: "18px",
-                          lineHeight: "25px",
-                          color: "#222222",
-                        }}
-                      >
-                        Đã chọn {chooseService.length} sản phẩm
-                      </div>
+                </div>
+                <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                  <div className={cx("order")}>
+                    <div className={cx("item")}>
+                      <h3>Đã chọn {chooseService.length} phòng</h3>
                       {chooseService.length > 0 && (
                         <span
                           style={{
                             textDecoration: "line-through",
                             fontSize: " 16px",
                             color: "#828282",
-                          }}
-                        >
+                          }}>
                           {filterService.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseService?.reduce(
@@ -570,7 +516,7 @@ const Index = () => {
                                     ),
                                 0
                               )
-                            )}`}
+                            )}đ`}
                           {filterService.OrderByTime === 0 &&
                             `${convertPrice(
                               chooseService?.reduce(
@@ -583,58 +529,50 @@ const Index = () => {
                                     ),
                                 0
                               )
-                            )}`}
-                          đ
+                            )}đ`}
                         </span>
                       )}
                     </div>
-                    <div className="d-flex justify-content-between mb-26">
-                      <div className="text-medium-re">
-                        Bao gồm 50.000đ thuế và phí
-                      </div>
-                      {chooseService.length > 0 && (
-                        <div
-                          style={{
-                            fontWeight: "700",
-                            fontSize: "20px",
-                            lineHeight: "27px",
-                            /* Primary/Red 700 */
-                            color: "#E22828",
-                          }}
-                        >
-                          {filterService.OrderByTime === 1 &&
-                            `${convertPrice(
-                              chooseService?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByHour *
-                                    calTime(
-                                      filterService.OrderByTimeFrom,
-                                      filterService.OrderByTimeTo
-                                    ),
-                                0
-                              )
-                            )}`}
-                          {filterService.OrderByTime === 0 &&
-                            `${convertPrice(
-                              chooseService?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByDate *
-                                    calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
-                                    ),
-                                0
-                              )
-                            )}`}
-                          đ
-                        </div>
-                      )}
+                    <div className={cx("item")}>
+                      <span className="mt-3">Bao gồm 50.000đ thuế và phí </span>
+                      <span
+                        style={{
+                          color: "#E22828",
+                          fontSize: "20px",
+                          fontWeight: "700",
+                        }}>
+                        {filterService.OrderByTime === 1 &&
+                          `${convertPrice(
+                            chooseService?.reduce(
+                              (total, item) =>
+                                total +
+                                item.PriceByHour *
+                                  calTime(
+                                    filterService.OrderByTimeFrom,
+                                    filterService.OrderByTimeTo
+                                  ),
+                              0
+                            )
+                          )}đ`}
+                        {filterService.OrderByTime === 0 &&
+                          `${convertPrice(
+                            chooseService?.reduce(
+                              (total, item) =>
+                                total +
+                                item.PriceByDate *
+                                  calDate(
+                                    filterService.OrderByDateFrom,
+                                    filterService.OrderByDateTo
+                                  ),
+                              0
+                            )
+                          )}đ`}
+                      </span>
                     </div>
-                    <div className="w-100 d-flex justify-content-between">
+                    <div className="w-100 d-flex justify-content-between mt-20">
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                        disabled={chooseService.length > 0 ? false : true}
                         onClick={() =>
                           toastMessage(
                             "Chức năng này đang phát triển!",
@@ -643,25 +581,24 @@ const Index = () => {
                             "",
                             {}
                           )
-                        }
-                      >
+                        }>
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                      >
+                        disabled={chooseService.length > 0 ? false : true}>
                         Đặt ngay
                       </Button>
                     </div>
                   </div>
-                </Col>
-              </Row>
+                </ReactStickyBox>
+              </div>
             </div>
             {studioDetail?.album?.length > 0 && (
-              <Row>
-                <Col lg={16} md={24}>
+              <Row gutter={[20]}>
+                <Col md={16}>
                   <div className="album_container">
                     <h3>Các album</h3>
                     {toggleSeeMore ? (
@@ -682,8 +619,7 @@ const Index = () => {
                         {studioDetail?.album?.length > 3 && (
                           <div
                             className="btn_see_more"
-                            onClick={() => setToggleSeeMore(true)}
-                          >
+                            onClick={() => setToggleSeeMore(true)}>
                             Xem thêm <DownOutlined className="icon" />
                           </div>
                         )}
@@ -693,11 +629,6 @@ const Index = () => {
                 </Col>
               </Row>
             )}
-            <Row>
-              <Col lg={16} md={24}>
-                <CommentRating data={studioDetail} className="mb-43" />
-              </Col>
-            </Row>
             {listStudioSimilar.length > 0 ? (
               <SlideCard
                 data={listStudioSimilar}
@@ -715,8 +646,7 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -724,8 +654,7 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>

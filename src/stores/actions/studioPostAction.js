@@ -46,7 +46,18 @@ export const getFilterStudioPost =
       if (user !== null) {
         dispatch(getAllStudioLikedAction1(filter.category));
       }
-      navigate(`/home/filter?${queryString.stringify(filter)}`);
+      console.log(filter);
+      navigate(
+        `/home/filter?${queryString.stringify(
+          Object.keys(filter).reduce(
+            (newFilter, key) =>
+              filter[key] === ""
+                ? { ...newFilter }
+                : { ...newFilter, [key]: filter[key] },
+            {}
+          )
+        )}`
+      );
     } catch (error) {
       console.error(error);
     }

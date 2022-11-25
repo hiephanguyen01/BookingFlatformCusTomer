@@ -24,6 +24,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 const { Option } = Select;
 const categories = [
   {
+    id: "",
+    value: "",
+    name: "Tất cả",
+  },
+  {
     id: 1,
     value: "studio",
     name: "Studio",
@@ -58,7 +63,6 @@ const FilterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const ref = useRef(null);
-  console.log(ref, ref?.current?.offsetTop);
   const querySearch = queryString.parse(location?.search);
 
   const dispatch = useDispatch();
@@ -66,6 +70,7 @@ const FilterPage = () => {
   const { filter, loading, pagination, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const [provinces, setProvinces] = useState([]);
   useEffect(() => {
     (async () => {
@@ -74,12 +79,11 @@ const FilterPage = () => {
     })();
     initState();
   }, []);
-
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
         keyString: querySearch?.keyString || "",
-        category: Number(querySearch?.category),
+        category: Number(querySearch?.category) || "",
         priceOption: Number(querySearch?.priceOption),
         price1: undefined,
         price2: undefined,
@@ -105,7 +109,7 @@ const FilterPage = () => {
         5,
         1,
         { ...filter, category: e.target.value },
-        {},
+        currentUser,
         navigate
       )
     );
@@ -116,7 +120,7 @@ const FilterPage = () => {
         5,
         1,
         { ...filter, provinceIds: [value] },
-        {},
+        currentUser,
         navigate
       )
     );
@@ -127,7 +131,7 @@ const FilterPage = () => {
         5,
         1,
         { ...filter, keyString: e.target.value },
-        {},
+        currentUser,
         navigate
       )
     );
@@ -138,7 +142,7 @@ const FilterPage = () => {
         5,
         1,
         { ...filter, priceOption: e.target.value },
-        {},
+        currentUser,
         navigate
       )
     );
@@ -162,7 +166,7 @@ const FilterPage = () => {
   };
   const onChangePage = (value) => {
     dispatch(getFilterStudioPost(5, value, filter), {}, navigate);
-    window.scrollTo({ behavior: "smooth", top: ref.current.offsetTop });
+    window.scrollTo({ behavior: "smooth", top: ref?.current?.offsetTop });
   };
   const handleClearFilter = () => {
     dispatch(
@@ -171,17 +175,12 @@ const FilterPage = () => {
         1,
         {
           keyString: "",
-          // OrderByTime: -1,
-          // OrderByTimeFrom: convertDateSendToDB(new Date()),
-          // OrderByTimeTo: convertDateSendToDB(new Date()),
-          // OrderByDateFrom: convertDateSendToDB(new Date()),
-          // OrderByDateTo: convertDateSendToDB(new Date()),
-          category: 1,
+          category: "",
           priceOption: 1,
           price1: undefined,
           price2: undefined,
           provinceIds: [],
-          ratingOption: 1,
+          ratingOption: 3,
         },
         {},
         navigate
@@ -279,7 +278,10 @@ const FilterPage = () => {
                 <Divider />
                 <Form.Item label="Giá" name="price">
                   <div className="filter_price_container">
-                    <Radio.Group onChange={onChangePriceOption}>
+                    <Radio.Group
+                      onChange={onChangePriceOption}
+                      value={filter.priceOption}
+                    >
                       <Row>
                         <Col span={24}>
                           <Radio value={2}>Giá cao nhất</Radio>
@@ -310,7 +312,10 @@ const FilterPage = () => {
                 <p className="text">Đánh giá</p>
                 <Form.Item name="ratingOption">
                   <div className="filter_rating_container">
-                    <Radio.Group onChange={onChangeRateOption}>
+                    <Radio.Group
+                      onChange={onChangeRateOption}
+                      value={filter.ratingOption}
+                    >
                       <Row>
                         <Col span={24}>
                           <Radio value={1}>Đánh giá nhiều nhất</Radio>

@@ -6,17 +6,18 @@ import {
 import {
   Avatar,
   Button,
+  Col,
   Dropdown,
   Form,
   Input,
   Menu,
   Modal,
+  Row,
   Select,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import queryString from "query-string";
 import DaoIcon from "../../assets/header/DaoIcon.svg";
 import Logo from "../../assets/header/Logo.svg";
 import { ReactComponent as SearchIcon } from "../../assets/header/SearchIcon.svg";
@@ -25,7 +26,6 @@ import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { convertImage } from "../../utils/convertImage";
-import { ImageDetect } from "../ImageDetect/ImageDetect";
 import SearchButton from "../layouts/SearchButton";
 import "./Header.scss";
 import toastMessage from "../ToastMessage";
@@ -38,6 +38,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const categories = [
+    {
+      id: "",
+      name: "Tất cả",
+    },
     {
       id: 1,
       name: "Studio",
@@ -80,8 +84,7 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}
-              >
+                style={{ borderRadius: "5px" }}>
                 Đăng nhập
               </Button>
             </Link>
@@ -119,8 +122,7 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}
-            >
+              onClick={() => navigate("/home/user/")}>
               Thông tin tài khoản
             </Button>
           ),
@@ -133,8 +135,7 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}
-            >
+              onClick={() => handleSignOut()}>
               Đăng xuất
             </Button>
           ),
@@ -163,10 +164,11 @@ const Header = () => {
   const onFinish = (values) => {
     const newFilter = {
       ...filter,
-      category: values.category || 1,
+      category: values.category || "",
       provinceIds: values?.province ? [values.province] : [],
       keyString: values.keyString,
-      priceOption: values.price,
+      priceOption: values.price || 1,
+      ratingOption: 3,
     };
     dispatch(getFilterStudioPost(5, 1, newFilter, user, navigate));
     setVisible(false);
@@ -188,8 +190,7 @@ const Header = () => {
         className="search-modal"
         width={"700px"}
         visible={visible}
-        footer={[]}
-      >
+        footer={[]}>
         <div className="logo">
           <img src={Logo} alt="" />
         </div>
@@ -201,16 +202,14 @@ const Header = () => {
           <div className="option d-flex justify-content-between">
             <Form.Item
               name="province"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select
                 defaultValue=""
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                   option.children.toLowerCase().includes(input.toLowerCase())
-                }
-              >
+                }>
                 <Option value="">Địa điểm</Option>
                 {Boolean(provinces) &&
                   provinces.map((val) => (
@@ -222,8 +221,7 @@ const Header = () => {
             </Form.Item>
             <Form.Item
               name="category"
-              style={{ width: "100%", marginRight: "20px" }}
-            >
+              style={{ width: "100%", marginRight: "20px" }}>
               <Select defaultValue="">
                 <Option value="">Danh mục</Option>
                 {categories.map((val) => (
@@ -250,96 +248,127 @@ const Header = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              style={{ width: "50%" }}
-            >
+              style={{ width: "50%" }}>
               Tìm kiếm
             </Button>
           </Form.Item>
         </Form>
       </Modal>
       <div className="container">
-        <Link to="/home" className="link">
-          <div className="img">
-            <img src={Logo} alt="" />
-          </div>
-        </Link>
-
-        <Input
-          className="container__input "
-          placeholder="Bạn đang tìm gì?"
-          prefix={<SearchIcon />}
-          suffix={<SearchButton />}
-          onClick={() => setVisible(true)}
-        />
-        <div className="container__right">
-          <div className="tip" onClick={() => navigate("/home/dao")}>
-            <img src={DaoIcon} alt="" />
-            <p>Dạo</p>
-          </div>
-          <Link
-            to={"#"}
-            className="tip"
-            onClick={() =>
-              toastMessage("Chức năng này đang phát triển!", "info", 1, "", {})
-            }
-          >
-            <ShoppingOutlined style={{ fontSize: "20px", color: "#828282" }} />
-            <p style={{ color: "#828282" }}>Giỏ hàng</p>
-          </Link>
-          {user ? (
-            <div className="wrapper-user">
-              <Dropdown overlay={menuSignOut} placement="topRight" arrow>
-                <div className="user">
-                  <Avatar src={user.Image ? img : noBody} />
-                  <div className="text">
-                    <p>Tài khoản</p>
-                    <p>
-                      {user?.Fullname ? user.Fullname : user.Email}
-                      <DownOutlined
-                        style={{
-                          fontSize: "10px",
-                          color: "#828282",
-                          marginLeft: "3px",
-                        }}
-                      />
-                    </p>
+        <Row>
+          <Col
+            lg={4}
+            md={5}
+            sm={24}
+            xs={24}
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}>
+            <Link to="/home" className="link">
+              <div className="img">
+                <img src={Logo} alt="" />
+              </div>
+            </Link>
+          </Col>
+          <Col
+            lg={12}
+            md={9}
+            sm={24}
+            xs={24}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+            <Input
+              className="container__input"
+              placeholder="Bạn đang tìm gì?"
+              prefix={<SearchIcon />}
+              suffix={<SearchButton />}
+              onClick={() => setVisible(true)}
+            />
+          </Col>
+          <Col lg={8} md={10} sm={24} xs={24}>
+            <div className="container__right">
+              <div className="tip" onClick={() => navigate("/home/dao")}>
+                <img src={DaoIcon} alt="" />
+                <p>Dạo</p>
+              </div>
+              <Link
+                to={"#"}
+                className="tip"
+                onClick={() =>
+                  toastMessage(
+                    "Chức năng này đang phát triển!",
+                    "info",
+                    1,
+                    "",
+                    {}
+                  )
+                }>
+                <ShoppingOutlined
+                  style={{ fontSize: "20px", color: "#828282" }}
+                />
+                <p style={{ color: "#828282" }}>Giỏ hàng</p>
+              </Link>
+              {user ? (
+                <div className="wrapper-user">
+                  <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+                    <div className="user">
+                      <Avatar src={user.Image ? img : noBody} />
+                      <div className="text">
+                        <p>Tài khoản</p>
+                        <p>
+                          {user?.Fullname ? user.Fullname : user.Email}
+                          <DownOutlined
+                            style={{
+                              fontSize: "10px",
+                              color: "#828282",
+                              marginLeft: "3px",
+                            }}
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </Dropdown>
+                  <div
+                    // type="secondary"
+                    className="btn-become-partner w-80 ms-30 mt-5 d-select"
+                    // onClick={() => navigate("/home/user/")}
+                  >
+                    Trở thành đối tác
                   </div>
                 </div>
-              </Dropdown>
-              <div
-                // type="secondary"
-                className="btn-become-partner w-80 ms-30 mt-5 d-select"
-                // onClick={() => navigate("/home/user/")}
-              >
-                Trở thành đối tác
-              </div>
-            </div>
-          ) : (
-            <div className="wrapper-user">
-              <Dropdown overlay={menuSignIn} placement="topRight" arrow>
-                <div className="user">
-                  <Avatar src={noBody} />
-                  <div className="text">
-                    {!user && <p>Đăng ký/Đăng nhập</p>}
-                    <p>
-                      {user ? user.Fullname : "Tài khoản"}
-                      <DownOutlined
-                        style={{ fontSize: "10px", color: "#828282" }}
-                      />
-                    </p>
+              ) : (
+                <div className="wrapper-user">
+                  <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+                    <div className="user">
+                      <Avatar src={noBody} />
+                      <div className="text">
+                        {!user && <p>Đăng ký/Đăng nhập</p>}
+                        <p>
+                          {user ? user.Fullname : "Tài khoản"}
+                          <DownOutlined
+                            style={{ fontSize: "10px", color: "#828282" }}
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </Dropdown>
+                  <div
+                    // type="secondary"
+                    className="btn-become-partner w-80 ms-30 mt-5 d-select"
+                    // onClick={() => navigate("/home/user/")}
+                  >
+                    Trở thành đối tác
                   </div>
                 </div>
-              </Dropdown>
-              <div
-                // type="secondary"
-                className="btn-become-partner w-80 ms-30 mt-5 d-select"
-                // onClick={() => navigate("/home/user/")}
-              >
-                Trở thành đối tác
-              </div>
+              )}
             </div>
-          )}
-        </div>
+          </Col>
+        </Row>
       </div>
     </div>
   );

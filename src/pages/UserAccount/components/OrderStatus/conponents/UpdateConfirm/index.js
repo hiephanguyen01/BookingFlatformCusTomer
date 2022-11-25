@@ -34,8 +34,7 @@ const UpdateConfirm = () => {
   return (
     <div
       className="py-12"
-      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
-    >
+      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}>
       <div className="confirm_order_container">
         <div className="border_bottom">
           <div className="confirm_title">MINH CHỨNG ĐÃ THANH TOÁN TIỀN CỌC</div>
@@ -53,8 +52,7 @@ const UpdateConfirm = () => {
             <div
               onClick={handleCopyToClipboard}
               className="text-medium-re"
-              style={{ color: "#03AC84", cursor: "pointer" }}
-            >
+              style={{ color: "#03AC84", cursor: "pointer" }}>
               SAO CHÉP
             </div>
           </div>
@@ -72,8 +70,7 @@ const UpdateConfirm = () => {
           <div className="d-flex justify-content-between mb-18">
             <div
               className=" text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Số tài khoản:
             </div>
             <div
@@ -82,16 +79,14 @@ const UpdateConfirm = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               68000888
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Ngân hàng:
             </div>
             <div
@@ -100,16 +95,14 @@ const UpdateConfirm = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Tên thụ hưởng:
             </div>
             <div
@@ -118,16 +111,14 @@ const UpdateConfirm = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               Công ty cổ phần Công nghệ và Đầu tư VNPLUS
             </div>
           </div>
           <div className="d-flex justify-content-between">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
+              style={{ color: "#616161" }}>
               Nội dung chuyển khoản:
             </div>
             <div
@@ -136,8 +127,7 @@ const UpdateConfirm = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
+              }}>
               [Mã Booking của bạn]
             </div>
           </div>
@@ -156,15 +146,13 @@ const UpdateConfirm = () => {
                 <UploadImage
                   onChangeFile={onChangeFile}
                   multiple={true}
-                  image={file.length ? file[0].preview : undefined}
-                >
+                  image={file.length ? file[0].preview : undefined}>
                   <div className="btn_upload">Tải ảnh lên</div>
                 </UploadImage>
               </div>
               <div
                 className="btn_update text-medium-se mb-30 "
-                onClick={() => handleProve()}
-              >
+                onClick={() => handleProve()}>
                 Cập nhật minh chứng
               </div>
             </>

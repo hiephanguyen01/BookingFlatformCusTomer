@@ -52,12 +52,9 @@ const PostDetail = () => {
     useSelector((state) => state.postDaoReducer);
 
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  // const [mouseOverHeart, setMouseOverHeart] = useState(false);
-  // const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
-  // const [commentsClick, setCommentsClick] = useState(false);
 
   const [post, setPost] = useState({ ...postDetail });
   const [comments, setComments] = useState([]);
@@ -258,7 +255,11 @@ const PostDetail = () => {
         }
       />
       <Row>
-        <Col span={16} style={{ backgroundColor: "#1D2226", height: "100%" }}>
+        <Col
+          lg={16}
+          md={12}
+          sm={24}
+          style={{ backgroundColor: "#1D2226", height: "100%" }}>
           <Swiper
             slidesPerView={1}
             spaceBetween={30}
@@ -268,13 +269,11 @@ const PostDetail = () => {
             // }}
             navigation={true}
             modules={[Pagination, Navigation]}
-            className="swiperPostDetail"
-          >
+            className="swiperPostDetail">
             {post?.Image?.map((img, index) => (
               <SwiperSlide
                 key={index}
-                style={{ background: "#1D2226", padding: "90px 0" }}
-              >
+                style={{ background: "#1D2226", padding: "90px 0" }}>
                 <img
                   src={convertImage(img)}
                   className="w-100 h-100"
@@ -285,7 +284,7 @@ const PostDetail = () => {
             ))}
           </Swiper>
         </Col>
-        <Col span={8} className="px-23 py-30 col-right">
+        <Col lg={8} md={12} sm={24} className="px-23 py-30 col-right">
           <header className="post_detail_info d-flex justify-content-between align-posts-center">
             <div className="d-flex justify-content-between align-items-center">
               <img
@@ -317,8 +316,7 @@ const PostDetail = () => {
                               );
                               handleMoreOptionClick(itm);
                             }}
-                            key={idx}
-                          >
+                            key={idx}>
                             <div className="container d-flex">
                               <div>{itm.icon}</div>
                               <p>{itm.title}</p>
@@ -335,8 +333,7 @@ const PostDetail = () => {
                                 ) ? (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}
-                                  >
+                                    key={idx}>
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>Tắt thông báo về bài viết này</p>
@@ -345,8 +342,7 @@ const PostDetail = () => {
                                 ) : (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}
-                                  >
+                                    key={idx}>
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>{itm.title}</p>
@@ -357,8 +353,7 @@ const PostDetail = () => {
                             ) : (
                               <li
                                 onClick={() => handleMoreOptionClick(itm)}
-                                key={idx}
-                              >
+                                key={idx}>
                                 <div className="container d-flex">
                                   <div>{itm.icon}</div>
                                   <p>{itm.title}</p>
@@ -375,8 +370,7 @@ const PostDetail = () => {
                 visible={isModalOptionDetail}
                 onVisibleChange={(newVisible) =>
                   setIsModalOptionDetail(newVisible)
-                }
-              >
+                }>
                 <MoreOutlined style={{ fontSize: "24px" }} />
               </Popover>
               <ReportPost
@@ -396,8 +390,7 @@ const PostDetail = () => {
           </div>
           <div
             className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-            style={{ borderBottom: "1px solid #E7E7E7" }}
-          >
+            style={{ borderBottom: "1px solid #E7E7E7" }}>
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn onClick={(e) => {}}>
                 {post?.Loves?.some(
@@ -454,16 +447,14 @@ const PostDetail = () => {
                         className={
                           chooseCommentDefault.id === item.id && "active"
                         }
-                        onClick={() => handleAddComment(item)}
-                      >
+                        onClick={() => handleAddComment(item)}>
                         {item.Content}
                       </li>
                     ))}
                   </ul>
                   <div
                     className="post_detail_choose_service d-flex justify-content-center align-items-center"
-                    onClick={handleShowModalChooseService}
-                  >
+                    onClick={handleShowModalChooseService}>
                     <PlusOutlined
                       style={{ color: "#03AC84", fontSize: "14px" }}
                     />
@@ -514,8 +505,7 @@ const PostDetail = () => {
                       marginLeft: "40px",
                       marginTop: "15px",
                     }}
-                    className="post__comments__detail__content"
-                  >
+                    className="post__comments__detail__content">
                     {comment.Content}
                   </div>
                 )}
@@ -524,8 +514,7 @@ const PostDetail = () => {
                 )}
                 <div
                   className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-                  style={{ borderBottom: "1px solid #E7E7E7" }}
-                >
+                  style={{ borderBottom: "1px solid #E7E7E7" }}>
                   <div className="post__main__content__like-comment__likes d-flex">
                     <PopUpSignIn onClick={(e) => {}}>
                       {comment?.Likes?.some(

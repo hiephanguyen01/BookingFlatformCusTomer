@@ -29,7 +29,7 @@
 
         &__right-side {
           &__locate {
-            margin: 12px 0 12px 0;
+            margin: 5px 0 5px 0;
 
             svg {
               margin-right: 7px;
@@ -56,6 +56,8 @@
           }
 
           &__rating {
+            margin-bottom: 15px;
+
             .has-booked {
               padding-left: 10px;
 
