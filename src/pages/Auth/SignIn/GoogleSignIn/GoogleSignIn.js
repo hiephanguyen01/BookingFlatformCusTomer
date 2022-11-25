@@ -11,7 +11,13 @@ export const GoogleSignIn = () => {
     dispatch(googleSignIn(navigate));
   };
   return (
-    <button className="google-button" onClick={() => handleGoogleSignIn()}>
+    <button
+      className="google-button"
+      onClick={(e) => {
+        e.stopPropagation();
+        handleGoogleSignIn();
+      }}
+    >
       <img alt="google" src={ggLogo} className="gg-logo"></img>
       Tiếp tục với Google
     </button>

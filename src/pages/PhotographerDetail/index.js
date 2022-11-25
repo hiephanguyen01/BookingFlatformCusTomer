@@ -311,9 +311,10 @@ const PhotographerDetail = () => {
   //   }
   // };
   const handleChangeLike = (e) => {
-    e.stopPropagation();
-    if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    // e.stopPropagation();
+    if (currentUser) {
+      dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    }
   };
   const handleReport = () => {
     dispatch({

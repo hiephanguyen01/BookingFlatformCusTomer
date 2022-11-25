@@ -26,7 +26,17 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
   return (
     <div className="PopUpSignIn">
       <span
-        onClick={user ? () => onClick() : () => setVisible(true)}
+        onClick={
+          user
+            ? (e) => {
+                e.stopPropagation();
+                onClick(e);
+              }
+            : (e) => {
+                e.stopPropagation();
+                setVisible(true);
+              }
+        }
         className={className ? className : "pop-up-sign-in-button"}
         style={style}
       >
@@ -41,37 +51,65 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
             <Modal
               centered
               visible={visible}
-              onOk={() => setVisible(false)}
-              onCancel={() => setVisible(false)}
+              onOk={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
+              onCancel={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
               footer={false}
               width={400}
             >
-              <SignIn onClickPop={(e) => setPage(e)}></SignIn>
+              <SignIn
+                onClickPop={(e) => {
+                  setPage(e);
+                }}
+              ></SignIn>
             </Modal>
           ) : page === 2 ? (
             <Modal
               centered
               visible={visible}
-              onOk={() => setVisible(false)}
-              onCancel={() => setVisible(false)}
+              onOk={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
+              onCancel={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
               footer={false}
               width={400}
             >
-              <ForgotPassword onClickPop={(e) => setPage(e)} />
+              <ForgotPassword
+                onClickPop={(e) => {
+                  setPage(e);
+                }}
+              />
             </Modal>
           ) : page === 3 ? (
             <Modal
               centered
               visible={visible}
-              onOk={() => setVisible(false)}
-              onCancel={() => setVisible(false)}
+              onOk={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
+              onCancel={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
               footer={false}
               width={400}
             >
               <SignUpWithPhone
                 backLink=""
                 nextLink=""
-                onClickPop={(e) => setPage(e)}
+                onClickPop={(e) => {
+                  setPage(e);
+                }}
               ></SignUpWithPhone>
             </Modal>
           ) : page === 4 ? (
@@ -97,26 +135,44 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
             <Modal
               centered
               visible={visible}
-              onOk={() => setVisible(false)}
-              onCancel={() => setVisible(false)}
+              onOk={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
+              onCancel={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
               footer={false}
               width={400}
             >
-              <SignUp onClickSignUp={(e) => setPage(e)}></SignUp>
+              <SignUp
+                onClickSignUp={(e) => {
+                  setPage(e);
+                }}
+              ></SignUp>
             </Modal>
           ) : page === 6 ? (
             <Modal
               centered
               visible={visible}
-              onOk={() => setVisible(false)}
-              onCancel={() => setVisible(false)}
+              onOk={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
+              onCancel={(e) => {
+                e.stopPropagation();
+                setVisible(false);
+              }}
               footer={false}
               width={400}
             >
               <SignUpWithPhone
                 backLink=""
                 nextLink=""
-                onClickSignUp={(e) => setPage(e)}
+                onClickSignUp={(e) => {
+                  setPage(e);
+                }}
               ></SignUpWithPhone>
             </Modal>
           ) : page === 7 ? (

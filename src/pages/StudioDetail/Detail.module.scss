@@ -59,6 +59,7 @@
         align-items: center;
         justify-content: flex-start;
         gap: 10px;
+        margin-bottom: 15px;
 
         span {
             font-size: 15px;
@@ -136,16 +137,16 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    margin: 11px 0;
+    margin: 5px 0;
 
     img {
-        width: 10px;
-        height: 10px;
+        width: 14px;
+        height: 14px;
         object-fit: contain;
     }
 
     span {
-        font-size: 14px;
+        font-size: 18px;
         color: #828282;
     }
 }

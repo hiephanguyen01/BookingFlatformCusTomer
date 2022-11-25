@@ -100,8 +100,9 @@ const Index = () => {
   // }, [studioDetail]);
 
   const handleChangeLike = (e) => {
-    if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    if (currentUser) {
+      dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    }
   };
 
   const ROW = (dataSource = []) => {
@@ -439,7 +440,7 @@ const Index = () => {
                 />
                 {studioDetail?.data?.Address}
               </div>
-              <div className="d-flex align-items-center mb-20">
+              <div className="d-flex align-items-center mb-15">
                 <Rate
                   disabled
                   allowHalf

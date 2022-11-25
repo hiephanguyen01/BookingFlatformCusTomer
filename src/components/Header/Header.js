@@ -37,6 +37,10 @@ const Header = () => {
   const navigate = useNavigate();
   const categories = [
     {
+      id: "",
+      name: "Tất cả",
+    },
+    {
       id: 1,
       name: "Studio",
     },
@@ -161,10 +165,11 @@ const Header = () => {
   const onFinish = (values) => {
     const newFilter = {
       ...filter,
-      category: values.category || 1,
+      category: values.category || "",
       provinceIds: values?.province ? [values.province] : [],
       keyString: values.keyString,
-      priceOption: values.price,
+      priceOption: values.price || 1,
+      ratingOption: 3,
     };
     dispatch(getFilterStudioPost(5, 1, newFilter, user, navigate));
     setVisible(false);

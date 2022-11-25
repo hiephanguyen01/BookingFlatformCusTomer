@@ -20,10 +20,21 @@ export const SignIn = ({ onClickPop }) => {
     dispatch(LoginWithPhoneNumber(values, navigate));
   };
   return (
-    <div className="SignIn">
+    <div
+      className="SignIn"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <div style={{ marginBottom: "52px" }}>
         {onClickPop ? (
-          <button className="sign-up-button" onClick={() => onClickPop(5)}>
+          <button
+            className="sign-up-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickPop(5);
+            }}
+          >
             Đăng ký
           </button>
         ) : (
@@ -69,7 +80,13 @@ export const SignIn = ({ onClickPop }) => {
 
         <div className="d-flex justify-content-end">
           {onClickPop ? (
-            <button className="forgot-password" onClick={() => onClickPop(2)}>
+            <button
+              className="forgot-password"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClickPop(2);
+              }}
+            >
               Quên mật khẩu
             </button>
           ) : (
@@ -97,7 +114,10 @@ export const SignIn = ({ onClickPop }) => {
         {onClickPop ? (
           <span
             className="dont-have-account-button"
-            onClick={() => onClickPop(5)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickPop(5);
+            }}
           >
             Đăng ký
           </span>
