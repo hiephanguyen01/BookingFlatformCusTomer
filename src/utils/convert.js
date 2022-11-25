@@ -69,3 +69,6 @@ export const dateStructure = (date) => {
     date?.getDate() + "/" + (date?.getMonth() + 1) + "/" + date?.getFullYear()
   );
 };
+export const addLinebreaks = (anyString) => {
+  return anyString.replaceAll("\n", "<br />\r\n");
+};

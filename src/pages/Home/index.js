@@ -226,8 +226,7 @@ export const Home = () => {
               className={cx("box")}
               onClick={() => {
                 handleClickCategory(item.id);
-              }}
-            >
+              }}>
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>

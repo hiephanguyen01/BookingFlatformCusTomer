@@ -33,6 +33,7 @@ import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import "./clothesDetails.scss";
+import styles from "./Detail.module.scss";
 
 import {
   SET_PROMOTION_CODE,
@@ -41,7 +42,11 @@ import {
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { Report } from "../StudioDetail/Report";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
+import ReactStickyBox from "react-sticky-box";
+import images from "../../assets/images";
+import classNames from "classnames/bind";
 
+const cx = classNames.bind(styles);
 const SIZE = [
   { id: "S", label: "S" },
   { id: "M", label: "M" },
@@ -117,6 +122,9 @@ const Index = () => {
       // clearTimeout(timeOut);
     };
   }, [dispatch]);
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  }, [id]);
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -183,8 +191,7 @@ const Index = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 {data.Name}
               </div>
               <div
@@ -193,8 +200,7 @@ const Index = () => {
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}
-              >
+                }}>
                 {data.Description}
               </div>
             </div>
@@ -210,8 +216,7 @@ const Index = () => {
                     className=""
                     style={{
                       minWidth: "30%",
-                    }}
-                  >
+                    }}>
                     Size
                   </div>
                   <Select
@@ -219,8 +224,7 @@ const Index = () => {
                     style={{
                       width: "30%",
                     }}
-                    onChange={handleChange}
-                  >
+                    onChange={handleChange}>
                     {SIZE.map((item) => (
                       <Option value={item.id}>{item.label}</Option>
                     ))}
@@ -231,8 +235,7 @@ const Index = () => {
                     className=""
                     style={{
                       minWidth: "30%",
-                    }}
-                  >
+                    }}>
                     Màu sắc
                   </div>
                   <Select
@@ -240,8 +243,7 @@ const Index = () => {
                     style={{
                       width: "30%",
                     }}
-                    onChange={handleChange}
-                  >
+                    onChange={handleChange}>
                     {COLOR.map((item) => (
                       <Option value={item.id}>{item.label}</Option>
                     ))}
@@ -252,8 +254,7 @@ const Index = () => {
                     className=""
                     style={{
                       minWidth: "30%",
-                    }}
-                  >
+                    }}>
                     Số lượng
                   </div>
                   <Select
@@ -261,8 +262,7 @@ const Index = () => {
                     style={{
                       width: "30%",
                     }}
-                    onChange={handleChange}
-                  >
+                    onChange={handleChange}>
                     {QUANTITY.map((item) => (
                       <Option value={item.id}>{item.label}</Option>
                     ))}
@@ -273,8 +273,7 @@ const Index = () => {
                     className="mb-10"
                     style={{
                       fontWeight: "bolder",
-                    }}
-                  >
+                    }}>
                     Khung giờ bạn muốn đặt
                   </div>
                   <SelectTimeOptionService service={data} />
@@ -295,15 +294,13 @@ const Index = () => {
                       gap: "5px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}
-                  >
+                    }}>
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -321,8 +318,7 @@ const Index = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -340,8 +336,7 @@ const Index = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {data.PriceNote}
                   </p>
                   {/* <button
@@ -375,8 +370,7 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Bỏ chọn
                   </div>
                 ) : (
@@ -396,8 +390,7 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Chọn
                   </div>
                 )}
@@ -437,8 +430,7 @@ const Index = () => {
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}
-              >
+                style={{ marginBottom: "11px" }}>
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -447,8 +439,7 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}
-                  >
+                    }}>
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{
@@ -492,27 +483,23 @@ const Index = () => {
                           flexDirection: "column",
                           gap: "10px",
                           padding: "10px",
-                        }}
-                      >
+                        }}>
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
                             cursor: "pointer",
-                          }}
-                        >
+                          }}>
                           <WarningOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Báo cáo
                           </span>
                         </div>
                       </div>
                     }
-                    trigger="click"
-                  >
+                    trigger="click">
                     <MoreOutlined
                       style={{
                         fontSize: "25px",
@@ -544,110 +531,63 @@ const Index = () => {
               </div>
               <ImagePost data={studioDetail?.data?.Image} />
             </div>
-            <div className="wrapper_description">
-              <Row style={{ height: "100%" }}>
-                <Col
-                  lg={16}
-                  sm={24}
-                  style={{ paddingRight: "0.25rem", height: "100%" }}
-                  className="mb-12"
-                >
-                  <div className="desc_col_left">
-                    <ReadMoreDesc title="Chi tiết sản phẩm">
-                      {studioDetail?.data?.Description}
-                    </ReadMoreDesc>
-                  </div>
-                </Col>
-                {studioDetail?.shop !== null && (
-                  <Col
-                    lg={8}
-                    sm={24}
-                    style={{ paddingLeft: "0.25rem", height: "100%" }}
-                    className="mb-12"
-                  >
-                    <div className="desc_col_right">
-                      <div className="d-flex mb-25" style={{}}>
-                        <img
-                          src={`${
-                            imgPost.includes("https://drive.google.com/")
-                              ? imgPost
-                              : REACT_APP_DB_BASE_URL_IMG + "/" + imgPost
-                          }`}
-                          className="avatar"
-                          alt=""
-                        />
-                        <div className="">
-                          <div className="desc_col_right_title">
-                            {studioDetail?.shop?.Name}
-                            <CheckCircleOutlined className="icon_check_circle" />
-                          </div>
-                          <div className="text-medium-re">
-                            <img
-                              src={svgLocation}
-                              style={{ marginRight: "6px" }}
-                              alt=""
-                            />
-                            {studioDetail?.shop?.Address}
-                          </div>
-                        </div>
-                      </div>
-                      <Button className="btn_see">
-                        <Link to="shop">Xem shop</Link>
-                        {/* <iframe
-                    style={{ width: "100%", height: "100%", border: "0" }}
-                    src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                  ></iframe> */}
-                      </Button>
-                    </div>
-                  </Col>
-                )}
-              </Row>
-            </div>
-            <Row className="mb-12">
-              <Col lg={16} sm={24} style={{ paddingRight: "0.25rem" }}>
-                <div
-                  className="py-26 px-18"
-                  style={{
-                    backgroundColor: "#ffffff",
-                  }}
-                >
+            <div className={cx("box2")}>
+              <div className={cx("left")}>
+                <div className={cx("description")}>
+                  <ReadMoreDesc title="Chi tiết sản phẩm">
+                    {studioDetail?.data?.Description}
+                  </ReadMoreDesc>
+                </div>
+                <div className={cx("sale")}>
                   <PromotionList data={filter_promo} />
                 </div>
-              </Col>
-            </Row>
-            <div className="w-100 mb-12 wrapper_list_costume">
-              <Row>
-                <Col
-                  lg={16}
-                  sm={24}
-                  style={{ paddingRight: "0.25rem" }}
-                  className="col_left"
-                >
-                  <div
-                    className=" py-22 mb-12 h-100"
-                    style={{
-                      backgroundColor: "#ffffff",
-                    }}
-                  >
-                    <div className=" px-24">
-                      <Link to="#" className="choose_size text-medium-se ">
-                        Hướng dẫn chọn size{" "}
-                        <RightOutlined style={{ color: "#1FCBA2" }} />
-                      </Link>
+
+                <Table column={COLUMN} row={ROW(studioDetail?.service)} />
+
+                <div className={cx("rating")}>
+                  <CommentRating data={studioDetail} className="mb-43 mt-12" />
+                </div>
+              </div>
+              <div className={cx("right")}>
+                <div className={cx("desc_col_right")}>
+                  <div className="d-flex mb-30">
+                    <img src={imgPost} className={cx("avatar")} alt="" />
+                    <div>
+                      <div className={cx("desc_col_right_title")}>
+                        {studioDetail?.shop?.Name}
+                        <CheckCircleOutlined
+                          className={cx("icon_check_circle")}
+                        />
+                      </div>
+                      <div
+                        className={cx("text-medium-re")}
+                        style={{ marginBottom: "15px" }}>
+                        <img
+                          src={svgLocation}
+                          style={{ marginRight: "6px" }}
+                          alt=""
+                        />
+                        {studioDetail?.shop?.Address}
+                      </div>
                     </div>
-                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
-                </Col>
-                <Col lg={8} sm={24} style={{ paddingLeft: "0.25rem" }}>
+                  <Button className={cx("btn_see")}>
+                    <Link to="shop">Xem shop</Link>
+                    {/* <iframe
+                      style={{ width: "100%", height: "100%", border: "0" }}
+                      src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe> */}
+                  </Button>
+                </div>
+                <ReactStickyBox offsetTop={20} offsetBottom={20}>
                   <div
                     style={{
                       padding: "24px 26px",
                       backgroundColor: "#ffffff",
                       // height: "100%",
-                    }}
-                  >
+                    }}>
                     <div className="d-flex justify-content-between mb-12">
                       <div
                         className=""
@@ -657,8 +597,7 @@ const Index = () => {
                           lineHeight: "25px",
                           /* Neutral/Grey 700 */
                           color: "#222222",
-                        }}
-                      >
+                        }}>
                         Đã chọn {chooseService.length} sản phẩm
                       </div>
                       {chooseService.length > 0 && (
@@ -670,8 +609,7 @@ const Index = () => {
                             textDecorationLine: "line-through",
                             /* Neutral/Grey 400 */
                             color: "#828282",
-                          }}
-                        >
+                          }}>
                           {`${convertPrice(
                             chooseService?.reduce(
                               (total, item) => total + item.Price,
@@ -693,8 +631,7 @@ const Index = () => {
                           lineHeight: "27px",
                           /* Primary/Red 700 */
                           color: "#E22828",
-                        }}
-                      >
+                        }}>
                         {`${convertPrice(
                           chooseService?.reduce(
                             (total, item) => total + item.Sales,
@@ -715,23 +652,21 @@ const Index = () => {
                             "",
                             {}
                           )
-                        }
-                      >
+                        }>
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}
-                      >
+                        onClick={handleBook}>
                         Đặt ngay
                       </Button>
                     </div>
                   </div>
-                </Col>
-              </Row>
+                </ReactStickyBox>
+              </div>
             </div>
-            <CommentRating data={studioDetail} className="mb-43" />
+
             {listStudioSimilar.length > 0 ? (
               <SlideCard
                 data={listStudioSimilar}
@@ -749,8 +684,7 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -758,8 +692,7 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>

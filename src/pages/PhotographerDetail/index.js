@@ -45,13 +45,17 @@ import {
   SET_PROMOTION_CODE,
   SET_STUDIO_DETAIL,
 } from "../../stores/types/studioPostType";
+import classNames from "classnames/bind";
+import ReactStickyBox from "react-sticky-box";
+import styles from "./Detail.module.scss";
+import images from "../../assets/images";
 
 const COLUMN = [
   { title: "Dịch vụ", size: 7 },
   { title: "Chọn thời gian", size: 10 },
   { title: "Chọn dịch vụ", size: 7 },
 ];
-
+const cx = classNames.bind(styles);
 const PhotographerDetail = () => {
   const { studioDetail, listStudioSimilar, promotionCode, filterService } =
     useSelector((state) => state.studioPostReducer);
@@ -100,7 +104,9 @@ const PhotographerDetail = () => {
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
     };
   }, [dispatch]);
-
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  }, [id]);
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
@@ -121,8 +127,7 @@ const PhotographerDetail = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 {data.Name}
               </div>
               <div
@@ -131,8 +136,7 @@ const PhotographerDetail = () => {
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}
-              >
+                }}>
                 {data.Description}
               </div>
             </div>
@@ -156,15 +160,13 @@ const PhotographerDetail = () => {
                       gap: "10px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}
-                  >
+                    }}>
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -182,8 +184,7 @@ const PhotographerDetail = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -201,8 +202,7 @@ const PhotographerDetail = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {data.PriceNote}
                   </p>
                   <button
@@ -212,8 +212,7 @@ const PhotographerDetail = () => {
                       color: "#ffff",
                       border: " 1px solid #E22828",
                       borderRadius: " 8px",
-                    }}
-                  >
+                    }}>
                     Giảm 50%{" "}
                   </button>
                 </div>
@@ -236,8 +235,7 @@ const PhotographerDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Bỏ chọn
                   </div>
                 ) : (
@@ -257,8 +255,7 @@ const PhotographerDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Chọn
                   </div>
                 )}
@@ -338,8 +335,7 @@ const PhotographerDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -347,8 +343,7 @@ const PhotographerDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -359,8 +354,7 @@ const PhotographerDetail = () => {
             margin: "auto",
             backgroundColor: "rgb(245, 245, 245)",
             padding: "2rem 0",
-          }}
-        >
+          }}>
           <section className="photographer-detail">
             <div className="photographer-detail__container">
               <header className="photographer-detail__container__header">
@@ -398,8 +392,7 @@ const PhotographerDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           style={{
@@ -430,27 +423,23 @@ const PhotographerDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}
-                        >
+                          }}>
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}
-                          >
+                            }}>
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
+                              style={{ fontSize: "18px", fontWeight: "bold" }}>
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click"
-                    >
+                      trigger="click">
                       <MoreOutlined
                         style={{
                           fontSize: "25px",
@@ -463,209 +452,158 @@ const PhotographerDetail = () => {
                   <ImagePost data={studioDetail?.data?.Image} />
                 </div>
               </header>
-              <Row
-                style={{ marginRight: "0", marginLeft: "0" }}
-                gutter={[24, 24]}
-              >
-                <Col style={{ paddingLeft: "0" }} md={16}>
-                  <Row className="photographer-detail__container__description">
-                    <Col md={24}>
-                      <ReadMoreDesc title="Chi tiết sản phẩm">
-                        {studioDetail?.data?.Description}
-                      </ReadMoreDesc>
-                    </Col>
-                  </Row>
-                  <Row className="photographer-detail__container__coupon">
-                    <Col md={24}>
-                      <PromotionList data={filter_promo} />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col md={8} className="photographer-detail__container__map">
-                  <h3>Xem trên bản đồ</h3>
-                  <p>
-                    <EnvironmentOutlined
-                      style={{ fontSize: "16px", color: "#828282" }}
-                    />{" "}
-                    {studioDetail?.data?.Address}
-                  </p>
-                  <div className="mapouter mt-10">
-                    <div className="gmap_canvas">
-                      <iframe
-                        title="map"
-                        key="map"
-                        className="gmap_iframe"
-                        width="380px"
-                        height=""
-                        frameBorder={0}
-                        scrolling="no"
-                        marginHeight={0}
-                        marginWidth={0}
-                        src="https://maps.google.com/maps?width=667&height=255&hl=en&q=thi tran ha lam &t=&z=13&ie=UTF8&iwloc=B&output=embed"
-                      />
-                      <a href="https://embedmapgenerator.com/">
-                        embed google maps in website
-                      </a>
-                    </div>
-                    <style
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          ".mapouter{position:relative;text-align:right;width:100%;height:255px;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:255px;}.gmap_iframe {height:255px!important;}",
-                      }}
-                    />
+
+              <div className={cx("box2")}>
+                <div className={cx("left")}>
+                  <div className={cx("description")}>
+                    <ReadMoreDesc title="Chi tiết sản phẩm">
+                      {studioDetail?.data?.Description}
+                    </ReadMoreDesc>
                   </div>
-                </Col>
-              </Row>
-              <Row
-                style={{ marginLeft: "0", marginRight: "0" }}
-                gutter={[18, 18]}
-              >
-                <Col
-                  style={{ paddingLeft: "0" }}
-                  md={16}
-                  className="photographer-detail__container__services"
-                >
-                  <div className="h-100" style={{ backgroundColor: "#fff" }}>
-                    {/* <div className="ms-24 pt-20">
-                      <SelectTimeOption />
-                    </div> */}
+                  <div className={cx("sale")}>
+                    <PromotionList data={filter_promo} />
+                  </div>
+
+                  <div className={cx("")}>
                     <Table column={COLUMN} row={ROW(studioDetail?.service)} />
                   </div>
-                </Col>
-                <Col
-                  md={8}
-                  className="photographer-detail__container__chosen-services"
-                >
-                  <div
-                    style={{
-                      padding: " 0 15px 0 15px",
-                      backgroundColor: "#ffffff",
-                    }}
-                  >
-                    <div className="d-flex justify-content-between mb-12">
-                      <div
-                        className=""
-                        style={{
-                          fontWeight: "600",
-                          fontSize: "18px",
-                          lineHeight: "25px",
-                          color: "#222222",
-                        }}
-                      >
-                        Đã chọn {chooseService.length} dịch vụ
-                      </div>
-                      {chooseService.length > 0 && (
-                        <span
-                          style={{
-                            textDecoration: "line-through",
-                            fontSize: " 16px",
-                            color: "#828282",
-                          }}
-                        >
-                          {filterService.OrderByTime === 1 &&
-                            `${convertPrice(
-                              chooseService?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByHour *
-                                    calTime(
-                                      filterService.OrderByTimeFrom,
-                                      filterService.OrderByTimeTo
-                                    ),
-                                0
-                              )
-                            )}`}
-                          {filterService.OrderByTime === 0 &&
-                            `${convertPrice(
-                              chooseService?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByDate *
-                                    calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
-                                    ),
-                                0
-                              )
-                            )}`}
-                          đ
-                        </span>
-                      )}
+
+                  <div className={cx("rating")}>
+                    <CommentRating
+                      data={studioDetail}
+                      className="mb-43 mt-12"
+                    />
+                  </div>
+                </div>
+                <div className={cx("right")}>
+                  <div className={cx("map")}>
+                    <h3>Xem trên bản đồ</h3>
+                    <div className={cx("address")}>
+                      <img src={images.address} alt="" />
+                      <span>{studioDetail?.data?.Address}</span>
                     </div>
-                    <div className="d-flex justify-content-between mb-26">
-                      <div className="text-medium-re">
-                        Bao gồm 50.000đ thuế và phí
+                    <div className="mapouter">
+                      <div className="gmap_canvas">
+                        {/* <iframe
+                          title="map"
+                          className="gmap_iframe"
+                          width="100%"
+                          frameBorder={0}
+                          scrolling="no"
+                          marginHeight={0}
+                          marginWidth={0}
+                          // src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                        /> */}
                       </div>
-                      {chooseService.length > 0 && (
-                        <div
-                          style={{
-                            fontWeight: "700",
-                            fontSize: "20px",
-                            lineHeight: "27px",
-                            /* Primary/Red 700 */
-                            color: "#E22828",
-                          }}
-                        >
-                          {filterService.OrderByTime === 1 &&
-                            `${convertPrice(
-                              chooseService?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByHour *
-                                    calTime(
-                                      filterService.OrderByTimeFrom,
-                                      filterService.OrderByTimeTo
-                                    ),
-                                0
-                              )
-                            )}`}
-                          {filterService.OrderByTime === 0 &&
-                            `${convertPrice(
-                              chooseService?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByDate *
-                                    calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
-                                    ),
-                                0
-                              )
-                            )}`}
-                          đ
-                        </div>
-                      )}
-                    </div>
-                    <div className="w-100 d-flex justify-content-between">
-                      <Button
-                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        onClick={() =>
-                          toastMessage(
-                            "Chức năng này đang phát triển!",
-                            "info",
-                            1,
-                            "",
-                            {}
-                          )
-                        }
-                        // disabled={chooseService.length > 0 ? false : true}
-                      >
-                        <ShoppingCartOutlined />
-                        Thêm vào giỏ hàng
-                      </Button>
-                      <Button
-                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
-                        Đặt ngay
-                      </Button>
                     </div>
                   </div>
-                </Col>
-              </Row>
+                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                    <div className={cx("order")}>
+                      <div className={cx("item")}>
+                        <h3>Đã chọn {chooseService.length} phòng</h3>
+                        {chooseService.length > 0 && (
+                          <span
+                            style={{
+                              textDecoration: "line-through",
+                              fontSize: " 16px",
+                              color: "#828282",
+                            }}>
+                            {filterService.OrderByTime === 1 &&
+                              `${convertPrice(
+                                chooseService?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByHour *
+                                      calTime(
+                                        filterService.OrderByTimeFrom,
+                                        filterService.OrderByTimeTo
+                                      ),
+                                  0
+                                )
+                              )}đ`}
+                            {filterService.OrderByTime === 0 &&
+                              `${convertPrice(
+                                chooseService?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByDate *
+                                      calDate(
+                                        filterService.OrderByDateFrom,
+                                        filterService.OrderByDateTo
+                                      ),
+                                  0
+                                )
+                              )}đ`}
+                          </span>
+                        )}
+                      </div>
+                      <div className={cx("item")}>
+                        <span className="mt-3">
+                          Bao gồm 50.000đ thuế và phí{" "}
+                        </span>
+                        <span
+                          style={{
+                            color: "#E22828",
+                            fontSize: "20px",
+                            fontWeight: "700",
+                          }}>
+                          {filterService.OrderByTime === 1 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByHour *
+                                    calTime(
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}đ`}
+                          {filterService.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByDate *
+                                    calDate(
+                                      filterService.OrderByDateFrom,
+                                      filterService.OrderByDateTo
+                                    ),
+                                0
+                              )
+                            )}đ`}
+                        </span>
+                      </div>
+                      <div className="w-100 d-flex justify-content-between mt-20">
+                        <Button
+                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                          disabled={chooseService.length > 0 ? false : true}
+                          onClick={() =>
+                            toastMessage(
+                              "Chức năng này đang phát triển!",
+                              "info",
+                              1,
+                              "",
+                              {}
+                            )
+                          }>
+                          <ShoppingCartOutlined />
+                          Thêm vào giỏ hàng
+                        </Button>
+                        <Button
+                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                          onClick={handleBook}
+                          disabled={chooseService.length > 0 ? false : true}>
+                          Đặt ngay
+                        </Button>
+                      </div>
+                    </div>
+                  </ReactStickyBox>
+                </div>
+              </div>
               {studioDetail?.album?.length > 0 && (
-                <Row gutter={[18]}>
+                <Row gutter={[20]}>
                   <Col md={16}>
                     <div className="album_container">
                       <h3>Các album</h3>
@@ -685,8 +623,7 @@ const PhotographerDetail = () => {
                             ))}
                           <div
                             className="btn_see_more"
-                            onClick={() => setToggleSeeMore(true)}
-                          >
+                            onClick={() => setToggleSeeMore(true)}>
                             Xem thêm <DownOutlined className="icon" />
                           </div>
                         </>
@@ -695,11 +632,6 @@ const PhotographerDetail = () => {
                   </Col>
                 </Row>
               )}
-              <Row gutter={[18, 18]}>
-                <Col md={16}>
-                  <CommentRating data={studioDetail} className="mb-43 mt-12" />
-                </Col>
-              </Row>
               {listStudioSimilar.length > 0 ? (
                 <SlideCard
                   data={listStudioSimilar}
