@@ -12,7 +12,13 @@ export const FacebookSignin = () => {
   };
 
   return (
-    <button className="facebook-button" onClick={() => handleFacebookSignIn()}>
+    <button
+      className="facebook-button"
+      onClick={(e) => {
+        e.stopPropagation();
+        handleFacebookSignIn();
+      }}
+    >
       <img alt="facebook" src={fbLogo} className="fb-logo"></img>
       Tiếp tục với Facebook
     </button>

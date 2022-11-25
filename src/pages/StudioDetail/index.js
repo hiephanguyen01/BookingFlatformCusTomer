@@ -372,7 +372,6 @@ export const StudioDetail = () => {
   };
 
   const [chooseService, setChooseService] = useState([]);
-  console.log("chooseService", chooseService);
 
   const handleChooseService = (data) => {
     if (data.id !== serviceSelected) {
@@ -414,9 +413,9 @@ export const StudioDetail = () => {
   //   }
   // };
   const handleChangeLike = (e) => {
-    e.stopPropagation();
-    if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    if (currentUser) {
+      dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    }
   };
   return (
     <>
@@ -462,10 +461,7 @@ export const StudioDetail = () => {
                     />
                   </div>
                   <div className={cx("icons")}>
-                    <PopUpSignIn
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}>
+                    <PopUpSignIn onClick={(e) => {}}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}

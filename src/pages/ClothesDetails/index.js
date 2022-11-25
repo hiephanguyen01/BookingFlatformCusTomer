@@ -138,8 +138,10 @@ const Index = () => {
     }
   };
   const handleChangeLike = (e) => {
-    if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    // if (!currentUser) navigate("/auth/sign-in");
+    if (currentUser) {
+      dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    }
   };
 
   const handleReport = () => {
@@ -514,7 +516,7 @@ const Index = () => {
                 />
                 {studioDetail?.data?.Address}
               </div>
-              <div className="d-flex align-items-center mb-26">
+              <div className="d-flex align-items-center mb-15">
                 <Rate
                   disabled
                   allowHalf

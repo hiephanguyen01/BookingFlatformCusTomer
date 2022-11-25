@@ -1,6 +1,7 @@
 .footer {
     padding: 56px 125px 45px 125px;
     background-color: #ffff;
+
     .box-container {
         // display: flex;
         // flex-direction: row;
@@ -15,23 +16,28 @@
         font-size: 14px;
         text-align: center;
     }
+
     .box {
         display: flex;
         flex-flow: column;
+
         h5 {
             font-size: 16px;
             margin-bottom: 23px;
         }
+
         a {
             color: #3f3f3f;
             font-size: 16px;
             text-decoration: none;
             margin-bottom: 16px;
         }
+
         .app {
             margin: 0 0 57px 0;
             display: flex;
             gap: 10px;
+
             a {
                 img {
                     width: 86px;
@@ -40,14 +46,17 @@
                 }
             }
         }
+
         .bottom {
             p {
                 font-size: 16px;
                 margin-bottom: 17px;
             }
+
             .socials {
                 display: flex;
                 gap: 24px;
+
                 .social {
                     img {
                         width: 28px;
@@ -56,12 +65,14 @@
                 }
             }
         }
+
         &:nth-child(4) {
             img {
                 width: 112px;
                 height: 34px;
                 object-fit: contain;
             }
+
             h4 {
                 font-weight: 600;
                 font-size: 16px;
