@@ -60,6 +60,7 @@ const Option = ({ option, disabled, service }) => {
         );
         return dates.includes(moment(dString).format("l"));
       });
+      console.log("so gio da chon ", hl)
       setDisableHour(hl);
     }
     if (time.length > 0) {
