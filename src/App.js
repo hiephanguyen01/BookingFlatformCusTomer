@@ -33,26 +33,13 @@ import Verify from "./pages/Verify/Verify";
 function App() {
   const dispatch = useDispatch();
 
-  // const style = {
-  //   height: 40,
-  //   width: 40,
-  //   lineHeight: "40px",
-  //   borderRadius: "50%",
-  //   backgroundColor: "#E22828",
-  //   color: "#fff",
-  //   textAlign: "center",
-  //   fontSize: 20,
-  // };
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
-  // Warning  Add <ProtectedRouter></ProtectedRouter> when create Route //
   return (
     <div className="App">
       <ModalCustom />
       <BackTop>
-        {/* <ArrowUpOutlined style={style} /> */}
-        {/* <BackTopIcon /> */}
         <BackTopIcon />
       </BackTop>
       <Routes>
@@ -65,8 +52,7 @@ function App() {
             <CustomerLayout>
               <Verify />
             </CustomerLayout>
-          }
-        ></Route>
+          }></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route
@@ -75,8 +61,7 @@ function App() {
               <ProtectedRouter>
                 <UserAccount />
               </ProtectedRouter>
-            }
-          ></Route>
+            }></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />

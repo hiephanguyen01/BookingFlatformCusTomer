@@ -1,5 +1,5 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Row } from "antd";
+import { Button, Col, Input, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -72,14 +72,16 @@ const Index = ({ linkTo = "" }) => {
     dispatch(studioDetailAction(id, cate));
 
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
-    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
       dispatch({
         type: HIDE_MODAL,
       });
     };
-  }, []);
+  }, [cate, dispatch, id, user]);
+  useEffect(()=>{
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  },[])
 
   const isEmpty = () => {
     if (
@@ -295,7 +297,7 @@ const Index = ({ linkTo = "" }) => {
                       />
                       <div>
                         <span className="text-middle">
-                          {item.Name.length > 30
+                          {item?.Name.length > 30
                             ? `${item.Name.slice(0, 30)}...`
                             : item.Name}
                         </span>

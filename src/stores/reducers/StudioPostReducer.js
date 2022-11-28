@@ -1,3 +1,4 @@
+import toastMessage from "../../components/ToastMessage";
 import {
   SET_POST_LIST,
   SET_FILTER,
@@ -18,6 +19,8 @@ import {
   SET_FILTER_SERVICE,
   LOADING_SERVICE,
   SET_SERVICE_SELECT,
+  ADD_TIME_ORDER,
+  SELECT_TIME_ORDER,
 } from "../types/studioPostType";
 
 const initialState = {
@@ -68,6 +71,7 @@ const initialState = {
         OrderByDateFrom: "",
         OrderByDateTo: "",
       },
+  listTimeSelected: [],
   loadingService: false,
   serviceSelected: null,
 };
@@ -170,6 +174,69 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         serviceSelected: action.payload,
+      };
+    case "SET_TIME_ORDER":
+      return {
+        ...state,
+        listTimeSelected: action.data,
+      };
+    case ADD_TIME_ORDER:
+      console.log(action.data);
+      let newArray = [...state.listTimeSelected];
+      if (newArray.length > 0) {
+        const existed = newArray.findIndex(
+          (item) => item.id === action.data?.id
+        );
+        if (existed !== -1) {
+          newArray[existed] = action.data;
+        } else {
+          newArray = [...newArray, action.data];
+        }
+      } else {
+        newArray = [...newArray, action.data];
+      }
+      console.log(newArray);
+      return {
+        ...state,
+        listTimeSelected: newArray,
+      };
+    case SELECT_TIME_ORDER:
+      let newFilter = { ...state.filterService };
+
+      if (newFilter.id == action.data.id) {
+        newFilter = {};
+      } else {
+        let data = state.listTimeSelected.find(
+          (item) => item.id == action.data.id
+        );
+        console.log("data da chon", data);
+        if (data) {
+          newFilter = data;
+        } else {
+          newFilter = { ...newFilter, id: -1 };
+          toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
+        }
+      }
+
+      return {
+        ...state,
+        filterService: newFilter,
+      };
+    case "SET_SELECT_TIME_ORDER":
+      return {
+        ...state,
+        filterService: {},
+      };
+    case "SET_TIME_ORDER_SELECTED":
+      return {
+        ...state,
+        filterService: {
+          OrderByTime: -1,
+          OrderByTimeFrom: "",
+          OrderByTimeTo: "",
+          OrderByDateFrom: "",
+          OrderByDateTo: "",
+        },
       };
     default:
       return state;

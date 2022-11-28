@@ -21,7 +21,7 @@ const Index = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPromotionCodeUserSave());
-  }, []);
+  }, [dispatch]);
 
   const priceOrder = () => {
     let price = 0;

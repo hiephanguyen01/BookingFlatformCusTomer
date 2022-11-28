@@ -7,12 +7,13 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Popover, Rate } from "antd";
+import { Affix, Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import ReactStickyBox from "react-sticky-box";
 import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
@@ -23,21 +24,26 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import {
+  chooseServiceAction,
+  chooseServiceListAction,
+} from "../../stores/actions/OrderAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
   getLikeStudioPostAction,
   getPromotionByTenantId,
   getStudioSimilarAction,
+  handlerSelectServiceAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 import {
+  SELECT_TIME_ORDER,
   SET_PROMOTION_CODE,
-  SET_SERVICE_SELECT,
 } from "../../stores/types/studioPostType";
-import { calDate, calTime, calTimeMinus } from "../../utils/calculate";
+import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 // import { openNotification } from "../../utils/Notification";
@@ -56,11 +62,13 @@ const cx = classNames.bind(styles);
 
 export const StudioDetail = () => {
   const { id } = useParams();
+  const setContainer = useRef(null);
   const { pathname } = useLocation();
   // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
+  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
   const {
     studioDetail1,
     studioDetail,
@@ -70,7 +78,6 @@ export const StudioDetail = () => {
     filterService,
     serviceSelected,
   } = useSelector((state) => state.studioPostReducer);
-  console.log("serviceSelected", serviceSelected);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -91,10 +98,19 @@ export const StudioDetail = () => {
 
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
+    dispatch({ type: "SET_SELECT_TIME_ORDER" });
+    dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
+      dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     };
   }, [dispatch]);
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+    dispatch({ type: "SET_SELECT_TIME_ORDER" });
+    dispatch({ type: "SET_SERVICE_SELECT", payload: null });
+    dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
+  }, [id, dispatch]);
 
   useEffect(() => {
     dispatch(getPromotionCodeUserSave());
@@ -123,10 +139,10 @@ export const StudioDetail = () => {
       Component: <Report category={cate} postId={id} />,
     });
   };
-  const handlerServiceSelect = (data) => {
-    console.log(data.id);
-    // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
-  };
+  // const handlerServiceSelect = (data) => {
+  //   console.log(data.id);
+  //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
+  // };
 
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -262,7 +278,7 @@ export const StudioDetail = () => {
                 disabled={
                   serviceSelected === null
                     ? false
-                    : data.id == serviceSelected
+                    : data.id === serviceSelected
                     ? false
                     : true
                 }
@@ -335,8 +351,7 @@ export const StudioDetail = () => {
                 </div>
               )}
               <div className="">
-                {chooseService.filter((item) => item.id === data.id).length >
-                0 && serviceSelected ==data.id ? (
+                {filterService.id === data.id && serviceSelected == data.id ? (
                   <div
                     onClick={() => handleChooseService(data)}
                     style={{
@@ -386,44 +401,51 @@ export const StudioDetail = () => {
     }
   };
 
-  const [chooseService, setChooseService] = useState([]);
-  console.log("chooseService", chooseService);
-
+  // const [chooseServiceList, setChooseService] = useState([]);
+  // console.log("chooseServiceList", chooseServiceList);
+  console.log("chooseServiceList", chooseServiceList);
   const handleChooseService = (data) => {
-    if (data.id != serviceSelected) {
+    if (data.id !== serviceSelected) {
       toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
       return;
-    }
-    console.log("chọn", data);
-    if (
-      (filterService.OrderByTime === 0 &&
-        filterService.OrderByDateFrom !== "" &&
-        filterService.OrderByDateTo !== "") ||
-      (filterService.OrderByTime === 1 &&
-        filterService.OrderByTimeFrom !== "" &&
-        filterService.OrderByTimeTo !== "")
-    ) {
-      if (chooseService.filter((item) => item.id === data.id).length > 0) {
-        setChooseService([]);
-      } else {
-        setChooseService([{ ...data }]);
-      }
     } else {
-      toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
+      dispatch(handlerSelectServiceAction(data));
     }
+
+    // if (
+    //   (filterService.OrderByTime === 0 &&
+    //     filterService.OrderByDateFrom !== "" &&
+    //     filterService.OrderByDateTo !== "") ||
+    //   (filterService.OrderByTime === 1 &&
+    //     filterService.OrderByTimeFrom !== "" &&
+    //     filterService.OrderByTimeTo !== "")
+    // ) {
+    // if (filterService.id == data.id) {
+    //   if (chooseServiceList.filter((item) => item.id === data.id).length > 0) {
+    //     setChooseService([]);
+    //   } else {
+    //     setChooseService([{ ...data }]);
+    //   }
+    // }
+    // const existed = chooseServiceList.findIndex((item) => item.id == data.id);
+    // if (existed !== -1) {
+    //   setChooseService([]);
+    // } else {
+    //   setChooseService([{ ...data }]);
+    // }
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0) {
-      dispatch(chooseServiceAction(chooseService));
+    if (chooseServiceList.length > 0) {
+      dispatch(chooseServiceAction(chooseServiceList));
       navigate("order");
     } else {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
   // const handleAddCart = () => {
-  //   if (chooseService.length > 0) {
-  //     dispatch(addOrder(cate, chooseService));
+  //   if (chooseServiceList.length > 0) {
+  //     dispatch(addOrder(cate, chooseServiceList));
   //     toastMessage("Đã thêm vào giỏ hàng!", "success");
   //   } else {
   //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
@@ -597,20 +619,61 @@ export const StudioDetail = () => {
                       </div>
                     </div>
                   </div>
-                  <div className={cx("order")}>
-                    <div className={cx("item")}>
-                      <h3>Đã chọn {chooseService.length} phòng</h3>
-                      {chooseService.length > 0 && (
+                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                    <div className={cx("order")}>
+                      <div className={cx("item")}>
+                        <h3>Đã chọn {chooseServiceList?.length} phòng</h3>
+                        {chooseServiceList?.length > 0 && (
+                          <span
+                            style={{
+                              textDecoration: "line-through",
+                              fontSize: " 16px",
+                              color: "#828282",
+                            }}
+                          >
+                            {filterService?.OrderByTime === 1 &&
+                              `${convertPrice(
+                                chooseServiceList?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByHour *
+                                      calTime(
+                                        filterService?.OrderByTimeFrom,
+                                        filterService?.OrderByTimeTo
+                                      ),
+                                  0
+                                )
+                              )}đ`}
+                            {filterService?.OrderByTime === 0 &&
+                              `${convertPrice(
+                                chooseServiceList?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByDate *
+                                      calDate(
+                                        filterService?.OrderByDateFrom,
+                                        filterService?.OrderByDateTo
+                                      ),
+                                  0
+                                )
+                              )}đ`}
+                          </span>
+                        )}
+                      </div>
+                      <div className={cx("item")}>
+                        <span className="mt-3">
+                          Bao gồm 50.000đ thuế và phí{" "}
+                        </span>
                         <span
                           style={{
-                            textDecoration: "line-through",
-                            fontSize: " 16px",
-                            color: "#828282",
+                            color: "#E22828",
+                            fontSize: "20px",
+                            fontWeight: "700",
                           }}
                         >
-                          {filterService.OrderByTime === 1 &&
+                          {filterService?.OrderByTime === 1 &&
                             `${convertPrice(
-                              chooseService?.reduce(
+                              chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByHour *
@@ -621,9 +684,9 @@ export const StudioDetail = () => {
                                 0
                               )
                             )}đ`}
-                          {filterService.OrderByTime === 0 &&
+                          {filterService?.OrderByTime === 0 &&
                             `${convertPrice(
-                              chooseService?.reduce(
+                              chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByDate *
@@ -635,73 +698,39 @@ export const StudioDetail = () => {
                               )
                             )}đ`}
                         </span>
-                      )}
-                    </div>
-                    <div className={cx("item")}>
-                      <span className="mt-3">Bao gồm 50.000đ thuế và phí </span>
-                      <span
-                        style={{
-                          color: "#E22828",
-                          fontSize: "20px",
-                          fontWeight: "700",
-                        }}
-                      >
-                        {filterService.OrderByTime === 1 &&
-                          `${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) =>
-                                total +
-                                item.PriceByHour *
-                                  calTime(
-                                    filterService.OrderByTimeFrom,
-                                    filterService.OrderByTimeTo
-                                  ),
-                              0
+                      </div>
+                      <div className="w-100 d-flex justify-content-between mt-20">
+                        <Button
+                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                          disabled={
+                            chooseServiceList?.length > 0 ? false : true
+                          }
+                          onClick={() =>
+                            toastMessage(
+                              "Chức năng này đang phát triển!",
+                              "info",
+                              1,
+                              "",
+                              {}
                             )
-                          )}đ`}
-                        {filterService.OrderByTime === 0 &&
-                          `${convertPrice(
-                            chooseService?.reduce(
-                              (total, item) =>
-                                total +
-                                item.PriceByDate *
-                                  calDate(
-                                    filterService.OrderByDateFrom,
-                                    filterService.OrderByDateTo
-                                  ),
-                              0
-                            )
-                          )}đ`}
-                      </span>
+                          }
+                        >
+                          <ShoppingCartOutlined />
+                          Thêm vào giỏ hàng
+                        </Button>
+                        <Button
+                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                          onClick={handleBook}
+                          // disabled={chooseServiceList?.length > 0 ? false : true}
+                        >
+                          Đặt ngay
+                        </Button>
+                      </div>
                     </div>
-                    <div className="w-100 d-flex justify-content-between mt-20">
-                      <Button
-                        className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        disabled={chooseService.length > 0 ? false : true}
-                        onClick={() =>
-                          toastMessage(
-                            "Chức năng này đang phát triển!",
-                            "info",
-                            1,
-                            "",
-                            {}
-                          )
-                        }
-                      >
-                        <ShoppingCartOutlined />
-                        Thêm vào giỏ hàng
-                      </Button>
-                      <Button
-                        className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}
-                      >
-                        Đặt ngay
-                      </Button>
-                    </div>
-                  </div>
+                  </ReactStickyBox>
                 </div>
               </div>
+
               <SlideCard
                 data={listStudioSimilar ?? listStudioSimilar}
                 category={{ name: "studio", id: 1 }}

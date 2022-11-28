@@ -15,23 +15,20 @@
 
   /* height: 85px; */
   .container {
+    margin: 0 50px;
     width: 100%;
-    display: flex;
-    flex: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 80px;
-
+    .img {
+      display: block;
+    }
     &__right {
       display: flex;
-      flex-direction: row;
       align-items: center;
+      justify-content: flex-end;
       gap: 40px;
 
       .wrapper-user {
         display: flex;
         flex-direction: column;
-
         .btn-become-partner {
           display: flex;
           justify-content: center;
@@ -51,7 +48,7 @@
 
     .ant-input-affix-wrapper {
       padding: 3px 3px !important;
-
+      width: 100% !important;
       .ant-input-prefix {
         padding: 10px 0 10px 13px !important;
       }
@@ -80,10 +77,6 @@
         // pointer-events: none;
       }
     }
-  }
-
-  .ant-input-affix-wrapper {
-    width: 50% !important;
   }
 
   .user {
@@ -137,35 +130,39 @@
   }
 }
 
-@media (max-width: 991px) {
-  .Header {
-    .container {
-      margin: 0 20px;
+// @media (max-width: 992px) {
+//   .Header {
+//     .container {
+//       margin: 0 20px;
+//       .link {
+//         display: block;
+//         width: 50%;
+//         margin-bottom: 21px;
+//       }
+//       &__right {
+//         margin-top: 30px;
+//         gap: 20px;
+//         width: 100% !important;
+//         display: flex;
+//         justify-content: space-between;
+//         margin-left: 10px;
+//       }
+//     }
 
-      &__right {
-        gap: 20px;
-      }
-    }
+//     .text {
+//       // display: none;
+//       p:nth-child(1) {
+//         display: none;
+//       }
+//     }
 
-    .user {
-      flex-direction: column;
-    }
+//     .ant-input-affix-wrapper {
+//       width: 50% !important;
+//     }
+//   }
+// }
 
-    .text {
-
-      // display: none;
-      p:nth-child(1) {
-        display: none;
-      }
-    }
-
-    .ant-input-affix-wrapper {
-      width: 40% !important;
-    }
-  }
-}
-
-@media (max-width: 601px) {
+@media (max-width: 767px) {
   .Header {
     .container {
       flex-wrap: wrap;
@@ -176,25 +173,12 @@
         width: 100%;
         margin-bottom: 21px;
       }
-
       &__right {
-        flex: 1;
-        margin-left: 10px;
-        gap: 10px;
+        padding-top: 20px;
       }
     }
 
-    // .tip {
-    //   p {
-    //     display: none;
-    //   }
-    // }
-    .user {
-      flex-direction: column;
-    }
-
     .text {
-
       // display: none;
       p:nth-child(1) {
         display: none;

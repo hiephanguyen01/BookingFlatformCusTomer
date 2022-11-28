@@ -1,10 +1,11 @@
 import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_SERVICE_SELECT } from "../../stores/types/studioPostType";
 import { convertDateSendToDB } from "../../utils/convert";
+import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
 
 import "./selectTimeOptionService.scss";
 
@@ -52,6 +53,7 @@ const Option = ({ option, disabled, service }) => {
   const handleOnchangeDate = (d, dString) => {
     console.log("dang chin", service.id);
     setDate(dString);
+    console.log("gio UTC", moment.utc(moment(date).utc()).format());
     if (dString && filterService.OrderByTime === 1) {
       let hl = service?.Bookings?.filter((item) => {
         const dates = dateRange(
@@ -60,63 +62,95 @@ const Option = ({ option, disabled, service }) => {
         );
         return dates.includes(moment(dString).format("l"));
       });
-      console.log("so gio da chon ", hl)
+      console.log("so gio da chon ", hl);
       setDisableHour(hl);
     }
-    if (time.length > 0) {
-      dispatch(
-        setFilterStudioService(5, 1, {
-          ...filterService,
-          OrderByTime: 1,
-          OrderByTimeFrom:
-            convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
-          OrderByTimeTo:
-            convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
-        })
-      );
-      // dispatch({
-      //   type: SET_FILTER_SERVICE,
-      //   payload: {
-      //     ...filterService,
-      //     OrderByTime: 0,
-      //     OrderByTimeFrom:
-      //       convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
-      //     OrderByTimeTo:
-      //       convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
-      //   },
-      // });
-    }
+    // if (time.length > 0) {
+    //   dispatch(
+    //     setFilterStudioService(5, 1, {
+    //       ...filterService,
+    //       OrderByTime: 1,
+    //       OrderByTimeFrom:
+    //         convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
+    //       OrderByTimeTo:
+    //         convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
+    //     })
+    //   );
+    //   // dispatch({
+    //   //   type: SET_FILTER_SERVICE,
+    //   //   payload: {
+    //   //     ...filterService,
+    //   //     OrderByTime: 0,
+    //   //     OrderByTimeFrom:
+    //   //       convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
+    //   //     OrderByTimeTo:
+    //   //       convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
+    //   //   },
+    //   // });
+    // }
   };
   const handleOnchangeHour = (t, timeString) => {
     setTime(timeString);
     if (date !== "") {
-      dispatch(
-        setFilterStudioService(5, 1, {
+      dispatch({
+        type: ADD_TIME_ORDER,
+        data: {
           ...filterService,
+          id: service.id,
           OrderByTime: 1,
           OrderByTimeFrom:
             convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
           OrderByTimeTo:
             convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
-        })
-      );
+        },
+      });
+      // dispatch(
+      //   setFilterStudioService(5, 1, {
+      //     ...filterService,
+      //     OrderByTime: 1,
+      //     OrderByTimeFrom:
+      //       convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
+      //     OrderByTimeTo:
+      //       convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
+      //   })
+      // );
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
-    dispatch(
-      setFilterStudioService(5, 1, {
+    dispatch({
+      type: ADD_TIME_ORDER,
+      data: {
         ...filterService,
+        id: service.id,
         OrderByTime: 0,
         OrderByDateFrom:
           moment(datesString[0]).toISOString().slice(0, 11) + "00:00:00.000Z",
         OrderByDateTo:
           moment(datesString[1]).toISOString().slice(0, 11) + "00:00:00.000Z",
-      })
-    );
+      },
+    });
+    // dispatch(
+    //   setFilterStudioService(5, 1, {
+    //     ...filterService,
+    //     OrderByTime: 0,
+    //     OrderByDateFrom:
+    //       moment(datesString[0]).toISOString().slice(0, 11) + "00:00:00.000Z",
+    //     OrderByDateTo:
+    //       moment(datesString[1]).toISOString().slice(0, 11) + "00:00:00.000Z",
+    //   })
+    // );
   };
 
+  function range(start, end) {
+    const result = [];
+    for (let i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
   const getDisabledHours = (date, type) => {
-    let array = [];
+    console.log(range(0, moment().hours()));
+    let array = range(0, moment().hours());
     if (disableHour?.length > 0) {
       array = disableHour?.reduce((acc, item) => {
         let dates = dateRangeHour(
@@ -251,10 +285,10 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   const [data, setData] = useState(service);
   const { filterService } = useSelector((state) => state.studioPostReducer);
   // const [selection, setSelection] = useState(filterService.OrderByTime);
-  const handlerServiceSelect = (data) => {
-    console.log(data.id);
-    // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
-  };
+  // const handlerServiceSelect = (data) => {
+  //   console.log(data.id);
+  //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
+  // };
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -271,7 +305,12 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   };
 
   return (
-    <div onClick={()=>  dispatch({ type: SET_SERVICE_SELECT, payload: service.id })} className="selectTimeOptionServiceContainer mb-20">
+    <div
+      onClick={() =>
+        dispatch({ type: SET_SERVICE_SELECT, payload: service.id })
+      }
+      className="selectTimeOptionServiceContainer mb-20"
+    >
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}

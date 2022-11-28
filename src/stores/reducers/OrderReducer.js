@@ -28,13 +28,11 @@ export const OrderReducer = (state = initialState, action) => {
         loading: action.payload,
       };
     case SET_CHOOSE_SERVICE:
-      localStorage.setItem(
-        "choose-service",
-        JSON.stringify([...action.payload])
-      );
+      console.log(action);
+      localStorage.setItem("choose-service", JSON.stringify(action.payload));
       return {
         ...state,
-        chooseServiceList: [...action.payload],
+        chooseServiceList: action.payload,
       };
     // case UPDATE_CHOOSE_SERVICE:
     //   localStorage.setItem(

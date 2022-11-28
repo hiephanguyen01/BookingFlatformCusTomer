@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Row, Popover, message } from "antd";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -24,7 +24,6 @@ import {
   getAllNotificationDaoAction,
   getLikePostList,
   getPostDaoByIdAction,
-  likePost,
   toggleNotificationDaoAction,
 } from "../../stores/actions/PostDaoAction";
 import { ReactComponent as Info } from "../../assets/dao/info.svg";
@@ -44,28 +43,18 @@ import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
 import { postDaoService } from "../../services/PostDaoService";
 import { cancelSavePost } from "../../stores/actions/userAction";
 import { userService } from "../../services/UserService";
-import CopyToClipboard from "react-copy-to-clipboard";
 
 const PostDetail = () => {
   const type = "post";
   const { postId } = useParams();
   const dispatch = useDispatch();
-  console.log("postId", postId);
-  const {
-    postDetail,
-    likePostList,
-    defaultComments,
-    relatedService,
-    listNotificationUser,
-  } = useSelector((state) => state.postDaoReducer);
+  const { postDetail, defaultComments, relatedService, listNotificationUser } =
+    useSelector((state) => state.postDaoReducer);
 
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const [mouseOverHeart, setMouseOverHeart] = useState(false);
-  const [mouseClickHeart, setMouseClickHeart] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
-  const [commentsClick, setCommentsClick] = useState(false);
 
   const [post, setPost] = useState({ ...postDetail });
   const [comments, setComments] = useState([]);
@@ -84,6 +73,27 @@ const PostDetail = () => {
   ];
 
   const [moreOptionModal, setMoreOptionModal] = useState(false);
+  const getComments = useCallback(
+    async (currentPage) => {
+      try {
+        const { data } = await postDaoService.getComments(
+          postId,
+          currentPage || 1,
+          5
+        );
+        if (currentPage === 1) {
+          setComments([...data.data]);
+          setPagination(data.pagination);
+        } else {
+          setComments([...comments, ...data.data]);
+          setPagination(data.pagination);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [comments, postId]
+  );
 
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
@@ -92,12 +102,12 @@ const PostDetail = () => {
     return () => {
       dispatch({ type: "DELETE_DETAIL_POST", data: {} });
     };
-  }, [dispatch, postId]);
+  }, [dispatch, postId, getComments]);
 
   useEffect(() => {
     dispatch(getLikePostList(currentUser?.id));
     dispatch(getAllNotificationDaoAction());
-  }, []);
+  }, [currentUser, dispatch]);
 
   useEffect(() => {
     setPost({ ...postDetail });
@@ -114,25 +124,6 @@ const PostDetail = () => {
     dispatch(
       createLikeCommentDao({ CommentId: id }, postId, setComments, pagination)
     );
-  };
-
-  const getComments = async (currentPage) => {
-    try {
-      const { data } = await postDaoService.getComments(
-        postId,
-        currentPage || 1,
-        5
-      );
-      if (currentPage === 1) {
-        setComments([...data.data]);
-        setPagination(data.pagination);
-      } else {
-        setComments([...comments, ...data.data]);
-        setPagination(data.pagination);
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const handleSendComment = async () => {
@@ -222,17 +213,22 @@ const PostDetail = () => {
     // setIsModalVisible(false);
   };
 
-  const checkLikePost = () =>
-    likePostList?.filter((itm) => itm.PostId === Number(postId)).length > 0;
-
-  const handleLike = () => {
+  const handleLike = async () => {
     if (currentUser) {
-      if (checkLikePost()) {
-        setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
-      } else {
-        setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+      // if (checkLikePost()) {
+      //   setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
+      // } else {
+      //   setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+      // }
+      try {
+        await postDaoService.createLike({
+          PostId: post.id,
+          UserId: currentUser.id,
+        });
+        dispatch(getPostDaoByIdAction(postId));
+      } catch (error) {
+        console.log(error);
       }
-      dispatch(likePost(currentUser?.id, postId)); //2 là UserId, mốt đăng nhập rồi thì thay đổi cái này
     }
   };
 
@@ -250,16 +246,20 @@ const PostDetail = () => {
     <div className="postDetail">
       <MetaDecorator
         // title={`${postDetail?.Tags?.split(",").join(" - ").toUpperCase()}`}
-        title={`${postDetail.Fullname} - ${postDetail?.Tags?.split(",")
-          .join(",")
-          .toUpperCase()}`}
+        title={`${
+          postDetail?.BookingUser?.Fullname
+        } - ${postDetail?.Tags?.split(",").join(",").toUpperCase()}`}
         description={postDetail.Description}
         imgUrl={
           REACT_APP_DB_BASE_URL_IMG + `/${postDetail?.Image?.slice(0, 1)}`
         }
       />
       <Row>
-        <Col span={16} style={{ backgroundColor: "#1D2226", height: "100%" }}>
+        <Col
+          lg={16}
+          md={12}
+          sm={24}
+          style={{ backgroundColor: "#1D2226", height: "100%" }}>
           <Swiper
             slidesPerView={1}
             spaceBetween={30}
@@ -269,13 +269,11 @@ const PostDetail = () => {
             // }}
             navigation={true}
             modules={[Pagination, Navigation]}
-            className="swiperPostDetail"
-          >
+            className="swiperPostDetail">
             {post?.Image?.map((img, index) => (
               <SwiperSlide
                 key={index}
-                style={{ background: "#1D2226", padding: "90px 0" }}
-              >
+                style={{ background: "#1D2226", padding: "90px 0" }}>
                 <img
                   src={convertImage(img)}
                   className="w-100 h-100"
@@ -286,12 +284,18 @@ const PostDetail = () => {
             ))}
           </Swiper>
         </Col>
-        <Col span={8} className="px-23 py-30 col-right">
+        <Col lg={8} md={12} sm={24} className="px-23 py-30 col-right">
           <header className="post_detail_info d-flex justify-content-between align-posts-center">
             <div className="d-flex justify-content-between align-items-center">
-              <img src={convertImage(post?.Avatar)} alt="" className="avt" />
+              <img
+                src={convertImage(post?.BookingUser?.Image)}
+                alt=""
+                className="avt"
+              />
               <div className="ms-10">
-                <p className="post_detail_info_name">{post?.Fullname}</p>
+                <p className="post_detail_info_name">
+                  {post?.BookingUser?.Fullname}
+                </p>
                 <p className="post_detail_info_time">
                   {convertTime(post?.CreationTime)}
                 </p>
@@ -312,8 +316,7 @@ const PostDetail = () => {
                               );
                               handleMoreOptionClick(itm);
                             }}
-                            key={idx}
-                          >
+                            key={idx}>
                             <div className="container d-flex">
                               <div>{itm.icon}</div>
                               <p>{itm.title}</p>
@@ -325,13 +328,12 @@ const PostDetail = () => {
                               <>
                                 {listNotificationUser?.some(
                                   (item) =>
-                                    item?.UserId == currentUser?.id &&
-                                    item.PostId == postId
+                                    item?.UserId === currentUser?.id &&
+                                    item.PostId === postId
                                 ) ? (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}
-                                  >
+                                    key={idx}>
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>Tắt thông báo về bài viết này</p>
@@ -340,8 +342,7 @@ const PostDetail = () => {
                                 ) : (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}
-                                  >
+                                    key={idx}>
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>{itm.title}</p>
@@ -352,8 +353,7 @@ const PostDetail = () => {
                             ) : (
                               <li
                                 onClick={() => handleMoreOptionClick(itm)}
-                                key={idx}
-                              >
+                                key={idx}>
                                 <div className="container d-flex">
                                   <div>{itm.icon}</div>
                                   <p>{itm.title}</p>
@@ -370,8 +370,7 @@ const PostDetail = () => {
                 visible={isModalOptionDetail}
                 onVisibleChange={(newVisible) =>
                   setIsModalOptionDetail(newVisible)
-                }
-              >
+                }>
                 <MoreOutlined style={{ fontSize: "24px" }} />
               </Popover>
               <ReportPost
@@ -391,11 +390,12 @@ const PostDetail = () => {
           </div>
           <div
             className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-            style={{ borderBottom: "1px solid #E7E7E7" }}
-          >
+            style={{ borderBottom: "1px solid #E7E7E7" }}>
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn onClick={(e) => {}}>
-                {mouseOverHeart || checkLikePost() ? (
+                {post?.Loves?.some(
+                  (item) => item.UserId === currentUser?.id
+                ) ? (
                   <HeartFilled
                     onClick={handleLike}
                     style={{
@@ -403,7 +403,7 @@ const PostDetail = () => {
                       color: "#E22828",
                       marginBottom: "2px",
                     }}
-                    onMouseLeave={() => setMouseOverHeart(false)}
+                    // onMouseLeave={() => setMouseOverHeart(false)}
                   />
                 ) : (
                   <HeartOutlined
@@ -414,19 +414,23 @@ const PostDetail = () => {
                       cursor: "pointer",
                       marginBottom: "2px",
                     }}
-                    onMouseOver={() => setMouseOverHeart(true)}
+                    // onMouseOver={() => setMouseOverHeart(true)}
                   />
                 )}
               </PopUpSignIn>
-              <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+              <p
+                style={
+                  post?.Loves?.some((item) => item.UserId === currentUser?.id)
+                    ? { color: "#E22828" }
+                    : {}
+                }
+              >
                 {post?.TotalLikes}
               </p>
             </div>
             <div className="post__main__content__like-comment__comments d-flex">
               <Comments className="active" style={{ color: "#E22828" }} />
-              <p className={`${commentsClick ? "active" : ""}`}>
-                {post?.TotalComments}
-              </p>
+              <p className={`${true ? "active" : ""}`}>{post?.TotalComments}</p>
             </div>
           </div>
           <section className="post_detail_comment">
@@ -443,16 +447,14 @@ const PostDetail = () => {
                         className={
                           chooseCommentDefault.id === item.id && "active"
                         }
-                        onClick={() => handleAddComment(item)}
-                      >
+                        onClick={() => handleAddComment(item)}>
                         {item.Content}
                       </li>
                     ))}
                   </ul>
                   <div
                     className="post_detail_choose_service d-flex justify-content-center align-items-center"
-                    onClick={handleShowModalChooseService}
-                  >
+                    onClick={handleShowModalChooseService}>
                     <PlusOutlined
                       style={{ color: "#03AC84", fontSize: "14px" }}
                     />
@@ -503,8 +505,7 @@ const PostDetail = () => {
                       marginLeft: "40px",
                       marginTop: "15px",
                     }}
-                    className="post__comments__detail__content"
-                  >
+                    className="post__comments__detail__content">
                     {comment.Content}
                   </div>
                 )}
@@ -513,12 +514,11 @@ const PostDetail = () => {
                 )}
                 <div
                   className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-                  style={{ borderBottom: "1px solid #E7E7E7" }}
-                >
+                  style={{ borderBottom: "1px solid #E7E7E7" }}>
                   <div className="post__main__content__like-comment__likes d-flex">
                     <PopUpSignIn onClick={(e) => {}}>
                       {comment?.Likes?.some(
-                        (item) => item?.UserId == currentUser?.id
+                        (item) => item?.UserId === currentUser?.id
                       ) ? (
                         <HeartFilled
                           onClick={() => handlerLikeComment(comment?.id)}
@@ -542,7 +542,15 @@ const PostDetail = () => {
                         />
                       )}
                     </PopUpSignIn>
-                    <p style={mouseClickHeart ? { color: "#E22828" } : {}}>
+                    <p
+                      style={
+                        comment?.Likes?.some(
+                          (item) => item?.UserId === currentUser?.id
+                        )
+                          ? { color: "#E22828" }
+                          : {}
+                      }
+                    >
                       {comment?.TotalLike}
                     </p>
                   </div>
