@@ -11,17 +11,27 @@ import "./voucher.scss";
 import { convertPrice, convertTime } from "../../utils/convert";
 import { calDate, calTime } from "../../utils/calculate";
 import { Button } from "antd";
+import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
 
 const Index = () => {
-  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
+  const { promoCodeUserSave, choosePromotionUser } = useSelector(
+    (state) => state.promoCodeReducer
+  );
   const { filterService } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
 
-  const [choose, setChoose] = useState({ ...promoCodeUserSave });
+  const [choose, setChoose] = useState({ ...choosePromotionUser });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPromotionCodeUserSave());
   }, [dispatch]);
+
+  useEffect(() => {
+    setChoose({ ...choosePromotionUser });
+    // return () => {
+    //   dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+    // };
+  }, [choosePromotionUser, dispatch]);
 
   const priceOrder = () => {
     let price = 0;
@@ -80,7 +90,7 @@ const Index = () => {
         <CloseOutlined />
       </div>
       <header className="header_modal">Mã khuyến mãi</header>
-      {promoCodeUserSave &&
+      {promoCodeUserSave.length > 0 &&
         promoCodeUserSave
           .filter((item) => item.DateTimeExpire >= new Date().toISOString())
           .map((item, index) => (

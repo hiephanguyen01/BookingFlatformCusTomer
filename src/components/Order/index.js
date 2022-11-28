@@ -70,16 +70,15 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser(user);
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
-
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
-    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      dispatch({
-        type: HIDE_MODAL,
-      });
     };
-  }, [cate, dispatch, id, studioDetail, user]);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  }, []);
 
   const isEmpty = () => {
     if (
