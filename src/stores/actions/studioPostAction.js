@@ -4,6 +4,7 @@ import { userService } from "../../services/UserService";
 import {
   LOADING,
   LOADING_SERVICE,
+  SELECT_TIME_ORDER,
   SET_FILTER,
   SET_FILTER_SERVICE,
   SET_LIST_LIKED_CATEGORY,
@@ -15,6 +16,7 @@ import {
   SET_STUDIO_NEAR,
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
+import { SET_CHOOSE_SERVICE } from "../types/OrderType";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: true });
@@ -304,3 +306,22 @@ export const setFilterStudioService =
     }
     dispatch({ type: LOADING_SERVICE, payload: false });
   };
+
+export const handlerSelectServiceAction = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: SELECT_TIME_ORDER, data: { id: data.id } });
+      console.log("action data", data);
+      dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
+      // if (filterService.id == data.id) {
+      //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      //       setChooseService([]);
+      //     } else {
+      //       setChooseService([{ ...data }]);
+      //     }
+      //   }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};

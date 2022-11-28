@@ -81,11 +81,10 @@ const Index = ({ linkTo = "" }) => {
       dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
       dispatch({ type: SET_FILTER_SERVICE, payload: {} });
     };
-  }, []);
-
-  useEffect(() => {
+  }, [cate, dispatch, id, user]);
+  useEffect(()=>{
     window.scrollTo({ behavior: "smooth", top: 0 });
-  }, []);
+  },[])
 
   const isEmpty = () => {
     if (
@@ -301,7 +300,7 @@ const Index = ({ linkTo = "" }) => {
                       />
                       <div>
                         <span className="text-middle">
-                          {item.Name.length > 30
+                          {item?.Name.length > 30
                             ? `${item.Name.slice(0, 30)}...`
                             : item.Name}
                         </span>
