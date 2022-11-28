@@ -266,7 +266,7 @@ const FilterPage = () => {
                       value={filter.category}
                     >
                       {categories &&
-                        categories.map((val) => (
+                        categories?.map((val) => (
                           <Radio key={val.id} value={val.id}>
                             {val.name}
                           </Radio>

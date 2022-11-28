@@ -149,7 +149,6 @@ const Option = ({ option, disabled, service }) => {
     return result;
   }
   const getDisabledHours = (date, type) => {
-    console.log(range(0, moment().hours()));
     let array = range(0, moment().hours());
     if (disableHour?.length > 0) {
       array = disableHour?.reduce((acc, item) => {
