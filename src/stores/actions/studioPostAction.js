@@ -34,7 +34,10 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: false });
 };
 export const getFilterStudioPost =
-  (limit, page, filter, user, navigate) => async (dispatch) => {
+  (limit, page, filter, currentUser, navigate) => async (dispatch) => {
+    // console.log("filter", filter.category);
+    console.log(filter, currentUser);
+
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getFilterStudioPost(
@@ -45,13 +48,12 @@ export const getFilterStudioPost =
       dispatch({ type: SET_POST_LIST, payload: data.data });
       dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
       dispatch({ type: SET_FILTER, payload: filter });
-      if (user !== null) {
+      if (currentUser !== null) {
         dispatch(getAllStudioLikedAction1(filter.category));
       }
-      console.log(filter);
       navigate(
         `/home/filter?${queryString.stringify(
-          Object.keys(filter).reduce(
+          Object.keys(filter)?.reduce(
             (newFilter, key) =>
               filter[key] === ""
                 ? { ...newFilter }
