@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import "./confirmOrder.scss";
 
-import UploadImage from "../UploadImage";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import { partnerService } from "../../services/PartnerService";
-import toastMessage from "../ToastMessage";
 import { orderService } from "../../services/OrderService";
 import { convertImage } from "../../utils/convertImage";
+import toastMessage from "../ToastMessage";
+import UploadImage from "../UploadImage";
 
 const Index = () => {
   const [checkoutDisable, setCheckoutDisable] = useState(false);
@@ -45,31 +44,11 @@ const Index = () => {
       break;
   }
   const [file, setFile] = useState({});
-  const [partner, setPartner] = useState({});
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(location?.state?.IdentifyCode);
     toastMessage("Đã lưu mã booking vào bộ nhớ tạm!", "success");
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await partnerService.getPartnerDetail(
-          location?.state?.TenantId
-        );
-        setPartner(response?.data);
-      } catch (error) {
-        toastMessage("Lấy thông tin partner thất bại!", "error");
-      }
-    })();
-
-    const timer = setTimeout(() => setCheckoutDisable(true), 900000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [location.state]);
 
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
@@ -117,7 +96,7 @@ const Index = () => {
             VUI LÒNG THANH TOÁN TIỀN CỌC ĐỂ HOÀN THÀNH ĐẶT CHỖ
           </div>
           <div className="confirm_reminder text-medium-re">
-            Trong vòng 30 phút nếu bạn không thanh toán thì đơn đặt sẽ bị hủy
+            Trong vòng 15 phút nếu bạn không thanh toán thì đơn đặt sẽ bị hủy
           </div>
         </div>
 
@@ -161,9 +140,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
-              {partner.BankAccount}
+              }}>
+              68000888
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
@@ -179,9 +157,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
-              {partner.BankBranchName}
+              }}>
+              Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
@@ -197,9 +174,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}
-            >
-              {partner.BankAccountOwnerName}
+              }}>
+              Công ty cổ phần Công nghệ và Đầu tư VNPLUS
             </div>
           </div>
           <div className="d-flex justify-content-between">
@@ -210,7 +186,7 @@ const Index = () => {
               Nội dung chuyển khoản:
             </div>
             <div
-              className="banking-mess text-medium-se w-60"
+              className="text-medium-se w-60"
               style={{
                 color: "#222222",
                 fontWeight: "400",

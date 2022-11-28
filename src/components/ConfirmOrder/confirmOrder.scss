@@ -1,8 +1,8 @@
 @import "../../App.scss";
 
 .confirm_order_container {
-  max-width: 38%;
-  margin: auto;
+  width: #{"min(100% - 1em, 650px)"};
+  margin-inline: auto;
   padding: 41px 24px;
   background-color: #fff;
 
