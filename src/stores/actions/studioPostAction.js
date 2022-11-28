@@ -61,7 +61,7 @@ export const getFilterStudioPost =
         )}`
       );
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
     dispatch({ type: LOADING, payload: false });
   };

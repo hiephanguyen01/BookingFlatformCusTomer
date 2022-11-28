@@ -20,6 +20,8 @@ import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 import toastMessage from "../ToastMessage";
 import "./order.scss";
+import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -67,16 +69,17 @@ const Index = ({ linkTo = "" }) => {
   }
   const dispatch = useDispatch();
   useEffect(() => {
+    if (chooseServiceList.length <= 0) {
+      navigate(`${location.pathname.split("/order")[0]}`);
+    }
     setInfoUser(user);
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
-
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      dispatch({
-        type: HIDE_MODAL,
-      });
+      dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
+      dispatch({ type: SET_FILTER_SERVICE, payload: {} });
     };
   }, [cate, dispatch, id, user]);
   useEffect(()=>{

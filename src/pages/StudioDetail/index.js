@@ -401,9 +401,6 @@ export const StudioDetail = () => {
     }
   };
 
-  // const [chooseServiceList, setChooseService] = useState([]);
-  // console.log("chooseServiceList", chooseServiceList);
-  console.log("chooseServiceList", chooseServiceList);
   const handleChooseService = (data) => {
     if (data.id !== serviceSelected) {
       toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
@@ -452,9 +449,9 @@ export const StudioDetail = () => {
   //   }
   // };
   const handleChangeLike = (e) => {
-    e.stopPropagation();
-    if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    if (currentUser) {
+      dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
+    }
   };
   return (
     <>

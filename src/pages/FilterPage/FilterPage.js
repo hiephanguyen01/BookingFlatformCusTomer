@@ -24,6 +24,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 const { Option } = Select;
 const categories = [
   {
+    id: "",
+    value: "",
+    name: "Tất cả",
+  },
+  {
     id: 1,
     value: "studio",
     name: "Studio",
@@ -58,7 +63,6 @@ const FilterPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const ref = useRef(null);
-  console.log(ref, ref?.current?.offsetTop);
   const querySearch = queryString.parse(location?.search);
 
   const dispatch = useDispatch();
@@ -66,6 +70,7 @@ const FilterPage = () => {
   const { filter, loading, pagination, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
   const [provinces, setProvinces] = useState([]);
   useEffect(() => {
     (async () => {
@@ -74,12 +79,11 @@ const FilterPage = () => {
     })();
     initState();
   }, []);
-  console.log(studioPostList);
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
         keyString: querySearch?.keyString || "",
-        category: Number(querySearch?.category),
+        category: Number(querySearch?.category) || "",
         priceOption: Number(querySearch?.priceOption),
         price1: undefined,
         price2: undefined,
@@ -105,7 +109,7 @@ const FilterPage = () => {
         5,
         1,
         { ...filter, category: e.target.value },
-        {},
+        currentUser,
         navigate
       )
     );
@@ -116,7 +120,7 @@ const FilterPage = () => {
         5,
         1,
         { ...filter, provinceIds: [value] },
-        {},
+        currentUser,
         navigate
       )
     );
@@ -127,19 +131,18 @@ const FilterPage = () => {
         5,
         1,
         { ...filter, keyString: e.target.value },
-        {},
+        currentUser,
         navigate
       )
     );
   };
   const onChangePriceOption = (e) => {
-    console.log(123);
     dispatch(
       getFilterStudioPost(
         5,
         1,
         { ...filter, priceOption: e.target.value },
-        {},
+        currentUser,
         navigate
       )
     );
@@ -163,7 +166,7 @@ const FilterPage = () => {
   };
   const onChangePage = (value) => {
     dispatch(getFilterStudioPost(5, value, filter), {}, navigate);
-    window.scrollTo({ behavior: "smooth", top: ref.current.offsetTop });
+    window.scrollTo({ behavior: "smooth", top: ref?.current?.offsetTop });
   };
   const handleClearFilter = () => {
     dispatch(
@@ -172,12 +175,12 @@ const FilterPage = () => {
         1,
         {
           keyString: "",
-          category: 1,
+          category: "",
           priceOption: 1,
           price1: undefined,
           price2: undefined,
           provinceIds: [],
-          ratingOption: 1,
+          ratingOption: 3,
         },
         {},
         navigate

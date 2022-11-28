@@ -25,11 +25,21 @@ export const SignUp = ({ onClickSignUp }) => {
     }
   }, [user, navigate]);
   return (
-    <>
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <div style={{ marginBottom: "52px" }}>
         <button className="sign-up-button">Đăng ký</button>
         {onClickSignUp ? (
-          <button className="sign-in-button" onClick={() => onClickSignUp(1)}>
+          <button
+            className="sign-in-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickSignUp(1);
+            }}
+          >
             Đăng nhập
           </button>
         ) : (
@@ -97,6 +107,6 @@ export const SignUp = ({ onClickSignUp }) => {
           </Link>
         )}
       </div>
-    </>
+    </div>
   );
 };
