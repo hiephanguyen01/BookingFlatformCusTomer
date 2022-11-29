@@ -1,6 +1,6 @@
 import React from "react";
-import { Card } from "../Card";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Card } from "../Card";
 
 // Import Swiper styles
 import "swiper/css";
@@ -42,8 +42,7 @@ const Index = ({ title, style = {}, className = "" }) => {
               },
             }}
             modules={[Navigation]}
-            className="swiper_card"
-          >
+            className="swiper_card">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => {
               return (
                 <SwiperSlide key={idx}>

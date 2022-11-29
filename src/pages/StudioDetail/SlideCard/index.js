@@ -12,9 +12,23 @@ import "./styles.scss";
 
 // import required modules
 import { Navigation, Autoplay } from "swiper";
+import { useEffect, useState } from "react";
+import CarSkeleton from "../../../components/Skeleton/CarSkeleton";
 const cx = classNames.bind(styles);
 
 export const SlideCard = ({ title, data, category }) => {
+  const [fakeLoading, setFakeLoading] = useState(true);
+
+  useEffect(() => {
+    const a = setTimeout(() => {
+      setFakeLoading(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(a);
+    };
+  }, [data]);
+
   return (
     <>
       <div className={cx("ListItem")}>
@@ -48,14 +62,23 @@ export const SlideCard = ({ title, data, category }) => {
               },
             }}
             modules={[Navigation, Autoplay]}>
-            {data &&
-              data.map((item, idx) => {
-                return (
-                  <SwiperSlide key={idx}>
-                    <Card category={category} value={item} />
-                  </SwiperSlide>
-                );
-              })}
+            {fakeLoading &&
+              Array(5)
+                .fill(0)
+                .map((val, idx) => (
+                  <>
+                    <SwiperSlide key={idx}>
+                      <CarSkeleton />
+                    </SwiperSlide>
+                  </>
+                ))}
+
+            {!fakeLoading &&
+              data.map((item, idx) => (
+                <SwiperSlide key={idx}>
+                  <Card category={category} value={item} />
+                </SwiperSlide>
+              ))}
           </Swiper>
         </div>
       </div>

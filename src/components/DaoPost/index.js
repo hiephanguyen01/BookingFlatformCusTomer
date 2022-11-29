@@ -37,6 +37,7 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
 import CommentSlider from "../CommentSlider/CommentSlider";
 import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
+import DaoPostSkeleton from "../Skeleton/DaoPostSkeleton";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
@@ -50,18 +51,12 @@ const DaoPost = (props) => {
 
   const { item, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
-  // const [mouseOverHeart, setMouseOverHeart] = useState(false);
-  // const [mouseClickHeart, setMouseClickHeart] = useState(
-  //   likePostList?.filter((itm) => itm.PostId === post?.id).length > 0
-  // );
   const [commentsClick, setCommentsClick] = useState(false);
-  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [moreOptionModal, setMoreOptionModal] = useState(false);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
   const [isModalVisibleDetail, setIsModalVisibleDetail] = useState(false);
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
-  // const [imageInModal, setImageInModal] = useState("");
 
   const {
     id,
@@ -72,7 +67,6 @@ const DaoPost = (props) => {
     Image,
     CreationTime,
   } = post;
-
   const [comments, setComments] = useState([]);
   const [pagination, setPagination] = useState({});
   const [chooseCommentDefault, setChooseCommentDefault] = useState({});
@@ -102,8 +96,6 @@ const DaoPost = (props) => {
     dispatch(getAllNotificationDaoAction());
   }, [dispatch]);
   const handlerLikeComment = (id) => {
-    // getComments(1);
-    // setPost({ ...post, TotalComments: post?.TotalComments + 1 });
     dispatch(
       createLikeCommentDao({ CommentId: id }, post?.id, setComments, pagination)
     );
@@ -429,44 +421,58 @@ const DaoPost = (props) => {
       </Row>
     );
   }
+  const [fakeLoading, setFakeLoading] = useState(true);
+
+  useEffect(() => {
+    const a = setTimeout(() => {
+      setFakeLoading(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(a);
+    };
+  }, [post]);
   return (
-    <article className="post">
-      <section className="post__main d-flex flex-column">
-        <header className="post__main__info d-flex justify-content-between align-posts-center">
-          <div className="d-flex justify-content-between align-posts-center">
-            <img src={convertImage(post?.BookingUser?.Image)} alt="" />
-            <div className="post__main__info__nametime">
-              <p className="post__main__info__nametime__name">
-                {post?.BookingUser?.Fullname}
-              </p>
-              <p>{convertTime(CreationTime)}</p>
-            </div>
-          </div>
-          <div>
-            <Popover
-              placement="leftTop"
-              content={
-                <div className="more-option-modal">
-                  {moreOptionOnEachPost.map((itm, idx) => (
-                    <>
-                      {itm.id === 3 ? (
-                        <li
-                          key={idx}
-                          onClick={(e) => {
-                            navigator.clipboard.writeText(
-                              `${window.location.origin}/home/dao/posts/${id}`
-                            );
-                            handleMoreOptionClick(itm);
-                          }}
-                        >
-                          <div className="container d-flex">
-                            <div>{itm.icon}</div>
-                            <p>{itm.title}</p>
-                          </div>
-                        </li>
-                      ) : (
+    <>
+      {fakeLoading &&
+        Array(5)
+          .fill(0)
+          .map((val, idx) => <DaoPostSkeleton />)}
+      {!fakeLoading && (
+        <article className="post">
+          <section className="post__main d-flex flex-column">
+            <header className="post__main__info d-flex justify-content-between align-posts-center">
+              <div className="d-flex justify-content-between align-posts-center">
+                <img src={convertImage(post?.BookingUser?.Image)} alt="" />
+                <div className="post__main__info__nametime">
+                  <p className="post__main__info__nametime__name">
+                    {post?.BookingUser?.Fullname}
+                  </p>
+                  <p>{convertTime(CreationTime)}</p>
+                </div>
+              </div>
+              <div>
+                <Popover
+                  placement="leftTop"
+                  content={
+                    <div className="more-option-modal">
+                      {moreOptionOnEachPost.map((itm, idx) => (
                         <>
-                          {itm.id === 2 ? (
+                          {itm.id === 3 ? (
+                            <li
+                              key={idx}
+                              onClick={(e) => {
+                                navigator.clipboard.writeText(
+                                  `${window.location.origin}/home/dao/posts/${id}`
+                                );
+                                handleMoreOptionClick(itm);
+                              }}>
+                              <div className="container d-flex">
+                                <div>{itm.icon}</div>
+                                <p>{itm.title}</p>
+                              </div>
+                            </li>
+                          ) : (
                             <>
                               {listNotificationUser?.some(
                                 (item) =>
@@ -634,7 +640,21 @@ const DaoPost = (props) => {
                                   </li>
                                 ) : (
                                   <>
-                                    {itm.id === 2 ? (
+                                    {itm.id === 3 ? (
+                                      <li
+                                        onClick={(e) => {
+                                          navigator.clipboard.writeText(
+                                            `${window.location.origin}/home/dao/posts/${id}`
+                                          );
+                                          handleMoreOptionClick(itm);
+                                        }}
+                                        key={idx}>
+                                        <div className="container d-flex">
+                                          <div>{itm.icon}</div>
+                                          <p>{itm.title}</p>
+                                        </div>
+                                      </li>
+                                    ) : (
                                       <>
                                         {listNotificationUser?.some(
                                           (item) =>
@@ -805,23 +825,17 @@ const DaoPost = (props) => {
                           <PlusOutlined
                             style={{ color: "#03AC84", fontSize: "14px" }}
                           />
-                          <p>Chọn dịch vụ liên quan</p>
+                          <p className={`${commentsClick ? "active" : ""}`}>
+                            {TotalComments}
+                          </p>
                         </div>
-                        {relatedService.length > 0 && (
-                          <div className="w-100 pe-20">
-                            <CommentSlider
-                              data={relatedService}
-                              slidesPerView={1.5}
-                            />
-                          </div>
-                        )}
-                        <PopUpSignIn onClick={(e) => {}}>
+                      </div>
+                      <section className="comment_wrapper">
+                        <div className="d-flex">
                           <img
-                            src={sendComment}
-                            style={{ borderRadius: "0", cursor: "pointer" }}
-                            className="mt-5 btn-send-comment"
+                            className="avatar-comment-default avt"
+                            src={convertImage(currentUser?.Image)}
                             alt=""
-                            onClick={handleSendComment}
                           />
                         </PopUpSignIn>
                       </div>
@@ -863,11 +877,12 @@ const DaoPost = (props) => {
                             {comment?.services?.length > 0 && (
                               <div className="post_slider_container">
                                 <CommentSlider
-                                  data={comment.services}
+                                  data={relatedService}
                                   slidesPerView={1.5}
                                 />
                               </div>
                             )}
+
 
                             <div
                               className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
@@ -895,18 +910,29 @@ const DaoPost = (props) => {
                                       }
                                       // onMouseLeave={() => setMouseOverHeart(false)}
                                     />
-                                  ) : (
-                                    <HeartOutlined
-                                      style={{
-                                        color: "#828282",
-                                        fontSize: "20px",
-                                        cursor: "pointer",
-                                        marginBottom: "2px",
-                                      }}
-                                      onClick={() =>
-                                        handlerLikeComment(comment?.id)
-                                      }
-                                      // onMouseOver={() => setMouseOverHeart(true)}
+                                    <div className="post__main__info__nametime">
+                                      <p className="post__main__info__nametime__name">
+                                        {comment?.BookingUser?.Fullname}
+                                      </p>
+                                      <p>{convertTime(comment?.createdAt)}</p>
+                                    </div>
+                                  </div>
+                                </header>
+                                {comment.Content && (
+                                  <div
+                                    style={{
+                                      marginLeft: "40px",
+                                      marginTop: "15px",
+                                    }}
+                                    className="post__comments__detail__content">
+                                    {comment.Content}
+                                  </div>
+                                )}
+                                {comment?.services?.length > 0 && (
+                                  <div className="post_slider_container">
+                                    <CommentSlider
+                                      data={comment.services}
+                                      slidesPerView={1.5}
                                     />
                                   )}
                                 </PopUpSignIn>
@@ -922,8 +948,15 @@ const DaoPost = (props) => {
                                   {comment?.TotalLike}
                                 </p>
                               </div>
-                            </div>
+                            );
+                          })}
+                        {pagination.hasNextPage && (
+                          <div
+                            className="btn-see-more-cmt"
+                            onClick={handleSeeMoreComment}>
+                            Xem thêm bình luận
                           </div>
+
                         );
                       })}
                     {pagination.hasNextPage && (
@@ -933,11 +966,9 @@ const DaoPost = (props) => {
                       >
                         Xem thêm bình luận
                       </div>
-                    )}
-                  </div>
-                </Col>
-              </Row>
-              {/* <img
+                    </Col>
+                  </Row>
+                  {/* <img
                 style={{ width: "100%", transform: "scale(1.8)" }}
                 src={imageInModal}
                 alt=""
@@ -968,7 +999,8 @@ const DaoPost = (props) => {
                       cursor: "pointer",
                       marginBottom: "2px",
                     }}
-                    // onMouseOver={() => setMouseOverHeart(true)}
+                    className={`${commentsClick ? "active" : ""}`}
+                    style={commentsClick ? { color: "#E22828" } : {}}
                   />
                 )}
               </PopUpSignIn>
@@ -1092,50 +1124,109 @@ const DaoPost = (props) => {
                     <CommentSlider data={cmt?.services} />
                   </div>
                 )}
-
-                <div className="d-flex" style={{ marginTop: "22px" }}>
-                  {cmt?.Likes?.some(
-                    (item) => item?.UserId === currentUser?.id
-                  ) ? (
-                    <HeartFilled
-                      // onClick={() =>
-                      //   setMouseClickHeart(!mouseClickHeart)
-                      // }
-                      onClick={() => handlerLikeComment(cmt?.id)}
-                      style={{
-                        fontSize: "20px",
-                        color: "#E22828",
-                        marginBottom: "2px",
-                      }}
-                      // onMouseLeave={() => setMouseOverHeart(false)}
-                    />
-                  ) : (
-                    <HeartOutlined
-                      style={{
-                        color: "#828282",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                        marginBottom: "2px",
-                      }}
-                      onClick={() => handlerLikeComment(cmt?.id)}
-
-                      // onMouseOver={() => setMouseOverHeart(true)}
-                    />
-                  )}
-                  <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                    {cmt?.TotalLike}
-                  </p>
-                </div>
               </div>
-            );
-          })}
-        {pagination.hasNextPage && (
-          <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
-            Xem thêm bình luận
-          </div>
-        )}
-      </section>
-    </article>
+              <PopUpSignIn
+                onClick={(e) => {
+                  e.prevent();
+                }}>
+                <img
+                  src={sendComment}
+                  style={{ borderRadius: "0", cursor: "pointer" }}
+                  className="mt-5 btn-send-comment"
+                  alt=""
+                  onClick={handleSendComment}
+                />
+              </PopUpSignIn>
+            </div>
+          </section>
+          <section
+            className={
+              commentsClick ? "post__comments" : "post__comments d-none"
+            }>
+            <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
+            {comments
+              .sort((a, b) => b.createdAt - a.createdAt)
+              .map((cmt, idx) => {
+                return (
+                  <div key={cmt.id} className="post__comments__detail">
+                    {idx !== 0 && (
+                      <hr color="#E7E7E7" style={{ marginBottom: "18px" }} />
+                    )}
+                    <div className="post__comments__detail__info d-flex align-posts-center">
+                      <img
+                        className="post__comments__detail__info_avatar"
+                        // src={cmt.BookingUser.Image}
+                        // alt=""
+                        src={convertImage(cmt.BookingUser.Image)}
+                        alt=""
+                      />
+                      <div
+                        style={{ marginLeft: "10px" }}
+                        className="post__comments__detail__info__nametime">
+                        <p className="post__comments__detail__info__nametime__name">
+                          {cmt.BookingUser.Fullname}
+                        </p>
+                        <p>{convertTime(cmt.createdAt)}</p>
+                      </div>
+                    </div>
+                    {cmt?.Content && (
+                      <div
+                        style={{ marginLeft: "40px", marginTop: "5px" }}
+                        className="post__comments__detail__content">
+                        {cmt.Content}
+                      </div>
+                    )}
+                    {cmt?.services?.length > 0 && (
+                      <div className="w-100">
+                        <CommentSlider data={cmt?.services} />
+                      </div>
+                    )}
+
+                    <div className="d-flex" style={{ marginTop: "22px" }}>
+                      {cmt?.Likes?.some(
+                        (item) => item?.UserId === currentUser?.id
+                      ) ? (
+                        <HeartFilled
+                          // onClick={() =>
+                          //   setMouseClickHeart(!mouseClickHeart)
+                          // }
+                          onClick={() => handlerLikeComment(cmt?.id)}
+                          style={{
+                            fontSize: "20px",
+                            color: "#E22828",
+                            marginBottom: "2px",
+                          }}
+                          // onMouseLeave={() => setMouseOverHeart(false)}
+                        />
+                      ) : (
+                        <HeartOutlined
+                          style={{
+                            color: "#828282",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            marginBottom: "2px",
+                          }}
+                          onClick={() => handlerLikeComment(cmt?.id)}
+
+                          // onMouseOver={() => setMouseOverHeart(true)}
+                        />
+                      )}
+                      <p style={{ paddingLeft: "5px", color: "#E22828" }}>
+                        {cmt?.TotalLike}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            {pagination.hasNextPage && (
+              <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
+                Xem thêm bình luận
+              </div>
+            )}
+          </section>
+        </article>
+      )}
+    </>
   );
 };
 
