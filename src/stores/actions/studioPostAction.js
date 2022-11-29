@@ -4,6 +4,7 @@ import { userService } from "../../services/UserService";
 import {
   LOADING,
   LOADING_SERVICE,
+  SELECT_TIME_ORDER,
   SET_FILTER,
   SET_FILTER_SERVICE,
   SET_LIST_LIKED_CATEGORY,
@@ -15,6 +16,7 @@ import {
   SET_STUDIO_NEAR,
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
+import { SET_CHOOSE_SERVICE } from "../types/OrderType";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: true });
@@ -32,7 +34,10 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: false });
 };
 export const getFilterStudioPost =
-  (limit, page, filter, user, navigate) => async (dispatch) => {
+  (limit, page, filter, currentUser, navigate) => async (dispatch) => {
+    // console.log("filter", filter.category);
+    console.log(filter, currentUser);
+
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getFilterStudioPost(
@@ -43,13 +48,12 @@ export const getFilterStudioPost =
       dispatch({ type: SET_POST_LIST, payload: data.data });
       dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
       dispatch({ type: SET_FILTER, payload: filter });
-      if (user !== null) {
+      if (currentUser !== null) {
         dispatch(getAllStudioLikedAction1(filter.category));
       }
-      console.log(filter);
       navigate(
         `/home/filter?${queryString.stringify(
-          Object.keys(filter).reduce(
+          Object.keys(filter)?.reduce(
             (newFilter, key) =>
               filter[key] === ""
                 ? { ...newFilter }
@@ -59,7 +63,7 @@ export const getFilterStudioPost =
         )}`
       );
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
     dispatch({ type: LOADING, payload: false });
   };
@@ -304,3 +308,22 @@ export const setFilterStudioService =
     }
     dispatch({ type: LOADING_SERVICE, payload: false });
   };
+
+export const handlerSelectServiceAction = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: SELECT_TIME_ORDER, data: { id: data.id } });
+      console.log("action data", data);
+      dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
+      // if (filterService.id == data.id) {
+      //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
+      //       setChooseService([]);
+      //     } else {
+      //       setChooseService([{ ...data }]);
+      //     }
+      //   }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};

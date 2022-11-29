@@ -17,9 +17,11 @@
   .container {
     margin: 0 50px;
     width: 100%;
+
     .img {
       display: block;
     }
+
     &__right {
       display: flex;
       align-items: center;
@@ -29,6 +31,7 @@
       .wrapper-user {
         display: flex;
         flex-direction: column;
+
         .btn-become-partner {
           display: flex;
           justify-content: center;
@@ -49,6 +52,7 @@
     .ant-input-affix-wrapper {
       padding: 3px 3px !important;
       width: 100% !important;
+
       .ant-input-prefix {
         padding: 10px 0 10px 13px !important;
       }
@@ -99,6 +103,77 @@
 }
 
 .search-modal {
+  .search-container {
+    width: 50%;
+    margin: auto;
+    position: relative;
+
+    .input-search {
+      border-radius: 5px;
+      background: #F4F4F4;
+      padding: 10px 20px;
+      outline: none;
+
+      .ant-input {
+        background: #F4F4F4;
+
+      }
+    }
+
+    .option {
+
+      .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+        width: 100%;
+        height: auto;
+        padding: 5px 10px;
+      }
+
+      .ant-select-selector {
+        border-radius: 8px;
+      }
+    }
+
+    .btn-search {
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .wrapper-user {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      top: 0;
+      right: -40%;
+
+      .user {
+        display: flex;
+        align-items: center;
+      }
+
+      .btn-become-partner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1px 3px;
+
+        border: 1px solid #20dfb3;
+        border-radius: 5px;
+        font-size: 12px;
+        line-height: 15px;
+
+        color: #0cbb92;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .ant-modal-content {
+
+    .ant-modal-body {
+      padding: 12px 24px;
+    }
+  }
+
   .ant-modal-title {
     width: fit-content;
   }
@@ -111,16 +186,29 @@
     display: none;
   }
 
-  .logo {
-    text-align: center;
-    margin: 20px;
-    cursor: pointer;
+  .header-search {
+    position: relative;
+
+    .logo {
+      text-align: center;
+      margin: 20px;
+      // cursor: pointer;
+    }
+
+    .btn-close {
+      position: absolute;
+      top: 50%;
+      right: -5%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      cursor: pointer;
+    }
   }
 
   .filter {
     font-weight: 600;
     size: 18px;
-    padding: 20px 0;
+    padding: 10px 0 20px 0;
   }
 
   .time {
@@ -130,37 +218,44 @@
   }
 }
 
-// @media (max-width: 992px) {
-//   .Header {
-//     .container {
-//       margin: 0 20px;
-//       .link {
-//         display: block;
-//         width: 50%;
-//         margin-bottom: 21px;
-//       }
-//       &__right {
-//         margin-top: 30px;
-//         gap: 20px;
-//         width: 100% !important;
-//         display: flex;
-//         justify-content: space-between;
-//         margin-left: 10px;
-//       }
-//     }
 
-//     .text {
-//       // display: none;
-//       p:nth-child(1) {
-//         display: none;
-//       }
-//     }
+@media (max-width: 991px) {
+  .Header {
+    .container {
+      margin: 0 20px;
+      // @media (max-width: 992px) {
+      //   .Header {
+      //     .container {
+      //       margin: 0 20px;
+      //       .link {
+      //         display: block;
+      //         width: 50%;
+      //         margin-bottom: 21px;
+      //       }
+      //       &__right {
+      //         margin-top: 30px;
+      //         gap: 20px;
+      //         width: 100% !important;
+      //         display: flex;
+      //         justify-content: space-between;
+      //         margin-left: 10px;
+      //       }
+      //     }
 
-//     .ant-input-affix-wrapper {
-//       width: 50% !important;
-//     }
-//   }
-// }
+      //     .text {
+      //       // display: none;
+      //       p:nth-child(1) {
+      //         display: none;
+      //       }
+      //     }
+
+      //     .ant-input-affix-wrapper {
+      //       width: 50% !important;
+      //     }
+      //   }
+    }
+  }
+}
 
 @media (max-width: 767px) {
   .Header {
@@ -173,12 +268,14 @@
         width: 100%;
         margin-bottom: 21px;
       }
+
       &__right {
         padding-top: 20px;
       }
     }
 
     .text {
+
       // display: none;
       p:nth-child(1) {
         display: none;

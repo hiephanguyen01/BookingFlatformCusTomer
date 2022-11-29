@@ -66,7 +66,7 @@ export const Card = ({ value, category }) => {
     listLikedCategory6,
   ]);
   const handleChangeLike = (e) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
     dispatch(getLikeStudioPostAction(value?.id, category.id));
   };

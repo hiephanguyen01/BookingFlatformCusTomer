@@ -48,6 +48,7 @@ const categories = {
   },
 };
 const FilterCard = ({ data, category }) => {
+  console.log("dâttalike", category);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -60,8 +61,9 @@ const FilterCard = ({ data, category }) => {
     listLikedCategory6,
   } = useSelector((state) => state.studioPostReducer);
   const [value, setValue] = useState([]);
+  console.log(value);
   useEffect(() => {
-    switch (data.category) {
+    switch (category?.id) {
       case 1:
         setValue(listLikedCategory1);
         break;
@@ -84,7 +86,7 @@ const FilterCard = ({ data, category }) => {
         break;
     }
   }, [
-    data.category,
+    data?.category,
     listLikedCategory1,
     listLikedCategory2,
     listLikedCategory3,
@@ -95,7 +97,7 @@ const FilterCard = ({ data, category }) => {
   const handleChangeLike = (e) => {
     // if (!currentUser) navigate("/auth/sign-in");
     if (currentUser) {
-      dispatch(getLikeStudioPostAction(data.id, data.category));
+      dispatch(getLikeStudioPostAction(data?.id, category?.id));
     }
   };
   return (
@@ -114,7 +116,7 @@ const FilterCard = ({ data, category }) => {
                 OrderByDateTo: "",
               },
             });
-            navigate(`/home/${categories[data.category].value}/${data.id}`);
+            navigate(`/home/${categories[category?.id].value}/${data?.id}`);
           }}
         >
           <div className="groupImage">
@@ -125,7 +127,7 @@ const FilterCard = ({ data, category }) => {
               }}
               className={"like"}
             >
-              {value?.findIndex((item) => item.id === data.id) > -1 ? (
+              {value?.findIndex((item) => item.id === data?.id) > -1 ? (
                 <HeartFilled style={{ color: "red", fontSize: "20px" }} />
               ) : (
                 <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
@@ -134,7 +136,7 @@ const FilterCard = ({ data, category }) => {
 
             {/* <div className="sale">-60% HÔM NAY</div> */}
             <div className="main">
-              <img className="main" src={convertImage(data.Image[0])} alt="" />
+              <img className="main" src={convertImage(data?.Image[0])} alt="" />
             </div>
             <div className="right">
               {data?.Image.slice(1, 3).map((img, index) => (
@@ -147,7 +149,7 @@ const FilterCard = ({ data, category }) => {
 
           <div className="text">
             <div className="d-flex align-items-center mb-8">
-              <p className="title">{data.Name}</p>
+              <p className="title">{data?.Name}</p>
               <CheckCircleTwoTone
                 style={{ fontSize: "20px" }}
                 className="pb-4"
@@ -156,31 +158,31 @@ const FilterCard = ({ data, category }) => {
             </div>
             <div className="d-flex justify-content-between align-items-center mb-8">
               <p className="description">
-                <img src={Logo3} alt="" /> {data.Address}
+                <img src={Logo3} alt="" /> {data?.Address}
               </p>
               <d>
                 <StarOutlined
                   style={{ color: "#F8D93A" }}
                   twoToneColor="#F8D93A"
                 />
-                {data.TotalRate} ({data.NumberOfRating})
+                {data?.TotalRate} ({data?.NumberOfRating})
               </d>
             </div>
             <div className="d-flex justify-content-between align-items-center mb-8">
               <p className="description-category">
                 <img src={Logo2} alt="" className="pb-3" />{" "}
-                {categories[data.category].name}
+                {categories[data?.category]?.name}
               </p>
-              <p>Đã đặt {data.BookingCount}</p>
+              <p>Đã đặt {data?.BookingCount}</p>
             </div>
 
             <CurrencyFormat
-              value={data.Price}
+              value={data?.Price}
               displayType={"text"}
               thousandSeparator={true}
               renderText={(value) => (
                 <p className="addition">
-                  {value} {data.PriceUnit || ""}
+                  {value} {data?.PriceUnit || ""}
                 </p>
               )}
             />
