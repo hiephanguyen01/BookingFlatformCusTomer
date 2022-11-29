@@ -5,8 +5,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import images from "../../assets/images";
-import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
+import { getLikeStudioPostAction,getAllStudioLikedAction1 } from "../../stores/actions/studioPostAction";
 import styles from "./Card.module.scss";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 
 const cx = classNames.bind(styles);
 
@@ -15,10 +16,8 @@ export const Card = ({ value, category }) => {
     `${process.env.REACT_APP_DB_BASE_URL_IMG}/${
       value?.Image[0] || value?.Image
     }` || images.baby;
-  const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const {
     listLikedCategory1,
@@ -64,7 +63,7 @@ export const Card = ({ value, category }) => {
     listLikedCategory6,
   ]);
   const handleChangeLike = (e) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
     dispatch(getLikeStudioPostAction(value?.id, category.id));
   };
@@ -77,13 +76,20 @@ export const Card = ({ value, category }) => {
         <img className={cx("thumbnail")} alt="" src={img} />
       </div>
 
-      <div onClick={handleChangeLike} className={cx("like")}>
-        {data?.findIndex((item) => item.id === value.id) > -1 ? (
-          <HeartFilled style={{ color: "red", fontSize: "20px" }} />
-        ) : (
-          <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
-        )}
-      </div>
+      <PopUpSignIn
+        onClick={(e) => {
+          e.stopPropagation();
+          handleChangeLike();
+        }}
+      >
+        <div className={cx("like")}>
+          {data?.findIndex((item) => item.id === value.id) > -1 ? (
+            <HeartFilled style={{ color: "red", fontSize: "20px" }} />
+          ) : (
+            <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
+          )}
+        </div>
+      </PopUpSignIn>
       <div className={cx("content")}>
         <div className="h-43px mb-8">
           <h5>{value?.Name}</h5>

@@ -10,11 +10,45 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
 import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertImage } from "../../utils/convertImage";
 import "./FilterCard.scss";
+const categories = {
+  1: {
+    id: 1,
+    value: "studio",
+    name: "Studio",
+  },
+  2: {
+    id: 2,
+    value: "photographer",
+    name: "Nhiếp ảnh",
+  },
+  3: {
+    id: 3,
+    value: "clothes",
+    name: "Trang phục",
+  },
+  4: {
+    id: 4,
+    value: "makeup",
+    name: "Make up",
+  },
+  5: {
+    id: 5,
+    value: "device",
+    name: "Thiết bị",
+  },
+  6: {
+    id: 6,
+    value: "model",
+    name: "Người mẫu",
+  },
+};
 const FilterCard = ({ data, category }) => {
+  console.log("dâttalike", category);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -27,6 +61,7 @@ const FilterCard = ({ data, category }) => {
     listLikedCategory6,
   } = useSelector((state) => state.studioPostReducer);
   const [value, setValue] = useState([]);
+  console.log(value);
   useEffect(() => {
     switch (category?.id) {
       case 1:
@@ -51,7 +86,7 @@ const FilterCard = ({ data, category }) => {
         break;
     }
   }, [
-    category?.id,
+    data?.category,
     listLikedCategory1,
     listLikedCategory2,
     listLikedCategory3,
@@ -60,9 +95,10 @@ const FilterCard = ({ data, category }) => {
     listLikedCategory6,
   ]);
   const handleChangeLike = (e) => {
-    e.stopPropagation();
-    if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(data.id, category.id));
+    // if (!currentUser) navigate("/auth/sign-in");
+    if (currentUser) {
+      dispatch(getLikeStudioPostAction(data?.id, category?.id));
+    }
   };
   return (
     <>
@@ -80,42 +116,27 @@ const FilterCard = ({ data, category }) => {
                 OrderByDateTo: "",
               },
             });
-            navigate(`/home/${category.value}/${data.id}`);
+            navigate(`/home/${categories[category?.id].value}/${data?.id}`);
           }}
         >
           <div className="groupImage">
-            <div onClick={handleChangeLike} className={"like"}>
-              {value?.findIndex((item) => item.id === data.id) > -1 ? (
+            <PopUpSignIn
+              onClick={(e) => {
+                e.stopPropagation();
+                handleChangeLike();
+              }}
+              className={"like"}
+            >
+              {value?.findIndex((item) => item.id === data?.id) > -1 ? (
                 <HeartFilled style={{ color: "red", fontSize: "20px" }} />
               ) : (
                 <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
               )}
-            </div>
-            <div className="heard" onClick={(e) => e.stopPropagation()}>
-              {/* <PopUpSignIn
-                onClick={(e) => {
-                  setLike(!like);
-                  e.stopPropagation();
-                }}
-              >
-                <HeartTwoTone
-                  sizes={30}
-                  style={
-                    like
-                      ? { padding: "10px", display: "block", fontSize: "25px" }
-                      : {
-                          padding: "10px",
-                          display: "block",
-                          fontSize: "25px",
-                        }
-                  }
-                  twoToneColor="#e22828"
-                />
-              </PopUpSignIn> */}
-            </div>
+            </PopUpSignIn>
+
             {/* <div className="sale">-60% HÔM NAY</div> */}
             <div className="main">
-              <img className="main" src={convertImage(data.Image[0])} alt="" />
+              <img className="main" src={convertImage(data?.Image[0])} alt="" />
             </div>
             <div className="right">
               {data?.Image.slice(1, 3).map((img, index) => (
@@ -125,9 +146,10 @@ const FilterCard = ({ data, category }) => {
               ))}
             </div>
           </div>
+
           <div className="text">
             <div className="d-flex align-items-center mb-8">
-              <p className="title">{data.Name}</p>
+              <p className="title">{data?.Name}</p>
               <CheckCircleTwoTone
                 style={{ fontSize: "20px" }}
                 className="pb-4"
@@ -136,30 +158,31 @@ const FilterCard = ({ data, category }) => {
             </div>
             <div className="d-flex justify-content-between align-items-center mb-8">
               <p className="description">
-                <img src={Logo3} alt="" /> {data.Address}
+                <img src={Logo3} alt="" /> {data?.Address}
               </p>
               <d>
                 <StarOutlined
                   style={{ color: "#F8D93A" }}
                   twoToneColor="#F8D93A"
                 />
-                {data.TotalRate} ({data.NumberOfRating})
+                {data?.TotalRate} ({data?.NumberOfRating})
               </d>
             </div>
             <div className="d-flex justify-content-between align-items-center mb-8">
               <p className="description-category">
-                <img src={Logo2} alt="" className="pb-3" /> {category?.name}
+                <img src={Logo2} alt="" className="pb-3" />{" "}
+                {categories[data?.category]?.name}
               </p>
-              <p>Đã đặt {data.BookingCount}</p>
+              <p>Đã đặt {data?.BookingCount}</p>
             </div>
 
             <CurrencyFormat
-              value={data.Price}
+              value={data?.Price}
               displayType={"text"}
               thousandSeparator={true}
               renderText={(value) => (
                 <p className="addition">
-                  {value} {data.PriceUnit || ""}
+                  {value} {data?.PriceUnit || ""}
                 </p>
               )}
             />

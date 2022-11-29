@@ -7,27 +7,28 @@ import {
   UPDATE_CHOOSE_SERVICE,
   DELETE_CHOOSE_SERVICE,
 } from "../types/OrderType";
+import { ADD_TIME_ORDER } from "../types/studioPostType";
 
 export const getAllOrder = () => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     // const { data } = await orderService.getAllOrder();
     // dispatch({ type: SET_POST_LIST, payload: data.data });
   } catch (error) {
     console.error(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
 
 export const getAllOrderByUserId = () => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     // const { data } = await orderService.getAllOrderByUserId();
     // dispatch({ type: SET_POST_LIST, payload: data.data });
   } catch (error) {
     console.error(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
 
 export const getTotalOrder = async (id, category) => {
@@ -40,47 +41,48 @@ export const getTotalOrder = async (id, category) => {
 };
 
 export const chooseServiceAction = (data) => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: SET_CHOOSE_SERVICE, payload: data });
+    dispatch({type:"SET_TIME_ORDER",data:[]})
   } catch (error) {
     console.log(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
 
 export const deleteChooseServiceAction = () => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: DELETE_CHOOSE_SERVICE });
   } catch (error) {
     console.log(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
 
 export const updateServiceListAction = (data) => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: UPDATE_CHOOSE_SERVICE, payload: data });
   } catch (error) {
     console.log(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
 
 export const deleteOrder = () => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: DELETE_ORDER });
   } catch (error) {
     console.log(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
 
 export const addOrder = (category, data) => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     switch (Number(category)) {
       case 1:
@@ -126,11 +128,11 @@ export const addOrder = (category, data) => async (dispatch) => {
   } catch (error) {
     console.error(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
 
 export const updateOrder = (category, data) => async (dispatch) => {
-  dispatch({ type: LOADING, payload: true });
+  // dispatch({ type: LOADING, payload: true });
   try {
     switch (Number(category)) {
       case 1:
@@ -176,5 +178,5 @@ export const updateOrder = (category, data) => async (dispatch) => {
   } catch (error) {
     console.error(error);
   }
-  dispatch({ type: LOADING, payload: false });
+  // dispatch({ type: LOADING, payload: false });
 };
