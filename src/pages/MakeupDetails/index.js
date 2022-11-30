@@ -24,6 +24,7 @@ import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import {
   getLikeStudioPostAction,
   getStudioSimilarAction,
+  handlerSelectServiceAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
@@ -46,6 +47,7 @@ import ReactStickyBox from "react-sticky-box";
 import styles from "./Detail.module.scss";
 import images from "../../assets/images";
 import classNames from "classnames/bind";
+import { DELETE_CHOOSE_SERVICE, SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 const COLUMN = [
   { title: "Dịch vụ", size: 7 },
   { title: "Chọn thời gian", size: 10 },
@@ -56,6 +58,7 @@ const cx = classNames.bind(styles);
 const Index = () => {
   const { studioDetail, listStudioSimilar, promotionCode, filterService } =
     useSelector((state) => state.studioPostReducer);
+  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -95,10 +98,14 @@ const Index = () => {
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
+      dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     };
   }, [dispatch]);
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
+    dispatch({ type: "SET_SELECT_TIME_ORDER" });
+    dispatch({ type: "SET_SERVICE_SELECT", payload: null });
+    dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
   }, [id]);
 
   const handleReport = () => {
@@ -148,7 +155,8 @@ const Index = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 {data.Name}
               </div>
               <div
@@ -157,7 +165,8 @@ const Index = () => {
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}>
+                }}
+              >
                 {data.Description}
               </div>
             </div>
@@ -181,13 +190,15 @@ const Index = () => {
                       gap: "5px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}>
+                    }}
+                  >
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -205,7 +216,8 @@ const Index = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -223,7 +235,8 @@ const Index = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
+                    }}
+                  >
                     {data.PriceNote}
                   </p>
                   {/* <button
@@ -240,10 +253,12 @@ const Index = () => {
                 </div>
               )}
               <div className="">
-                {chooseService.filter((item) => item.id === data.id).length >
-                0 ? (
+                {filterService.id === data.id ? (
                   <div
-                    onClick={() => handleChooseService(data)}
+                    onClick={() => {
+                      dispatch({ type: "REMOVE_SELECT_TIME" });
+                      dispatch({ type: DELETE_CHOOSE_SERVICE });
+                    }}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -257,7 +272,8 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Bỏ chọn
                   </div>
                 ) : (
@@ -277,7 +293,8 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Chọn
                   </div>
                 )}
@@ -290,35 +307,42 @@ const Index = () => {
   };
 
   const handleChooseService = (data) => {
-    if (
-      (filterService.OrderByTime === 0 &&
-        filterService.OrderByDateFrom !== "" &&
-        filterService.OrderByDateTo !== "") ||
-      (filterService.OrderByTime === 1 &&
-        filterService.OrderByTimeFrom !== "" &&
-        filterService.OrderByTimeTo !== "")
-    ) {
-      if (chooseService.filter((item) => item.id === data.id).length > 0) {
-        setChooseService([]);
-      } else {
-        setChooseService([{ ...data }]);
-      }
-    } else {
-      toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
-    }
+    dispatch(handlerSelectServiceAction(data));
+    // if (
+    //   (filterService.OrderByTime === 0 &&
+    //     filterService.OrderByDateFrom !== "" &&
+    //     filterService.OrderByDateTo !== "") ||
+    //   (filterService.OrderByTime === 1 &&
+    //     filterService.OrderByTimeFrom !== "" &&
+    //     filterService.OrderByTimeTo !== "")
+    // ) {
+    //   if (chooseService.filter((item) => item.id === data.id).length > 0) {
+    //     setChooseService([]);
+    //   } else {
+    //     setChooseService([{ ...data }]);
+    //   }
+    // } else {
+    //   toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
+    // }
   };
 
   const handleBook = () => {
-    if (chooseService.length > 0) {
-      dispatch(chooseServiceAction(chooseService));
+    if (chooseServiceList.length > 0) {
+      dispatch(chooseServiceAction(chooseServiceList));
       navigate("order");
     } else {
-      if (filterService.OrderByTime === -1) {
-        toastMessage("Bạn cần chọn thời gian!", "warn");
-      } else if (chooseService.length <= 0) {
-        toastMessage("Bạn cần chọn dịch vụ!", "warn");
-      }
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
+    // if (chooseService.length > 0) {
+    //   dispatch(chooseServiceAction(chooseService));
+    //   navigate("order");
+    // } else {
+    //   if (filterService.OrderByTime === -1) {
+    //     toastMessage("Bạn cần chọn thời gian!", "warn");
+    //   } else if (chooseService.length <= 0) {
+    //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    //   }
+    // }
   };
 
   // const handleAddCart = () => {
@@ -351,7 +375,8 @@ const Index = () => {
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}>
+                style={{ marginBottom: "11px" }}
+              >
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -360,7 +385,8 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}>
+                    }}
+                  >
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{
@@ -404,23 +430,27 @@ const Index = () => {
                           flexDirection: "column",
                           gap: "10px",
                           padding: "10px",
-                        }}>
+                        }}
+                      >
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
                             cursor: "pointer",
-                          }}>
+                          }}
+                        >
                           <WarningOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Báo cáo
                           </span>
                         </div>
                       </div>
                     }
-                    trigger="click">
+                    trigger="click"
+                  >
                     <MoreOutlined
                       style={{
                         fontSize: "25px",
@@ -496,17 +526,18 @@ const Index = () => {
                 <ReactStickyBox offsetTop={20} offsetBottom={20}>
                   <div className={cx("order")}>
                     <div className={cx("item")}>
-                      <h3>Đã chọn {chooseService.length} phòng</h3>
-                      {chooseService.length > 0 && (
+                      <h3>Đã chọn {chooseServiceList.length} phòng</h3>
+                      {chooseServiceList.length > 0 && (
                         <span
                           style={{
                             textDecoration: "line-through",
                             fontSize: " 16px",
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           {filterService.OrderByTime === 1 &&
                             `${convertPrice(
-                              chooseService?.reduce(
+                              chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByHour *
@@ -519,7 +550,7 @@ const Index = () => {
                             )}đ`}
                           {filterService.OrderByTime === 0 &&
                             `${convertPrice(
-                              chooseService?.reduce(
+                              chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByDate *
@@ -540,10 +571,11 @@ const Index = () => {
                           color: "#E22828",
                           fontSize: "20px",
                           fontWeight: "700",
-                        }}>
+                        }}
+                      >
                         {filterService.OrderByTime === 1 &&
                           `${convertPrice(
-                            chooseService?.reduce(
+                            chooseServiceList?.reduce(
                               (total, item) =>
                                 total +
                                 item.PriceByHour *
@@ -556,7 +588,7 @@ const Index = () => {
                           )}đ`}
                         {filterService.OrderByTime === 0 &&
                           `${convertPrice(
-                            chooseService?.reduce(
+                            chooseServiceList?.reduce(
                               (total, item) =>
                                 total +
                                 item.PriceByDate *
@@ -572,7 +604,7 @@ const Index = () => {
                     <div className="w-100 d-flex justify-content-between mt-20">
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        disabled={chooseService.length > 0 ? false : true}
+                        disabled={chooseServiceList?.length > 0 ? false : true}
                         onClick={() =>
                           toastMessage(
                             "Chức năng này đang phát triển!",
@@ -581,14 +613,20 @@ const Index = () => {
                             "",
                             {}
                           )
-                        }>
+                        }
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                         onClick={handleBook}
-                        disabled={chooseService.length > 0 ? false : true}>
+                        disabled={
+                          chooseServiceList.length > 0 && filterService.id > 0
+                            ? false
+                            : true
+                        }
+                      >
                         Đặt ngay
                       </Button>
                     </div>
@@ -619,7 +657,8 @@ const Index = () => {
                         {studioDetail?.album?.length > 3 && (
                           <div
                             className="btn_see_more"
-                            onClick={() => setToggleSeeMore(true)}>
+                            onClick={() => setToggleSeeMore(true)}
+                          >
                             Xem thêm <DownOutlined className="icon" />
                           </div>
                         )}
@@ -646,7 +685,8 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -654,7 +694,8 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
