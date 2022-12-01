@@ -13,8 +13,10 @@ export const AuthLayout = ({ children }) => {
       </Link>
       <div className="body-login ">
         <div className="body-contain-login">
-          <img alt="pic" src={authPic} className="pic-login" />
-          <div className="w-50 login-platform ">{children}</div>
+          <div className="cover-image" style={{ height: "100%", width: "50%" }}>
+            <img alt="pic" src={authPic} className="pic-login" />
+          </div>
+          <div className="login-platform">{children}</div>
         </div>
       </div>
     </div>

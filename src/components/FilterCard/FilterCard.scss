@@ -4,9 +4,9 @@
   cursor: pointer;
   border-radius: 8px;
   border: 1px solid #ccc;
-  overflow: hidden;
   max-height: 190px;
   margin-bottom: 20px;
+  overflow: hidden;
 
   &:last-child {
     margin-bottom: 0;
@@ -33,6 +33,9 @@
 
   .groupImage {
     position: relative;
+    display: flex;
+    width: 40%;
+    min-height: 200px;
 
     .heard {
       position: absolute;
@@ -46,7 +49,8 @@
       overflow: hidden;
       z-index: 1;
 
-      &:hover {}
+      &:hover {
+      }
     }
 
     .sale {
@@ -69,8 +73,6 @@
       overflow: hidden;
       width: 269px;
       height: 189px;
-      margin-right: 8px;
-
       img {
         width: 100%;
         display: block;
@@ -78,10 +80,8 @@
       }
     }
 
-    display: flex;
-    width: 400;
-
     .right {
+      margin-left: 8px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -100,7 +100,13 @@
       }
     }
   }
-
+  .text {
+    width: 100%;
+    padding: 10px;
+    p {
+      padding: 2px;
+    }
+  }
   p.title {
     padding-right: 5px;
     font-weight: 700;
@@ -113,7 +119,6 @@
     overflow: hidden;
 
     text-overflow: ellipsis;
-    // max-width: 440px;
   }
 
   p.description {
@@ -127,7 +132,6 @@
     overflow: hidden;
 
     text-overflow: ellipsis;
-    width: 360px;
   }
 
   p.description-category {
@@ -136,13 +140,51 @@
   }
 
   .addition {
+    width: 100%;
     color: #e22828;
-    text-align: right;
+    text-align: end;
     font-weight: 600;
   }
+  .right-text {
+    text-align: end;
+  }
 
-  .text {
-    width: 100%;
-    padding: 10px 17px;
+  @media (max-width: 1200px) {
+    .groupImage {
+      display: block;
+      .main {
+        width: auto;
+        height: 100%;
+      }
+      .right {
+        display: none;
+      }
+    }
+  }
+  @media (max-width: 900px) {
+    .groupImage {
+      width: 50%;
+    }
+    // .main {
+    //   width: 120px;
+    //   height: 100%;
+    // }
+    .addition {
+      text-align: start;
+    }
+    .right-text {
+      text-align: start;
+    }
+  }
+  @media (max-width: 540px) {
+    .groupImage {
+      .main {
+        width: 120px;
+        height: 100%;
+      }
+      .right {
+        display: none;
+      }
+    }
   }
 }
