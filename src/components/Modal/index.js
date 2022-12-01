@@ -18,6 +18,7 @@ export const ModalCustom = () => {
         visible={visible}
         closable={false}
         footer={null}
+        maskClosable={false}
         // width={600}
         onCancel={() => dispatch({ type: HIDE_MODAL })}
         centered
