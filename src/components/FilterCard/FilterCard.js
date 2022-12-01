@@ -4,6 +4,7 @@ import {
   HeartOutlined,
   StarOutlined,
 } from "@ant-design/icons";
+import { Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { useDispatch, useSelector } from "react-redux";
@@ -117,16 +118,14 @@ const FilterCard = ({ data, category }) => {
               },
             });
             navigate(`/home/${categories[category?.id].value}/${data?.id}`);
-          }}
-        >
+          }}>
           <div className="groupImage">
             <PopUpSignIn
               onClick={(e) => {
                 e.stopPropagation();
                 handleChangeLike();
               }}
-              className={"like"}
-            >
+              className={"like"}>
               {value?.findIndex((item) => item.id === data?.id) > -1 ? (
                 <HeartFilled style={{ color: "red", fontSize: "20px" }} />
               ) : (
@@ -148,44 +147,49 @@ const FilterCard = ({ data, category }) => {
           </div>
 
           <div className="text">
-            <div className="d-flex align-items-center mb-8">
-              <p className="title">{data?.Name}</p>
+            <p className="title">
+              {data?.Name}&nbsp;
               <CheckCircleTwoTone
                 style={{ fontSize: "20px" }}
                 className="pb-4"
                 twoToneColor="#52c41a"
               />
-            </div>
-            <div className="d-flex justify-content-between align-items-center mb-8">
-              <p className="description">
-                <img src={Logo3} alt="" /> {data?.Address}
-              </p>
-              <d>
-                <StarOutlined
-                  style={{ color: "#F8D93A" }}
-                  twoToneColor="#F8D93A"
-                />
-                {data?.TotalRate} ({data?.NumberOfRating})
-              </d>
-            </div>
-            <div className="d-flex justify-content-between align-items-center mb-8">
-              <p className="description-category">
-                <img src={Logo2} alt="" className="pb-3" />{" "}
-                {categories[data?.category]?.name}
-              </p>
-              <p>Đã đặt {data?.BookingCount}</p>
-            </div>
-
-            <CurrencyFormat
-              value={data?.Price}
-              displayType={"text"}
-              thousandSeparator={true}
-              renderText={(value) => (
-                <p className="addition">
-                  {value} {data?.PriceUnit || ""}
+            </p>
+            <Row style={{ width: "100%" }}>
+              <Col md={12} sm={24} xs={24}>
+                <p className="description">
+                  <img src={Logo3} alt="" /> {data?.Address}
                 </p>
-              )}
-            />
+              </Col>
+              <Col md={12} sm={24} xs={24} className="right-text">
+                <p>
+                  <StarOutlined
+                    style={{ color: "#F8D93A" }}
+                    twoToneColor="#F8D93A"
+                  />
+                  {data?.TotalRate} ({data?.NumberOfRating})
+                </p>
+              </Col>
+              <Col md={12} sm={24} xs={24}>
+                <p className="description-category">
+                  <img src={Logo2} alt="" className="pb-3" />{" "}
+                  {categories[data?.category]?.name}
+                </p>
+              </Col>
+              <Col md={12} sm={24} xs={24} className="right-text">
+                <p>Đã đặt {data?.BookingCount}</p>
+              </Col>
+              <CurrencyFormat
+                value={data?.Price}
+                displayType={"text"}
+                thousandSeparator={true}
+                renderText={(value) => (
+                  <p className="addition">
+                    {value} {data?.PriceUnit || ""}
+                  </p>
+                )}
+              />
+            </Row>
           </div>
         </div>
       )}

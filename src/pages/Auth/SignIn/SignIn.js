@@ -24,8 +24,7 @@ export const SignIn = ({ onClickPop }) => {
       className="SignIn"
       onClick={(e) => {
         e.stopPropagation();
-      }}
-    >
+      }}>
       <div style={{ marginBottom: "52px" }}>
         {onClickPop ? (
           <button
@@ -33,8 +32,7 @@ export const SignIn = ({ onClickPop }) => {
             onClick={(e) => {
               e.stopPropagation();
               onClickPop(5);
-            }}
-          >
+            }}>
             Đăng ký
           </button>
         ) : (
@@ -56,8 +54,7 @@ export const SignIn = ({ onClickPop }) => {
         <Form.Item
           key={1}
           name="phoneNumber"
-          rules={[{ required: true, message: "Không được bỏ trống" }]}
-        >
+          rules={[{ required: true, message: "Không được bỏ trống" }]}>
           <Input
             size="large"
             className="input-phone"
@@ -67,8 +64,7 @@ export const SignIn = ({ onClickPop }) => {
         <Form.Item
           key={2}
           name="password"
-          rules={[{ required: true, message: "Không được bỏ trống" }]}
-        >
+          rules={[{ required: true, message: "Không được bỏ trống" }]}>
           <Input.Password
             size="large"
             placeholder="Mật khẩu"
@@ -78,6 +74,15 @@ export const SignIn = ({ onClickPop }) => {
           />
         </Form.Item>
 
+        <Form.Item>
+          <Button
+            size="large"
+            style={{ width: "100%", borderRadius: "10px" }}
+            type="primary"
+            htmlType="submit">
+            Đăng nhập
+          </Button>
+        </Form.Item>
         <div className="d-flex justify-content-end">
           {onClickPop ? (
             <button
@@ -85,8 +90,7 @@ export const SignIn = ({ onClickPop }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 onClickPop(2);
-              }}
-            >
+              }}>
               Quên mật khẩu
             </button>
           ) : (
@@ -95,16 +99,6 @@ export const SignIn = ({ onClickPop }) => {
             </Link>
           )}
         </div>
-        <Form.Item>
-          <Button
-            size="large"
-            style={{ width: "100%", borderRadius: "10px" }}
-            type="primary"
-            htmlType="submit"
-          >
-            Đăng nhập
-          </Button>
-        </Form.Item>
       </Form>
 
       <div className="dont-have-account">
@@ -117,8 +111,7 @@ export const SignIn = ({ onClickPop }) => {
             onClick={(e) => {
               e.stopPropagation();
               onClickPop(5);
-            }}
-          >
+            }}>
             Đăng ký
           </span>
         ) : (

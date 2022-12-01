@@ -28,8 +28,7 @@ export const SignUp = ({ onClickSignUp }) => {
     <div
       onClick={(e) => {
         e.stopPropagation();
-      }}
-    >
+      }}>
       <div style={{ marginBottom: "52px" }}>
         <button className="sign-up-button">Đăng ký</button>
         {onClickSignUp ? (
@@ -38,8 +37,7 @@ export const SignUp = ({ onClickSignUp }) => {
             onClick={(e) => {
               e.stopPropagation();
               onClickSignUp(1);
-            }}
-          >
+            }}>
             Đăng nhập
           </button>
         ) : (
@@ -71,8 +69,7 @@ export const SignUp = ({ onClickSignUp }) => {
               phoneNum.length >= 9 && phoneNum.length <= 11
                 ? "d-none"
                 : "invalidPhone"
-            }
-          >
+            }>
             Vui lòng nhập số điện thoại hợp lệ !
           </div>
         </div>
@@ -88,8 +85,7 @@ export const SignUp = ({ onClickSignUp }) => {
         type="primary"
         loading={loading}
         disabled={phoneNum.length < 9 && phoneNum.length > 11}
-        style={{ borderRadius: "10px" }}
-      >
+        style={{ borderRadius: "10px", width: "100%" }}>
         Đăng ký
       </Button>
       <div className="have-account">
@@ -97,8 +93,7 @@ export const SignUp = ({ onClickSignUp }) => {
         {onClickSignUp ? (
           <span
             className="have-account-button"
-            onClick={() => onClickSignUp(1)}
-          >
+            onClick={() => onClickSignUp(1)}>
             Đăng nhập
           </span>
         ) : (
