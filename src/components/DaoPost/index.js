@@ -44,9 +44,11 @@ const DaoPost = (props) => {
     (state) => state.authenticateReducer.currentUser
   );
 
-  const { defaultComments, relatedService, listNotificationUser } = useSelector(
+  const { defaultComments, listNotificationUser } = useSelector(
     (state) => state.postDaoReducer
   );
+
+  const [relatedServices, setRelatedServices] = useState([]);
 
   const { item, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
@@ -62,16 +64,6 @@ const DaoPost = (props) => {
   const [isReportPostModalVisible, setIsReportPostModalVisible] =
     useState(false);
   // const [imageInModal, setImageInModal] = useState("");
-
-  const {
-    id,
-    Description,
-    TotalLikes,
-    Tags,
-    TotalComments,
-    Image,
-    CreationTime,
-  } = post;
 
   const [comments, setComments] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -184,7 +176,7 @@ const DaoPost = (props) => {
       case 2:
         setIsModalOptionDetail(false);
         setMoreOptionModal(false);
-        dispatch(toggleNotificationDaoAction({ PostId: id }));
+        dispatch(toggleNotificationDaoAction({ PostId: post?.id }));
         message.success("Đã bật thông báo về bài viết này");
         break;
       case 3:
@@ -195,10 +187,9 @@ const DaoPost = (props) => {
       case 4:
         try {
           if (type !== "post") {
-            dispatch(cancelSavePost(currentUser?.id, id));
-            toastMessage("Hủy lưu bài viết thành công!", "success");
+            dispatch(cancelSavePost(currentUser?.id, post?.id));
           } else {
-            await userService.savePost(currentUser.id, id);
+            await userService.savePost(currentUser.id, post?.id);
             toastMessage("Lưu bài viết thành công!", "success");
           }
         } catch (error) {
@@ -214,7 +205,7 @@ const DaoPost = (props) => {
   };
 
   let ImageSection = null;
-  let tempCount = Image?.length;
+  let tempCount = post?.Image?.length;
   // Object.entries(post).forEach((post2, idx) => {
   //   if (post2[0].includes("Image")) tempCount++;
   // });
@@ -237,10 +228,16 @@ const DaoPost = (props) => {
   const handleShowModalChooseService = () => {
     dispatch({
       type: SHOW_MODAL,
-      Component: <ModalChooseService hasTags={Tags} PostId={id} />,
+      Component: (
+        <ModalChooseService
+          hasTags={post?.Tags}
+          PostId={post?.id}
+          relatedServices={relatedServices}
+          setRelatedServices={setRelatedServices}
+        />
+      ),
     });
   };
-
   const handleAddComment = (cmt) => {
     if (chooseCommentDefault.id === cmt.id) {
       setChooseCommentDefault({});
@@ -252,10 +249,10 @@ const DaoPost = (props) => {
   const handleSendComment = async () => {
     if (currentUser) {
       if (
-        relatedService.length > 0 ||
+        relatedServices.length > 0 ||
         chooseCommentDefault.Content !== undefined
       ) {
-        const newData = relatedService.reduce(
+        const newData = relatedServices.reduce(
           (arr, item) => [
             ...arr,
             { category: item.category, serviceId: item.id },
@@ -265,15 +262,16 @@ const DaoPost = (props) => {
         try {
           // console.log(JSON.stringify(newData));
           const res = await postDaoService.createComment({
-            PostId: id,
+            PostId: post?.id,
             Content: chooseCommentDefault.Content || "",
             Services: JSON.stringify(newData),
           });
           if (res) {
             getComments(1);
             setPost({ ...post, TotalComments: post?.TotalComments + 1 });
+            setRelatedServices([]);
             // setComments([res.data, ...comments]);
-            dispatch({ type: SET_RELATED_SERVICE, data: [] });
+            // dispatch({ type: SET_RELATED_SERVICE, data: [] });
           }
         } catch (error) {
           toastMessage("Add related service fail!", "error");
@@ -294,7 +292,7 @@ const DaoPost = (props) => {
   if (tempCount < 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((img, idx) => (
+        {post.Image.map((img, idx) => (
           <Col
             key={idx}
             md={tempCount === 1 ? 24 : 12}
@@ -319,7 +317,7 @@ const DaoPost = (props) => {
   } else if (tempCount === 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((img, idx) => {
+        {post?.Image.map((img, idx) => {
           if (idx === 0) {
             //Kiểm tra cái idx này sau khi nhét API vào (Không xóa)
             return (
@@ -370,7 +368,7 @@ const DaoPost = (props) => {
   } else if (tempCount === 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((img, idx) => (
+        {post?.Image.map((img, idx) => (
           <Col key={idx} md={12} xs={24} onClick={() => handleImageModal(img)}>
             <img
               style={{
@@ -390,7 +388,7 @@ const DaoPost = (props) => {
   } else if (tempCount > 4) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {Image.map((img, idx) => {
+        {post?.Image.map((img, idx) => {
           if (idx < 4) {
             return (
               <Col
@@ -439,7 +437,7 @@ const DaoPost = (props) => {
               <p className="post__main__info__nametime__name">
                 {post?.BookingUser?.Fullname}
               </p>
-              <p>{convertTime(CreationTime)}</p>
+              <p>{convertTime(post?.CreationTime)}</p>
             </div>
           </div>
           <div>
@@ -454,7 +452,7 @@ const DaoPost = (props) => {
                           key={idx}
                           onClick={(e) => {
                             navigator.clipboard.writeText(
-                              `${window.location.origin}/home/dao/posts/${id}`
+                              `${window.location.origin}/home/dao/posts/${post?.id}`
                             );
                             handleMoreOptionClick(itm);
                           }}
@@ -471,7 +469,7 @@ const DaoPost = (props) => {
                               {listNotificationUser?.some(
                                 (item) =>
                                   item?.UserId === currentUser?.id &&
-                                  item.PostId === id
+                                  item.PostId === post?.id
                               ) ? (
                                 <li
                                   onClick={() => handleMoreOptionClick(itm)}
@@ -520,13 +518,13 @@ const DaoPost = (props) => {
             <ReportPost
               isReportPostModalVisible={isReportPostModalVisible}
               setIsReportPostModalVisible={setIsReportPostModalVisible}
-              postId={id}
+              postId={post?.id}
             />
           </div>
         </header>
         <div className="post__main__content">
           <div className="post__main__content__tags d-flex align-posts-center">
-            {Tags?.split(",").map((post, idx) => (
+            {post?.Tags?.split(",").map((post, idx) => (
               <li key={idx}>#{post}</li>
             ))}
           </div>
@@ -534,7 +532,7 @@ const DaoPost = (props) => {
             <p
               style={{ textAlign: "justify" }}
               dangerouslySetInnerHTML={{
-                __html: addLinebreaks(Description),
+                __html: addLinebreaks(post?.Description),
               }}
             />
           </div>
@@ -571,7 +569,7 @@ const DaoPost = (props) => {
                     modules={[Pagination, Navigation]}
                     className="swiperPostDetail"
                   >
-                    {Image?.map((img, index) => (
+                    {post?.Image?.map((img, index) => (
                       <SwiperSlide
                         key={index}
                         style={{ background: "#1D2226", padding: "90px 0" }}
@@ -607,7 +605,7 @@ const DaoPost = (props) => {
                         <p className="post__main__info__nametime__name">
                           {post?.BookingUser?.Fullname}
                         </p>
-                        <p>{convertTime(CreationTime)}</p>
+                        <p>{convertTime(post?.CreationTime)}</p>
                       </div>
                     </div>
                     <div>
@@ -621,7 +619,7 @@ const DaoPost = (props) => {
                                   <li
                                     onClick={(e) => {
                                       navigator.clipboard.writeText(
-                                        `${window.location.origin}/home/dao/posts/${id}`
+                                        `${window.location.origin}/home/dao/posts/${post?.id}`
                                       );
                                       handleMoreOptionClick(itm);
                                     }}
@@ -639,7 +637,7 @@ const DaoPost = (props) => {
                                         {listNotificationUser?.some(
                                           (item) =>
                                             item?.UserId === currentUser?.id &&
-                                            item.PostId === id
+                                            item.PostId === post?.id
                                         ) ? (
                                           <li
                                             onClick={() =>
@@ -700,12 +698,12 @@ const DaoPost = (props) => {
                         setIsReportPostModalVisible={
                           setIsReportPostModalVisible
                         }
-                        postId={id}
+                        postId={post?.id}
                       />
                     </div>
                   </header>
                   <div className="post__main__content__tags d-flex align-posts-center">
-                    {Tags?.split(",").map((post, idx) => (
+                    {post?.Tags?.split(",").map((post, idx) => (
                       <li key={idx}>#{post}</li>
                     ))}
                   </div>
@@ -713,7 +711,7 @@ const DaoPost = (props) => {
                     <p
                       style={{ textAlign: "justify" }}
                       dangerouslySetInnerHTML={{
-                        __html: addLinebreaks(Description),
+                        __html: addLinebreaks(post?.Description),
                       }}
                     />
                   </div>
@@ -758,7 +756,7 @@ const DaoPost = (props) => {
                             : {}
                         }
                       >
-                        {TotalLikes}
+                        {post?.TotalLikes}
                       </p>
                     </div>
                     <div className="post__main__content__like-comment__comments d-flex">
@@ -767,7 +765,7 @@ const DaoPost = (props) => {
                         style={{ color: "#E22828" }}
                       />
                       <p className={`${commentsClick ? "active" : ""}`}>
-                        {TotalComments}
+                        {post?.TotalComments}
                       </p>
                     </div>
                   </div>
@@ -807,10 +805,10 @@ const DaoPost = (props) => {
                           />
                           <p>Chọn dịch vụ liên quan</p>
                         </div>
-                        {relatedService.length > 0 && (
+                        {relatedServices.length > 0 && (
                           <div className="w-100 pe-20">
                             <CommentSlider
-                              data={relatedService}
+                              data={relatedServices}
                               slidesPerView={1.5}
                             />
                           </div>
@@ -873,10 +871,7 @@ const DaoPost = (props) => {
                               className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
                               style={{ borderBottom: "1px solid #E7E7E7" }}
                             >
-                              <div
-                                className="post__main__content__like-comment__likes d-flex"
-                                onClick={() => console.log(123)}
-                              >
+                              <div className="post__main__content__like-comment__likes d-flex">
                                 <PopUpSignIn onClick={(e) => {}}>
                                   {comment?.Likes?.some(
                                     (item) => item?.UserId === currentUser?.id
@@ -979,7 +974,7 @@ const DaoPost = (props) => {
                     : {}
                 }
               >
-                {TotalLikes}
+                {post?.TotalLikes}
               </p>
             </div>
             <div className="post__main__content__like-comment__comments d-flex">
@@ -995,7 +990,7 @@ const DaoPost = (props) => {
                 style={commentsClick ? { color: "#E22828" } : {}}
               />
               <p className={`${commentsClick ? "active" : ""}`}>
-                {TotalComments}
+                {post?.TotalComments}
               </p>
             </div>
           </div>
@@ -1028,9 +1023,9 @@ const DaoPost = (props) => {
               <PlusOutlined style={{ color: "#03AC84", fontSize: "14px" }} />
               <p className="d-select">Chọn dịch vụ liên quan</p>
             </div>
-            {relatedService.length > 0 && (
+            {relatedServices.length > 0 && (
               <div className="w-100" style={{ paddingRight: "50px" }}>
-                <CommentSlider data={relatedService} />
+                <CommentSlider data={relatedServices} />
               </div>
             )}
           </div>
@@ -1093,39 +1088,41 @@ const DaoPost = (props) => {
                   </div>
                 )}
 
-                <div className="d-flex" style={{ marginTop: "22px" }}>
-                  {cmt?.Likes?.some(
-                    (item) => item?.UserId === currentUser?.id
-                  ) ? (
-                    <HeartFilled
-                      // onClick={() =>
-                      //   setMouseClickHeart(!mouseClickHeart)
-                      // }
-                      onClick={() => handlerLikeComment(cmt?.id)}
-                      style={{
-                        fontSize: "20px",
-                        color: "#E22828",
-                        marginBottom: "2px",
-                      }}
-                      // onMouseLeave={() => setMouseOverHeart(false)}
-                    />
-                  ) : (
-                    <HeartOutlined
-                      style={{
-                        color: "#828282",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                        marginBottom: "2px",
-                      }}
-                      onClick={() => handlerLikeComment(cmt?.id)}
+                <PopUpSignIn onClick={(e) => {}}>
+                  <div className="d-flex" style={{ marginTop: "22px" }}>
+                    {cmt?.Likes?.some(
+                      (item) => item?.UserId === currentUser?.id
+                    ) ? (
+                      <HeartFilled
+                        // onClick={() =>
+                        //   setMouseClickHeart(!mouseClickHeart)
+                        // }
+                        onClick={() => handlerLikeComment(cmt?.id)}
+                        style={{
+                          fontSize: "20px",
+                          color: "#E22828",
+                          marginBottom: "2px",
+                        }}
+                        // onMouseLeave={() => setMouseOverHeart(false)}
+                      />
+                    ) : (
+                      <HeartOutlined
+                        style={{
+                          color: "#828282",
+                          fontSize: "20px",
+                          cursor: "pointer",
+                          marginBottom: "2px",
+                        }}
+                        onClick={() => handlerLikeComment(cmt?.id)}
 
-                      // onMouseOver={() => setMouseOverHeart(true)}
-                    />
-                  )}
-                  <p style={{ paddingLeft: "5px", color: "#E22828" }}>
-                    {cmt?.TotalLike}
-                  </p>
-                </div>
+                        // onMouseOver={() => setMouseOverHeart(true)}
+                      />
+                    )}
+                    <p style={{ paddingLeft: "5px", color: "#E22828" }}>
+                      {cmt?.TotalLike}
+                    </p>
+                  </div>
+                </PopUpSignIn>
               </div>
             );
           })}

@@ -21,7 +21,6 @@ const PostSaved = () => {
   // const listSavePost = () => {
   //   return;
   // };
-  console.log(likePostList, savedPostList);
   return (
     <>
       <h4 className="PostSaved__header">Bài viết đã lưu</h4>

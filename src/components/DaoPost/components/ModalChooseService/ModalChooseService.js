@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Button, Input, AutoComplete, Checkbox, Tag } from "antd";
 
 import "./modalChooseService.scss";
-import { SearchOutlined, StarFilled } from "@ant-design/icons";
+import { LoadingOutlined, SearchOutlined, StarFilled } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { HIDE_MODAL } from "../../../../stores/types/modalTypes";
 import { useEffect } from "react";
@@ -11,15 +11,32 @@ import { convertImage } from "../../../../utils/convertImage";
 import { convertPrice } from "../../../../utils/convert";
 import { setRelatedService } from "../../../../stores/actions/PostDaoAction";
 
-const ModalChooseService = ({ hasTags, PostId }) => {
-  const { relatedService } = useSelector((state) => state.postDaoReducer);
+const ModalChooseService = ({
+  hasTags,
+  PostId,
+  relatedServices,
+  setRelatedServices,
+}) => {
+  // const { relatedService } = useSelector((state) => state.postDaoReducer);
+  const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [services, setServices] = useState([]);
-  const [selectService, setSelectService] = useState([...relatedService]);
+  const [selectService, setSelectService] = useState([...relatedServices]);
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setSelectService([...relatedServices]);
+  }, [relatedServices]);
+
+  useEffect(() => {
+    setSearch("");
+    //   setSelectService([]);
+    //   setRelatedServices([]);
+  }, [hasTags]);
+
+  useEffect(() => {
+    setLoading(true);
     const getRelatedService = async () => {
       const { data } = await postDaoService.filterRelatedService(
         hasTags,
@@ -31,14 +48,10 @@ const ModalChooseService = ({ hasTags, PostId }) => {
           value: item.Name,
         }))
       );
+      setLoading(false);
     };
     getRelatedService();
   }, [search, hasTags]);
-
-  useEffect(() => {
-    setSearch("");
-    setSelectService([]);
-  }, [hasTags]);
 
   const handleSearch = (value) => {
     setSearch(value);
@@ -60,7 +73,8 @@ const ModalChooseService = ({ hasTags, PostId }) => {
     setSelectService(newSelectService);
   };
   const handleCmtRelatedService = async () => {
-    dispatch(setRelatedService([...selectService]));
+    // dispatch(setRelatedService([...relatedServices]));
+    setRelatedServices(selectService);
     // const newData = selectService.reduce(
     //   (arr, item) => [...arr, { category: item.category, serviceId: item.id }],
     //   []
@@ -85,7 +99,7 @@ const ModalChooseService = ({ hasTags, PostId }) => {
   const handleCloseTag = (e, tag) => {
     e.preventDefault();
     // newSelectService = newSelectService.filter((item) => item.id !== tag.id);
-    setSelectService(selectService.filter((item) => item.id !== tag.id));
+    setRelatedServices(relatedServices.filter((item) => item.id !== tag.id));
   };
   return (
     <div className="search-container">
@@ -107,99 +121,108 @@ const ModalChooseService = ({ hasTags, PostId }) => {
           placeholder="Tìm studio, người mẫu,..."
         />
       </AutoComplete>
-      {/* <AutoComplete
-        dropdownMatchSelectWidth={"95%"}
-        className="search-wrap"
-        options={options}
-        onSelect={onSelect}
-        onSearch={handleSearch}
-      >
-        <Input.Search size="large" placeholder="input here" enterButton />
-      </AutoComplete> */}
-      {/* <Input.Search
-        placeholder="Tìm studio, người mẫu,..."
-        allowClear
-        onSearch={onSearch}
-        className="search-wrap"
-        prefix={
-          <SearchOutlined style={{ fontSize: "20px", marginRight: "5px" }} />
-        }
-      /> */}
-      <div className="search-body">
-        <div className="number-service-select">
-          {selectService.length} bài đăng được chọn
+      {loading ? (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              background: "white",
+              width: "fit-content",
+              borderRadius: "50%",
+              padding: "10px",
+              margin: "10px",
+            }}
+          >
+            <LoadingOutlined style={{ fontSize: "40px" }} />
+          </div>
         </div>
-        <ul className="service-list">
-          <ul className="choose-service-list">
-            {selectService.map((item, index) => (
-              <Tag
-                key={index}
-                closable
-                onClose={(e) => handleCloseTag(e, item)}
-                className="choose-service-list-tag"
-              >
-                {item.Name}
-              </Tag>
-            ))}
-          </ul>
-          {services.map((item, index) => (
-            <li key={index} className="service-list-item">
-              <div className="d-flex w-100 h-100">
-                <img
-                  className="service-image"
-                  src={convertImage(item?.Image[0])}
-                  alt=""
-                />
-                <div className="service-content">
-                  <h5 className="service-content-name">{item.Name}</h5>
-                  <p className="service-content-price">
-                    {convertPrice(item.Price)}
-                    {item.PriceUnit || "/ giờ"}
-                  </p>
-                  <div className="service-content-rating">
-                    <StarFilled className="service-content-rating-start me-5" />
-                    <span>{item.TotalRate}</span> |{" "}
-                    <span>Đã đặt {item.BookingCount}</span>
+      ) : (
+        <>
+          <div className="search-body">
+            <div className="number-service-select">
+              {selectService.length} bài đăng được chọn
+            </div>
+            <ul className="service-list">
+              <ul className="choose-service-list">
+                {selectService.map((item, index) => (
+                  <Tag
+                    key={index}
+                    closable
+                    onClose={(e) => handleCloseTag(e, item)}
+                    className="choose-service-list-tag"
+                  >
+                    {item.Name}
+                  </Tag>
+                ))}
+              </ul>
+              {services.map((item, index) => (
+                <li key={index} className="service-list-item">
+                  <div className="d-flex w-100 h-100">
+                    <img
+                      className="service-image"
+                      src={convertImage(item?.Image[0])}
+                      alt=""
+                    />
+                    <div className="service-content">
+                      <h5 className="service-content-name">{item.Name}</h5>
+                      <p className="service-content-price">
+                        {convertPrice(item.Price)}
+                        {item.PriceUnit || "/ giờ"}
+                      </p>
+                      <div className="service-content-rating">
+                        <StarFilled className="service-content-rating-start me-5" />
+                        <span>{item.TotalRate}</span> |{" "}
+                        <span>Đã đặt {item.BookingCount}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <Checkbox
-                className="check-box"
-                checked={
-                  selectService.findIndex((itm) => item.id === itm.id) !== -1
-                    ? true
-                    : false
-                }
-                onChange={() => handleCheckBox(item)}
-              ></Checkbox>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="search-footer">
-        <Button
-          className="h-100 me-20"
-          onClick={() => {
-            dispatch({ type: HIDE_MODAL });
-            dispatch(setRelatedService([]));
-            setSelectService([]);
-          }}
-        >
-          Hủy
-        </Button>
-        <Button
-          className="h-100 px-50"
-          type="primary"
-          onClick={() => {
-            dispatch({ type: HIDE_MODAL });
-            handleCmtRelatedService();
-          }}
-        >
-          Xong
-        </Button>
-      </div>
+                  <Checkbox
+                    className="check-box"
+                    checked={
+                      selectService.some(
+                        (itm) =>
+                          item.id === itm.id && item.category === itm.category
+                      )
+                        ? true
+                        : false
+                    }
+                    onChange={() => handleCheckBox(item)}
+                  ></Checkbox>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="search-footer">
+            <Button
+              className="h-100 me-20"
+              onClick={() => {
+                dispatch({ type: HIDE_MODAL });
+                // dispatch(setRelatedService([]));
+                setRelatedServices([]);
+              }}
+            >
+              Hủy
+            </Button>
+            <Button
+              className="h-100 px-50"
+              type="primary"
+              onClick={() => {
+                dispatch({ type: HIDE_MODAL });
+                handleCmtRelatedService();
+              }}
+            >
+              Xong
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
 
-export default ModalChooseService;
+export default memo(ModalChooseService);

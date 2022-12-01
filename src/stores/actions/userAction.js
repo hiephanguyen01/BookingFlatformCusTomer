@@ -1,3 +1,4 @@
+import toastMessage from "../../components/ToastMessage";
 import { userService } from "../../services/UserService";
 import {
   CANCEL_SAVED_POST,
@@ -11,7 +12,7 @@ export const getSavedPostList = (limit, page, userId) => async (dispatch) => {
     const { data } = await userService.getSavedPostList(userId, page, limit);
     dispatch({
       type: SET_SAVED_POST_LIST,
-      payload: data.data.map((val) => val.savedPost),
+      payload: data.data,
     });
     // dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
   } catch (error) {
@@ -38,10 +39,8 @@ export const getListPosts = (limit, page) => async (dispatch) => {
 export const cancelSavePost = (userId, postId) => async (dispatch) => {
   try {
     await userService.cancelSavePost(userId, postId);
-    dispatch({
-      type: CANCEL_SAVED_POST,
-      payload: { userId, postId },
-    });
+    dispatch(getSavedPostList(19, 1, userId));
+    toastMessage("Hủy lưu bài viết thành công!", "success");
     // dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
   } catch (error) {
     console.error(error);
