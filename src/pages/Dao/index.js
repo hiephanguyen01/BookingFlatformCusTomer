@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Pen } from "../../assets/pen.svg";
 import DaoPost from "../../components/DaoPost";
 import DaoPostSearchModal from "../../components/DaoPostSearchModal";
+import DaoPostSkeleton from "../../components/Skeleton/DaoPostSkeleton";
 import toastMessage from "../../components/ToastMessage";
 import UploadImage from "../../components/UploadImage";
 import { postDaoService } from "../../services/PostDaoService";
@@ -316,12 +317,8 @@ const Dao = () => {
               getData();
             }}
             hasMore={pagination.hasNextPage}
-            loader={<h4 style={{ textAlign: "center" }}>Loading...</h4>}
-            endMessage={
-              <div style={{ textAlign: "center" }}>
-                <b>Yay! You have seen it all</b>
-              </div>
-            }
+            loader={<DaoPostSkeleton />}
+            endMessage={<DaoPostSkeleton />}
           >
             {listPost.map((item) => (
               <DaoPost key={item.Id} item={item} likePostList={likePostList} />

@@ -1,42 +1,43 @@
 import {
-  MoreOutlined,
+  CloseOutlined,
   HeartFilled,
   HeartOutlined,
+  MoreOutlined,
   PlusOutlined,
-  CloseOutlined,
 } from "@ant-design/icons";
-import { Col, Row, Popover, Modal, message } from "antd";
+import { Col, message, Modal, Popover, Row } from "antd";
 import { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
-import "./daoPost.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigation, Pagination } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
-import { ReactComponent as Info } from "../../assets/dao/info.svg";
-import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
+import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
 import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
 import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
 import img1 from "../../assets/dao/Frame 180.png";
+import { ReactComponent as Info } from "../../assets/dao/info.svg";
 import sendComment from "../../assets/svg/sendComment.svg";
-import ReportPost from "../ReportPostDao";
-import { useDispatch, useSelector } from "react-redux";
+import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+import { postDaoService } from "../../services/PostDaoService";
+import { userService } from "../../services/UserService";
 import {
   createLikeCommentDao,
   getAllNotificationDaoAction,
   toggleNotificationDaoAction,
 } from "../../stores/actions/PostDaoAction";
-import { addLinebreaks, convertTime } from "../../utils/convert";
-import { userService } from "../../services/UserService";
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
-import { convertImage } from "../../utils/convertImage";
-import toastMessage from "../ToastMessage";
 import { cancelSavePost } from "../../stores/actions/userAction";
-import { postDaoService } from "../../services/PostDaoService";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
-import CommentSlider from "../CommentSlider/CommentSlider";
 import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
+import { addLinebreaks, convertTime } from "../../utils/convert";
+import { convertImage } from "../../utils/convertImage";
+import CommentSlider from "../CommentSlider/CommentSlider";
+import ReportPost from "../ReportPostDao";
+import DaoPostSkeleton from "../Skeleton/DaoPostSkeleton";
+import toastMessage from "../ToastMessage";
+import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
+import "./daoPost.scss";
 
 const DaoPost = (props) => {
   const dispatch = useDispatch();
@@ -292,7 +293,7 @@ const DaoPost = (props) => {
   if (tempCount < 3) {
     ImageSection = (
       <Row gutter={[16, 16]}>
-        {post.Image.map((img, idx) => (
+        {post?.Image.map((img, idx) => (
           <Col
             key={idx}
             md={tempCount === 1 ? 24 : 12}
@@ -427,6 +428,18 @@ const DaoPost = (props) => {
       </Row>
     );
   }
+
+  const [fakeLoading, setFakeLoading] = useState(true);
+
+  useEffect(() => {
+    const a = setTimeout(() => {
+      setFakeLoading(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(a);
+    };
+  }, [post]);
   return (
     <article className="post">
       <section className="post__main d-flex flex-column">
@@ -532,7 +545,7 @@ const DaoPost = (props) => {
             <p
               style={{ textAlign: "justify" }}
               dangerouslySetInnerHTML={{
-                __html: addLinebreaks(post?.Description),
+                __html: addLinebreaks(post.Description),
               }}
             />
           </div>
@@ -871,7 +884,10 @@ const DaoPost = (props) => {
                               className="post__main__content__like-comment d-flex align-items-center pb-17 mb-25"
                               style={{ borderBottom: "1px solid #E7E7E7" }}
                             >
-                              <div className="post__main__content__like-comment__likes d-flex">
+                              <div
+                                className="post__main__content__like-comment__likes d-flex"
+                                onClick={() => console.log(123)}
+                              >
                                 <PopUpSignIn onClick={(e) => {}}>
                                   {comment?.Likes?.some(
                                     (item) => item?.UserId === currentUser?.id
@@ -1088,7 +1104,7 @@ const DaoPost = (props) => {
                   </div>
                 )}
 
-                <PopUpSignIn onClick={(e) => {}}>
+                <PopUpSignIn>
                   <div className="d-flex" style={{ marginTop: "22px" }}>
                     {cmt?.Likes?.some(
                       (item) => item?.UserId === currentUser?.id

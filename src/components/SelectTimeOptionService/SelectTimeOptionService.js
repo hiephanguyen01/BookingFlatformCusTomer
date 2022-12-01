@@ -53,7 +53,7 @@ const Option = ({ option, disabled, service }) => {
   const handleOnchangeDate = (d, dString) => {
     console.log("dang chin", service.id);
     setDate(dString);
-    console.log("gio UTC", moment.utc(moment(date).utc()).format());
+    // console.log("gio UTC", moment.utc(moment(date).utc()).format());
     if (dString && filterService.OrderByTime === 1) {
       let hl = service?.Bookings?.filter((item) => {
         const dates = dateRange(
@@ -148,18 +148,38 @@ const Option = ({ option, disabled, service }) => {
     }
     return result;
   }
-  const getDisabledHours = (date, type) => {
-    let array = range(0, moment().hours());
+  const getDisabledHours = (date1, type) => {
+    console.log(date);
+    console.log(
+      "day today",
+      moment(date).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")
+    );
+    console.log(
+      moment(date).format("YYYY-MM-DD"),
+      moment(Date.now()).format("YYYY-MM-DD")
+    );
+    let array = [];
+    if (
+      moment(date).format("YYYY-MM-DD") ==
+      moment(new Date()).format("YYYY-MM-DD")
+    ) {
+      array = range(0, moment().hours());
+      console.log("first", array);
+    }
+
     if (disableHour?.length > 0) {
       array = disableHour?.reduce((acc, item) => {
+        acc = array;
         let dates = dateRangeHour(
           moment(item.OrderByTimeFrom).format(),
           moment(item.OrderByTimeTo).format()
         );
+        console.log(acc);
         acc.push(...dates.slice(0, -1));
         return remove_duplicates_es6(acc);
       }, []);
     }
+    console.log(array);
     return array;
   };
   switch (Number(filterService.OrderByTime)) {
@@ -226,7 +246,7 @@ const Option = ({ option, disabled, service }) => {
                 // ]}
                 inputReadOnly={true}
                 disabledTime={(date, type) => ({
-                  disabledHours: () => getDisabledHours(date, type) || [],
+                  disabledHours: () => getDisabledHours(date, type),
                 })}
                 disabled={disabled}
                 minuteStep={60}

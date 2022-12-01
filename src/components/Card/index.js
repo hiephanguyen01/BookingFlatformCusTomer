@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import classNames from "classnames/bind";
-import styles from "./Card.module.scss";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
 import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
 import { useDispatch, useSelector } from "react-redux";
-import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
+import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
+import styles from "./Card.module.scss";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { studioPostService } from "../../services/StudioPostService";
 
@@ -19,18 +18,12 @@ export const Card = ({ value, category }) => {
       value?.Image[0] || value?.Image
     }` || images.baby;
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const dispatch = useDispatch();
 
-  const {
-    listLikedCategory1,
-    listLikedCategory2,
-    listLikedCategory3,
-    listLikedCategory4,
-    listLikedCategory5,
-    listLikedCategory6,
-  } = useSelector((state) => state.studioPostReducer);
+  useEffect(() => {
+    setNewData({ ...value });
+  }, [value]);
+
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
 
   // useEffect(() => {
   //   switch (category?.id) {
@@ -94,7 +87,7 @@ export const Card = ({ value, category }) => {
         }}
       >
         <div className={cx("like")}>
-          {newData?.UsersLiked.some(
+          {newData?.UsersLiked?.some(
             (item) => item.UserId === currentUser?.id
           ) ? (
             <HeartFilled style={{ color: "red", fontSize: "20px" }} />
