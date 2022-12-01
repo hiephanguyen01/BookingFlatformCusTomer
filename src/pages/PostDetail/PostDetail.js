@@ -48,8 +48,9 @@ const PostDetail = () => {
   const type = "post";
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const { postDetail, defaultComments, relatedService, listNotificationUser } =
-    useSelector((state) => state.postDaoReducer);
+  const { postDetail, defaultComments, listNotificationUser } = useSelector(
+    (state) => state.postDaoReducer
+  );
 
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
@@ -60,6 +61,7 @@ const PostDetail = () => {
   const [comments, setComments] = useState([]);
   const [pagination, setPagination] = useState({});
   const [chooseCommentDefault, setChooseCommentDefault] = useState({});
+  const [relatedServices, setRelatedServices] = useState([]);
 
   const moreOptionOnEachPost = [
     { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
@@ -73,27 +75,24 @@ const PostDetail = () => {
   ];
 
   const [moreOptionModal, setMoreOptionModal] = useState(false);
-  const getComments = useCallback(
-    async (currentPage) => {
-      try {
-        const { data } = await postDaoService.getComments(
-          postId,
-          currentPage || 1,
-          5
-        );
-        if (currentPage === 1) {
-          setComments([...data.data]);
-          setPagination(data.pagination);
-        } else {
-          setComments([...comments, ...data.data]);
-          setPagination(data.pagination);
-        }
-      } catch (error) {
-        console.log(error);
+  const getComments = async (currentPage) => {
+    try {
+      const { data } = await postDaoService.getComments(
+        postId,
+        currentPage || 1,
+        5
+      );
+      if (currentPage === 1) {
+        setComments([...data.data]);
+        setPagination(data.pagination);
+      } else {
+        setComments([...comments, ...data.data]);
+        setPagination(data.pagination);
       }
-    },
-    [comments, postId]
-  );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     dispatch(getPostDaoByIdAction(postId));
@@ -102,7 +101,7 @@ const PostDetail = () => {
     return () => {
       dispatch({ type: "DELETE_DETAIL_POST", data: {} });
     };
-  }, [dispatch, postId, getComments]);
+  }, []);
 
   useEffect(() => {
     dispatch(getLikePostList(currentUser?.id));
@@ -116,7 +115,14 @@ const PostDetail = () => {
   const handleShowModalChooseService = () => {
     dispatch({
       type: SHOW_MODAL,
-      Component: <ModalChooseService hasTags={post.Tags} PostId={post.Id} />,
+      Component: (
+        <ModalChooseService
+          hasTags={post.Tags}
+          PostId={post.Id}
+          relatedServices={relatedServices}
+          setRelatedServices={setRelatedServices}
+        />
+      ),
     });
   };
 
@@ -129,10 +135,10 @@ const PostDetail = () => {
   const handleSendComment = async () => {
     if (currentUser) {
       if (
-        relatedService.length > 0 ||
+        relatedServices.length > 0 ||
         chooseCommentDefault.Content !== undefined
       ) {
-        const newData = relatedService.reduce(
+        const newData = relatedServices.reduce(
           (arr, item) => [
             ...arr,
             { category: item.category, serviceId: item.id },
@@ -142,7 +148,7 @@ const PostDetail = () => {
         try {
           // console.log(window.locationJSON.stringify(newData));
           const res = await postDaoService.createComment({
-            PostId: postDetail.Id,
+            PostId: postDetail.id,
             Content: chooseCommentDefault.Content || "",
             Services: JSON.stringify(newData),
           });
@@ -150,7 +156,8 @@ const PostDetail = () => {
             getComments(1);
             setPost({ ...post, TotalComments: post.TotalComments + 1 });
             // setComments([res.data, ...comments]);
-            dispatch({ type: SET_RELATED_SERVICE, data: [] });
+            setRelatedServices([]);
+            setChooseCommentDefault({});
           }
         } catch (error) {
           toastMessage("Add related service fail!", "error");
@@ -259,7 +266,8 @@ const PostDetail = () => {
           lg={16}
           md={12}
           sm={24}
-          style={{ backgroundColor: "#1D2226", height: "100%" }}>
+          style={{ backgroundColor: "#1D2226", height: "100%" }}
+        >
           <Swiper
             slidesPerView={1}
             spaceBetween={30}
@@ -269,11 +277,13 @@ const PostDetail = () => {
             // }}
             navigation={true}
             modules={[Pagination, Navigation]}
-            className="swiperPostDetail">
+            className="swiperPostDetail"
+          >
             {post?.Image?.map((img, index) => (
               <SwiperSlide
                 key={index}
-                style={{ background: "#1D2226", padding: "90px 0" }}>
+                style={{ background: "#1D2226", padding: "90px 0" }}
+              >
                 <img
                   src={convertImage(img)}
                   className="w-100 h-100"
@@ -316,7 +326,8 @@ const PostDetail = () => {
                               );
                               handleMoreOptionClick(itm);
                             }}
-                            key={idx}>
+                            key={idx}
+                          >
                             <div className="container d-flex">
                               <div>{itm.icon}</div>
                               <p>{itm.title}</p>
@@ -333,7 +344,8 @@ const PostDetail = () => {
                                 ) ? (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}>
+                                    key={idx}
+                                  >
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>Tắt thông báo về bài viết này</p>
@@ -342,7 +354,8 @@ const PostDetail = () => {
                                 ) : (
                                   <li
                                     onClick={() => handleMoreOptionClick(itm)}
-                                    key={idx}>
+                                    key={idx}
+                                  >
                                     <div className="container d-flex">
                                       <div>{itm.icon}</div>
                                       <p>{itm.title}</p>
@@ -353,7 +366,8 @@ const PostDetail = () => {
                             ) : (
                               <li
                                 onClick={() => handleMoreOptionClick(itm)}
-                                key={idx}>
+                                key={idx}
+                              >
                                 <div className="container d-flex">
                                   <div>{itm.icon}</div>
                                   <p>{itm.title}</p>
@@ -370,7 +384,8 @@ const PostDetail = () => {
                 visible={isModalOptionDetail}
                 onVisibleChange={(newVisible) =>
                   setIsModalOptionDetail(newVisible)
-                }>
+                }
+              >
                 <MoreOutlined style={{ fontSize: "24px" }} />
               </Popover>
               <ReportPost
@@ -390,7 +405,8 @@ const PostDetail = () => {
           </div>
           <div
             className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-            style={{ borderBottom: "1px solid #E7E7E7" }}>
+            style={{ borderBottom: "1px solid #E7E7E7" }}
+          >
             <div className="post__main__content__like-comment__likes d-flex">
               <PopUpSignIn onClick={(e) => {}}>
                 {post?.Loves?.some(
@@ -447,14 +463,16 @@ const PostDetail = () => {
                         className={
                           chooseCommentDefault.id === item.id && "active"
                         }
-                        onClick={() => handleAddComment(item)}>
+                        onClick={() => handleAddComment(item)}
+                      >
                         {item.Content}
                       </li>
                     ))}
                   </ul>
                   <div
                     className="post_detail_choose_service d-flex justify-content-center align-items-center"
-                    onClick={handleShowModalChooseService}>
+                    onClick={handleShowModalChooseService}
+                  >
                     <PlusOutlined
                       style={{ color: "#03AC84", fontSize: "14px" }}
                     />
@@ -472,9 +490,9 @@ const PostDetail = () => {
                 </PopUpSignIn>
               </div>
             </div>
-            {relatedService.length > 0 && (
+            {relatedServices.length > 0 && (
               <div className="w-100 pe-20">
-                <CommentSlider data={relatedService} slidesPerView={1.5} />
+                <CommentSlider data={relatedServices} slidesPerView={1.5} />
               </div>
             )}
           </section>
@@ -505,7 +523,8 @@ const PostDetail = () => {
                       marginLeft: "40px",
                       marginTop: "15px",
                     }}
-                    className="post__comments__detail__content">
+                    className="post__comments__detail__content"
+                  >
                     {comment.Content}
                   </div>
                 )}
@@ -514,7 +533,8 @@ const PostDetail = () => {
                 )}
                 <div
                   className="post__main__content__like-comment d-flex align-posts-center pb-17 mb-25"
-                  style={{ borderBottom: "1px solid #E7E7E7" }}>
+                  style={{ borderBottom: "1px solid #E7E7E7" }}
+                >
                   <div className="post__main__content__like-comment__likes d-flex">
                     <PopUpSignIn onClick={(e) => {}}>
                       {comment?.Likes?.some(

@@ -62,12 +62,12 @@ const ITEM_US_ASIDE = [
   {
     icon: <ReadOutlined style={{ height: "100%" }} />,
     title: "Điều khoản sử dụng",
-    linkTo: "clause",
+    linkTo: "terms-use",
   },
   {
     icon: <SafetyCertificateOutlined style={{ height: "100%" }} />,
     title: "Chính sách an toàn & bảo mật",
-    linkTo: "policy",
+    linkTo: "privacy-policy",
   },
   {
     icon: <PhoneOutlined style={{ height: "100%" }} />,
@@ -84,7 +84,9 @@ const Aside = ({ children }) => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   // console.log(pathname.split("/")[4]);
-  const newPathname = pathname.split("/")[4];
+  // const newPathname = pathname.split("/")[3];
+  // console.log(newPathname);
+
   // useEffect(() => {
   //   if (UserMe.Fullname) {
   //     setName(UserMe.Fullname);
@@ -95,7 +97,7 @@ const Aside = ({ children }) => {
       <Link
         to={item.linkTo}
         style={
-          newPathname === item.linkTo
+          pathname.includes(item.linkTo)
             ? { color: "#E22828" }
             : { color: "#222222" }
         }
@@ -109,7 +111,7 @@ const Aside = ({ children }) => {
           {item.icon}
           <span
             style={
-              newPathname === item.linkTo
+              pathname.includes(item.linkTo)
                 ? {
                     fontSize: "16px",
                     marginLeft: "0.5rem",

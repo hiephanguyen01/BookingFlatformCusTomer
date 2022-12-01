@@ -174,7 +174,6 @@ const Option = ({ option, disabled, service }) => {
           moment(item.OrderByTimeFrom).format(),
           moment(item.OrderByTimeTo).format()
         );
-        console.log(acc);
         acc.push(...dates.slice(0, -1));
         return remove_duplicates_es6(acc);
       }, []);
@@ -198,11 +197,8 @@ const Option = ({ option, disabled, service }) => {
             <DatePicker
               onChange={handleOnchangeDate}
               status={"error"}
-              // defaultValue={moment(
-              //   filterService?.OrderByTimeFrom || new Date(),
-              //   "YYYY-MM-DD"
-              // )}
-              // value={moment(filterService?.OrderByTimeFrom, "YYYY-MM-DD")}
+              // defaultValue={moment(filterService?.OrderByTimeFrom)}
+              // format={"YYYY-MM-DD"}
               // format={"DD/MM/YYYY"}
               allowClear={false}
               inputReadOnly={true}
@@ -241,8 +237,8 @@ const Option = ({ option, disabled, service }) => {
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 // defaultValue={[
-                //   moment(filterService?.OrderByTimeFrom.slice(11, 16), "HH"),
-                //   moment(filterService?.OrderByTimeTo.slice(11, 16), "HH"),
+                //   moment(filterService?.OrderByTimeFrom),
+                //   moment(filterService?.OrderByTimeTo),
                 // ]}
                 inputReadOnly={true}
                 disabledTime={(date, type) => ({
@@ -325,9 +321,9 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
 
   return (
     <div
-      onClick={() =>
-        dispatch({ type: SET_SERVICE_SELECT, payload: service.id })
-      }
+      // onClick={() => {
+      //   dispatch({ type: SET_SERVICE_SELECT, payload: service.id });
+      // }}
       className="selectTimeOptionServiceContainer mb-20"
     >
       <Radio.Group

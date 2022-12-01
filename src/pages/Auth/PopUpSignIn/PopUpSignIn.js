@@ -43,7 +43,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
         {children}
       </span>
 
-      {user ? (
+      {user?.id ? (
         <div></div>
       ) : (
         <div>

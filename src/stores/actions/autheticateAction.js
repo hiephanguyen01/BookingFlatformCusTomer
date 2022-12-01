@@ -17,6 +17,8 @@ import {
 import firebase from "../../pages/Auth/FireBaseSetUp/Firebase";
 
 import { auth } from "../../pages/Auth/FireBaseSetUp/Firebase";
+import { userService } from "../../services/UserService";
+import toastMessage from "../../components/ToastMessage";
 
 const setAuthToken = (token) => {
   if (token) {
@@ -88,7 +90,7 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
   dispatch({ type: SET_LOADING, payload: false });
 };
 
-export const googleSignIn = (navigate) => async (dispatch) => {
+export const googleSignIn = () => async (dispatch) => {
   const provider = new GoogleAuthProvider();
   try {
     dispatch({ type: SET_LOADING, payload: true });
@@ -319,5 +321,19 @@ export const logOut = (navigate) => async (dispatch) => {
     localStorage.removeItem("token");
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const deleteMe = (navigate) => async (dispatch) => {
+  try {
+    await userService.deleteMe();
+    signOut(auth);
+    navigate("/auth/sign-in");
+    setAuthToken(null);
+    dispatch({ type: SET_USER, payload: null });
+    localStorage.removeItem("token");
+  } catch (error) {
+    console.log(error);
+    toastMessage(error.response.data.message, "error");
   }
 };

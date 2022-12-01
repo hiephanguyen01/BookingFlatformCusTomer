@@ -169,13 +169,14 @@ const Header = () => {
     const newFilter = {
       ...filter,
       category: values.category || "",
-      provinceIds: values?.province ? [values.province] : [],
+      provinceIds: values?.province ? values.province : "",
       keyString: values.keyString,
       priceOption: values.price || 1,
       ratingOption: 3,
     };
-    dispatch(getFilterStudioPost(5, 1, newFilter, user, navigate));
-    setVisible(false);
+
+    dispatch(getFilterStudioPost(5, 1, newFilter, user, navigate, setVisible));
+
     // const tempFilter = {
     //   category: values.category,
     //   provinceIds: values?.province ? [values.province] : [],
@@ -379,7 +380,7 @@ const Header = () => {
                 />
                 <p style={{ color: "#828282" }}>Giỏ hàng</p>
               </Link>
-              {user ? (
+              {user?.id ? (
                 <div className="wrapper-user">
                   <Dropdown overlay={menuSignOut} placement="topRight" arrow>
                     <div className="user">
@@ -413,9 +414,9 @@ const Header = () => {
                     <div className="user">
                       <Avatar src={noBody} />
                       <div className="text">
-                        {!user && <p>Đăng ký/Đăng nhập</p>}
+                        {!user?.id && <p>Đăng ký/Đăng nhập</p>}
                         <p>
-                          {user ? user.Fullname : "Tài khoản"}
+                          {user?.id ? user?.Fullname : "Tài khoản"}
                           <DownOutlined
                             style={{ fontSize: "10px", color: "#828282" }}
                           />

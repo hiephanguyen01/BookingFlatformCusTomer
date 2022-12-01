@@ -5,8 +5,9 @@ import styles from "./SignUpWithPhone.module.scss";
 import classNames from "classnames/bind";
 import { Button } from "antd";
 import { useDispatch } from "react-redux";
-import { HIDE_MODAL } from "../../../stores/types/modalTypes";
+import { HIDE_MODAL, SHOW_MODAL } from "../../../stores/types/modalTypes";
 import { studioPostService } from "../../../services/StudioPostService";
+import { CloseCircleOutlined } from "@ant-design/icons";
 const StyledReactInputVerificationCode = styled.div`
   display: flex;
   justify-content: center;
@@ -32,25 +33,29 @@ export const VerifyOtp = ({ setValid, email }) => {
   const [isInvalid, setIsInvalid] = useState(false);
   const [countDown, setCountDown] = React.useState(60);
   const dispatch = useDispatch();
+  // useEffect(() => {
+  //   let timerId = setInterval(() => {
+  //     setCountDown((countDown) => countDown - 1);
+  //   }, 1000);
+  //   if (countDown <= 0) {
+  //     clearInterval(timerId);
+  //     return;
+  //   }
+  //   return () => clearInterval(timerId);
+  // }, [countDown]);
+
   useEffect(() => {
     let timerId = setInterval(() => {
       setCountDown((countDown) => countDown - 1);
     }, 1000);
     if (countDown <= 0) {
       clearInterval(timerId);
+
       return;
     }
-    return () => clearInterval(timerId);
-  }, [countDown]);
-  useEffect(() => {
-    let timerId = setInterval(() => {
-      setCountDown((countDown) => countDown - 1);
-    }, 1000);
-    if (countDown <= 0) {
+    return () => {
       clearInterval(timerId);
-      return;
-    }
-    return () => clearInterval(timerId);
+    };
   }, [countDown]);
 
   const hanleChange = (data) => {
@@ -74,6 +79,14 @@ export const VerifyOtp = ({ setValid, email }) => {
 
   return (
     <div className={cx("container")}>
+      <CloseCircleOutlined
+        className={cx("close")}
+        onClick={() => {
+          dispatch({ type: HIDE_MODAL });
+          setCountDown(60);
+          setValue("")
+        }}
+      />
       <h2>Verify Your Account</h2>
       <p>
         We emailed you the six digit code to{" "}

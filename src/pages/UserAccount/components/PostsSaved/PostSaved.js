@@ -21,11 +21,10 @@ const PostSaved = () => {
   // const listSavePost = () => {
   //   return;
   // };
-  console.log(likePostList, savedPostList);
   return (
     <>
       <h4 className="PostSaved__header">Bài viết đã lưu</h4>
-      <div>
+      <div className="post-save-container">
         {savedPosts.map((itm, index) => (
           <div key={index} className="PostSaved__body">
             <DaoPost item={itm} likePostList={likePostList} type="save-post" />

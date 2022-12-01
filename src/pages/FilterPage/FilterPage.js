@@ -73,6 +73,10 @@ const FilterPage = () => {
   );
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const [provinces, setProvinces] = useState([]);
+  const [province, setProvince] = useState(
+    Number(querySearch?.provinceIds) || ""
+  );
+  const [keyString, setKeyString] = useState(querySearch?.keyString || "");
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
@@ -80,20 +84,24 @@ const FilterPage = () => {
     })();
     initState();
   }, []);
+
   const initState = () => {
     dispatch(
       getFilterStudioPost(5, 1, {
         keyString: querySearch?.keyString || "",
-        category: Number(querySearch?.category) || "",
+        category:
+          Number(querySearch?.category) > 0 && Number(querySearch?.category) < 7
+            ? Number(querySearch?.category)
+            : "",
         priceOption: Number(querySearch?.priceOption),
-        price1: undefined,
-        price2: undefined,
-        provinceIds: Number(querySearch?.provinceIds) || [],
+        price1: Number(querySearch?.price1) || undefined,
+        price2: Number(querySearch?.price2) || undefined,
+        provinceIds: Number(querySearch?.provinceIds) || "",
         ratingOption: Number(querySearch?.ratingOption) || 1,
       })
     );
   };
-
+  console.log(keyString, filter.keyString);
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 24 },
@@ -120,7 +128,7 @@ const FilterPage = () => {
       getFilterStudioPost(
         5,
         1,
-        { ...filter, provinceIds: [value] },
+        { ...filter, provinceIds: value },
         currentUser,
         navigate
       )
@@ -170,6 +178,9 @@ const FilterPage = () => {
     window.scrollTo({ behavior: "smooth", top: ref?.current?.offsetTop });
   };
   const handleClearFilter = () => {
+    form.resetFields();
+    setProvince("");
+    setKeyString("");
     dispatch(
       getFilterStudioPost(
         5,
@@ -180,16 +191,14 @@ const FilterPage = () => {
           priceOption: 1,
           price1: undefined,
           price2: undefined,
-          provinceIds: [],
+          provinceIds: "",
           ratingOption: 3,
         },
         {},
         navigate
       )
     );
-    form.resetFields();
   };
-
   return (
     <div className="FilterPage">
       <div className="container">

@@ -9,6 +9,8 @@ import Posts from "./components/Posts/Posts";
 import PostSaved from "./components/PostsSaved/PostSaved";
 import Rating from "./components/Rating/Rating";
 import RecentlyViewed from "./components/RecentlyViewed/RecentlyViewed";
+import TermsUser from "../TermsUse/TermsUse";
+import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 
 const Index = () => {
   return (
@@ -35,14 +37,8 @@ const Index = () => {
               <Route path="posts" element={<Posts />} />
               <Route path="post-saved" element={<PostSaved />} />
               <Route path="recently-viewed" element={<RecentlyViewed />} />
-              <Route
-                path="clause"
-                element={<Navigate to="/home/terms-use" />}
-              />
-              <Route
-                path="policy"
-                element={<Navigate to="/home/privacy-policy" />}
-              />
+              <Route path="terms-use" element={<TermsUser />} />
+              <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route
                 path="support"
                 element={<Navigate to="/home/helpCenter" />}
