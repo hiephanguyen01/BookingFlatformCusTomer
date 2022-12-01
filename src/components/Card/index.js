@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
-import classNames from "classnames/bind";
-import styles from "./Card.module.scss";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
+import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import images from "../../assets/images";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllStudioLikedAction1,
-  getLikeStudioPostAction,
-} from "../../stores/actions/studioPostAction";
+import { getLikeStudioPostAction,getAllStudioLikedAction1 } from "../../stores/actions/studioPostAction";
+import styles from "./Card.module.scss";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 
 const cx = classNames.bind(styles);

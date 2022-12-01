@@ -321,7 +321,7 @@ const Header = () => {
         <Row>
           <Col
             lg={4}
-            md={5}
+            md={24}
             sm={24}
             xs={24}
             style={{
@@ -338,7 +338,7 @@ const Header = () => {
           </Col>
           <Col
             lg={12}
-            md={9}
+            md={12}
             sm={24}
             xs={24}
             style={{
@@ -355,7 +355,7 @@ const Header = () => {
               onClick={() => setVisible(true)}
             />
           </Col>
-          <Col lg={8} md={10} sm={24} xs={24}>
+          <Col lg={8} md={12} sm={24} xs={24}>
             <div className="container__right">
               <div className="tip" onClick={() => navigate("/home/dao")}>
                 <img src={DaoIcon} alt="" />
