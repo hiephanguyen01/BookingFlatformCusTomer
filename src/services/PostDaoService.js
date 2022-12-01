@@ -37,7 +37,7 @@ class PostDaoService extends BaseService {
   getComments = (postId, page = 1, limit = 5) => {
     return this.get(`/api/comment/${postId}?page=${page}&limit=${limit}`);
   };
-  filterRelatedService = (hasTags, search) => {
+  filterRelatedService = (hasTags, search = "") => {
     return this.get(
       `/api/studio-post/filter-related-service?hasTags=${hasTags}&search=${search}`
     );

@@ -17,6 +17,7 @@ import TextInput from "../../../../components/TextInput/TextInput";
 import toastMessage from "../../../../components/ToastMessage";
 import { userService } from "../../../../services/UserService";
 import {
+  deleteMe,
   facebookLink,
   getCurrentUser,
   googleLink,
@@ -27,6 +28,7 @@ import { convertImage } from "../../../../utils/convertImage";
 import "./accountInfo.scss";
 import { authenticateService } from "../../../../services/AuthenticateService";
 import { SET_USER } from "../../../../stores/types/authType";
+import { signOut } from "firebase/auth";
 
 const APP_ID = "934722658638520488";
 const SECRET_KEY = "9D1oI4FcpFbS5GmQrK8K";
@@ -167,8 +169,7 @@ const AccountInfo = () => {
   };
   const handleDelete = async () => {
     try {
-      await userService.deleteMe();
-      dispatch(logOut(navigate));
+      dispatch(deleteMe(navigate));
     } catch (error) {
       toastMessage(error.response.data.message, "error");
     }

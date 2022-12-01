@@ -6,9 +6,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 export const GoogleSignIn = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const handleGoogleSignIn = async () => {
-    dispatch(googleSignIn(navigate));
+    dispatch(googleSignIn());
   };
   return (
     <button
