@@ -352,7 +352,7 @@ export const StudioDetail = () => {
                 </div>
               )}
               <div className="">
-              {filterService.id === data.id ? (
+                {filterService.id === data.id ? (
                   <div
                     onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
                     style={{

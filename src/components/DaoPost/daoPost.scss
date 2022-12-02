@@ -67,6 +67,25 @@
           // overflow: hidden;
           // text-overflow: ellipsis;
         }
+
+        .LinesEllipsis-unit {
+          display: none;
+        }
+
+        .LinesEllipsis {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 22px;
+        }
+
+        .LinesEllipsis-ellipsis {
+          color: #afadad;
+          font-size: 16px;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
       }
 
       &__images {
