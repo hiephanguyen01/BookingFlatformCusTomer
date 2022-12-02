@@ -1,4 +1,5 @@
 import toastMessage from "../../components/ToastMessage";
+
 import {
   SET_POST_LIST,
   SET_FILTER,
@@ -203,7 +204,7 @@ export const studioPostReducer = (state = initialState, action) => {
         if (data) {
           newFilter = data;
         } else {
-          newFilter = { ...newFilter, id: -1 };
+          // newFilter = { ...newFilter, id: -1 };
           toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
         }
       }
@@ -215,6 +216,18 @@ export const studioPostReducer = (state = initialState, action) => {
     case "SET_SELECT_TIME_ORDER":
       return {
         ...state,
+        filterService: {},
+      };
+    case "REMOVE_SELECT_TIME":
+      // let listnew = [...state.listTimeSelected];
+      // const existed = listnew.findIndex((item) => item.id == action.id);
+      // if (existed>-1) {
+      //   listnew.splice(existed, 1);
+      // }
+      // console.log("listnew", listnew);
+      return {
+        ...state,
+        listTimeSelected: [],
         filterService: {},
       };
     case "SET_TIME_ORDER_SELECTED":
