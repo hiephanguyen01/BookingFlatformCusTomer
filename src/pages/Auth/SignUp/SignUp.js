@@ -14,8 +14,16 @@ export const SignUp = ({ onClickSignUp }) => {
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const handleSendOtpp = () => {
+    setLoading(true);
     dispatch(
-      handleSendOtp(phoneNum, navigate, "/auth/sign-up/phone", onClickSignUp, 6)
+      handleSendOtp(
+        phoneNum,
+        navigate,
+        "/auth/sign-up/phone",
+        onClickSignUp,
+        6,
+        setLoading
+      )
     );
   };
 
@@ -82,7 +90,6 @@ export const SignUp = ({ onClickSignUp }) => {
       <Button
         onClick={() => {
           handleSendOtpp();
-          setLoading(true);
         }}
         size="large"
         type="primary"

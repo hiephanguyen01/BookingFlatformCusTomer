@@ -5,7 +5,7 @@ import {
   MoreOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Col, message, Modal, Popover, Row } from "antd";
+import { Col, message, Modal, Popover, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigation, Pagination } from "swiper";
@@ -34,7 +34,6 @@ import { addLinebreaks, convertTime } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import CommentSlider from "../CommentSlider/CommentSlider";
 import ReportPost from "../ReportPostDao";
-import DaoPostSkeleton from "../Skeleton/DaoPostSkeleton";
 import toastMessage from "../ToastMessage";
 import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
 import "./daoPost.scss";
@@ -50,6 +49,7 @@ const DaoPost = (props) => {
   );
 
   const [relatedServices, setRelatedServices] = useState([]);
+  const [seeMore, setSeeMore] = useState(false);
 
   const { item, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
@@ -545,9 +545,32 @@ const DaoPost = (props) => {
             <p
               style={{ textAlign: "justify" }}
               dangerouslySetInnerHTML={{
-                __html: addLinebreaks(post.Description),
+                __html: addLinebreaks(post?.Description),
               }}
             />
+            {/* <Typography.Paragraph
+              ellipsis={
+                true ? { rows: 2, expandable: true, symbol: "more" } : false
+              }
+            >
+              <p
+                style={{ textAlign: "justify" }}
+                dangerouslySetInnerHTML={{
+                  __html: addLinebreaks(post?.Description),
+                }}
+              />
+            </Typography.Paragraph> */}
+            {/* <Typography.Text
+              style={true ? { width: "200px" } : undefined}
+              ellipsis={true ? {} : false}
+            >
+              <p
+                style={{ textAlign: "justify" }}
+                dangerouslySetInnerHTML={{
+                  __html: addLinebreaks(post?.Description),
+                }}
+              />
+              </Typography.Text>*/}
           </div>
           <div className="post__main__content__images">
             {/* //Post Image đang xử lý */}
@@ -829,7 +852,6 @@ const DaoPost = (props) => {
                         <PopUpSignIn onClick={(e) => {}}>
                           <img
                             src={sendComment}
-                            style={{ borderRadius: "0", cursor: "pointer" }}
                             className="mt-5 btn-send-comment"
                             alt=""
                             onClick={handleSendComment}
@@ -1052,7 +1074,6 @@ const DaoPost = (props) => {
           >
             <img
               src={sendComment}
-              style={{ borderRadius: "0", cursor: "pointer" }}
               className="mt-5 btn-send-comment"
               alt=""
               onClick={handleSendComment}
