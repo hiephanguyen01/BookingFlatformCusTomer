@@ -14,7 +14,7 @@ class PostDaoService extends BaseService {
     return this.post(`/api/post-post?userId=${userId}`, data);
   };
   updatePost = (id, data) => {
-    return this.post(`/api/post-post/${id}`, data);
+    return this.patch(`/api/post-post/${id}`, data);
   };
   deletePost = (id) => {
     return this.delete(`/api/post-post/${id}`);

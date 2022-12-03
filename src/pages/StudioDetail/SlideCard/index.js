@@ -17,17 +17,17 @@ import CarSkeleton from "../../../components/Skeleton/CarSkeleton";
 const cx = classNames.bind(styles);
 
 export const SlideCard = ({ title, data, category }) => {
-  const [fakeLoading, setFakeLoading] = useState(true);
+  // const [fakeLoading, setFakeLoading] = useState(true);
 
-  useEffect(() => {
-    const a = setTimeout(() => {
-      setFakeLoading(false);
-    }, 3000);
+  // useEffect(() => {
+  //   const a = setTimeout(() => {
+  //     setFakeLoading(false);
+  //   }, 3000);
 
-    return () => {
-      clearTimeout(a);
-    };
-  }, [data]);
+  //   return () => {
+  //     clearTimeout(a);
+  //   };
+  // }, [data]);
 
   return (
     <>
@@ -61,24 +61,23 @@ export const SlideCard = ({ title, data, category }) => {
                 spaceBetween: 10,
               },
             }}
-            modules={[Navigation, Autoplay]}>
-            {fakeLoading &&
-              Array(5)
-                .fill(0)
-                .map((val, idx) => (
-                  <>
-                    <SwiperSlide key={idx}>
-                      <CarSkeleton />
-                    </SwiperSlide>
-                  </>
+            modules={[Navigation, Autoplay]}
+          >
+            {data?.length <= 0
+              ? Array(5)
+                  .fill(0)
+                  .map((val, idx) => (
+                    <>
+                      <SwiperSlide key={idx}>
+                        <CarSkeleton />
+                      </SwiperSlide>
+                    </>
+                  ))
+              : data.map((item, idx) => (
+                  <SwiperSlide key={idx}>
+                    <Card category={category} value={item} />
+                  </SwiperSlide>
                 ))}
-
-            {!fakeLoading &&
-              data.map((item, idx) => (
-                <SwiperSlide key={idx}>
-                  <Card category={category} value={item} />
-                </SwiperSlide>
-              ))}
           </Swiper>
         </div>
       </div>

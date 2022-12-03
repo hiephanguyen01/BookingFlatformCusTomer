@@ -30,7 +30,7 @@ const Index = () => {
 
   return (
     <div
-      className=""
+      className="device-shop-container"
       style={{
         margin: "auto",
         backgroundColor: "rgb(245, 245, 245)",
@@ -38,7 +38,7 @@ const Index = () => {
       }}
     >
       <div className="shop_container">
-        <div className="w-100 pt-38 pb-49 px-28  banner_container">
+        <div className="w-100 pt-38 pb-49 px-28 banner_container">
           <Row className="">
             <Col lg={8} sm={24}>
               <img
@@ -61,8 +61,13 @@ const Index = () => {
                 />
                 Quận 1, TPHCM
               </div>
-              <div className="d-flex align-items-center mb-20">
-                <Rate disabled allowHalf defaultValue={5} className="rating " />
+              <div className="d-flex align-items-center mb-10">
+                <Rate
+                  disabled
+                  allowHalf
+                  defaultValue={5}
+                  className="rating-device"
+                />
                 <div className="d-flex align-items-center mt-3">
                   <span>5</span>
                   <div className="reserve ms-20">Đã đặt 60</div>

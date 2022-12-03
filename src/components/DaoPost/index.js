@@ -4,8 +4,10 @@ import {
   HeartOutlined,
   MoreOutlined,
   PlusOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
-import { Col, message, Modal, Popover, Row } from "antd";
+import HTMLEllipsis from "react-lines-ellipsis/lib/html";
+import { Col, message, Modal, Popover, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigation, Pagination } from "swiper";
@@ -29,12 +31,14 @@ import {
 } from "../../stores/actions/PostDaoAction";
 import { cancelSavePost } from "../../stores/actions/userAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
+import {
+  GET_LIST_POST,
+  SET_RELATED_SERVICE,
+} from "../../stores/types/PostDaoType";
 import { addLinebreaks, convertTime } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import CommentSlider from "../CommentSlider/CommentSlider";
 import ReportPost from "../ReportPostDao";
-import DaoPostSkeleton from "../Skeleton/DaoPostSkeleton";
 import toastMessage from "../ToastMessage";
 import ModalChooseService from "./components/ModalChooseService/ModalChooseService";
 import "./daoPost.scss";
@@ -45,11 +49,12 @@ const DaoPost = (props) => {
     (state) => state.authenticateReducer.currentUser
   );
 
-  const { defaultComments, listNotificationUser } = useSelector(
+  const { defaultComments, listNotificationUser, listPost } = useSelector(
     (state) => state.postDaoReducer
   );
 
   const [relatedServices, setRelatedServices] = useState([]);
+  const [seeMore, setSeeMore] = useState(false);
 
   const { item, type = "post" } = props;
   const [post, setPost] = useState({ ...item });
@@ -67,7 +72,7 @@ const DaoPost = (props) => {
   // const [imageInModal, setImageInModal] = useState("");
 
   const [comments, setComments] = useState([]);
-  const [pagination, setPagination] = useState({});
+  const [paginationCmt, setPaginationCmt] = useState({});
   const [chooseCommentDefault, setChooseCommentDefault] = useState({});
   const getComments = async (currentPage) => {
     try {
@@ -78,10 +83,10 @@ const DaoPost = (props) => {
       );
       if (currentPage === 1) {
         setComments([...data.data]);
-        setPagination(data.pagination);
+        setPaginationCmt(data.pagination);
       } else {
         setComments([...comments, ...data.data]);
-        setPagination(data.pagination);
+        setPaginationCmt(data.pagination);
       }
     } catch (error) {
       console.log(error);
@@ -98,7 +103,12 @@ const DaoPost = (props) => {
     // getComments(1);
     // setPost({ ...post, TotalComments: post?.TotalComments + 1 });
     dispatch(
-      createLikeCommentDao({ CommentId: id }, post?.id, setComments, pagination)
+      createLikeCommentDao(
+        { CommentId: id },
+        post?.id,
+        setComments,
+        paginationCmt
+      )
     );
   };
 
@@ -199,6 +209,18 @@ const DaoPost = (props) => {
         setIsModalOptionDetail(false);
         setMoreOptionModal(false);
         break;
+      case 5:
+        try {
+          const formData = new FormData();
+          formData.append("IsDeleted", 1);
+          const { data } = await postDaoService.updatePost(post?.id, formData);
+          const newData = listPost.filter((item) => item.id !== data.data.id);
+          console.log(listPost, data, newData);
+          dispatch({ type: GET_LIST_POST, data: newData });
+        } catch (error) {}
+        setIsModalOptionDetail(false);
+        setMoreOptionModal(false);
+        break;
       default:
         break;
     }
@@ -287,7 +309,7 @@ const DaoPost = (props) => {
   };
 
   const handleSeeMoreComment = () => {
-    getComments(pagination.currentPage + 1);
+    getComments(paginationCmt.currentPage + 1);
   };
 
   if (tempCount < 3) {
@@ -520,6 +542,16 @@ const DaoPost = (props) => {
                       )}
                     </>
                   ))}
+                  {post?.BookingUserId === currentUser?.id && (
+                    <li onClick={() => handleMoreOptionClick({ id: 5 })}>
+                      <div className="container d-flex">
+                        <div>
+                          <DeleteOutlined style={{ fontSize: "18px" }} />
+                        </div>
+                        <p>Xóa bài viết</p>
+                      </div>
+                    </li>
+                  )}
                 </div>
               }
               trigger="click"
@@ -542,12 +574,25 @@ const DaoPost = (props) => {
             ))}
           </div>
           <div className="post__main__content__description">
-            <p
-              style={{ textAlign: "justify" }}
-              dangerouslySetInnerHTML={{
-                __html: addLinebreaks(post.Description),
-              }}
-            />
+            {!seeMore ? (
+              <HTMLEllipsis
+                unsafeHTML={`<p style="text-align: justify;">${addLinebreaks(
+                  post?.Description
+                )}</p>`}
+                maxLine="2"
+                trimRight={false}
+                ellipsis="...Xem thêm"
+                basedOn="letters"
+                onClick={() => setSeeMore(true)}
+              />
+            ) : (
+              <p
+                style={{ textAlign: "justify" }}
+                dangerouslySetInnerHTML={{
+                  __html: addLinebreaks(post?.Description),
+                }}
+              />
+            )}
           </div>
           <div className="post__main__content__images">
             {/* //Post Image đang xử lý */}
@@ -829,7 +874,6 @@ const DaoPost = (props) => {
                         <PopUpSignIn onClick={(e) => {}}>
                           <img
                             src={sendComment}
-                            style={{ borderRadius: "0", cursor: "pointer" }}
                             className="mt-5 btn-send-comment"
                             alt=""
                             onClick={handleSendComment}
@@ -937,7 +981,7 @@ const DaoPost = (props) => {
                           </div>
                         );
                       })}
-                    {pagination.hasNextPage && (
+                    {paginationCmt.hasNextPage && (
                       <div
                         className="btn-see-more-cmt"
                         onClick={handleSeeMoreComment}
@@ -1052,7 +1096,6 @@ const DaoPost = (props) => {
           >
             <img
               src={sendComment}
-              style={{ borderRadius: "0", cursor: "pointer" }}
               className="mt-5 btn-send-comment"
               alt=""
               onClick={handleSendComment}
@@ -1142,7 +1185,7 @@ const DaoPost = (props) => {
               </div>
             );
           })}
-        {pagination.hasNextPage && (
+        {paginationCmt.hasNextPage && (
           <div className="btn-see-more-cmt" onClick={handleSeeMoreComment}>
             Xem thêm bình luận
           </div>

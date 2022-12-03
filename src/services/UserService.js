@@ -12,8 +12,8 @@ class UserService extends BaseService {
       PostId,
     });
   };
-  getListPosts = (page, limit) => {
-    return this.get(`/api/save-post/me?page=${page}&limit=${limit}`);
+  getListPosts = () => {
+    return this.get(`/api/save-post/me`);
   };
   cancelSavePost = (UserId, PostId) => {
     return this.delete(`/api/save-post`, {

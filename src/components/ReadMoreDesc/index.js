@@ -1,12 +1,33 @@
 import React, { useState } from "react";
+import HTMLEllipsis from "react-lines-ellipsis/lib/html";
+import { addLinebreaks } from "../../utils/convert";
+
 import "./readMoreDesc.scss";
 
 const Index = ({ title = "", children }) => {
   const [toggle, setToggle] = useState(false);
   return (
-    <>
+    <div className="wrap-read-more">
       {title && <div className="title">{title}</div>}
-      <div className={`see-more ${toggle && "active"}`}>
+      {!toggle ? (
+        <HTMLEllipsis
+          className="see-more"
+          unsafeHTML={`${addLinebreaks(children)}`}
+          maxLine="5"
+          trimRight={false}
+          ellipsis="Xem thêm"
+          basedOn="letters"
+          onClick={() => setToggle(true)}
+        />
+      ) : (
+        <p
+          className="see-more"
+          dangerouslySetInnerHTML={{
+            __html: addLinebreaks(children),
+          }}
+        />
+      )}
+      {/* <div className={`see-more ${toggle && "active"}`}>
         {children}
         {children?.length > 600 ? (
           <div
@@ -23,8 +44,8 @@ const Index = ({ title = "", children }) => {
             Thu gọn
           </div>
         )}
-      </div>
-    </>
+      </div> */}
+    </div>
   );
 };
 

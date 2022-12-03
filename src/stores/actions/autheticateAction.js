@@ -214,7 +214,8 @@ export const facebookLink =
   };
 
 export const handleSendOtp =
-  (phoneNum, navigate, to, onClick, num) => async (dispatch) => {
+  (phoneNum, navigate, to, onClick, num, setLoading = () => {}) =>
+  async (dispatch) => {
     try {
       configureCaptcha();
       const phoneNumber = "+84" + phoneNum;
@@ -230,6 +231,7 @@ export const handleSendOtp =
       }
     } catch (error) {
       openNotificationWithIcon("error", "Something fail", "please try again");
+      setLoading(false);
     }
     dispatch({ type: SET_LOADING, payload: false });
   };
