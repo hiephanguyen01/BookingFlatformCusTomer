@@ -1,74 +1,78 @@
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
+import { useNavigate } from "react-router-dom";
+import images from "../../assets/images";
+import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import images from "../../assets/images";
-import { getLikeStudioPostAction,getAllStudioLikedAction1 } from "../../stores/actions/studioPostAction";
 import styles from "./Card.module.scss";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+import { studioPostService } from "../../services/StudioPostService";
 
 const cx = classNames.bind(styles);
 
 export const Card = ({ value, category }) => {
+  const [newData, setNewData] = useState();
   const img =
     `${process.env.REACT_APP_DB_BASE_URL_IMG}/${
       value?.Image[0] || value?.Image
     }` || images.baby;
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const dispatch = useDispatch();
-
-  const {
-    listLikedCategory1,
-    listLikedCategory2,
-    listLikedCategory3,
-    listLikedCategory4,
-    listLikedCategory5,
-    listLikedCategory6,
-  } = useSelector((state) => state.studioPostReducer);
-  const navigate = useNavigate();
-  const [data, setData] = useState([]);
 
   useEffect(() => {
-    switch (category?.id) {
-      case 1:
-        setData(listLikedCategory1);
-        break;
-      case 2:
-        setData(listLikedCategory2);
-        break;
-      case 3:
-        setData(listLikedCategory3);
-        break;
-      case 4:
-        setData(listLikedCategory4);
-        break;
-      case 5:
-        setData(listLikedCategory5);
-        break;
-      case 6:
-        setData(listLikedCategory6);
-        break;
-      default:
-        break;
-    }
-  }, [
-    category?.id,
-    listLikedCategory1,
-    listLikedCategory2,
-    listLikedCategory3,
-    listLikedCategory4,
-    listLikedCategory5,
-    listLikedCategory6,
-  ]);
-  const handleChangeLike = (e) => {
+    setNewData({ ...value });
+  }, [value]);
+
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   switch (category?.id) {
+  //     case 1:
+  //       setData(listLikedCategory1);
+  //       break;
+  //     case 2:
+  //       setData(listLikedCategory2);
+  //       break;
+  //     case 3:
+  //       setData(listLikedCategory3);
+  //       break;
+  //     case 4:
+  //       setData(listLikedCategory4);
+  //       break;
+  //     case 5:
+  //       setData(listLikedCategory5);
+  //       break;
+  //     case 6:
+  //       setData(listLikedCategory6);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }, [
+  //   category?.id,
+  //   listLikedCategory1,
+  //   listLikedCategory2,
+  //   listLikedCategory3,
+  //   listLikedCategory4,
+  //   listLikedCategory5,
+  //   listLikedCategory6,
+  // ]);
+
+  const handleChangeLike = async (e) => {
     // e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
-    dispatch(getLikeStudioPostAction(value?.id, category.id));
+    // dispatch(getLikeStudioPostAction(value?.id, category.id));
+    if (currentUser) {
+      // dispatch(getLikeStudioPostAction(data?.id, data?.category));
+      const res = await studioPostService.getLikeStudioPost({
+        PostId: value?.id,
+        CategoryId: category?.id,
+      });
+      setNewData(res.data.data);
+    }
   };
   const handleNavigate = () => {
-    navigate(`/home/${category.name}/${value.id}`);
+    navigate(`/home/${category?.name}/${value.id}`);
   };
   return (
     <div className={cx("card")} onClick={handleNavigate}>
@@ -83,7 +87,9 @@ export const Card = ({ value, category }) => {
         }}
       >
         <div className={cx("like")}>
-          {data?.findIndex((item) => item.id === value.id) > -1 ? (
+          {newData?.UsersLiked?.some(
+            (item) => item.UserId === currentUser?.id
+          ) ? (
             <HeartFilled style={{ color: "red", fontSize: "20px" }} />
           ) : (
             <HeartOutlined style={{ color: "red", fontSize: "20px" }} />

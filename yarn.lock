@@ -9877,6 +9877,11 @@ react-lightbox-pack@^0.1.5:
   resolved "https://registry.npmjs.org/react-lightbox-pack/-/react-lightbox-pack-0.1.5.tgz"
   integrity sha512-kAtTwjRbZ/gHB8DDpPrJ8dncrbCEl7gjUvI7S7XqxHSFnSwVLENtncqQhjk1IWBDwMWjraY0BMCVqKgkKLpk8A==
 
+react-lines-ellipsis@^0.15.3:
+  version "0.15.3"
+  resolved "https://registry.yarnpkg.com/react-lines-ellipsis/-/react-lines-ellipsis-0.15.3.tgz#eb081c12e58170b09c5bd9db2fdbde9b5a3ea6c0"
+  integrity sha512-+kIcUZJPI3QqazZbO0eeEUmfRjmYKjCRzSmXQL4otrJzwOU9MjvASGQd4SELOOBSy6oiygjfDuCocGMssX0oUQ==
+
 react-loading@^2.0.3:
   version "2.0.3"
   resolved "https://registry.npmjs.org/react-loading/-/react-loading-2.0.3.tgz"

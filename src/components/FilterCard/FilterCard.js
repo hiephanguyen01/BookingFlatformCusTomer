@@ -4,6 +4,7 @@ import {
   HeartOutlined,
   StarOutlined,
 } from "@ant-design/icons";
+import { Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
+import { studioPostService } from "../../services/StudioPostService";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
 import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertImage } from "../../utils/convertImage";
@@ -48,7 +50,6 @@ const categories = {
   },
 };
 const FilterCard = ({ data, category }) => {
-  console.log("dâttalike", category);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -60,49 +61,66 @@ const FilterCard = ({ data, category }) => {
     listLikedCategory5,
     listLikedCategory6,
   } = useSelector((state) => state.studioPostReducer);
-  const [value, setValue] = useState([]);
-  console.log(value);
+  const [newData, setNewData] = useState({ ...data });
   useEffect(() => {
-    switch (category?.id) {
-      case 1:
-        setValue(listLikedCategory1);
-        break;
-      case 2:
-        setValue(listLikedCategory2);
-        break;
-      case 3:
-        setValue(listLikedCategory3);
-        break;
-      case 4:
-        setValue(listLikedCategory4);
-        break;
-      case 5:
-        setValue(listLikedCategory5);
-        break;
-      case 6:
-        setValue(listLikedCategory6);
-        break;
-      default:
-        break;
-    }
-  }, [
-    data?.category,
-    listLikedCategory1,
-    listLikedCategory2,
-    listLikedCategory3,
-    listLikedCategory4,
-    listLikedCategory5,
-    listLikedCategory6,
-  ]);
-  const handleChangeLike = (e) => {
+    setNewData({ ...data });
+  }, [data]);
+  // useEffect(() => {
+  //   switch (data?.category) {
+  //     case "":
+  //       setValue([
+  //         ...listLikedCategory1,
+  //         ...listLikedCategory2,
+  //         ...listLikedCategory3,
+  //         ...listLikedCategory4,
+  //         ...listLikedCategory5,
+  //         ...listLikedCategory6,
+  //       ]);
+  //       break;
+  //     case 1:
+  //       setValue(listLikedCategory1);
+  //       break;
+  //     case 2:
+  //       setValue(listLikedCategory2);
+  //       break;
+  //     case 3:
+  //       setValue(listLikedCategory3);
+  //       break;
+  //     case 4:
+  //       setValue(listLikedCategory4);
+  //       break;
+  //     case 5:
+  //       setValue(listLikedCategory5);
+  //       break;
+  //     case 6:
+  //       setValue(listLikedCategory6);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }, [
+  //   data?.category,
+  //   listLikedCategory1,
+  //   listLikedCategory2,
+  //   listLikedCategory3,
+  //   listLikedCategory4,
+  //   listLikedCategory5,
+  //   listLikedCategory6,
+  // ]);
+  const handleChangeLike = async (e) => {
     // if (!currentUser) navigate("/auth/sign-in");
     if (currentUser) {
-      dispatch(getLikeStudioPostAction(data?.id, category?.id));
+      // dispatch(getLikeStudioPostAction(data?.id, data?.category));
+      const res = await studioPostService.getLikeStudioPost({
+        PostId: data?.id,
+        CategoryId: data?.category,
+      });
+      setNewData(res.data.data);
     }
   };
   return (
     <>
-      {data && (
+      {newData && (
         <div
           className="FilterCard"
           onClick={() => {
@@ -116,18 +134,24 @@ const FilterCard = ({ data, category }) => {
                 OrderByDateTo: "",
               },
             });
-            navigate(`/home/${categories[category?.id].value}/${data?.id}`);
+            navigate(
+              `/home/${categories[newData?.category].value}/${newData?.id}`
+            );
           }}
         >
           <div className="groupImage">
             <PopUpSignIn
               onClick={(e) => {
-                e.stopPropagation();
+                // e.stopPropagation();
                 handleChangeLike();
               }}
               className={"like"}
             >
-              {value?.findIndex((item) => item.id === data?.id) > -1 ? (
+              {newData?.UsersLiked &&
+              newData?.UsersLiked.length > 0 &&
+              newData?.UsersLiked.some(
+                (item) => item.UserId === currentUser?.id
+              ) ? (
                 <HeartFilled style={{ color: "red", fontSize: "20px" }} />
               ) : (
                 <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
@@ -136,10 +160,14 @@ const FilterCard = ({ data, category }) => {
 
             {/* <div className="sale">-60% HÔM NAY</div> */}
             <div className="main">
-              <img className="main" src={convertImage(data?.Image[0])} alt="" />
+              <img
+                className="main"
+                src={convertImage(newData?.Image[0])}
+                alt=""
+              />
             </div>
             <div className="right">
-              {data?.Image.slice(1, 3).map((img, index) => (
+              {newData?.Image.slice(1, 3).map((img, index) => (
                 <div className="sub" key={index}>
                   <img src={convertImage(img)} alt="" />
                 </div>
@@ -148,44 +176,49 @@ const FilterCard = ({ data, category }) => {
           </div>
 
           <div className="text">
-            <div className="d-flex align-items-center mb-8">
-              <p className="title">{data?.Name}</p>
+            <p className="title">
+              {data?.Name}&nbsp;
               <CheckCircleTwoTone
                 style={{ fontSize: "20px" }}
                 className="pb-4"
                 twoToneColor="#52c41a"
               />
-            </div>
-            <div className="d-flex justify-content-between align-items-center mb-8">
-              <p className="description">
-                <img src={Logo3} alt="" /> {data?.Address}
-              </p>
-              <d>
-                <StarOutlined
-                  style={{ color: "#F8D93A" }}
-                  twoToneColor="#F8D93A"
-                />
-                {data?.TotalRate} ({data?.NumberOfRating})
-              </d>
-            </div>
-            <div className="d-flex justify-content-between align-items-center mb-8">
-              <p className="description-category">
-                <img src={Logo2} alt="" className="pb-3" />{" "}
-                {categories[data?.category]?.name}
-              </p>
-              <p>Đã đặt {data?.BookingCount}</p>
-            </div>
-
-            <CurrencyFormat
-              value={data?.Price}
-              displayType={"text"}
-              thousandSeparator={true}
-              renderText={(value) => (
-                <p className="addition">
-                  {value} {data?.PriceUnit || ""}
+            </p>
+            <Row style={{ width: "100%" }}>
+              <Col md={12} sm={24} xs={24}>
+                <p className="description">
+                  <img src={Logo3} alt="" /> {data?.Address}
                 </p>
-              )}
-            />
+              </Col>
+              <Col md={12} sm={24} xs={24} className="right-text">
+                <p>
+                  <StarOutlined
+                    style={{ color: "#F8D93A" }}
+                    twoToneColor="#F8D93A"
+                  />
+                  {data?.TotalRate} ({data?.NumberOfRating})
+                </p>
+              </Col>
+              <Col md={12} sm={24} xs={24}>
+                <p className="description-category">
+                  <img src={Logo2} alt="" className="pb-3" />{" "}
+                  {categories[data?.category]?.name}
+                </p>
+              </Col>
+              <Col md={12} sm={24} xs={24} className="right-text">
+                <p>Đã đặt {data?.BookingCount}</p>
+              </Col>
+              <CurrencyFormat
+                value={data?.Price}
+                displayType={"text"}
+                thousandSeparator={true}
+                renderText={(value) => (
+                  <p className="addition">
+                    {value} {data?.PriceUnit || ""}
+                  </p>
+                )}
+              />
+            </Row>
           </div>
         </div>
       )}

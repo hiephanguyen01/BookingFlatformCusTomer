@@ -34,10 +34,8 @@ export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: false });
 };
 export const getFilterStudioPost =
-  (limit, page, filter, currentUser, navigate) => async (dispatch) => {
-    // console.log("filter", filter.category);
-    console.log(filter, currentUser);
-
+  (limit, page, filter, currentUser, navigate, setVisible = () => {}) =>
+  async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
     try {
       const { data } = await studioPostService.getFilterStudioPost(
@@ -51,11 +49,12 @@ export const getFilterStudioPost =
       if (currentUser !== null) {
         dispatch(getAllStudioLikedAction1(filter.category));
       }
+      setVisible(false);
       navigate(
         `/home/filter?${queryString.stringify(
           Object.keys(filter)?.reduce(
             (newFilter, key) =>
-              filter[key] === ""
+              filter[key] === "" || filter[key] === undefined
                 ? { ...newFilter }
                 : { ...newFilter, [key]: filter[key] },
             {}
@@ -141,8 +140,8 @@ export const getLikeStudioPostAction = (postId, category, currentUser = "") => {
         PostId: postId,
         CategoryId: category,
       });
-      dispatch(getAllStudioLikedAction1(category));
-      dispatch(getAllStudioLikedAction(category));
+      // dispatch(getAllStudioLikedAction1(category));
+      // dispatch(getAllStudioLikedAction(category));
       if (currentUser) {
         dispatch(studioDetailAction(postId, category, currentUser));
       }

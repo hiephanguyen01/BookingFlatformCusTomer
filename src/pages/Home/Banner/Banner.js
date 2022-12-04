@@ -23,7 +23,7 @@ const Banner = ({ banners }) => {
   }, [banners]);
   return (
     <div className="Banner">
-      {fakeLoading ? (
+      {banners.length <= 0 ? (
         <BannerSkeleton />
       ) : (
         <Swiper
@@ -33,7 +33,8 @@ const Banner = ({ banners }) => {
           lazy={true}
           speed={600}
           modules={[Navigation, Pagination, Autoplay, Lazy, Parallax]}
-          className="bannerSwiper">
+          className="bannerSwiper"
+        >
           {banners &&
             banners.map(
               (banner) =>
@@ -52,7 +53,8 @@ const Banner = ({ banners }) => {
                         />
                         <div
                           className="contentBanner"
-                          data-swiper-parallax="-200">
+                          data-swiper-parallax="-200"
+                        >
                           <h1 className="" data-swiper-parallax="-200">
                             {banner.name}
                           </h1>

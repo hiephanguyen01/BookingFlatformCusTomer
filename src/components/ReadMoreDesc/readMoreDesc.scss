@@ -1,61 +1,95 @@
-.title {
-    margin-bottom: 6px;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 27px;
-    color: #3F3F3F;
-}
+.wrap-read-more {
 
-.see-more {
-    height: 120px;
-    overflow: hidden;
-    position: relative;
-    font-weight: 500;
+    .title {
+        margin-bottom: 6px;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 27px;
+        color: #3F3F3F;
+    }
 
-    font-size: 16px;
-    line-height: 22px;
-
-    .more {
-        position: absolute;
-        width: 100%;
-        height: 80px;
-        bottom: 0;
-
-        // left: 0;
-        background: linear-gradient(rgba(255, 255, 255, 0.7) 0%, #FFFFFF 100%);
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-
+    .see-more {
+        // height: 120px;
+        overflow: hidden;
+        position: relative;
         font-weight: 500;
+
         font-size: 16px;
         line-height: 22px;
-        color: #03AC84;
 
-        cursor: pointer;
+        .more {
+            position: absolute;
+            width: 100%;
+            height: 80px;
+            bottom: 0;
 
-        &.none {
-            display: none;
+            // left: 0;
+            background: linear-gradient(rgba(255, 255, 255, 0.7) 0%, #FFFFFF 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 22px;
+            color: #03AC84;
+
+            cursor: pointer;
+
+            &.none {
+                display: none;
+            }
+        }
+
+        .see-less {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 22px;
+            color: #03AC84;
+
+            cursor: pointer;
+        }
+
+        &.active {
+            overflow: visible;
+            height: auto !important;
+        }
+
+    }
+
+    .LinesEllipsis {
+        position: relative;
+
+        .LinesEllipsis-ellipsis {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            display: block;
+            width: 100%;
+            padding: 50px 0 20px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, #FFFFFF 100%, rgba(255, 255, 255, 0) 100%);
+
+            text-align: center;
+            font-weight: 500;
+            font-size: 16px;
+            color: #009874;
+
+            cursor: pointer;
+
+            // &::after {
+            //     content: "\203A";
+            //     display: inline-block;
+            //     transform: rotate(90deg);
+            //     font-size: 25px;
+            //     margin-right: 5px;
+            // }
         }
     }
-
-    .see-less {
-        margin-top: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 22px;
-        color: #03AC84;
-
-        cursor: pointer;
-    }
-
-    &.active {
-        overflow: visible;
-        height: auto !important;
-    }
-
 }

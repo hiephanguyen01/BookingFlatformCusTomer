@@ -103,6 +103,7 @@ export const StudioDetail = () => {
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: "SET_SERVICE_SELECT", payload: null });
+      dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
     };
   }, [dispatch]);
   useEffect(() => {
@@ -127,11 +128,11 @@ export const StudioDetail = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
-  useEffect(() => {
-    return () => {
-      dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
-    };
-  }, [dispatch]);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
+  //   };
+  // }, [dispatch]);
 
   const handleReport = () => {
     dispatch({
@@ -275,13 +276,13 @@ export const StudioDetail = () => {
           render: (item) => {
             return (
               <SelectTimeOptionService
-                disabled={
-                  serviceSelected === null
-                    ? false
-                    : data.id === serviceSelected
-                    ? false
-                    : true
-                }
+                // disabled={
+                //   serviceSelected === null
+                //     ? false
+                //     : data.id === serviceSelected
+                //     ? false
+                //     : true
+                // }
                 service={data}
               />
             );
@@ -351,9 +352,9 @@ export const StudioDetail = () => {
                 </div>
               )}
               <div className="">
-                {filterService.id === data.id && serviceSelected == data.id ? (
+                {filterService.id === data.id ? (
                   <div
-                    onClick={() => handleChooseService(data)}
+                    onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -402,12 +403,12 @@ export const StudioDetail = () => {
   };
 
   const handleChooseService = (data) => {
-    if (data.id !== serviceSelected) {
-      toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
-      return;
-    } else {
-      dispatch(handlerSelectServiceAction(data));
-    }
+    // if (data.id !== serviceSelected) {
+    //   toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
+    //   return;
+    // } else {
+    // }
+    dispatch(handlerSelectServiceAction(data));
 
     // if (
     //   (filterService.OrderByTime === 0 &&
@@ -718,7 +719,11 @@ export const StudioDetail = () => {
                         <Button
                           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                           onClick={handleBook}
-                          // disabled={chooseServiceList?.length > 0 ? false : true}
+                          disabled={
+                            chooseServiceList.length > 0 && filterService.id > 0
+                              ? false
+                              : true
+                          }
                         >
                           Đặt ngay
                         </Button>

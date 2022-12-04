@@ -13,7 +13,14 @@
   .box {
     background-color: white;
     padding: 20px;
-    margin: 10px;
+  }
+  .card-div {
+    padding: 10px;
+    background-color: #fff;
+    width: 100%;
+  }
+  .card-div-2 {
+    display: none;
   }
 
   .container {
@@ -76,6 +83,16 @@
         line-height: 22px;
         color: #3f3f3f;
       }
+    }
+  }
+  @media (max-width: 540px) {
+    .card-div {
+      display: none;
+    }
+    .card-div-2 {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
     }
   }
 }

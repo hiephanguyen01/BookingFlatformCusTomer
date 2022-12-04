@@ -20,6 +20,7 @@
         margin-left: 10px;
 
         &__name {
+          text-align: start;
           font-weight: 700;
           font-size: 14px;
           line-height: 19px;
@@ -58,6 +59,32 @@
           font-weight: 400;
           font-size: 16px;
           line-height: 22px;
+          // max-height: 44px;
+
+          // display: -webkit-box;
+          // -webkit-line-clamp: 2;
+          // -webkit-box-orient: vertical;
+          // overflow: hidden;
+          // text-overflow: ellipsis;
+        }
+
+        .LinesEllipsis-unit {
+          display: none;
+        }
+
+        .LinesEllipsis {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 22px;
+        }
+
+        .LinesEllipsis-ellipsis {
+          color: #afadad;
+          font-size: 16px;
+
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
 
@@ -302,8 +329,10 @@
   right: 0%;
   top: 15px;
   transform: translate(-50%, -50%);
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
+  border-radius: 0;
+  cursor: pointer
 }
 
 .ant-popover-inner-content {
@@ -377,9 +406,11 @@
   max-width: 100vw !important;
   min-height: 100vh !important;
   padding: 0 !important;
+
   .ant-modal-footer {
     display: none !important;
   }
+
   .ant-modal-content {
     width: 100%;
     height: 100% !important;
