@@ -29,12 +29,12 @@ const initialState = {
   studioPostList: [],
   filter: JSON.parse(localStorage.getItem("filter-post")) || {
     keyString: "",
-    category: 1,
-    priceOption: 0,
+    category: "",
+    priceOption: 1,
     price1: undefined,
     price2: undefined,
-    provinceIds: [],
-    ratingOption: 1,
+    provinceIds: "",
+    ratingOption: 3,
   },
   pagination: {
     page: 1,

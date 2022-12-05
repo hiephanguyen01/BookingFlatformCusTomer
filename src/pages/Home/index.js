@@ -198,8 +198,8 @@ export const Home = () => {
       ...filter,
       category: categoryId,
     };
-    dispatch(getFilterStudioPost(5, 1, newFilter));
-    navigate(`/home/filter?${queryString.stringify(newFilter)}`);
+    dispatch(getFilterStudioPost(5, 1, newFilter, currentUser, navigate));
+    // navigate(`/home/filter?${queryString.stringify(newFilter)}`);
   };
   const [banners, setBannerList] = useState([]);
   useEffect(() => {
@@ -226,7 +226,8 @@ export const Home = () => {
               className={cx("box")}
               onClick={() => {
                 handleClickCategory(item.id);
-              }}>
+              }}
+            >
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>

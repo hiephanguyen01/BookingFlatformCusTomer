@@ -70,13 +70,11 @@ export const StudioDetail = () => {
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
   const {
-    studioDetail1,
     studioDetail,
     studioNear,
     listStudioSimilar,
     promotionCode,
     filterService,
-    serviceSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
@@ -612,7 +610,7 @@ export const StudioDetail = () => {
                           scrolling="no"
                           marginHeight={0}
                           marginWidth={0}
-                          src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                          src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
                         />
                       </div>
                     </div>

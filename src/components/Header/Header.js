@@ -193,10 +193,9 @@ const Header = () => {
       <Modal
         onCancel={handleCancel}
         className="search-modal"
-        width={"100vw"}
+        width={"700px"}
         visible={visible}
         footer={[]}
-        style={{ top: 0 }}
         closable={false}
       >
         <div className="search-container">
@@ -204,7 +203,6 @@ const Header = () => {
             <div className="logo">
               <img src={Logo} alt="" />
             </div>
-            <CloseOutlined className="btn-close" onClick={handleCancel} />
           </div>
           <Form onFinish={onFinish}>
             <Form.Item name="keyString">
@@ -265,7 +263,14 @@ const Header = () => {
             {/* <p className="time">Khung giờ bạn muốn đặt</p>
 
           <SelectTime /> */}
-            <Form.Item style={{ textAlign: "center", width: "100%" }}>
+            <Form.Item
+              style={{
+                textAlign: "center",
+                width: "100%",
+                marginTop: "10px",
+                marginBottom: "35px",
+              }}
+            >
               <Button
                 type="primary"
                 htmlType="submit"
