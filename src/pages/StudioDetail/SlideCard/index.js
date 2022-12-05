@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import CarSkeleton from "../../../components/Skeleton/CarSkeleton";
 const cx = classNames.bind(styles);
 
-export const SlideCard = ({ title, data, category }) => {
+export const SlideCard = ({ title, data, category, loading = false }) => {
   // const [fakeLoading, setFakeLoading] = useState(true);
 
   // useEffect(() => {

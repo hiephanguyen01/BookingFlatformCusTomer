@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./confirmOrder.scss";
 
@@ -8,12 +8,16 @@ import { orderService } from "../../services/OrderService";
 import { convertImage } from "../../utils/convertImage";
 import toastMessage from "../ToastMessage";
 import UploadImage from "../UploadImage";
+import { registerPartnerService } from "../../services/RegisterPartnerService";
 
 const Index = () => {
   const [checkoutDisable, setCheckoutDisable] = useState(false);
+  const [partner, setPartner] = useState({});
   const location = useLocation();
   // console.log(location);
   const navigate = useNavigate();
+  console.log(location.state);
+
   let cate;
   const nameCategory = location.pathname
     .split("/")
@@ -44,6 +48,22 @@ const Index = () => {
       break;
   }
   const [file, setFile] = useState({});
+
+  useEffect(() => {
+    const getPartnerByTenantId = async () => {
+      try {
+        const res = await registerPartnerService.getPartnerByTenantId(
+          location.state.TenantId
+        );
+        setPartner(res.data);
+        console.log(res.data);
+      } catch (error) {
+        toastMessage("Partner không tồn tại!", "error");
+      }
+    };
+
+    getPartnerByTenantId();
+  }, [location?.state.TenantId]);
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(location?.state?.IdentifyCode);
@@ -140,8 +160,9 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
-              68000888
+              }}
+            >
+              {partner.BankAccount}
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
@@ -157,8 +178,9 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
-              Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
+              }}
+            >
+              {partner.BankBranchName}
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
@@ -174,8 +196,9 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
-              Công ty cổ phần Công nghệ và Đầu tư VNPLUS
+              }}
+            >
+              {partner.BankAccountOwnerName}
             </div>
           </div>
           <div className="d-flex justify-content-between">
@@ -185,15 +208,10 @@ const Index = () => {
             >
               Nội dung chuyển khoản:
             </div>
-            <div
-              className="text-medium-se w-60"
-              style={{
-                color: "#222222",
-                fontWeight: "400",
-                textAlign: "start",
-              }}
-            >
-              {location?.state?.IdentifyCode}
+            <div className="text-medium-se w-60 transfer-content">
+              {location?.state?.IdentifyCode[0].length > 35
+                ? `${location?.state?.IdentifyCode[0].slice(0, 35)}...`
+                : location?.state?.IdentifyCode}
             </div>
           </div>
         </div>

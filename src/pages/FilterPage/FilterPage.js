@@ -101,7 +101,6 @@ const FilterPage = () => {
       })
     );
   };
-  console.log(keyString, filter.keyString);
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 24 },
@@ -243,7 +242,7 @@ const FilterPage = () => {
                 <Divider />
                 <Col lg={24} md={12} sm={12} xs={12}>
                   <Form.Item label="Tên" name="keyString">
-                    <Input onChange={onChangeInput} />
+                    <Input onChange={onChangeInput} defaultValue={keyString} />
                   </Form.Item>
                 </Col>
                 <Col lg={24} md={12} sm={12} xs={12}>
@@ -256,7 +255,10 @@ const FilterPage = () => {
                         option.children
                           .toLowerCase()
                           .includes(input.toLowerCase())
-                      }>
+                      }
+                      defaultValue={province}
+                    >
+                      <Option value={""}>Tất cả</Option>
                       {provinces &&
                         provinces.map((val) => (
                           <Option value={val.id}>{val.Name}</Option>
@@ -270,7 +272,8 @@ const FilterPage = () => {
                     <div className="category_radio_group">
                       <Radio.Group
                         onChange={onChangeFilterCategory}
-                        value={filter.category}>
+                        value={filter.category}
+                      >
                         {categories &&
                           categories?.map((val) => (
                             <Radio key={val.id} value={val.id}>
@@ -288,7 +291,8 @@ const FilterPage = () => {
                     <div className="filter_price_container">
                       <Radio.Group
                         onChange={onChangePriceOption}
-                        value={filter.priceOption}>
+                        value={filter.priceOption}
+                      >
                         <Row>
                           <Col span={24}>
                             <Radio value={2}>Giá cao nhất</Radio>
@@ -322,7 +326,8 @@ const FilterPage = () => {
                     <div className="filter_rating_container">
                       <Radio.Group
                         onChange={onChangeRateOption}
-                        value={filter.ratingOption}>
+                        value={filter.ratingOption}
+                      >
                         <Row>
                           <Col span={24}>
                             <Radio value={1}>Đánh giá nhiều nhất</Radio>
@@ -349,7 +354,8 @@ const FilterPage = () => {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                  }}>
+                  }}
+                >
                   <div
                     style={{
                       background: "white",
@@ -357,7 +363,8 @@ const FilterPage = () => {
                       borderRadius: "50%",
                       padding: "10px",
                       margin: "10px",
-                    }}>
+                    }}
+                  >
                     <LoadingOutlined style={{ fontSize: "40px" }} />
                   </div>
                 </div>
@@ -378,14 +385,14 @@ const FilterPage = () => {
                     ))}
                   </div>
                   <div className="card-div-2">
-                    {studioPostList?.map((val) => (
+                    {studioPostList?.map((item) => (
                       <Card
                         category={
                           categories.filter(
                             (val) => val.id === filter.category
                           )[0]
                         }
-                        value={val}
+                        value={item}
                       />
                     ))}
                   </div>
@@ -395,7 +402,8 @@ const FilterPage = () => {
                 style={{
                   padding: "10px 0px",
                   marginLeft: "auto",
-                }}>
+                }}
+              >
                 <Pagination
                   pageSize={pagination?.limit || 0}
                   current={pagination?.currentPage}

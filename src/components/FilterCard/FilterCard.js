@@ -107,6 +107,7 @@ const FilterCard = ({ data, category }) => {
   //   listLikedCategory5,
   //   listLikedCategory6,
   // ]);
+  console.log(data.id);
   const handleChangeLike = async (e) => {
     // if (!currentUser) navigate("/auth/sign-in");
     if (currentUser) {

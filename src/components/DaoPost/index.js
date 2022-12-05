@@ -215,7 +215,6 @@ const DaoPost = (props) => {
           formData.append("IsDeleted", 1);
           const { data } = await postDaoService.updatePost(post?.id, formData);
           const newData = listPost.filter((item) => item.id !== data.data.id);
-          console.log(listPost, data, newData);
           dispatch({ type: GET_LIST_POST, data: newData });
         } catch (error) {}
         setIsModalOptionDetail(false);

@@ -66,7 +66,7 @@ export const Card = ({ value, category }) => {
       // dispatch(getLikeStudioPostAction(data?.id, data?.category));
       const res = await studioPostService.getLikeStudioPost({
         PostId: value?.id,
-        CategoryId: category?.id,
+        CategoryId: value?.category || category?.id,
       });
       setNewData(res.data.data);
     }

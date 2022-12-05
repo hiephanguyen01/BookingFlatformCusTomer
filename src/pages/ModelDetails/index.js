@@ -18,7 +18,6 @@ import styles from "./Detail.module.scss";
 
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
-import SlideAlbum from "./components/SlideAlbum";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 
 import svgLocation from "../../assets/svg/location.svg";
@@ -36,6 +35,7 @@ import toastMessage from "../../components/ToastMessage";
 // import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import SlideAlbum from "../../components/SlideAlbum";
 import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import { calDate, calTime } from "../../utils/calculate";
@@ -251,9 +251,9 @@ const Index = () => {
                 </div>
               )}
               <div className="">
-              {filterService.id === data.id ? (
+                {filterService.id === data.id ? (
                   <div
-                    onClick={() => dispatch({ type: "REMOVE_SELECT_TIME"})}
+                    onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -308,7 +308,7 @@ const Index = () => {
     // } else {
     // }
     dispatch(handlerSelectServiceAction(data));
-    // if ( 
+    // if (
     //   (filterService.OrderByTime === 0 &&
     //     filterService.OrderByDateFrom !== "" &&
     //     filterService.OrderByDateTo !== "") ||
@@ -720,13 +720,15 @@ const Index = () => {
               </div>
               <div className={cx("right")}>
                 <div className={cx("map")}>
-                  <h3>Xem trên bản đồ</h3>
-                  <div className={cx("address")}>
-                    <img src={images.address} alt="" />
+                  <h3 className="mb-5">Xem trên bản đồ</h3>
+                  <div
+                    className={cx("address d-flex align-items-center mb-10")}
+                  >
+                    <img src={images.address} alt="" className="me-10" />
                     <span>{studioDetail?.data?.Address}</span>
                   </div>
                   <div className="mapouter">
-                    {/* <div className="gmap_canvas">
+                    <div className="gmap_canvas">
                       <iframe
                         title="map"
                         className="gmap_iframe"
@@ -735,9 +737,9 @@ const Index = () => {
                         scrolling="no"
                         marginHeight={0}
                         marginWidth={0}
-                        src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                        src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
                       />
-                    </div> */}
+                    </div>
                   </div>
                 </div>
                 <ReactStickyBox offsetTop={20} offsetBottom={20}>
@@ -861,7 +863,7 @@ const Index = () => {
                       studioDetail?.album
                         ?.sort((a, b) => a.id - b.id)
                         .map((item, index) => (
-                          <SlideAlbum key={index} title={item.id} />
+                          <SlideAlbum key={index} data={item} />
                         ))
                     ) : (
                       <>
@@ -869,14 +871,16 @@ const Index = () => {
                           .sort((a, b) => a.id - b.id)
                           .slice(0, 3)
                           .map((item, index) => (
-                            <SlideAlbum key={index} title={item.id} />
+                            <SlideAlbum key={index} data={item} />
                           ))}
-                        <div
-                          className="btn_see_more"
-                          onClick={() => setToggleSeeMore(true)}
-                        >
-                          Xem thêm <DownOutlined className="icon" />
-                        </div>
+                        {studioDetail?.album?.length > 3 && (
+                          <div
+                            className="btn_see_more"
+                            onClick={() => setToggleSeeMore(true)}
+                          >
+                            Xem thêm <DownOutlined className="icon" />
+                          </div>
+                        )}
                       </>
                     )}
                   </div>
