@@ -42,6 +42,7 @@ const Footer = () => {
                           width: "100%",
                         }}
                         value={window.location.origin + "/home/detect-app"}
+                        // value={"https://katsukei.vn"}
                         // viewBox={`0 0 256 256`}
                       />
                     </div>
