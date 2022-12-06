@@ -158,10 +158,10 @@ const Index = ({ data = [], className }) => {
                           })
                         }
                       >
-                        <li className="item-video">
+                        {/* <li className="item-video">
                           <img src={imgCmt} alt="" />
                           <PlayCircleOutlined className="play" />
-                        </li>
+                        </li> */}
                         {item?.Image.map((img, index) => (
                           <li key={index} className="item-image">
                             <img
@@ -184,7 +184,7 @@ const Index = ({ data = [], className }) => {
                           item?.ModelServicePackage?.Name ||
                           item?.MakeupServicePackage?.Name}
                       </div>
-                      <div className="d-flex">
+                      {/* <div className="d-flex">
                         <div className="w-28px h-28px me-15">
                           <img
                             src={images.banner2}
@@ -208,7 +208,7 @@ const Index = ({ data = [], className }) => {
                           </div>
                           <span>1 tuần trước</span>
                         </div>
-                      </div>
+                      </div> */}
                       <Divider style={{ backgroundColor: "#E7E7E7" }} />
                     </div>
                   )
