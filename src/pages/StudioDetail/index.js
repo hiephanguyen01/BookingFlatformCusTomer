@@ -70,13 +70,11 @@ export const StudioDetail = () => {
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
   const {
-    studioDetail1,
     studioDetail,
     studioNear,
     listStudioSimilar,
     promotionCode,
     filterService,
-    serviceSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
@@ -408,6 +406,7 @@ export const StudioDetail = () => {
     //   return;
     // } else {
     // }
+    console.log(data);
     dispatch(handlerSelectServiceAction(data));
 
     // if (
@@ -612,7 +611,7 @@ export const StudioDetail = () => {
                           scrolling="no"
                           marginHeight={0}
                           marginWidth={0}
-                          src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                          src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
                         />
                       </div>
                     </div>
@@ -732,17 +731,20 @@ export const StudioDetail = () => {
                   </ReactStickyBox>
                 </div>
               </div>
-
-              <SlideCard
-                data={listStudioSimilar ?? listStudioSimilar}
-                category={{ name: "studio", id: 1 }}
-                title="Studio tương tự"
-              />
-              <SlideCard
-                data={studioNear ?? studioNear}
-                category={{ name: "studio", id: 1 }}
-                title="Gần bạn"
-              />
+              {listStudioSimilar?.length > 1 && (
+                <SlideCard
+                  data={listStudioSimilar ?? listStudioSimilar}
+                  category={{ name: "studio", id: 1 }}
+                  title="Studio tương tự"
+                />
+              )}
+              {studioNear?.length > 1 && (
+                <SlideCard
+                  data={studioNear ?? studioNear}
+                  category={{ name: "studio", id: 1 }}
+                  title="Gần bạn"
+                />
+              )}
             </div>
           </div>
         </div>

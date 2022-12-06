@@ -6,11 +6,11 @@ import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./slideAlbum.scss";
-import { convertImage } from "../../../../utils/convertImage";
-import { ModalImage } from "../../../../components/ModalImg";
-import { studioPostService } from "../../../../services/StudioPostService";
+import { convertImage } from "../../utils/convertImage";
+import { ModalImage } from "../../components/ModalImg";
+import { studioPostService } from "../../services/StudioPostService";
 import { useLocation } from "react-router-dom";
-import { CATEGORIES } from "../../../../utils/category";
+import { CATEGORIES } from "../../utils/category";
 
 const Index = ({ data, style = {}, className = "" }) => {
   const dispatch = useDispatch();

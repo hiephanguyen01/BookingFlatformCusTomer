@@ -211,6 +211,15 @@ const AccountInfo = () => {
           "Vui lòng kiểm tra lại mật khẩu!"
         );
       }
+      if (infoUser.Fullname === "") {
+        setLoading(false);
+
+        return openNotificationWithIcon(
+          "warning",
+          "Thất bại",
+          "Tên không được bỏ trống!"
+        );
+      }
       const formData = new FormData();
       delete file.preview;
       for (let key in infoUser) {

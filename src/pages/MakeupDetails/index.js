@@ -17,6 +17,7 @@ import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
+import SlideAlbum from "../../components/SlideAlbum";
 // import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
@@ -33,7 +34,6 @@ import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { SlideCard } from "../StudioDetail/SlideCard";
-import SlideAlbum from "./components/SlideAlbum";
 import "./makeupDetails.scss";
 import {
   SET_PROMOTION_CODE,
@@ -47,7 +47,10 @@ import ReactStickyBox from "react-sticky-box";
 import styles from "./Detail.module.scss";
 import images from "../../assets/images";
 import classNames from "classnames/bind";
-import { DELETE_CHOOSE_SERVICE, SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import {
+  DELETE_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE,
+} from "../../stores/types/OrderType";
 const COLUMN = [
   { title: "Dịch vụ", size: 7 },
   { title: "Chọn thời gian", size: 10 },
@@ -643,7 +646,7 @@ const Index = () => {
                       studioDetail?.album
                         .sort((a, b) => a.id - b.id)
                         .map((item, index) => (
-                          <SlideAlbum key={index} title={item.title} />
+                          <SlideAlbum key={index} data={item} />
                         ))
                     ) : (
                       <>
@@ -651,7 +654,7 @@ const Index = () => {
                           .sort((a, b) => a.id - b.id)
                           .slice(0, 3)
                           .map((item, index) => (
-                            <SlideAlbum key={index} title={item.title} />
+                            <SlideAlbum key={index} data={item} />
                           ))}
 
                         {studioDetail?.album?.length > 3 && (

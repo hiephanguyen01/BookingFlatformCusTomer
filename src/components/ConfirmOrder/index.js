@@ -140,7 +140,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               68000888
             </div>
           </div>
@@ -157,7 +158,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
             </div>
           </div>
@@ -174,7 +176,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               Công ty cổ phần Công nghệ và Đầu tư VNPLUS
             </div>
           </div>

@@ -17,8 +17,8 @@ import { ReactComponent as Check } from "../../assets/PhotographerDetail/check 2
 import { Rate, Row, Col, Button, Popover } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SlideAlbum from "../MakeupDetails/components/SlideAlbum";
 import CommentRating from "../../components/CommentRating";
+import SlideAlbum from "../../components/SlideAlbum";
 import ImagePost from "../../components/imagePost/ImagePost";
 import {
   getLikeStudioPostAction,
@@ -252,7 +252,7 @@ const PhotographerDetail = () => {
                 {filterService.id === data.id ? (
                   <div
                     onClick={() => {
-                      dispatch({ type: "REMOVE_SELECT_TIME"});
+                      dispatch({ type: "REMOVE_SELECT_TIME" });
                     }}
                     style={{
                       display: "flex",
@@ -533,13 +533,20 @@ const PhotographerDetail = () => {
                 <div className={cx("right")}>
                   <div className={cx("map")}>
                     <h3>Xem trên bản đồ</h3>
-                    <div className={cx("address")}>
-                      <img src={images.address} alt="" />
+                    <div
+                      className={cx("address d-flex align-items-center mb-10")}
+                    >
+                      <img
+                        src={images.address}
+                        className="me-10 w-13px h-15px"
+                        alt=""
+                        style={{ fontSize: "5px" }}
+                      />
                       <span>{studioDetail?.data?.Address}</span>
                     </div>
                     <div className="mapouter">
                       <div className="gmap_canvas">
-                        {/* <iframe
+                        <iframe
                           title="map"
                           className="gmap_iframe"
                           width="100%"
@@ -547,8 +554,8 @@ const PhotographerDetail = () => {
                           scrolling="no"
                           marginHeight={0}
                           marginWidth={0}
-                          // src={`https://www.google.com/maps?q=${studioDetail1?.Latitude},${studioDetail1?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
-                        /> */}
+                          src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                        />
                       </div>
                     </div>
                   </div>
@@ -684,12 +691,14 @@ const PhotographerDetail = () => {
                             .map((item, index) => (
                               <SlideAlbum key={index} data={item} />
                             ))}
-                          <div
-                            className="btn_see_more"
-                            onClick={() => setToggleSeeMore(true)}
-                          >
-                            Xem thêm <DownOutlined className="icon" />
-                          </div>
+                          {studioDetail?.album?.length > 3 && (
+                            <div
+                              className="btn_see_more"
+                              onClick={() => setToggleSeeMore(true)}
+                            >
+                              Xem thêm <DownOutlined className="icon" />
+                            </div>
+                          )}
                         </>
                       )}
                     </div>

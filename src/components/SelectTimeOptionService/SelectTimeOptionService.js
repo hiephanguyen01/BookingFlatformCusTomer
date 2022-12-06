@@ -1,6 +1,6 @@
 import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { SET_SERVICE_SELECT } from "../../stores/types/studioPostType";
@@ -20,6 +20,13 @@ function dateRange(startDate, endDate, steps = 1) {
   }
 
   return dateArray;
+}
+function range(start, end) {
+  const result = [];
+  for (let i = start; i <= end; i++) {
+    result.push(i);
+  }
+  return result;
 }
 function dateRangeHour(startDate, endDate) {
   const dateArray = [];
@@ -48,60 +55,117 @@ const Option = ({ option, disabled, service }) => {
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
   const [disableHour, setDisableHour] = useState([]);
+  const [disableDate, setDisableDate] = useState([]);
   const [time, setTime] = useState([]);
 
-  const handleOnchangeDate = (d, dString) => {
-    console.log("dang chin", service.id);
-    setDate(dString);
-    // console.log("gio UTC", moment.utc(moment(date).utc()).format());
-    if (dString && filterService.OrderByTime === 1) {
-      let hl = service?.Bookings?.filter((item) => {
-        const dates = dateRange(
-          moment(item.OrderByTimeFrom).format("l"),
-          moment(item.OrderByTimeTo).format("l")
-        );
-        return dates.includes(moment(dString).format("l"));
-      });
-      console.log("so gio da chon ", hl);
-      setDisableHour(hl);
-    }
-    // if (time.length > 0) {
-    //   dispatch(
-    //     setFilterStudioService(5, 1, {
-    //       ...filterService,
-    //       OrderByTime: 1,
-    //       OrderByTimeFrom:
-    //         convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
-    //       OrderByTimeTo:
-    //         convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
-    //     })
-    //   );
-    //   // dispatch({
-    //   //   type: SET_FILTER_SERVICE,
-    //   //   payload: {
-    //   //     ...filterService,
-    //   //     OrderByTime: 0,
-    //   //     OrderByTimeFrom:
-    //   //       convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
-    //   //     OrderByTimeTo:
-    //   //       convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
-    //   //   },
-    //   // });
-    // }
-  };
+  useEffect(() => {
+    const listDate = service?.Bookings?.reduce((acc, item) => {
+      let dates = dateRange(
+        moment(item.OrderByTimeFrom).format("l"),
+        moment(item.OrderByTimeTo).format("l")
+      );
+      let dates2 = dateRange(
+        moment(item.OrderByDateFrom).format("l"),
+        moment(item.OrderByDateTo).format("l")
+      );
+      acc.push(...dates, ...dates2);
+      return uniqueInOrder(acc);
+    }, []);
+    console.log("listDate", listDate);
+    const minDate = new Date(
+      Math.min(
+        ...listDate.map((element) => {
+          return new Date(element);
+        })
+      )
+    );
+    console.log("minDate",moment( minDate).format("l"));
+    setDisableDate(listDate);
+  }, []);
+
+  // const handleOnchangeDate = (d, dString) => {
+  //   console.log("dang chin", service.id);
+  //   // setDate(dString);
+  //   // console.log("gio UTC", moment.utc(moment(date).utc()).format());
+  //   if (dString && filterService.OrderByTime === 1) {
+  //     let hl = service?.Bookings?.filter((item) => {
+  //       const dates = dateRange(
+  //         moment(item.OrderByTimeFrom).format("l"),
+  //         moment(item.OrderByTimeTo).format("l")
+  //       );
+  //       return dates.includes(moment(dString).format("l"));
+  //     });
+  //     // console.log("so gio da chon ", hl);
+  //     let array = [];
+  //     if (
+  //       moment(dString).format("YYYY-MM-DD") ==
+  //       moment(new Date()).format("YYYY-MM-DD")
+  //     ) {
+  //       array = range(0, moment().hours());
+  //       console.log("first", array);
+  //     }
+
+  //     if (hl?.length > 0) {
+  //       array = hl?.reduce((acc, item) => {
+  //         acc = array;
+  //         let dates = dateRangeHour(
+  //           moment(item.OrderByTimeFrom).format(),
+  //           moment(item.OrderByTimeTo).format()
+  //         );
+  //         acc.push(...dates.slice(0, -1));
+  //         return remove_duplicates_es6(acc);
+  //       }, []);
+  //     }
+  //     // dispatch({
+  //     //   type: ADD_TIME_ORDER,
+  //     //   data: {
+  //     //     ...filterService,
+  //     //     id: service.id,
+  //     //     OrderByTime: 1,
+  //     //     disableTimeOrder: array,
+  //     //   },
+  //     // });
+
+  //     setDisableHour(array);
+  //   }
+  //   // if (time.length > 0) {
+  //   //   dispatch(
+  //   //     setFilterStudioService(5, 1, {
+  //   //       ...filterService,
+  //   //       OrderByTime: 1,
+  //   //       OrderByTimeFrom:
+  //   //         convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
+  //   //       OrderByTimeTo:
+  //   //         convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
+  //   //     })
+  //   //   );
+  //   //   // dispatch({
+  //   //   //   type: SET_FILTER_SERVICE,
+  //   //   //   payload: {
+  //   //   //     ...filterService,
+  //   //   //     OrderByTime: 0,
+  //   //   //     OrderByTimeFrom:
+  //   //   //       convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
+  //   //   //     OrderByTimeTo:
+  //   //   //       convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
+  //   //   //   },
+  //   //   // });
+  //   // }
+  // };
   const handleOnchangeHour = (t, timeString) => {
-    setTime(timeString);
+    // setTime(timeString);
     if (date !== "") {
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
-          ...filterService,
+          // ...filterService,
           id: service.id,
           OrderByTime: 1,
           OrderByTimeFrom:
             convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
           OrderByTimeTo:
             convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
+          // ListDisableHour: disableHour,
         },
       });
       // dispatch(
@@ -120,13 +184,14 @@ const Option = ({ option, disabled, service }) => {
     dispatch({
       type: ADD_TIME_ORDER,
       data: {
-        ...filterService,
+        // ...filterService,
         id: service.id,
         OrderByTime: 0,
         OrderByDateFrom:
           moment(datesString[0]).toISOString().slice(0, 11) + "00:00:00.000Z",
         OrderByDateTo:
           moment(datesString[1]).toISOString().slice(0, 11) + "00:00:00.000Z",
+        disableDate: disableDate || [],
       },
     });
     // dispatch(
@@ -141,23 +206,16 @@ const Option = ({ option, disabled, service }) => {
     // );
   };
 
-  function range(start, end) {
-    const result = [];
-    for (let i = start; i <= end; i++) {
-      result.push(i);
-    }
-    return result;
-  }
   const getDisabledHours = (date1, type) => {
-    console.log(date);
-    console.log(
-      "day today",
-      moment(date).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")
-    );
-    console.log(
-      moment(date).format("YYYY-MM-DD"),
-      moment(Date.now()).format("YYYY-MM-DD")
-    );
+    // console.log(date);
+    // console.log(
+    //   "day today",
+    //   moment(date).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")
+    // );
+    // console.log(
+    //   moment(date).format("YYYY-MM-DD"),
+    //   moment(Date.now()).format("YYYY-MM-DD")
+    // );
     let array = [];
     if (
       moment(date).format("YYYY-MM-DD") ==
@@ -178,7 +236,15 @@ const Option = ({ option, disabled, service }) => {
         return remove_duplicates_es6(acc);
       }, []);
     }
-    console.log(array);
+    // dispatch({
+    //   type: ADD_TIME_ORDER,
+    //   data: {
+    //     ...filterService,
+    //     id: service.id,
+    //     OrderByTime: 1,
+    //     disableTimeOrder: array,
+    //   },
+    // });
     return array;
   };
   switch (Number(filterService.OrderByTime)) {
@@ -195,7 +261,55 @@ const Option = ({ option, disabled, service }) => {
             }}
           >
             <DatePicker
-              onChange={handleOnchangeDate}
+              onChange={(d, dString) => {
+                // console.log("dang chin", service.id);
+                setDate(dString);
+                // console.log("gio UTC", moment.utc(moment(date).utc()).format());
+                if (dString && filterService.OrderByTime === 1) {
+                  let hl = service?.Bookings?.filter((item) => {
+                    const dates = dateRange(
+                      moment(item.OrderByTimeFrom).format("l"),
+                      moment(item.OrderByTimeTo).format("l")
+                    );
+                    return dates.includes(moment(dString).format("l"));
+                  });
+                  console.log(
+                    "so gio da chon sio sanhg ",
+                    moment(dString).format("YYYY-MM-DD") ==
+                      moment(new Date()).format("YYYY-MM-DD")
+                  );
+                  let array = [];
+                  if (
+                    moment(dString).format("YYYY-MM-DD") ==
+                    moment(new Date()).format("YYYY-MM-DD")
+                  ) {
+                    array = range(0, moment().hours());
+                    console.log("first", array);
+                  }
+
+                  if (hl?.length > 0) {
+                    array = hl?.reduce((acc, item) => {
+                      acc = array;
+                      let dates = dateRangeHour(
+                        moment(item.OrderByTimeFrom).format(),
+                        moment(item.OrderByTimeTo).format()
+                      );
+                      acc.push(...dates.slice(0, -1));
+                      return remove_duplicates_es6(acc);
+                    }, []);
+                  }
+                  dispatch({
+                    type: ADD_TIME_ORDER,
+                    data: {
+                      // ...filterService,
+                      id: service.id,
+                      OrderByTime: 1,
+                      disableTimeOrder: array,
+                    },
+                  });
+                  setDisableHour(array);
+                }
+              }}
               status={"error"}
               // defaultValue={moment(filterService?.OrderByTimeFrom)}
               // format={"YYYY-MM-DD"}
@@ -241,8 +355,11 @@ const Option = ({ option, disabled, service }) => {
                 //   moment(filterService?.OrderByTimeTo),
                 // ]}
                 inputReadOnly={true}
+                // disabledTime={(date, type) => ({
+                //   disabledHours: () => getDisabledHours(date, type),
+                // })}
                 disabledTime={(date, type) => ({
-                  disabledHours: () => getDisabledHours(date, type),
+                  disabledHours: () => disableHour,
                 })}
                 disabled={disabled}
                 minuteStep={60}
@@ -268,20 +385,28 @@ const Option = ({ option, disabled, service }) => {
               // format={"DD/MM/YYYY"}
               disabled={disabled}
               inputReadOnly={true}
+              // disabledDate={(current) => {
+              //   return (
+              //     service?.Bookings?.reduce((acc, item) => {
+              //       let dates = dateRange(
+              //         moment(item.OrderByTimeFrom).format("l"),
+              //         moment(item.OrderByTimeTo).format("l")
+              //       );
+              //       let dates2 = dateRange(
+              //         moment(item.OrderByDateFrom).format("l"),
+              //         moment(item.OrderByDateTo).format("l")
+              //       );
+              //       acc.push(...dates, ...dates2);
+              //       return uniqueInOrder(acc);
+              //     }, []).some((date) =>
+              //       moment(moment(current).format("l")).isSame(moment(date))
+              //     ) ||
+              //     (current && current <= moment().subtract(1, "days"))
+              //   );
+              // }}
               disabledDate={(current) => {
                 return (
-                  service?.Bookings?.reduce((acc, item) => {
-                    let dates = dateRange(
-                      moment(item.OrderByTimeFrom).format("l"),
-                      moment(item.OrderByTimeTo).format("l")
-                    );
-                    let dates2 = dateRange(
-                      moment(item.OrderByDateFrom).format("l"),
-                      moment(item.OrderByDateTo).format("l")
-                    );
-                    acc.push(...dates, ...dates2);
-                    return uniqueInOrder(acc);
-                  }, []).some((date) =>
+                  disableDate.some((date) =>
                     moment(moment(current).format("l")).isSame(moment(date))
                   ) ||
                   (current && current <= moment().subtract(1, "days"))
@@ -304,6 +429,7 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   //   console.log(data.id);
   //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
   // };
+  console.log("services", service);
   const dispatch = useDispatch();
 
   useEffect(() => {
