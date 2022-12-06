@@ -45,6 +45,8 @@ export const Footer = ({
       const formData = new FormData();
       formData.append("BookingStatus", 2);
       formData.append("Category", Category);
+      formData.append("DeletionTime", new Date());
+
       await orderService.updateOrder(formData, IdentifyCode);
       const newPageBooking = pageBooking.filter(
         (item) => item.IdentifyCode !== IdentifyCode

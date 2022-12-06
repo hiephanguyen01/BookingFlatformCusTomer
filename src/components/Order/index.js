@@ -82,9 +82,9 @@ const Index = ({ linkTo = "" }) => {
       dispatch({ type: SET_FILTER_SERVICE, payload: {} });
     };
   }, [cate, dispatch, id, user]);
-  useEffect(()=>{
+  useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
-  },[])
+  }, []);
 
   const isEmpty = () => {
     if (
@@ -182,6 +182,7 @@ const Index = ({ linkTo = "" }) => {
               Category: cate,
               IsPayDeposit: 1,
               BookingValue: calculatePrice(),
+              PromoCodeId: choosePromotionUser.id,
             };
             const response = await orderService.addOrder({
               ...newData,
