@@ -143,261 +143,243 @@ export const StudioDetail = () => {
   //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
   // };
 
-  const ROW = (dataSource = []) => {
-    if (dataSource.length > 0) {
-      return dataSource?.map((data, index) => [
-        {
-          key: "title",
-          render: () => (
-            <div style={{}}>
-              <img
-                alt="as"
-                style={{ width: "100%", borderRadius: " 6px" }}
-                src={`${
-                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
-                }`}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "10px",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#616161",
-                    fontSize: "16px",
-                    fontWeight: "400",
-                    minWidth: "60px",
-                  }}
-                >
-                  Phòng
-                </span>
-                <span
-                  style={{
-                    color: "#3F3F3F",
-                    fontSize: "16px",
-                    fontWeight: "700",
-
-                    display: "-webkit-box",
-                    lineHeight: "18px",
-                    webkitLineClamp: "1",
-                    webkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    height: "18px",
-                  }}
-                >
-                  {data.Name}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "10px",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#616161",
-                    fontSize: "16px",
-                    fontWeight: "400",
-                  }}
-                >
-                  Diện tích
-                </span>
-                <span
-                  style={{
-                    color: "#3F3F3F",
-                    fontSize: "16px",
-                    fontWeight: "700",
-                  }}
-                >
-                  {data.Area}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "10px",
-                }}
-              >
-                <div
-                  style={{
-                    color: "#616161",
-                    fontSize: "16px",
-                    fontWeight: "400",
-                    minWidth: "100px",
-                  }}
-                >
-                  Phong cách
-                </div>
-                <div
-                  style={{
-                    color: "#3F3F3F",
-                    fontSize: "16px",
-                    fontWeight: "700",
-
-                    display: "-webkit-box",
-                    lineHeight: "18px",
-                    webkitLineClamp: "1",
-                    webkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    height: "18px",
-                  }}
-                >
-                  {data.Style}
-                </div>
-              </div>
-              <div
-                className="mt-15"
+  const ROW = (dataSource) => {
+    return dataSource?.map((data, index) => [
+      {
+        key: "title",
+        render: () => (
+          <div style={{}}>
+            <img
+              alt="as"
+              style={{ width: "100%", borderRadius: " 6px" }}
+              src={`${
+                data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
+              }`}
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "10px",
+              }}>
+              <span
                 style={{
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}
-              >
-                {data.Description}
+                  minWidth: "60px",
+                }}>
+                Phòng
+              </span>
+              <span
+                style={{
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+
+                  display: "-webkit-box",
+                  lineHeight: "18px",
+                  webkitLineClamp: "1",
+                  webkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  height: "18px",
+                }}>
+                {data?.Name}
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "10px",
+              }}>
+              <span
+                style={{
+                  color: "#616161",
+                  fontSize: "16px",
+                  fontWeight: "400",
+                }}>
+                Diện tích
+              </span>
+              <span
+                style={{
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}>
+                {data?.Area}
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "10px",
+              }}>
+              <div
+                style={{
+                  color: "#616161",
+                  fontSize: "16px",
+                  fontWeight: "400",
+                  minWidth: "100px",
+                }}>
+                Phong cách
+              </div>
+              <div
+                style={{
+                  color: "#3F3F3F",
+                  fontSize: "16px",
+                  fontWeight: "700",
+
+                  display: "-webkit-box",
+                  lineHeight: "18px",
+                  webkitLineClamp: "1",
+                  webkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  height: "18px",
+                }}>
+                {data.Style}
               </div>
             </div>
-          ),
+            <div
+              className="mt-15"
+              style={{
+                color: "#616161",
+                fontSize: "16px",
+                fontWeight: "400",
+              }}>
+              {data.Description}
+            </div>
+          </div>
+        ),
+      },
+      {
+        key: "desc",
+        render: (item) => {
+          return (
+            <SelectTimeOptionService
+              // disabled={
+              //   serviceSelected === null
+              //     ? false
+              //     : data.id === serviceSelected
+              //     ? false
+              //     : true
+              // }
+              service={data}
+            />
+          );
         },
-        {
-          key: "desc",
-          render: (item) => {
-            return (
-              <SelectTimeOptionService
-                // disabled={
-                //   serviceSelected === null
-                //     ? false
-                //     : data.id === serviceSelected
-                //     ? false
-                //     : true
-                // }
-                service={data}
-              />
-            );
-          },
-        },
-        {
-          key: "currency",
-          render: () => (
-            <>
-              {filterService.OrderByTime !== -1 && (
-                <div className="mb-20">
-                  <div
+      },
+      {
+        key: "currency",
+        render: () => (
+          <>
+            {filterService.OrderByTime !== -1 && (
+              <div className="mb-20">
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                  }}>
+                  <span
                     style={{
-                      display: "flex",
-                      gap: "10px",
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: "#E22828",
-                        fontSize: "20px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      {filterService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {filterService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                    </span>
-                    <span
-                      style={{
-                        color: "#828282",
-                        textDecoration: "line-through",
-                        fontSize: "14px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      {filterService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {filterService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                    </span>
-                  </div>
-                  <p
+                      color: "#E22828",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                    }}>
+                    {filterService.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {filterService.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </span>
+                  <span
                     style={{
                       color: "#828282",
+                      textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
-                    {data.PriceNote}
-                  </p>
+                    }}>
+                    {filterService.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {filterService.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </span>
+                </div>
+                <p
+                  style={{
+                    color: "#828282",
+                    fontSize: "14px",
+                    fontWeight: "400",
+                  }}>
+                  {data?.PriceNote}
+                </p>
+              </div>
+            )}
+            <div className="">
+              {filterService?.id === data?.id ? (
+                <div
+                  onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "13px 25px",
+
+                    backgroundColor: "#E7E7E7",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}>
+                  Bỏ chọn
+                </div>
+              ) : (
+                <div
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "13px 25px",
+
+                    border: "1px solid #E22828",
+                    color: "#E22828",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}>
+                  Chọn
                 </div>
               )}
-              <div className="">
-                {filterService.id === data.id ? (
-                  <div
-                    onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "13px 25px",
-
-                      backgroundColor: "#E7E7E7",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Bỏ chọn
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => handleChooseService(data)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "13px 25px",
-
-                      border: "1px solid #E22828",
-                      color: "#E22828",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Chọn
-                  </div>
-                )}
-              </div>
-            </>
-          ),
-        },
-      ]);
-    }
+            </div>
+          </>
+        ),
+      },
+    ]);
   };
 
   const handleChooseService = (data) => {
@@ -472,8 +454,7 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -481,8 +462,7 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -502,8 +482,7 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -526,27 +505,23 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}
-                        >
+                          }}>
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}
-                          >
+                            }}>
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
+                              style={{ fontSize: "18px", fontWeight: "bold" }}>
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click"
-                    >
+                      trigger="click">
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -559,13 +534,11 @@ export const StudioDetail = () => {
                   <Rate
                     disabled
                     allowHalf
-                    value={studioDetail?.data?.TotalRate}
-                  ></Rate>
+                    value={studioDetail?.data?.TotalRate}></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}
-                  >
+                    style={{ fontSize: "15px" }}>
                     {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
@@ -582,10 +555,11 @@ export const StudioDetail = () => {
                   <div className={cx("sale")}>
                     <PromotionList data={filter_promo} />
                   </div>
-
-                  <div className={cx("")}>
-                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                  </div>
+                  {studioDetail && (
+                    <div className={cx("")}>
+                      <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                    </div>
+                  )}
 
                   <div className={cx("rating")}>
                     <CommentRating
@@ -626,8 +600,7 @@ export const StudioDetail = () => {
                               textDecoration: "line-through",
                               fontSize: " 16px",
                               color: "#828282",
-                            }}
-                          >
+                            }}>
                             {filterService?.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
@@ -666,8 +639,7 @@ export const StudioDetail = () => {
                             color: "#E22828",
                             fontSize: "20px",
                             fontWeight: "700",
-                          }}
-                        >
+                          }}>
                           {filterService?.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
@@ -710,8 +682,7 @@ export const StudioDetail = () => {
                               "",
                               {}
                             )
-                          }
-                        >
+                          }>
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
@@ -722,8 +693,7 @@ export const StudioDetail = () => {
                             chooseServiceList.length > 0 && filterService.id > 0
                               ? false
                               : true
-                          }
-                        >
+                          }>
                           Đặt ngay
                         </Button>
                       </div>
