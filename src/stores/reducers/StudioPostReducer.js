@@ -1,3 +1,4 @@
+import moment from "moment";
 import toastMessage from "../../components/ToastMessage";
 
 import {
@@ -179,7 +180,7 @@ export const studioPostReducer = (state = initialState, action) => {
           (item) => item.id === action.data?.id
         );
         if (existed !== -1) {
-          newArray[existed] = action.data;
+          newArray[existed] = { ...newArray[existed], ...action.data };
         } else {
           newArray = [...newArray, action.data];
         }
@@ -202,6 +203,61 @@ export const studioPostReducer = (state = initialState, action) => {
         );
         console.log("data da chon", data);
         if (data) {
+          // console.log(
+          //   "hour so sanh ",
+          //   data.disableTimeOrder[0] || 0,
+          //   moment.utc(moment(data.OrderByTimeFrom).utc()).hour()
+          // );
+          if (data.OrderByTime === 1) {
+            if (
+              data.disableTimeOrder[0] >
+                moment.utc(moment(data.OrderByTimeFrom).utc()).hour() &&
+              data.disableTimeOrder[0] <
+                moment.utc(moment(data.OrderByTimeTo).utc()).hour()
+            ) {
+              toastMessage(
+                "Đã có người đặt trong khoảng thời gian này!",
+                "warn",
+                2
+              );
+              return {
+                ...state,
+                filterService: {},
+              };
+            }
+          } else {
+            function inArray(array) {
+              for (let i = 0; i < array.length; i++) {
+                if (
+                  new Date(array[i]).getTime() >
+                    new Date(
+                      moment.utc(moment(data.OrderByDateFrom).utc()).format("l")
+                    ).getTime() &&
+                  new Date(array[i]).getTime() <
+                    new Date(
+                      moment.utc(moment(data.OrderByDateTo).utc()).format("l")
+                    ).getTime()
+                ) {
+                  return true;
+                }
+              }
+
+              return false;
+            }
+            const check = inArray(data.disableDate);
+
+            if (check) {
+              toastMessage(
+                "Đã có người đặt trong khoảng thời gian này!",
+                "warn",
+                2
+              );
+              return {
+                ...state,
+                filterService: {},
+              };
+            }
+          }
           newFilter = data;
         } else {
           // newFilter = { ...newFilter, id: -1 };

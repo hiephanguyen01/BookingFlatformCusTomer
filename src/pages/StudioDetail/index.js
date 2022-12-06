@@ -406,6 +406,7 @@ export const StudioDetail = () => {
     //   return;
     // } else {
     // }
+    console.log(data);
     dispatch(handlerSelectServiceAction(data));
 
     // if (
@@ -730,17 +731,20 @@ export const StudioDetail = () => {
                   </ReactStickyBox>
                 </div>
               </div>
-
-              <SlideCard
-                data={listStudioSimilar ?? listStudioSimilar}
-                category={{ name: "studio", id: 1 }}
-                title="Studio tương tự"
-              />
-              <SlideCard
-                data={studioNear ?? studioNear}
-                category={{ name: "studio", id: 1 }}
-                title="Gần bạn"
-              />
+              {listStudioSimilar?.length > 1 && (
+                <SlideCard
+                  data={listStudioSimilar ?? listStudioSimilar}
+                  category={{ name: "studio", id: 1 }}
+                  title="Studio tương tự"
+                />
+              )}
+              {studioNear?.length > 1 && (
+                <SlideCard
+                  data={studioNear ?? studioNear}
+                  category={{ name: "studio", id: 1 }}
+                  title="Gần bạn"
+                />
+              )}
             </div>
           </div>
         </div>

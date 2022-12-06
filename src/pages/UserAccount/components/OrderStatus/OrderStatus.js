@@ -23,7 +23,8 @@ const OrderStatus = () => {
     page: 1,
     limit: 10,
     // category: 1,
-    BookingStatus: 1,
+    BookingStatus: 4,
+    PaymentStatus: 1,
     EntryDate: JSON.stringify(EntryDate),
   });
   const onChange = (key) => {
@@ -72,6 +73,7 @@ const OrderStatus = () => {
     }
   }, [booking, filter, pageSize]);
 
+  console.log("bookinff", booking, params);
   return (
     <>
       <h4 className="OrderStatus__header">Lịch sử đơn đặt</h4>
@@ -82,7 +84,8 @@ const OrderStatus = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <div
               style={{
                 background: "white",
@@ -90,7 +93,8 @@ const OrderStatus = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}>
+              }}
+            >
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -108,7 +112,8 @@ const OrderStatus = () => {
                   placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
                 />
               ),
-            }}>
+            }}
+          >
             <TabPane tab="Chờ thanh toán" key={1}>
               {booking &&
                 pageBooking.map((item, idx) => (
@@ -170,7 +175,8 @@ const OrderStatus = () => {
             display: "flex",
             justifyContent: "right",
             padding: "10px 10px",
-          }}>
+          }}
+        >
           <Pagination
             showSizeChanger={false}
             onChange={handleChange}
