@@ -53,15 +53,13 @@ const initialState = {
   listLikedUser: [],
   listStudioSimilar: [],
   promotionCode: [],
-  filterService: JSON.parse(localStorage.getItem("filter-service"))
-    ? JSON.parse(localStorage.getItem("filter-service"))
-    : {
-        OrderByTime: -1,
-        OrderByTimeFrom: "",
-        OrderByTimeTo: "",
-        OrderByDateFrom: "",
-        OrderByDateTo: "",
-      },
+  filterService: {
+    OrderByTime: -1,
+    OrderByTimeFrom: "",
+    OrderByTimeTo: "",
+    OrderByDateFrom: "",
+    OrderByDateTo: "",
+  },
   listTimeSelected: [],
   loadingService: false,
   serviceSelected: null,
@@ -156,13 +154,11 @@ export const studioPostReducer = (state = initialState, action) => {
         loadingService: action.payload,
       };
     case SET_FILTER_SERVICE:
-      localStorage.setItem("filter-service", JSON.stringify(action.payload));
       return {
         ...state,
         filterService: { ...action.payload },
       };
     case SET_SERVICE_SELECT:
-      console.log(action.payload);
       return {
         ...state,
         serviceSelected: action.payload,
