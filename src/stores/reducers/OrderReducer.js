@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   loading: false,
-  chooseServiceList: JSON.parse(localStorage.getItem("choose-service")) || [],
+  chooseServiceList: [],
   order: JSON.parse(localStorage.getItem("cart")) || {
     studio: [],
     photographer: [],
@@ -29,7 +29,7 @@ export const OrderReducer = (state = initialState, action) => {
       };
     case SET_CHOOSE_SERVICE:
       console.log(action);
-      localStorage.setItem("choose-service", JSON.stringify(action.payload));
+      // localStorage.setItem("choose-service", JSON.stringify(action.payload));
       return {
         ...state,
         chooseServiceList: action.payload,
@@ -44,7 +44,7 @@ export const OrderReducer = (state = initialState, action) => {
     //     chooseServiceList: [...action.payload],
     //   };
     case DELETE_CHOOSE_SERVICE:
-      localStorage.removeItem("choose-service");
+      // localStorage.removeItem("choose-service");
       return {
         ...state,
         chooseServiceList: [],
