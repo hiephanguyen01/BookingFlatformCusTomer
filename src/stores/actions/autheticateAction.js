@@ -308,6 +308,7 @@ export const getCurrentUser = () => async (dispatch) => {
       dispatch({ type: SET_USER, payload: res.data.user });
     }
   } catch (error) {
+    localStorage.removeItem("token");
     setAuthToken(false);
   }
   dispatch({ type: AUTHING, payload: false });

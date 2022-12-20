@@ -7,7 +7,7 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Affix, Button, Popover, Rate } from "antd";
+import { Button, Carousel, Image, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
 import { useEffect, useRef, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
@@ -24,10 +24,7 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import {
-  chooseServiceAction,
-  chooseServiceListAction,
-} from "../../stores/actions/OrderAction";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
@@ -39,10 +36,7 @@ import {
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
-import {
-  SELECT_TIME_ORDER,
-  SET_PROMOTION_CODE,
-} from "../../stores/types/studioPostType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
@@ -61,6 +55,8 @@ const COLUMN = [
 const cx = classNames.bind(styles);
 
 export const StudioDetail = () => {
+  const [visible, setVisible] = useState(false);
+
   const { id } = useParams();
   const setContainer = useRef(null);
   const { pathname } = useLocation();
@@ -148,14 +144,28 @@ export const StudioDetail = () => {
       {
         key: "title",
         render: () => (
-          <div style={{}}>
-            <img
-              alt="as"
-              style={{ width: "100%", borderRadius: " 6px" }}
-              src={`${
-                data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
-              }`}
-            />
+          <div style={{ maxWidth: "300px" }}>
+            <Carousel autoplay style={{ width: "100%" }}>
+              {data.Image.map((val) => (
+                <Image
+                  key={val}
+                  preview={{ visible: false }}
+                  src={convertImage(val)}
+                  onClick={() => setVisible(data.id)}
+                />
+              ))}
+            </Carousel>
+            <div style={{ display: "none" }}>
+              <Image.PreviewGroup
+                preview={{
+                  visible: Boolean(visible === data.id),
+                  onVisibleChange: (vis) => setVisible(vis),
+                }}>
+                {data.Image.map((val) => (
+                  <Image src={convertImage(val)} />
+                ))}
+              </Image.PreviewGroup>
+            </div>
             <div
               style={{
                 display: "flex",
