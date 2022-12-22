@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Carousel, Image, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -58,37 +58,31 @@ export const StudioDetail = () => {
   const [visible, setVisible] = useState(false);
 
   const { id } = useParams();
-  const setContainer = useRef(null);
   const { pathname } = useLocation();
   // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
-  const {
-    studioDetail,
-    studioNear,
-    listStudioSimilar,
-    promotionCode,
-    filterService,
-  } = useSelector((state) => state.studioPostReducer);
+  const { studioDetail, studioNear, listStudioSimilar, filterService } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
       ? 1
       : undefined;
 
-  const filter_promo = promotionCode
-    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
-    ?.reduce((arr, item) => {
-      if (
-        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
-        0
-      ) {
-        return [...arr];
-      }
-      return [...arr, item];
-    }, []);
+  // const filter_promo = promotionCode
+  //   ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+  //   ?.reduce((arr, item) => {
+  //     if (
+  //       promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+  //       0
+  //     ) {
+  //       return [...arr];
+  //     }
+  //     return [...arr, item];
+  //   }, []);
 
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
@@ -103,7 +97,7 @@ export const StudioDetail = () => {
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
-    dispatch({ type: "SET_SERVICE_SELECT", payload: null });
+    // dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
   }, [id, dispatch]);
 
@@ -563,7 +557,7 @@ export const StudioDetail = () => {
                     </ReadMoreDesc>
                   </div>
                   <div className={cx("sale")}>
-                    <PromotionList data={filter_promo} />
+                    <PromotionList />
                   </div>
                   {studioDetail && (
                     <div className={cx("")}>

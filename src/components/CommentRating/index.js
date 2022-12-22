@@ -6,6 +6,7 @@ import {
 import { Divider, Pagination, Rate } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import images from "../../assets/images";
 import imgCmt from "../../assets/images/deviceImg.png";
 import { convertTime } from "../../utils/convert";
@@ -182,7 +183,8 @@ const Index = ({ data = [], className }) => {
                         {item?.StudioRoom?.Name ||
                           item?.PhotographerServicePackage?.Name ||
                           item?.ModelServicePackage?.Name ||
-                          item?.MakeupServicePackage?.Name}
+                          item?.MakeupServicePackage?.Name ||
+                          item?.Item?.Name}
                       </div>
                       {/* <div className="d-flex">
                         <div className="w-28px h-28px me-15">

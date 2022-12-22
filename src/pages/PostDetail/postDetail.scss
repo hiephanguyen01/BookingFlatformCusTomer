@@ -1,149 +1,160 @@
 @import "../../App.scss";
 
-.postDetail {
-  background-color: rgb(29, 34, 38);
-  height: calc(100vh - 105px);
+.post-wrapper {
+  background-color: $neutral-50;
+  padding: 10px 0;
 
-  .swiperPostDetail {
-    height: calc(100vh - 105px);
-
-    .swiper-button-prev,
-    .swiper-button-next {
-      padding: 25px 15px;
-      background: rgba(255, 255, 255, 0.46);
-      border-radius: 2px;
-
-      &::after {
-        font-size: 18px;
-        color: #000000;
-        font-weight: 900;
-      }
-    }
-  }
-
-  .col-right {
+  .postDetail {
+    background-color: rgb(29, 34, 38);
+    // height: calc(100vh - 105px);
+    width: 800px;
+    margin: auto;
     background-color: #fff;
-    height: calc(100vh - 105px);
-    overflow-y: scroll;
-    position: relative;
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px 0;
 
-    .post_detail_info {
-      .avt {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-      }
+    .swiperPostDetail {
+      height: calc(100vh - 105px);
 
-      &_name {
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 19px;
-        color: $neutral-500;
-      }
+      .swiper-button-prev,
+      .swiper-button-next {
+        padding: 25px 15px;
+        background: rgba(255, 255, 255, 0.46);
+        border-radius: 2px;
 
-      &_time {
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 16px;
-        color: $neutral-500;
-      }
-    }
-
-    .post_detail_tags {
-      margin-top: 13px;
-      list-style: none;
-
-      li {
-        color: $secondary-800;
-        margin-right: 8px;
-
-        &:last-child {
-          margin-right: 0;
+        &::after {
+          font-size: 18px;
+          color: #000000;
+          font-weight: 900;
         }
       }
     }
 
-    .post_detail_description {
-      p {
-        margin-top: 10px;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 22px;
+    .col-right {
+      background-color: #fff;
+      height: calc(100vh - 105px);
+      overflow-y: scroll;
+      position: relative;
+
+      .post_detail_info {
+        .avt {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+        }
+
+        &_name {
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 19px;
+          color: $neutral-500;
+        }
+
+        &_time {
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 16px;
+          color: $neutral-500;
+        }
       }
-    }
 
-    .post_detail_comment {
-      padding-bottom: 18px;
-      border-bottom: 1px solid #e7e7e7;
-      width: 100%;
+      .post_detail_tags {
+        margin-top: 13px;
+        list-style: none;
 
-      &.active {
-        color: "#E22828";
+        li {
+          color: $secondary-800;
+          margin-right: 8px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
       }
 
-      .avt {
-        object-fit: contain;
-        height: fit-content;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
+      .post_detail_description {
+        p {
+          margin-top: 10px;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 22px;
+        }
       }
 
-      .post_detail_choose_comment {
-        ul {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
+      .post_detail_comment {
+        padding-bottom: 18px;
+        border-bottom: 1px solid #e7e7e7;
+        width: 100%;
 
-          li {
+        &.active {
+          color: "#E22828";
+        }
+
+        .avt {
+          object-fit: contain;
+          height: fit-content;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+        }
+
+        .post_detail_choose_comment {
+          ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            li {
+              width: fit-content;
+              padding: 11px 8px 11px 8px;
+              box-shadow: 0.5px 1px 4px rgba(0, 0, 0, 0.16);
+              border-radius: 8px;
+
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 19px;
+              margin-left: 10px;
+
+              cursor: pointer;
+
+              &:first-child {
+                margin-left: 16px;
+              }
+
+              &.active {
+                background-color: #96fde5;
+              }
+            }
+          }
+
+          .post_detail_choose_service {
             width: fit-content;
-            padding: 11px 8px 11px 8px;
-            box-shadow: 0.5px 1px 4px rgba(0, 0, 0, 0.16);
+            margin-top: 18px;
+            border: 1px dashed #1fcba2;
+            margin-left: 16px;
+            padding: 12px 91px 12px 83px;
             border-radius: 8px;
-
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 19px;
-            margin-left: 10px;
-
             cursor: pointer;
 
-            &:first-child {
-              margin-left: 16px;
+            svg {
+              margin-right: 8px;
             }
 
-            &.active {
-              background-color: #96fde5;
+            p {
+              color: $secondary-800;
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 19px;
             }
           }
-        }
 
-        .post_detail_choose_service {
-          width: fit-content;
-          margin-top: 18px;
-          border: 1px dashed #1fcba2;
-          margin-left: 16px;
-          padding: 12px 91px 12px 83px;
-          border-radius: 8px;
-          cursor: pointer;
+          .btn-send-comment {
+            position: relative;
 
-          svg {
-            margin-right: 8px;
+            width: 25px;
+            height: 25px;
           }
-
-          p {
-            color: $secondary-800;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 19px;
-          }
-        }
-
-        .btn-send-comment {
-          position: relative;
-
-          width: 25px;
-          height: 25px;
         }
       }
     }
