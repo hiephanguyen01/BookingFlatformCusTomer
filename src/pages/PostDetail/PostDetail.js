@@ -43,6 +43,7 @@ import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
 import { postDaoService } from "../../services/PostDaoService";
 import { cancelSavePost } from "../../stores/actions/userAction";
 import { userService } from "../../services/UserService";
+import DaoPost from "../../components/DaoPost";
 
 const PostDetail = () => {
   const type = "post";
@@ -250,18 +251,20 @@ const PostDetail = () => {
   //     },
   //   ];
   return (
-    <div className="postDetail">
-      <MetaDecorator
-        // title={`${postDetail?.Tags?.split(",").join(" - ").toUpperCase()}`}
-        title={`${
-          postDetail?.BookingUser?.Fullname
-        } - ${postDetail?.Tags?.split(",").join(",").toUpperCase()}`}
-        description={postDetail.Description}
-        imgUrl={
-          REACT_APP_DB_BASE_URL_IMG + `/${postDetail?.Image?.slice(0, 1)}`
-        }
-      />
-      <Row>
+    <div className="post-wrapper">
+      <div className="postDetail">
+        <MetaDecorator
+          // title={`${postDetail?.Tags?.split(",").join(" - ").toUpperCase()}`}
+          title={`${
+            postDetail?.BookingUser?.Fullname
+          } - ${postDetail?.Tags?.split(",").join(",").toUpperCase()}`}
+          description={postDetail.Description}
+          imgUrl={
+            REACT_APP_DB_BASE_URL_IMG + `/${postDetail?.Image?.slice(0, 1)}`
+          }
+        />
+        <DaoPost item={postDetail} type={type} />
+        {/* <Row>
         <Col
           lg={16}
           md={12}
@@ -583,7 +586,8 @@ const PostDetail = () => {
             </div>
           )}
         </Col>
-      </Row>
+      </Row> */}
+      </div>
     </div>
   );
 };

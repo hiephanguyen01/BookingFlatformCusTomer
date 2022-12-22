@@ -7,9 +7,9 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Affix, Button, Popover, Rate } from "antd";
+import { Button, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -24,10 +24,7 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import {
-  chooseServiceAction,
-  chooseServiceListAction,
-} from "../../stores/actions/OrderAction";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
@@ -39,10 +36,7 @@ import {
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
-import {
-  SELECT_TIME_ORDER,
-  SET_PROMOTION_CODE,
-} from "../../stores/types/studioPostType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
@@ -62,37 +56,31 @@ const cx = classNames.bind(styles);
 
 export const StudioDetail = () => {
   const { id } = useParams();
-  const setContainer = useRef(null);
   const { pathname } = useLocation();
   // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
-  const {
-    studioDetail,
-    studioNear,
-    listStudioSimilar,
-    promotionCode,
-    filterService,
-  } = useSelector((state) => state.studioPostReducer);
+  const { studioDetail, studioNear, listStudioSimilar, filterService } =
+    useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
       ? 1
       : undefined;
 
-  const filter_promo = promotionCode
-    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
-    ?.reduce((arr, item) => {
-      if (
-        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
-        0
-      ) {
-        return [...arr];
-      }
-      return [...arr, item];
-    }, []);
+  // const filter_promo = promotionCode
+  //   ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+  //   ?.reduce((arr, item) => {
+  //     if (
+  //       promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+  //       0
+  //     ) {
+  //       return [...arr];
+  //     }
+  //     return [...arr, item];
+  //   }, []);
 
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
@@ -107,7 +95,7 @@ export const StudioDetail = () => {
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
-    dispatch({ type: "SET_SERVICE_SELECT", payload: null });
+    // dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
   }, [id, dispatch]);
 
@@ -580,7 +568,7 @@ export const StudioDetail = () => {
                     </ReadMoreDesc>
                   </div>
                   <div className={cx("sale")}>
-                    <PromotionList data={filter_promo} />
+                    <PromotionList />
                   </div>
 
                   <div className={cx("")}>

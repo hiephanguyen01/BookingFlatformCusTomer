@@ -504,7 +504,6 @@ const Index = ({ linkTo = "" }) => {
                   try {
                     dispatch({
                       type: SHOW_MODAL,
-
                       Component: (
                         <VerifyOtp email={infoUser.Email} setValid={setValid} />
                       ),
