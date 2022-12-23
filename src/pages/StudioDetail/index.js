@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Carousel, Image, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
