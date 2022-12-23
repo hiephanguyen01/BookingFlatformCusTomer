@@ -57,7 +57,7 @@ const DaoPost = (props) => {
   const [seeMore, setSeeMore] = useState(false);
 
   const { item, type = "post" } = props;
-  const [post, setPost] = useState({ ...item });
+  const [post, setPost] = useState({});
   // const [mouseOverHeart, setMouseOverHeart] = useState(false);
   // const [mouseClickHeart, setMouseClickHeart] = useState(
   //   likePostList?.filter((itm) => itm.PostId === post?.id).length > 0
@@ -92,6 +92,7 @@ const DaoPost = (props) => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     setPost({ ...item });
   }, [item]);

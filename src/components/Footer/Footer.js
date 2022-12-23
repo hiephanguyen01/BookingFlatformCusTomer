@@ -110,7 +110,7 @@ const Footer = () => {
                 </ul>
               </Col>
               <Col sm={24} md={12} lg={6}>
-                <img src={Logo} />
+                <img src={Logo} alt="" />
                 {/* <Enter /> */}
                 <p className="title exten">
                   Công ty Cổ phần Công nghệ và Đầu tư VNPLUS

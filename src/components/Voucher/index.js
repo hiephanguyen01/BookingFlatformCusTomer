@@ -14,15 +14,15 @@ import { getPromotionByTenantId } from "../../stores/actions/studioPostAction";
 
 const Index = () => {
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
+  console.log(promoCodeUserSave);
 
-  const { studioDetail, promotionCode } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { promotionCode } = useSelector((state) => state.studioPostReducer);
   const [savePromo, setSavePromo] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
-    dispatch(getPromotionCodeUserSave());
+    setSavePromo([...promoCodeUserSave]);
+    // dispatch(getPromotionByTenantId(studioDetail?.data?.TenantId));
+    // dispatch(getPromotionCodeUserSave());
     // if (
     //   promotionCode
     //     .filter(
@@ -40,7 +40,7 @@ const Index = () => {
     // ) {
     //   dispatch({ type: HIDE_MODAL });
     // }
-  }, [studioDetail, dispatch]);
+  }, [promoCodeUserSave, dispatch]);
 
   const handleChooseVoucher = (code) => {
     const newSavePromo = [...savePromo];
@@ -55,7 +55,7 @@ const Index = () => {
     }
   };
   return (
-    <div className="save_promotion_container">
+    <div className="wrapper">
       <div
         className="close_modal"
         onClick={() => {
@@ -64,22 +64,10 @@ const Index = () => {
       >
         <CloseOutlined />
       </div>
-      <header className="header_modal">Mã khuyến mãi</header>
-      {promotionCode &&
-        promotionCode
-          .filter(
-            (item) => item.SaleCode.DateTimeExpire > new Date().toISOString()
-          )
-          .reduce((arr, item) => {
-            if (
-              promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id)
-                .length > 0
-            ) {
-              return [...arr];
-            }
-            return [...arr, item.SaleCode];
-          }, [])
-          .map((item, index) => (
+      <div className="save_promotion_container">
+        <header className="header_modal">Mã khuyến mãi</header>
+        {promotionCode &&
+          promotionCode?.map((item, index) => (
             <div className="save_promotion_wrap" key={index}>
               <div className="save_promotion_content">
                 <div className="save_promotion_code">{item.SaleCode}</div>
@@ -88,7 +76,7 @@ const Index = () => {
                   HSD: {convertTime(item.DateTimeExpire).slice(0, 10)}
                 </div>
               </div>
-              {savePromo.filter((itm) => item.id === itm.id).length > 0 ? (
+              {savePromo.some((itm) => item.id === itm.id) ? (
                 <div
                   className="btn_applied"
                   onClick={() => {
@@ -109,6 +97,7 @@ const Index = () => {
               )}
             </div>
           ))}
+      </div>
     </div>
   );
 };

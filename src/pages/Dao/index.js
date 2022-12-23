@@ -208,7 +208,7 @@ const Dao = () => {
         dispatch(getAllPostDaoAction([], { ...filter, page: 1, tags: [] }));
       }
     } catch (error) {
-      errorMess();
+      errorMess(error.response.data.message);
     }
     setLoading(false);
   };
