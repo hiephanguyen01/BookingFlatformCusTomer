@@ -8,6 +8,10 @@ import {
   LoadingOutlined,
   HeartFilled,
   WarningOutlined,
+  CameraOutlined,
+  PictureOutlined,
+  StopOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 import "./photographerDetail.scss";
 
@@ -51,6 +55,8 @@ import classNames from "classnames/bind";
 import ReactStickyBox from "react-sticky-box";
 import styles from "./Detail.module.scss";
 import images from "../../assets/images";
+import jiwery from "../../assets/svg/jiwery.svg";
+import different from "../../assets/svg/diffrent.svg";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 
 const COLUMN = [
@@ -107,7 +113,7 @@ const PhotographerDetail = () => {
   }, [studioDetail, dispatch]);
 
   useEffect(() => {
-    window.scrollTo({ behavior: "smooth", top: 0 });
+    // window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
@@ -147,13 +153,142 @@ const PhotographerDetail = () => {
               <div
                 className="mt-10"
                 style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <CameraOutlined style={{ marginRight: "10px" }} />
+                  Ekip
+                </div>
+                <ul className="ekip">
+                  <li>2 Thợ chụp ảnh</li>
+                  <li>1 Thợ trang điểm</li>
+                  <li>1 Stylist</li>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <img src={jiwery} className="me-10 mb-5" alt="" />
+                  Trang phục, phụ kiện
+                </div>
+                <ul className="ekip">
+                  <li>02 váy, 02 vest, 01 đồ tự chọn</li>
+                  <li>Hoa cầm tay </li>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <img src={different} className="me-10 mb-5" alt="" />
+                  Khác
+                </div>
+                <div className="ekip">
+                  <p>Bối cảnh: Ngoài trời</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <PictureOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Sản phẩm nhận được
+                </div>
+                <ul className="ekip">
+                  <li>01 Album photobook cao cấp 20 x 30 (20 trang)</li>
+                  <li>01 Hình cổng laminate 60 x 90</li>
+                  <li>10 ảnh trang trí 12 x 16 ép lụa</li>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div className="d-flex align-items-center">
+                  <StopOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Dịch vụ CHƯA bao gồm:
+                </div>
+                <div className="ekip">
+                  <p>Di chuyển</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <EnvironmentOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Địa điểm
+                </div>
+                <div className="ekip">
+                  <p>26 Nguyễn Ái Quốc, Biên Hòa, Đồng Nai</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <ClockCircleOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Thời gian thực hiện
+                </div>
+                <div className="ekip">
+                  <p>2 giờ (ước lượng)</p>
+                </div>
+              </div>
+              {/* <div
+                className="mt-10"
+                style={{
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
                 }}
               >
                 {data.Description}
-              </div>
+              </div> */}
             </div>
           ),
         },
@@ -376,199 +511,247 @@ const PhotographerDetail = () => {
         type="article"
         imgAlt="Booking Studio Details"
       />
-      {Object.keys(studioDetail).length <= 0 ? (
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+      {
+        // Object.keys(studioDetail).length <= 0
+        false ? (
           <div
             style={{
-              background: "white",
-              width: "fit-content",
-              borderRadius: "50%",
-              padding: "10px",
-              margin: "10px",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
-            <LoadingOutlined style={{ fontSize: "40px" }} />
+            <div
+              style={{
+                background: "white",
+                width: "fit-content",
+                borderRadius: "50%",
+                padding: "10px",
+                margin: "10px",
+              }}
+            >
+              <LoadingOutlined style={{ fontSize: "40px" }} />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div
-          className="container-detail"
-          style={{
-            margin: "auto",
-            backgroundColor: "rgb(245, 245, 245)",
-            padding: "2rem 0",
-          }}
-        >
-          <section className="photographer-detail">
-            <div className="photographer-detail__container">
-              <header className="photographer-detail__container__header">
-                <div className="photographer-detail__container__header__info d-flex justify-content-between">
-                  <div className="photographer-detail__container__header__info__right-side d-flex flex-column">
-                    <div className="photographer-detail__container__header__info__right-side__name d-flex align-items-center">
-                      <p>{studioDetail?.data?.Name}</p> <Check />
-                    </div>
-                    <div className="photographer-detail__container__header__info__right-side__locate d-flex align-items-center">
-                      <EnvironmentOutlined
-                        style={{
-                          height: "fit-content",
-                          fontSize: "16px",
-                          color: "#828282",
-                        }}
-                      />
+        ) : (
+          <div
+            className="container-detail"
+            style={{
+              margin: "auto",
+              backgroundColor: "rgb(245, 245, 245)",
+              padding: "2rem 0",
+            }}
+          >
+            <section className="photographer-detail">
+              <div className="photographer-detail__container">
+                <header className="photographer-detail__container__header">
+                  <div className="photographer-detail__container__header__info d-flex justify-content-between">
+                    <div className="photographer-detail__container__header__info__right-side d-flex flex-column">
+                      <div className="photographer-detail__container__header__info__right-side__name d-flex align-items-center">
+                        <p>{studioDetail?.data?.Name}</p> <Check />
+                      </div>
+                      <div className="photographer-detail__container__header__info__right-side__locate d-flex align-items-center">
+                        <EnvironmentOutlined
+                          style={{
+                            height: "fit-content",
+                            fontSize: "16px",
+                            color: "#828282",
+                          }}
+                        />
 
-                      <p>{studioDetail?.data?.Address}</p>
-                    </div>
-                    <div className="photographer-detail__container__header__info__right-side__rating d-flex align-items-center">
-                      <div className="stars d-flex align-items-center">
-                        <Rate
-                          style={{ fontSize: "13px" }}
-                          disabled
-                          defaultValue={5}
-                        />
-                        <div className="star-number">{5}</div>
+                        <p>{studioDetail?.data?.Address}</p>
                       </div>
-                      <div className="has-booked">
-                        <p>Đã đặt {studioDetail?.data?.BookingCount}</p>
+                      <div className="photographer-detail__container__header__info__right-side__rating d-flex align-items-center">
+                        <div className="stars d-flex align-items-center">
+                          <Rate
+                            style={{ fontSize: "13px" }}
+                            disabled
+                            defaultValue={5}
+                          />
+                          <div className="star-number">{5}</div>
+                        </div>
+                        <div className="has-booked">
+                          <p>Đã đặt {studioDetail?.data?.BookingCount}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="photographer-detail__container__header__info__left-side d-flex align-items-start">
-                    <PopUpSignIn
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      {studioDetail?.data?.UsersLiked ? (
-                        <HeartFilled
-                          style={{
-                            fontSize: "25px",
-                            color: "#E22828",
-                            marginRight: "10px",
-                          }}
-                          onClick={handleChangeLike}
-                        />
-                      ) : (
-                        <HeartOutlined
-                          style={{
-                            fontSize: "25px",
-                            color: "#E22828",
-                            marginRight: "10px",
-                          }}
-                          onClick={handleChangeLike}
-                        />
-                      )}
-                    </PopUpSignIn>
-                    <Popover
-                      placement="bottomRight"
-                      content={
-                        <div
-                          onClick={() => handleReport()}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "10px",
-                            padding: "10px",
-                          }}
-                        >
+                    <div className="photographer-detail__container__header__info__left-side d-flex align-items-start">
+                      <PopUpSignIn
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        {studioDetail?.data?.UsersLiked ? (
+                          <HeartFilled
+                            style={{
+                              fontSize: "25px",
+                              color: "#E22828",
+                              marginRight: "10px",
+                            }}
+                            onClick={handleChangeLike}
+                          />
+                        ) : (
+                          <HeartOutlined
+                            style={{
+                              fontSize: "25px",
+                              color: "#E22828",
+                              marginRight: "10px",
+                            }}
+                            onClick={handleChangeLike}
+                          />
+                        )}
+                      </PopUpSignIn>
+                      <Popover
+                        placement="bottomRight"
+                        content={
                           <div
+                            onClick={() => handleReport()}
                             style={{
                               display: "flex",
-                              alignItems: "center",
+                              flexDirection: "column",
                               gap: "10px",
-                              cursor: "pointer",
+                              padding: "10px",
                             }}
                           >
-                            <WarningOutlined style={{ fontSize: "20px" }} />
-                            <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                cursor: "pointer",
+                              }}
                             >
-                              Báo cáo
-                            </span>
+                              <WarningOutlined style={{ fontSize: "20px" }} />
+                              <span
+                                style={{ fontSize: "18px", fontWeight: "bold" }}
+                              >
+                                Báo cáo
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      }
-                      trigger="click"
-                    >
-                      <MoreOutlined
-                        style={{
-                          fontSize: "25px",
-                        }}
-                      />
-                    </Popover>
-                  </div>
-                </div>
-                <div className="photographer-detail__container__header__image">
-                  <ImagePost data={studioDetail?.data?.Image} />
-                </div>
-              </header>
-
-              <div className={cx("box2")}>
-                <div className={cx("left")}>
-                  <div className={cx("description")}>
-                    <ReadMoreDesc title="Chi tiết sản phẩm">
-                      {studioDetail?.data?.Description}
-                    </ReadMoreDesc>
-                  </div>
-                  <div className={cx("sale")}>
-                    <PromotionList data={filter_promo} />
-                  </div>
-
-                  <div className={cx("")}>
-                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                  </div>
-
-                  <div className={cx("rating")}>
-                    <CommentRating
-                      data={studioDetail}
-                      className="mb-43 mt-12"
-                    />
-                  </div>
-                </div>
-                <div className={cx("right")}>
-                  <div className={cx("map")}>
-                    <h3>Xem trên bản đồ</h3>
-                    <div
-                      className={cx("address d-flex align-items-center mb-10")}
-                    >
-                      <img
-                        src={images.address}
-                        className="me-10 w-13px h-15px"
-                        alt=""
-                        style={{ fontSize: "5px" }}
-                      />
-                      <span>{studioDetail?.data?.Address}</span>
-                    </div>
-                    <div className="mapouter">
-                      <div className="gmap_canvas">
-                        <iframe
-                          title="map"
-                          className="gmap_iframe"
-                          width="100%"
-                          frameBorder={0}
-                          scrolling="no"
-                          marginHeight={0}
-                          marginWidth={0}
-                          src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                        }
+                        trigger="click"
+                      >
+                        <MoreOutlined
+                          style={{
+                            fontSize: "25px",
+                          }}
                         />
+                      </Popover>
+                    </div>
+                  </div>
+                  <div className="photographer-detail__container__header__image">
+                    <ImagePost data={studioDetail?.data?.Image} />
+                  </div>
+                </header>
+
+                <div className={cx("box2")}>
+                  <div className={cx("left")}>
+                    <div className={cx("description")}>
+                      <ReadMoreDesc title="Chi tiết sản phẩm">
+                        {studioDetail?.data?.Description}
+                      </ReadMoreDesc>
+                    </div>
+                    <div className={cx("sale")}>
+                      <PromotionList data={filter_promo} />
+                    </div>
+
+                    <div className={cx("")}>
+                      <Table
+                        column={COLUMN}
+                        row={ROW(studioDetail?.service)}
+                        rowNumber={3}
+                      />
+                    </div>
+
+                    <div className={cx("rating")}>
+                      <CommentRating
+                        data={studioDetail}
+                        className="mb-43 mt-12"
+                      />
+                    </div>
+                  </div>
+                  <div className={cx("right")}>
+                    <div className={cx("map")}>
+                      <h3>Xem trên bản đồ</h3>
+                      <div
+                        className={cx(
+                          "address d-flex align-items-center mb-10"
+                        )}
+                      >
+                        <img
+                          src={images.address}
+                          className="me-10 w-13px h-15px"
+                          alt=""
+                          style={{ fontSize: "5px" }}
+                        />
+                        <span>{studioDetail?.data?.Address}</span>
+                      </div>
+                      <div className="mapouter">
+                        <div className="gmap_canvas">
+                          <iframe
+                            title="map"
+                            className="gmap_iframe"
+                            width="100%"
+                            frameBorder={0}
+                            scrolling="no"
+                            marginHeight={0}
+                            marginWidth={0}
+                            src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
-                    <div className={cx("order")}>
-                      <div className={cx("item")}>
-                        <h3>Đã chọn {chooseServiceList?.length} phòng</h3>
-                        {chooseServiceList?.length > 0 && (
+                    <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                      <div className={cx("order")}>
+                        <div className={cx("item")}>
+                          <h3>Đã chọn {chooseServiceList?.length} phòng</h3>
+                          {chooseServiceList?.length > 0 && (
+                            <span
+                              style={{
+                                textDecoration: "line-through",
+                                fontSize: " 16px",
+                                color: "#828282",
+                              }}
+                            >
+                              {filterService.OrderByTime === 1 &&
+                                `${convertPrice(
+                                  chooseServiceList?.reduce(
+                                    (total, item) =>
+                                      total +
+                                      item.PriceByHour *
+                                        calTime(
+                                          filterService.OrderByTimeFrom,
+                                          filterService.OrderByTimeTo
+                                        ),
+                                    0
+                                  )
+                                )}đ`}
+                              {filterService.OrderByTime === 0 &&
+                                `${convertPrice(
+                                  chooseServiceList?.reduce(
+                                    (total, item) =>
+                                      total +
+                                      item.PriceByDate *
+                                        calDate(
+                                          filterService.OrderByDateFrom,
+                                          filterService.OrderByDateTo
+                                        ),
+                                    0
+                                  )
+                                )}đ`}
+                            </span>
+                          )}
+                        </div>
+                        <div className={cx("item")}>
+                          <span className="mt-3">
+                            Bao gồm 50.000đ thuế và phí{" "}
+                          </span>
                           <span
                             style={{
-                              textDecoration: "line-through",
-                              fontSize: " 16px",
-                              color: "#828282",
+                              color: "#E22828",
+                              fontSize: "20px",
+                              fontWeight: "700",
                             }}
                           >
                             {filterService.OrderByTime === 1 &&
@@ -598,126 +781,88 @@ const PhotographerDetail = () => {
                                 )
                               )}đ`}
                           </span>
-                        )}
-                      </div>
-                      <div className={cx("item")}>
-                        <span className="mt-3">
-                          Bao gồm 50.000đ thuế và phí{" "}
-                        </span>
-                        <span
-                          style={{
-                            color: "#E22828",
-                            fontSize: "20px",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {filterService.OrderByTime === 1 &&
-                            `${convertPrice(
-                              chooseServiceList?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByHour *
-                                    calTime(
-                                      filterService.OrderByTimeFrom,
-                                      filterService.OrderByTimeTo
-                                    ),
-                                0
+                        </div>
+                        <div className="w-100 d-flex justify-content-between mt-20">
+                          <Button
+                            className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                            disabled={true}
+                            onClick={() =>
+                              toastMessage(
+                                "Chức năng này đang phát triển!",
+                                "info",
+                                1,
+                                "",
+                                {}
                               )
-                            )}đ`}
-                          {filterService.OrderByTime === 0 &&
-                            `${convertPrice(
-                              chooseServiceList?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByDate *
-                                    calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
-                                    ),
-                                0
-                              )
-                            )}đ`}
-                        </span>
+                            }
+                          >
+                            <ShoppingCartOutlined />
+                            Thêm vào giỏ hàng
+                          </Button>
+                          <Button
+                            className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                            onClick={handleBook}
+                            disabled={
+                              chooseServiceList.length > 0 &&
+                              filterService.id > 0
+                                ? false
+                                : true
+                            }
+                          >
+                            Đặt ngay
+                          </Button>
+                        </div>
                       </div>
-                      <div className="w-100 d-flex justify-content-between mt-20">
-                        <Button
-                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                          disabled={true}
-                          onClick={() =>
-                            toastMessage(
-                              "Chức năng này đang phát triển!",
-                              "info",
-                              1,
-                              "",
-                              {}
-                            )
-                          }
-                        >
-                          <ShoppingCartOutlined />
-                          Thêm vào giỏ hàng
-                        </Button>
-                        <Button
-                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                          onClick={handleBook}
-                          disabled={
-                            chooseServiceList.length > 0 && filterService.id > 0
-                              ? false
-                              : true
-                          }
-                        >
-                          Đặt ngay
-                        </Button>
-                      </div>
-                    </div>
-                  </ReactStickyBox>
+                    </ReactStickyBox>
+                  </div>
                 </div>
-              </div>
-              {studioDetail?.album?.length > 0 && (
-                <Row gutter={[20]}>
-                  <Col md={16}>
-                    <div className="album_container">
-                      <h3>Các album</h3>
-                      {toggleSeeMore ? (
-                        studioDetail?.album
-                          ?.sort((a, b) => a.id - b.id)
-                          .map((item, index) => (
-                            <SlideAlbum key={index} data={item} />
-                          ))
-                      ) : (
-                        <>
-                          {studioDetail?.album
+                {studioDetail?.album?.length > 0 && (
+                  <Row gutter={[20]}>
+                    <Col md={16}>
+                      <div className="album_container">
+                        <h3>Các album</h3>
+                        {toggleSeeMore ? (
+                          studioDetail?.album
                             ?.sort((a, b) => a.id - b.id)
-                            .slice(0, 3)
                             .map((item, index) => (
                               <SlideAlbum key={index} data={item} />
-                            ))}
-                          {studioDetail?.album?.length > 3 && (
-                            <div
-                              className="btn_see_more"
-                              onClick={() => setToggleSeeMore(true)}
-                            >
-                              Xem thêm <DownOutlined className="icon" />
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </Col>
-                </Row>
-              )}
-              {listStudioSimilar.length > 0 ? (
-                <SlideCard
-                  data={listStudioSimilar}
-                  category={{ name: "photographer", id: 2 }}
-                  title="Photographer tương tự"
-                />
-              ) : (
-                <></>
-              )}
-            </div>
-          </section>
-        </div>
-      )}
+                            ))
+                        ) : (
+                          <>
+                            {studioDetail?.album
+                              ?.sort((a, b) => a.id - b.id)
+                              .slice(0, 3)
+                              .map((item, index) => (
+                                <SlideAlbum key={index} data={item} />
+                              ))}
+                            {studioDetail?.album?.length > 3 && (
+                              <div
+                                className="btn_see_more"
+                                onClick={() => setToggleSeeMore(true)}
+                              >
+                                Xem thêm <DownOutlined className="icon" />
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </Col>
+                  </Row>
+                )}
+                {listStudioSimilar.length > 0 ? (
+                  <SlideCard
+                    data={listStudioSimilar}
+                    category={{ name: "photographer", id: 2 }}
+                    title="Photographer tương tự"
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+            </section>
+          </div>
+        )
+      }
     </>
   );
 };

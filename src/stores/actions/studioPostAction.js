@@ -312,7 +312,6 @@ export const handlerSelectServiceAction = (data) => {
   return async (dispatch) => {
     try {
       dispatch({ type: SELECT_TIME_ORDER, data: { id: data.id } });
-      console.log("action data", data);
       dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
       // if (filterService.id == data.id) {
       //     if (chooseService.filter((item) => item.id === data.id).length > 0) {

@@ -1,6 +1,8 @@
 import {
   CheckCircleOutlined,
+  ClockCircleOutlined,
   DownOutlined,
+  EnvironmentOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
@@ -97,7 +99,7 @@ const Index = () => {
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
-    window.scrollTo({ behavior: "smooth", top: 0 });
+    // window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
@@ -105,7 +107,7 @@ const Index = () => {
     };
   }, [dispatch]);
   useEffect(() => {
-    window.scrollTo({ behavior: "smooth", top: 0 });
+    // window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
     dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
@@ -165,12 +167,81 @@ const Index = () => {
               <div
                 className="mt-10"
                 style={{
-                  color: "#616161",
+                  color: "#222222",
                   fontSize: "16px",
-                  fontWeight: "400",
+                  fontWeight: "700",
                 }}
               >
-                {data.Description}
+                <div>
+                  <CheckCircleOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Dịch vụ ĐÃ bao gồm:
+                </div>
+                <ul className="detail-description">
+                  <li>Làm tóc</li>
+                  <li>Trang điểm</li>
+                  <li>Mỹ phẩm cao cấp</li>
+                  <li>Số lượng kiểu trang điểm: 2</li>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <CheckCircleOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Dịch vụ CHƯA bao gồm:
+                </div>
+                <ul className="detail-description">
+                  <p>Phí đi theo để dặm phấn, chỉnh tóc, thay trang phục</p>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <EnvironmentOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Địa điểm
+                </div>
+                <div className="detail-description">
+                  <p>26 Nguyễn Ái Quốc, Biên Hòa, Đồng Nai</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <ClockCircleOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Thời gian trang điểm
+                </div>
+                <div className="detail-description">
+                  <p>2 giờ (ước lượng)</p>
+                </div>
               </div>
             </div>
           ),
@@ -242,17 +313,6 @@ const Index = () => {
                   >
                     {data.PriceNote}
                   </p>
-                  {/* <button
-                    style={{
-                      padding: "3px 21px",
-                      background: "#E22828",
-                      color: "#ffff",
-                      border: " 1px solid #E22828",
-                      borderRadius: " 8px",
-                    }}
-                  >
-                    Giảm 50%{" "}
-                  </button> */}
                 </div>
               )}
               <div className="">

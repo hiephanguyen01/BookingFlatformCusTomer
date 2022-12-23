@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Carousel, Image, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -154,7 +154,8 @@ export const StudioDetail = () => {
                 preview={{
                   visible: Boolean(visible === data.id),
                   onVisibleChange: (vis) => setVisible(vis),
-                }}>
+                }}
+              >
                 {data.Image.map((val) => (
                   <Image src={convertImage(val)} />
                 ))}
@@ -166,14 +167,16 @@ export const StudioDetail = () => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 marginTop: "10px",
-              }}>
+              }}
+            >
               <span
                 style={{
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
                   minWidth: "60px",
-                }}>
+                }}
+              >
                 Phòng
               </span>
               <span
@@ -189,7 +192,8 @@ export const StudioDetail = () => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   height: "18px",
-                }}>
+                }}
+              >
                 {data?.Name}
               </span>
             </div>
@@ -199,13 +203,15 @@ export const StudioDetail = () => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 marginTop: "10px",
-              }}>
+              }}
+            >
               <span
                 style={{
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
-                }}>
+                }}
+              >
                 Diện tích
               </span>
               <span
@@ -213,7 +219,8 @@ export const StudioDetail = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 {data?.Area}
               </span>
             </div>
@@ -223,14 +230,16 @@ export const StudioDetail = () => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 marginTop: "10px",
-              }}>
+              }}
+            >
               <div
                 style={{
                   color: "#616161",
                   fontSize: "16px",
                   fontWeight: "400",
                   minWidth: "100px",
-                }}>
+                }}
+              >
                 Phong cách
               </div>
               <div
@@ -246,7 +255,8 @@ export const StudioDetail = () => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   height: "18px",
-                }}>
+                }}
+              >
                 {data.Style}
               </div>
             </div>
@@ -256,7 +266,8 @@ export const StudioDetail = () => {
                 color: "#616161",
                 fontSize: "16px",
                 fontWeight: "400",
-              }}>
+              }}
+            >
               {data.Description}
             </div>
           </div>
@@ -291,13 +302,15 @@ export const StudioDetail = () => {
                     gap: "10px",
                     alignItems: "center",
                     flexWrap: "wrap",
-                  }}>
+                  }}
+                >
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}>
+                    }}
+                  >
                     {filterService.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
@@ -315,7 +328,8 @@ export const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
+                    }}
+                  >
                     {filterService.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
@@ -333,7 +347,8 @@ export const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   {data?.PriceNote}
                 </p>
               </div>
@@ -355,7 +370,8 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Bỏ chọn
                 </div>
               ) : (
@@ -375,7 +391,8 @@ export const StudioDetail = () => {
                     fontSize: "13px",
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Chọn
                 </div>
               )}
@@ -392,7 +409,6 @@ export const StudioDetail = () => {
     //   return;
     // } else {
     // }
-    console.log(data);
     dispatch(handlerSelectServiceAction(data));
 
     // if (
@@ -458,7 +474,8 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -466,7 +483,8 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -486,7 +504,8 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}>
+                      }}
+                    >
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -509,23 +528,27 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}>
+                          }}
+                        >
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}>
+                            }}
+                          >
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click">
+                      trigger="click"
+                    >
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -538,11 +561,13 @@ export const StudioDetail = () => {
                   <Rate
                     disabled
                     allowHalf
-                    value={studioDetail?.data?.TotalRate}></Rate>
+                    value={studioDetail?.data?.TotalRate}
+                  ></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}>
+                    style={{ fontSize: "15px" }}
+                  >
                     {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
@@ -604,7 +629,8 @@ export const StudioDetail = () => {
                               textDecoration: "line-through",
                               fontSize: " 16px",
                               color: "#828282",
-                            }}>
+                            }}
+                          >
                             {filterService?.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
@@ -643,7 +669,8 @@ export const StudioDetail = () => {
                             color: "#E22828",
                             fontSize: "20px",
                             fontWeight: "700",
-                          }}>
+                          }}
+                        >
                           {filterService?.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
@@ -686,7 +713,8 @@ export const StudioDetail = () => {
                               "",
                               {}
                             )
-                          }>
+                          }
+                        >
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
@@ -697,7 +725,8 @@ export const StudioDetail = () => {
                             chooseServiceList.length > 0 && filterService.id > 0
                               ? false
                               : true
-                          }>
+                          }
+                        >
                           Đặt ngay
                         </Button>
                       </div>
