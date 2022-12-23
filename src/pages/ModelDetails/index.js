@@ -1,14 +1,20 @@
 import {
   CheckCircleOutlined,
+  ClockCircleOutlined,
+  DeploymentUnitOutlined,
   DownOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
   ShoppingCartOutlined,
+  SkinOutlined,
+  StarOutlined,
+  StopOutlined,
+  UserOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Popover, Rate, Row } from "antd";
+import { Button, Col, Popover, Rate, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -149,12 +155,59 @@ const Index = () => {
               <div
                 className="mt-10"
                 style={{
-                  color: "#616161",
+                  color: "#222222",
                   fontSize: "16px",
-                  fontWeight: "400",
+                  fontWeight: "700",
                 }}
               >
-                {data.Description}
+                <div>
+                  <ClockCircleOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Thời gian thực hiện tối đa
+                </div>
+                <div className="detail-description">
+                  <p>2 giờ</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <SkinOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Số sản phẩm tối đa
+                </div>
+                <div className="detail-description">
+                  <p>3 sản phẩm</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <StopOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Giải thưởng
+                </div>
+                <ul className="detail-description">
+                  <li>Á hậu 2 Miss Grand Vietnam 2022</li>
+                </ul>
               </div>
             </div>
           ),
@@ -702,9 +755,94 @@ const Index = () => {
             <div className={cx("box2")}>
               <div className={cx("left")}>
                 <div className={cx("description")}>
-                  <ReadMoreDesc title="Chi tiết sản phẩm">
-                    {studioDetail?.data?.Description}
-                  </ReadMoreDesc>
+                  <Row>
+                    <Col span={12}>
+                      <div
+                        className="mt-10"
+                        style={{
+                          color: "#222222",
+                          fontSize: "16px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        <div>
+                          <UserOutlined
+                            className="me-10 mb-2"
+                            style={{ fontSize: "15px" }}
+                          />
+                          Ngoại hình
+                        </div>
+                        <ul className="detail-description">
+                          <li>Nữ</li>
+                          <li>22 tuổi</li>
+                          <li>Cao 165cm</li>
+                          <li>Số do ba vòng: 84 - 63 - 92</li>
+                        </ul>
+                      </div>
+                      <div
+                        className="mt-10"
+                        style={{
+                          color: "#222222",
+                          fontSize: "16px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        <div>
+                          <DeploymentUnitOutlined
+                            className="me-10 mb-2"
+                            style={{ fontSize: "15px" }}
+                          />
+                          Mạng xã hội
+                        </div>
+                        <ul className="detail-description">
+                          <li>Instagram 25.000 lượt theo dõi</li>
+                          <li>Youtube 5.000 lượt đăng ký</li>
+                        </ul>
+                      </div>
+                    </Col>
+                    <Col span={12}>
+                      <div
+                        className="mt-10"
+                        style={{
+                          color: "#222222",
+                          fontSize: "16px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        <div>
+                          <StarOutlined
+                            className="me-10 mb-2"
+                            style={{ fontSize: "15px" }}
+                          />
+                          Ưu điểm
+                        </div>
+                        <div className="detail-description">
+                          <p>
+                            Có 3 năm kinh nghiệm trong lĩnh vực làm người mẫu
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="mt-10"
+                        style={{
+                          color: "#222222",
+                          fontSize: "16px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        <div>
+                          <StarOutlined
+                            className="me-10 mb-2"
+                            style={{ fontSize: "15px" }}
+                          />
+                          Giải thưởng
+                        </div>
+                        <div className="detail-description">
+                          <p>Á hậu 2 Miss Grand Vietnam 2022</p>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
                 </div>
                 <div className={cx("sale")}>
                   <PromotionList data={filter_promo} />

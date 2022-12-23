@@ -69,9 +69,9 @@ const Option = ({ option, disabled }) => {
               onChange={handleOnchangeDate}
               defaultValue={moment(
                 filterService?.OrderByTimeFrom,
-                "YYYY-MM-DD"
+                "DD-MM-YYYY"
               )}
-              // format={"DD/MM/YYYY"}
+              // format={"DD-MM-YYYY"}
               disabled={disabled}
               disabledDate={(current) => {
                 return current && current <= moment().subtract(1, "days");
@@ -124,7 +124,7 @@ const Option = ({ option, disabled }) => {
                 moment(filterService?.OrderByDateFrom),
                 moment(filterService?.OrderByDateTo),
               ]}
-              // format="DD/MM/YYYY"
+              format="DD-MM-YYYY"
               disabled={disabled}
               disabledDate={(current) => {
                 return current && current <= moment().subtract(1, "days");

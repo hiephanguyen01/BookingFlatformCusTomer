@@ -79,9 +79,8 @@ const Option = ({ option, disabled, service }) => {
         })
       )
     );
-    console.log("minDate",moment( minDate).format("l"));
     setDisableDate(listDate);
-  }, []);
+  }, [service]);
 
   // const handleOnchangeDate = (d, dString) => {
   //   console.log("dang chin", service.id);
@@ -154,7 +153,8 @@ const Option = ({ option, disabled, service }) => {
   // };
   const handleOnchangeHour = (t, timeString) => {
     // setTime(timeString);
-    if (date !== "") {
+    console.log(timeString);
+    if (date) {
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
@@ -162,9 +162,13 @@ const Option = ({ option, disabled, service }) => {
           id: service.id,
           OrderByTime: 1,
           OrderByTimeFrom:
-            convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
+            moment(date).toISOString().slice(0, 11) +
+            timeString[0] +
+            ":00.000Z",
           OrderByTimeTo:
-            convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
+            moment(date).toISOString().slice(0, 11) +
+            timeString[1] +
+            ":00.000Z",
           // ListDisableHour: disableHour,
         },
       });
@@ -181,19 +185,22 @@ const Option = ({ option, disabled, service }) => {
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
-    dispatch({
-      type: ADD_TIME_ORDER,
-      data: {
-        // ...filterService,
-        id: service.id,
-        OrderByTime: 0,
-        OrderByDateFrom:
-          moment(datesString[0]).toISOString().slice(0, 11) + "00:00:00.000Z",
-        OrderByDateTo:
-          moment(datesString[1]).toISOString().slice(0, 11) + "00:00:00.000Z",
-        disableDate: disableDate || [],
-      },
-    });
+    if (ds) {
+      dispatch({
+        type: ADD_TIME_ORDER,
+        data: {
+          // ...filterService,
+          id: service.id,
+          OrderByTime: 0,
+          // OrderByDateFrom: moment(datesString[0]).add(7, "hour").toISOString(),
+          OrderByDateFrom:
+            moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
+          OrderByDateTo:
+            moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
+          disableDate: disableDate || [],
+        },
+      });
+    }
     // dispatch(
     //   setFilterStudioService(5, 1, {
     //     ...filterService,
@@ -263,7 +270,7 @@ const Option = ({ option, disabled, service }) => {
             <DatePicker
               onChange={(d, dString) => {
                 // console.log("dang chin", service.id);
-                setDate(dString);
+                setDate(d);
                 // console.log("gio UTC", moment.utc(moment(date).utc()).format());
                 if (dString && filterService.OrderByTime === 1) {
                   let hl = service?.Bookings?.filter((item) => {
@@ -312,7 +319,7 @@ const Option = ({ option, disabled, service }) => {
               }}
               status={"error"}
               // defaultValue={moment(filterService?.OrderByTimeFrom)}
-              // format={"YYYY-MM-DD"}
+              // format={"DD-MM-YYYY"}
               // format={"DD/MM/YYYY"}
               allowClear={false}
               inputReadOnly={true}
@@ -334,6 +341,7 @@ const Option = ({ option, disabled, service }) => {
                   (current && current <= moment().subtract(1, "days"))
                 );
               }}
+              format={"DD-MM-YYYY"}
             />
           </Form.Item>
           <Form.Item
@@ -382,7 +390,7 @@ const Option = ({ option, disabled, service }) => {
               //   moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
               //   moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
               // ]}
-              // format={"DD/MM/YYYY"}
+              format={"DD-MM-YYYY"}
               disabled={disabled}
               inputReadOnly={true}
               // disabledDate={(current) => {
@@ -429,7 +437,6 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   //   console.log(data.id);
   //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
   // };
-  console.log("services", service);
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -22,6 +22,7 @@ import toastMessage from "../ToastMessage";
 import "./order.scss";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
+import moment from "moment";
 
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -167,10 +168,8 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom: convertTimeSendDB(
-                filterService?.OrderByDateFrom
-              ),
-              OrderByDateTo: convertTimeSendDB(filterService?.OrderByDateTo),
+              OrderByDateFrom: moment(filterService?.OrderByDateFrom),
+              OrderByDateTo: moment(filterService?.OrderByDateTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -205,10 +204,8 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 1,
-              OrderByTimeFrom: convertTimeSendDB(
-                filterService?.OrderByTimeFrom
-              ),
-              OrderByTimeTo: convertTimeSendDB(filterService?.OrderByTimeTo),
+              OrderByTimeFrom: moment(filterService?.OrderByTimeFrom),
+              OrderByTimeTo: moment(filterService?.OrderByTimeTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,

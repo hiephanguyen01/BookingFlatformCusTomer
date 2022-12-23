@@ -5,6 +5,7 @@ import {
   LoadingOutlined,
   MoreOutlined,
   ShoppingCartOutlined,
+  SkinOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 import { Button, Carousel, Image, Popover, Rate } from "antd";
@@ -162,113 +163,90 @@ export const StudioDetail = () => {
               </Image.PreviewGroup>
             </div>
             <div
+              className="mt-10"
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                  minWidth: "60px",
-                }}
-              >
-                Phòng
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-
-                  display: "-webkit-box",
-                  lineHeight: "18px",
-                  webkitLineClamp: "1",
-                  webkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  height: "18px",
-                }}
-              >
-                {data?.Name}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                Diện tích
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                {data?.Area}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <div
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                  minWidth: "100px",
-                }}
-              >
-                Phong cách
-              </div>
-              <div
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-
-                  display: "-webkit-box",
-                  lineHeight: "18px",
-                  webkitLineClamp: "1",
-                  webkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  height: "18px",
-                }}
-              >
-                {data.Style}
-              </div>
-            </div>
-            <div
-              className="mt-15"
-              style={{
-                color: "#616161",
+                color: "#222222",
                 fontSize: "16px",
-                fontWeight: "400",
+                fontWeight: "700",
               }}
             >
-              {data.Description}
+              <div>
+                <SkinOutlined
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Kích thước
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Diện tích 40m2</li>
+                <li>Chiều rộng 5m</li>
+                <li>Chiều dài 8m</li>
+                <li>Chiều cao trần 3m</li>
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <SkinOutlined
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Thiết bị có sẵn
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Phông nền xanh lá</li>
+                <li>Bàn</li>
+                <li>Ghế</li>
+                <li>Sofa</li>
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <SkinOutlined
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Tiện ích đi kèm
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Máy lạnh</li>
+                <li>Phòng thay đồ riêng</li>
+                <li>Chỗ đậu xe máy/ô tô</li>
+                <li>Wifi</li>
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <SkinOutlined
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Số lượng khách
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Số lượng khách tối đa: 10 người</li>
+                <li>Phụ thu: 100.00 VND/người</li>
+              </ul>
             </div>
           </div>
         ),
@@ -355,46 +333,42 @@ export const StudioDetail = () => {
             )}
             <div className="">
               {filterService?.id === data?.id ? (
-                <div
+                <Button
+                  type="default"
+                  size="large"
                   onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "13px 25px",
-
+                    width: "100%",
+                    color: "#000",
                     backgroundColor: "#E7E7E7",
+                    border: "none",
+
                     borderRadius: "8px",
-                    cursor: "pointer",
                     fontWeight: "700",
                     fontSize: "13px",
                     lineHeight: "19px",
+
                     textTransform: "uppercase",
                   }}
                 >
                   Bỏ chọn
-                </div>
+                </Button>
               ) : (
-                <div
+                <Button
                   onClick={() => handleChooseService(data)}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "13px 25px",
-
-                    border: "1px solid #E22828",
-                    color: "#E22828",
+                    width: "100%",
                     borderRadius: "8px",
-                    cursor: "pointer",
                     fontWeight: "700",
                     fontSize: "13px",
+
                     lineHeight: "19px",
                     textTransform: "uppercase",
                   }}
+                  size="large"
                 >
                   Chọn
-                </div>
+                </Button>
               )}
             </div>
           </>

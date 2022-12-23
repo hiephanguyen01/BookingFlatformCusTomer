@@ -218,7 +218,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                filterService: {},
+                // filterService: {},
               };
             }
           } else {
@@ -250,7 +250,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                filterService: {},
+                // filterService: {},
               };
             }
           }
