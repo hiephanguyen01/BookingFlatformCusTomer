@@ -8,6 +8,9 @@ import {
   LoadingOutlined,
   MoreOutlined,
   ShoppingCartOutlined,
+  StopOutlined,
+  TeamOutlined,
+  UserOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Popover, Rate, Row } from "antd";
@@ -48,6 +51,7 @@ import SelectTimeOptionService from "../../components/SelectTimeOptionService/Se
 import ReactStickyBox from "react-sticky-box";
 import styles from "./Detail.module.scss";
 import images from "../../assets/images";
+import cost from "../../assets/svg/cost.svg";
 import classNames from "classnames/bind";
 import {
   DELETE_CHOOSE_SERVICE,
@@ -99,7 +103,7 @@ const Index = () => {
   }, [currentUser, id, cate, dispatch]);
 
   useEffect(() => {
-    // window.scrollTo({ behavior: "smooth", top: 0 });
+    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
@@ -107,7 +111,7 @@ const Index = () => {
     };
   }, [dispatch]);
   useEffect(() => {
-    // window.scrollTo({ behavior: "smooth", top: 0 });
+    window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
     dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
@@ -195,7 +199,7 @@ const Index = () => {
                 }}
               >
                 <div>
-                  <CheckCircleOutlined
+                  <StopOutlined
                     className="me-10 mb-2"
                     style={{ fontSize: "15px" }}
                   />
@@ -241,6 +245,65 @@ const Index = () => {
                 </div>
                 <div className="detail-description">
                   <p>2 giờ (ước lượng)</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <UserOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Số khách tối thiểu
+                </div>
+                <div className="detail-description">
+                  <p>2 khách</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <TeamOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Số khách tối đa
+                </div>
+                <div className="detail-description">
+                  <p>10 khách</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <img
+                    alt=""
+                    src={cost}
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Phụ thu
+                </div>
+                <div className="detail-description">
+                  <p>Phụ thu phát sinh 200.000 VND/khách</p>
                 </div>
               </div>
             </div>

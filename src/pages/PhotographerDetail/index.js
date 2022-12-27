@@ -113,7 +113,7 @@ const PhotographerDetail = () => {
   }, [studioDetail, dispatch]);
 
   useEffect(() => {
-    // window.scrollTo({ behavior: "smooth", top: 0 });
+    window.scrollTo({ behavior: "smooth", top: 0 });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: SET_STUDIO_DETAIL, payload: {} });
@@ -121,7 +121,7 @@ const PhotographerDetail = () => {
     };
   }, [dispatch]);
   useEffect(() => {
-    window.scrollTo({ behavior: "smooth", top: 0 });
+    // window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
     dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });

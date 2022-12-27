@@ -6,6 +6,7 @@ import {
   MoreOutlined,
   ShoppingCartOutlined,
   SkinOutlined,
+  TeamOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 import { Button, Carousel, Image, Popover, Rate } from "antd";
@@ -36,7 +37,10 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import {
+  DELETE_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE,
+} from "../../stores/types/OrderType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
@@ -47,6 +51,9 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+import expand from "../../assets/svg/expand.svg";
+import chair from "../../assets/svg/chair.svg";
+import conditional from "../../assets/svg/conditional.svg";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -65,8 +72,13 @@ export const StudioDetail = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
-  const { studioDetail, studioNear, listStudioSimilar, filterService } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail,
+    studioNear,
+    listStudioSimilar,
+    filterService,
+    listTimeSelected,
+  } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -93,6 +105,7 @@ export const StudioDetail = () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: "SET_SERVICE_SELECT", payload: null });
       dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
+      dispatch({ type: "SET_TIME_ORDER", data: [] });
     };
   }, [dispatch]);
   useEffect(() => {
@@ -168,20 +181,33 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
+                textTransform: "uppercase",
+              }}
+            >
+              {data?.Name}
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
               }}
             >
               <div>
-                <SkinOutlined
+                <img
+                  alt=""
+                  src={expand}
                   className="me-10 mb-2"
                   style={{ fontSize: "15px" }}
                 />
                 Kích thước
               </div>
               <ul className={cx("detail-description")}>
-                <li>Diện tích 40m2</li>
-                <li>Chiều rộng 5m</li>
-                <li>Chiều dài 8m</li>
-                <li>Chiều cao trần 3m</li>
+                <li>Diện tích {data?.Area}</li>
+                <li>Chiều rộng {data?.Width}m</li>
+                <li>Chiều dài {data?.Length}m</li>
+                <li>Chiều cao trần {data?.Height}m</li>
               </ul>
             </div>
             <div
@@ -193,17 +219,24 @@ export const StudioDetail = () => {
               }}
             >
               <div>
-                <SkinOutlined
+                <img
+                  alt=""
+                  src={chair}
                   className="me-10 mb-2"
                   style={{ fontSize: "15px" }}
                 />
                 Thiết bị có sẵn
               </div>
               <ul className={cx("detail-description")}>
-                <li>Phông nền xanh lá</li>
-                <li>Bàn</li>
-                <li>Ghế</li>
-                <li>Sofa</li>
+                {data?.HasBackground && <li>{data?.BackgroundDescription}</li>}
+                {data?.HasLamp && <li>{data?.LampDescription}</li>}
+                {data?.HasTable && <li>Bàn</li>}
+                {data?.HasChair && <li>Ghế</li>}
+                {data?.HasSofa && <li>Sofa</li>}
+                {data?.HasFlower && <li>Hoa</li>}
+                {data?.HasOtherDevice && (
+                  <li>{data?.OtherDeviceDescription}</li>
+                )}
               </ul>
             </div>
             <div
@@ -215,17 +248,24 @@ export const StudioDetail = () => {
               }}
             >
               <div>
-                <SkinOutlined
+                <img
+                  alt=""
+                  src={conditional}
                   className="me-10 mb-2"
                   style={{ fontSize: "15px" }}
                 />
                 Tiện ích đi kèm
               </div>
               <ul className={cx("detail-description")}>
-                <li>Máy lạnh</li>
-                <li>Phòng thay đồ riêng</li>
-                <li>Chỗ đậu xe máy/ô tô</li>
-                <li>Wifi</li>
+                {data?.HasAirConditioner && <li>Máy lạnh</li>}
+                {data?.HasFan && <li>Quạt</li>}
+                {data?.HasDressingRoom && <li>Phòng thay đồ riêng</li>}
+                {data?.HasWC && <li>Nhà vệ sinh</li>}
+                {data?.HasCamera && <li>Camera</li>}
+                {data?.HasWifi && <li>Wifi</li>}
+                {data?.HasMotorBikeParking && <li>Chổ để xe máy</li>}
+                {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
+                {data?.HasSupporter && <li>Người hỗ trợ</li>}
               </ul>
             </div>
             <div
@@ -237,15 +277,15 @@ export const StudioDetail = () => {
               }}
             >
               <div>
-                <SkinOutlined
+                <TeamOutlined
                   className="me-10 mb-2"
                   style={{ fontSize: "15px" }}
                 />
                 Số lượng khách
               </div>
               <ul className={cx("detail-description")}>
-                <li>Số lượng khách tối đa: 10 người</li>
-                <li>Phụ thu: 100.00 VND/người</li>
+                <li>Số lượng khách tối đa: {data?.MaximumCustomer} người</li>
+                <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
               </ul>
             </div>
           </div>
@@ -272,7 +312,8 @@ export const StudioDetail = () => {
         key: "currency",
         render: () => (
           <>
-            {filterService.OrderByTime !== -1 && (
+            {listTimeSelected?.find((item) => item.id === data?.id)
+              ?.OrderByTime !== -1 && (
               <div className="mb-20">
                 <div
                   style={{
@@ -289,12 +330,14 @@ export const StudioDetail = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {filterService.OrderByTime === 1 &&
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
-                    {filterService.OrderByTime === 0 &&
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
@@ -308,12 +351,14 @@ export const StudioDetail = () => {
                       fontWeight: "400",
                     }}
                   >
-                    {filterService.OrderByTime === 1 &&
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
-                    {filterService.OrderByTime === 0 &&
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
@@ -332,11 +377,14 @@ export const StudioDetail = () => {
               </div>
             )}
             <div className="">
-              {filterService?.id === data?.id ? (
+              {chooseServiceList?.find((item) => item.id === data?.id) ? (
                 <Button
                   type="default"
                   size="large"
-                  onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
+                  onClick={() => {
+                    dispatch({ type: DELETE_CHOOSE_SERVICE });
+                    dispatch({ type: "SET_SELECT_TIME_ORDER" });
+                  }}
                   style={{
                     width: "100%",
                     color: "#000",
@@ -383,29 +431,32 @@ export const StudioDetail = () => {
     //   return;
     // } else {
     // }
-    dispatch(handlerSelectServiceAction(data));
-
-    // if (
-    //   (filterService.OrderByTime === 0 &&
-    //     filterService.OrderByDateFrom !== "" &&
-    //     filterService.OrderByDateTo !== "") ||
-    //   (filterService.OrderByTime === 1 &&
-    //     filterService.OrderByTimeFrom !== "" &&
-    //     filterService.OrderByTimeTo !== "")
-    // ) {
-    // if (filterService.id == data.id) {
-    //   if (chooseServiceList.filter((item) => item.id === data.id).length > 0) {
-    //     setChooseService([]);
-    //   } else {
-    //     setChooseService([{ ...data }]);
-    //   }
-    // }
-    // const existed = chooseServiceList.findIndex((item) => item.id == data.id);
-    // if (existed !== -1) {
-    //   setChooseService([]);
-    // } else {
-    //   setChooseService([{ ...data }]);
-    // }
+    const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+    if (findSelectTime) {
+      if (
+        findSelectTime.OrderByTime === 1 &&
+        findSelectTime.OrderByTimeFrom !== undefined &&
+        findSelectTime.OrderByTimeFrom !== "" &&
+        findSelectTime.OrderByTimeTo !== undefined &&
+        findSelectTime.OrderByTimeTo !== "" &&
+        findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else if (
+        findSelectTime.OrderByTime === 0 &&
+        findSelectTime.OrderByDateFrom !== undefined &&
+        findSelectTime.OrderByDateFrom !== "" &&
+        findSelectTime.OrderByDateTo !== undefined &&
+        findSelectTime.OrderByDateTo !== "" &&
+        findSelectTime.OrderByDateTo !== findSelectTime.OrderByDateFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else {
+        return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+      }
+    } else {
+      return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+    }
   };
 
   const handleBook = () => {
@@ -416,14 +467,7 @@ export const StudioDetail = () => {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
-  // const handleAddCart = () => {
-  //   if (chooseServiceList.length > 0) {
-  //     dispatch(addOrder(cate, chooseServiceList));
-  //     toastMessage("Đã thêm vào giỏ hàng!", "success");
-  //   } else {
-  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
-  //   }
-  // };
+
   const handleChangeLike = (e) => {
     if (currentUser) {
       dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));

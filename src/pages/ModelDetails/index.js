@@ -203,10 +203,10 @@ const Index = () => {
                     className="me-10 mb-2"
                     style={{ fontSize: "15px" }}
                   />
-                  Giải thưởng
+                  Dịch vụ CHƯA bao gồm:
                 </div>
                 <ul className="detail-description">
-                  <li>Á hậu 2 Miss Grand Vietnam 2022</li>
+                  <li>Phí đi theo để dặm phấn, chỉnh tóc, thay trang phục</li>
                 </ul>
               </div>
             </div>

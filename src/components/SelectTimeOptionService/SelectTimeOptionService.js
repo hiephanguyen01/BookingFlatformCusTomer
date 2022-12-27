@@ -11,12 +11,11 @@ import "./selectTimeOptionService.scss";
 
 function dateRange(startDate, endDate, steps = 1) {
   const dateArray = [];
-  let currentDate = new Date(startDate);
+  let currentDate = moment(startDate);
 
-  while (currentDate <= new Date(endDate)) {
-    dateArray.push(moment(currentDate).format("l"));
-    // Use UTC date to prevent problems with time zones and DST
-    currentDate.setUTCDate(currentDate.getUTCDate() + steps);
+  while (currentDate <= endDate) {
+    dateArray.push(currentDate.format("DD-MM-YYYY"));
+    currentDate.add(steps, "d");
   }
 
   return dateArray;
@@ -51,114 +50,45 @@ function remove_duplicates_es6(arr) {
   return Array.from(it);
 }
 const Option = ({ option, disabled, service }) => {
-  const { filterService } = useSelector((state) => state.studioPostReducer);
+  const { listTimeSelected, studioDetail } = useSelector(
+    (state) => state.studioPostReducer
+  );
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
   const [disableHour, setDisableHour] = useState([]);
   const [disableDate, setDisableDate] = useState([]);
-  const [time, setTime] = useState([]);
+  // const [time, setTime] = useState([]);
+  const [filter, setFilter] = useState({});
 
   useEffect(() => {
     const listDate = service?.Bookings?.reduce((acc, item) => {
       let dates = dateRange(
-        moment(item.OrderByTimeFrom).format("l"),
-        moment(item.OrderByTimeTo).format("l")
+        moment(item?.OrderByTimeFrom),
+        moment(item?.OrderByTimeTo)
       );
       let dates2 = dateRange(
-        moment(item.OrderByDateFrom).format("l"),
-        moment(item.OrderByDateTo).format("l")
+        moment(item?.OrderByDateFrom),
+        moment(item?.OrderByDateTo)
       );
       acc.push(...dates, ...dates2);
       return uniqueInOrder(acc);
     }, []);
-    console.log("listDate", listDate);
-    const minDate = new Date(
-      Math.min(
-        ...listDate.map((element) => {
-          return new Date(element);
-        })
-      )
-    );
     setDisableDate(listDate);
   }, [service]);
 
-  // const handleOnchangeDate = (d, dString) => {
-  //   console.log("dang chin", service.id);
-  //   // setDate(dString);
-  //   // console.log("gio UTC", moment.utc(moment(date).utc()).format());
-  //   if (dString && filterService.OrderByTime === 1) {
-  //     let hl = service?.Bookings?.filter((item) => {
-  //       const dates = dateRange(
-  //         moment(item.OrderByTimeFrom).format("l"),
-  //         moment(item.OrderByTimeTo).format("l")
-  //       );
-  //       return dates.includes(moment(dString).format("l"));
-  //     });
-  //     // console.log("so gio da chon ", hl);
-  //     let array = [];
-  //     if (
-  //       moment(dString).format("YYYY-MM-DD") ==
-  //       moment(new Date()).format("YYYY-MM-DD")
-  //     ) {
-  //       array = range(0, moment().hours());
-  //       console.log("first", array);
-  //     }
+  useEffect(() => {
+    setFilter(listTimeSelected.find((item) => item.id === service.id));
+  }, [listTimeSelected, service]);
 
-  //     if (hl?.length > 0) {
-  //       array = hl?.reduce((acc, item) => {
-  //         acc = array;
-  //         let dates = dateRangeHour(
-  //           moment(item.OrderByTimeFrom).format(),
-  //           moment(item.OrderByTimeTo).format()
-  //         );
-  //         acc.push(...dates.slice(0, -1));
-  //         return remove_duplicates_es6(acc);
-  //       }, []);
-  //     }
-  //     // dispatch({
-  //     //   type: ADD_TIME_ORDER,
-  //     //   data: {
-  //     //     ...filterService,
-  //     //     id: service.id,
-  //     //     OrderByTime: 1,
-  //     //     disableTimeOrder: array,
-  //     //   },
-  //     // });
+  console.log(
+    moment(new Date("2023-01-12T00:00:00.000Z")).set("h", 7).toISOString()
+  );
 
-  //     setDisableHour(array);
-  //   }
-  //   // if (time.length > 0) {
-  //   //   dispatch(
-  //   //     setFilterStudioService(5, 1, {
-  //   //       ...filterService,
-  //   //       OrderByTime: 1,
-  //   //       OrderByTimeFrom:
-  //   //         convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
-  //   //       OrderByTimeTo:
-  //   //         convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
-  //   //     })
-  //   //   );
-  //   //   // dispatch({
-  //   //   //   type: SET_FILTER_SERVICE,
-  //   //   //   payload: {
-  //   //   //     ...filterService,
-  //   //   //     OrderByTime: 0,
-  //   //   //     OrderByTimeFrom:
-  //   //   //       convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
-  //   //   //     OrderByTimeTo:
-  //   //   //       convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
-  //   //   //   },
-  //   //   // });
-  //   // }
-  // };
   const handleOnchangeHour = (t, timeString) => {
-    // setTime(timeString);
-    console.log(timeString);
     if (date) {
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
-          // ...filterService,
           id: service.id,
           OrderByTime: 1,
           OrderByTimeFrom:
@@ -169,19 +99,8 @@ const Option = ({ option, disabled, service }) => {
             moment(date).toISOString().slice(0, 11) +
             timeString[1] +
             ":00.000Z",
-          // ListDisableHour: disableHour,
         },
       });
-      // dispatch(
-      //   setFilterStudioService(5, 1, {
-      //     ...filterService,
-      //     OrderByTime: 1,
-      //     OrderByTimeFrom:
-      //       convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
-      //     OrderByTimeTo:
-      //       convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
-      //   })
-      // );
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
@@ -189,10 +108,8 @@ const Option = ({ option, disabled, service }) => {
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
-          // ...filterService,
           id: service.id,
           OrderByTime: 0,
-          // OrderByDateFrom: moment(datesString[0]).add(7, "hour").toISOString(),
           OrderByDateFrom:
             moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
           OrderByDateTo:
@@ -201,60 +118,9 @@ const Option = ({ option, disabled, service }) => {
         },
       });
     }
-    // dispatch(
-    //   setFilterStudioService(5, 1, {
-    //     ...filterService,
-    //     OrderByTime: 0,
-    //     OrderByDateFrom:
-    //       moment(datesString[0]).toISOString().slice(0, 11) + "00:00:00.000Z",
-    //     OrderByDateTo:
-    //       moment(datesString[1]).toISOString().slice(0, 11) + "00:00:00.000Z",
-    //   })
-    // );
   };
 
-  const getDisabledHours = (date1, type) => {
-    // console.log(date);
-    // console.log(
-    //   "day today",
-    //   moment(date).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")
-    // );
-    // console.log(
-    //   moment(date).format("YYYY-MM-DD"),
-    //   moment(Date.now()).format("YYYY-MM-DD")
-    // );
-    let array = [];
-    if (
-      moment(date).format("YYYY-MM-DD") ==
-      moment(new Date()).format("YYYY-MM-DD")
-    ) {
-      array = range(0, moment().hours());
-      console.log("first", array);
-    }
-
-    if (disableHour?.length > 0) {
-      array = disableHour?.reduce((acc, item) => {
-        acc = array;
-        let dates = dateRangeHour(
-          moment(item.OrderByTimeFrom).format(),
-          moment(item.OrderByTimeTo).format()
-        );
-        acc.push(...dates.slice(0, -1));
-        return remove_duplicates_es6(acc);
-      }, []);
-    }
-    // dispatch({
-    //   type: ADD_TIME_ORDER,
-    //   data: {
-    //     ...filterService,
-    //     id: service.id,
-    //     OrderByTime: 1,
-    //     disableTimeOrder: array,
-    //   },
-    // });
-    return array;
-  };
-  switch (Number(filterService.OrderByTime)) {
+  switch (Number(option)) {
     case 1:
       return (
         <div className="timeContainer">
@@ -269,37 +135,35 @@ const Option = ({ option, disabled, service }) => {
           >
             <DatePicker
               onChange={(d, dString) => {
-                // console.log("dang chin", service.id);
                 setDate(d);
-                // console.log("gio UTC", moment.utc(moment(date).utc()).format());
-                if (dString && filterService.OrderByTime === 1) {
-                  let hl = service?.Bookings?.filter((item) => {
-                    const dates = dateRange(
-                      moment(item.OrderByTimeFrom).format("l"),
-                      moment(item.OrderByTimeTo).format("l")
-                    );
-                    return dates.includes(moment(dString).format("l"));
-                  });
-                  console.log(
-                    "so gio da chon sio sanhg ",
-                    moment(dString).format("YYYY-MM-DD") ==
-                      moment(new Date()).format("YYYY-MM-DD")
+                if (dString && option === 1) {
+                  let hl = service?.Bookings?.filter((item) =>
+                    item?.OrderByTimeFrom?.includes(
+                      moment(d).format("YYYY-MM-DD")
+                    )
                   );
                   let array = [];
-                  if (
-                    moment(dString).format("YYYY-MM-DD") ==
-                    moment(new Date()).format("YYYY-MM-DD")
-                  ) {
-                    array = range(0, moment().hours());
-                    console.log("first", array);
+                  array = range(0, studioDetail?.data?.HourOpenDefault);
+                  array = [
+                    ...array,
+                    ...range(studioDetail?.data?.HourCloseDefault + 1, 23),
+                  ];
+                  if (dString === moment(new Date()).format("DD-MM-YYYY")) {
+                    array = [
+                      ...array,
+                      ...range(
+                        studioDetail?.data?.HourOpenDefault + 1,
+                        moment().hours()
+                      ),
+                    ];
                   }
 
                   if (hl?.length > 0) {
                     array = hl?.reduce((acc, item) => {
-                      acc = array;
+                      acc = [...array];
                       let dates = dateRangeHour(
-                        moment(item.OrderByTimeFrom).format(),
-                        moment(item.OrderByTimeTo).format()
+                        moment(item.OrderByTimeFrom).utc(),
+                        moment(item.OrderByTimeTo).utc()
                       );
                       acc.push(...dates.slice(0, -1));
                       return remove_duplicates_es6(acc);
@@ -318,9 +182,6 @@ const Option = ({ option, disabled, service }) => {
                 }
               }}
               status={"error"}
-              // defaultValue={moment(filterService?.OrderByTimeFrom)}
-              // format={"DD-MM-YYYY"}
-              // format={"DD/MM/YYYY"}
               allowClear={false}
               inputReadOnly={true}
               disabled={disabled}
@@ -329,19 +190,22 @@ const Option = ({ option, disabled, service }) => {
                   service?.Bookings?.filter((item) => !item.OrderByTime)
                     .reduce((acc, item) => {
                       let dates2 = dateRange(
-                        moment(item.OrderByDateFrom).format("l"),
-                        moment(item.OrderByDateTo).format("l")
+                        moment(item.OrderByDateFrom),
+                        moment(item.OrderByDateTo)
                       );
                       acc.push(...dates2);
                       return uniqueInOrder(acc);
                     }, [])
-                    .some((date) =>
-                      moment(moment(current).format("l")).isSame(moment(date))
+                    .some(
+                      (date) => moment(current).format("DD-MM-YYYY") === date
                     ) ||
                   (current && current <= moment().subtract(1, "days"))
                 );
               }}
               format={"DD-MM-YYYY"}
+              defaultValue={
+                filter?.OrderByTimeFrom ? moment(filter?.OrderByTimeFrom) : ""
+              }
             />
           </Form.Item>
           <Form.Item
@@ -358,10 +222,14 @@ const Option = ({ option, disabled, service }) => {
                 format="HH:mm"
                 onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
-                // defaultValue={[
-                //   moment(filterService?.OrderByTimeFrom),
-                //   moment(filterService?.OrderByTimeTo),
-                // ]}
+                defaultValue={[
+                  filter?.OrderByTimeFrom
+                    ? moment(filter?.OrderByTimeFrom).subtract(7, "h")
+                    : "",
+                  filter?.OrderByTimeTo
+                    ? moment(filter?.OrderByTimeTo).subtract(7, "h")
+                    : "",
+                ]}
                 inputReadOnly={true}
                 // disabledTime={(date, type) => ({
                 //   disabledHours: () => getDisabledHours(date, type),
@@ -369,7 +237,12 @@ const Option = ({ option, disabled, service }) => {
                 disabledTime={(date, type) => ({
                   disabledHours: () => disableHour,
                 })}
-                disabled={disabled}
+                disabled={
+                  disabled
+                    ? disabled
+                    : listTimeSelected.find((item) => item.id === service.id)
+                        ?.disableTimeOrder === undefined
+                }
                 minuteStep={60}
               />
             </div>
@@ -383,39 +256,21 @@ const Option = ({ option, disabled, service }) => {
             name="time"
             label="Chọn ngày"
             style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
+            initialValue=""
           >
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
-              // defaultValue={[
-              //   moment(filterService?.OrderByDateFrom, "YYYY-MM-DD"),
-              //   moment(filterService?.OrderByDateTo, "YYYY-MM-DD"),
-              // ]}
+              defaultValue={[
+                filter?.OrderByDateFrom ? moment(filter?.OrderByDateFrom) : "",
+                filter?.OrderByDateTo ? moment(filter?.OrderByDateTo) : "",
+              ]}
               format={"DD-MM-YYYY"}
               disabled={disabled}
               inputReadOnly={true}
-              // disabledDate={(current) => {
-              //   return (
-              //     service?.Bookings?.reduce((acc, item) => {
-              //       let dates = dateRange(
-              //         moment(item.OrderByTimeFrom).format("l"),
-              //         moment(item.OrderByTimeTo).format("l")
-              //       );
-              //       let dates2 = dateRange(
-              //         moment(item.OrderByDateFrom).format("l"),
-              //         moment(item.OrderByDateTo).format("l")
-              //       );
-              //       acc.push(...dates, ...dates2);
-              //       return uniqueInOrder(acc);
-              //     }, []).some((date) =>
-              //       moment(moment(current).format("l")).isSame(moment(date))
-              //     ) ||
-              //     (current && current <= moment().subtract(1, "days"))
-              //   );
-              // }}
               disabledDate={(current) => {
                 return (
-                  disableDate.some((date) =>
-                    moment(moment(current).format("l")).isSame(moment(date))
+                  disableDate.some(
+                    (date) => moment(current).format("DD-MM-YYYY") === date
                   ) ||
                   (current && current <= moment().subtract(1, "days"))
                 );
@@ -431,47 +286,46 @@ const Option = ({ option, disabled, service }) => {
 
 const SelectTimeOptionService = ({ disabled, service, onClick }) => {
   const [data, setData] = useState(service);
-  const { filterService } = useSelector((state) => state.studioPostReducer);
-  // const [selection, setSelection] = useState(filterService.OrderByTime);
-  // const handlerServiceSelect = (data) => {
-  //   console.log(data.id);
-  //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
-  // };
+  const [selectTime, setSelectTime] = useState();
+  const { listTimeSelected, filterService } = useSelector(
+    (state) => state.studioPostReducer
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     setData(service);
-  }, [service]);
+    setSelectTime(listTimeSelected.find((item) => item.id === service.id));
+  }, [service, listTimeSelected]);
 
   const handleOnChangeSelection = (e) => {
-    dispatch(
-      setFilterStudioService(5, 1, {
-        ...filterService,
+    dispatch({
+      type: ADD_TIME_ORDER,
+      data: {
+        id: service.id,
         OrderByTime: e.target.value,
-      })
-    );
+      },
+    });
   };
 
   return (
-    <div
-      // onClick={() => {
-      //   dispatch({ type: SET_SERVICE_SELECT, payload: service.id });
-      // }}
-      className="selectTimeOptionServiceContainer mb-20"
-    >
+    <div className="selectTimeOptionServiceContainer mb-20">
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}
         style={{ padding: "0 0 20px" }}
-        value={filterService.OrderByTime}
-        disabled={disabled}
+        value={selectTime?.OrderByTime}
+        disabled={disabled ? disabled : filterService?.id === data?.id}
       >
         <Space direction="vertical">
           <Radio value={1}>Đặt theo giờ</Radio>
           <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
-      <Option service={data} disabled={disabled} />
+      <Option
+        option={selectTime?.OrderByTime}
+        service={data}
+        disabled={disabled}
+      />
     </div>
   );
 };
