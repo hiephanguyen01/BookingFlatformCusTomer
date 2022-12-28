@@ -80,10 +80,6 @@ const Option = ({ option, disabled, service }) => {
     setFilter(listTimeSelected.find((item) => item.id === service.id));
   }, [listTimeSelected, service]);
 
-  console.log(
-    moment(new Date("2023-01-12T00:00:00.000Z")).set("h", 7).toISOString()
-  );
-
   const handleOnchangeHour = (t, timeString) => {
     if (date) {
       dispatch({

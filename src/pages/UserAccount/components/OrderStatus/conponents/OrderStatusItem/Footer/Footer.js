@@ -3,12 +3,13 @@ import {
   InfoCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Modal } from "antd";
+import { Input, Modal } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { socket } from "../../../../../../../components/ConnectSocket/ConnectSocket";
+import toastMessage from "../../../../../../../components/ToastMessage";
 import { chatService } from "../../../../../../../services/ChatService";
 import { orderService } from "../../../../../../../services/OrderService";
 import {
@@ -35,6 +36,7 @@ export const Footer = ({
   post,
 }) => {
   const [visible, setVisible] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
   // const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
@@ -42,26 +44,44 @@ export const Footer = ({
 
   const handleCancelOrder = async () => {
     try {
-      const formData = new FormData();
-      formData.append("BookingStatus", 2);
-      formData.append("Category", Category);
-      formData.append("DeletionTime", new Date());
+      console.log(cancelReason, 123);
+      if (cancelReason === "") {
+        return toastMessage("Vui lòng nhập lý do hủy đơn!");
+      }
+      // const formData = new FormData();
+      // formData.append("BookingStatus", 2);
+      // formData.append("Category", Category);
+      // formData.append("DeletionTime", new Date());
+      // formData.append("DeletedNote", cancelReason);
 
-      await orderService.updateOrder(formData, IdentifyCode);
-      const newPageBooking = pageBooking.filter(
-        (item) => item.IdentifyCode !== IdentifyCode
-      );
-      setPageBooking(newPageBooking);
+      // await orderService.updateOrder(formData, IdentifyCode);
+      // const newPageBooking = pageBooking.filter(
+      //   (item) => item.IdentifyCode !== IdentifyCode
+      // );
+      // setPageBooking(newPageBooking);
     } catch (error) {
       console.log(error);
     }
   };
 
+  console.log(cancelReason);
+
   const confirm = () => {
     Modal.confirm({
       title: "Xác nhận hủy đơn hàng",
       icon: <ExclamationCircleOutlined />,
-      content: "Bạn có chắc muốn hủy đơn hàng này không?",
+      content: (
+        <>
+          <div className="">Bạn có chắc muốn hủy đơn hàng này không?</div>
+          <div className="mt-3">Vui lòng nhập lý do hủy đơn?</div>
+          <Input.TextArea
+            className="mt-3"
+            rows={4}
+            style={{ resize: "none" }}
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
+        </>
+      ),
       okText: "Đồng ý",
       cancelText: "Thoát",
       onOk: () => handleCancelOrder(),
@@ -112,9 +132,19 @@ export const Footer = ({
             >
               <UploadOutlined /> Đã thanh toán
             </Link>
-            <button className="FooterStatus__wait__button__2">
+            <Link
+              to={`/home/confirm-order/${id}`}
+              state={{
+                IdentifyCode: [IdentifyCode],
+                TenantId,
+                EvidenceImage,
+                updatePay: true,
+                Category: Category,
+              }}
+              className="FooterStatus__wait__button__2"
+            >
               Thanh toán cọc
-            </button>
+            </Link>
           </div>
         </div>
       );
