@@ -37,7 +37,7 @@ export const convertDateSendToDB = (date, prevDayFlag) => {
   return modify;
 };
 
-export const convertTimeSendDB = (time) => moment(time).subtract(7, "h");
+// export const convertTimeSendDB = (time) => moment(time).add(7, "hour");
 
 export const numberWithDot = (x) => {
   return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -69,6 +69,6 @@ export const dateStructure = (date) => {
     date?.getDate() + "/" + (date?.getMonth() + 1) + "/" + date?.getFullYear()
   );
 };
-export const addLinebreaks = (anyString) => {
+export const addLinebreaks = (anyString = "") => {
   return anyString.replaceAll("\n", "<br />\r\n");
 };

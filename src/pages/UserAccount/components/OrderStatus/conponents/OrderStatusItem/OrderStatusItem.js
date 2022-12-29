@@ -1,5 +1,6 @@
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Divider } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import demo from "../../../../../../assets/Chat/demo.png";
@@ -32,19 +33,11 @@ const OrderStatusItem = ({
     OrderByTimeTo,
     OrderByDateFrom,
     OrderByDateTo,
-    DepositValue,
     BookingValue,
     category,
     EvidenceImage,
+    DepositValue,
   } = item;
-  const orderDate = new Date(CreationTime);
-  if (OrderByTimeFrom && OrderByTimeTo) {
-    OrderByTimeFrom = new Date(OrderByTimeFrom);
-    OrderByTimeTo = new Date(OrderByTimeTo);
-  } else {
-    OrderByDateFrom = new Date(OrderByDateFrom);
-    OrderByDateTo = new Date(OrderByDateTo);
-  }
   useEffect(() => {
     (async () => {
       try {
@@ -119,12 +112,22 @@ const OrderStatusItem = ({
                 {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">
-                Ngày tạo: <span>{dateStructure(orderDate)}</span>
+                Ngày đặt:{" "}
+                <span>{moment(CreationTime).format("DD/MM/YYYY")}</span>
               </div>
               <div className="OrderStatusItem__body__info__content__time">
                 Đặt từ{" "}
-                <span>{timeStructure(OrderByTimeFrom || OrderByDateFrom)}</span>{" "}
-                đến <span>{timeStructure(OrderByTimeTo || OrderByDateTo)}</span>{" "}
+                <span>
+                  {moment(OrderByTimeFrom || OrderByDateFrom)
+                    .utc()
+                    .format("HH:mm DD/MM/YYYY")}
+                </span>{" "}
+                đến{" "}
+                <span>
+                  {moment(OrderByTimeTo || OrderByDateTo)
+                    .utc()
+                    .format("HH:mm DD/MM/YYYY")}
+                </span>
               </div>
             </div>
           </div>

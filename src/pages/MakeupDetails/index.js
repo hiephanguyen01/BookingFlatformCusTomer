@@ -1,11 +1,16 @@
 import {
   CheckCircleOutlined,
+  ClockCircleOutlined,
   DownOutlined,
+  EnvironmentOutlined,
   HeartFilled,
   HeartOutlined,
   LoadingOutlined,
   MoreOutlined,
   ShoppingCartOutlined,
+  StopOutlined,
+  TeamOutlined,
+  UserOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Popover, Rate, Row } from "antd";
@@ -46,6 +51,7 @@ import SelectTimeOptionService from "../../components/SelectTimeOptionService/Se
 import ReactStickyBox from "react-sticky-box";
 import styles from "./Detail.module.scss";
 import images from "../../assets/images";
+import cost from "../../assets/svg/cost.svg";
 import classNames from "classnames/bind";
 import {
   DELETE_CHOOSE_SERVICE,
@@ -165,12 +171,140 @@ const Index = () => {
               <div
                 className="mt-10"
                 style={{
-                  color: "#616161",
+                  color: "#222222",
                   fontSize: "16px",
-                  fontWeight: "400",
+                  fontWeight: "700",
                 }}
               >
-                {data.Description}
+                <div>
+                  <CheckCircleOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Dịch vụ ĐÃ bao gồm:
+                </div>
+                <ul className="detail-description">
+                  <li>Làm tóc</li>
+                  <li>Trang điểm</li>
+                  <li>Mỹ phẩm cao cấp</li>
+                  <li>Số lượng kiểu trang điểm: 2</li>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <StopOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Dịch vụ CHƯA bao gồm:
+                </div>
+                <ul className="detail-description">
+                  <p>Phí đi theo để dặm phấn, chỉnh tóc, thay trang phục</p>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <EnvironmentOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Địa điểm
+                </div>
+                <div className="detail-description">
+                  <p>26 Nguyễn Ái Quốc, Biên Hòa, Đồng Nai</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <ClockCircleOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Thời gian trang điểm
+                </div>
+                <div className="detail-description">
+                  <p>2 giờ (ước lượng)</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <UserOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Số khách tối thiểu
+                </div>
+                <div className="detail-description">
+                  <p>2 khách</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <TeamOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Số khách tối đa
+                </div>
+                <div className="detail-description">
+                  <p>10 khách</p>
+                </div>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <img
+                    alt=""
+                    src={cost}
+                    className="me-10 mb-2"
+                    style={{ fontSize: "12px" }}
+                  />
+                  Phụ thu
+                </div>
+                <div className="detail-description">
+                  <p>Phụ thu phát sinh 200.000 VND/khách</p>
+                </div>
               </div>
             </div>
           ),
@@ -242,17 +376,6 @@ const Index = () => {
                   >
                     {data.PriceNote}
                   </p>
-                  {/* <button
-                    style={{
-                      padding: "3px 21px",
-                      background: "#E22828",
-                      color: "#ffff",
-                      border: " 1px solid #E22828",
-                      borderRadius: " 8px",
-                    }}
-                  >
-                    Giảm 50%{" "}
-                  </button> */}
                 </div>
               )}
               <div className="">

@@ -5,11 +5,13 @@ import {
   LoadingOutlined,
   MoreOutlined,
   ShoppingCartOutlined,
+  SkinOutlined,
+  TeamOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Affix, Button, Popover, Rate } from "antd";
+import { Button, Carousel, Image, Popover, Rate } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -24,10 +26,7 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import {
-  chooseServiceAction,
-  chooseServiceListAction,
-} from "../../stores/actions/OrderAction";
+import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
@@ -38,11 +37,11 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 import {
-  SELECT_TIME_ORDER,
-  SET_PROMOTION_CODE,
-} from "../../stores/types/studioPostType";
+  DELETE_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE,
+} from "../../stores/types/OrderType";
+import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
@@ -52,6 +51,9 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+import expand from "../../assets/svg/expand.svg";
+import chair from "../../assets/svg/chair.svg";
+import conditional from "../../assets/svg/conditional.svg";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -61,8 +63,9 @@ const COLUMN = [
 const cx = classNames.bind(styles);
 
 export const StudioDetail = () => {
+  const [visible, setVisible] = useState(false);
+
   const { id } = useParams();
-  const setContainer = useRef(null);
   const { pathname } = useLocation();
   // State
   const dispatch = useDispatch();
@@ -73,8 +76,8 @@ export const StudioDetail = () => {
     studioDetail,
     studioNear,
     listStudioSimilar,
-    promotionCode,
     filterService,
+    listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
@@ -82,17 +85,17 @@ export const StudioDetail = () => {
       ? 1
       : undefined;
 
-  const filter_promo = promotionCode
-    ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
-    ?.reduce((arr, item) => {
-      if (
-        promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
-        0
-      ) {
-        return [...arr];
-      }
-      return [...arr, item];
-    }, []);
+  // const filter_promo = promotionCode
+  //   ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
+  //   ?.reduce((arr, item) => {
+  //     if (
+  //       promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id).length >
+  //       0
+  //     ) {
+  //       return [...arr];
+  //     }
+  //     return [...arr, item];
+  //   }, []);
 
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
@@ -102,12 +105,13 @@ export const StudioDetail = () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: "SET_SERVICE_SELECT", payload: null });
       dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
+      dispatch({ type: "SET_TIME_ORDER", data: [] });
     };
   }, [dispatch]);
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
-    dispatch({ type: "SET_SERVICE_SELECT", payload: null });
+    // dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
   }, [id, dispatch]);
 
@@ -142,6 +146,7 @@ export const StudioDetail = () => {
   //   console.log(data.id);
   //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
   // };
+<<<<<<< HEAD
   console.log("seveice phong", studioDetail?.service);
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -163,241 +168,285 @@ export const StudioDetail = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "10px",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#616161",
-                    fontSize: "16px",
-                    fontWeight: "400",
-                    minWidth: "60px",
-                  }}
-                >
-                  Phòng
-                </span>
-                <span
-                  style={{
-                    color: "#3F3F3F",
-                    fontSize: "16px",
-                    fontWeight: "700",
+=======
 
-                    display: "-webkit-box",
-                    lineHeight: "18px",
-                    webkitLineClamp: "1",
-                    webkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    height: "18px",
-                  }}
-                >
-                  {data.Name}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "10px",
+  const ROW = (dataSource) => {
+    return dataSource?.map((data, index) => [
+      {
+        key: "title",
+        render: () => (
+          <div style={{ maxWidth: "300px" }}>
+            <Carousel autoplay style={{ width: "100%" }}>
+              {data.Image.map((val) => (
+                <Image
+                  key={val}
+                  preview={{ visible: false }}
+                  src={convertImage(val)}
+                  onClick={() => setVisible(data.id)}
+                />
+              ))}
+            </Carousel>
+            <div style={{ display: "none" }}>
+              <Image.PreviewGroup
+                preview={{
+                  visible: Boolean(visible === data.id),
+                  onVisibleChange: (vis) => setVisible(vis),
+>>>>>>> c92509d6d397f8ee8dbaecd95b7de9c0006b8abf
                 }}
               >
-                <span
-                  style={{
-                    color: "#616161",
-                    fontSize: "16px",
-                    fontWeight: "400",
-                  }}
-                >
-                  Diện tích
-                </span>
-                <span
-                  style={{
-                    color: "#3F3F3F",
-                    fontSize: "16px",
-                    fontWeight: "700",
-                  }}
-                >
-                  {data.Area}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "10px",
-                }}
-              >
-                <div
-                  style={{
-                    color: "#616161",
-                    fontSize: "16px",
-                    fontWeight: "400",
-                    minWidth: "100px",
-                  }}
-                >
-                  Phong cách
-                </div>
-                <div
-                  style={{
-                    color: "#3F3F3F",
-                    fontSize: "16px",
-                    fontWeight: "700",
-
-                    display: "-webkit-box",
-                    lineHeight: "18px",
-                    webkitLineClamp: "1",
-                    webkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    height: "18px",
-                  }}
-                >
-                  {data.Style}
-                </div>
-              </div>
-              <div
-                className="mt-15"
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                {data.Description}
-              </div>
+                {data.Image.map((val) => (
+                  <Image src={convertImage(val)} />
+                ))}
+              </Image.PreviewGroup>
             </div>
-          ),
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+                textTransform: "uppercase",
+              }}
+            >
+              {data?.Name}
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={expand}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Kích thước
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Diện tích {data?.Area}</li>
+                <li>Chiều rộng {data?.Width}m</li>
+                <li>Chiều dài {data?.Length}m</li>
+                <li>Chiều cao trần {data?.Height}m</li>
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={chair}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Thiết bị có sẵn
+              </div>
+              <ul className={cx("detail-description")}>
+                {data?.HasBackground && <li>{data?.BackgroundDescription}</li>}
+                {data?.HasLamp && <li>{data?.LampDescription}</li>}
+                {data?.HasTable && <li>Bàn</li>}
+                {data?.HasChair && <li>Ghế</li>}
+                {data?.HasSofa && <li>Sofa</li>}
+                {data?.HasFlower && <li>Hoa</li>}
+                {data?.HasOtherDevice && (
+                  <li>{data?.OtherDeviceDescription}</li>
+                )}
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={conditional}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Tiện ích đi kèm
+              </div>
+              <ul className={cx("detail-description")}>
+                {data?.HasAirConditioner && <li>Máy lạnh</li>}
+                {data?.HasFan && <li>Quạt</li>}
+                {data?.HasDressingRoom && <li>Phòng thay đồ riêng</li>}
+                {data?.HasWC && <li>Nhà vệ sinh</li>}
+                {data?.HasCamera && <li>Camera</li>}
+                {data?.HasWifi && <li>Wifi</li>}
+                {data?.HasMotorBikeParking && <li>Chổ để xe máy</li>}
+                {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
+                {data?.HasSupporter && <li>Người hỗ trợ</li>}
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <TeamOutlined
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Số lượng khách
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Số lượng khách tối đa: {data?.MaximumCustomer} người</li>
+                <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
+              </ul>
+            </div>
+          </div>
+        ),
+      },
+      {
+        key: "desc",
+        render: (item) => {
+          return (
+            <SelectTimeOptionService
+              // disabled={
+              //   serviceSelected === null
+              //     ? false
+              //     : data.id === serviceSelected
+              //     ? false
+              //     : true
+              // }
+              service={data}
+            />
+          );
         },
-        {
-          key: "desc",
-          render: (item) => {
-            return (
-              <SelectTimeOptionService
-                // disabled={
-                //   serviceSelected === null
-                //     ? false
-                //     : data.id === serviceSelected
-                //     ? false
-                //     : true
-                // }
-                service={data}
-              />
-            );
-          },
-        },
-        {
-          key: "currency",
-          render: () => (
-            <>
-              {filterService.OrderByTime !== -1 && (
-                <div className="mb-20">
-                  <div
+      },
+      {
+        key: "currency",
+        render: () => (
+          <>
+            {listTimeSelected?.find((item) => item.id === data?.id)
+              ?.OrderByTime !== -1 && (
+              <div className="mb-20">
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <span
                     style={{
-                      display: "flex",
-                      gap: "10px",
-                      alignItems: "center",
-                      flexWrap: "wrap",
+                      color: "#E22828",
+                      fontSize: "20px",
+                      fontWeight: "700",
                     }}
                   >
-                    <span
-                      style={{
-                        color: "#E22828",
-                        fontSize: "20px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      {filterService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {filterService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                    </span>
-                    <span
-                      style={{
-                        color: "#828282",
-                        textDecoration: "line-through",
-                        fontSize: "14px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      {filterService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {filterService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                    </span>
-                  </div>
-                  <p
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </span>
+                  <span
                     style={{
                       color: "#828282",
+                      textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
                     }}
                   >
-                    {data.PriceNote}
-                  </p>
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 1 &&
+                      data?.PriceByHour?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 0 &&
+                      data?.PriceByDate?.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                  </span>
                 </div>
-              )}
-              <div className="">
-                {filterService.id === data.id ? (
-                  <div
-                    onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "13px 25px",
-
-                      backgroundColor: "#E7E7E7",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Bỏ chọn
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => handleChooseService(data)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "13px 25px",
-
-                      border: "1px solid #E22828",
-                      color: "#E22828",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Chọn
-                  </div>
-                )}
+                <p
+                  style={{
+                    color: "#828282",
+                    fontSize: "14px",
+                    fontWeight: "400",
+                  }}
+                >
+                  {data?.PriceNote}
+                </p>
               </div>
-            </>
-          ),
-        },
-      ]);
-    }
+            )}
+            <div className="">
+              {chooseServiceList?.find((item) => item.id === data?.id) ? (
+                <Button
+                  type="default"
+                  size="large"
+                  onClick={() => {
+                    dispatch({ type: DELETE_CHOOSE_SERVICE });
+                    dispatch({ type: "SET_SELECT_TIME_ORDER" });
+                  }}
+                  style={{
+                    width: "100%",
+                    color: "#000",
+                    backgroundColor: "#E7E7E7",
+                    border: "none",
+
+                    borderRadius: "8px",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    lineHeight: "19px",
+
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Bỏ chọn
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleChooseService(data)}
+                  style={{
+                    width: "100%",
+                    borderRadius: "8px",
+                    fontWeight: "700",
+                    fontSize: "13px",
+
+                    lineHeight: "19px",
+                    textTransform: "uppercase",
+                  }}
+                  size="large"
+                >
+                  Chọn
+                </Button>
+              )}
+            </div>
+          </>
+        ),
+      },
+    ]);
   };
 
   const handleChooseService = (data) => {
@@ -406,30 +455,32 @@ export const StudioDetail = () => {
     //   return;
     // } else {
     // }
-    console.log(data);
-    dispatch(handlerSelectServiceAction(data));
-
-    // if (
-    //   (filterService.OrderByTime === 0 &&
-    //     filterService.OrderByDateFrom !== "" &&
-    //     filterService.OrderByDateTo !== "") ||
-    //   (filterService.OrderByTime === 1 &&
-    //     filterService.OrderByTimeFrom !== "" &&
-    //     filterService.OrderByTimeTo !== "")
-    // ) {
-    // if (filterService.id == data.id) {
-    //   if (chooseServiceList.filter((item) => item.id === data.id).length > 0) {
-    //     setChooseService([]);
-    //   } else {
-    //     setChooseService([{ ...data }]);
-    //   }
-    // }
-    // const existed = chooseServiceList.findIndex((item) => item.id == data.id);
-    // if (existed !== -1) {
-    //   setChooseService([]);
-    // } else {
-    //   setChooseService([{ ...data }]);
-    // }
+    const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+    if (findSelectTime) {
+      if (
+        findSelectTime.OrderByTime === 1 &&
+        findSelectTime.OrderByTimeFrom !== undefined &&
+        findSelectTime.OrderByTimeFrom !== "" &&
+        findSelectTime.OrderByTimeTo !== undefined &&
+        findSelectTime.OrderByTimeTo !== "" &&
+        findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else if (
+        findSelectTime.OrderByTime === 0 &&
+        findSelectTime.OrderByDateFrom !== undefined &&
+        findSelectTime.OrderByDateFrom !== "" &&
+        findSelectTime.OrderByDateTo !== undefined &&
+        findSelectTime.OrderByDateTo !== "" &&
+        findSelectTime.OrderByDateTo !== findSelectTime.OrderByDateFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else {
+        return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+      }
+    } else {
+      return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+    }
   };
 
   const handleBook = () => {
@@ -440,14 +491,7 @@ export const StudioDetail = () => {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
-  // const handleAddCart = () => {
-  //   if (chooseServiceList.length > 0) {
-  //     dispatch(addOrder(cate, chooseServiceList));
-  //     toastMessage("Đã thêm vào giỏ hàng!", "success");
-  //   } else {
-  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
-  //   }
-  // };
+
   const handleChangeLike = (e) => {
     if (currentUser) {
       dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
@@ -580,12 +624,13 @@ export const StudioDetail = () => {
                     </ReadMoreDesc>
                   </div>
                   <div className={cx("sale")}>
-                    <PromotionList data={filter_promo} />
+                    <PromotionList />
                   </div>
-
-                  <div className={cx("")}>
-                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                  </div>
+                  {studioDetail && (
+                    <div className={cx("")}>
+                      <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                    </div>
+                  )}
 
                   <div className={cx("rating")}>
                     <CommentRating

@@ -6,10 +6,10 @@ import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";
 import "./orderStatus.scss";
 const { TabPane } = Tabs;
 const keyF = {
-  1: { BookingStatus: 4, PaymentStatus: 1 },
+  1: { BookingStatus: 4, PaymentStatus: [1] },
   2: { BookingStatus: 4, PaymentStatus: [4, 3, 2] },
   3: { BookingStatus: 1, PaymentStatus: [3, 4] },
-  4: { BookingStatus: 2 },
+  4: { BookingStatus: 2, PaymentStatus: [1, 2, 3, 4] },
 };
 const OrderStatus = () => {
   const [booking, setBooking] = useState([]);
@@ -24,8 +24,8 @@ const OrderStatus = () => {
     limit: 10,
     // category: 1,
     BookingStatus: 4,
-    PaymentStatus: 1,
-    EntryDate: JSON.stringify(EntryDate),
+    PaymentStatus: [1],
+    // EntryDate: JSON.stringify(EntryDate),
   });
   const onChange = (key) => {
     setFilter([]);
@@ -54,7 +54,7 @@ const OrderStatus = () => {
     (async () => {
       setLoading(true);
       try {
-        const { data } = await orderService.getAllOrderByUserId(params);
+        const { data } = await orderService.getOrderStatus(params);
         setBooking(data.data);
       } catch (error) {
         console.log(error);
@@ -73,7 +73,6 @@ const OrderStatus = () => {
     }
   }, [booking, filter, pageSize]);
 
-  console.log("bookinff", booking, params);
   return (
     <>
       <h4 className="OrderStatus__header">Lịch sử đơn đặt</h4>
@@ -119,7 +118,7 @@ const OrderStatus = () => {
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
                     id={item.id}
-                    BookingStatus={params.key}
+                    BookingStatus={params.key || 1}
                     key={idx}
                     item={item}
                     pageBooking={pageBooking}

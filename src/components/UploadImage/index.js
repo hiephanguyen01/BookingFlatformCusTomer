@@ -5,7 +5,7 @@ import "./uploadImage.scss";
 const DropFileInput = ({
   onChangeFile,
   children,
-  image,
+  image = "",
   multiple,
   className,
   style = {},
@@ -15,7 +15,7 @@ const DropFileInput = ({
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
   const onDragLeave = () => wrapperRef.current.classList.remove("dragover");
   const onDrop = () => wrapperRef.current.classList.remove("dragover");
-
+  console.log(image);
   return (
     <div
       ref={wrapperRef}

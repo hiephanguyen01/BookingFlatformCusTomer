@@ -1,34 +1,36 @@
 import { BackTop } from "antd";
+import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.scss";
+import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
+import UpdateConfirm from "./components/ConfirmOrder";
+import Success from "./components/Email/Success";
 import { ModalCustom } from "./components/Modal";
 import { AuthPage } from "./pages/Auth/AuthPage";
+import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import BookStudio from "./pages/BookStudio";
 import Cart from "./pages/Cart";
 import PageClothes from "./pages/ClothesDetails/PageClothes";
 import { CustomerLayout } from "./pages/CustomerLayout";
 import Dao from "./pages/Dao";
+import DetectApp from "./pages/DetectApp/DetectApp";
 import PageDevice from "./pages/DeviceDetails/PageDevice";
 import FilterPage from "./pages/FilterPage/FilterPage";
+import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
 import { Home } from "./pages/Home";
 import PageMakeup from "./pages/MakeupDetails/PageMakeup";
 import PageModel from "./pages/ModelDetails/PageModel";
 import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
-import PageStudio from "./pages/StudioDetail/PageStudio";
-import UserAccount from "./pages/UserAccount";
-import UpdateConfirm from "./components/ConfirmOrder";
-import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
 import PostDetail from "./pages/PostDetail/PostDetail";
-import { getCurrentUser } from "./stores/actions/autheticateAction";
-import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
-import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import PageStudio from "./pages/StudioDetail/PageStudio";
 import TermsUse from "./pages/TermsUse/TermsUse";
-import Success from "./components/Email/Success";
-import DetectApp from "./pages/DetectApp/DetectApp";
+import UserAccount from "./pages/UserAccount";
 import Verify from "./pages/Verify/Verify";
+import { visitService } from "./services/VisitService";
+import { getCurrentUser } from "./stores/actions/autheticateAction";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,6 +38,44 @@ function App() {
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
+  /// count and sent time accesses
+  const countAndSendTimeAcc = async () => {
+    try {
+      const { data } = await axios.get("https://geolocation-db.com/json/");
+      localStorage.setItem(
+        "@locate@vn@ipkd4couvnnter@ccesskdtime",
+        JSON.stringify({ ...data, ts: Date.now() })
+      );
+      await visitService.count();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    (async () => {
+      if (!localStorage.getItem("@locate@vn@ipkd4couvnnter@ccesskdtime")) {
+        await countAndSendTimeAcc();
+      } else {
+        try {
+          const { data } = await axios.get("https://geolocation-db.com/json/");
+          const raw = localStorage.getItem(
+            "@locate@vn@ipkd4couvnnter@ccesskdtime"
+          );
+          const { IPv4, ts } = JSON.parse(raw);
+          if (data.IPv4 === IPv4 && Date.now() - ts > 120000) {
+            localStorage.removeItem("@locate@vn@ipkd4couvnnter@ccesskdtime");
+            await countAndSendTimeAcc();
+          }
+          if (data.IPv4 !== IPv4) {
+            localStorage.removeItem("@locate@vn@ipkd4couvnnter@ccesskdtime");
+            await countAndSendTimeAcc();
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    })();
+  }, []);
   return (
     <div className="App">
       <ModalCustom />

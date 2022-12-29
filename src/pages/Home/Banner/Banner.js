@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import BannerSkeleton from "../../../components/Skeleton/BannerSkeleton";
+import { convertImage } from "../../../utils/convertImage";
 import { REACT_APP_DB_BASE_URL_IMG } from "../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import "./banner.scss";
 const Banner = ({ banners }) => {
@@ -45,9 +46,7 @@ const Banner = ({ banners }) => {
                         <img
                           data-swiper-parallax="-300"
                           slot="container-start"
-                          src={`${REACT_APP_DB_BASE_URL_IMG}${
-                            "/" + banner.Image
-                          }`}
+                          src={convertImage(banner.Image)}
                           alt={banner.id}
                           className="bg swiper-lazy"
                         />

@@ -22,6 +22,7 @@ import toastMessage from "../ToastMessage";
 import "./order.scss";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
+import moment from "moment";
 
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -68,6 +69,15 @@ const Index = ({ linkTo = "" }) => {
       break;
   }
   const dispatch = useDispatch();
+  console.log({
+    OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
+      .add(studioDetail?.data?.HourOpenDefault, "h")
+      .add(studioDetail?.data?.MinutesOpenDefault, "m")
+      .toISOString(),
+    OrderByDateTo: moment(filterService?.OrderByDateTo)
+      .add(studioDetail?.HourCloseDefault, "h")
+      .add(studioDetail?.MinutesCloseDefault, "m"),
+  });
   useEffect(() => {
     if (chooseServiceList.length <= 0) {
       navigate(`${location.pathname.split("/order")[0]}`);
@@ -98,6 +108,36 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const calculatePrice = () => {
+    switch (filterService?.OrderByTime) {
+      case 1:
+        return chooseServiceList?.reduce(
+          (total, service) =>
+            total +
+            service?.PriceByHour *
+              calTime(
+                filterService?.OrderByTimeFrom,
+                filterService?.OrderByTimeTo
+              ),
+          0
+        );
+      case 0:
+        return chooseServiceList?.reduce(
+          (total, service) =>
+            total +
+            service.PriceByDate *
+              calDate(
+                filterService?.OrderByDateFrom,
+                filterService?.OrderByDateTo
+              ),
+          0
+        );
+
+      default:
+        break;
+    }
+  };
+
+  const calculatePriceUsePromo = () => {
     switch (filterService?.OrderByTime) {
       case 1:
         const priceByHour = chooseServiceList?.reduce(
@@ -149,6 +189,7 @@ const Index = ({ linkTo = "" }) => {
         break;
     }
   };
+
   const handleOnClickOrder = async () => {
     try {
       if (user === null) {
@@ -167,10 +208,12 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom: convertTimeSendDB(
-                filterService?.OrderByDateFrom
-              ),
-              OrderByDateTo: convertTimeSendDB(filterService?.OrderByDateTo),
+              OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
+                .add(studioDetail?.data?.HourOpenDefault, "h")
+                .add(studioDetail?.data?.MinutesOpenDefault, "m"),
+              OrderByDateTo: moment(new Date(filterService?.OrderByDateTo))
+                .add(studioDetail?.data?.HourCloseDefault, "h")
+                .add(studioDetail?.data?.MinutesCloseDefault, "m"),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -181,7 +224,9 @@ const Index = ({ linkTo = "" }) => {
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue: calculatePrice(),
+              BookingValueBeforeDiscount: calculatePrice(),
+              BookingValue: calculatePriceUsePromo(),
+              DepositValue: (calculatePriceUsePromo() * 15) / 100,
               PromoCodeId: choosePromotionUser.id,
             };
             const response = await orderService.addOrder({
@@ -205,10 +250,8 @@ const Index = ({ linkTo = "" }) => {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 1,
-              OrderByTimeFrom: convertTimeSendDB(
-                filterService?.OrderByTimeFrom
-              ),
-              OrderByTimeTo: convertTimeSendDB(filterService?.OrderByTimeTo),
+              OrderByTimeFrom: moment(filterService?.OrderByTimeFrom),
+              OrderByTimeTo: moment(filterService?.OrderByTimeTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -219,7 +262,10 @@ const Index = ({ linkTo = "" }) => {
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
-              BookingValue: calculatePrice(),
+              BookingValueBeforeDiscount: calculatePrice(),
+              BookingValue: calculatePriceUsePromo(),
+              DepositValue: (calculatePriceUsePromo() * 15) / 100,
+              PromoCodeId: choosePromotionUser.id,
             };
             const response = await orderService.addOrder({
               ...newData,
@@ -240,7 +286,7 @@ const Index = ({ linkTo = "" }) => {
           }
         }
         navigate("confirm", {
-          state: { IdentifyCode, TenantId },
+          state: { IdentifyCode, TenantId, Category: cate },
         });
       } else {
         toastMessage("Vui lòng điền đầy đủ thông tin!", "warn");
@@ -436,7 +482,7 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}
                   >
-                    {convertPrice(calculatePrice())}đ
+                    {convertPrice(calculatePriceUsePromo())}đ
                   </div>
                 </div>
               </div>
@@ -504,7 +550,6 @@ const Index = ({ linkTo = "" }) => {
                   try {
                     dispatch({
                       type: SHOW_MODAL,
-
                       Component: (
                         <VerifyOtp email={infoUser.Email} setValid={setValid} />
                       ),

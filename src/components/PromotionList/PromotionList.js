@@ -6,8 +6,10 @@ import Voucher from "../Voucher";
 
 import "./promotionList.scss";
 
-const PromotionList = ({ data }) => {
+const PromotionList = () => {
+  const { promotionCode } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
+  const { currentUser } = useSelector((state) => state.authenticateReducer);
 
   const dispatch = useDispatch();
 
@@ -22,22 +24,12 @@ const PromotionList = ({ data }) => {
   };
   return (
     <div className="promotion-list-container">
-      <h3 className="mb-16 label">{`${data.length}`} mã khuyến mãi</h3>
+      <h3 className="mb-16 label">
+        {`${currentUser?.id ? promotionCode.length : "0"}`} mã khuyến mãi
+      </h3>
       <ul className="d-flex promotion-list">
-        {data
-          ?.filter(
-            (item) => item.SaleCode.DateTimeExpire > new Date().toISOString()
-          )
-          ?.reduce((arr, item) => {
-            if (
-              promoCodeUserSave.filter((itm) => itm.id === item.SaleCode.id)
-                .length > 0
-            ) {
-              return [...arr];
-            }
-            return [...arr, item];
-          }, [])
-          .map((item, index) => (
+        {currentUser?.id &&
+          promotionCode.map((item, index) => (
             <li
               key={index}
               className="promotion-list-item active"
@@ -45,9 +37,9 @@ const PromotionList = ({ data }) => {
               onClick={showPromotion}
               style={{ cursor: "pointer" }}
             >
-              {item?.SaleCode?.TypeReduce === 1
-                ? `Giảm ${numberSlice(item?.SaleCode?.ReduceValue)}K`
-                : `Giảm ${item?.SaleCode?.ReduceValue}%`}
+              {item?.TypeReduce === 1
+                ? `Giảm ${numberSlice(item?.ReduceValue)}K`
+                : `Giảm ${item?.ReduceValue}%`}
             </li>
           ))}
       </ul>

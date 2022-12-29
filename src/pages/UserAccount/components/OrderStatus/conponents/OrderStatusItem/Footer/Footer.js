@@ -3,12 +3,13 @@ import {
   InfoCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Modal } from "antd";
+import { Input, Modal } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { socket } from "../../../../../../../components/ConnectSocket/ConnectSocket";
+import toastMessage from "../../../../../../../components/ToastMessage";
 import { chatService } from "../../../../../../../services/ChatService";
 import { orderService } from "../../../../../../../services/OrderService";
 import {
@@ -35,6 +36,8 @@ export const Footer = ({
   post,
 }) => {
   const [visible, setVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
   // const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
@@ -42,31 +45,29 @@ export const Footer = ({
 
   const handleCancelOrder = async () => {
     try {
+      if (cancelReason === "") {
+        return toastMessage("Vui lòng nhập lý do hủy đơn!");
+      }
       const formData = new FormData();
       formData.append("BookingStatus", 2);
       formData.append("Category", Category);
       formData.append("DeletionTime", new Date());
+      formData.append("DeletedNote", cancelReason);
 
       await orderService.updateOrder(formData, IdentifyCode);
       const newPageBooking = pageBooking.filter(
         (item) => item.IdentifyCode !== IdentifyCode
       );
       setPageBooking(newPageBooking);
+      setShowModal(false);
+      toastMessage("Hủy đơn thành công!", "success");
     } catch (error) {
       console.log(error);
+      toastMessage("Hủy đơn thất bại!", "error");
     }
   };
 
-  const confirm = () => {
-    Modal.confirm({
-      title: "Xác nhận hủy đơn hàng",
-      icon: <ExclamationCircleOutlined />,
-      content: "Bạn có chắc muốn hủy đơn hàng này không?",
-      okText: "Đồng ý",
-      cancelText: "Thoát",
-      onOk: () => handleCancelOrder(),
-    });
-  };
+  console.log(cancelReason);
 
   const handleOpenChatPartner = async () => {
     try {
@@ -112,16 +113,29 @@ export const Footer = ({
             >
               <UploadOutlined /> Đã thanh toán
             </Link>
-            <button className="FooterStatus__wait__button__2">
+            <Link
+              to={`/home/confirm-order/${id}`}
+              state={{
+                IdentifyCode: [IdentifyCode],
+                TenantId,
+                EvidenceImage,
+                updatePay: true,
+                Category: Category,
+              }}
+              className="FooterStatus__wait__button__2"
+            >
               Thanh toán cọc
-            </button>
+            </Link>
           </div>
         </div>
       );
     case 2:
       return (
         <div className="FooterStatus__comming">
-          <button className="FooterStatus__comming__cancel" onClick={confirm}>
+          <button
+            className="FooterStatus__comming__cancel"
+            onClick={() => setShowModal(true)}
+          >
             Hủy đơn
           </button>
           <button
@@ -133,6 +147,25 @@ export const Footer = ({
           >
             Liên hệ
           </button>
+          <Modal
+            title={"Xác nhận!"}
+            visible={showModal}
+            okText="Đồng ý"
+            cancelText="Thoát"
+            onCancel={() => setShowModal(false)}
+            onOk={() => handleCancelOrder()}
+          >
+            <>
+              <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
+              <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
+              <Input.TextArea
+                className="mt-3"
+                rows={4}
+                style={{ resize: "none" }}
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></Input.TextArea>
+            </>
+          </Modal>
         </div>
       );
     case 3:
