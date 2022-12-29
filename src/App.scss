@@ -205,18 +205,18 @@ h5 {
 }
 
 img {
-  position: relative;
+  // position: relative;
 
-  &::before {
-    content: " ";
-    display: block;
-    position: absolute;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: white;
-    background-image: url("./assets/img/image_default.png");
-  }
+  // &::before {
+  //   content: " ";
+  //   display: block;
+  //   position: absolute;
+  //   left: 0;
+  //   height: 100%;
+  //   width: 100%;
+  //   background-color: white;
+  //   background-image: url("./assets/img/image_default.png");
+  // }
 }
 
 /////////////////////////////////////////////////////

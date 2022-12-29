@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./confirmOrder.scss";
 
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { orderService } from "../../services/OrderService";
-import { convertImage } from "../../utils/convertImage";
+import { convertImage, convertImageUrl } from "../../utils/convertImage";
 import toastMessage from "../ToastMessage";
 import UploadImage from "../UploadImage";
+import { numberWithDot } from "../../utils/convert";
 
 const Index = () => {
   const [checkoutDisable, setCheckoutDisable] = useState(false);
   const location = useLocation();
-  // console.log(location);
+  console.log(location);
   const navigate = useNavigate();
   let cate;
   const nameCategory = location.pathname
@@ -44,6 +45,18 @@ const Index = () => {
       break;
   }
   const [file, setFile] = useState({});
+  const [booking, setBooking] = useState({});
+
+  useEffect(() => {
+    const getBookingByIdentify = async () => {
+      const res = await orderService.getOrderByIdentify(
+        location?.state?.IdentifyCode[0],
+        cate
+      );
+      setBooking(res.data);
+    };
+    getBookingByIdentify();
+  }, [location, cate]);
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(location?.state?.IdentifyCode);
@@ -69,10 +82,14 @@ const Index = () => {
         formData.append("Category", cate);
 
         const IdentifyCode = [...location?.state?.IdentifyCode];
-        for (let i = 0; i < IdentifyCode.length; i++) {
-          await orderService.updateOrder(formData, IdentifyCode[i]);
-          // console.log(response);
-        }
+
+        await orderService.updateOrder(formData, IdentifyCode[0]);
+        const res = await orderService.getOrderByIdentify(
+          booking?.IdentifyCode,
+          cate
+        );
+        setBooking(res.data);
+        // console.log(response);
         if (location?.state?.updatePay || false) {
           toastMessage("Cập nhật minh chứng thành công!", "success");
         } else {
@@ -105,7 +122,7 @@ const Index = () => {
             <div className="booking_code d-flex text-medium-re">
               <p>Mã Booking:</p>
               <div className="banking-mess text-medium-se">
-                {location?.state?.IdentifyCode}
+                {booking?.IdentifyCode}
               </div>
             </div>
             <div
@@ -121,7 +138,7 @@ const Index = () => {
               Số tiền cọc:
             </div>
             <div className="text-medium-se" style={{ color: "#E22828" }}>
-              250.000đ
+              {numberWithDot(booking?.DepositValue)}đ
             </div>
           </div>
         </div>
@@ -196,7 +213,7 @@ const Index = () => {
                 textAlign: "start",
               }}
             >
-              {location?.state?.IdentifyCode}
+              {booking?.IdentifyCode}
             </div>
           </div>
         </div>
@@ -212,9 +229,7 @@ const Index = () => {
             <UploadImage
               onChangeFile={onChangeFile}
               multiple={true}
-              image={
-                file.preview || convertImage(location?.state?.EvidenceImage)
-              }
+              image={file.preview || convertImageUrl(booking?.EvidenceImage)}
             >
               <div className="btn_upload">Tải ảnh lên</div>
             </UploadImage>

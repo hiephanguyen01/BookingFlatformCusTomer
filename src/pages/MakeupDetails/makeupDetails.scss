@@ -206,6 +206,24 @@
             &.active {}
         }
     }
+
+    .detail-description {
+        list-style: disc outside;
+        margin-left: 40px !important;
+
+        li {
+            font-weight: 400;
+            font-size: 16px;
+            color: #222222;
+        }
+
+        p {
+            margin-left: -15px !important;
+            font-weight: 400;
+            font-size: 16px;
+            color: #222222;
+        }
+    }
 }
 
 .dropdown {
@@ -219,7 +237,7 @@
 }
 
 .btn_add {
-    background-color: $neutral-100  !important;
+    background-color: $neutral-100 !important;
     border-radius: 8px !important;
     font-weight: 700 !important;
     font-size: 14px !important;
@@ -229,7 +247,7 @@
 }
 
 .btn_order {
-    background-color: $primary-700  !important;
+    background-color: $primary-700 !important;
     border-radius: 8px !important;
     font-weight: 700 !important;
     font-size: 14px !important;

@@ -169,7 +169,6 @@ export const studioPostReducer = (state = initialState, action) => {
         listTimeSelected: action.data,
       };
     case ADD_TIME_ORDER:
-      console.log(action.data);
       let newArray = [...state.listTimeSelected];
       if (newArray.length > 0) {
         const existed = newArray.findIndex(
@@ -190,7 +189,7 @@ export const studioPostReducer = (state = initialState, action) => {
       };
     case SELECT_TIME_ORDER:
       let newFilter = { ...state.filterService };
-
+      console.log(newFilter);
       if (newFilter.id == action.data.id) {
         newFilter = {};
       } else {
@@ -218,7 +217,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                filterService: {},
+                // filterService: {},
               };
             }
           } else {
@@ -250,7 +249,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                filterService: {},
+                // filterService: {},
               };
             }
           }
@@ -279,7 +278,7 @@ export const studioPostReducer = (state = initialState, action) => {
       // console.log("listnew", listnew);
       return {
         ...state,
-        listTimeSelected: [],
+        // listTimeSelected: [],
         filterService: {},
       };
     case "SET_TIME_ORDER_SELECTED":
