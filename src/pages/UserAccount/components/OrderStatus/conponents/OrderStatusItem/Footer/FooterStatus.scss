@@ -1,16 +1,19 @@
 @import "../../../../../../../App.scss";
+
 .FooterStatus {
   &__wait {
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
     height: 100%;
+
     &__prove {
       display: flex;
       align-items: center;
       color: #ba8600;
       padding-left: 10px;
-      & > div {
+
+      &>div {
         margin-left: 10px;
         font-weight: 400;
         font-size: 14px;
@@ -18,10 +21,12 @@
         max-width: 317px;
       }
     }
+
     &__button {
       width: 34%;
       display: flex;
       justify-content: space-between;
+
       &__1 {
         width: 48%;
         background-color: #fff;
@@ -34,12 +39,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
         &:hover {
           cursor: pointer;
           color: #000;
           border: 1px solid #000;
         }
       }
+
       &__2 {
         width: 48%;
         background-color: $secondary-700;
@@ -49,6 +56,10 @@
         font-size: 16px;
         line-height: 22px;
         border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         &:hover {
           cursor: pointer;
           filter: brightness(120%);
@@ -56,11 +67,13 @@
       }
     }
   }
+
   &__comming {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     height: 100%;
+
     &__cancel {
       width: 120px;
       margin-left: 10px;
@@ -70,11 +83,13 @@
       color: $primary-700;
       border: 1px solid $primary-700;
       font-weight: 400;
+
       &:hover {
         cursor: pointer;
         filter: brightness(120%);
       }
     }
+
     &__contact {
       width: 120px;
       margin-left: 10px;
@@ -86,28 +101,33 @@
       font-weight: 400;
       font-size: 16px;
       line-height: 22px;
+
       &:hover {
         cursor: pointer;
         filter: brightness(120%);
       }
     }
   }
+
   &__complete {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     height: 100%;
+
     &__modal {
       &__body {
         display: flex;
         align-items: center;
         flex-direction: column;
         padding: 0 5px;
+
         & h3 {
           font-weight: 700 !important;
           font-size: 20px !important;
           line-height: 27px !important;
         }
+
         &__info {
           width: 100%;
           border: 1px solid $neutral-200;
@@ -116,14 +136,17 @@
           padding: 10px;
           display: flex;
           align-items: center;
+
           & img {
             border-radius: 10px;
           }
+
           &__content {
             font-weight: 400;
             font-size: 16px;
             line-height: 22px;
             margin-left: 10px;
+
             &__title {
               font-weight: 600;
               font-size: 18px;
@@ -131,9 +154,11 @@
             }
           }
         }
+
         &__stars {
           margin: 15px;
         }
+
         & textarea {
           width: 100%;
           height: 110px;
@@ -141,36 +166,43 @@
           background-color: $neutral-50;
           border: none;
           padding: 10px;
+
           &:focus {
             outline: none;
           }
         }
+
         &__img {
           display: flex;
           width: 100%;
           justify-content: space-between;
+
           &__footer {
             display: flex;
             justify-content: space-between;
             width: 100%;
             margin-top: 5px;
-            & > div {
+
+            &>div {
               width: 80px;
               justify-content: center;
               display: flex;
             }
           }
         }
+
         &__isAnonymous {
           width: 100%;
           margin-top: 15px;
           font-weight: 600;
           font-size: 18px;
         }
+
         &__confirm {
           display: flex;
           width: 100%;
           justify-content: flex-end;
+
           &__1 {
             width: 80px;
             padding: 8px;
@@ -178,11 +210,13 @@
             border: none;
             font-weight: 600;
             color: $neutral-500;
+
             &:hover {
               cursor: pointer;
               filter: brightness(120%);
             }
           }
+
           &__2 {
             margin-left: 10px;
             width: 120px;
@@ -192,6 +226,7 @@
             color: #fff;
             border: none;
             background-color: $primary-700;
+
             &:hover {
               cursor: pointer;
               filter: brightness(120%);
@@ -200,10 +235,12 @@
         }
       }
     }
+
     &__rating {
       .ant-rate {
         font-size: 25px !important;
       }
+
       width: 120px;
       background-color: #fff;
       border: 1px solid $secondary-800;
@@ -213,11 +250,13 @@
       font-size: 16px;
       line-height: 22px;
       border-radius: 5px;
+
       &:hover {
         cursor: pointer;
         filter: brightness(120%);
       }
     }
+
     &__order {
       width: 120px;
       margin-left: 10px;
@@ -229,17 +268,20 @@
       font-size: 16px;
       line-height: 22px;
       border-radius: 5px;
+
       &:hover {
         cursor: pointer;
         filter: brightness(120%);
       }
     }
   }
+
   &__cancel {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     height: 100%;
+
     &__order {
       width: 120px;
       margin-left: 10px;
@@ -251,6 +293,7 @@
       font-size: 16px;
       line-height: 22px;
       border-radius: 5px;
+
       &:hover {
         cursor: pointer;
         filter: brightness(120%);
@@ -258,6 +301,7 @@
     }
   }
 }
+
 .ant-modal-content {
   border-radius: 10px !important;
 }

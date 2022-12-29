@@ -11,6 +11,25 @@
   gap: 12px;
 }
 
+.detail-description {
+  list-style: disc outside;
+  margin-left: 40px !important;
+
+  li {
+    font-weight: 400;
+    font-size: 16px;
+    color: #222222;
+  }
+
+  p {
+    margin-left: -15px !important;
+    font-weight: 400;
+    font-size: 16px;
+    color: #222222;
+  }
+}
+
+
 .box1 {
   padding: 29px;
   background-color: #fff;
@@ -113,11 +132,9 @@
         top: 0;
         left: 0;
         right: 0;
-        background: linear-gradient(
-          0deg,
-          rgba(0, 0, 0, 0.3),
-          rgba(0, 0, 0, 0.3)
-        );
+        background: linear-gradient(0deg,
+            rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0.3));
       }
 
       .number {
@@ -371,6 +388,7 @@
       padding: 26px;
       background-color: #fff;
     }
+
     .order {
       padding: 26px;
       background-color: #fff;

@@ -33,13 +33,12 @@ const Index = ({ column, row = [], rowNumber = 5, className = "", style }) => {
           }}
         >
           {/* <SelectTimeOptionService service={service} /> */}
-          {(filterService.OrderByTime === -1 ||
-            filterService.OrderByTime === undefined) && (
-            <div className="warning-choose-time">
-              <ExclamationCircleOutlined className="me-5" />
-              Chọn khung giờ bạn muốn đặt để xem giá cho từng loại dịch vụ
-            </div>
-          )}
+
+          <div className="warning-choose-time">
+            <ExclamationCircleOutlined className="me-5" />
+            Chọn khung giờ bạn muốn đặt để xem giá cho từng loại dịch vụ
+          </div>
+
           <Row className="table-header">
             {column.map((item, index) => (
               <Col key={index} span={item.size} className="table-header-col">

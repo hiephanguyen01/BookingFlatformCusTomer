@@ -17,6 +17,8 @@ import {
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
 import { SET_CHOOSE_SERVICE } from "../types/OrderType";
+import moment from "moment";
+import toastMessage from "../../components/ToastMessage";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: true });
@@ -301,19 +303,53 @@ export const setFilterStudioService =
     dispatch({ type: LOADING_SERVICE, payload: true });
     try {
       dispatch({ type: SET_POST_PAGINATION, payload: { limit, page } });
-      dispatch({ type: SET_FILTER_SERVICE, payload: filter });
+      // dispatch({ type: SET_FILTER_SERVICE, payload: filter });
     } catch (error) {
       console.error(error);
     }
     dispatch({ type: LOADING_SERVICE, payload: false });
   };
 
-export const handlerSelectServiceAction = (data) => {
+export const handlerSelectServiceAction = (data, chooseServiceTime) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: SELECT_TIME_ORDER, data: { id: data.id } });
-      console.log("action data", data);
+      if (chooseServiceTime.OrderByTime === 1) {
+        if (
+          chooseServiceTime?.disableTimeOrder?.some((item) => {
+            return (
+              parseInt(item) >=
+                parseInt(
+                  moment(chooseServiceTime?.OrderByTimeFrom).utc().hour()
+                ) &&
+              parseInt(item) <=
+                parseInt(moment(chooseServiceTime?.OrderByTimeTo).utc().hour())
+            );
+          })
+        ) {
+          return toastMessage(
+            "Đã có người đặt trong khoảng thời gian này!",
+            "warning"
+          );
+        }
+      } else if (chooseServiceTime.OrderByTime === 0) {
+        if (
+          chooseServiceTime.disableDate.some(
+            (item) =>
+              moment(item, "DD-MM-YYYY") >=
+                moment(chooseServiceTime?.OrderByDateFrom) &&
+              moment(item, "DD-MM-YYYY") <=
+                moment(chooseServiceTime?.OrderByDateTo)
+          )
+        ) {
+          return toastMessage(
+            "Đã có người đặt trong khoảng thời gian này!",
+            "warning"
+          );
+        }
+        // dispatch({ type: SELECT_TIME_ORDER, data: { id: data.id } });
+      }
       dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
+      dispatch({ type: SET_FILTER_SERVICE, payload: chooseServiceTime });
       // if (filterService.id == data.id) {
       //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
       //       setChooseService([]);

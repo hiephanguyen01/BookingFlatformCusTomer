@@ -5,6 +5,8 @@ import {
   LoadingOutlined,
   MoreOutlined,
   ShoppingCartOutlined,
+  SkinOutlined,
+  TeamOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 import { Button, Carousel, Image, Popover, Rate } from "antd";
@@ -35,7 +37,10 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import {
+  DELETE_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE,
+} from "../../stores/types/OrderType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
@@ -46,6 +51,9 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+import expand from "../../assets/svg/expand.svg";
+import chair from "../../assets/svg/chair.svg";
+import conditional from "../../assets/svg/conditional.svg";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -64,8 +72,13 @@ export const StudioDetail = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
-  const { studioDetail, studioNear, listStudioSimilar, filterService } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail,
+    studioNear,
+    listStudioSimilar,
+    filterService,
+    listTimeSelected,
+  } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
@@ -92,6 +105,7 @@ export const StudioDetail = () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: "SET_SERVICE_SELECT", payload: null });
       dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
+      dispatch({ type: "SET_TIME_ORDER", data: [] });
     };
   }, [dispatch]);
   useEffect(() => {
@@ -154,110 +168,125 @@ export const StudioDetail = () => {
                 preview={{
                   visible: Boolean(visible === data.id),
                   onVisibleChange: (vis) => setVisible(vis),
-                }}>
+                }}
+              >
                 {data.Image.map((val) => (
                   <Image src={convertImage(val)} />
                 ))}
               </Image.PreviewGroup>
             </div>
             <div
+              className="mt-10"
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}>
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                  minWidth: "60px",
-                }}>
-                Phòng
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-
-                  display: "-webkit-box",
-                  lineHeight: "18px",
-                  webkitLineClamp: "1",
-                  webkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  height: "18px",
-                }}>
-                {data?.Name}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}>
-              <span
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}>
-                Diện tích
-              </span>
-              <span
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}>
-                {data?.Area}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: "10px",
-              }}>
-              <div
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                  minWidth: "100px",
-                }}>
-                Phong cách
-              </div>
-              <div
-                style={{
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-
-                  display: "-webkit-box",
-                  lineHeight: "18px",
-                  webkitLineClamp: "1",
-                  webkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  height: "18px",
-                }}>
-                {data.Style}
-              </div>
-            </div>
-            <div
-              className="mt-15"
-              style={{
-                color: "#616161",
+                color: "#222222",
                 fontSize: "16px",
-                fontWeight: "400",
-              }}>
-              {data.Description}
+                fontWeight: "700",
+                textTransform: "uppercase",
+              }}
+            >
+              {data?.Name}
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={expand}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Kích thước
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Diện tích {data?.Area}</li>
+                <li>Chiều rộng {data?.Width}m</li>
+                <li>Chiều dài {data?.Length}m</li>
+                <li>Chiều cao trần {data?.Height}m</li>
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={chair}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Thiết bị có sẵn
+              </div>
+              <ul className={cx("detail-description")}>
+                {data?.HasBackground && <li>{data?.BackgroundDescription}</li>}
+                {data?.HasLamp && <li>{data?.LampDescription}</li>}
+                {data?.HasTable && <li>Bàn</li>}
+                {data?.HasChair && <li>Ghế</li>}
+                {data?.HasSofa && <li>Sofa</li>}
+                {data?.HasFlower && <li>Hoa</li>}
+                {data?.HasOtherDevice && (
+                  <li>{data?.OtherDeviceDescription}</li>
+                )}
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={conditional}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Tiện ích đi kèm
+              </div>
+              <ul className={cx("detail-description")}>
+                {data?.HasAirConditioner && <li>Máy lạnh</li>}
+                {data?.HasFan && <li>Quạt</li>}
+                {data?.HasDressingRoom && <li>Phòng thay đồ riêng</li>}
+                {data?.HasWC && <li>Nhà vệ sinh</li>}
+                {data?.HasCamera && <li>Camera</li>}
+                {data?.HasWifi && <li>Wifi</li>}
+                {data?.HasMotorBikeParking && <li>Chổ để xe máy</li>}
+                {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
+                {data?.HasSupporter && <li>Người hỗ trợ</li>}
+              </ul>
+            </div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <TeamOutlined
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Số lượng khách
+              </div>
+              <ul className={cx("detail-description")}>
+                <li>Số lượng khách tối đa: {data?.MaximumCustomer} người</li>
+                <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
+              </ul>
             </div>
           </div>
         ),
@@ -283,7 +312,8 @@ export const StudioDetail = () => {
         key: "currency",
         render: () => (
           <>
-            {filterService.OrderByTime !== -1 && (
+            {listTimeSelected?.find((item) => item.id === data?.id)
+              ?.OrderByTime !== -1 && (
               <div className="mb-20">
                 <div
                   style={{
@@ -291,19 +321,23 @@ export const StudioDetail = () => {
                     gap: "10px",
                     alignItems: "center",
                     flexWrap: "wrap",
-                  }}>
+                  }}
+                >
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}>
-                    {filterService.OrderByTime === 1 &&
+                    }}
+                  >
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
-                    {filterService.OrderByTime === 0 &&
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
@@ -315,13 +349,16 @@ export const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
-                    {filterService.OrderByTime === 1 &&
+                    }}
+                  >
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
-                    {filterService.OrderByTime === 0 &&
+                    {listTimeSelected?.find((item) => item.id === data?.id)
+                      ?.OrderByTime === 0 &&
                       data?.PriceByDate?.toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
@@ -333,51 +370,53 @@ export const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   {data?.PriceNote}
                 </p>
               </div>
             )}
             <div className="">
-              {filterService?.id === data?.id ? (
-                <div
-                  onClick={() => dispatch({ type: "REMOVE_SELECT_TIME" })}
+              {chooseServiceList?.find((item) => item.id === data?.id) ? (
+                <Button
+                  type="default"
+                  size="large"
+                  onClick={() => {
+                    dispatch({ type: DELETE_CHOOSE_SERVICE });
+                    dispatch({ type: "SET_SELECT_TIME_ORDER" });
+                  }}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "13px 25px",
-
+                    width: "100%",
+                    color: "#000",
                     backgroundColor: "#E7E7E7",
+                    border: "none",
+
                     borderRadius: "8px",
-                    cursor: "pointer",
                     fontWeight: "700",
                     fontSize: "13px",
                     lineHeight: "19px",
+
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Bỏ chọn
-                </div>
+                </Button>
               ) : (
-                <div
+                <Button
                   onClick={() => handleChooseService(data)}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "13px 25px",
-
-                    border: "1px solid #E22828",
-                    color: "#E22828",
+                    width: "100%",
                     borderRadius: "8px",
-                    cursor: "pointer",
                     fontWeight: "700",
                     fontSize: "13px",
+
                     lineHeight: "19px",
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                  size="large"
+                >
                   Chọn
-                </div>
+                </Button>
               )}
             </div>
           </>
@@ -392,30 +431,32 @@ export const StudioDetail = () => {
     //   return;
     // } else {
     // }
-    console.log(data);
-    dispatch(handlerSelectServiceAction(data));
-
-    // if (
-    //   (filterService.OrderByTime === 0 &&
-    //     filterService.OrderByDateFrom !== "" &&
-    //     filterService.OrderByDateTo !== "") ||
-    //   (filterService.OrderByTime === 1 &&
-    //     filterService.OrderByTimeFrom !== "" &&
-    //     filterService.OrderByTimeTo !== "")
-    // ) {
-    // if (filterService.id == data.id) {
-    //   if (chooseServiceList.filter((item) => item.id === data.id).length > 0) {
-    //     setChooseService([]);
-    //   } else {
-    //     setChooseService([{ ...data }]);
-    //   }
-    // }
-    // const existed = chooseServiceList.findIndex((item) => item.id == data.id);
-    // if (existed !== -1) {
-    //   setChooseService([]);
-    // } else {
-    //   setChooseService([{ ...data }]);
-    // }
+    const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+    if (findSelectTime) {
+      if (
+        findSelectTime.OrderByTime === 1 &&
+        findSelectTime.OrderByTimeFrom !== undefined &&
+        findSelectTime.OrderByTimeFrom !== "" &&
+        findSelectTime.OrderByTimeTo !== undefined &&
+        findSelectTime.OrderByTimeTo !== "" &&
+        findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else if (
+        findSelectTime.OrderByTime === 0 &&
+        findSelectTime.OrderByDateFrom !== undefined &&
+        findSelectTime.OrderByDateFrom !== "" &&
+        findSelectTime.OrderByDateTo !== undefined &&
+        findSelectTime.OrderByDateTo !== "" &&
+        findSelectTime.OrderByDateTo !== findSelectTime.OrderByDateFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else {
+        return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+      }
+    } else {
+      return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+    }
   };
 
   const handleBook = () => {
@@ -426,14 +467,7 @@ export const StudioDetail = () => {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
-  // const handleAddCart = () => {
-  //   if (chooseServiceList.length > 0) {
-  //     dispatch(addOrder(cate, chooseServiceList));
-  //     toastMessage("Đã thêm vào giỏ hàng!", "success");
-  //   } else {
-  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
-  //   }
-  // };
+
   const handleChangeLike = (e) => {
     if (currentUser) {
       dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
@@ -458,7 +492,8 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -466,7 +501,8 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -486,7 +522,8 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}>
+                      }}
+                    >
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -509,23 +546,27 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}>
+                          }}
+                        >
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}>
+                            }}
+                          >
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click">
+                      trigger="click"
+                    >
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -538,11 +579,13 @@ export const StudioDetail = () => {
                   <Rate
                     disabled
                     allowHalf
-                    value={studioDetail?.data?.TotalRate}></Rate>
+                    value={studioDetail?.data?.TotalRate}
+                  ></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}>
+                    style={{ fontSize: "15px" }}
+                  >
                     {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
@@ -604,7 +647,8 @@ export const StudioDetail = () => {
                               textDecoration: "line-through",
                               fontSize: " 16px",
                               color: "#828282",
-                            }}>
+                            }}
+                          >
                             {filterService?.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
@@ -643,7 +687,8 @@ export const StudioDetail = () => {
                             color: "#E22828",
                             fontSize: "20px",
                             fontWeight: "700",
-                          }}>
+                          }}
+                        >
                           {filterService?.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
@@ -686,7 +731,8 @@ export const StudioDetail = () => {
                               "",
                               {}
                             )
-                          }>
+                          }
+                        >
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
@@ -697,7 +743,8 @@ export const StudioDetail = () => {
                             chooseServiceList.length > 0 && filterService.id > 0
                               ? false
                               : true
-                          }>
+                          }
+                        >
                           Đặt ngay
                         </Button>
                       </div>
