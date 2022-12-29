@@ -83,7 +83,7 @@ export const ModalImage = ({ title = "", data }) => {
           {data?.map((item, idx) => {
             return (
               <SwiperSlide
-              key={idx}
+                key={idx}
                 className="slide-item"
                 style={{ width: "187px", height: "108px" }}
               >

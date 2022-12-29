@@ -142,7 +142,7 @@ export const StudioDetail = () => {
   //   console.log(data.id);
   //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
   // };
-
+  console.log("seveice phong", studioDetail?.service);
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
