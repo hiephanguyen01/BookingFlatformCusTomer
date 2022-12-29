@@ -36,6 +36,7 @@ export const Footer = ({
   post,
 }) => {
   const [visible, setVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   // const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
@@ -44,49 +45,29 @@ export const Footer = ({
 
   const handleCancelOrder = async () => {
     try {
-      console.log(cancelReason, 123);
       if (cancelReason === "") {
         return toastMessage("Vui lòng nhập lý do hủy đơn!");
       }
-      // const formData = new FormData();
-      // formData.append("BookingStatus", 2);
-      // formData.append("Category", Category);
-      // formData.append("DeletionTime", new Date());
-      // formData.append("DeletedNote", cancelReason);
+      const formData = new FormData();
+      formData.append("BookingStatus", 2);
+      formData.append("Category", Category);
+      formData.append("DeletionTime", new Date());
+      formData.append("DeletedNote", cancelReason);
 
-      // await orderService.updateOrder(formData, IdentifyCode);
-      // const newPageBooking = pageBooking.filter(
-      //   (item) => item.IdentifyCode !== IdentifyCode
-      // );
-      // setPageBooking(newPageBooking);
+      await orderService.updateOrder(formData, IdentifyCode);
+      const newPageBooking = pageBooking.filter(
+        (item) => item.IdentifyCode !== IdentifyCode
+      );
+      setPageBooking(newPageBooking);
+      setShowModal(false);
+      toastMessage("Hủy đơn thành công!", "success");
     } catch (error) {
       console.log(error);
+      toastMessage("Hủy đơn thất bại!", "error");
     }
   };
 
   console.log(cancelReason);
-
-  const confirm = () => {
-    Modal.confirm({
-      title: "Xác nhận hủy đơn hàng",
-      icon: <ExclamationCircleOutlined />,
-      content: (
-        <>
-          <div className="">Bạn có chắc muốn hủy đơn hàng này không?</div>
-          <div className="mt-3">Vui lòng nhập lý do hủy đơn?</div>
-          <Input.TextArea
-            className="mt-3"
-            rows={4}
-            style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}
-          ></Input.TextArea>
-        </>
-      ),
-      okText: "Đồng ý",
-      cancelText: "Thoát",
-      onOk: () => handleCancelOrder(),
-    });
-  };
 
   const handleOpenChatPartner = async () => {
     try {
@@ -151,7 +132,10 @@ export const Footer = ({
     case 2:
       return (
         <div className="FooterStatus__comming">
-          <button className="FooterStatus__comming__cancel" onClick={confirm}>
+          <button
+            className="FooterStatus__comming__cancel"
+            onClick={() => setShowModal(true)}
+          >
             Hủy đơn
           </button>
           <button
@@ -163,6 +147,25 @@ export const Footer = ({
           >
             Liên hệ
           </button>
+          <Modal
+            title={"Xác nhận!"}
+            visible={showModal}
+            okText="Đồng ý"
+            cancelText="Thoát"
+            onCancel={() => setShowModal(false)}
+            onOk={() => handleCancelOrder()}
+          >
+            <>
+              <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
+              <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
+              <Input.TextArea
+                className="mt-3"
+                rows={4}
+                style={{ resize: "none" }}
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></Input.TextArea>
+            </>
+          </Modal>
         </div>
       );
     case 3:
