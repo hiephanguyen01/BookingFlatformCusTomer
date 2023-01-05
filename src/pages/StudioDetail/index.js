@@ -447,8 +447,7 @@ export const StudioDetail = () => {
         findSelectTime.OrderByDateFrom !== undefined &&
         findSelectTime.OrderByDateFrom !== "" &&
         findSelectTime.OrderByDateTo !== undefined &&
-        findSelectTime.OrderByDateTo !== "" &&
-        findSelectTime.OrderByDateTo !== findSelectTime.OrderByDateFrom
+        findSelectTime.OrderByDateTo !== ""
       ) {
         dispatch(handlerSelectServiceAction(data, findSelectTime));
       } else {
