@@ -84,7 +84,7 @@ export const VerifyOtp = ({ setValid, email }) => {
         onClick={() => {
           dispatch({ type: HIDE_MODAL });
           setCountDown(60);
-          setValue("")
+          setValue("");
         }}
       />
       <h2>Verify Your Account</h2>
@@ -124,8 +124,7 @@ export const VerifyOtp = ({ setValid, email }) => {
                 } catch (error) {
                   console.log(error);
                 }
-              }}
-            >
+              }}>
               Gửi lại
             </button>
           </div>
@@ -136,8 +135,7 @@ export const VerifyOtp = ({ setValid, email }) => {
               onClick={() => onSubmit()}
               loading={false}
               size="large"
-              className={cx("continue-sign-up")}
-            >
+              className={cx("continue-sign-up")}>
               Tiếp tục
             </Button>
           ) : (
@@ -146,8 +144,7 @@ export const VerifyOtp = ({ setValid, email }) => {
               loading={false}
               disabled
               size="large"
-              className={cx("continue-sign-up")}
-            >
+              className={cx("continue-sign-up")}>
               Tiếp tục
             </Button>
           )}
