@@ -261,7 +261,7 @@ const FilterPage = () => {
                       <Option value={""}>Tất cả</Option>
                       {provinces &&
                         provinces.map((val) => (
-                          <Option value={val.id}>{val.Name}</Option>
+                          <Option value={Number(val.Code)}>{val.Name}</Option>
                         ))}
                     </Select>
                   </Form.Item>
