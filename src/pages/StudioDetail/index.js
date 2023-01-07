@@ -204,7 +204,7 @@ export const StudioDetail = () => {
                 Kích thước
               </div>
               <ul className={cx("detail-description")}>
-                <li>Diện tích {data?.Area}</li>
+                <li>Diện tích {data?.Area}m2</li>
                 <li>Chiều rộng {data?.Width}m</li>
                 <li>Chiều dài {data?.Length}m</li>
                 <li>Chiều cao trần {data?.Height}m</li>
@@ -447,8 +447,7 @@ export const StudioDetail = () => {
         findSelectTime.OrderByDateFrom !== undefined &&
         findSelectTime.OrderByDateFrom !== "" &&
         findSelectTime.OrderByDateTo !== undefined &&
-        findSelectTime.OrderByDateTo !== "" &&
-        findSelectTime.OrderByDateTo !== findSelectTime.OrderByDateFrom
+        findSelectTime.OrderByDateTo !== ""
       ) {
         dispatch(handlerSelectServiceAction(data, findSelectTime));
       } else {
