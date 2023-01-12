@@ -13,7 +13,7 @@
       color: #ba8600;
       padding-left: 10px;
 
-      &>div {
+      & > div {
         margin-left: 10px;
         font-weight: 400;
         font-size: 14px;
@@ -183,7 +183,7 @@
             width: 100%;
             margin-top: 5px;
 
-            &>div {
+            & > div {
               width: 80px;
               justify-content: center;
               display: flex;
@@ -300,8 +300,4 @@
       }
     }
   }
-}
-
-.ant-modal-content {
-  border-radius: 10px !important;
 }
