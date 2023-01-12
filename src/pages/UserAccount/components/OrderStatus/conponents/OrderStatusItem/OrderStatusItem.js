@@ -83,8 +83,7 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}
-          >
+            onClick={navigateToDetail}>
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
@@ -99,6 +98,9 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__body">
           <div className="OrderStatusItem__body__info">
             <img
+              onClick={() =>
+                navigate(`/home/user/orderStatus/${id}?categoryId=${category}`)
+              }
               alt=""
               className="OrderStatusItem__body__info__pic"
               src={
@@ -108,7 +110,13 @@ const OrderStatusItem = ({
               }
             />
             <div className="OrderStatusItem__body__info__content">
-              <div className="OrderStatusItem__body__info__content__title">
+              <div
+                className="OrderStatusItem__body__info__content__title"
+                onClick={() =>
+                  navigate(
+                    `/home/user/orderStatus/${id}?categoryId=${category}`
+                  )
+                }>
                 {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">

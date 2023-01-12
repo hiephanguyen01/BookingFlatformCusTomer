@@ -11,6 +11,7 @@ import Rating from "./components/Rating/Rating";
 import RecentlyViewed from "./components/RecentlyViewed/RecentlyViewed";
 import TermsUser from "../TermsUse/TermsUse";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
+import OrderDetail from "./components/OrderStatus/OrderDetail";
 
 const Index = () => {
   return (
@@ -20,8 +21,7 @@ const Index = () => {
         margin: "auto",
         backgroundColor: "rgb(245, 245, 245)",
         padding: "2rem 0",
-      }}
-    >
+      }}>
       <div style={{ maxWidth: "1200px", margin: "auto" }}>
         <Row>
           <Col span={6}>
@@ -32,6 +32,7 @@ const Index = () => {
               <Route path="" element={<Navigate to="accountInfo" />} />
               <Route path="accountInfo" element={<AccountInfo />} />
               <Route path="orderStatus" element={<OrderStatus />} />
+              <Route path="orderStatus/:id" element={<OrderDetail />} />
               <Route path="liked" element={<Liked />} />
               <Route path="rating" element={<Rating />} />
               <Route path="posts" element={<Posts />} />
