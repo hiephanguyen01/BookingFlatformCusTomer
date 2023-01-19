@@ -2,9 +2,9 @@ import { Row } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import "./imagePost.scss";
+import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { ModalImage } from "../ModalImg";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import "./imagePost.scss";
 
 const ImagePost = ({ data = [] }) => {
   // const [toggle, setToggle] = useState(false);
@@ -26,14 +26,13 @@ const ImagePost = ({ data = [] }) => {
                       Component: <ModalImage data={data} />,
                     })
                   }
-                  className="image_item"
-                >
+                  className="image_item">
                   <img
                     alt=""
                     src={`${
                       item.includes("https://drive.google.com/")
                         ? item
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                        : IMG(item)
                     }`}
                   />
                 </div>
@@ -46,13 +45,14 @@ const ImagePost = ({ data = [] }) => {
                       Component: <ModalImage data={data} />,
                     })
                   }
-                  className={`image_item ${data?.length > 5 ? "img_more" : ""}`}
-                >
+                  className={`image_item ${
+                    data?.length > 5 ? "img_more" : ""
+                  }`}>
                   <img
                     src={`${
                       item.includes("https://drive.google.com/")
                         ? item
-                        : REACT_APP_DB_BASE_URL_IMG + "/" + item
+                        : IMG(item)
                     }`}
                     alt=""
                     // onError={(e) => e.target.classList.add("d-none")}

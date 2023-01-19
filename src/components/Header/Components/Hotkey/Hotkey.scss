@@ -1,0 +1,15 @@
+.Hotkey {
+  .ant-carousel .slick-prev,
+  .ant-carousel .slick-next,
+  .ant-carousel .slick-prev:hover,
+  .ant-carousel .slick-next:hover {
+    align-items: center;
+    font-size: 10px;
+    color: currentColor;
+    z-index: 10000;
+    display: flex !important;
+  }
+  .ant-carousel .slick-list .slick-slide > div > div {
+    display: flex !important;
+  }
+}
