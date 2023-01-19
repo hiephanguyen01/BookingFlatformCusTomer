@@ -6,14 +6,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
-import "swiper/css/thumbs";
 import "swiper/css/pagination";
+import "swiper/css/thumbs";
 
 // import required modules
-import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
-import { useDispatch } from "react-redux";
-import { HIDE_MODAL } from "../../../stores/types/modalTypes";
 import { CloseOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { FreeMode, Navigation, Pagination, Thumbs } from "swiper";
+import { HIDE_MODAL } from "../../../stores/types/modalTypes";
+import { IMG } from "../../../utils/REACT_APP_DB_BASE_URL_IMG";
 export const ModalImage = ({ data }) => {
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -25,8 +26,7 @@ export const ModalImage = ({ data }) => {
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-      }}
-    >
+      }}>
       <h3>ALBUM CHỤP PHONG CẢNH</h3>
       <div onClick={() => dispatch({ type: HIDE_MODAL })} className={"close"}>
         <CloseOutlined style={{ fontSize: "22px" }} />
@@ -46,15 +46,11 @@ export const ModalImage = ({ data }) => {
           }}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Navigation, Pagination, Thumbs]}
-          className="mySwiper2"
-        >
+          className="mySwiper2">
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
-                <img
-                  src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
-                  alt=""
-                />
+                <img src={IMG(item)} alt="" />
               </SwiperSlide>
             );
           })}
@@ -66,8 +62,7 @@ export const ModalImage = ({ data }) => {
           height: "108px",
           padding: "0 40px",
           marginTop: "30px",
-        }}
-      >
+        }}>
         <Swiper
           onSwiper={setThumbsSwiper}
           spaceBetween={10}
@@ -75,22 +70,20 @@ export const ModalImage = ({ data }) => {
           //   freeMode={true}
           watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Thumbs]}
-          className="mySwiper"
-        >
+          className="mySwiper">
           {data?.map((item, idx) => {
             return (
               <SwiperSlide
                 key={idx}
                 className="slide-item"
-                style={{ width: "187px", height: "108px" }}
-              >
+                style={{ width: "187px", height: "108px" }}>
                 <img
                   style={{
                     width: "187px",
                     height: "108px",
                     objectFit: "cover",
                   }}
-                  src={`${process.env.REACT_APP_DB_BASE_URL_IMG}/${item}`}
+                  src={IMG(item)}
                   alt=""
                 />
               </SwiperSlide>

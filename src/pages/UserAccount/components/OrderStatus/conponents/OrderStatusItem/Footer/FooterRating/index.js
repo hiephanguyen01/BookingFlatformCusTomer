@@ -27,7 +27,6 @@ export const FooterRating = ({ id, setVisible, visible }) => {
   if (loading) {
     return <></>;
   }
-  console.log(id);
   return (
     <>
       {data.findIndex(
