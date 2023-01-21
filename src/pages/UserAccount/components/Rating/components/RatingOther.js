@@ -1,11 +1,11 @@
+import { CheckCircleOutlined } from "@ant-design/icons";
 import { Divider, Rate } from "antd";
 import React from "react";
-import { CheckCircleOutlined } from "@ant-design/icons";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
-import { convertTime } from "../../../../../utils/convert";
-import "./RatingItm.scss";
 import { useSelector } from "react-redux";
 import { ImageDetect } from "../../../../../components/ImageDetect/ImageDetect";
+import { convertTime } from "../../../../../utils/convert";
+import { IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import "./RatingItm.scss";
 export const RatingOther = ({ info }) => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const Name = info.PhotographerPost
@@ -56,9 +56,7 @@ export const RatingOther = ({ info }) => {
         {info.Image.map((img, index) => (
           <img
             src={`${
-              img.includes("https://drive.google.com/")
-                ? img
-                : REACT_APP_DB_BASE_URL_IMG + "/" + img
+              img.includes("https://drive.google.com/") ? img : IMG(img)
             }`}
             alt=""
             key={index}
@@ -70,7 +68,7 @@ export const RatingOther = ({ info }) => {
       {info.ReplyComment && (
         <div className="d-flex">
           <img
-            src={`${REACT_APP_DB_BASE_URL_IMG}/${IMG_ME}`}
+            src={IMG(IMG_ME)}
             className="rating_wrapper__info-user__avatar  me-15"
             alt=""
           />

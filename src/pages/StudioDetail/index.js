@@ -5,7 +5,6 @@ import {
   LoadingOutlined,
   MoreOutlined,
   ShoppingCartOutlined,
-  SkinOutlined,
   TeamOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
@@ -46,14 +45,14 @@ import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 // import { openNotification } from "../../utils/Notification";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import chair from "../../assets/svg/chair.svg";
+import conditional from "../../assets/svg/conditional.svg";
+import expand from "../../assets/svg/expand.svg";
+import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
-import expand from "../../assets/svg/expand.svg";
-import chair from "../../assets/svg/chair.svg";
-import conditional from "../../assets/svg/conditional.svg";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -168,8 +167,7 @@ export const StudioDetail = () => {
                 preview={{
                   visible: Boolean(visible === data.id),
                   onVisibleChange: (vis) => setVisible(vis),
-                }}
-              >
+                }}>
                 {data.Image.map((val) => (
                   <Image src={convertImage(val)} />
                 ))}
@@ -182,8 +180,7 @@ export const StudioDetail = () => {
                 fontSize: "16px",
                 fontWeight: "700",
                 textTransform: "uppercase",
-              }}
-            >
+              }}>
               {data?.Name}
             </div>
             <div
@@ -192,8 +189,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -216,8 +212,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -245,8 +240,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -274,8 +268,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <TeamOutlined
                   className="me-10 mb-2"
@@ -321,15 +314,13 @@ export const StudioDetail = () => {
                     gap: "10px",
                     alignItems: "center",
                     flexWrap: "wrap",
-                  }}
-                >
+                  }}>
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
@@ -349,8 +340,7 @@ export const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
@@ -370,8 +360,7 @@ export const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   {data?.PriceNote}
                 </p>
               </div>
@@ -397,8 +386,7 @@ export const StudioDetail = () => {
                     lineHeight: "19px",
 
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Bỏ chọn
                 </Button>
               ) : (
@@ -413,8 +401,7 @@ export const StudioDetail = () => {
                     lineHeight: "19px",
                     textTransform: "uppercase",
                   }}
-                  size="large"
-                >
+                  size="large">
                   Chọn
                 </Button>
               )}
@@ -477,12 +464,7 @@ export const StudioDetail = () => {
       <MetaDecorator
         description={studioDetail?.data?.Description}
         imgAlt={studioDetail?.data?.Image[0]}
-        imgUrl={
-          window.location.origin +
-          REACT_APP_DB_BASE_URL_IMG +
-          "/" +
-          studioDetail?.data?.Image[0]
-        }
+        imgUrl={IMG(studioDetail?.data?.Image[0])}
         title={studioDetail?.data?.Name}
       />
       {Object.keys(studioDetail).length <= 0 ? (
@@ -491,8 +473,7 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -500,8 +481,7 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -521,8 +501,7 @@ export const StudioDetail = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -545,27 +524,23 @@ export const StudioDetail = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}
-                        >
+                          }}>
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}
-                          >
+                            }}>
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
+                              style={{ fontSize: "18px", fontWeight: "bold" }}>
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click"
-                    >
+                      trigger="click">
                       <MoreOutlined className={cx("item")} />
                     </Popover>
                   </div>
@@ -578,13 +553,11 @@ export const StudioDetail = () => {
                   <Rate
                     disabled
                     allowHalf
-                    value={studioDetail?.data?.TotalRate}
-                  ></Rate>
+                    value={studioDetail?.data?.TotalRate}></Rate>
                   <span>{studioDetail?.data?.TotalRate}</span>
                   <span
                     className={cx("number-order")}
-                    style={{ fontSize: "15px" }}
-                  >
+                    style={{ fontSize: "15px" }}>
                     {studioDetail?.data?.BookingCount} đã đặt{" "}
                   </span>
                 </div>
@@ -646,8 +619,7 @@ export const StudioDetail = () => {
                               textDecoration: "line-through",
                               fontSize: " 16px",
                               color: "#828282",
-                            }}
-                          >
+                            }}>
                             {filterService?.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
@@ -686,8 +658,7 @@ export const StudioDetail = () => {
                             color: "#E22828",
                             fontSize: "20px",
                             fontWeight: "700",
-                          }}
-                        >
+                          }}>
                           {filterService?.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
@@ -730,8 +701,7 @@ export const StudioDetail = () => {
                               "",
                               {}
                             )
-                          }
-                        >
+                          }>
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
@@ -742,8 +712,7 @@ export const StudioDetail = () => {
                             chooseServiceList.length > 0 && filterService.id > 0
                               ? false
                               : true
-                          }
-                        >
+                          }>
                           Đặt ngay
                         </Button>
                       </div>

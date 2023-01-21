@@ -1,6 +1,6 @@
 import { Divider, Rate } from "antd";
 import React from "react";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { convertTime } from "../../../../../utils/convert";
 import "./RatingItm.scss";
 import { CheckCircleOutlined } from "@ant-design/icons";
@@ -34,9 +34,7 @@ export const RatingStudio = ({ info }) => {
         {info.Image.map((img, index) => (
           <img
             src={`${
-              img.includes("https://drive.google.com/")
-                ? img
-                : REACT_APP_DB_BASE_URL_IMG + "/" + img
+              img.includes("https://drive.google.com/") ? img : IMG(img)
             }`}
             alt=""
             key={index}
@@ -51,7 +49,7 @@ export const RatingStudio = ({ info }) => {
       {info.ReplyComment && (
         <div className="d-flex">
           <img
-            src={`${REACT_APP_DB_BASE_URL_IMG}/${info.StudioPost.Image1}`}
+            src={IMG(info.StudioPost.Image1)}
             className="rating_wrapper__info-user__avatar  me-15"
             alt=""
           />

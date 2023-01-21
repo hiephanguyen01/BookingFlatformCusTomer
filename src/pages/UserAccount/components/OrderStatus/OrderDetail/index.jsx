@@ -6,6 +6,7 @@ import {
 import { Button, Col, Divider, Input, Modal, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Link,
   useNavigate,
@@ -16,9 +17,16 @@ import { socket } from "../../../../../components/ConnectSocket/ConnectSocket";
 import { chatService } from "../../../../../services/ChatService";
 import { orderService } from "../../../../../services/OrderService";
 import { studioPostService } from "../../../../../services/StudioPostService";
+import {
+  createConverAction,
+  findConverAction,
+} from "../../../../../stores/actions/ChatAction";
+import { SHOW_CHAT, TOGGLE_STATE } from "../../../../../stores/types/messType";
 import { convertPrice } from "../../../../../utils/convert";
 import { openNotification } from "../../../../../utils/Notification";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { FooterRating } from "../conponents/OrderStatusItem/Footer/FooterRating";
+import { RateModal } from "../conponents/OrderStatusItem/Footer/RateModal/RateModal";
 import CancelIcon from "../Icon/CancelIcon";
 import Dolar from "../Icon/Dolar";
 import Dolar2 from "../Icon/Dolar2";
@@ -26,14 +34,6 @@ import NotiIcon from "../Icon/NotiIcon";
 import OrderIcon from "../Icon/OrderIcon";
 import { keyF } from "../OrderStatus";
 import "./OrderDetail.scss";
-import {
-  createConverAction,
-  findConverAction,
-} from "../../../../../stores/actions/ChatAction";
-import { useDispatch, useSelector } from "react-redux";
-import { SHOW_CHAT, TOGGLE_STATE } from "../../../../../stores/types/messType";
-import { FooterRating } from "../conponents/OrderStatusItem/Footer/FooterRating";
-import { RateModal } from "../conponents/OrderStatusItem/Footer/RateModal/RateModal";
 const OrderDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -78,10 +78,10 @@ const OrderDetail = () => {
         id,
         searchParams.get("categoryId")
       );
-      if (data?.BookingUserId !== UserMe.id) {
-        openNotification("error", "Đây không phải đơn đặt của bạn");
-        return navigate("/home/user/orderStatus");
-      }
+      // if (data?.BookingUserId !== UserMe.id) {
+      //   openNotification("error", "Đây không phải đơn đặt của bạn");
+      //   return navigate("/home/user/orderStatus");
+      // }
       setBooking(data);
       setService(
         data?.StudioRoom ||
@@ -473,7 +473,7 @@ const OrderDetail = () => {
             <div className="trt">Tổng thanh toán</div>
             <div className="trt">
               {booking?.BookingValue
-                ? `${convertPrice(lastPrice)} VND`
+                ? `${convertPrice(booking?.BookingValue)} VND`
                 : `${convertPrice(booking?.BookingValue)} VND`}
             </div>
           </div>
@@ -650,11 +650,7 @@ const OrderDetail = () => {
         </div>
         <Divider />
         <div className="cardx">
-          <img
-            alt=""
-            className="present_img"
-            src={REACT_APP_DB_BASE_URL_IMG + "/" + service?.Image1}
-          />
+          <img alt="" className="present_img" src={IMG(service?.Image1)} />
           <div className="cardx__text">
             <div className="cardx__text__title">{service?.Name}</div>
             <div className="cardx__text__sub">

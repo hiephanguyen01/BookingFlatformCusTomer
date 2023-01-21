@@ -1,17 +1,11 @@
-import {
-  CheckCircleOutlined,
-  PlayCircleOutlined,
-  StarFilled,
-} from "@ant-design/icons";
+import { StarFilled } from "@ant-design/icons";
 import { Divider, Pagination, Rate } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import images from "../../assets/images";
-import imgCmt from "../../assets/images/deviceImg.png";
 import { convertTime } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { ModalImage } from "../ModalImg";
 import "./commentRating.scss";
 
@@ -78,8 +72,7 @@ const Index = ({ data = [], className }) => {
             allowHalf
             value={Number(data?.data?.TotalRate)}
             style={{ fontSize: "10px" }}
-            disabled
-          ></Rate>
+            disabled></Rate>
           <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
             data?.rating?.length || 0
           })`}</div>
@@ -92,8 +85,7 @@ const Index = ({ data = [], className }) => {
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
-                }`}
-              >
+                }`}>
                 <span>{star.label}</span>
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
@@ -157,8 +149,7 @@ const Index = ({ data = [], className }) => {
                             type: "SHOW_MODAL_LIST",
                             Component: <ModalImage data={item?.Image} />,
                           })
-                        }
-                      >
+                        }>
                         {/* <li className="item-video">
                           <img src={imgCmt} alt="" />
                           <PlayCircleOutlined className="play" />
@@ -169,7 +160,7 @@ const Index = ({ data = [], className }) => {
                               src={`${
                                 img.includes("https://drive.google.com/")
                                   ? img
-                                  : REACT_APP_DB_BASE_URL_IMG + "/" + img
+                                  : IMG(img)
                               }`}
                               alt=""
                             />
@@ -178,8 +169,7 @@ const Index = ({ data = [], className }) => {
                       </ul>
                       <div
                         className="mt-16 mb-25 text-medium-re"
-                        style={{ color: "#828282" }}
-                      >
+                        style={{ color: "#828282" }}>
                         {item?.StudioRoom?.Name ||
                           item?.PhotographerServicePackage?.Name ||
                           item?.ModelServicePackage?.Name ||
