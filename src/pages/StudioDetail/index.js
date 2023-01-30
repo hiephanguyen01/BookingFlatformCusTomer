@@ -146,29 +146,6 @@ export const StudioDetail = () => {
   //   console.log(data.id);
   //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
   // };
-<<<<<<< HEAD
-  console.log("seveice phong", studioDetail?.service);
-  const ROW = (dataSource = []) => {
-    if (dataSource.length > 0) {
-      return dataSource?.map((data, index) => [
-        {
-          key: "title",
-          render: () => (
-            <div style={{}}>
-              <img
-                alt="as"
-                style={{ width: "100%", borderRadius: " 6px" }}
-                src={`${
-                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
-                }`}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "10px",
-=======
 
   const ROW = (dataSource) => {
     return dataSource?.map((data, index) => [
@@ -191,7 +168,6 @@ export const StudioDetail = () => {
                 preview={{
                   visible: Boolean(visible === data.id),
                   onVisibleChange: (vis) => setVisible(vis),
->>>>>>> c92509d6d397f8ee8dbaecd95b7de9c0006b8abf
                 }}
               >
                 {data.Image.map((val) => (
