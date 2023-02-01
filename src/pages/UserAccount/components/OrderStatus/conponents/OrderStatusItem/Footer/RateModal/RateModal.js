@@ -86,7 +86,7 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
       ) {
         file.preview = URL.createObjectURL(file);
         newFiles.push(file);
-      }
+      }    
     }
     if (newFiles.length === 6) return setFiles([...newFiles.splice(0, 5)]);
     else {
