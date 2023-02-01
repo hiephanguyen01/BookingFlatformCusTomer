@@ -1,20 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
-import "./ChatContent.scss";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateMSelector } from "../../../../stores/selector/ChatSelector";
-import { useEffect, useRef } from "react";
-import { chatService } from "../../../../services/ChatService";
-import { socket } from "../../../ConnectSocket/ConnectSocket";
+import { CloseCircleOutlined, PictureOutlined } from "@ant-design/icons";
 import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import demopic1 from "../../../../assets/Chat/demo1.png";
-import { closeConversationAction } from "../../../../stores/actions/ChatAction";
 import UploadImage from "../../../../components/UploadImage";
-import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { chatService } from "../../../../services/ChatService";
 import { orderService } from "../../../../services/OrderService";
+import { closeConversationAction } from "../../../../stores/actions/ChatAction";
+import { updateMSelector } from "../../../../stores/selector/ChatSelector";
+import { IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { socket } from "../../../ConnectSocket/ConnectSocket";
+import "./ChatContent.scss";
 
 /* export const UserMe = {
   id: 5,
@@ -215,7 +213,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             borderRadius: "10px",
             color: "#fff !important",
           }}
-          src={`${REACT_APP_DB_BASE_URL_IMG}/${itm.Content}`}
+          src={IMG(itm.Content)}
           alt={itm.fileName}
         />
       );
@@ -231,8 +229,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             alt="user"
             src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
             width={35}
-            height={35}
-          ></img>
+            height={35}></img>
           <div className="ChatContent__header__user">
             <div>{chatInfo.PartnerId.PartnerName}</div>
           </div>
@@ -243,8 +240,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
               navigate("user/orderStatus");
               dispatch(closeConversationAction());
             }}
-            className="ChatContent__header__order"
-          >
+            className="ChatContent__header__order">
             <div className="d-flex flex-column align-items-center">
               <div style={{ fontSize: "14px", fontWeight: "600" }}>
                 Bạn đang có {booking.length} đơn đặt hàng
@@ -297,8 +293,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
               setFlag(false);
             }
           }
-        }}
-      >
+        }}>
         {loading ? (
           <>
             {!hasMore && (
@@ -326,8 +321,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
                     itm.Chatting.PartnerName !== undefined
                       ? "ChatContent__conversation__other"
                       : "ChatContent__conversation__you"
-                  }
-                >
+                  }>
                   <div
                     className={
                       itm.Chatting.PartnerName !== undefined &&
@@ -340,8 +334,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
                           itm.Type === "text"
                         ? "ChatContent__conversation__you__content"
                         : "ChatContent__conversation__you__img"
-                    }
-                  >
+                    }>
                     {renderMess(itm)}
                   </div>
                 </div>
@@ -368,8 +361,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       </div>
       <div
         className="ChatContent__container"
-        style={{ height: files.length === 0 ? "70px" : "140px" }}
-      >
+        style={{ height: files.length === 0 ? "70px" : "140px" }}>
         <div className="ChatContent__container__upload">
           <UploadImage
             onChangeFile={onChangeFile}
@@ -378,8 +370,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
               height: "30px",
               borderRadius: "10px",
             }}
-            multiple={true}
-          >
+            multiple={true}>
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "30px" }} />
           </UploadImage>
         </div>
@@ -394,8 +385,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
                     width: "40px",
                     marginLeft: "10px",
                     marginBottom: "10px",
-                  }}
-                >
+                  }}>
                   <img
                     alt=""
                     src={item.preview}
@@ -422,8 +412,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
-            maxLength={2000}
-          ></textarea>
+            maxLength={2000}></textarea>
         </div>
       </div>
     </div>

@@ -1,17 +1,14 @@
-import React from "react";
-import "./ChatContent.scss";
-import { useState } from "react";
-import uploadLogo from "../../../../assets/Chat/Upload.png";
-import { useSelector } from "react-redux";
-import { updateMSelector } from "../../../../stores/selector/ChatSelector";
-import { useEffect, useRef } from "react";
-import { chatService } from "../../../../services/ChatService";
-import { socket } from "../../../ConnectSocket/ConnectSocket";
-import adminLogo from "../../../../assets/Chat/AdminUser.png";
+import { CloseCircleOutlined, PictureOutlined } from "@ant-design/icons";
 import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import adminLogo from "../../../../assets/Chat/AdminUser.png";
 import UploadImage from "../../../../components/UploadImage";
-import { PictureOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { chatService } from "../../../../services/ChatService";
+import { updateMSelector } from "../../../../stores/selector/ChatSelector";
+import { IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { socket } from "../../../ConnectSocket/ConnectSocket";
+import "./ChatContent.scss";
 export const ChatContentAdmin = React.memo(({ info }) => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const updateScroll = useSelector(updateMSelector);
@@ -193,7 +190,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
             borderRadius: "10px",
             color: "#fff !important",
           }}
-          src={`${REACT_APP_DB_BASE_URL_IMG}/${itm.Content}`}
+          src={IMG(itm.Content)}
           alt={itm.fileName}
         />
       );
@@ -242,8 +239,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
               setLoadMore(false);
             }
           }
-        }}
-      >
+        }}>
         {loading ? (
           <>
             {!hasMore && (
@@ -271,8 +267,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
                     itm.Chatting === "Admin"
                       ? "ChatContent__conversation__other"
                       : "ChatContent__conversation__you"
-                  }
-                >
+                  }>
                   <div
                     className={
                       itm.Chatting === "Admin" && itm.Type === "text"
@@ -317,8 +312,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
       </div>
       <div
         className="ChatContent__container"
-        style={{ height: files.length === 0 ? "70px" : "140px" }}
-      >
+        style={{ height: files.length === 0 ? "70px" : "140px" }}>
         <div className="ChatContent__container__upload">
           <UploadImage
             onChangeFile={onChangeFile}
@@ -326,8 +320,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
               width: "30px",
               height: "30px",
             }}
-            multiple={true}
-          >
+            multiple={true}>
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "30px" }} />
           </UploadImage>
         </div>
@@ -342,8 +335,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
                     width: "40px",
                     marginLeft: "10px",
                     marginBottom: "10px",
-                  }}
-                >
+                  }}>
                   <img
                     alt=""
                     src={item.preview}
@@ -370,8 +362,7 @@ export const ChatContentAdmin = React.memo(({ info }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
-            maxLength={2000}
-          ></textarea>
+            maxLength={2000}></textarea>
         </div>
       </div>
     </div>

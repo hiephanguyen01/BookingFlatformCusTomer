@@ -8,7 +8,6 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import BannerSkeleton from "../../../components/Skeleton/BannerSkeleton";
 import { convertImage } from "../../../utils/convertImage";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import "./banner.scss";
 const Banner = ({ banners }) => {
   const [fakeLoading, setFakeLoading] = useState(true);
@@ -34,8 +33,7 @@ const Banner = ({ banners }) => {
           lazy={true}
           speed={600}
           modules={[Navigation, Pagination, Autoplay, Lazy, Parallax]}
-          className="bannerSwiper"
-        >
+          className="bannerSwiper">
           {banners &&
             banners.map(
               (banner) =>
@@ -52,8 +50,7 @@ const Banner = ({ banners }) => {
                         />
                         <div
                           className="contentBanner"
-                          data-swiper-parallax="-200"
-                        >
+                          data-swiper-parallax="-200">
                           <h1 className="" data-swiper-parallax="-200">
                             {banner.name}
                           </h1>

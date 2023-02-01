@@ -5,12 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import demo from "../../../../../../assets/Chat/demo.png";
 import { studioPostService } from "../../../../../../services/StudioPostService";
-import {
-  dateStructure,
-  numberWithDot,
-  timeStructure,
-} from "../../../../../../utils/convert";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { numberWithDot } from "../../../../../../utils/convert";
+import { IMG } from "../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { DividerCustom } from "../DividerCustom/DividerCustom";
 import { Footer } from "./Footer/Footer";
 import "./OrderStatusItem.scss";
@@ -83,8 +79,7 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}
-          >
+            onClick={navigateToDetail}>
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
@@ -99,16 +94,21 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__body">
           <div className="OrderStatusItem__body__info">
             <img
+              onClick={() =>
+                navigate(`/home/user/orderStatus/${id}?categoryId=${category}`)
+              }
               alt=""
               className="OrderStatusItem__body__info__pic"
-              src={
-                Item?.Image1
-                  ? `${REACT_APP_DB_BASE_URL_IMG}/${Item?.Image1}`
-                  : demo
-              }
+              src={Item?.Image1 ? IMG(Item?.Image1) : demo}
             />
             <div className="OrderStatusItem__body__info__content">
-              <div className="OrderStatusItem__body__info__content__title">
+              <div
+                className="OrderStatusItem__body__info__content__title"
+                onClick={() =>
+                  navigate(
+                    `/home/user/orderStatus/${id}?categoryId=${category}`
+                  )
+                }>
                 {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">

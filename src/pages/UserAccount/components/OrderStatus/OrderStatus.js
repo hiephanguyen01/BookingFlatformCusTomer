@@ -5,11 +5,12 @@ import { orderService } from "../../../../services/OrderService";
 import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";
 import "./orderStatus.scss";
 const { TabPane } = Tabs;
-const keyF = {
-  1: { BookingStatus: 4, PaymentStatus: [1] },
-  2: { BookingStatus: 4, PaymentStatus: [4, 3, 2] },
-  3: { BookingStatus: 1, PaymentStatus: [3, 4] },
-  4: { BookingStatus: 2, PaymentStatus: [1, 2, 3, 4] },
+export const keyF = {
+  1: { BookingStatus: 4, PaymentStatus: [1] }, //chờ thanh toán
+  2: { BookingStatus: 4, PaymentStatus: [4, 3, 2] }, //sắp tới
+  3: { BookingStatus: 1, PaymentStatus: [3, 4] }, //hoàn tất
+  4: { BookingStatus: 2, PaymentStatus: [1, 2, 3, 4] }, //đã huỷ
+  5: { BookingStatus: 3, PaymentStatus: [1, 2, 3, 4] }, //vắng mặt
 };
 const OrderStatus = () => {
   const [booking, setBooking] = useState([]);
@@ -22,10 +23,8 @@ const OrderStatus = () => {
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
-    // category: 1,
     BookingStatus: 4,
     PaymentStatus: [1],
-    // EntryDate: JSON.stringify(EntryDate),
   });
   const onChange = (key) => {
     setFilter([]);
@@ -83,8 +82,7 @@ const OrderStatus = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}
-          >
+            }}>
             <div
               style={{
                 background: "white",
@@ -92,8 +90,7 @@ const OrderStatus = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}
-            >
+              }}>
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -111,8 +108,7 @@ const OrderStatus = () => {
                   placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
                 />
               ),
-            }}
-          >
+            }}>
             <TabPane tab="Chờ thanh toán" key={1}>
               {booking &&
                 pageBooking.map((item, idx) => (
@@ -174,13 +170,11 @@ const OrderStatus = () => {
             display: "flex",
             justifyContent: "right",
             padding: "10px 10px",
-          }}
-        >
+          }}>
           <Pagination
-            showSizeChanger={false}
+            defaultCurrent={1}
             onChange={handleChange}
-            pageSize={pageSize}
-            defaultCurrent={currentPage}
+            pageSize={pageSize || 1}
             total={filter.length || booking.length}
           />
         </div>

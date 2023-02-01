@@ -1,22 +1,20 @@
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
-import { useNavigate } from "react-router-dom";
-import images from "../../assets/images";
-import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
-import styles from "./Card.module.scss";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import images from "../../assets/images";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { studioPostService } from "../../services/StudioPostService";
+import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import styles from "./Card.module.scss";
 
 const cx = classNames.bind(styles);
 
 export const Card = ({ value, category }) => {
   const [newData, setNewData] = useState();
-  const img =
-    `${process.env.REACT_APP_DB_BASE_URL_IMG}/${
-      value?.Image[0] || value?.Image
-    }` || images.baby;
+  const img = IMG(value?.Image[0] || value?.Image) || images.baby;
   const { currentUser } = useSelector((state) => state.authenticateReducer);
 
   useEffect(() => {
@@ -84,8 +82,7 @@ export const Card = ({ value, category }) => {
         onClick={(e) => {
           e.stopPropagation();
           handleChangeLike();
-        }}
-      >
+        }}>
         <div className={cx("like")}>
           {newData?.UsersLiked?.some(
             (item) => item.UserId === currentUser?.id

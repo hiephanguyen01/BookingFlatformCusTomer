@@ -1,23 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { message } from "antd";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row, Popover, message } from "antd";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
-import {
-  HeartFilled,
-  HeartOutlined,
-  MoreOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
 import { useParams } from "react-router-dom";
-import sendComment from "../../assets/svg/sendComment.svg";
 
-import "./postDetail.scss";
 import "swiper/css";
 import "swiper/css/navigation";
+import "./postDetail.scss";
 
-import { convertImage } from "../../utils/convertImage";
-import { ReactComponent as Comments } from "../../assets/dao/comments.svg";
+import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
+import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
+import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
+import { ReactComponent as Info } from "../../assets/dao/info.svg";
+import DaoPost from "../../components/DaoPost";
+import ModalChooseService from "../../components/DaoPost/components/ModalChooseService/ModalChooseService";
+import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import toastMessage from "../../components/ToastMessage";
+import { postDaoService } from "../../services/PostDaoService";
+import { userService } from "../../services/UserService";
 import {
   createLikeCommentDao,
   getAllDefaultComments,
@@ -26,24 +25,9 @@ import {
   getPostDaoByIdAction,
   toggleNotificationDaoAction,
 } from "../../stores/actions/PostDaoAction";
-import { ReactComponent as Info } from "../../assets/dao/info.svg";
-import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
-import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
-import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
-import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import ReportPost from "../../components/ReportPostDao";
-import { convertTime } from "../../utils/convert";
-import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-import ModalChooseService from "../../components/DaoPost/components/ModalChooseService/ModalChooseService";
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import CommentSlider from "../../components/CommentSlider/CommentSlider";
-import toastMessage from "../../components/ToastMessage";
-import { SET_RELATED_SERVICE } from "../../stores/types/PostDaoType";
-import { postDaoService } from "../../services/PostDaoService";
 import { cancelSavePost } from "../../stores/actions/userAction";
-import { userService } from "../../services/UserService";
-import DaoPost from "../../components/DaoPost";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const PostDetail = () => {
   const type = "post";
@@ -259,9 +243,7 @@ const PostDetail = () => {
             postDetail?.BookingUser?.Fullname
           } - ${postDetail?.Tags?.split(",").join(",").toUpperCase()}`}
           description={postDetail.Description}
-          imgUrl={
-            REACT_APP_DB_BASE_URL_IMG + `/${postDetail?.Image?.slice(0, 1)}`
-          }
+          imgUrl={IMG(postDetail?.Image?.slice(0, 1))}
         />
         <DaoPost item={postDetail} type={type} />
         {/* <Row>

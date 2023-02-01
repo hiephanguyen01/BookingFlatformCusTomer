@@ -3,7 +3,7 @@ import { Checkbox, Rate } from "antd";
 import React, { useEffect, useState } from "react";
 import UploadImage from "../../../../../../../../components/UploadImage";
 import { ratingService } from "../../../../../../../../services/RatingService";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { IMG } from "../../../../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 const desc = ["Rất tệ", "Tệ", "Bình thường", "Tốt", "Tuyệt vời"];
 export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
   const [value, setValue] = useState(0);
@@ -103,12 +103,7 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
     <div className="FooterStatus__complete__modal__body">
       <h3>Viết đánh giá</h3>
       <div className="FooterStatus__complete__modal__body__info">
-        <img
-          alt=""
-          src={`${REACT_APP_DB_BASE_URL_IMG}/${Item.Image1}`}
-          height={80}
-          width={118}
-        />
+        <img alt="" src={IMG(Item.Image1)} height={80} width={118} />
         <div className="FooterStatus__complete__modal__body__info__content">
           <div className="FooterStatus__complete__modal__body__info__content__title">
             {post.Name}
@@ -144,8 +139,7 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
       <div className="w-100">
         <div
           className="mb-15 d-flex "
-          style={{ gap: "10px", flexWrap: "wrap" }}
-        >
+          style={{ gap: "10px", flexWrap: "wrap" }}>
           {/* <ImgRate setData={setData} /> <ImgRate  setData={setData} /> <ImgRate  setData={setData} /> <ImgRate  setData={setData}  /> <ImgRate  setData={setData}  />{" "}
           <VideoRate /> */}
           <UploadImage
@@ -156,8 +150,7 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
               border: "0.6px dashed #1FCBA2",
               borderRadius: "10px",
             }}
-            multiple={true}
-          >
+            multiple={true}>
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
           </UploadImage>
           {/* <GoogleDrivePicker files={filesDrive} setFiles={setFilesDrive} /> */}
@@ -196,16 +189,14 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
       <div className="FooterStatus__complete__modal__body__confirm">
         <button
           onClick={onCancel}
-          className="FooterStatus__complete__modal__body__confirm__1"
-        >
+          className="FooterStatus__complete__modal__body__confirm__1">
           Hủy
         </button>
         <button
           onClick={() => {
             onsubmit();
           }}
-          className="FooterStatus__complete__modal__body__confirm__2"
-        >
+          className="FooterStatus__complete__modal__body__confirm__2">
           Lưu
         </button>
       </div>

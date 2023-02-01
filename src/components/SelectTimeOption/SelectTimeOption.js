@@ -7,50 +7,8 @@ import { convertDateSendToDB } from "../../utils/convert";
 
 import "./selectTimeOption.scss";
 
-const Option = ({ option, disabled }) => {
+const Option = ({ disabled }) => {
   const { filterService } = useSelector((state) => state.studioPostReducer);
-  const dispatch = useDispatch();
-  const [date, setDate] = useState(convertDateSendToDB(new Date()));
-  const [time, setTime] = useState([]);
-  const handleOnchangeDate = (d, dString) => {
-    setDate(dString);
-    if (time.length > 0) {
-      dispatch(
-        getFilterStudioPost(5, 1, {
-          ...filterService,
-          OrderByTimeFrom:
-            convertDateSendToDB(dString).slice(0, 11) + time[0] + ".000Z",
-          OrderByTimeTo:
-            convertDateSendToDB(dString).slice(0, 11) + time[1] + ".000Z",
-        })
-      );
-    }
-  };
-  const handleOnchangeHour = (t, timeString) => {
-    setTime(timeString);
-
-    if (date !== "") {
-      dispatch(
-        getFilterStudioPost(5, 1, {
-          ...filterService,
-          OrderByTimeFrom:
-            convertDateSendToDB(date).slice(0, 11) + timeString[0] + ":00.000Z",
-          OrderByTimeTo:
-            convertDateSendToDB(date).slice(0, 11) + timeString[1] + ":00.000Z",
-        })
-      );
-    }
-  };
-  const handleOnchangeDateRange = (ds, datesString) => {
-    // setDates(datesString);
-    dispatch(
-      getFilterStudioPost(5, 1, {
-        ...filterService,
-        OrderByDateFrom: convertDateSendToDB(datesString[0]),
-        OrderByDateTo: convertDateSendToDB(datesString[1]),
-      })
-    );
-  };
 
   switch (Number(filterService?.OrderByTime)) {
     case 1:
@@ -66,16 +24,9 @@ const Option = ({ option, disabled }) => {
             }}
           >
             <DatePicker
-              onChange={handleOnchangeDate}
-              defaultValue={moment(
-                filterService?.OrderByTimeFrom,
-                "DD-MM-YYYY"
-              )}
-              // format={"DD-MM-YYYY"}
+              defaultValue={moment(filterService?.OrderByTimeFrom)}
+              format={"DD/MM/YYYY"}
               disabled={disabled}
-              disabledDate={(current) => {
-                return current && current <= moment().subtract(1, "days");
-              }}
             />
           </Form.Item>
           <Form.Item
@@ -90,14 +41,10 @@ const Option = ({ option, disabled }) => {
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
-                onChange={handleOnchangeHour}
                 style={{ marginRight: "10px" }}
                 value={[
-                  moment(
-                    filterService?.OrderByTimeFrom?.slice(11, 16),
-                    "HH:mm"
-                  ),
-                  moment(filterService?.OrderByTimeTo?.slice(11, 16), "HH:mm"),
+                  moment(filterService?.OrderByTimeFrom).utc(),
+                  moment(filterService?.OrderByTimeTo).utc(),
                 ]}
                 disabled={disabled}
                 minuteStep={60}
@@ -119,7 +66,6 @@ const Option = ({ option, disabled }) => {
             }}
           >
             <DatePicker.RangePicker
-              onChange={handleOnchangeDateRange}
               defaultValue={[
                 moment(filterService?.OrderByDateFrom),
                 moment(filterService?.OrderByDateTo),
@@ -140,27 +86,13 @@ const Option = ({ option, disabled }) => {
 
 const SelectTimeOption = ({ disabled }) => {
   const { filterService } = useSelector((state) => state.studioPostReducer);
-  const [selection, setSelection] = useState(filterService?.OrderByTime);
-
-  const dispatch = useDispatch();
-
-  const handleOnChangeSelection = (e) => {
-    setSelection(e.target.value);
-    dispatch(
-      getFilterStudioPost(5, 1, {
-        ...filterService,
-        OrderByTime: e.target.value,
-      })
-    );
-  };
 
   return (
     <div className="selectTimeOptionContainer">
       <Radio.Group
         name="radiogroup"
-        onChange={handleOnChangeSelection}
         style={{ padding: "0 0 20px" }}
-        value={selection}
+        value={filterService.OrderByTime}
         disabled={disabled}
       >
         <Space direction="vertical">
@@ -168,7 +100,7 @@ const SelectTimeOption = ({ disabled }) => {
           <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
-      <Option option={selection} disabled={disabled} />
+      <Option disabled={disabled} />
     </div>
   );
 };

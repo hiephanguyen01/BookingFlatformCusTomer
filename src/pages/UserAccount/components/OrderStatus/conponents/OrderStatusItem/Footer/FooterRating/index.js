@@ -42,8 +42,7 @@ export const FooterRating = ({ id, setVisible, visible }) => {
       ) : (
         <button
           className="FooterStatus__complete__rating"
-          onClick={() => setVisible(true)}
-        >
+          onClick={() => setVisible(true)}>
           Đánh giá
         </button>
       )}

@@ -21,8 +21,7 @@ const HelpCenterContent = ({ ref }) => {
       bordered={false}
       defaultActiveKey={[""]}
       expandIconPosition="end"
-      expandIcon={({ isActive }) => <UpOutlined rotate={isActive ? 180 : 0} />}
-    >
+      expandIcon={({ isActive }) => <UpOutlined rotate={isActive ? 180 : 0} />}>
       <Panel className="collapse-item" header={title} key="1">
         {text}
       </Panel>

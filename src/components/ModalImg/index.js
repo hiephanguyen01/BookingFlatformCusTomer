@@ -7,15 +7,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
-import "swiper/css/thumbs";
 import "swiper/css/pagination";
+import "swiper/css/thumbs";
 
 // import required modules
-import { FreeMode, Navigation, Thumbs, Pagination } from "swiper";
-import { useDispatch } from "react-redux";
-import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import { CloseOutlined } from "@ant-design/icons";
-import { REACT_APP_DB_BASE_URL_IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import { useDispatch } from "react-redux";
+import { FreeMode, Navigation, Pagination, Thumbs } from "swiper";
+import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import { convertImage } from "../../utils/convertImage";
 export const ModalImage = ({ title = "", data }) => {
   const dispatch = useDispatch();
@@ -31,8 +30,7 @@ export const ModalImage = ({ title = "", data }) => {
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-      }}
-    >
+      }}>
       <h3>{title}</h3>
       <div onClick={() => dispatch({ type: HIDE_MODAL })} className={"close"}>
         <CloseOutlined style={{ fontSize: "22px" }} />
@@ -52,8 +50,7 @@ export const ModalImage = ({ title = "", data }) => {
           }}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Navigation, Pagination, Thumbs]}
-          className="swiperModalImg"
-        >
+          className="swiperModalImg">
           {data?.map((item, idx) => {
             return (
               <SwiperSlide key={idx}>
@@ -69,8 +66,7 @@ export const ModalImage = ({ title = "", data }) => {
           height: "108px",
           padding: "0 40px",
           marginTop: "30px",
-        }}
-      >
+        }}>
         <Swiper
           onSwiper={setThumbsSwiper}
           spaceBetween={10}
@@ -78,15 +74,13 @@ export const ModalImage = ({ title = "", data }) => {
           //   freeMode={true}
           watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Thumbs]}
-          className="swiperThumb"
-        >
+          className="swiperThumb">
           {data?.map((item, idx) => {
             return (
               <SwiperSlide
                 key={idx}
                 className="slide-item"
-                style={{ width: "187px", height: "108px" }}
-              >
+                style={{ width: "187px", height: "108px" }}>
                 <img
                   style={{
                     width: "187px",

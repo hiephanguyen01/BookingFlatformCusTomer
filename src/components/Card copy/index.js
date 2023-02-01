@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
-import classNames from "classnames/bind";
-import styles from "./Card.module.scss";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
+import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllStudioLikedAction1,
-  getLikeStudioPostAction,
-} from "../../stores/actions/studioPostAction";
+import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
+import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
+import styles from "./Card.module.scss";
 
 const cx = classNames.bind(styles);
 
 export const Card = ({ value, category }) => {
-  const img =
-    `${process.env.REACT_APP_DB_BASE_URL_IMG}/${
-      value?.Image[0] || value?.Image
-    }` || images.baby;
+  const img = IMG(value?.Image[0] || value?.Image) || images.baby;
+
   const linkTo = useSelector((state) => state.listByCategoryReducer.linkTo);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
@@ -73,8 +69,7 @@ export const Card = ({ value, category }) => {
   return (
     <div
       className={cx("card")}
-      onClick={() => navigate(`${category.name}/${value.id}`)}
-    >
+      onClick={() => navigate(`${category.name}/${value.id}`)}>
       <div className={cx("image")}>
         <img className={cx("thumbnail")} alt="" src={img} />
       </div>

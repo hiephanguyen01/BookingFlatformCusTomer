@@ -1,5 +1,4 @@
 import {
-  CloseOutlined,
   DownOutlined,
   SearchOutlined,
   ShoppingOutlined,
@@ -28,8 +27,9 @@ import { logOut } from "../../stores/actions/autheticateAction";
 import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
 import { convertImage } from "../../utils/convertImage";
 import SearchButton from "../layouts/SearchButton";
-import "./Header.scss";
 import toastMessage from "../ToastMessage";
+import Hotkey from "./Components/Hotkey";
+import "./Header.scss";
 const { Option } = Select;
 const Header = () => {
   const [provinces, setProvinces] = useState([]);
@@ -85,8 +85,7 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}
-              >
+                style={{ borderRadius: "5px" }}>
                 Đăng nhập
               </Button>
             </Link>
@@ -124,8 +123,7 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}
-            >
+              onClick={() => navigate("/home/user/")}>
               Thông tin tài khoản
             </Button>
           ),
@@ -138,8 +136,7 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}
-            >
+              onClick={() => handleSignOut()}>
               Đăng xuất
             </Button>
           ),
@@ -196,8 +193,7 @@ const Header = () => {
         width={"700px"}
         visible={visible}
         footer={[]}
-        closable={false}
-      >
+        closable={false}>
         <div className="search-container">
           <div className="header-search">
             <div className="logo">
@@ -216,8 +212,7 @@ const Header = () => {
             <div className="option d-flex justify-content-between">
               <Form.Item
                 name="province"
-                style={{ width: "100%", marginRight: "20px" }}
-              >
+                style={{ width: "100%", marginRight: "20px" }}>
                 <Select
                   defaultValue=""
                   showSearch
@@ -225,8 +220,7 @@ const Header = () => {
                   filterOption={(input, option) =>
                     option.children.toLowerCase().includes(input.toLowerCase())
                   }
-                  className="select-item"
-                >
+                  className="select-item">
                   <Option value="">Địa điểm</Option>
                   {Boolean(provinces) &&
                     provinces.map((val) => (
@@ -238,8 +232,7 @@ const Header = () => {
               </Form.Item>
               <Form.Item
                 name="category"
-                style={{ width: "100%", marginRight: "20px" }}
-              >
+                style={{ width: "100%", marginRight: "20px" }}>
                 <Select defaultValue="-1" className="select-item">
                   <Option value="-1" disabled={true}>
                     Danh mục
@@ -269,15 +262,13 @@ const Header = () => {
                 width: "100%",
                 marginTop: "10px",
                 marginBottom: "35px",
-              }}
-            >
+              }}>
               <Button
                 type="primary"
                 htmlType="submit"
                 size="large"
                 style={{ width: "50%" }}
-                className="btn-search"
-              >
+                className="btn-search">
                 Tìm kiếm
               </Button>
             </Form.Item>
@@ -323,7 +314,7 @@ const Header = () => {
           )} */}
         </div>
       </Modal>
-      <div className="container">
+      <div className="container" style={{ padding: "0 50px" }}>
         <Row>
           <Col
             lg={4}
@@ -334,8 +325,7 @@ const Header = () => {
               display: "flex",
               justifyContent: "flex-start",
               alignItems: "center",
-            }}
-          >
+            }}>
             <Link to="/home" className="link">
               <div className="img">
                 <img src={Logo} alt="" />
@@ -351,15 +341,19 @@ const Header = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-            }}
-          >
-            <Input
-              className="container__input"
-              placeholder="Bạn đang tìm gì?"
-              prefix={<SearchIcon />}
-              suffix={<SearchButton />}
-              onClick={() => setVisible(true)}
-            />
+            }}>
+            <div style={{ width: "100%" }}>
+              <div style={{ width: "100%", marginBottom: "10px" }}>
+                <Input
+                  className="container__input"
+                  placeholder="Bạn đang tìm gì?"
+                  prefix={<SearchIcon />}
+                  suffix={<SearchButton />}
+                  onClick={() => setVisible(true)}
+                />
+              </div>
+              <Hotkey />
+            </div>
           </Col>
           <Col lg={8} md={12} sm={24} xs={24}>
             <div className="container__right">
@@ -378,8 +372,7 @@ const Header = () => {
                     "",
                     {}
                   )
-                }
-              >
+                }>
                 <ShoppingOutlined
                   style={{ fontSize: "20px", color: "#828282" }}
                 />
