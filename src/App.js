@@ -79,8 +79,17 @@ function App() {
     })();
     if (new URLSearchParams(search).get("qs") !== "") {
       localStorage.setItem("qs", new URLSearchParams(search).get("qs"));
+      localStorage.setItem(
+        "category",
+        new URLSearchParams(search).get("category")
+      );
+      localStorage.setItem(
+        "id",
+        new URLSearchParams(search).get("id")
+      );
     }
   }, []);
+  console.log(localStorage.getItem("qs"), localStorage.getItem("category"));
   return (
     <div className="App">
       <ModalCustom />
