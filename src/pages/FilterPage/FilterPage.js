@@ -92,15 +92,14 @@ const FilterPage = () => {
         {
           keyString: key,
           category:
-            Number(querySearch?.category) > 0 &&
-            Number(querySearch?.category) < 7
-              ? Number(querySearch?.category)
+            +querySearch?.category > 0 && +querySearch?.category < 7
+              ? +querySearch?.category
               : "",
-          priceOption: Number(querySearch?.priceOption),
-          price1: Number(querySearch?.price1) || undefined,
-          price2: Number(querySearch?.price2) || undefined,
-          provinceIds: Number(querySearch?.provinceIds) || "",
-          ratingOption: Number(querySearch?.ratingOption) || 1,
+          priceOption: +querySearch?.priceOption,
+          price1: +querySearch?.price1 || undefined,
+          price2: +querySearch?.price2 || undefined,
+          provinceIds: +querySearch?.provinceIds || "",
+          ratingOption: +querySearch?.ratingOption || 1,
         },
         null,
         navigate

@@ -1,28 +1,28 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { Button, Col, Input, Row } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Promotion from "../../components/Promotion";
 import TextInput from "../../components/TextInput/TextInput";
-import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { orderService } from "../../services/OrderService";
 import { studioPostService } from "../../services/StudioPostService";
+import { getCurrentUser } from "../../stores/actions/autheticateAction";
 import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
+import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
-import { HIDE_MODAL, SHOW_MODAL } from "../../stores/types/modalTypes";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { calDate, calTime } from "../../utils/calculate";
-import { convertPrice, convertTimeSendDB } from "../../utils/convert";
+import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
-import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 import toastMessage from "../ToastMessage";
 import "./order.scss";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
-import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
-import moment from "moment";
 
 const Index = ({ linkTo = "" }) => {
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -136,6 +136,9 @@ const Index = ({ linkTo = "" }) => {
         break;
     }
   };
+  const calculateCommisionAffiliate = (price) => {
+    return (price / 1.1) * 0.05;
+  };
 
   const calculatePriceUsePromo = () => {
     switch (filterService?.OrderByTime) {
@@ -192,16 +195,17 @@ const Index = ({ linkTo = "" }) => {
 
   const handleOnClickOrder = async () => {
     console.log("allalid", localStorage.getItem("qs"), cate, id);
+
     const AffiliateUserId =
       localStorage.getItem("category") == cate &&
       localStorage.getItem("id") == id
         ? localStorage.getItem("qs")
         : undefined;
     try {
-      if (user === null) {
-        // handleSendOtp(phoneNumber, Navigate, "", null, null);
-        return;
-      }
+      // if (user === null) {
+      //   // handleSendOtp(phoneNumber, Navigate, "", null, null);
+      //   return;
+      // }
       if (isEmpty()) {
         let IdentifyCode = [],
           TenantId;
@@ -225,14 +229,17 @@ const Index = ({ linkTo = "" }) => {
               BookingUserName: infoUser.Fullname,
               BookingPhone: infoUser.Phone,
               BookingEmail: infoUser.Email,
-              BookingUserId: user.id,
-              CreatorUserId: user.id,
+              BookingUserId: user?.id || undefined,
+              CreatorUserId: user?.id || undefined,
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
               BookingValueBeforeDiscount: calculatePrice(),
               BookingValue: calculatePriceUsePromo(),
               DepositValue: (calculatePriceUsePromo() * 15) / 100,
+              AffiliateCommission: calculateCommisionAffiliate(
+                calculatePriceUsePromo()
+              ),
               PromoCodeId: choosePromotionUser.id,
               AffiliateUserId: Number(AffiliateUserId),
             };
@@ -264,16 +271,19 @@ const Index = ({ linkTo = "" }) => {
               BookingUserName: infoUser.Fullname,
               BookingPhone: infoUser.Phone,
               BookingEmail: infoUser.Email,
-              BookingUserId: user.id,
-              CreatorUserId: user.id,
+              BookingUserId: user?.id || undefined,
+              CreatorUserId: user?.id || undefined,
               ProductId: chooseServiceList[i].id,
               Category: cate,
               IsPayDeposit: 1,
               BookingValueBeforeDiscount: calculatePrice(),
               BookingValue: calculatePriceUsePromo(),
               DepositValue: (calculatePriceUsePromo() * 15) / 100,
+              AffiliateCommission: calculateCommisionAffiliate(
+                calculatePriceUsePromo()
+              ),
               PromoCodeId: choosePromotionUser.id,
-              AffiliateUserId:Number(AffiliateUserId),
+              AffiliateUserId: Number(AffiliateUserId),
             };
             const response = await orderService.addOrder({
               ...newData,
@@ -293,6 +303,7 @@ const Index = ({ linkTo = "" }) => {
             TenantId = response.data.TenantId;
           }
         }
+        dispatch(getCurrentUser());
         navigate("confirm", {
           state: { IdentifyCode, TenantId, Category: cate },
         });
@@ -321,8 +332,7 @@ const Index = ({ linkTo = "" }) => {
         style={{
           maxWidth: "1300px",
           margin: "auto",
-        }}
-      >
+        }}>
         <Col lg={9} sm={24}>
           <div className="right_col">
             <div className="text-title">Bạn đã chọn</div>
@@ -342,8 +352,7 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="d-flex"
-                      style={{ height: "88px", marginRight: "0.5rem" }}
-                    >
+                      style={{ height: "88px", marginRight: "0.5rem" }}>
                       <img
                         src={`${
                           item?.Image?.length > 0
@@ -378,8 +387,7 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="text-title"
-                      style={{ marginBottom: "16px" }}
-                    >
+                      style={{ marginBottom: "16px" }}>
                       Khung giờ bạn muốn đặt
                     </div>
                     <SelectTimeOption disabled={true} />
@@ -419,17 +427,14 @@ const Index = ({ linkTo = "" }) => {
               style={{
                 marginBottom: "0.5rem",
                 backgroundColor: "#FFFFFF",
-              }}
-            >
+              }}>
               <div
                 className="d-flex justify-content-between"
-                style={{ marginBottom: "28px" }}
-              >
+                style={{ marginBottom: "28px" }}>
                 <div>Chọn mã khuyến mãi</div>
                 <div
                   style={{ cursor: "pointer" }}
-                  onClick={() => onClickModal()}
-                >
+                  onClick={() => onClickModal()}>
                   Mã khuyến mãi
                 </div>
               </div>
@@ -444,8 +449,7 @@ const Index = ({ linkTo = "" }) => {
                       textDecoration: "line-through",
                       color: "#828282",
                       marginBottom: "12px",
-                    }}
-                  >
+                    }}>
                     {filterService?.OrderByTime === 1 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
@@ -477,8 +481,7 @@ const Index = ({ linkTo = "" }) => {
                 <div className="d-flex justify-content-between">
                   <div
                     className="text-description"
-                    style={{ color: "#616161" }}
-                  >
+                    style={{ color: "#616161" }}>
                     Bao gồm 50.000đ thuế và phí
                   </div>
                   <div
@@ -488,8 +491,7 @@ const Index = ({ linkTo = "" }) => {
                       fontSize: "20px",
                       lineHeight: "28px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     {convertPrice(calculatePriceUsePromo())}đ
                   </div>
                 </div>
@@ -503,16 +505,14 @@ const Index = ({ linkTo = "" }) => {
               padding: "25px 25px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}
-          >
+            }}>
             <div
               className="text-title"
               style={{
                 fontSize: "22px",
                 lineHeight: "30px",
                 marginBottom: "0.25rem",
-              }}
-            >
+              }}>
               Vui lòng điền thông tin của bạn
             </div>
             <TextInput
@@ -564,12 +564,12 @@ const Index = ({ linkTo = "" }) => {
                     });
                     await studioPostService.sendCodeEmail({
                       Email: infoUser.Email,
+                      UserId: user?.id || undefined,
                     });
                   } catch (error) {
                     console.log(error);
                   }
-                }}
-              >
+                }}>
                 Verify Email
               </Button>
             )}
@@ -577,44 +577,35 @@ const Index = ({ linkTo = "" }) => {
 
           <div
             className="d-flex justify-content-end"
-            style={{ marginTop: "35px" }}
-          >
+            style={{ marginTop: "35px" }}>
             {infoUser?.IsActiveEmail &&
             infoUser?.Email?.trim() === user?.Email?.trim() ? (
-              <PopUpSignIn
+              <Button
                 onClick={(e) => {
                   handleOnClickOrder();
                 }}
-              >
-                <Button
-                  type="primary"
-                  // disabled={Valid ? false : true}
-                  style={{
-                    borderRadius: "8px",
-                    height: "45px",
-                    width: "270px",
-                  }}
-                >
-                  Hoàn tất đặt
-                </Button>
-              </PopUpSignIn>
+                type="primary"
+                // disabled={Valid ? false : true}
+                style={{
+                  borderRadius: "8px",
+                  height: "45px",
+                  width: "270px",
+                }}>
+                Hoàn tất đặt
+              </Button>
             ) : Valid ? (
-              <PopUpSignIn
+              <Button
                 onClick={(e) => {
                   handleOnClickOrder();
                 }}
-              >
-                <Button
-                  type="primary"
-                  style={{
-                    borderRadius: "8px",
-                    height: "45px",
-                    width: "270px",
-                  }}
-                >
-                  Hoàn tất đặt
-                </Button>
-              </PopUpSignIn>
+                type="primary"
+                style={{
+                  borderRadius: "8px",
+                  height: "45px",
+                  width: "270px",
+                }}>
+                Hoàn tất đặt
+              </Button>
             ) : (
               <Button
                 type="primary"
@@ -623,8 +614,7 @@ const Index = ({ linkTo = "" }) => {
                   borderRadius: "8px",
                   height: "45px",
                   width: "270px",
-                }}
-              >
+                }}>
                 Hoàn tất đặt
               </Button>
             )}
