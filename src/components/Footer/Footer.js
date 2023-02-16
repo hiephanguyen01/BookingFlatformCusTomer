@@ -32,8 +32,7 @@ const Footer = () => {
                         margin: "0 auto",
                         maxWidth: 100,
                         width: "100%",
-                      }}
-                    >
+                      }}>
                       <QRCode
                         size={256}
                         style={{
@@ -51,16 +50,14 @@ const Footer = () => {
                     <a
                       href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
                       target="_blank"
-                      rel="noreferrer"
-                    >
+                      rel="noreferrer">
                       <img src={Android} alt="" className="h-40px px-3" />
                     </a>
                     <a
                       href="https://apps.apple.com/vn/app/booking-studio/id1563362722"
                       target="_blank"
                       className=""
-                      rel="noreferrer"
-                    >
+                      rel="noreferrer">
                       <img
                         src={Ios}
                         target="_blank"
@@ -84,8 +81,7 @@ const Footer = () => {
                     href="https://vnplus.vn"
                     alt=""
                     target="_blank"
-                    rel="noreferrer"
-                  >
+                    rel="noreferrer">
                     <li className="item mt-20"> Giới thiệu VNPLUS</li>
                   </a>
                   <li className="mt-20">
@@ -121,7 +117,7 @@ const Footer = () => {
           </div>
           <p className="copywrite">
             <CopyrightOutlined /> 2021 - Bản quyền thuộc công ty Cổ phần Công
-            nghệ và Đầu tư VNPLUS
+            nghệ và Đầu tư VNPLUS V-16-2-23
           </p>
         </div>
       )}
