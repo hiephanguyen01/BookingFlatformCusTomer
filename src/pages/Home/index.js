@@ -2,11 +2,9 @@ import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import queryString from "query-string";
-import { bannerService } from "../../services/Banner";
 import logoImg from "../../../src/assets/img/Logo1.png";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import { bannerService } from "../../services/Banner";
 import {
   getAllStudioLikedAction1,
   getAllStudioLikedAction2,
@@ -14,6 +12,7 @@ import {
   getAllStudioLikedAction4,
   getAllStudioLikedAction5,
   getAllStudioLikedAction6,
+  getFilterStudioPost,
 } from "../../stores/actions/studioPostAction";
 import {
   getTop10OrderClothesAction,
@@ -197,9 +196,9 @@ export const Home = () => {
     const newFilter = {
       ...filter,
       category: categoryId,
+      keyString: "",
     };
     dispatch(getFilterStudioPost(5, 1, newFilter, currentUser, navigate));
-    // navigate(`/home/filter?${queryString.stringify(newFilter)}`);
   };
   const [banners, setBannerList] = useState([]);
   useEffect(() => {
@@ -226,8 +225,7 @@ export const Home = () => {
               className={cx("box")}
               onClick={() => {
                 handleClickCategory(item.id);
-              }}
-            >
+              }}>
               <img src={item.img} alt="a" />
               <span>{item.label}</span>
             </div>

@@ -14,8 +14,6 @@ import { getPromotionByTenantId } from "../../stores/actions/studioPostAction";
 
 const Index = () => {
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
-  console.log(promoCodeUserSave);
-
   const { promotionCode } = useSelector((state) => state.studioPostReducer);
   const [savePromo, setSavePromo] = useState([]);
   const dispatch = useDispatch();
@@ -60,8 +58,7 @@ const Index = () => {
         className="close_modal"
         onClick={() => {
           dispatch({ type: HIDE_MODAL });
-        }}
-      >
+        }}>
         <CloseOutlined />
       </div>
       <div className="save_promotion_container">
@@ -81,8 +78,7 @@ const Index = () => {
                   className="btn_applied"
                   onClick={() => {
                     handleChooseVoucher(item);
-                  }}
-                >
+                  }}>
                   Đã lưu
                 </div>
               ) : (
@@ -90,8 +86,7 @@ const Index = () => {
                   className="btn_apply"
                   onClick={() => {
                     handleChooseVoucher(item);
-                  }}
-                >
+                  }}>
                   Lưu
                 </div>
               )}

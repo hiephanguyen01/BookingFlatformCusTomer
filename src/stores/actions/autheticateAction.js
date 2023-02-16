@@ -51,34 +51,25 @@ export const facebookSignIn = (navigate) => async (dispatch) => {
   try {
     dispatch({ type: SET_LOADING, payload: true });
     const res = await signInWithPopup(auth, provider);
-    // const resp = await authenticateService.authenticate({
-    //   ...res.user,
-    //   ...res.user.providerData[0],
-    // });
     const resp = await authenticateService.authenticate({
       ...res["_tokenResponse"],
       providerId: res["_tokenResponse"].providerId,
     });
 
-    localStorage.setItem("token", resp.data.token);
+    localStorage.setItem("access_token", resp.data.token);
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
     dispatch({ type: PROVIDER_ID, payload: resp.data.providerId });
-    // navigate("/home/dao");
   } catch (error) {
     if (error.code === "auth/account-exists-with-different-credential") {
-      // const firstPopupProviderMethod = providers.find((p) =>
-      //   supportedPopupSignInMethods.includes(p)
-      // );
       const respError = await authenticateService.authenticate({
         ...error.customData["_tokenResponse"],
         providerId: error.customData["_tokenResponse"].providerId,
       });
-      localStorage.setItem("token", respError.data.token);
+      localStorage.setItem("access_token", respError.data.token);
       setAuthToken(respError.data.token);
       dispatch({ type: SET_USER, payload: respError.data.data });
       dispatch({ type: PROVIDER_ID, payload: respError.data.providerId });
-      // navigate("/home/dao");
     } else {
       openNotificationWithIcon(
         "error",
@@ -99,11 +90,10 @@ export const googleSignIn = () => async (dispatch) => {
       ...res.user,
       ...res.user.providerData[0],
     });
-    localStorage.setItem("token", resp.data.token);
+    localStorage.setItem("access_token", resp.data.token);
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
     dispatch({ type: PROVIDER_ID, payload: resp.data.providerId });
-    // navigate("/home/dao");
   } catch (error) {
     openNotificationWithIcon(
       "error",
@@ -139,13 +129,7 @@ export const googleLink =
           "Liên kiết tài khoản google thành công!"
         );
       }
-
-      // localStorage.setItem("token", resp.data.token);
-      // setAuthToken(resp.data.token);
       setCheckedLink(!checkedLink);
-      // dispatch(handleSendOtp("0934115420", navigate, "", undefined, 6));
-      // dispatch(configureCaptcha());
-
       dispatch({ type: SET_USER, payload: resp.data.data });
     } catch (error) {
       openNotificationWithIcon(
@@ -240,7 +224,7 @@ export const SignUpWithPhoneNumber = (data, navigate) => async (dispatch) => {
     dispatch({ type: SET_LOADING, payload: true });
     if (data.password) {
       const resp = await authenticateService.authenticate({ ...data });
-      localStorage.setItem("token", resp.data.token);
+      localStorage.setItem("access_token", resp.data.token);
       setAuthToken(resp.data.token);
       dispatch({ type: SET_USER, payload: resp.data.data });
       navigate("/home/dao");
@@ -256,7 +240,7 @@ export const LoginWithPhoneNumber = (data, navigate) => async (dispatch) => {
   try {
     dispatch({ type: SET_LOADING, payload: true });
     const resp = await authenticateService.loginByPhoneNumber(data);
-    localStorage.setItem("token", resp.data.token);
+    localStorage.setItem("access_token", resp.data.token);
     localStorage.removeItem("providerId");
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
@@ -274,7 +258,7 @@ export const login = (data) => async (dispatch) => {
     const res = await authenticateService.authenticate(data);
     setAuthToken(res.data.token);
     dispatch({ type: SET_USER, payload: res.data.user });
-    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("access_token", res.data.token);
   } catch (error) {
     openNotificationWithIcon(
       "error",
@@ -290,7 +274,7 @@ export const changePassword = (data) => async (dispatch) => {
 
     const res = await authenticateService.updateData(data);
     dispatch({ type: SET_USER, payload: null });
-    localStorage.removeItem("token", res.data.token);
+    localStorage.removeItem("access_token", res.data.token);
   } catch (error) {
     openNotificationWithIcon(
       "error",
@@ -303,12 +287,12 @@ export const changePassword = (data) => async (dispatch) => {
 export const getCurrentUser = () => async (dispatch) => {
   try {
     dispatch({ type: AUTHING, payload: true });
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("access_token")) {
       const res = await authenticateService.me();
       dispatch({ type: SET_USER, payload: res.data.user });
     }
   } catch (error) {
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     setAuthToken(false);
   }
   dispatch({ type: AUTHING, payload: false });
@@ -321,7 +305,7 @@ export const logOut = (navigate) => async (dispatch) => {
     navigate("/auth/sign-in");
     setAuthToken(null);
     dispatch({ type: SET_USER, payload: null });
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
   } catch (error) {
     console.log(error);
   }
@@ -334,7 +318,7 @@ export const deleteMe = (navigate) => async (dispatch) => {
     navigate("/auth/sign-in");
     setAuthToken(null);
     dispatch({ type: SET_USER, payload: null });
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
   } catch (error) {
     console.log(error);
     toastMessage(error.response.data.message, "error");

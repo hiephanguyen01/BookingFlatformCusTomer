@@ -148,7 +148,6 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       message.trim() !== "" &&
       files.length !== 0
     ) {
-      console.log("case3");
       e.preventDefault();
       setMessage("");
       socket.emit("send_message", messText);
@@ -184,8 +183,6 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   useEffect(() => {
     socket.on("receive_message", (data) => {
       if (data.ConversationId === id) {
-        console.log("Content", data.Content);
-
         setMessageList((list) => [...list, data]);
         setFlag(true);
       } else {

@@ -72,6 +72,7 @@ const Index = () => {
     promotionCode,
     filterService,
     serviceSelected,
+    listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -148,8 +149,7 @@ const Index = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 {data.Name}
               </div>
               <div
@@ -158,8 +158,7 @@ const Index = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <ClockCircleOutlined
                     className="me-10 mb-2"
@@ -177,8 +176,7 @@ const Index = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <SkinOutlined
                     className="me-10 mb-2"
@@ -196,8 +194,7 @@ const Index = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <StopOutlined
                     className="me-10 mb-2"
@@ -241,15 +238,13 @@ const Index = () => {
                       gap: "5px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}
-                  >
+                    }}>
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -267,8 +262,7 @@ const Index = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -286,8 +280,7 @@ const Index = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {data.PriceNote}
                   </p>
                   {/* <button
@@ -320,8 +313,7 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Bỏ chọn
                   </div>
                 ) : (
@@ -341,8 +333,7 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Chọn
                   </div>
                 )}
@@ -355,28 +346,31 @@ const Index = () => {
   };
 
   const handleChooseService = (data) => {
-    // if (data.id !== serviceSelected) {
-    //   toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
-    //   return;
-    // } else {
-    // }
-    dispatch(handlerSelectServiceAction(data));
-    // if (
-    //   (filterService.OrderByTime === 0 &&
-    //     filterService.OrderByDateFrom !== "" &&
-    //     filterService.OrderByDateTo !== "") ||
-    //   (filterService.OrderByTime === 1 &&
-    //     filterService.OrderByTimeFrom !== "" &&
-    //     filterService.OrderByTimeTo !== "")
-    // ) {
-    //   if (chooseService.filter((item) => item.id === data.id).length > 0) {
-    //     setChooseService([]);
-    //   } else {
-    //     setChooseService([{ ...data }]);
-    //   }
-    // } else {
-    //   toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
-    // }
+    const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+    if (findSelectTime) {
+      if (
+        findSelectTime.OrderByTime === 1 &&
+        findSelectTime.OrderByTimeFrom !== undefined &&
+        findSelectTime.OrderByTimeFrom !== "" &&
+        findSelectTime.OrderByTimeTo !== undefined &&
+        findSelectTime.OrderByTimeTo !== "" &&
+        findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else if (
+        findSelectTime.OrderByTime === 0 &&
+        findSelectTime.OrderByDateFrom !== undefined &&
+        findSelectTime.OrderByDateFrom !== "" &&
+        findSelectTime.OrderByDateTo !== undefined &&
+        findSelectTime.OrderByDateTo !== ""
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else {
+        return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+      }
+    } else {
+      return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+    }
   };
 
   const handleBook = () => {
@@ -386,16 +380,6 @@ const Index = () => {
     } else {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
-    // if (chooseService.length > 0 && filterService.OrderByTime !== -1) {
-    //   dispatch(chooseServiceAction(chooseService));
-    //   navigate("order");
-    // } else {
-    //   if (filterService.OrderByTime === -1) {
-    //     toastMessage("Bạn cần chọn thời gian!", "warn");
-    //   } else if (chooseService.length <= 0) {
-    //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
-    //   }
-    // }
   };
 
   const handleReport = () => {
@@ -420,8 +404,7 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -429,8 +412,7 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -440,8 +422,7 @@ const Index = () => {
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}
-              >
+                style={{ marginBottom: "11px" }}>
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -450,8 +431,7 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}
-                  >
+                    }}>
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{
@@ -495,27 +475,23 @@ const Index = () => {
                           flexDirection: "column",
                           gap: "10px",
                           padding: "10px",
-                        }}
-                      >
+                        }}>
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
                             cursor: "pointer",
-                          }}
-                        >
+                          }}>
                           <WarningOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Báo cáo
                           </span>
                         </div>
                       </div>
                     }
-                    trigger="click"
-                  >
+                    trigger="click">
                     <MoreOutlined
                       style={{
                         fontSize: "25px",
@@ -763,8 +739,7 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}
-                      >
+                        }}>
                         <div>
                           <UserOutlined
                             className="me-10 mb-2"
@@ -785,8 +760,7 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}
-                      >
+                        }}>
                         <div>
                           <DeploymentUnitOutlined
                             className="me-10 mb-2"
@@ -807,8 +781,7 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}
-                      >
+                        }}>
                         <div>
                           <StarOutlined
                             className="me-10 mb-2"
@@ -828,8 +801,7 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}
-                      >
+                        }}>
                         <div>
                           <StarOutlined
                             className="me-10 mb-2"
@@ -860,8 +832,7 @@ const Index = () => {
                 <div className={cx("map")}>
                   <h3 className="mb-5">Xem trên bản đồ</h3>
                   <div
-                    className={cx("address d-flex align-items-center mb-10")}
-                  >
+                    className={cx("address d-flex align-items-center mb-10")}>
                     <img src={images.address} alt="" className="me-10" />
                     <span>{studioDetail?.data?.Address}</span>
                   </div>
@@ -890,8 +861,7 @@ const Index = () => {
                             textDecoration: "line-through",
                             fontSize: " 16px",
                             color: "#828282",
-                          }}
-                        >
+                          }}>
                           {chooseServiceList?.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
@@ -928,8 +898,7 @@ const Index = () => {
                           color: "#E22828",
                           fontSize: "20px",
                           fontWeight: "700",
-                        }}
-                      >
+                        }}>
                         {filterService.OrderByTime === 1 &&
                           `${convertPrice(
                             chooseServiceList?.reduce(
@@ -970,8 +939,7 @@ const Index = () => {
                             "",
                             {}
                           )
-                        }
-                      >
+                        }>
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
@@ -982,8 +950,7 @@ const Index = () => {
                           chooseServiceList.length > 0 && filterService.id > 0
                             ? false
                             : true
-                        }
-                      >
+                        }>
                         Đặt ngay
                       </Button>
                     </div>
@@ -1014,8 +981,7 @@ const Index = () => {
                         {studioDetail?.album?.length > 3 && (
                           <div
                             className="btn_see_more"
-                            onClick={() => setToggleSeeMore(true)}
-                          >
+                            onClick={() => setToggleSeeMore(true)}>
                             Xem thêm <DownOutlined className="icon" />
                           </div>
                         )}
