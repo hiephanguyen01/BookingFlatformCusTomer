@@ -6,7 +6,7 @@ export class BaseService {
       method: "PUT",
       data: model,
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
       }, //JWT
     });
   };
@@ -16,7 +16,7 @@ export class BaseService {
       method: "PATCH",
       data: model,
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
       }, //JWT
     });
   };
@@ -27,7 +27,7 @@ export class BaseService {
       method: "POST",
       data: model,
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
       }, //JWT
     });
   };
@@ -38,8 +38,8 @@ export class BaseService {
       params: { ...params } || null,
       method: "GET",
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      }, //token yêu cầu từ backend chứng minh user đã đăng nhập rồi
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      }, //access_token yêu cầu từ backend chứng minh user đã đăng nhập rồi
     });
   };
 
@@ -49,8 +49,8 @@ export class BaseService {
       method: "DELETE",
       data: model,
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      }, //token yêu cầu từ backend chứng minh user đã đăng nhập rồi
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      }, //access_token yêu cầu từ backend chứng minh user đã đăng nhập rồi
     });
   };
 }

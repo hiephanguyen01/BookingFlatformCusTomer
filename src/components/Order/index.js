@@ -194,8 +194,6 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const handleOnClickOrder = async () => {
-    console.log("allalid", localStorage.getItem("qs"), cate, id);
-
     const AffiliateUserId =
       localStorage.getItem("category") == cate &&
       localStorage.getItem("id") == id

@@ -184,10 +184,6 @@ const AccountInfo = () => {
   const saveChange = async () => {
     setLoading(true);
     try {
-      // console.log(infoUser);
-      // console.log(
-      //   /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(infoUser.Phone)
-      // );
       if (!isVietnamesePhoneNumber(infoUser.Phone)) {
         setLoading(false);
 
@@ -313,8 +309,7 @@ const AccountInfo = () => {
               />
               {UserMe?.IsActiveEmail ? (
                 <p
-                  style={{ color: "green", paddingLeft: "39.703px!important" }}
-                >
+                  style={{ color: "green", paddingLeft: "39.703px!important" }}>
                   Email đã được xác nhận
                 </p>
               ) : UserMe?.Email?.trim() !== " " ? (
@@ -344,8 +339,7 @@ const AccountInfo = () => {
             style={{
               borderBottom: "1px solid #CACACA",
               paddingBottom: "1rem",
-            }}
-          >
+            }}>
             <Col lg={12} sm={24}>
               <EditText
                 label="Mật khẩu hiện tại"
@@ -383,8 +377,7 @@ const AccountInfo = () => {
             style={{
               borderBottom: "1px solid #CACACA",
               paddingBottom: "2rem",
-            }}
-          >
+            }}>
             <Col span={12}>
               <div className="d-flex container justify-content-center align-items-center mb-30">
                 <img
@@ -394,8 +387,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết Zalo
                   </span>
@@ -410,8 +402,7 @@ const AccountInfo = () => {
               </div>
               <div
                 className="d-flex container justify-content-center align-items-center"
-                style={{ marginBottom: "30px" }}
-              >
+                style={{ marginBottom: "30px" }}>
                 <img
                   src={imgFB}
                   alt=""
@@ -419,8 +410,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết facebook
                   </span>
@@ -449,8 +439,7 @@ const AccountInfo = () => {
                 />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết google
                   </span>
@@ -487,8 +476,7 @@ const AccountInfo = () => {
               type="primary"
               ghost
               className="AccountInfo__delete__container__button"
-              onClick={() => setVisible(true)}
-            >
+              onClick={() => setVisible(true)}>
               <span>Xóa tài khoản</span>
             </Button>
           </div>
@@ -499,8 +487,7 @@ const AccountInfo = () => {
             type="primary"
             className="AccountInfo__save"
             onClick={saveChange}
-            disabled={loading}
-          >
+            disabled={loading}>
             {loading && <ClipLoader color="#fff" size={20} />} Lưu thay đổi
           </Button>
         </div>
@@ -514,15 +501,13 @@ const AccountInfo = () => {
         // height={400}
         closable={false}
         className="AccountInfo__delete__modal"
-        footer={false}
-      >
+        footer={false}>
         <div className="AccountInfo__delete__modal__header">
           Bạn có chắc muốn xóa tài khoản này?
         </div>
         <div
           className="AccountInfo__delete__modal__content"
-          style={{ color: "#000" }}
-        >
+          style={{ color: "#000" }}>
           <div className="mb-20">
             Bằng cách bấm vào nút “Xóa tài khoản”, bạn tự nguyện chọn xóa bỏ tài
             khoản của mình hoàn toàn và không thể thay đổi được, và bạn đồng ý
@@ -536,8 +521,7 @@ const AccountInfo = () => {
               listStyleType: "disc",
               color: "#E22828",
               fontWeight: "600",
-            }}
-          >
+            }}>
             <li>Xóa bỏ tất cả thông tin trên hồ sơ của bạn</li>
             <li>Xóa bỏ tất cả thông tin về các đơn đặt phòng trước đây </li>
           </ul>
@@ -552,14 +536,12 @@ const AccountInfo = () => {
         <div className="AccountInfo__delete__modal__group__btn">
           <button
             className="AccountInfo__delete__modal__group__btn__cancel"
-            onClick={handleCancel}
-          >
+            onClick={handleCancel}>
             Hủy
           </button>
           <button
             className="AccountInfo__delete__modal__group__btn__delete"
-            onClick={handleDelete}
-          >
+            onClick={handleDelete}>
             Xóa
           </button>
         </div>

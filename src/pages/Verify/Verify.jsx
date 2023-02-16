@@ -17,7 +17,7 @@ const Verify = () => {
     (async () => {
       try {
         const res = await authenticateService.verifyEmail(token);
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("access_token", res.data.token);
         dispatch({ type: SET_USER, payload: res.data.data });
         setMessage("Xác nhận email thành công!");
       } catch (error) {

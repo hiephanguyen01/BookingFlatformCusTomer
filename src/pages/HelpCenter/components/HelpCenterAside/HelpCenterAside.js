@@ -32,9 +32,6 @@ const ITEM_USER_ACCOUNT_ASIDE = [
 ];
 
 const HelpCenterAside = ({ children, ref }) => {
-  // const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-  // const { pathname } = useLocation();
-  // console.log(pathname.split("/")[4]);
   const AsideItems = ({ item, ref, index }) => {
     return (
       <Link
@@ -43,35 +40,14 @@ const HelpCenterAside = ({ children, ref }) => {
         spy={true}
         smooth={false}
         offset={-20}
-        duration={100}
-        // to={item.linkTo}
-        // onClick={() => ref?.current?.scrollIntoView({ behavior: "smooth" })}
-        // style={
-        //   pathname.includes(item.linkTo)
-        //     ? { color: "#E22828" }
-        //     : { color: "#222222" }
-        // }
-      >
+        duration={100}>
         <div
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
-          }}
-        >
+          }}>
           {item.icon}
-          <span
-          // style={
-          //   pathname.includes(item.linkTo)
-          //     ? {
-          //         fontSize: "16px",
-          //         marginLeft: "0.5rem",
-          //         fontWeight: "600",
-          //       }
-          //     : { fontSize: "16px", marginLeft: "0.5rem", fontWeight: "400" }
-          // }
-          >
-            {item.title}
-          </span>
+          <span>{item.title}</span>
         </div>
       </Link>
     );

@@ -73,9 +73,8 @@ export const VerifyOtp = ({ setValid, email }) => {
         Email: email,
       });
       dispatch({ type: HIDE_MODAL });
-      console.log(user);
       if (!user) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("access_token", data.token);
         dispatch({ type: HIDE_MODAL });
       }
       setValue("");

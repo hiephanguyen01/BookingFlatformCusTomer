@@ -35,8 +35,6 @@ import { getCurrentUser } from "./stores/actions/autheticateAction";
 function App() {
   const dispatch = useDispatch();
   const { search } = useLocation();
-  console.log("localca", new URLSearchParams(search).get("qs"));
-  console.log("dhjsabdhjksaghdgshja", localStorage.getItem("qs"));
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
@@ -86,7 +84,6 @@ function App() {
       localStorage.setItem("id", new URLSearchParams(search).get("id"));
     }
   }, []);
-  console.log(localStorage.getItem("qs"), localStorage.getItem("category"));
   return (
     <div className="App">
       <ModalCustom />
