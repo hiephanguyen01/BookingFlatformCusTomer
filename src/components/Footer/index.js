@@ -3,7 +3,6 @@ import classNames from "classnames/bind";
 import styles from "./Footer.module.scss";
 import images from "../../assets/images";
 
-
 const cx = classNames.bind(styles);
 export const Footer = () => {
   return (
@@ -46,12 +45,14 @@ export const Footer = () => {
           <a>Quy định chung </a>
         </div>
         <div className={cx("box")}>
-          <a>Logo</a>
+          <a>Logo V-12-2-23</a>
           <h4>Công ty Cổ phần Công nghệ và Đầu tư VNPLUS</h4>
           <img src={images.reg} />
         </div>
       </div>
-      <p className={cx("credit")}>&#169; 2021 - Bản quyền thuộc công ty Cổ phần Công nghệ và Đầu tư VNPLUS</p>
+      <p className={cx("credit")}>
+        &#169; 2021 - Bản quyền thuộc công ty Cổ phần Công nghệ và Đầu tư VNPLUS
+      </p>
     </div>
   );
 };
