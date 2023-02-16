@@ -191,12 +191,7 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const handleOnClickOrder = async () => {
-    console.log("allalid", localStorage.getItem("qs"), cate, id);
-    const AffiliateUserId =
-      localStorage.getItem("category") == cate &&
-      localStorage.getItem("id") == id
-        ? localStorage.getItem("qs")
-        : undefined;
+    const AffiliateUserId = localStorage.getItem("qs");
     try {
       if (user === null) {
         // handleSendOtp(phoneNumber, Navigate, "", null, null);
@@ -273,7 +268,7 @@ const Index = ({ linkTo = "" }) => {
               BookingValue: calculatePriceUsePromo(),
               DepositValue: (calculatePriceUsePromo() * 15) / 100,
               PromoCodeId: choosePromotionUser.id,
-              AffiliateUserId:Number(AffiliateUserId),
+              AffiliateUserId: Number(AffiliateUserId),
             };
             const response = await orderService.addOrder({
               ...newData,

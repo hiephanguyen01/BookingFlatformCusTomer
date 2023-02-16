@@ -49,6 +49,11 @@ function App() {
         JSON.stringify({ ...data, ts: Date.now() })
       );
       await visitService.count();
+      if (new URLSearchParams(search).get("qs"))
+        await visitService.affiliateAccessCount({
+          AffiliateUserId: localStorage.getItem("qs"),
+          IpAddress: data.IPv4,
+        });
     } catch (error) {
       console.log(error);
     }
@@ -83,10 +88,7 @@ function App() {
         "category",
         new URLSearchParams(search).get("category")
       );
-      localStorage.setItem(
-        "id",
-        new URLSearchParams(search).get("id")
-      );
+      localStorage.setItem("id", new URLSearchParams(search).get("id"));
     }
   }, []);
   console.log(localStorage.getItem("qs"), localStorage.getItem("category"));
