@@ -47,6 +47,11 @@ function App() {
         JSON.stringify({ ...data, ts: Date.now() })
       );
       await visitService.count();
+      if (new URLSearchParams(search).get("qs"))
+        await visitService.affiliateAccessCount({
+          AffiliateUserId: localStorage.getItem("qs"),
+          IpAddress: data.IPv4,
+        });
     } catch (error) {
       console.log(error);
     }

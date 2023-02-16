@@ -194,11 +194,8 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const handleOnClickOrder = async () => {
-    const AffiliateUserId =
-      localStorage.getItem("category") == cate &&
-      localStorage.getItem("id") == id
-        ? localStorage.getItem("qs")
-        : undefined;
+    const AffiliateUserId = localStorage.getItem("qs");
+
     try {
       // if (user === null) {
       //   // handleSendOtp(phoneNumber, Navigate, "", null, null);
