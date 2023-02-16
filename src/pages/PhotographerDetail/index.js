@@ -71,7 +71,7 @@ const PhotographerDetail = () => {
     listStudioSimilar,
     promotionCode,
     filterService,
-    serviceSelected,
+    listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
@@ -146,8 +146,7 @@ const PhotographerDetail = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 {data.Name}
               </div>
               <div
@@ -156,8 +155,7 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <CameraOutlined style={{ marginRight: "10px" }} />
                   Ekip
@@ -174,8 +172,7 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <img src={jiwery} className="me-10 mb-5" alt="" />
                   Trang phục, phụ kiện
@@ -191,8 +188,7 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <img src={different} className="me-10 mb-5" alt="" />
                   Khác
@@ -207,8 +203,7 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <PictureOutlined
                     className="me-10 mb-2"
@@ -228,8 +223,7 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div className="d-flex align-items-center">
                   <StopOutlined
                     className="me-10 mb-2"
@@ -247,8 +241,7 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <EnvironmentOutlined
                     className="me-10 mb-2"
@@ -266,8 +259,7 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}
-              >
+                }}>
                 <div>
                   <ClockCircleOutlined
                     className="me-10 mb-2"
@@ -321,15 +313,13 @@ const PhotographerDetail = () => {
                       gap: "10px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}
-                  >
+                    }}>
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -347,8 +337,7 @@ const PhotographerDetail = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}
-                    >
+                      }}>
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -366,8 +355,7 @@ const PhotographerDetail = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {data.PriceNote}
                   </p>
                   <button
@@ -377,8 +365,7 @@ const PhotographerDetail = () => {
                       color: "#ffff",
                       border: " 1px solid #E22828",
                       borderRadius: " 8px",
-                    }}
-                  >
+                    }}>
                     Giảm 50%{" "}
                   </button>
                 </div>
@@ -402,8 +389,7 @@ const PhotographerDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Bỏ chọn
                   </div>
                 ) : (
@@ -423,8 +409,7 @@ const PhotographerDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}
-                  >
+                    }}>
                     Chọn
                   </div>
                 )}
@@ -437,31 +422,32 @@ const PhotographerDetail = () => {
   };
 
   const handleChooseService = (data) => {
-    // if (data.id !== serviceSelected) {
-    //   toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
-    //   return;
-    // } else {
-    // }
-    dispatch(handlerSelectServiceAction(data));
-
-    // if (
-    //   (filterService.OrderByTime === 0 &&
-    //     filterService.OrderByDateFrom !== "" &&
-    //     filterService.OrderByDateTo !== "") ||
-    //   (filterService.OrderByTime === 1 &&
-    //     filterService.OrderByTimeFrom !== "" &&
-    //     filterService.OrderByTimeTo !== "")
-    // ) {
-    //   if (chooseService.filter((item) => item.id === data.id).length > 0) {
-    //     setChooseService([]);
-    //   } else {
-    //     setChooseService([{ ...data }]);
-    //   }
-    // } else {
-    //   toastMessage("Vui lòng chọn giá theo giờ hoặc theo ngày!", "warn", 2);
-    // }
+    const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+    if (findSelectTime) {
+      if (
+        findSelectTime.OrderByTime === 1 &&
+        findSelectTime.OrderByTimeFrom !== undefined &&
+        findSelectTime.OrderByTimeFrom !== "" &&
+        findSelectTime.OrderByTimeTo !== undefined &&
+        findSelectTime.OrderByTimeTo !== "" &&
+        findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else if (
+        findSelectTime.OrderByTime === 0 &&
+        findSelectTime.OrderByDateFrom !== undefined &&
+        findSelectTime.OrderByDateFrom !== "" &&
+        findSelectTime.OrderByDateTo !== undefined &&
+        findSelectTime.OrderByDateTo !== ""
+      ) {
+        dispatch(handlerSelectServiceAction(data, findSelectTime));
+      } else {
+        return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+      }
+    } else {
+      return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+    }
   };
-  console.log(chooseServiceList.length > 0 && filterService?.id > 0);
   const handleBook = () => {
     if (chooseServiceList.length > 0) {
       dispatch(chooseServiceAction(chooseServiceList));
@@ -469,28 +455,9 @@ const PhotographerDetail = () => {
     } else {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
-    // if (chooseService.length > 0 && filterService.OrderByTime !== -1) {
-    //   dispatch(chooseServiceAction(chooseService));
-    //   navigate("order");
-    // } else {
-    //   if (filterService.OrderByTime === -1) {
-    //     toastMessage("Bạn cần chọn thời gian!", "warn");
-    //   } else if (chooseService.length <= 0) {
-    //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
-    //   }
-    // }
   };
 
-  // const handleAddCart = () => {
-  //   if (chooseService.length > 0) {
-  //     dispatch(addOrder(cate, chooseService));
-  //     toastMessage("Đã thêm vào giỏ hàng!", "success");
-  //   } else {
-  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
-  //   }
-  // };
   const handleChangeLike = (e) => {
-    // e.stopPropagation();
     if (currentUser) {
       dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
     }
@@ -519,8 +486,7 @@ const PhotographerDetail = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}
-          >
+            }}>
             <div
               style={{
                 background: "white",
@@ -528,8 +494,7 @@ const PhotographerDetail = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}
-            >
+              }}>
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -540,8 +505,7 @@ const PhotographerDetail = () => {
               margin: "auto",
               backgroundColor: "rgb(245, 245, 245)",
               padding: "2rem 0",
-            }}
-          >
+            }}>
             <section className="photographer-detail">
               <div className="photographer-detail__container">
                 <header className="photographer-detail__container__header">
@@ -579,8 +543,7 @@ const PhotographerDetail = () => {
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                        }}
-                      >
+                        }}>
                         {studioDetail?.data?.UsersLiked ? (
                           <HeartFilled
                             style={{
@@ -611,27 +574,26 @@ const PhotographerDetail = () => {
                               flexDirection: "column",
                               gap: "10px",
                               padding: "10px",
-                            }}
-                          >
+                            }}>
                             <div
                               style={{
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "10px",
                                 cursor: "pointer",
-                              }}
-                            >
+                              }}>
                               <WarningOutlined style={{ fontSize: "20px" }} />
                               <span
-                                style={{ fontSize: "18px", fontWeight: "bold" }}
-                              >
+                                style={{
+                                  fontSize: "18px",
+                                  fontWeight: "bold",
+                                }}>
                                 Báo cáo
                               </span>
                             </div>
                           </div>
                         }
-                        trigger="click"
-                      >
+                        trigger="click">
                         <MoreOutlined
                           style={{
                             fontSize: "25px",
@@ -677,8 +639,7 @@ const PhotographerDetail = () => {
                       <div
                         className={cx(
                           "address d-flex align-items-center mb-10"
-                        )}
-                      >
+                        )}>
                         <img
                           src={images.address}
                           className="me-10 w-13px h-15px"
@@ -712,8 +673,7 @@ const PhotographerDetail = () => {
                                 textDecoration: "line-through",
                                 fontSize: " 16px",
                                 color: "#828282",
-                              }}
-                            >
+                              }}>
                               {filterService.OrderByTime === 1 &&
                                 `${convertPrice(
                                   chooseServiceList?.reduce(
@@ -752,8 +712,7 @@ const PhotographerDetail = () => {
                               color: "#E22828",
                               fontSize: "20px",
                               fontWeight: "700",
-                            }}
-                          >
+                            }}>
                             {filterService.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
@@ -794,8 +753,7 @@ const PhotographerDetail = () => {
                                 "",
                                 {}
                               )
-                            }
-                          >
+                            }>
                             <ShoppingCartOutlined />
                             Thêm vào giỏ hàng
                           </Button>
@@ -807,8 +765,7 @@ const PhotographerDetail = () => {
                               filterService.id > 0
                                 ? false
                                 : true
-                            }
-                          >
+                            }>
                             Đặt ngay
                           </Button>
                         </div>
@@ -838,8 +795,7 @@ const PhotographerDetail = () => {
                             {studioDetail?.album?.length > 3 && (
                               <div
                                 className="btn_see_more"
-                                onClick={() => setToggleSeeMore(true)}
-                              >
+                                onClick={() => setToggleSeeMore(true)}>
                                 Xem thêm <DownOutlined className="icon" />
                               </div>
                             )}

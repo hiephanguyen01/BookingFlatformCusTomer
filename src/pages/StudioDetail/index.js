@@ -129,22 +129,12 @@ export const StudioDetail = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch({ type: "SET_STUDIO_DETAIL", payload: {} });
-  //   };
-  // }, [dispatch]);
-
   const handleReport = () => {
     dispatch({
       type: SHOW_MODAL,
       Component: <Report category={cate} postId={id} />,
     });
   };
-  // const handlerServiceSelect = (data) => {
-  //   console.log(data.id);
-  //   // dispatch({ type: SET_SERVICE_SELECT, payload: data.id });
-  // };
 
   const ROW = (dataSource) => {
     return dataSource?.map((data, index) => [
@@ -413,11 +403,6 @@ export const StudioDetail = () => {
   };
 
   const handleChooseService = (data) => {
-    // if (data.id !== serviceSelected) {
-    //   toastMessage("Vui lòng chọn cho đúng đêeeee!", "warn", 2);
-    //   return;
-    // } else {
-    // }
     const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
     if (findSelectTime) {
       if (

@@ -15,7 +15,6 @@ const DropFileInput = ({
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
   const onDragLeave = () => wrapperRef.current.classList.remove("dragover");
   const onDrop = () => wrapperRef.current.classList.remove("dragover");
-  console.log(image);
   return (
     <div
       ref={wrapperRef}
@@ -23,8 +22,7 @@ const DropFileInput = ({
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
-      style={{ ...style }}
-    >
+      style={{ ...style }}>
       {/* <i className='fa-solid fa-cloud-arrow-up mb-3 text-primary' style={{fontSize: '100px'}}></i> */}
       {image ? (
         <img

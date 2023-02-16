@@ -83,15 +83,6 @@ const Aside = ({ children }) => {
   const debounced = useDebounce(name, 1500);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-  // console.log(pathname.split("/")[4]);
-  // const newPathname = pathname.split("/")[3];
-  // console.log(newPathname);
-
-  // useEffect(() => {
-  //   if (UserMe.Fullname) {
-  //     setName(UserMe.Fullname);
-  //   }
-  // }, [UserMe]);
   const AsideItems = ({ item }) => {
     return (
       <Link
@@ -100,14 +91,12 @@ const Aside = ({ children }) => {
           pathname.includes(item.linkTo)
             ? { color: "#E22828" }
             : { color: "#222222" }
-        }
-      >
+        }>
         <div
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
-          }}
-        >
+          }}>
           {item.icon}
           <span
             style={
@@ -118,8 +107,7 @@ const Aside = ({ children }) => {
                     fontWeight: "600",
                   }
                 : { fontSize: "16px", marginLeft: "0.5rem", fontWeight: "400" }
-            }
-          >
+            }>
             {item.title}
           </span>
         </div>
@@ -147,9 +135,7 @@ const Aside = ({ children }) => {
         formData.append("Fullname", debounced);
         await userService.saveInfo(formData);
         dispatch(getCurrentUser());
-      } catch (error) {
-        console.log("fail");
-      }
+      } catch (error) {}
     };
     fetchApi();
   }, [debounced, dispatch, UserMe.Fullname]);
@@ -164,15 +150,13 @@ const Aside = ({ children }) => {
         style={{
           paddingBottom: "1rem",
           borderBottom: "1px solid #CACACA",
-        }}
-      >
+        }}>
         <div
           className=""
           style={{
             height: "46px",
             marginRight: "1rem",
-          }}
-        >
+          }}>
           <img
             src={UserMe.Image !== null ? ImageDetect(UserMe) : noBody}
             alt=""
@@ -201,8 +185,7 @@ const Aside = ({ children }) => {
               onClick={() => {
                 ref.current.focus();
               }}
-              type="text"
-            >
+              type="text">
               <EditOutlined style={{ color: "#03AC84" }} />
             </Button>
           </div>
@@ -214,8 +197,7 @@ const Aside = ({ children }) => {
           marginTop: "1rem",
           borderBottom: "1px solid #CACACA",
           paddingBottom: "1rem",
-        }}
-      >
+        }}>
         <h5 style={{ textTransform: "uppercase" }}>Tài khoản của chúng tôi</h5>
         {ITEM_USER_ACCOUNT_ASIDE.map((item, index) => (
           <AsideItems item={item} key={index} />

@@ -182,27 +182,19 @@ export const studioPostReducer = (state = initialState, action) => {
       } else {
         newArray = [...newArray, action.data];
       }
-      console.log(newArray);
       return {
         ...state,
         listTimeSelected: newArray,
       };
     case SELECT_TIME_ORDER:
       let newFilter = { ...state.filterService };
-      console.log(newFilter);
       if (newFilter.id == action.data.id) {
         newFilter = {};
       } else {
         let data = state.listTimeSelected.find(
           (item) => item.id == action.data.id
         );
-        console.log("data da chon", data);
         if (data) {
-          // console.log(
-          //   "hour so sanh ",
-          //   data.disableTimeOrder[0] || 0,
-          //   moment.utc(moment(data.OrderByTimeFrom).utc()).hour()
-          // );
           if (data.OrderByTime === 1) {
             if (
               data.disableTimeOrder[0] >
@@ -270,15 +262,8 @@ export const studioPostReducer = (state = initialState, action) => {
         filterService: {},
       };
     case "REMOVE_SELECT_TIME":
-      // let listnew = [...state.listTimeSelected];
-      // const existed = listnew.findIndex((item) => item.id == action.id);
-      // if (existed>-1) {
-      //   listnew.splice(existed, 1);
-      // }
-      // console.log("listnew", listnew);
       return {
         ...state,
-        // listTimeSelected: [],
         filterService: {},
       };
     case "SET_TIME_ORDER_SELECTED":

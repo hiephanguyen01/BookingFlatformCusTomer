@@ -14,7 +14,6 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
     image: [],
   });
   const [files, setFiles] = useState([]);
-  console.log(post);
   const onChange = (e) => {
     setData((prevState) => ({
       ...prevState,
@@ -32,7 +31,6 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
       formData.append("Description", newPost.Description);
       formData.append("IsAnonymous", newPost.IsAnonymous);
       formData.append("Rate", newPost.Rate);
-      console.log(formData);
       const result = await ratingService.createRatingBookign(
         id,
         Category,
@@ -45,8 +43,6 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
         image: [],
       });
       onOk();
-
-      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -59,7 +55,6 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
     }));
   };
   const handleChangeDescription = (e) => {
-    console.log(e.target.value);
     setData((prevState) => ({
       ...prevState,
       Description: e.target.value,

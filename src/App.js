@@ -2,7 +2,7 @@ import { BackTop } from "antd";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import "./App.scss";
 import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
 import UpdateConfirm from "./components/ConfirmOrder";
@@ -34,7 +34,7 @@ import { getCurrentUser } from "./stores/actions/autheticateAction";
 
 function App() {
   const dispatch = useDispatch();
-
+  const { search } = useLocation();
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
@@ -47,6 +47,11 @@ function App() {
         JSON.stringify({ ...data, ts: Date.now() })
       );
       await visitService.count();
+      if (new URLSearchParams(search).get("qs"))
+        await visitService.affiliateAccessCount({
+          AffiliateUserId: localStorage.getItem("qs"),
+          IpAddress: data.IPv4,
+        });
     } catch (error) {
       console.log(error);
     }
@@ -75,6 +80,14 @@ function App() {
         }
       }
     })();
+    if (new URLSearchParams(search).get("qs") !== "") {
+      localStorage.setItem("qs", new URLSearchParams(search).get("qs"));
+      localStorage.setItem(
+        "category",
+        new URLSearchParams(search).get("category")
+      );
+      localStorage.setItem("id", new URLSearchParams(search).get("id"));
+    }
   }, []);
   return (
     <div className="App">

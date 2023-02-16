@@ -131,7 +131,6 @@ const PostDetail = () => {
           []
         );
         try {
-          // console.log(window.locationJSON.stringify(newData));
           const res = await postDaoService.createComment({
             PostId: postDetail.id,
             Content: chooseCommentDefault.Content || "",
@@ -140,7 +139,6 @@ const PostDetail = () => {
           if (res) {
             getComments(1);
             setPost({ ...post, TotalComments: post.TotalComments + 1 });
-            // setComments([res.data, ...comments]);
             setRelatedServices([]);
             setChooseCommentDefault({});
           }

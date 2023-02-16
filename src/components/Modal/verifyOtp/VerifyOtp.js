@@ -1,13 +1,13 @@
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import ReactInputVerificationCode from "react-input-verification-code";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import styles from "./SignUpWithPhone.module.scss";
-import classNames from "classnames/bind";
-import { Button } from "antd";
-import { useDispatch } from "react-redux";
-import { HIDE_MODAL, SHOW_MODAL } from "../../../stores/types/modalTypes";
 import { studioPostService } from "../../../services/StudioPostService";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { HIDE_MODAL } from "../../../stores/types/modalTypes";
+import styles from "./SignUpWithPhone.module.scss";
 const StyledReactInputVerificationCode = styled.div`
   display: flex;
   justify-content: center;
@@ -29,6 +29,7 @@ const StyledReactInputVerificationCode = styled.div`
 `;
 const cx = classNames.bind(styles);
 export const VerifyOtp = ({ setValid, email }) => {
+  const user = useSelector((state) => state.authenticateReducer.currentUser);
   const [value, setValue] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
   const [countDown, setCountDown] = React.useState(60);
@@ -66,10 +67,16 @@ export const VerifyOtp = ({ setValid, email }) => {
   const onSubmit = async () => {
     try {
       setValid(true);
-      await studioPostService.verifyCodeEmail({
+      const { data } = await studioPostService.verifyCodeEmail({
         VerifyCode: value,
+        UserId: user?.id || undefined,
+        Email: email,
       });
       dispatch({ type: HIDE_MODAL });
+      if (!user) {
+        localStorage.setItem("access_token", data.token);
+        dispatch({ type: HIDE_MODAL });
+      }
       setValue("");
     } catch (error) {
       setIsInvalid(true);
@@ -120,6 +127,7 @@ export const VerifyOtp = ({ setValid, email }) => {
                   setCountDown(60);
                   await studioPostService.sendCodeEmail({
                     Email: email,
+                    UserId: user?.id || undefined,
                   });
                 } catch (error) {
                   console.log(error);
