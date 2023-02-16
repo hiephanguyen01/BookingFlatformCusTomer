@@ -3,7 +3,6 @@ import image from "../assets/img/no-body.svg";
 
 export const convertImage = (url = "") => {
   if (url !== "" && url !== undefined) {
-    // console.log(url);
     if (url?.includes("http")) {
       return url;
     } else if (url === null) {

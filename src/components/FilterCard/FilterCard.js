@@ -65,53 +65,9 @@ const FilterCard = ({ data, category }) => {
   useEffect(() => {
     setNewData({ ...data });
   }, [data]);
-  // useEffect(() => {
-  //   switch (data?.category) {
-  //     case "":
-  //       setValue([
-  //         ...listLikedCategory1,
-  //         ...listLikedCategory2,
-  //         ...listLikedCategory3,
-  //         ...listLikedCategory4,
-  //         ...listLikedCategory5,
-  //         ...listLikedCategory6,
-  //       ]);
-  //       break;
-  //     case 1:
-  //       setValue(listLikedCategory1);
-  //       break;
-  //     case 2:
-  //       setValue(listLikedCategory2);
-  //       break;
-  //     case 3:
-  //       setValue(listLikedCategory3);
-  //       break;
-  //     case 4:
-  //       setValue(listLikedCategory4);
-  //       break;
-  //     case 5:
-  //       setValue(listLikedCategory5);
-  //       break;
-  //     case 6:
-  //       setValue(listLikedCategory6);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }, [
-  //   data?.category,
-  //   listLikedCategory1,
-  //   listLikedCategory2,
-  //   listLikedCategory3,
-  //   listLikedCategory4,
-  //   listLikedCategory5,
-  //   listLikedCategory6,
-  // ]);
-  console.log(data.id);
+
   const handleChangeLike = async (e) => {
-    // if (!currentUser) navigate("/auth/sign-in");
     if (currentUser) {
-      // dispatch(getLikeStudioPostAction(data?.id, data?.category));
       const res = await studioPostService.getLikeStudioPost({
         PostId: data?.id,
         CategoryId: data?.category,
@@ -138,16 +94,14 @@ const FilterCard = ({ data, category }) => {
             navigate(
               `/home/${categories[newData?.category].value}/${newData?.id}`
             );
-          }}
-        >
+          }}>
           <div className="groupImage">
             <PopUpSignIn
               onClick={(e) => {
                 // e.stopPropagation();
                 handleChangeLike();
               }}
-              className={"like"}
-            >
+              className={"like"}>
               {newData?.UsersLiked &&
               newData?.UsersLiked.length > 0 &&
               newData?.UsersLiked.some(

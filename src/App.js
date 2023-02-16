@@ -35,8 +35,6 @@ import { getCurrentUser } from "./stores/actions/autheticateAction";
 function App() {
   const dispatch = useDispatch();
   const { search } = useLocation();
-  console.log("localca", new URLSearchParams(search).get("qs"));
-  console.log("dhjsabdhjksaghdgshja", localStorage.getItem("qs"));
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
@@ -83,13 +81,9 @@ function App() {
         "category",
         new URLSearchParams(search).get("category")
       );
-      localStorage.setItem(
-        "id",
-        new URLSearchParams(search).get("id")
-      );
+      localStorage.setItem("id", new URLSearchParams(search).get("id"));
     }
   }, []);
-  console.log(localStorage.getItem("qs"), localStorage.getItem("category"));
   return (
     <div className="App">
       <ModalCustom />
@@ -106,8 +100,7 @@ function App() {
             <CustomerLayout>
               <Verify />
             </CustomerLayout>
-          }
-        ></Route>
+          }></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route index element={<Home />}></Route>
           <Route
@@ -116,8 +109,7 @@ function App() {
               <ProtectedRouter>
                 <UserAccount />
               </ProtectedRouter>
-            }
-          ></Route>
+            }></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />
