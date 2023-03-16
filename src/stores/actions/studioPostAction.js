@@ -232,15 +232,10 @@ export const getAllStudioLikedAction1 = (category, sort = "") => {
 export const getAllStudioLikedAction = (category, sort = "") => {
   return async (dispatch) => {
     try {
-      const { data } = await studioPostService.getAllStudioLiked(
-        {
-          CategoryId: category,
-        },
-        sort
-      );
+      const { data } = await studioPostService.getAllStudioLiked(sort);
       dispatch({
         type: SET_LIST_LIKED_CATEGORY,
-        data: data.Posts,
+        data: data,
       });
     } catch (error) {
       console.log(error);
