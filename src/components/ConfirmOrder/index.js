@@ -9,8 +9,10 @@ import { convertImage, convertImageUrl } from "../../utils/convertImage";
 import toastMessage from "../ToastMessage";
 import UploadImage from "../UploadImage";
 import { numberWithDot } from "../../utils/convert";
+import { useSelector } from "react-redux";
 
 const Index = () => {
+  const socket = useSelector((state) => state.userReducer.socket);
   const [checkoutDisable, setCheckoutDisable] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -86,6 +88,8 @@ const Index = () => {
           booking?.IdentifyCode,
           cate
         );
+
+        socket?.emit("updateEvidence", res.data);
         setBooking(res.data);
         if (location?.state?.updatePay || false) {
           toastMessage("Cập nhật minh chứng thành công!", "success");
@@ -96,6 +100,7 @@ const Index = () => {
         toastMessage("Vui lòng chọn ảnh minh chứng!", "warn");
       }
     } catch (error) {
+      console.log("🚀 ~ handleClickBtnUpdate ~ error:", error);
       toastMessage("Cập nhật minh chứng thất bại!", "error");
     }
   };

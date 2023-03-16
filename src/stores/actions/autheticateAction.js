@@ -6,6 +6,7 @@ import {
   PHONE,
   PROVIDER_ID,
   SET_LOADING,
+  SET_SOCKET,
   SET_USER,
 } from "../types/authType";
 import {
@@ -19,6 +20,7 @@ import firebase from "../../pages/Auth/FireBaseSetUp/Firebase";
 import { auth } from "../../pages/Auth/FireBaseSetUp/Firebase";
 import { userService } from "../../services/UserService";
 import toastMessage from "../../components/ToastMessage";
+import { io } from "socket.io-client";
 
 const setAuthToken = (token) => {
   if (token) {
@@ -323,4 +325,17 @@ export const deleteMe = (navigate) => async (dispatch) => {
     console.log(error);
     toastMessage(error.response.data.message, "error");
   }
+};
+
+export const setupSocket = () => (dispatch) => {
+  const newSocket = io(process.env.REACT_APP_DB_BASE_URL + "/");
+  console.log("🚀 ~ setupSocket ~ newSocket:", newSocket);
+  newSocket.on("disconnect", () => {
+    dispatch({ type: SET_SOCKET, payload: null });
+    setTimeout(setupSocket, 3000);
+  });
+  newSocket.on("connect", () => {
+    console.log("aaaaas");
+    dispatch({ type: SET_SOCKET, payload: newSocket });
+  });
 };

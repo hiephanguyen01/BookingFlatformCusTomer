@@ -35,6 +35,7 @@ export const Footer = ({
   Item,
   post,
 }) => {
+  const socket = useSelector((state) => state.userReducer.socket);
   const [visible, setVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
@@ -59,6 +60,8 @@ export const Footer = ({
         (item) => item.IdentifyCode !== IdentifyCode
       );
       setPageBooking(newPageBooking);
+      console.log("🚀 ~ handleCancelOrder ~ newPageBooking:", IdentifyCode);
+      socket?.emit("cancelBooking", { IdentifyCode });
       setShowModal(false);
       toastMessage("Hủy đơn thành công!", "success");
     } catch (error) {

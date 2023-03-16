@@ -1,0 +1,70 @@
+.Refund {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .container-r {
+    max-width: 650px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    text-align: center;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 4px;
+  }
+  .wrapper {
+    margin: auto;
+    max-width: 580px;
+    background-color: #fff;
+    padding: 28px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  img {
+    object-fit: contain;
+  }
+  .title-r {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    color: #000000;
+    margin-top: 40px;
+    padding: 0 90px;
+  }
+  .form-r {
+    display: flex;
+    flex-direction: column;
+    padding: 0 90px;
+    margin-top: 36px;
+    width: 100%;
+    gap: 24px;
+  }
+  .input-r {
+    padding: 14px 24px;
+    width: 100%;
+    border: 1px solid #000000;
+    border-radius: 6px;
+  }
+  .select-r {
+    padding: 14px 24px;
+    width: 100%;
+    border: 1px solid #000000;
+    border-radius: 6px;
+    color: #717171;
+  }
+  .noti {
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 40px;
+    margin: 33px 0 24px 0;
+  }
+  .text-t {
+    text-align: left;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #000000;
+  }
+}

@@ -8,9 +8,9 @@ const { TabPane } = Tabs;
 export const keyF = {
   1: { BookingStatus: 4, PaymentStatus: [1] }, //chờ thanh toán
   2: { BookingStatus: 4, PaymentStatus: [4, 3, 2] }, //sắp tới
-  3: { BookingStatus: 1, PaymentStatus: [3, 4] }, //hoàn tất
+  3: { BookingStatus: 1, PaymentStatus: [2, 3, 4] }, //hoàn tất
   4: { BookingStatus: 2, PaymentStatus: [1, 2, 3, 4] }, //đã huỷ
-  5: { BookingStatus: 3, PaymentStatus: [1, 2, 3, 4] }, //vắng mặt
+  5: { BookingStatus: 3, PaymentStatus: [2, 3, 4] }, //vắng mặt
 };
 const OrderStatus = () => {
   const [booking, setBooking] = useState([]);
