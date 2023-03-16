@@ -76,7 +76,7 @@ const Rating = () => {
         {handleStar()}
       </div>
     </> */}
-      <CommentRating data={{ rating: myRatings }} className="mb-43 mt-12" />
+      <CommentRating data={{ rating: myRatings }} isPerional={true} className="mb-43 mt-12" />
     </>
   );
 };

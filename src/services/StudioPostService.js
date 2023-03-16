@@ -32,11 +32,11 @@ class StudioPostService extends BaseService {
   getLikeStudioPost = (data) => {
     return this.post(`/api/booking-user/like-studio-post`, data);
   };
-  getAllStudioLiked = (data, _sort = "") => {
+  getAllStudioLiked = (_sort = "") => {
     if (_sort.trim() !== "") {
-      return this.post(`/api/booking-user/liked-studio?_sort=${_sort}`, data);
+      return this.post(`/api/booking-user/liked-studio?_sort=${_sort}`);
     }
-    return this.post(`/api/booking-user/liked-studio`, data);
+    return this.post(`/api/booking-user/liked-studio`);
   };
   updateView = (data) => {
     return this.patch(`/api/album/`, data);

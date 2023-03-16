@@ -1,3 +1,4 @@
+import { SET_SOCKET } from "../types/authType";
 import {
   CANCEL_SAVED_POST,
   SET_LOADING,
@@ -7,6 +8,7 @@ import {
 const initialState = {
   loading: false,
   savedPostList: [],
+  socket: null,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -20,6 +22,11 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         savedPostList: action.payload,
+      };
+    case SET_SOCKET:
+      return {
+        ...state,
+        socket: action.payload,
       };
     case CANCEL_SAVED_POST:
       const newState = { ...state };
