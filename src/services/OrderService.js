@@ -21,6 +21,12 @@ class OrderService extends BaseService {
   addOrder = (data) => {
     return this.post("/api/booking", data);
   };
+  updateRefundOrderByid = (data, IdentifyCode, category, token) => {
+    return this.patch(
+      `/api/booking/refund?IdentifyCode=${IdentifyCode}&category=${category}&token=${token}`,
+      data
+    );
+  };
   updateOrder = (data, IdentifyCode) => {
     return this.put(`/api/booking/update/${IdentifyCode}`, data);
   };

@@ -25,18 +25,23 @@ import PageModel from "./pages/ModelDetails/PageModel";
 import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
 import PostDetail from "./pages/PostDetail/PostDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import Refund from "./pages/Refund/Refund";
 import PageStudio from "./pages/StudioDetail/PageStudio";
 import TermsUse from "./pages/TermsUse/TermsUse";
 import UserAccount from "./pages/UserAccount";
 import Verify from "./pages/Verify/Verify";
 import { visitService } from "./services/VisitService";
-import { getCurrentUser } from "./stores/actions/autheticateAction";
+import {
+  getCurrentUser,
+  setupSocket,
+} from "./stores/actions/autheticateAction";
 
 function App() {
   const dispatch = useDispatch();
   const { search } = useLocation();
   useEffect(() => {
     dispatch(getCurrentUser());
+    dispatch(setupSocket());
   }, [dispatch]);
   /// count and sent time accesses
   const countAndSendTimeAcc = async () => {
@@ -107,6 +112,7 @@ function App() {
             </CustomerLayout>
           }></Route>
         <Route path="home" element={<CustomerLayout />}>
+          <Route path="refund" element={<Refund />}></Route>
           <Route index element={<Home />}></Route>
           <Route
             path="user/*"
