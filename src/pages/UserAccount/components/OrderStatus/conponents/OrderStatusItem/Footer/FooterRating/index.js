@@ -13,7 +13,7 @@ export const FooterRating = ({ id, setVisible, visible }) => {
           }${"/api/studio-post/ratingByMe"}`,
           method: "GET",
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
           }, //JWT
         });
         setData(data.data);
@@ -42,7 +42,8 @@ export const FooterRating = ({ id, setVisible, visible }) => {
       ) : (
         <button
           className="FooterStatus__complete__rating"
-          onClick={() => setVisible(true)}>
+          onClick={() => setVisible(true)}
+        >
           Đánh giá
         </button>
       )}

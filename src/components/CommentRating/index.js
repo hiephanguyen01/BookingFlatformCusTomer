@@ -1,4 +1,4 @@
-import { StarFilled } from "@ant-design/icons";
+import { CheckCircleOutlined, StarFilled } from "@ant-design/icons";
 import { Divider, Pagination, Rate } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,8 @@ const STAR_LIST = [
   { id: 1, label: "1" },
 ];
 const pageSize = 5;
-const Index = ({ data = [], className }) => {
+const Index = ({ data = [], className, isPerional }) => {
+  console.log("rating", data);
   const ref = useRef(null);
   const [chooseRating, setChooseRating] = useState(0);
   const [state, setState] = useState({
@@ -67,16 +68,22 @@ const Index = ({ data = [], className }) => {
     <>
       <div ref={ref} className={`rating ${className}`}>
         <h3>Đánh giá</h3>
-        <div className="rate d-flex align-items-center">
-          <Rate
-            allowHalf
-            value={Number(data?.data?.TotalRate)}
-            style={{ fontSize: "10px" }}
-            disabled></Rate>
-          <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
-            data?.rating?.length || 0
-          })`}</div>
-        </div>
+        {isPerional ? (
+          <></>
+        ) : (
+          <div className="rate d-flex align-items-center">
+            <Rate
+              allowHalf
+              value={Number(data?.data?.TotalRate)}
+              style={{ fontSize: "10px" }}
+              disabled
+            ></Rate>
+            <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
+              data?.rating?.length || 0
+            })`}</div>
+          </div>
+        )}
+
         <div className="listRates">
           {STAR_LIST.map((star) => {
             return (
@@ -85,7 +92,8 @@ const Index = ({ data = [], className }) => {
                 key={star.id}
                 className={`rate_item ${
                   chooseRating === star.id ? "active" : ""
-                }`}>
+                }`}
+              >
                 <span>{star.label}</span>
                 <StarFilled style={{ color: "#F8D93A" }} />
                 <span>
@@ -149,11 +157,13 @@ const Index = ({ data = [], className }) => {
                             type: "SHOW_MODAL_LIST",
                             Component: <ModalImage data={item?.Image} />,
                           })
-                        }>
+                        }
+                      >
                         {/* <li className="item-video">
                           <img src={imgCmt} alt="" />
                           <PlayCircleOutlined className="play" />
                         </li> */}
+
                         {item?.Image.map((img, index) => (
                           <li key={index} className="item-image">
                             <img
@@ -169,38 +179,45 @@ const Index = ({ data = [], className }) => {
                       </ul>
                       <div
                         className="mt-16 mb-25 text-medium-re"
-                        style={{ color: "#828282" }}>
+                        style={{ color: "#828282" }}
+                      >
                         {item?.StudioRoom?.Name ||
                           item?.PhotographerServicePackage?.Name ||
                           item?.ModelServicePackage?.Name ||
                           item?.MakeupServicePackage?.Name ||
                           item?.Item?.Name}
                       </div>
-                      {/* <div className="d-flex">
-                        <div className="w-28px h-28px me-15">
-                          <img
-                            src={images.banner2}
-                            className="img_avatar"
-                            alt=""
-                          />
-                        </div>
-                        <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
-                          <div>
-                            <div className="name_reply text-medium-se">
-                              Wisteria Studio{" "}
-                              <CheckCircleOutlined
-                                className="w-14px h-14px"
-                                style={{ color: "#03AC84" }}
-                              />
-                            </div>
-                            <div className="cmt_reply text-medium-re">
-                              Cảm ơn bạn vì đã tin tưởng và ủng hộ Studio
-                              Wisteria
-                            </div>
+                      {item.ReplyComment && (
+                        <div className="d-flex">
+                          <div className="w-28px h-28px me-15">
+                            <img
+                              src={IMG(item?.Item?.Image1)}
+                              className="img_avatar"
+                              alt={item?.Item?.Image1}
+                            />
                           </div>
-                          <span>1 tuần trước</span>
+
+                          <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
+                            <div>
+                              <div className="name_reply text-medium-se">
+                                {data?.data?.Name || item?.Item.StudioPost.Name}
+                                <CheckCircleOutlined
+                                  className="w-14px h-14px"
+                                  style={{
+                                    color: "#03AC84",
+                                    marginLeft: "5px",
+                                  }}
+                                />
+                              </div>
+                              <div className="cmt_reply text-medium-re">
+                                {item.ReplyComment || item.Item.Name}
+                              </div>
+                            </div>
+                            {/* <span>1 tuần trước</span> */}
+                          </div>
                         </div>
-                      </div> */}
+                      )}
+
                       <Divider style={{ backgroundColor: "#E7E7E7" }} />
                     </div>
                   )
