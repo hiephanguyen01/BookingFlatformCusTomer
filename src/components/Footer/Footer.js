@@ -117,7 +117,7 @@ const Footer = () => {
           </div>
           <p className="copywrite">
             <CopyrightOutlined /> 2021 - Bản quyền thuộc công ty Cổ phần Công
-            nghệ và Đầu tư VNPLUS V-16323
+            nghệ và Đầu tư VNPLUS V-28323
           </p>
         </div>
       )}
