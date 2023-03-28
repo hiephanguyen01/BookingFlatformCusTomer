@@ -23,7 +23,6 @@ export const Card = ({ value, category }) => {
   }, [value]);
 
   const navigate = useNavigate();
-  console.log("newdata", newData);
   // useEffect(() => {
   //   switch (category?.id) {
   //     case 1:
@@ -84,8 +83,7 @@ export const Card = ({ value, category }) => {
         onClick={(e) => {
           e.stopPropagation();
           handleChangeLike();
-        }}
-      >
+        }}>
         <div className={cx("like")}>
           {newData?.UsersLiked?.some(
             (item) => item.UserId === currentUser?.id
