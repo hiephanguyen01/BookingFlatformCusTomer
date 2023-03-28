@@ -200,7 +200,8 @@ const Index = ({ data = [], className, isPerional }) => {
                           <div className="py-6 px-15 d-flex justify-content-between w-100 cmt_reply_container">
                             <div>
                               <div className="name_reply text-medium-se">
-                                {data?.data?.Name || item?.Item.StudioPost.Name}
+                                {data?.data?.Name ||
+                                  item?.Item.StudioPost?.Name}
                                 <CheckCircleOutlined
                                   className="w-14px h-14px"
                                   style={{
