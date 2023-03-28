@@ -100,6 +100,7 @@ const Option = ({ option, disabled, service }) => {
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
+    console.log("timeselelcgt",ds)
     if (ds) {
       dispatch({
         type: ADD_TIME_ORDER,
@@ -255,6 +256,7 @@ const Option = ({ option, disabled, service }) => {
             initialValue=""
           >
             <DatePicker.RangePicker
+             
               onChange={handleOnchangeDateRange}
               defaultValue={[
                 filter?.OrderByDateFrom ? moment(filter?.OrderByDateFrom) : "",

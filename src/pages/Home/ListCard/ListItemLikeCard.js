@@ -23,7 +23,7 @@ const ListItemLikeCard = ({ data,category }) => {
   useEffect(() => {
     setState({
       values: data,
-      totalPage: data.length / pageSize,
+      totalPage: data?.length / pageSize,
       minIndex: 0,
       maxIndex: pageSize,
     });
@@ -55,7 +55,7 @@ const ListItemLikeCard = ({ data,category }) => {
       <Pagination
         pageSize={pageSize}
         current={current || 1}
-        total={values.length}
+        total={values?.length}
         onChange={handleChange}
         style={{
           paddingTop: "10px",

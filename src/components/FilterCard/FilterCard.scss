@@ -134,9 +134,13 @@
     text-overflow: ellipsis;
   }
 
-  p.description-category {
+  div.description-category {
     font-weight: 400;
     font-size: 14px;
+    img{
+      width: 22px;
+      height: 22px;
+    }
   }
 
   .addition {

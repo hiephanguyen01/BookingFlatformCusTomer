@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
+import images from "../../assets/images";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { studioPostService } from "../../services/StudioPostService";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
@@ -22,45 +23,46 @@ const categories = {
     id: 1,
     value: "studio",
     name: "Studio",
+    img: images.studio1,
   },
   2: {
     id: 2,
     value: "photographer",
     name: "Nhiếp ảnh",
+    img: images.cameraman,
   },
   3: {
     id: 3,
     value: "clothes",
     name: "Trang phục",
+    img: images.clothes,
   },
   4: {
     id: 4,
     value: "makeup",
     name: "Make up",
+    img: images.makeup,
   },
   5: {
     id: 5,
     value: "device",
     name: "Thiết bị",
+    img: images.camera,
   },
   6: {
     id: 6,
     value: "model",
     name: "Người mẫu",
+    img: images.model,
   },
 };
+
+
 const FilterCard = ({ data, category }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const {
-    listLikedCategory1,
-    listLikedCategory2,
-    listLikedCategory3,
-    listLikedCategory4,
-    listLikedCategory5,
-    listLikedCategory6,
-  } = useSelector((state) => state.studioPostReducer);
+
   const [newData, setNewData] = useState({ ...data });
   useEffect(() => {
     setNewData({ ...data });
@@ -75,6 +77,7 @@ const FilterCard = ({ data, category }) => {
       setNewData(res.data.data);
     }
   };
+  console.log(categories[data?.category]?.name, data?.category);
   return (
     <>
       {newData && (
@@ -94,14 +97,16 @@ const FilterCard = ({ data, category }) => {
             navigate(
               `/home/${categories[newData?.category].value}/${newData?.id}`
             );
-          }}>
+          }}
+        >
           <div className="groupImage">
             <PopUpSignIn
               onClick={(e) => {
                 // e.stopPropagation();
                 handleChangeLike();
               }}
-              className={"like"}>
+              className={"like"}
+            >
               {newData?.UsersLiked &&
               newData?.UsersLiked.length > 0 &&
               newData?.UsersLiked.some(
@@ -155,10 +160,10 @@ const FilterCard = ({ data, category }) => {
                 </p>
               </Col>
               <Col md={12} sm={24} xs={24}>
-                <p className="description-category">
-                  <img src={Logo2} alt="" className="pb-3" />{" "}
+                <div className="description-category">
+                  <img src={categories[data?.category]?.img} alt="" className="pb-3" />{" "}
                   {categories[data?.category]?.name}
-                </p>
+                </div>
               </Col>
               <Col md={12} sm={24} xs={24} className="right-text">
                 <p>Đã đặt {data?.BookingCount}</p>
