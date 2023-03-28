@@ -1,15 +1,12 @@
-import { DatabaseFilled } from "@ant-design/icons";
 import { Col, Pagination, Row } from "antd";
 import classNames from "classnames/bind";
 import React, { memo, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Card } from "../../../components/Card";
 import { CardLiked } from "../../../components/Card/CardLiked";
 // import { getAllStudioLikedAction1 } from "../../../stores/actions/studioPostAction";
 import styles from "./ListCard.module.scss";
 const cx = classNames.bind(styles);
 const pageSize = 8;
-const ListItemLikeCard = ({ data,category }) => {
+const ListItemLikeCard = ({ data, category }) => {
   const [state, setState] = useState({
     values: [],
     totalPage: 0,
