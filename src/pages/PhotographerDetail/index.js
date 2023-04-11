@@ -83,7 +83,6 @@ const PhotographerDetail = () => {
     "photographer"
       ? 2
       : undefined;
-  const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const filter_promo = promotionCode
@@ -125,7 +124,7 @@ const PhotographerDetail = () => {
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
     dispatch({ type: "SET_SERVICE_SELECT", payload: null });
     dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
-  }, [id]);
+  }, [dispatch]);
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
       return dataSource?.map((data, index) => [
@@ -146,7 +145,8 @@ const PhotographerDetail = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 {data.Name}
               </div>
               <div
@@ -155,7 +155,8 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <CameraOutlined style={{ marginRight: "10px" }} />
                   Ekip
@@ -172,7 +173,8 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <img src={jiwery} className="me-10 mb-5" alt="" />
                   Trang phục, phụ kiện
@@ -188,7 +190,8 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <img src={different} className="me-10 mb-5" alt="" />
                   Khác
@@ -203,7 +206,8 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <PictureOutlined
                     className="me-10 mb-2"
@@ -223,7 +227,8 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div className="d-flex align-items-center">
                   <StopOutlined
                     className="me-10 mb-2"
@@ -241,7 +246,8 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <EnvironmentOutlined
                     className="me-10 mb-2"
@@ -259,7 +265,8 @@ const PhotographerDetail = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <ClockCircleOutlined
                     className="me-10 mb-2"
@@ -313,13 +320,15 @@ const PhotographerDetail = () => {
                       gap: "10px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}>
+                    }}
+                  >
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -337,7 +346,8 @@ const PhotographerDetail = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -355,7 +365,8 @@ const PhotographerDetail = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
+                    }}
+                  >
                     {data.PriceNote}
                   </p>
                   <button
@@ -365,7 +376,8 @@ const PhotographerDetail = () => {
                       color: "#ffff",
                       border: " 1px solid #E22828",
                       borderRadius: " 8px",
-                    }}>
+                    }}
+                  >
                     Giảm 50%{" "}
                   </button>
                 </div>
@@ -389,7 +401,8 @@ const PhotographerDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Bỏ chọn
                   </div>
                 ) : (
@@ -409,7 +422,8 @@ const PhotographerDetail = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Chọn
                   </div>
                 )}
@@ -486,7 +500,8 @@ const PhotographerDetail = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <div
               style={{
                 background: "white",
@@ -494,7 +509,8 @@ const PhotographerDetail = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}>
+              }}
+            >
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -505,7 +521,8 @@ const PhotographerDetail = () => {
               margin: "auto",
               backgroundColor: "rgb(245, 245, 245)",
               padding: "2rem 0",
-            }}>
+            }}
+          >
             <section className="photographer-detail">
               <div className="photographer-detail__container">
                 <header className="photographer-detail__container__header">
@@ -543,7 +560,8 @@ const PhotographerDetail = () => {
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                        }}>
+                        }}
+                      >
                         {studioDetail?.data?.UsersLiked ? (
                           <HeartFilled
                             style={{
@@ -574,26 +592,30 @@ const PhotographerDetail = () => {
                               flexDirection: "column",
                               gap: "10px",
                               padding: "10px",
-                            }}>
+                            }}
+                          >
                             <div
                               style={{
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "10px",
                                 cursor: "pointer",
-                              }}>
+                              }}
+                            >
                               <WarningOutlined style={{ fontSize: "20px" }} />
                               <span
                                 style={{
                                   fontSize: "18px",
                                   fontWeight: "bold",
-                                }}>
+                                }}
+                              >
                                 Báo cáo
                               </span>
                             </div>
                           </div>
                         }
-                        trigger="click">
+                        trigger="click"
+                      >
                         <MoreOutlined
                           style={{
                             fontSize: "25px",
@@ -639,7 +661,8 @@ const PhotographerDetail = () => {
                       <div
                         className={cx(
                           "address d-flex align-items-center mb-10"
-                        )}>
+                        )}
+                      >
                         <img
                           src={images.address}
                           className="me-10 w-13px h-15px"
@@ -673,7 +696,8 @@ const PhotographerDetail = () => {
                                 textDecoration: "line-through",
                                 fontSize: " 16px",
                                 color: "#828282",
-                              }}>
+                              }}
+                            >
                               {filterService.OrderByTime === 1 &&
                                 `${convertPrice(
                                   chooseServiceList?.reduce(
@@ -712,7 +736,8 @@ const PhotographerDetail = () => {
                               color: "#E22828",
                               fontSize: "20px",
                               fontWeight: "700",
-                            }}>
+                            }}
+                          >
                             {filterService.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
@@ -753,7 +778,8 @@ const PhotographerDetail = () => {
                                 "",
                                 {}
                               )
-                            }>
+                            }
+                          >
                             <ShoppingCartOutlined />
                             Thêm vào giỏ hàng
                           </Button>
@@ -765,7 +791,8 @@ const PhotographerDetail = () => {
                               filterService.id > 0
                                 ? false
                                 : true
-                            }>
+                            }
+                          >
                             Đặt ngay
                           </Button>
                         </div>
@@ -795,7 +822,8 @@ const PhotographerDetail = () => {
                             {studioDetail?.album?.length > 3 && (
                               <div
                                 className="btn_see_more"
-                                onClick={() => setToggleSeeMore(true)}>
+                                onClick={() => setToggleSeeMore(true)}
+                              >
                                 Xem thêm <DownOutlined className="icon" />
                               </div>
                             )}

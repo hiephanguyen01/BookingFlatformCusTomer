@@ -1,4 +1,3 @@
-import { message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -7,59 +6,37 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "./postDetail.scss";
 
-import { ReactComponent as Bell } from "../../assets/dao/bell.svg";
-import { ReactComponent as LinkCopy } from "../../assets/dao/copy.svg";
-import { ReactComponent as PostSave } from "../../assets/dao/copypost.svg";
-import { ReactComponent as Info } from "../../assets/dao/info.svg";
 import DaoPost from "../../components/DaoPost";
-import ModalChooseService from "../../components/DaoPost/components/ModalChooseService/ModalChooseService";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import toastMessage from "../../components/ToastMessage";
 import { postDaoService } from "../../services/PostDaoService";
-import { userService } from "../../services/UserService";
 import {
-  createLikeCommentDao,
   getAllDefaultComments,
   getAllNotificationDaoAction,
   getLikePostList,
   getPostDaoByIdAction,
-  toggleNotificationDaoAction,
 } from "../../stores/actions/PostDaoAction";
-import { cancelSavePost } from "../../stores/actions/userAction";
-import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 
 const PostDetail = () => {
   const type = "post";
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const { postDetail, defaultComments, listNotificationUser } = useSelector(
-    (state) => state.postDaoReducer
-  );
+  const { postDetail } = useSelector((state) => state.postDaoReducer);
 
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const [isModalOptionDetail, setIsModalOptionDetail] = useState(false);
-  const [isReportPostModalVisible, setIsReportPostModalVisible] =
-    useState(false);
-
-  const [post, setPost] = useState({ ...postDetail });
   const [comments, setComments] = useState([]);
-  const [pagination, setPagination] = useState({});
-  const [chooseCommentDefault, setChooseCommentDefault] = useState({});
-  const [relatedServices, setRelatedServices] = useState([]);
 
-  const moreOptionOnEachPost = [
-    { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
-    { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
-    { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
-    {
-      icon: <PostSave />,
-      title: type === "post" ? "Lưu bài viết" : "Hủy lưu",
-      id: 4,
-    },
-  ];
+  // const moreOptionOnEachPost = [
+  //   { icon: <Info />, title: "Báo cáo bài viết", id: 1 },
+  //   { icon: <Bell />, title: "Bật thông báo về bài viết này ", id: 2 },
+  //   { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
+  //   {
+  //     icon: <PostSave />,
+  //     title: type === "post" ? "Lưu bài viết" : "Hủy lưu",
+  //     id: 4,
+  //   },
+  // ];
 
-  const [moreOptionModal, setMoreOptionModal] = useState(false);
   const getComments = async (currentPage) => {
     try {
       const { data } = await postDaoService.getComments(
@@ -69,10 +46,8 @@ const PostDetail = () => {
       );
       if (currentPage === 1) {
         setComments([...data.data]);
-        setPagination(data.pagination);
       } else {
         setComments([...comments, ...data.data]);
-        setPagination(data.pagination);
       }
     } catch (error) {
       console.log(error);
@@ -86,141 +61,131 @@ const PostDetail = () => {
     return () => {
       dispatch({ type: "DELETE_DETAIL_POST", data: {} });
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getLikePostList(currentUser?.id));
     dispatch(getAllNotificationDaoAction());
   }, [currentUser, dispatch]);
 
-  useEffect(() => {
-    setPost({ ...postDetail });
-  }, [postDetail]);
+  // const handleShowModalChooseService = () => {
+  //   dispatch({
+  //     type: SHOW_MODAL,
+  //     Component: (
+  //       <ModalChooseService
+  //         hasTags={post.Tags}
+  //         PostId={post.Id}
+  //         relatedServices={relatedServices}
+  //         setRelatedServices={setRelatedServices}
+  //       />
+  //     ),
+  //   });
+  // };
 
-  const handleShowModalChooseService = () => {
-    dispatch({
-      type: SHOW_MODAL,
-      Component: (
-        <ModalChooseService
-          hasTags={post.Tags}
-          PostId={post.Id}
-          relatedServices={relatedServices}
-          setRelatedServices={setRelatedServices}
-        />
-      ),
-    });
-  };
+  // const handlerLikeComment = (id) => {
+  //   dispatch(
+  //     createLikeCommentDao({ CommentId: id }, postId, setComments, pagination)
+  //   );
+  // };
 
-  const handlerLikeComment = (id) => {
-    dispatch(
-      createLikeCommentDao({ CommentId: id }, postId, setComments, pagination)
-    );
-  };
+  // const handleSendComment = async () => {
+  //   if (currentUser) {
+  //     if (
+  //       relatedServices.length > 0 ||
+  //       chooseCommentDefault.Content !== undefined
+  //     ) {
+  //       const newData = relatedServices.reduce(
+  //         (arr, item) => [
+  //           ...arr,
+  //           { category: item.category, serviceId: item.id },
+  //         ],
+  //         []
+  //       );
+  //       try {
+  //         const res = await postDaoService.createComment({
+  //           PostId: postDetail.id,
+  //           Content: chooseCommentDefault.Content || "",
+  //           Services: JSON.stringify(newData),
+  //         });
+  //         if (res) {
+  //           getComments(1);
+  //           ({ ...post, TotalComments: post.TotalComments + 1 });
+  //           setRelatedServices([]);
+  //           setChooseCommentDefault({});
+  //         }
+  //       } catch (error) {
+  //         toastMessage("Add related service fail!", "error");
+  //       }
+  //     } else {
+  //       toastMessage(
+  //         "Vui lòng chọn bình luận hoặc dịch vụ liên quan!",
+  //         "warning"
+  //       );
+  //     }
+  //   }
+  // };
 
-  const handleSendComment = async () => {
-    if (currentUser) {
-      if (
-        relatedServices.length > 0 ||
-        chooseCommentDefault.Content !== undefined
-      ) {
-        const newData = relatedServices.reduce(
-          (arr, item) => [
-            ...arr,
-            { category: item.category, serviceId: item.id },
-          ],
-          []
-        );
-        try {
-          const res = await postDaoService.createComment({
-            PostId: postDetail.id,
-            Content: chooseCommentDefault.Content || "",
-            Services: JSON.stringify(newData),
-          });
-          if (res) {
-            getComments(1);
-            setPost({ ...post, TotalComments: post.TotalComments + 1 });
-            setRelatedServices([]);
-            setChooseCommentDefault({});
-          }
-        } catch (error) {
-          toastMessage("Add related service fail!", "error");
-        }
-      } else {
-        toastMessage(
-          "Vui lòng chọn bình luận hoặc dịch vụ liên quan!",
-          "warning"
-        );
-      }
-    }
-  };
+  // const handleSeeMoreComment = () => {
+  //   getComments(pagination.currentPage + 1);
+  // };
 
-  const handleSeeMoreComment = () => {
-    getComments(pagination.currentPage + 1);
-  };
+  // const handleAddComment = (cmt) => {
+  //   if (chooseCommentDefault.id === cmt.id) {
+  //     setChooseCommentDefault({});
+  //   } else {
+  //     setChooseCommentDefault(cmt);
+  //   }
+  // };
 
-  const handleAddComment = (cmt) => {
-    if (chooseCommentDefault.id === cmt.id) {
-      setChooseCommentDefault({});
-    } else {
-      setChooseCommentDefault(cmt);
-    }
-  };
+  // const handleMoreOptionClick = async (itm) => {
+  //   switch (itm.id) {
+  //     case 1:
+  //       break;
+  //     case 2:
+  //       dispatch(toggleNotificationDaoAction({ PostId: postId }));
+  //       message.success("Đã bật thông báo về bài viết này");
+  //       break;
+  //     case 3:
+  //       message.success("Đã sao chép liên kết");
+  //       break;
+  //     case 4:
+  //       try {
+  //         if (type !== "post") {
+  //           dispatch(cancelSavePost(currentUser?.id, postId));
+  //           toastMessage("Hủy lưu bài viết thành công!", "success");
+  //         } else {
+  //           await userService.savePost(currentUser.id, postId);
+  //           toastMessage("Lưu bài viết thành công!", "success");
+  //         }
+  //       } catch (error) {
+  //         toastMessage(error.response.data.message, "warn");
+  //       }
+  //       break;
+  //     default:
+  //       break;
+  //   }
 
-  const handleMoreOptionClick = async (itm) => {
-    switch (itm.id) {
-      case 1:
-        setIsReportPostModalVisible(true);
-        setIsModalOptionDetail(false);
-        break;
-      case 2:
-        setIsModalOptionDetail(false);
-        setMoreOptionModal(false);
-        dispatch(toggleNotificationDaoAction({ PostId: postId }));
-        message.success("Đã bật thông báo về bài viết này");
-        break;
-      case 3:
-        setIsModalOptionDetail(false);
-        message.success("Đã sao chép liên kết");
-        break;
-      case 4:
-        try {
-          if (type !== "post") {
-            dispatch(cancelSavePost(currentUser?.id, postId));
-            toastMessage("Hủy lưu bài viết thành công!", "success");
-          } else {
-            await userService.savePost(currentUser.id, postId);
-            toastMessage("Lưu bài viết thành công!", "success");
-          }
-        } catch (error) {
-          toastMessage(error.response.data.message, "warn");
-        }
-        setIsModalOptionDetail(false);
-        break;
-      default:
-        break;
-    }
+  //   // setIsModalVisible(false);
+  // };
 
-    // setIsModalVisible(false);
-  };
-
-  const handleLike = async () => {
-    if (currentUser) {
-      // if (checkLikePost()) {
-      //   setPost({ ...post, TotalLikes: post.TotalLikes - 1 });
-      // } else {
-      //   setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
-      // }
-      try {
-        await postDaoService.createLike({
-          PostId: post.id,
-          UserId: currentUser.id,
-        });
-        dispatch(getPostDaoByIdAction(postId));
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  // const handleLike = async () => {
+  //   if (currentUser) {
+  //     // if (checkLikePost()) {
+  //     //   ({ ...post, TotalLikes: post.TotalLikes - 1 });
+  //     // } else {
+  //     //   setPost({ ...post, TotalLikes: post.TotalLikes + 1 });
+  //     // }
+  //     try {
+  //       await postDaoService.createLike({
+  //         PostId: post.id,
+  //         UserId: currentUser.id,
+  //       });
+  //       dispatch(getPostDaoByIdAction(postId));
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   //   const moreOptionOnEachPost = [
   //     { icon: <Info />, title: "Báo cáo bài viết", id: 1 },

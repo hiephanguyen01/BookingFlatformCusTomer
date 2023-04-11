@@ -78,7 +78,6 @@ export const StudioDetail = () => {
     filterService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
-  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
       ? 1
@@ -137,7 +136,6 @@ export const StudioDetail = () => {
   };
 
   const ROW = (dataSource) => {
-    console.log("dataSource", dataSource);
     return dataSource?.map((data, index) => [
       {
         key: "title",

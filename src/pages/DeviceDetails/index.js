@@ -10,7 +10,7 @@ import {
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, InputNumber, Popover, Rate, Row } from "antd";
+import { Button, InputNumber, Popover, Rate } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -43,7 +43,6 @@ import { Report } from "../StudioDetail/Report";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import toastMessage from "../../components/ToastMessage";
 import ReactStickyBox from "react-sticky-box";
-import images from "../../assets/images";
 import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
@@ -130,7 +129,8 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -138,7 +138,8 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -148,7 +149,8 @@ const Index = () => {
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}>
+                style={{ marginBottom: "11px" }}
+              >
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -157,7 +159,8 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}>
+                    }}
+                  >
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{
@@ -201,23 +204,27 @@ const Index = () => {
                           flexDirection: "column",
                           gap: "10px",
                           padding: "10px",
-                        }}>
+                        }}
+                      >
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
                             cursor: "pointer",
-                          }}>
+                          }}
+                        >
                           <WarningOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Báo cáo
                           </span>
                         </div>
                       </div>
                     }
-                    trigger="click">
+                    trigger="click"
+                  >
                     <MoreOutlined
                       style={{
                         fontSize: "25px",
@@ -266,7 +273,8 @@ const Index = () => {
                     className=" py-22 mb-12 h-100 px-22"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}>
+                    }}
+                  >
                     {filterService.OrderByTime === -1 && (
                       <div className={cx("warning-choose-time")}>
                         <ExclamationCircleOutlined className="me-5" />
@@ -323,7 +331,8 @@ const Index = () => {
                       </div>
                       <div
                         className={cx("text-medium-re")}
-                        style={{ marginBottom: "15px" }}>
+                        style={{ marginBottom: "15px" }}
+                      >
                         <img
                           src={svgLocation}
                           style={{ marginRight: "6px" }}
@@ -349,7 +358,8 @@ const Index = () => {
                       padding: "24px 26px",
                       backgroundColor: "#ffffff",
                       // height: "100%",
-                    }}>
+                    }}
+                  >
                     <div className="d-flex justify-content-between mb-12">
                       <div
                         className=""
@@ -359,7 +369,8 @@ const Index = () => {
                           lineHeight: "25px",
                           /* Neutral/Grey 700 */
                           color: "#222222",
-                        }}>
+                        }}
+                      >
                         Đã chọn {amount} sản phẩm
                       </div>
                       {amount > 0 && (
@@ -371,7 +382,8 @@ const Index = () => {
                             textDecorationLine: "line-through",
                             /* Neutral/Grey 400 */
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           0 đ
                         </div>
                       )}
@@ -387,7 +399,8 @@ const Index = () => {
                           lineHeight: "27px",
                           /* Primary/Red 700 */
                           color: "#E22828",
-                        }}>
+                        }}
+                      >
                         0 đ
                       </div>
                     </div>
@@ -402,13 +415,15 @@ const Index = () => {
                             "",
                             {}
                           )
-                        }>
+                        }
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
                       <Button
                         className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                        onClick={handleBook}>
+                        onClick={handleBook}
+                      >
                         Đặt ngay
                       </Button>
                     </div>
