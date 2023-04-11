@@ -17,9 +17,7 @@ const OrderStatus = () => {
   const [filter, setFilter] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pageSize] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
   const [pageBooking, setPageBooking] = useState([]);
-  const EntryDate = { startDate: "", endDate: "" };
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
@@ -46,7 +44,6 @@ const OrderStatus = () => {
         val.IdentifyCode.toLowerCase().includes(input) ||
         val.Item?.Name.toLowerCase().includes(input)
     );
-    setCurrentPage(1);
     setFilter(newData);
   };
   useEffect(() => {
@@ -65,10 +62,8 @@ const OrderStatus = () => {
   useEffect(() => {
     if (filter.length) {
       setPageBooking(filter.slice(0, pageSize));
-      setCurrentPage(1);
     } else {
       setPageBooking(booking.slice(0, pageSize));
-      setCurrentPage(1);
     }
   }, [booking, filter, pageSize]);
 
@@ -82,7 +77,8 @@ const OrderStatus = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <div
               style={{
                 background: "white",
@@ -90,7 +86,8 @@ const OrderStatus = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}>
+              }}
+            >
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -108,7 +105,8 @@ const OrderStatus = () => {
                   placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
                 />
               ),
-            }}>
+            }}
+          >
             <TabPane tab="Chờ thanh toán" key={1}>
               {booking &&
                 pageBooking.map((item, idx) => (
@@ -170,7 +168,8 @@ const OrderStatus = () => {
             display: "flex",
             justifyContent: "right",
             padding: "10px 10px",
-          }}>
+          }}
+        >
           <Pagination
             defaultCurrent={1}
             onChange={handleChange}

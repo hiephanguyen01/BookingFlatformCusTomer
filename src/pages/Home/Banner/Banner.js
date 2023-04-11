@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Autoplay, Lazy, Navigation, Pagination, Parallax } from "swiper";
 import "swiper/css";
 import "swiper/css/bundle";
@@ -10,17 +10,6 @@ import BannerSkeleton from "../../../components/Skeleton/BannerSkeleton";
 import { convertImage } from "../../../utils/convertImage";
 import "./banner.scss";
 const Banner = ({ banners }) => {
-  const [fakeLoading, setFakeLoading] = useState(true);
-
-  useEffect(() => {
-    const a = setTimeout(() => {
-      setFakeLoading(false);
-    }, 3000);
-
-    return () => {
-      clearTimeout(a);
-    };
-  }, [banners]);
   return (
     <div className="Banner">
       {banners.length <= 0 ? (
@@ -33,7 +22,8 @@ const Banner = ({ banners }) => {
           lazy={true}
           speed={600}
           modules={[Navigation, Pagination, Autoplay, Lazy, Parallax]}
-          className="bannerSwiper">
+          className="bannerSwiper"
+        >
           {banners &&
             banners.map(
               (banner) =>
@@ -50,7 +40,8 @@ const Banner = ({ banners }) => {
                         />
                         <div
                           className="contentBanner"
-                          data-swiper-parallax="-200">
+                          data-swiper-parallax="-200"
+                        >
                           <h1 className="" data-swiper-parallax="-200">
                             {banner.name}
                           </h1>

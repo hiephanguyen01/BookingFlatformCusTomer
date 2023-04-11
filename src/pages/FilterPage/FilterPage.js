@@ -11,7 +11,7 @@ import {
   Select,
   Slider,
 } from "antd";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FilterCard from "../../components/FilterCard/FilterCard";
 import EmptyPage from "../../components/layouts/EmptyPage";
@@ -261,7 +261,8 @@ const FilterPage = () => {
                           .toLowerCase()
                           .includes(input.toLowerCase())
                       }
-                      defaultValue={province}>
+                      defaultValue={province}
+                    >
                       <Option value={""}>Tất cả</Option>
                       {provinces &&
                         provinces.map((val) => (
@@ -276,7 +277,8 @@ const FilterPage = () => {
                     <div className="category_radio_group">
                       <Radio.Group
                         onChange={onChangeFilterCategory}
-                        value={filter.category}>
+                        value={filter.category}
+                      >
                         {categories &&
                           categories?.map((val) => (
                             <Radio key={val.id} value={val.id}>
@@ -294,7 +296,8 @@ const FilterPage = () => {
                     <div className="filter_price_container">
                       <Radio.Group
                         onChange={onChangePriceOption}
-                        value={filter.priceOption}>
+                        value={filter.priceOption}
+                      >
                         <Row>
                           <Col span={24}>
                             <Radio value={2}>Giá cao nhất</Radio>
@@ -328,7 +331,8 @@ const FilterPage = () => {
                     <div className="filter_rating_container">
                       <Radio.Group
                         onChange={onChangeRateOption}
-                        value={filter.ratingOption}>
+                        value={filter.ratingOption}
+                      >
                         <Row>
                           <Col span={24}>
                             <Radio value={1}>Đánh giá nhiều nhất</Radio>
@@ -355,7 +359,8 @@ const FilterPage = () => {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                  }}>
+                  }}
+                >
                   <div
                     style={{
                       background: "white",
@@ -363,7 +368,8 @@ const FilterPage = () => {
                       borderRadius: "50%",
                       padding: "10px",
                       margin: "10px",
-                    }}>
+                    }}
+                  >
                     <LoadingOutlined style={{ fontSize: "40px" }} />
                   </div>
                 </div>
@@ -401,7 +407,8 @@ const FilterPage = () => {
                 style={{
                   padding: "10px 0px",
                   marginLeft: "auto",
-                }}>
+                }}
+              >
                 <Pagination
                   pageSize={pagination?.limit || 0}
                   current={pagination?.currentPage}

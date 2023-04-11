@@ -1,10 +1,6 @@
 import toastMessage from "../../components/ToastMessage";
 import { userService } from "../../services/UserService";
-import {
-  CANCEL_SAVED_POST,
-  SET_LOADING,
-  SET_SAVED_POST_LIST,
-} from "../types/userTypes";
+import { SET_LOADING, SET_SAVED_POST_LIST } from "../types/userTypes";
 
 export const getSavedPostList =
   (limit, page, userId, setLoading = () => {}) =>

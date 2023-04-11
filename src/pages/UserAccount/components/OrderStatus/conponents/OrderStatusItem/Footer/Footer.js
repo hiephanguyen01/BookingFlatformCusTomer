@@ -1,14 +1,9 @@
-import {
-  ExclamationCircleOutlined,
-  InfoCircleOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { InfoCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { Input, Modal } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { socket } from "../../../../../../../components/ConnectSocket/ConnectSocket";
 import toastMessage from "../../../../../../../components/ToastMessage";
 import { chatService } from "../../../../../../../services/ChatService";
 import { orderService } from "../../../../../../../services/OrderService";
@@ -108,7 +103,8 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1">
+              className="FooterStatus__wait__button__1"
+            >
               <UploadOutlined /> Đã thanh toán
             </Link>
             <Link
@@ -120,7 +116,8 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__2">
+              className="FooterStatus__wait__button__2"
+            >
               Thanh toán cọc
             </Link>
           </div>
@@ -131,7 +128,8 @@ export const Footer = ({
         <div className="FooterStatus__comming">
           <button
             className="FooterStatus__comming__cancel"
-            onClick={() => setShowModal(true)}>
+            onClick={() => setShowModal(true)}
+          >
             Hủy đơn
           </button>
           <button
@@ -139,7 +137,8 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}>
+            }}
+          >
             Liên hệ
           </button>
           <Modal
@@ -148,7 +147,8 @@ export const Footer = ({
             okText="Đồng ý"
             cancelText="Thoát"
             onCancel={() => setShowModal(false)}
-            onOk={() => handleCancelOrder()}>
+            onOk={() => handleCancelOrder()}
+          >
             <>
               <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
               <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
@@ -156,9 +156,8 @@ export const Footer = ({
                 className="mt-3"
                 rows={4}
                 style={{ resize: "none" }}
-                onChange={(e) =>
-                  setCancelReason(e.target.value)
-                }></Input.TextArea>
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></Input.TextArea>
             </>
           </Modal>
         </div>
@@ -193,7 +192,8 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal">
+            className="FooterStatus__complete__modal"
+          >
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
