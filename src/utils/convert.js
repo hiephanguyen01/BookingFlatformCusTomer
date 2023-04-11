@@ -69,5 +69,5 @@ export const dateStructure = (date) => {
   );
 };
 export const addLinebreaks = (anyString = "") => {
-  return anyString.replaceAll("\n", "<br />\r\n");
+  return anyString?.replaceAll("\n", "<br />\r\n");
 };

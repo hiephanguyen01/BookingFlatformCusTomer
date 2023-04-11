@@ -310,6 +310,18 @@ const Index = () => {
                   <p>Phụ thu phát sinh 200.000 VND/khách</p>
                 </div>
               </div>
+              <div style={{ marginTop: "5px" }}>
+                <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
+                <p
+                  style={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    color: "#222222",
+                  }}
+                >
+                  {data?.Description}
+                </p>
+              </div>
             </div>
           ),
         },

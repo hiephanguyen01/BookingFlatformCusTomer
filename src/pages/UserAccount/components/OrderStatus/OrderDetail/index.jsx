@@ -34,6 +34,7 @@ import NotiIcon from "../Icon/NotiIcon";
 import OrderIcon from "../Icon/OrderIcon";
 import { keyF } from "../OrderStatus";
 import "./OrderDetail.scss";
+
 const OrderDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -52,6 +53,23 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
+  console.log("bookingshds", booking);
+  console.log(
+    "bookingshds",
+    booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0]
+  );
+  const CancleFreeDate = moment(booking?.CreationTime)
+    .add(
+      booking?.OrderByTime
+        ? booking?.StudioRoom?.FreeCancelByHour?.match(/\d+/g)[0]
+        : booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0],
+      `${booking?.OrderByTime ? "hours" : "days"}`
+    )
+    .format("DD/MM/YYYY HH:mm A");
+  const deposite = booking?.OrderByTime
+    ? booking?.StudioRoom?.DepositByHour
+    : booking?.StudioRoom?.DepositByDate;
+  console.log("CancleFreeDate", CancleFreeDate);
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -225,12 +243,14 @@ const OrderDetail = () => {
             EvidenceImage: booking?.EvidenceImage,
             updatePay: true,
             Category: searchParams.get("categoryId"),
-          }}>
+          }}
+        >
           <Button
             type="primary"
             icon={<UploadOutlined />}
             size="large"
-            onClick={() => navigate(`/home/confirm-order/${id}`)}>
+            onClick={() => navigate(`/home/confirm-order/${id}`)}
+          >
             Cập nhật minh chứng
           </Button>
         </Link>
@@ -242,7 +262,8 @@ const OrderDetail = () => {
           type="text"
           onClick={() => setShowModal(true)}
           style={{ color: "#e60019", marginRight: "20px", borderRadius: "8px" }}
-          size="large">
+          size="large"
+        >
           Huỷ đơn
         </Button>
         <Button
@@ -256,7 +277,8 @@ const OrderDetail = () => {
             dispatch({ type: SHOW_CHAT });
             handleOpenChatPartner();
           }}
-          size="large">
+          size="large"
+        >
           Liên hệ
         </Button>
       </div>
@@ -267,7 +289,8 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
+        }}
+      >
         {/* <Button
           onClick={navigateToDetail}
           style={{
@@ -301,7 +324,8 @@ const OrderDetail = () => {
           footer={false}
           width={600}
           closable={false}
-          className="FooterStatus__complete__modal">
+          className="FooterStatus__complete__modal"
+        >
           <RateModal
             onOk={() => setVisible(false)}
             onCancel={() => setVisible(false)}
@@ -326,7 +350,8 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
+        }}
+      >
         <Button
           onClick={navigateToDetail}
           style={{
@@ -335,7 +360,8 @@ const OrderDetail = () => {
             borderRadius: "8px",
             padding: "0 55.5px",
           }}
-          size="large">
+          size="large"
+        >
           Đặt lại
         </Button>
         {/* <Button
@@ -349,7 +375,8 @@ const OrderDetail = () => {
             borderRadius: "6px",
             padding: "0 25.5px",
             backgroundColor: "#1fcba2",
-          }}>
+          }}
+        >
           Nhận hoàn tiền
         </Button> */}
       </div>
@@ -386,6 +413,7 @@ const OrderDetail = () => {
             <div className="trt">
               {booking?.DepositValue &&
                 `${convertPrice(booking?.DepositValue)} VND`}
+              {/* {convertPrice(deposite)} VND */}
             </div>
           </div>
         </Col>
@@ -687,14 +715,14 @@ const OrderDetail = () => {
             <div className="fi b_green"></div>
             <div className="text">
               <div className="text_title t_green">Hủy miễn phí</div>
-              <div className="text_title_2">Cho đến 13/02/2022 11:59 PM</div>
+              <div className="text_title_2">Cho đến {CancleFreeDate}</div>
             </div>
           </div>
           <div className="boxxx">
             <div className="fi b_red"></div>
             <div className="text">
               <div className="text_title t_red">Hủy mất 50% cọc</div>
-              <div className="text_title_2">Từ 14/02/2022 00:00 AM</div>
+              <div className="text_title_2">Từ {CancleFreeDate}</div>
             </div>
           </div>
         </div>
@@ -702,9 +730,9 @@ const OrderDetail = () => {
       <div className="flexx">
         <NotiIcon />
         <div className="noti_text">
-          Quý khách có thể hủy đơn đặt cho đến 13/02/2022 11:50 PM mà không mất
-          phí gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý
-          khách sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn đặt.
+          Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất phí
+          gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý khách
+          sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn đặt.
         </div>
       </div>
       <Modal
@@ -714,7 +742,8 @@ const OrderDetail = () => {
         okText="Đồng ý"
         cancelText="Thoát"
         onCancel={() => setShowModal(false)}
-        onOk={() => handleCancelOrder()}>
+        onOk={() => handleCancelOrder()}
+      >
         <>
           <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
           <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
@@ -722,7 +751,8 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
         </>
       </Modal>
     </div>

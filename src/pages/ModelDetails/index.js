@@ -208,6 +208,18 @@ const Index = () => {
                   <li>Phí đi theo để dặm phấn, chỉnh tóc, thay trang phục</li>
                 </ul>
               </div>
+              <div style={{ marginTop: "5px" }}>
+                <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
+                <p
+                  style={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    color: "#222222",
+                  }}
+                >
+                  {data?.Description}
+                </p>
+              </div>
             </div>
           ),
         },
