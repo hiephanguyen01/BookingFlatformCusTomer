@@ -328,6 +328,7 @@ const OrderDetail = () => {
           width: "fit-content",
         }}>
         <Button
+          onClick={navigateToDetail}
           style={{
             color: "#009874",
             borderColor: "#009874",
@@ -337,7 +338,7 @@ const OrderDetail = () => {
           size="large">
           Đặt lại
         </Button>
-        <Button
+        {/* <Button
           type="primary"
           size="large"
           style={{
@@ -350,7 +351,7 @@ const OrderDetail = () => {
             backgroundColor: "#1fcba2",
           }}>
           Nhận hoàn tiền
-        </Button>
+        </Button> */}
       </div>
     ),
   };

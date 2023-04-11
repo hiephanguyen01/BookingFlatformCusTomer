@@ -434,7 +434,7 @@ const DaoPost = (props) => {
     };
   }, [post]);
   return (
-    <article className="post">
+    <article className="post" key={post?.id}>
       <section className="post__main d-flex flex-column">
         <header className="post__main__info d-flex justify-content-between align-posts-center">
           <div className="d-flex justify-content-between align-posts-center">

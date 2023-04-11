@@ -10,6 +10,7 @@ import toastMessage from "../ToastMessage";
 import UploadImage from "../UploadImage";
 import { numberWithDot } from "../../utils/convert";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 const Index = () => {
   const socket = useSelector((state) => state.userReducer.socket);
@@ -47,7 +48,6 @@ const Index = () => {
   }
   const [file, setFile] = useState({});
   const [booking, setBooking] = useState({});
-
   useEffect(() => {
     const getBookingByIdentify = async () => {
       const res = await orderService.getOrderByIdentify(
@@ -219,6 +219,9 @@ const Index = () => {
           </div>
           <div className="w-60 wrapper_input">
             <UploadImage
+              disable={moment(booking.CreationTime)
+                .add(15, "minutes")
+                .isBefore(moment())}
               onChangeFile={onChangeFile}
               multiple={true}
               image={file.preview || convertImageUrl(booking?.EvidenceImage)}>
