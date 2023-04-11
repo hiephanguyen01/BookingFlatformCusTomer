@@ -9,11 +9,12 @@ import { postDaoService } from "../../services/PostDaoService";
 
 export const getAllPostDaoAction = (currentListPost = [], filter) => {
   return async (dispatch) => {
+    if (typeof currentListPost === "number") return;
     try {
       const { data } = await postDaoService.getAllPost(
-        filter?.limit,
-        filter?.page,
-        filter?.tags?.join(",")
+        filter?.limit || 1,
+        filter?.page || 1,
+        filter?.tags?.join(",") || ""
       );
       // if (filter.page === 1) {
       //   let temp = [...data.data];
@@ -28,6 +29,7 @@ export const getAllPostDaoAction = (currentListPost = [], filter) => {
       //     data: temp,
       //   });
       // }
+
       let temp = [...currentListPost, ...data.data];
       dispatch({
         type: GET_LIST_POST,
@@ -45,6 +47,7 @@ export const getAllPostDaoAction = (currentListPost = [], filter) => {
 };
 export const getPostDaoAction = (currentListPost = [], limit, page) => {
   return async (dispatch) => {
+    if (typeof currentListPost === "number") return;
     try {
       const { data } = await postDaoService.getAllPost(limit, page);
       let temp = [...currentListPost, ...data.data];

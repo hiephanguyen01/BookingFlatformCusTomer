@@ -236,17 +236,11 @@ const Dao = () => {
     );
   }, [filter, dispatch]);
 
-  useEffect(() => {
-    // dispatch(getLikePostList(currentUser?.id)); // 1 là user id
-
-    if (Notification.permission !== "granted") {
-      askPermission();
-    }
-
-    return () => {
-      // dispatch({ type: GET_LIST_POST, data: [] });
-    };
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (Notification.permission !== "granted") {
+  //     askPermission();
+  //   }
+  // }, [dispatch]);
 
   return (
     <section className="dao d-flex justify-content-center">
@@ -274,8 +268,7 @@ const Dao = () => {
               }`}
               onClick={() => {
                 setFilter({ ...filter, tags: [] });
-              }}
-            >
+              }}>
               {filter.tags.length > 0 &&
               filter.tags.length !== tagItems.length ? (
                 ""
@@ -300,8 +293,7 @@ const Dao = () => {
                     newFilter.tags.push(item.id);
                   }
                   setFilter(newFilter);
-                }}
-              >
+                }}>
                 {filter.tags.includes(item.id) ? item.icon : ""}
                 <p>{item.name}</p>
               </li>
@@ -316,8 +308,7 @@ const Dao = () => {
             }}
             hasMore={pagination.hasNextPage}
             loader={<DaoPostSkeleton />}
-            endMessage={<DaoPostSkeleton />}
-          >
+            endMessage={<DaoPostSkeleton />}>
             {listPost.map((item) => (
               <DaoPost key={item.Id} item={item} likePostList={likePostList} />
             ))}
@@ -331,8 +322,7 @@ const Dao = () => {
         className="modalDao"
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
-        width={""}
-      >
+        width={""}>
         <Input.TextArea
           rows={4}
           placeholder="Bạn muốn tìm gì"
@@ -343,14 +333,12 @@ const Dao = () => {
         />
         <div
           className="text-medium-re mt-20 mb-16"
-          style={{ color: "#222222" }}
-        >
+          style={{ color: "#222222" }}>
           Tải hình ảnh
         </div>
         <div
           className="mb-15 d-flex "
-          style={{ gap: "10px", flexWrap: "wrap" }}
-        >
+          style={{ gap: "10px", flexWrap: "wrap" }}>
           <UploadImage
             onChangeFile={onChangeFile}
             style={{
@@ -359,8 +347,7 @@ const Dao = () => {
               border: "0.6px dashed #1FCBA2",
               borderRadius: "10px",
             }}
-            multiple={true}
-          >
+            multiple={true}>
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
           </UploadImage>
           {/* <GoogleDrivePicker files={filesDrive} setFiles={setFilesDrive} /> */}
@@ -404,8 +391,7 @@ const Dao = () => {
         </div>
         <div
           className="text-medium-re mb-16"
-          style={{ color: "#222222", margin: "" }}
-        >
+          style={{ color: "#222222", margin: "" }}>
           Chọn danh mục liên quan
         </div>
         <Row>
@@ -425,8 +411,7 @@ const Dao = () => {
                   errorMess("Số hash tag vượt quá giới hạn !");
                 }
                 setPost(newPost);
-              }}
-            >
+              }}>
               {item.name}
             </p>
           ))}
@@ -437,8 +422,7 @@ const Dao = () => {
             className="btn btn-huy"
             onClick={() => {
               setVisible(false);
-            }}
-          >
+            }}>
             Hủy
           </Button>
           <Button
@@ -448,8 +432,7 @@ const Dao = () => {
             disabled={loading}
             onClick={() => {
               handleCreatePost();
-            }}
-          >
+            }}>
             {loading && (
               <LoadingOutlined color="primary" style={{ fontSize: "20px" }} />
             )}
