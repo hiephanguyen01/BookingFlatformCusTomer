@@ -1,11 +1,7 @@
 import { Tabs } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllStudioLikedAction,
-  getAllStudioLikedAction1,
-} from "../../../../stores/actions/studioPostAction";
-import ListItem from "../../../Home/ListCard";
+import { getAllStudioLikedAction } from "../../../../stores/actions/studioPostAction";
 import ListItemLikeCard from "../../../Home/ListCard/ListItemLikeCard";
 import { DividerCustom } from "../OrderStatus/conponents/DividerCustom/DividerCustom";
 import "./liked.scss";
@@ -25,14 +21,17 @@ const Liked = () => {
     <>
       <h4 className="Like__header">Danh sách đã thích</h4>
       <div className="Like__body">
-        <Tabs defaultValue={1} >
+        <Tabs defaultValue={1}>
           <TabPane tab="Studio" key={1}>
             <DividerCustom />
             <ListItemLikeCard data={listLikedUser?.studio} category={1} />
           </TabPane>
           <TabPane tab="Nhiếp ảnh" key={2}>
             <DividerCustom />
-            <ListItemLikeCard data={listLikedUser?.photographers} category={2} />
+            <ListItemLikeCard
+              data={listLikedUser?.photographers}
+              category={2}
+            />
           </TabPane>
           <TabPane tab="Thiết bị" key={5}>
             <DividerCustom />

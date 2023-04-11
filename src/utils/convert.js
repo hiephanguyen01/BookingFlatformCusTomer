@@ -1,4 +1,3 @@
-import moment from "moment";
 import Moment from "moment";
 export const convertTime = (time) => {
   if (time) {

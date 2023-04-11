@@ -3,11 +3,12 @@ import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterStudioService } from "../../stores/actions/studioPostAction";
-import { SET_SERVICE_SELECT } from "../../stores/types/studioPostType";
 import { convertDateSendToDB } from "../../utils/convert";
 import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
 
 import "./selectTimeOptionService.scss";
+import { handlerSelectServiceAction } from "../../stores/actions/studioPostAction";
+import { DELETE_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 
 function dateRange(startDate, endDate, steps = 1) {
   const dateArray = [];
@@ -50,15 +51,16 @@ function remove_duplicates_es6(arr) {
   return Array.from(it);
 }
 const Option = ({ option, disabled, service }) => {
-  const { listTimeSelected, studioDetail } = useSelector(
+  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { listTimeSelected, studioDetail, filterService } = useSelector(
     (state) => state.studioPostReducer
   );
   const dispatch = useDispatch();
   const [date, setDate] = useState(convertDateSendToDB(new Date()));
   const [disableHour, setDisableHour] = useState([]);
   const [disableDate, setDisableDate] = useState([]);
-  // const [time, setTime] = useState([]);
   const [filter, setFilter] = useState({});
+  const [time, setTime] = useState([]);
 
   useEffect(() => {
     const listDate = service?.Bookings?.reduce((acc, item) => {
@@ -82,6 +84,7 @@ const Option = ({ option, disabled, service }) => {
 
   const handleOnchangeHour = (t, timeString) => {
     if (date) {
+      setTime(timeString);
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
@@ -97,6 +100,21 @@ const Option = ({ option, disabled, service }) => {
             ":00.000Z",
         },
       });
+      if (chooseServiceList.find((item) => item?.id === service?.id)) {
+        dispatch(
+          handlerSelectServiceAction(service, {
+            ...filterService,
+            OrderByTimeFrom:
+              moment(date).toISOString().slice(0, 11) +
+              timeString[0] +
+              ":00.000Z",
+            OrderByTimeTo:
+              moment(date).toISOString().slice(0, 11) +
+              timeString[1] +
+              ":00.000Z",
+          })
+        );
+      }
     }
   };
   const handleOnchangeDateRange = (ds, datesString) => {
@@ -113,6 +131,17 @@ const Option = ({ option, disabled, service }) => {
           disableDate: disableDate || [],
         },
       });
+      if (chooseServiceList.find((item) => item?.id === service?.id)) {
+        dispatch(
+          handlerSelectServiceAction(service, {
+            ...filterService,
+            OrderByDateFrom:
+              moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
+            OrderByDateTo:
+              moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
+          })
+        );
+      }
     }
   };
 
@@ -131,6 +160,24 @@ const Option = ({ option, disabled, service }) => {
           >
             <DatePicker
               onChange={(d, dString) => {
+                dispatch({ type: DELETE_CHOOSE_SERVICE });
+                if (time.length) {
+                  dispatch({
+                    type: ADD_TIME_ORDER,
+                    data: {
+                      id: service.id,
+                      OrderByTime: 1,
+                      OrderByTimeFrom:
+                        moment(d).toISOString().slice(0, 11) +
+                        time[0] +
+                        ":00.000Z",
+                      OrderByTimeTo:
+                        moment(d).toISOString().slice(0, 11) +
+                        time[1] +
+                        ":00.000Z",
+                    },
+                  });
+                }
                 setDate(d);
                 if (dString && option === 1) {
                   let hl = service?.Bookings?.filter((item) =>
@@ -168,7 +215,6 @@ const Option = ({ option, disabled, service }) => {
                   dispatch({
                     type: ADD_TIME_ORDER,
                     data: {
-                      // ...filterService,
                       id: service.id,
                       OrderByTime: 1,
                       disableTimeOrder: array,
@@ -195,7 +241,9 @@ const Option = ({ option, disabled, service }) => {
                     .some(
                       (date) => moment(current).format("DD-MM-YYYY") === date
                     ) ||
-                  (current && current <= moment().subtract(1, "days"))
+                  (current &&
+                    moment(current).utc().toISOString() <=
+                      moment().subtract(1, "days").toISOString())
                 );
               }}
               format={"DD-MM-YYYY"}
@@ -268,7 +316,7 @@ const Option = ({ option, disabled, service }) => {
                   disableDate.some(
                     (date) => moment(current).format("DD-MM-YYYY") === date
                   ) ||
-                  (current && current <= moment().subtract(1, "days"))
+                  (current && current <= moment())
                 );
               }}
             />
@@ -281,6 +329,8 @@ const Option = ({ option, disabled, service }) => {
 };
 
 const SelectTimeOptionService = ({ disabled, service, onClick }) => {
+  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+
   const [data, setData] = useState(service);
   const [selectTime, setSelectTime] = useState();
   const { listTimeSelected, filterService } = useSelector(
@@ -310,7 +360,11 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
         onChange={handleOnChangeSelection}
         style={{ padding: "0 0 20px" }}
         value={selectTime?.OrderByTime}
-        disabled={disabled ? disabled : filterService?.id === data?.id}
+        disabled={
+          disabled
+            ? disabled
+            : chooseServiceList.find((item) => item?.id === service?.id)
+        }
       >
         <Space direction="vertical">
           <Radio value={1}>Đặt theo giờ</Radio>

@@ -1,13 +1,11 @@
 import { orderService } from "../../services/OrderService";
 import {
-  LOADING,
   SET_CHOOSE_SERVICE,
   ADD_ORDER,
   DELETE_ORDER,
   UPDATE_CHOOSE_SERVICE,
   DELETE_CHOOSE_SERVICE,
 } from "../types/OrderType";
-import { ADD_TIME_ORDER } from "../types/studioPostType";
 
 export const getAllOrder = () => async (dispatch) => {
   // dispatch({ type: LOADING, payload: true });
@@ -44,7 +42,7 @@ export const chooseServiceAction = (data) => async (dispatch) => {
   // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: SET_CHOOSE_SERVICE, payload: data });
-    dispatch({type:"SET_TIME_ORDER",data:[]})
+    dispatch({ type: "SET_TIME_ORDER", data: [] });
   } catch (error) {
     console.log(error);
   }

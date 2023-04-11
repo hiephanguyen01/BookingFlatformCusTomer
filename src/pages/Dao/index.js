@@ -20,9 +20,7 @@ import { postDaoService } from "../../services/PostDaoService";
 import {
   getAllDefaultComments,
   getAllPostDaoAction,
-  getLikePostList,
 } from "../../stores/actions/PostDaoAction";
-import { GET_LIST_POST } from "../../stores/types/PostDaoType";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import "./dao.scss";
 
