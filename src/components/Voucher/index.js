@@ -3,14 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   cancelSavePromotion,
-  getPromotionCodeUserSave,
   savePromotion,
 } from "../../stores/actions/promoCodeAction";
 import { HIDE_MODAL } from "../../stores/types/modalTypes";
 
 import "./voucher.scss";
 import { convertTime } from "../../utils/convert";
-import { getPromotionByTenantId } from "../../stores/actions/studioPostAction";
 
 const Index = () => {
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
@@ -58,7 +56,8 @@ const Index = () => {
         className="close_modal"
         onClick={() => {
           dispatch({ type: HIDE_MODAL });
-        }}>
+        }}
+      >
         <CloseOutlined />
       </div>
       <div className="save_promotion_container">
@@ -78,7 +77,8 @@ const Index = () => {
                   className="btn_applied"
                   onClick={() => {
                     handleChooseVoucher(item);
-                  }}>
+                  }}
+                >
                   Đã lưu
                 </div>
               ) : (
@@ -86,7 +86,8 @@ const Index = () => {
                   className="btn_apply"
                   onClick={() => {
                     handleChooseVoucher(item);
-                  }}>
+                  }}
+                >
                   Lưu
                 </div>
               )}

@@ -1,8 +1,7 @@
 import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilterStudioService } from "../../stores/actions/studioPostAction";
 import { convertDateSendToDB } from "../../utils/convert";
 import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
 
@@ -186,7 +185,11 @@ const Option = ({ option, disabled, service }) => {
                     )
                   );
                   let array = [];
-                  array = range(0, studioDetail?.data?.HourOpenDefault);
+                  if (studioDetail?.data?.MinutesOpenDefault > 0) {
+                    array = range(0, studioDetail?.data?.HourOpenDefault);
+                  } else {
+                    array = range(0, studioDetail?.data?.HourOpenDefault - 1);
+                  }
                   array = [
                     ...array,
                     ...range(studioDetail?.data?.HourCloseDefault + 1, 23),
@@ -195,7 +198,7 @@ const Option = ({ option, disabled, service }) => {
                     array = [
                       ...array,
                       ...range(
-                        studioDetail?.data?.HourOpenDefault + 1,
+                        studioDetail?.data?.HourOpenDefault,
                         moment().hours()
                       ),
                     ];

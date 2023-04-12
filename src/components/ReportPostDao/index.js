@@ -31,12 +31,12 @@ const ReportPost = (props) => {
   const handleOk = async () => {
     try {
       if (value === 6) {
-        const data1 = await reportService.createReportDao({
+        await reportService.createReportDao({
           PostId: Number(props.postId),
           Content: valueText,
         });
       } else {
-        const data1 = await reportService.createReportDao({
+         await reportService.createReportDao({
           PostId: Number(props.postId),
           Content: value,
         });
