@@ -4,7 +4,7 @@ import {
   LoadingOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
-import { Button, Input, message, Modal, Row } from "antd";
+import { Button, Grid, Input, message, Modal, Row } from "antd";
 import { useEffect, useState } from "react";
 // import InfiniteScroll from "react-infinite-scroll-component";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -67,7 +67,10 @@ const tagItems = [
 //     reader.onerror = (error) => reject(error);
 //   });
 
+const { useBreakpoint } = Grid;
+
 const Dao = () => {
+  const screens = useBreakpoint();
   const [files, setFiles] = useState([]);
   const [filesDrive, setFilesDrive] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -265,48 +268,95 @@ const Dao = () => {
           </PopUpSignIn>
         </header>
         <article className="dao__container__tag d-flex align-items-center justify-content-evenly">
-          <Row>
-            <li
-              className={`dao__container__tag__item d-flex align-items-center ${
-                filter.tags.length > 0 && filter.tags.length !== tagItems.length
-                  ? ""
-                  : "active"
-              }`}
-              onClick={() => {
-                setFilter({ ...filter, tags: [] });
-              }}
-            >
-              {filter.tags.length > 0 &&
-              filter.tags.length !== tagItems.length ? (
-                ""
-              ) : (
-                <CheckOutlined style={{ color: "#03AC84" }} />
-              )}
-              <p>Tất cả</p>
-            </li>
-            {tagItems.map((item, idx) => (
+          {screens.xs ? (
+            <div className="category-mobile-slide">
               <li
                 className={`dao__container__tag__item d-flex align-items-center ${
-                  filter.tags.includes(item.id) ? "active" : ""
+                  filter.tags.length > 0 &&
+                  filter.tags.length !== tagItems.length
+                    ? ""
+                    : "active"
                 }`}
-                key={item.id}
                 onClick={() => {
-                  let newFilter = { ...filter };
-                  if (newFilter.tags.includes(item.id)) {
-                    newFilter.tags = newFilter.tags.filter(
-                      (val) => val !== item.id
-                    );
-                  } else {
-                    newFilter.tags.push(item.id);
-                  }
-                  setFilter(newFilter);
+                  setFilter({ ...filter, tags: [] });
                 }}
               >
-                {filter.tags.includes(item.id) ? item.icon : ""}
-                <p>{item.name}</p>
+                {filter.tags.length > 0 &&
+                filter.tags.length !== tagItems.length ? (
+                  ""
+                ) : (
+                  <CheckOutlined style={{ color: "#03AC84" }} />
+                )}
+                <p>Tất cả</p>
               </li>
-            ))}
-          </Row>
+              {tagItems.map((item, idx) => (
+                <li
+                  className={`dao__container__tag__item d-flex align-items-center ${
+                    filter.tags.includes(item.id) ? "active" : ""
+                  }`}
+                  key={item.id}
+                  onClick={() => {
+                    let newFilter = { ...filter };
+                    if (newFilter.tags.includes(item.id)) {
+                      newFilter.tags = newFilter.tags.filter(
+                        (val) => val !== item.id
+                      );
+                    } else {
+                      newFilter.tags.push(item.id);
+                    }
+                    setFilter(newFilter);
+                  }}
+                >
+                  {filter.tags.includes(item.id) ? item.icon : ""}
+                  <p>{item.name}</p>
+                </li>
+              ))}
+            </div>
+          ) : (
+            <Row>
+              <li
+                className={`dao__container__tag__item d-flex align-items-center ${
+                  filter.tags.length > 0 &&
+                  filter.tags.length !== tagItems.length
+                    ? ""
+                    : "active"
+                }`}
+                onClick={() => {
+                  setFilter({ ...filter, tags: [] });
+                }}
+              >
+                {filter.tags.length > 0 &&
+                filter.tags.length !== tagItems.length ? (
+                  ""
+                ) : (
+                  <CheckOutlined style={{ color: "#03AC84" }} />
+                )}
+                <p>Tất cả</p>
+              </li>
+              {tagItems.map((item, idx) => (
+                <li
+                  className={`dao__container__tag__item d-flex align-items-center ${
+                    filter.tags.includes(item.id) ? "active" : ""
+                  }`}
+                  key={item.id}
+                  onClick={() => {
+                    let newFilter = { ...filter };
+                    if (newFilter.tags.includes(item.id)) {
+                      newFilter.tags = newFilter.tags.filter(
+                        (val) => val !== item.id
+                      );
+                    } else {
+                      newFilter.tags.push(item.id);
+                    }
+                    setFilter(newFilter);
+                  }}
+                >
+                  {filter.tags.includes(item.id) ? item.icon : ""}
+                  <p>{item.name}</p>
+                </li>
+              ))}
+            </Row>
+          )}
         </article>
         <ul id="infinity-list-post-dao">
           <InfiniteScroll

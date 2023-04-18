@@ -47,6 +47,10 @@ export const SlideCard = ({ title, data, category, loading = false }) => {
             }}
             navigation={true}
             breakpoints={{
+              0: {
+                slidesPerView: 1.5,
+                spaceBetween: 10,
+              },
               640: {
                 slidesPerView: 2,
                 spaceBetween: 10,

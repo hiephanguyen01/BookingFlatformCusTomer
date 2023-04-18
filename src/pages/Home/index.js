@@ -27,6 +27,7 @@ import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import Banner from "./Banner/Banner";
 import styles from "./home.module.scss";
+import { Col, Grid } from "antd";
 
 const cx = classNames.bind(styles);
 
@@ -151,13 +152,15 @@ const cx = classNames.bind(styles);
 //         </div>
 //       </Modal>
 
+const { useBreakpoint } = Grid;
+
 export const Home = () => {
   const { filter } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   // const [chooseCate, setChooseCate] = useState();
   // const [provinces, setProvinces] = useState([]);
-
+  const screens = useBreakpoint();
   const navigate = useNavigate();
   const {
     listOustandingStudioPost,
@@ -218,18 +221,51 @@ export const Home = () => {
         imgAlt="Booking Studio"
       />
       <div className={cx("home")}>
-        <div className={cx("filter")}>
-          {CATEGORIES.map((item) => (
-            <div
-              key={item.id}
-              className={cx("box")}
-              onClick={() => {
-                handleClickCategory(item.id);
-              }}>
-              <img src={item.img} alt="a" />
-              <span>{item.label}</span>
-            </div>
-          ))}
+        <div
+          className={cx("filter")}
+          style={
+            screens.xs
+              ? {
+                  backgroundColor: "",
+                  padding: 12,
+                }
+              : {
+                  padding: 29,
+                  backgroundColor: "#ffff",
+                }
+          }
+        >
+          {screens.xs
+            ? CATEGORIES.map((item) => (
+                <Col style={{ textAlign: "center" }}>
+                  <div
+                    key={item.id}
+                    className={cx("box", "shadow", "mb-5")}
+                    onClick={() => {
+                      handleClickCategory(item.id);
+                    }}
+                    style={{
+                      backgroundColor: "#ffff",
+                      border: "none",
+                    }}
+                  >
+                    <img src={item.img} alt="a" />
+                  </div>
+                  <p style={{ fontSize: 16 }}>{item.label}</p>
+                </Col>
+              ))
+            : CATEGORIES.map((item) => (
+                <div
+                  key={item.id}
+                  className={cx("box")}
+                  onClick={() => {
+                    handleClickCategory(item.id);
+                  }}
+                >
+                  <img src={item.img} alt="a" />
+                  <span>{item.label}</span>
+                </div>
+              ))}
         </div>
         {/* Banner */}
         {/* <div className={cx("banner")}>

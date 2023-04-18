@@ -1,4 +1,5 @@
 import {
+  CloseOutlined,
   DownOutlined,
   SearchOutlined,
   ShoppingOutlined,
@@ -14,12 +15,15 @@ import {
   Modal,
   Row,
   Select,
+  Grid,
+  Badge,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import DaoIcon from "../../assets/header/DaoIcon.svg";
 import Logo from "../../assets/header/Logo.svg";
+import Chat from "../../assets/header/chat.svg";
 import { ReactComponent as SearchIcon } from "../../assets/header/SearchIcon.svg";
 import noBody from "../../assets/img/no-body.png";
 import { studioPostService } from "../../services/StudioPostService";
@@ -31,6 +35,9 @@ import toastMessage from "../ToastMessage";
 import Hotkey from "./Components/Hotkey";
 import "./Header.scss";
 const { Option } = Select;
+
+const { useBreakpoint } = Grid;
+
 const Header = () => {
   const [provinces, setProvinces] = useState([]);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -38,6 +45,7 @@ const Header = () => {
   const filter = useSelector((state) => state.studioPostReducer.filter);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const screens = useBreakpoint();
   const categories = [
     {
       id: "",
@@ -85,7 +93,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -123,7 +132,8 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}>
+              onClick={() => navigate("/home/user/")}
+            >
               Thông tin tài khoản
             </Button>
           ),
@@ -136,7 +146,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -154,7 +165,7 @@ const Header = () => {
     if (document.activeElement === inputRef.current) {
       setVisible(true);
     }
-  });
+  }, []);
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
@@ -187,93 +198,107 @@ const Header = () => {
   };
   return (
     <div className="Header">
-      <Modal
-        onCancel={handleCancel}
-        className="search-modal"
-        width={"700px"}
-        visible={visible}
-        footer={[]}
-        closable={false}>
-        <div className="search-container">
-          <div className="header-search">
-            <div className="logo">
-              <img src={Logo} alt="" />
-            </div>
-          </div>
-          <Form onFinish={onFinish}>
-            <Form.Item name="keyString">
-              <Input
-                placeholder="Bạn đang tìm gì?"
-                prefix={<SearchOutlined />}
-                className="input-search"
-              />
-            </Form.Item>
-            <p className="filter">LỌC THEO</p>
-            <div className="option d-flex justify-content-between">
-              <Form.Item
-                name="province"
-                style={{ width: "100%", marginRight: "20px" }}>
-                <Select
-                  defaultValue=""
-                  showSearch
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().includes(input.toLowerCase())
-                  }
-                  className="select-item">
-                  <Option value="">Địa điểm</Option>
-                  {Boolean(provinces) &&
-                    provinces.map((val) => (
+      {screens.xs ? (
+        <Modal
+          onCancel={handleCancel}
+          className="search-modal mobile"
+          width={"100%"}
+          visible={visible}
+          footer={[]}
+          closable={false}
+        >
+          <div className="search-container pt-30">
+            <Form onFinish={onFinish}>
+              <Row className="w-100" justify="space-between" align="middle">
+                <Col span={2}>
+                  <CloseOutlined
+                    className="mb-30"
+                    onClick={() => setVisible(false)}
+                  />
+                </Col>
+                <Col span={22}>
+                  <Form.Item name="keyString">
+                    <Input
+                      placeholder="Bạn đang tìm gì?"
+                      prefix={<SearchOutlined />}
+                      className="input-search "
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <p className="filter">LỌC THEO</p>
+              <div className="option d-flex justify-content-between">
+                <Form.Item
+                  name="province"
+                  style={{ width: "100%", marginRight: "20px" }}
+                >
+                  <Select
+                    defaultValue=""
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    className="select-item"
+                  >
+                    <Option value="">Địa điểm</Option>
+                    {Boolean(provinces) &&
+                      provinces.map((val) => (
+                        <Option key={val.id} value={val.id}>
+                          {val.Name}
+                        </Option>
+                      ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="category"
+                  style={{ width: "100%", marginRight: "20px" }}
+                >
+                  <Select defaultValue="-1" className="select-item">
+                    <Option value="-1" disabled={true}>
+                      Danh mục
+                    </Option>
+                    {categories.map((val) => (
                       <Option key={val.id} value={val.id}>
-                        {val.Name}
+                        {val.name}
                       </Option>
                     ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="category"
-                style={{ width: "100%", marginRight: "20px" }}>
-                <Select defaultValue="-1" className="select-item">
-                  <Option value="-1" disabled={true}>
-                    Danh mục
-                  </Option>
-                  {categories.map((val) => (
-                    <Option key={val.id} value={val.id}>
-                      {val.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item name="price" style={{ width: "100%" }}>
-                <Select defaultValue="" className="select-item">
-                  <Option value="">Giá</Option>
-                  <Option value={2}>Giá cao nhất</Option>
-                  <Option value={1}>Giá thấp nhất </Option>
-                  <Option value={3}>Giảm giá nhiều nhất </Option>
-                </Select>
-              </Form.Item>
-            </div>
-            {/* <p className="time">Khung giờ bạn muốn đặt</p>
+                  </Select>
+                </Form.Item>
+                <Form.Item name="price" style={{ width: "100%" }}>
+                  <Select defaultValue="" className="select-item">
+                    <Option value="">Giá</Option>
+                    <Option value={2}>Giá cao nhất</Option>
+                    <Option value={1}>Giá thấp nhất </Option>
+                    <Option value={3}>Giảm giá nhiều nhất </Option>
+                  </Select>
+                </Form.Item>
+              </div>
+              {/* <p className="time">Khung giờ bạn muốn đặt</p>
 
           <SelectTime /> */}
-            <Form.Item
-              style={{
-                textAlign: "center",
-                width: "100%",
-                marginTop: "10px",
-                marginBottom: "35px",
-              }}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                size="large"
-                style={{ width: "50%" }}
-                className="btn-search">
-                Tìm kiếm
-              </Button>
-            </Form.Item>
-          </Form>
-          {/* {user ? (
+              <Form.Item
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  marginTop: "10px",
+                  marginBottom: "35px",
+                }}
+              >
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  style={{ width: "50%" }}
+                  className="btn-search"
+                >
+                  Tìm kiếm
+                </Button>
+              </Form.Item>
+            </Form>
+            {/* {user ? (
             <div className="wrapper-user">
               <Dropdown overlay={menuSignOut} placement="topRight" arrow>
                 <div className="user">
@@ -312,10 +337,150 @@ const Header = () => {
               </Dropdown>
             </div>
           )} */}
-        </div>
-      </Modal>
-      <div className="container" style={{ padding: "0 50px" }}>
-        <Row>
+          </div>
+        </Modal>
+      ) : (
+        <Modal
+          onCancel={handleCancel}
+          className="search-modal"
+          width={"700px"}
+          visible={visible}
+          footer={[]}
+          closable={false}
+        >
+          <div className="search-container">
+            <div className="header-search">
+              <div className="logo">
+                <img src={Logo} alt="" />
+              </div>
+            </div>
+            <Form onFinish={onFinish}>
+              <Form.Item name="keyString">
+                <Input
+                  placeholder="Bạn đang tìm gì?"
+                  prefix={<SearchOutlined />}
+                  className="input-search"
+                />
+              </Form.Item>
+              <p className="filter">LỌC THEO</p>
+              <div className="option d-flex justify-content-between">
+                <Form.Item
+                  name="province"
+                  style={{ width: "100%", marginRight: "20px" }}
+                >
+                  <Select
+                    defaultValue=""
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    className="select-item"
+                  >
+                    <Option value="">Địa điểm</Option>
+                    {Boolean(provinces) &&
+                      provinces.map((val) => (
+                        <Option key={val.id} value={val.id}>
+                          {val.Name}
+                        </Option>
+                      ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="category"
+                  style={{ width: "100%", marginRight: "20px" }}
+                >
+                  <Select defaultValue="-1" className="select-item">
+                    <Option value="-1" disabled={true}>
+                      Danh mục
+                    </Option>
+                    {categories.map((val) => (
+                      <Option key={val.id} value={val.id}>
+                        {val.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name="price" style={{ width: "100%" }}>
+                  <Select defaultValue="" className="select-item">
+                    <Option value="">Giá</Option>
+                    <Option value={2}>Giá cao nhất</Option>
+                    <Option value={1}>Giá thấp nhất </Option>
+                    <Option value={3}>Giảm giá nhiều nhất </Option>
+                  </Select>
+                </Form.Item>
+              </div>
+              {/* <p className="time">Khung giờ bạn muốn đặt</p>
+
+          <SelectTime /> */}
+              <Form.Item
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  marginTop: "10px",
+                  marginBottom: "35px",
+                }}
+              >
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  style={{ width: "50%" }}
+                  className="btn-search"
+                >
+                  Tìm kiếm
+                </Button>
+              </Form.Item>
+            </Form>
+            {/* {user ? (
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={user.Image ? img : noBody} />
+                  <div className="text ms-8">
+                    <p>Tài khoản</p>
+                    <p>
+                      {user?.Fullname ? user.Fullname : user.Email}
+                      <DownOutlined
+                        style={{
+                          fontSize: "10px",
+                          color: "#828282",
+                          marginLeft: "3px",
+                        }}
+                      />
+                    </p>
+                  </div>
+                </div>
+              </Dropdown>
+            </div>
+          ) : (
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={noBody} />
+                  <div className="text">
+                    {!user && <p>Đăng ký/Đăng nhập</p>}
+                    <p>
+                      {user ? user.Fullname : "Tài khoản"}
+                      <DownOutlined
+                        style={{ fontSize: "10px", color: "#828282" }}
+                      />
+                    </p>
+                  </div>
+                </div>
+              </Dropdown>
+            </div>
+          )} */}
+          </div>
+        </Modal>
+      )}
+      <div
+        className="container"
+        style={{ padding: `${screens.xs ? "0 10px" : "0 50px"}` }}
+      >
+        <Row justify="space-around">
           <Col
             lg={4}
             md={24}
@@ -325,7 +490,8 @@ const Header = () => {
               display: "flex",
               justifyContent: "flex-start",
               alignItems: "center",
-            }}>
+            }}
+          >
             <Link to="/home" className="link">
               <div className="img">
                 <img src={Logo} alt="" />
@@ -341,22 +507,56 @@ const Header = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-            }}>
-            <div style={{ width: "100%" }}>
-              <div style={{ width: "100%", marginBottom: "10px" }}>
+            }}
+          >
+            <Row style={{ width: "100%" }} justify="space-between">
+              <Col lg={24} md={24} sm={24} xs={16}>
                 <Input
                   className="container__input"
                   placeholder="Bạn đang tìm gì?"
                   prefix={<SearchIcon />}
                   suffix={<SearchButton />}
                   onClick={() => setVisible(true)}
+                  readOnly
                 />
-              </div>
-              <Hotkey />
-            </div>
+                {!screens.xs && <Hotkey />}
+              </Col>
+              <Col lg={0} md={0} sm={0} xs={7}>
+                <Row align="middle" justify="space-around" className="h-100">
+                  <Col>
+                    <Badge count={0} size="default">
+                      <img src={Chat} className="h-20px" alt="" />
+                    </Badge>
+                    <p>Chat</p>
+                  </Col>
+                  <Col
+                    onClick={() =>
+                      toastMessage(
+                        "Chức năng này đang phát triển!",
+                        "info",
+                        1,
+                        "",
+                        {}
+                      )
+                    }
+                  >
+                    <Badge count={0} size="default">
+                      <ShoppingOutlined
+                        style={{ fontSize: "19px", color: "#828282" }}
+                      />
+                    </Badge>
+                    <p>Giỏ hàng</p>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </Col>
-          <Col lg={8} md={12} sm={24} xs={24}>
-            <div className="container__right">
+          <Col lg={6} md={12} sm={24} xs={0}>
+            <Row
+              align="middle"
+              justify="space-around"
+              // className="container__right"
+            >
               <div className="tip" onClick={() => navigate("/home/dao")}>
                 <img src={DaoIcon} alt="" />
                 <p>Dạo</p>
@@ -372,7 +572,8 @@ const Header = () => {
                     "",
                     {}
                   )
-                }>
+                }
+              >
                 <ShoppingOutlined
                   style={{ fontSize: "20px", color: "#828282" }}
                 />
@@ -431,7 +632,7 @@ const Header = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </Row>
           </Col>
         </Row>
       </div>

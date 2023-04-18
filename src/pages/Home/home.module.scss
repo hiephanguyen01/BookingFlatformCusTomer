@@ -12,10 +12,8 @@
 
 .filter {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
     gap: 18px;
-    padding: 29px;
-    background-color: #ffff;
     border-radius: 4px;
     cursor: pointer;
 
@@ -37,6 +35,10 @@
         &.active {
             border-color: #e22828;
             color: #e22828;
+        }
+
+        &.shadow {
+            box-shadow: 1px 1px 20px #eaeaea;
         }
     }
 }
@@ -227,6 +229,12 @@
 
 @media (max-width: 768px) {
     .home {
-        padding: 0 0;
+        padding: 0 10px;
     }
 }
+
+// @media (max-width: 768px) {
+//     .home {
+//         padding: 0 0;
+//     }
+// }

@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   Pagination,
+  Popover,
   Radio,
   Row,
   Select,
@@ -127,6 +128,17 @@ const FilterPage = () => {
       )
     );
   };
+  const onChangeFilterCategoryOption = (value) => {
+    dispatch(
+      getFilterStudioPost(
+        5,
+        1,
+        { ...filter, category: value },
+        currentUser,
+        navigate
+      )
+    );
+  };
   const onChangeFilterProvince = (value) => {
     dispatch(
       getFilterStudioPost(
@@ -207,34 +219,8 @@ const FilterPage = () => {
     <div className="FilterPage">
       <div className="container">
         <Row gutter={20} style={{ paddingTop: "10px" }}>
-          <Col lg={6} md={24}>
-            <Form {...layout} onFinish={handleClearFilter} form={form}>
-              {/* timefil */}
-              {/* <div className="box">
-                <p className="text">Khung giờ bạn muốn đặt</p>
-                <Divider />
-                <div
-                  className=""
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}>
-                  <TimePicker.RangePicker
-                    format="HH:mm"
-                    onChange={handleOnchangeHour}
-                    size="large"
-                    inputReadOnly={true}
-                    defaultValue={[
-                      moment(filter.OrderByTimeFrom.slice(11, 16), "HH:mm"),
-                      moment(filter.OrderByTimeTo.slice(11, 16), "HH:mm"),
-                    ]}
-                    minuteStep={60}
-                  />
-                </div>
-              </div> */}
-              {/* filter */}
+          <Form {...layout} onFinish={handleClearFilter} form={form}>
+            <Col lg={6} md={24} sm={24} xs={0}>
               <Row className="box" gutter={10}>
                 <Col sm={12}>
                   <p className="text">LỌC THEO</p>
@@ -349,8 +335,129 @@ const FilterPage = () => {
                   </Form.Item>
                 </Col>
               </Row>
-            </Form>
-          </Col>
+            </Col>
+
+            {/* Mobile */}
+            <Col lg={0} md={0} sm={0} xs={24}>
+              <div className="filterSlide">
+                <Row className="box" gutter={10}>
+                  <Col>
+                    <Form.Item label="" name="location">
+                      <Select
+                        showSearch
+                        onChange={onChangeFilterProvince}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        defaultValue={province}
+                      >
+                        <Option value={""}>Tất cả</Option>
+                        {provinces &&
+                          provinces.map((val) => (
+                            <Option value={Number(val.Code)}>{val.Name}</Option>
+                          ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col>
+                    <Form.Item label="" name="category">
+                      <Select
+                        showSearch
+                        onChange={onChangeFilterCategoryOption}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        // defaultValue={province}
+                        defaultValue={filter.category}
+                      >
+                        {categories &&
+                          categories?.map((val) => (
+                            <Option value={Number(val?.id)}>{val?.name}</Option>
+                          ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+
+                  <Col>
+                    <Popover
+                      content={() => (
+                        <div className="popover_price">
+                          <Form.Item label="Giá" name="price">
+                            <div className="filter_price_container">
+                              <Radio.Group
+                                onChange={onChangePriceOption}
+                                value={filter.priceOption}
+                              >
+                                <Row>
+                                  <Col span={24}>
+                                    <Radio value={2}>Giá cao nhất</Radio>
+                                  </Col>
+                                  <Col span={24}>
+                                    <Radio value={1}>Giá thấp nhất </Radio>
+                                  </Col>
+                                  <Col span={24}>
+                                    <Radio value={3}>
+                                      Giảm giá nhiều nhất{" "}
+                                    </Radio>
+                                  </Col>
+                                  <Col span={24}>
+                                    <Slider
+                                      onAfterChange={onChangeSlideRange}
+                                      min={0}
+                                      max={5000000}
+                                      step={100000}
+                                      range
+                                      defaultValue={[0, 2500000]}
+                                      marks={marks}
+                                    />
+                                  </Col>
+                                </Row>
+                              </Radio.Group>
+                            </div>
+                          </Form.Item>
+                        </div>
+                      )}
+                      placement="bottomRight"
+                      title=""
+                      trigger="click"
+                    >
+                      <Button>Giá</Button>
+                    </Popover>
+                  </Col>
+                  <Col>
+                    <Divider />
+                    <p className="text">Đánh giá</p>
+                    <Form.Item name="ratingOption">
+                      <div className="filter_rating_container">
+                        <Radio.Group
+                          onChange={onChangeRateOption}
+                          value={filter.ratingOption}
+                        >
+                          <Row>
+                            <Col span={24}>
+                              <Radio value={1}>Đánh giá nhiều nhất</Radio>
+                            </Col>
+                            <Col span={24}>
+                              <Radio value={2}>Đánh giá cao nhất</Radio>
+                            </Col>
+                            <Col span={24}>
+                              <Radio value={3}>Đặt nhiều nhất</Radio>
+                            </Col>
+                          </Row>
+                        </Radio.Group>
+                      </div>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+          </Form>
           <Col lg={18} md={24}>
             <Row gutter={10}>
               {loading ? (
