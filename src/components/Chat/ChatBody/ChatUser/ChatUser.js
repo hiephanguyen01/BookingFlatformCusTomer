@@ -10,6 +10,7 @@ import {
 } from "../../../../stores/selector/OnlineSelector";
 import { chatService } from "../../../../services/ChatService";
 import { HandleImg } from "../../../HandleImg/HandleImg";
+
 export const ChatUser = React.memo(
   ({ userInfo, toggleState, toggleClick, setToggleState }) => {
     const onlinePartnerList = useSelector(onlinePartnerSelector);
@@ -21,7 +22,7 @@ export const ChatUser = React.memo(
     );
     useEffect(() => {
       if (userInfo.newestMessage) {
-        if (userInfo.newestMessage.UserId !== -1) {
+        if (userInfo.newestMessage?.UserId !== -1) {
           setIsRead(true);
         } else {
           setIsRead(userInfo.newestMessage.IsRead);

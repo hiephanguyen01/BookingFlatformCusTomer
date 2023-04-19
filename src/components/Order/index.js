@@ -70,15 +70,15 @@ const Index = ({ linkTo = "" }) => {
       break;
   }
   const dispatch = useDispatch();
-  console.log({
-    OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
-      .add(studioDetail?.data?.HourOpenDefault, "h")
-      .add(studioDetail?.data?.MinutesOpenDefault, "m")
-      .toISOString(),
-    OrderByDateTo: moment(filterService?.OrderByDateTo)
-      .add(studioDetail?.HourCloseDefault, "h")
-      .add(studioDetail?.MinutesCloseDefault, "m"),
-  });
+  // console.log({
+  //   OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
+  //     .add(studioDetail?.data?.HourOpenDefault, "h")
+  //     .add(studioDetail?.data?.MinutesOpenDefault, "m")
+  //     .toISOString(),
+  //   OrderByDateTo: moment(filterService?.OrderByDateTo)
+  //     .add(studioDetail?.HourCloseDefault, "h")
+  //     .add(studioDetail?.MinutesCloseDefault, "m"),
+  // });
   useEffect(() => {
     if (chooseServiceList.length <= 0) {
       navigate(`${location.pathname.split("/order")[0]}`);
@@ -335,7 +335,8 @@ const Index = ({ linkTo = "" }) => {
         style={{
           maxWidth: "1300px",
           margin: "auto",
-        }}>
+        }}
+      >
         <Col lg={9} sm={24}>
           <div className="right_col">
             <div className="text-title">Bạn đã chọn</div>
@@ -355,7 +356,8 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="d-flex"
-                      style={{ height: "88px", marginRight: "0.5rem" }}>
+                      style={{ height: "88px", marginRight: "0.5rem" }}
+                    >
                       <img
                         src={`${
                           item?.Image?.length > 0
@@ -390,7 +392,8 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="text-title"
-                      style={{ marginBottom: "16px" }}>
+                      style={{ marginBottom: "16px" }}
+                    >
                       Khung giờ bạn muốn đặt
                     </div>
                     <SelectTimeOption disabled={true} />
@@ -430,14 +433,17 @@ const Index = ({ linkTo = "" }) => {
               style={{
                 marginBottom: "0.5rem",
                 backgroundColor: "#FFFFFF",
-              }}>
+              }}
+            >
               <div
                 className="d-flex justify-content-between"
-                style={{ marginBottom: "28px" }}>
+                style={{ marginBottom: "28px" }}
+              >
                 <div>Chọn mã khuyến mãi</div>
                 <div
                   style={{ cursor: "pointer" }}
-                  onClick={() => onClickModal()}>
+                  onClick={() => onClickModal()}
+                >
                   Mã khuyến mãi
                 </div>
               </div>
@@ -452,7 +458,8 @@ const Index = ({ linkTo = "" }) => {
                       textDecoration: "line-through",
                       color: "#828282",
                       marginBottom: "12px",
-                    }}>
+                    }}
+                  >
                     {filterService?.OrderByTime === 1 &&
                       `${convertPrice(
                         chooseServiceList?.reduce(
@@ -484,7 +491,8 @@ const Index = ({ linkTo = "" }) => {
                 <div className="d-flex justify-content-between">
                   <div
                     className="text-description"
-                    style={{ color: "#616161" }}>
+                    style={{ color: "#616161" }}
+                  >
                     Bao gồm 50.000đ thuế và phí
                   </div>
                   <div
@@ -494,7 +502,8 @@ const Index = ({ linkTo = "" }) => {
                       fontSize: "20px",
                       lineHeight: "28px",
                       fontWeight: "700",
-                    }}>
+                    }}
+                  >
                     {convertPrice(calculatePriceUsePromo())}đ
                   </div>
                 </div>
@@ -508,14 +517,16 @@ const Index = ({ linkTo = "" }) => {
               padding: "25px 25px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}>
+            }}
+          >
             <div
               className="text-title"
               style={{
                 fontSize: "22px",
                 lineHeight: "30px",
                 marginBottom: "0.25rem",
-              }}>
+              }}
+            >
               Vui lòng điền thông tin của bạn
             </div>
             <TextInput
@@ -572,7 +583,8 @@ const Index = ({ linkTo = "" }) => {
                   } catch (error) {
                     console.log(error);
                   }
-                }}>
+                }}
+              >
                 Verify Email
               </Button>
             )}
@@ -580,7 +592,8 @@ const Index = ({ linkTo = "" }) => {
 
           <div
             className="d-flex justify-content-end"
-            style={{ marginTop: "35px" }}>
+            style={{ marginTop: "35px" }}
+          >
             {infoUser?.IsActiveEmail &&
             infoUser?.Email?.trim() === user?.Email?.trim() ? (
               <Button
@@ -593,7 +606,8 @@ const Index = ({ linkTo = "" }) => {
                   borderRadius: "8px",
                   height: "45px",
                   width: "270px",
-                }}>
+                }}
+              >
                 Hoàn tất đặt
               </Button>
             ) : Valid ? (
@@ -606,7 +620,8 @@ const Index = ({ linkTo = "" }) => {
                   borderRadius: "8px",
                   height: "45px",
                   width: "270px",
-                }}>
+                }}
+              >
                 Hoàn tất đặt
               </Button>
             ) : (
@@ -617,7 +632,8 @@ const Index = ({ linkTo = "" }) => {
                   borderRadius: "8px",
                   height: "45px",
                   width: "270px",
-                }}>
+                }}
+              >
                 Hoàn tất đặt
               </Button>
             )}

@@ -137,7 +137,7 @@ export const StudioDetail = () => {
   };
 
   const ROW = (dataSource) => {
-    console.log("dataSource", dataSource);
+    // console.log("dataSource", dataSource);
     return dataSource?.map((data, index) => [
       {
         key: "title",

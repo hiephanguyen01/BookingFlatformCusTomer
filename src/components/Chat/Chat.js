@@ -19,13 +19,14 @@ const Chat = () => {
   const closeConversation = useSelector(closeConversationSelector);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
-  const [notiMessage /* , setNotiMessage */] = useState(0);
-  const showLargeDrawer = () => {
-    setVisible(true);
-  };
-  const onClose = () => {
-    setVisible(false);
-  };
+  const [notiMessage, setNotiMessage] = useState(0);
+  // const showLargeDrawer = () => {
+  //   setVisible(true);
+  // };
+  // const onClose = () => {
+  //   setVisible(false);
+  // };
+
   useEffect(() => {
     socket.emit("login_user", {
       userId: UserMe.id,
@@ -36,12 +37,11 @@ const Chat = () => {
     socket.on("offline_partner", (partner) => {
       dispatch(getOfflinePartner(partner));
     });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
   useEffect(() => {
     setVisible(false);
   }, [closeConversation]);
+
   return (
     <div>
       <div

@@ -13,6 +13,7 @@ import {
 } from "../../../stores/selector/ChatSelector";
 import { updateMAction } from "../../../stores/actions/ChatAction";
 import { TOGGLE_STATE } from "../../../stores/types/messType";
+
 export const ChatBody = React.memo(() => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const getToggleState = useSelector((state) => state.chatReducer.toggleState);
@@ -25,9 +26,7 @@ export const ChatBody = React.memo(() => {
   const [conversation, setConversation] = useState(initMountStateUser.current);
   const [hasMore, setHasMore] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
-  useEffect(() => {
-    setToggleState(getToggleState);
-  }, [getToggleState]);
+
   const userChat = () => {
     return conversation.map((chat) => (
       <ChatUser
@@ -47,11 +46,16 @@ export const ChatBody = React.memo(() => {
     return conversation.map((chat) => (
       <div
         className={toggleState === chat.id ? "Chat__body__content" : "d-none"}
-        key={chat.id}>
+        key={chat.id}
+      >
         <ChatContent chatInfo={chat} />
       </div>
     ));
   };
+
+  useEffect(() => {
+    setToggleState(getToggleState);
+  }, [getToggleState]);
   useEffect(() => {
     (async () => {
       const res = await chatService.getConversation(8, 1, UserMe.id, 1);
@@ -129,6 +133,7 @@ export const ChatBody = React.memo(() => {
       })();
     });
   }, [UserMe?.id]);
+
   return (
     <div className="Chat__body">
       <div className="Chat__body__user">
@@ -182,7 +187,8 @@ export const ChatBody = React.memo(() => {
                 setLoadMore(false);
               }
             }
-          }}>
+          }}
+        >
           {userChat()}
           {!hasMore && (
             <div className="Chat__body__userlist__no-more">
@@ -201,7 +207,8 @@ export const ChatBody = React.memo(() => {
       <div className="Chat__body__divider"></div>
       <div
         className={toggleState === 1000000 ? "Chat__body__content" : "d-none"}
-        key={1000000}>
+        key={1000000}
+      >
         <ChatContentAdmin info={infoChatAdmin} />
       </div>
       {contentChat()}

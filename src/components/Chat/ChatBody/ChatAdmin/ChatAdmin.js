@@ -58,12 +58,13 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
       onClick={() => {
         toggleClick(1000000);
         setIsRead(true);
-        if (lastMessage.CustomerId === -1 && lastMessage.IsRead === false) {
+        if (lastMessage?.CustomerId === -1 && lastMessage?.IsRead === false) {
           (async () => {
             await chatService.readMessageAdmin(lastMessage.id);
           })();
         }
-      }}>
+      }}
+    >
       <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
         <div className="d-flex align-items-center h-100">
           <img
@@ -81,7 +82,8 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
             (lastMessage.CustomerId !== -1 ? (
               <div
                 className="w-100 d-flex justify-content-between"
-                style={{ color: "#828282", fontSize: "13px" }}>
+                style={{ color: "#828282", fontSize: "13px" }}
+              >
                 <div>
                   Bạn:{" "}
                   {lastMessage.Type === "text" ? (
@@ -103,7 +105,8 @@ export const ChatAdmin = React.memo(({ toggleState, toggleClick, info }) => {
                   color: isRead ? "#828282" : "#000",
                   fontSize: "13px",
                   fontWeight: isRead ? 500 : 700,
-                }}>
+                }}
+              >
                 <div>
                   {lastMessage.Type === "text" ? (
                     <>
