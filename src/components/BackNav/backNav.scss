@@ -1,0 +1,23 @@
+.nav-container {
+    padding: 25px 20px;
+    background-color: #fff;
+
+    a {
+        width: 100%;
+    }
+
+    .nav-back {
+        width: 100%;
+
+        .arrow {
+            margin-right: 15px;
+        }
+
+        .title {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 22px;
+            color: #3F3F3F;
+        }
+    }
+}

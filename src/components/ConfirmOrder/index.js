@@ -10,12 +10,14 @@ import toastMessage from "../ToastMessage";
 import UploadImage from "../UploadImage";
 import { numberWithDot } from "../../utils/convert";
 import { useSelector } from "react-redux";
+import BackNav from "../BackNav/BackNav";
 import moment from "moment";
 
 const Index = () => {
   const socket = useSelector((state) => state.userReducer.socket);
   const [checkoutDisable, setCheckoutDisable] = useState(false);
   const location = useLocation();
+  console.log(location?.state?.path);
   const navigate = useNavigate();
   let cate;
   const nameCategory = location.pathname
@@ -107,7 +109,16 @@ const Index = () => {
   return (
     <div
       className="py-12"
-      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}>
+      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
+    >
+      <BackNav
+        title="Cập nhật minh chứng"
+        to={`${
+          location?.state?.path
+            ? location?.state?.path
+            : "/home/user/orderStatus"
+        }`}
+      />
       <div className="confirm_order_container">
         <div className="border_bottom">
           <div className="confirm_title">
@@ -128,8 +139,9 @@ const Index = () => {
             </div>
             <div
               onClick={handleCopyToClipboard}
-              className="text-medium-re"
-              style={{ color: "#03AC84", cursor: "pointer" }}>
+              className="text-medium-re text-clipboard"
+              style={{ color: "#03AC84", cursor: "pointer" }}
+            >
               SAO CHÉP
             </div>
           </div>
@@ -147,7 +159,8 @@ const Index = () => {
           <div className="d-flex justify-content-between mb-18">
             <div
               className=" text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Số tài khoản:
             </div>
             <div
@@ -156,14 +169,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               68000888
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Ngân hàng:
             </div>
             <div
@@ -172,14 +187,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Tên thụ hưởng:
             </div>
             <div
@@ -188,14 +205,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               Công ty cổ phần Công nghệ và Đầu tư VNPLUS
             </div>
           </div>
           <div className="d-flex justify-content-between">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Nội dung chuyển khoản:
             </div>
             <div
@@ -204,7 +223,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               {booking?.IdentifyCode}
             </div>
           </div>
@@ -224,7 +244,8 @@ const Index = () => {
                 .isBefore(moment())}
               onChangeFile={onChangeFile}
               multiple={true}
-              image={file.preview || convertImageUrl(booking?.EvidenceImage)}>
+              image={file.preview || convertImageUrl(booking?.EvidenceImage)}
+            >
               <div className="btn_upload">Tải ảnh lên</div>
             </UploadImage>
           </div>
@@ -232,7 +253,8 @@ const Index = () => {
             className={`btn_update text-medium-se mb-30 ${
               checkoutDisable && "disable-checkout"
             }`}
-            onClick={handleClickBtnUpdate}>
+            onClick={handleClickBtnUpdate}
+          >
             Cập nhật minh chứng
           </div>
           <div className="d-flex">

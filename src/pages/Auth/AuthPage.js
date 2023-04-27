@@ -17,10 +17,10 @@ export const AuthPage = () => {
           path="sign-up/phone"
           element={
             <ProtectedRouter>
-              <SignUpWithPhone
-                backLink="/auth/sign-up"
-                nextLink="/auth/sign-up/set-password"
-              ></SignUpWithPhone>
+            <SignUpWithPhone
+              backLink="/auth/sign-up"
+              nextLink="/auth/sign-up/set-password"
+            ></SignUpWithPhone>
             </ProtectedRouter>
           }
         />
