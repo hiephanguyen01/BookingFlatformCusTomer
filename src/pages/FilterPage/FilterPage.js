@@ -181,7 +181,12 @@ const FilterPage = () => {
       );
       setChoosePrice(+filter?.priceOption);
       setPriceRange(filter?.priceRange || []);
-      setChooseProvince(filter?.provinces || []);
+      setChooseProvince(
+        typeof filter?.provinces === "string" ||
+          typeof filter?.provinces === "number"
+          ? [filter?.provinces]
+          : filter?.provinces
+      );
     }
   }, [filter]);
 
