@@ -17,8 +17,9 @@ const Index = () => {
   return (
     <div
       className="py-12"
-      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}>
-      <div className="confirm_order_container">
+      style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
+    >
+      <div className="confirm_order_device_container">
         <div className="border_bottom">
           <div className="confirm_title">
             VUI LÒNG THANH TOÁN TIỀN CỌC ĐỂ HOÀN THÀNH ĐẶT CHỖ
@@ -51,7 +52,8 @@ const Index = () => {
           <div className="d-flex justify-content-between mb-18">
             <div
               className=" text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Số tài khoản:
             </div>
             <div
@@ -60,14 +62,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               68000888
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Ngân hàng:
             </div>
             <div
@@ -76,14 +80,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
             </div>
           </div>
           <div className="d-flex justify-content-between mb-18">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Tên thụ hưởng:
             </div>
             <div
@@ -92,14 +98,16 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               Công ty cổ phần Công nghệ và Đầu tư VNPLUS
             </div>
           </div>
           <div className="d-flex justify-content-between">
             <div
               className="text-medium-re w-180px"
-              style={{ color: "#616161" }}>
+              style={{ color: "#616161" }}
+            >
               Nội dung chuyển khoản:
             </div>
             <div
@@ -108,7 +116,8 @@ const Index = () => {
                 color: "#222222",
                 fontWeight: "400",
                 textAlign: "start",
-              }}>
+              }}
+            >
               [Mã Booking của bạn]
             </div>
           </div>
@@ -125,7 +134,8 @@ const Index = () => {
             <UploadImage
               onChangeFile={onChangeFile}
               multiple={true}
-              image={file.preview}>
+              image={file.preview}
+            >
               <div className="btn_upload">Tải ảnh lên</div>
             </UploadImage>
           </div>

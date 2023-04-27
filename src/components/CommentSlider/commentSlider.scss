@@ -21,6 +21,7 @@
             .wrapper {
                 display: flex;
                 justify-content: space-between;
+                overflow: hidden;
             }
 
             &_info {

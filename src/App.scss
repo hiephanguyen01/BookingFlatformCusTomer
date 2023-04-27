@@ -332,3 +332,9 @@ input[type="number"]::-webkit-outer-spin-button {
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 576px) {
+  .App {
+    overflow: hidden;
+  }
+}

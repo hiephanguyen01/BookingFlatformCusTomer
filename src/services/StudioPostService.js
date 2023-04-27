@@ -4,9 +4,19 @@ class StudioPostService extends BaseService {
   getFilterStudioPost = (limit, page, filter) => {
     return this.post(`/api/filter/advance?page=${page}&limit=${limit}`, filter);
   };
+  getFilterStudioPostMobile = (limit, page, filter) => {
+    return this.post(
+      `/api/filter/advance/mobile?page=${page}&limit=${limit}`,
+      filter
+    );
+  };
   getAllProvince = () => {
     return this.get(`/api/provinces`);
   };
+  getDistrictByProvince = (provinceId) => {
+    return this.get(`/api/districts/${provinceId}`);
+  };
+
   getPostByTenantId = (params) => {
     return this.get(`/api/studio-post/tenant-id`, { ...params });
   };
