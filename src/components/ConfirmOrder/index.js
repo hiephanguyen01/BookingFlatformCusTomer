@@ -220,7 +220,7 @@ const Index = () => {
           <div className="w-60 wrapper_input">
             <UploadImage
               disable={moment(booking.CreationTime)
-                .add(15, "minutes")
+                .add(30, "minutes")
                 .isBefore(moment())}
               onChangeFile={onChangeFile}
               multiple={true}
