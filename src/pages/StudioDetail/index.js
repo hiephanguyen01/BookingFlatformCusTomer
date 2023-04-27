@@ -53,6 +53,7 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+import moment from "moment";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -128,6 +129,51 @@ export const StudioDetail = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
+  const priceService = (arr = [], OrderByTime) => {
+    console.log("arrrr", arr);
+
+    if (arr.length < 1) return null;
+    const areAllEqual = arr.every(
+      (num) =>
+        num.PriceByDate ===
+        (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
+    );
+    if (areAllEqual) {
+      return OrderByTime
+        ? arr[0].PriceByHour.toLocaleString("it-IT", {
+            style: "currency",
+            currency: "VND",
+          })
+        : arr[0].PriceByDate.toLocaleString("it-IT", {
+            style: "currency",
+            currency: "VND",
+          });
+    } else {
+      const result = arr.reduce(
+        (acc, curr) => {
+          const id = OrderByTime ? curr.PriceByHour : curr.PriceByDate;
+          if (id < acc.min) {
+            acc.min = id;
+          } else if (id > acc.max) {
+            acc.max = id;
+          }
+          return acc;
+        },
+        {
+          min: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+          max: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+        }
+      );
+      return `
+       ${result?.min?.toLocaleString("it-IT", {
+         style: "currency",
+         currency: "VND",
+       })} - ${result?.max?.toLocaleString("it-IT", {
+        style: "currency",
+        currency: "VND",
+      })}`;
+    }
+  };
   const handleReport = () => {
     dispatch({
       type: SHOW_MODAL,
@@ -326,20 +372,14 @@ export const StudioDetail = () => {
                       fontWeight: "700",
                     }}
                   >
+                    {console.log(priceService(data?.prices, false))}
+                    {/* {priceService(data?.prices)} */}
                     {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 1 &&
-                      data?.PriceByHour?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      ?.OrderByTime === 1 && priceService(data?.prices, true)}
                     {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 0 &&
-                      data?.PriceByDate?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      ?.OrderByTime === 0 && priceService(data?.prices, false)}
                   </span>
-                  <span
+                  {/* <span
                     style={{
                       color: "#828282",
                       textDecoration: "line-through",
@@ -359,7 +399,7 @@ export const StudioDetail = () => {
                         style: "currency",
                         currency: "VND",
                       })}
-                  </span>
+                  </span> */}
                 </div>
                 <p
                   style={{
@@ -639,10 +679,10 @@ export const StudioDetail = () => {
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
-                                    item.PriceByHour *
+                                    item.prices[0].PriceByHour *
                                       calTime(
-                                        filterService?.OrderByTimeFrom,
-                                        filterService?.OrderByTimeTo
+                                        filterService.OrderByTimeFrom,
+                                        filterService.OrderByTimeTo
                                       ),
                                   0
                                 )
@@ -652,11 +692,10 @@ export const StudioDetail = () => {
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
-                                    item.PriceByDate *
-                                      calDate(
-                                        filterService?.OrderByDateFrom,
-                                        filterService?.OrderByDateTo
-                                      ),
+                                    item.prices.reduce(
+                                      (sum, cur) => sum + cur.PriceByDate,
+                                      0
+                                    ),
                                   0
                                 )
                               )}đ`}
@@ -679,7 +718,7 @@ export const StudioDetail = () => {
                               chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
-                                  item.PriceByHour *
+                                  item.prices[0].PriceByHour *
                                     calTime(
                                       filterService.OrderByTimeFrom,
                                       filterService.OrderByTimeTo
@@ -692,11 +731,10 @@ export const StudioDetail = () => {
                               chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
-                                  item.PriceByDate *
-                                    calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
-                                    ),
+                                  item.prices.reduce(
+                                    (sum, cur) => sum + cur.PriceByDate,
+                                    0
+                                  ),
                                 0
                               )
                             )}đ`}
