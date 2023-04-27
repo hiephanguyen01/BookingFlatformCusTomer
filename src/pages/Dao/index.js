@@ -239,17 +239,11 @@ const Dao = () => {
     );
   }, [filter, dispatch]);
 
-  useEffect(() => {
-    // dispatch(getLikePostList(currentUser?.id)); // 1 là user id
-
-    if (Notification.permission !== "granted") {
-      askPermission();
-    }
-
-    return () => {
-      // dispatch({ type: GET_LIST_POST, data: [] });
-    };
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (Notification.permission !== "granted") {
+  //     askPermission();
+  //   }
+  // }, [dispatch]);
 
   return (
     <section className="dao d-flex justify-content-center">

@@ -1,19 +1,31 @@
 .drop-file-input {
-    position: relative;
+  position: relative;
 
-    &:hover {
-        opacity: 0.6;
-        cursor: pointer;
-    }
+  &:hover {
+    opacity: 0.6;
+    cursor: pointer;
+  }
 
-    .input_file {
-        position: absolute;
-        cursor: pointer;
-    }
+  .input_file {
+    position: absolute;
+    cursor: pointer;
+  }
 }
 
+.disable-select {
+  position: relative;
+
+  &:hover {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+  }
+  .input_file {
+    position: absolute;
+    cursor: not-allowed !important;
+  }
+}
 .drop-file-input {
-    &.dragover {
-        opacity: 0.6;
-    }
+  &.dragover {
+    opacity: 0.6;
+  }
 }

@@ -2,6 +2,9 @@ import {
   CheckCircleTwoTone,
   LeftOutlined,
   UploadOutlined,
+  DownOutlined,
+  TeamOutlined,
+  UpOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Divider, Grid, Input, Modal, Row } from "antd";
 import moment from "moment";
@@ -33,6 +36,9 @@ import Dolar2 from "../Icon/Dolar2";
 import NotiIcon from "../Icon/NotiIcon";
 import OrderIcon from "../Icon/OrderIcon";
 import { keyF } from "../OrderStatus";
+import chair from "../../../../../assets/svg/chair.svg";
+import conditional from "../../../../../assets/svg/conditional.svg";
+import expand from "../../../../../assets/svg/expand.svg";
 import "./OrderDetail.scss";
 import BackNav from "../../../../../components/BackNav/BackNav";
 
@@ -52,11 +58,28 @@ const OrderDetail = () => {
   const [showModal, setShowModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [visible, setVisible] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
+  console.log("bookingshds", booking);
+  console.log(
+    "bookingshds",
+    booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0]
+  );
+  const CancleFreeDate = moment(booking?.CreationTime)
+    .add(
+      booking?.OrderByTime
+        ? booking?.StudioRoom?.FreeCancelByHour?.match(/\d+/g)[0]
+        : booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0],
+      `${booking?.OrderByTime ? "hours" : "days"}`
+    )
+    .format("DD/MM/YYYY HH:mm A");
+  const deposite = booking?.OrderByTime
+    ? booking?.StudioRoom?.DepositByHour
+    : booking?.StudioRoom?.DepositByDate;
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -341,6 +364,7 @@ const OrderDetail = () => {
         }}
       >
         <Button
+          onClick={navigateToDetail}
           style={{
             color: "#009874",
             borderColor: "#009874",
@@ -351,7 +375,7 @@ const OrderDetail = () => {
         >
           Đặt lại
         </Button>
-        <Button
+        {/* <Button
           type="primary"
           size="large"
           style={{
@@ -365,7 +389,7 @@ const OrderDetail = () => {
           }}
         >
           Nhận hoàn tiền
-        </Button>
+        </Button> */}
       </div>
     ),
   };
@@ -400,6 +424,7 @@ const OrderDetail = () => {
             <div className="trt">
               {booking?.DepositValue &&
                 `${convertPrice(booking?.DepositValue)} VND`}
+              {/* {convertPrice(deposite)} VND */}
             </div>
           </div>
         </Col>
@@ -683,6 +708,207 @@ const OrderDetail = () => {
             </div>
           </div>
         </div>
+        <Divider />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#009874",
+            cursor: "pointer",
+            gap: ".5rem",
+          }}
+          onClick={() => setShowDetail(!showDetail)}
+        >
+          <p> {showDetail ? "Ẩn chi tiết" : "Xem chi tiết"} </p>
+          {showDetail ? <UpOutlined /> : <DownOutlined />}
+        </div>
+        {showDetail && (
+          <div>
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={expand}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Kích thước
+              </div>
+              <ul className={"detail-description"}>
+                <Row gutter={12}>
+                  <Col span={12}>
+                    <li>Diện tích {booking?.Area}m2</li>
+                  </Col>
+                  <Col span={12}>
+                    <li>Chiều rộng {booking?.Width}m</li>
+                  </Col>
+                  <Col span={12}>
+                    <li>Chiều dài {booking?.Length}m</li>
+                  </Col>
+                  <Col span={12}>
+                    <li>Chiều cao trần {booking?.Height}m</li>
+                  </Col>
+                </Row>
+              </ul>
+            </div>
+            <Divider />
+
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={chair}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Thiết bị có sẵn
+              </div>
+              <ul className={"detail-description"}>
+                <Row gutter={12}>
+                  {booking?.HasBackground && (
+                    <Col span={12}>
+                      <li>{booking?.BackgroundDescription}</li>
+                    </Col>
+                  )}
+                  {booking?.HasLamp && (
+                    <Col span={12}>
+                      <li>{booking?.LampDescription}</li>
+                    </Col>
+                  )}
+                  {booking?.HasTable && (
+                    <Col span={12}>
+                      <li>Bàn</li>
+                    </Col>
+                  )}
+                  {booking?.HasChair && (
+                    <Col span={12}>
+                      <li>Ghế</li>
+                    </Col>
+                  )}
+                  {booking?.HasSofa && (
+                    <Col span={12}>
+                      <li>Sofa</li>
+                    </Col>
+                  )}
+                  {booking?.HasFlower && (
+                    <Col span={12}>
+                      <li>Hoa</li>
+                    </Col>
+                  )}
+                  {booking?.HasOtherDevice && (
+                    <Col span={12}>
+                      <li>{booking?.OtherDeviceDescription}</li>
+                    </Col>
+                  )}
+                </Row>
+              </ul>
+            </div>
+            <Divider />
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <img
+                  alt=""
+                  src={conditional}
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Tiện ích đi kèm
+              </div>
+              <ul className={"detail-description"}>
+                <Row gutter={12}>
+                  {booking?.HasAirConditioner && (
+                    <Col span={12}>
+                      <li>Máy lạnh</li>
+                    </Col>
+                  )}
+                  {booking?.HasFan && (
+                    <Col span={12}>
+                      <li>Quạt</li>
+                    </Col>
+                  )}
+                  {booking?.HasDressingRoom && (
+                    <Col span={12}>
+                      <li>Phòng thay đồ riêng</li>
+                    </Col>
+                  )}
+                  {booking?.HasWC && (
+                    <Col span={12}>
+                      <li>Nhà vệ sinh</li>
+                    </Col>
+                  )}
+                  {booking?.HasCamera && (
+                    <Col span={12}>
+                      <li>Camera</li>
+                    </Col>
+                  )}
+                  {booking?.HasWifi && (
+                    <Col span={12}>
+                      <li>Wifi</li>
+                    </Col>
+                  )}
+                  {booking?.HasMotorBikeParking && (
+                    <Col span={12}>
+                      <li>Chổ để xe máy</li>
+                    </Col>
+                  )}
+                  {booking?.HasCarParking && (
+                    <Col span={12}>
+                      <li>Chổ để xe ô tô</li>
+                    </Col>
+                  )}
+                  {booking?.HasSupporter && (
+                    <Col span={12}>
+                      <li>Người hỗ trợ</li>
+                    </Col>
+                  )}
+                </Row>
+              </ul>
+            </div>
+            <Divider />
+            <div
+              className="mt-10"
+              style={{
+                color: "#222222",
+                fontSize: "16px",
+                fontWeight: "700",
+              }}
+            >
+              <div>
+                <TeamOutlined
+                  className="me-10 mb-2"
+                  style={{ fontSize: "15px" }}
+                />
+                Số lượng khách
+              </div>
+              <ul className={"detail-description"}>
+                <li>Số lượng khách tối đa: {booking?.MaximumCustomer} người</li>
+                <li>Phụ thu: {convertPrice(booking?.Surcharge)} VND/người</li>
+              </ul>
+            </div>
+          </div>
+        )}
       </section>
       <section className="chile">
         <div className="df">
@@ -708,14 +934,14 @@ const OrderDetail = () => {
             <div className="fi b_green"></div>
             <div className="text">
               <div className="text_title t_green">Hủy miễn phí</div>
-              <div className="text_title_2">Cho đến 13/02/2022 11:59 PM</div>
+              <div className="text_title_2">Cho đến {CancleFreeDate}</div>
             </div>
           </div>
           <div className="boxxx">
             <div className="fi b_red"></div>
             <div className="text">
               <div className="text_title t_red">Hủy mất 50% cọc</div>
-              <div className="text_title_2">Từ 14/02/2022 00:00 AM</div>
+              <div className="text_title_2">Từ {CancleFreeDate}</div>
             </div>
           </div>
         </div>
@@ -723,9 +949,9 @@ const OrderDetail = () => {
       <div className="flexx">
         {!screens?.xs && <NotiIcon />}
         <div className="noti_text">
-          Quý khách có thể hủy đơn đặt cho đến 13/02/2022 11:50 PM mà không mất
-          phí gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý
-          khách sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn đặt.
+          Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất phí
+          gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý khách
+          sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn đặt.
         </div>
       </div>
       <Modal

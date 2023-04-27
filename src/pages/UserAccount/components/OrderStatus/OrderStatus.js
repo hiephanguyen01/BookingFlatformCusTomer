@@ -179,6 +179,19 @@ const OrderStatus = () => {
                   />
                 ))}
             </TabPane>
+            <TabPane tab="Vắng mặt" key={5}>
+              {booking &&
+                pageBooking.map((item, idx) => (
+                  <OrderStatusItem
+                    id={item.id}
+                    BookingStatus={params.key}
+                    key={idx}
+                    item={item}
+                    booking={booking}
+                    setBooking={setBooking}
+                  />
+                ))}
+            </TabPane>
           </Tabs>
         )}
       </div>

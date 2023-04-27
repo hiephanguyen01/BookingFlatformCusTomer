@@ -1,6 +1,6 @@
-import { Avatar, Badge, Col, Grid, Layout, Row } from "antd";
+import {   Col, Grid,  Row } from "antd";
 import React from "react";
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AccountInfo from "./components/accountInfo/AccountInfo";
 import Aside from "./components/aside/Aside";
 import Liked from "./components/Liked/Liked";
@@ -12,7 +12,6 @@ import RecentlyViewed from "./components/RecentlyViewed/RecentlyViewed";
 import TermsUser from "../TermsUse/TermsUse";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 import OrderDetail from "./components/OrderStatus/OrderDetail";
-import { useSelector } from "react-redux";
 import "./userAccount.scss";
 import Account from "./components/Mobile/Account/Account";
 
