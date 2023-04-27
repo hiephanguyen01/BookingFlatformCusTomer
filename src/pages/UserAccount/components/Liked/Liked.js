@@ -1,11 +1,17 @@
-import { Tabs } from "antd";
+import { Grid, Tabs } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllStudioLikedAction } from "../../../../stores/actions/studioPostAction";
 import ListItemLikeCard from "../../../Home/ListCard/ListItemLikeCard";
 import { DividerCustom } from "../OrderStatus/conponents/DividerCustom/DividerCustom";
 import "./liked.scss";
+import BackNav from "../../../../components/BackNav/BackNav";
+import { MoreOutlined } from "@ant-design/icons";
+
+const { useBreakpoint } = Grid;
+
 const Liked = () => {
+  const screens = useBreakpoint();
   const dispatch = useDispatch();
   const { TabPane } = Tabs;
   // const onChange = (key) => {
@@ -19,7 +25,18 @@ const Liked = () => {
   const { listLikedUser } = useSelector((state) => state.studioPostReducer);
   return (
     <>
-      <h4 className="Like__header">Danh sách đã thích</h4>
+      {screens?.xs ? (
+        <>
+          <BackNav
+            title="Danh sách đã thích"
+            to="/home"
+            icon={<MoreOutlined onClick={(e) => e.stopPropagation()} />}
+          />
+          <div style={{ height: "10px", backgroundColor: "#f6f6f6" }}></div>
+        </>
+      ) : (
+        <h4 className="Like__header">Danh sách đã thích</h4>
+      )}
       <div className="Like__body">
         <Tabs defaultValue={1}>
           <TabPane tab="Studio" key={1}>
