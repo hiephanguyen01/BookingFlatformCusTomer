@@ -34,6 +34,10 @@
     gap: 9px;
     background-color: #f5f5f5;
   }
+
+  .divide {
+    display: none;
+  }
 }
 
 // @media (max-width: 991px) {
@@ -55,3 +59,13 @@
 @media (max-width: 768px) {}
 
 @media (max-width: 640px) {}
+
+@media (max-width: 576px) {
+  .ListItem {
+    margin-top: 0px;
+  }
+
+  .divider {
+    display: block;
+  }
+}
