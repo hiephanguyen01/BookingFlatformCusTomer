@@ -4,7 +4,7 @@ import {
   UploadOutlined,
   DownOutlined,
   TeamOutlined,
-  UpOutlined
+  UpOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Divider, Input, Modal, Row } from "antd";
 import moment from "moment";
@@ -68,14 +68,15 @@ const OrderDetail = () => {
   const CancleFreeDate = moment(booking?.CreationTime)
     .add(
       booking?.OrderByTime
-        ? booking?.StudioRoom?.FreeCancelByHour?.match(/\d+/g)[0]
-        : booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0],
+        ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
+        : booking?.FreeCancelByDate?.match(/\d+/g)[0],
       `${booking?.OrderByTime ? "hours" : "days"}`
     )
     .format("DD/MM/YYYY HH:mm A");
-  const deposite = booking?.OrderByTime
-    ? booking?.StudioRoom?.DepositByHour
-    : booking?.StudioRoom?.DepositByDate;
+  const depositPercent = booking?.OrderByTime
+    ? booking?.CancelPriceByHour
+    : booking?.CancelPriceByDate;
+ 
   console.log("CancleFreeDate", CancleFreeDate);
   const handleCancelOrder = async () => {
     try {
@@ -710,7 +711,7 @@ const OrderDetail = () => {
           onClick={() => setShowDetail(!showDetail)}
         >
           <p> {showDetail ? "Ẩn chi tiết" : "Xem chi tiết"} </p>
-          {showDetail ?<UpOutlined/> :<DownOutlined />}
+          {showDetail ? <UpOutlined /> : <DownOutlined />}
         </div>
         {showDetail && (
           <div>
@@ -910,7 +911,7 @@ const OrderDetail = () => {
         <NotiIcon />
         <div className="noti_text">
           Bao gồm 40.000 VND thuế và phí. Quý khách sẽ thanh toán 300.000 VND
-          vào ngày 13/02/2022
+          vào ngày {booking?.OrderByTime? moment(booking?.OrderByTimeFrom).format("DD/MM/YYYY")  :moment(booking?.OrderByDateFrom).format("DD/MM/YYYY")}
         </div>
       </div>
       <section className="chile">
@@ -929,7 +930,7 @@ const OrderDetail = () => {
           <div className="boxxx">
             <div className="fi b_red"></div>
             <div className="text">
-              <div className="text_title t_red">Hủy mất 50% cọc</div>
+              <div className="text_title t_red">Hủy mất {depositPercent}% cọc</div>
               <div className="text_title_2">Từ {CancleFreeDate}</div>
             </div>
           </div>
