@@ -53,14 +53,13 @@ const BottomNav = () => {
         </Col>
         <Col
           span={6}
-          className={`item ${
-            location.pathname === "/home/user/accountInfo" && "active"
-          }`}
+          className={`item ${location.pathname === "/home/user" && "active"}`}
           onClick={() => {
             if (user?.id) {
-              navigate("/home/user/accountInfo");
+              navigate("/home/user");
+            } else {
+              navigate("/auth/sign-in");
             }
-            navigate("/auth/sign-in");
           }}
         >
           {user?.id ? (

@@ -5,7 +5,7 @@ import { ReactComponent as Insta } from "../../assets/footer/instagram.svg";
 import Ios from "../../assets/footer/ios.svg";
 // import QRCode from "../../assets/footer/QRCode.svg";
 import { ReactComponent as LinkedIn } from "../../assets/footer/linkedin.svg";
-import Logo from "../../assets/header/Logo.svg";
+import { ReactComponent as Logo } from "../../assets/header/Logo.svg";
 
 import { CopyrightOutlined } from "@ant-design/icons";
 import QRCode from "qrcode.react";
@@ -143,7 +143,8 @@ const Footer = () => {
                 xs={24}
                 align={`${screens.xs ? "middle" : "start"}`}
               >
-                <img src={Logo} alt="" />
+                <Logo style={{ height: "45px", width: "150px" }} />
+
                 {/* <Enter /> */}
                 <p
                   className="title exten"

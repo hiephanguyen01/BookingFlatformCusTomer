@@ -49,8 +49,7 @@
       overflow: hidden;
       z-index: 1;
 
-      &:hover {
-      }
+      &:hover {}
     }
 
     .sale {
@@ -73,6 +72,7 @@
       overflow: hidden;
       width: 269px;
       height: 189px;
+
       img {
         width: 100%;
         display: block;
@@ -100,13 +100,16 @@
       }
     }
   }
+
   .text {
     width: 100%;
     padding: 10px;
+
     p {
       padding: 2px;
     }
   }
+
   p.title {
     padding-right: 5px;
     font-weight: 700;
@@ -137,7 +140,8 @@
   div.description-category {
     font-weight: 400;
     font-size: 14px;
-    img{
+
+    img {
       width: 22px;
       height: 22px;
     }
@@ -149,6 +153,7 @@
     text-align: end;
     font-weight: 600;
   }
+
   .right-text {
     text-align: end;
   }
@@ -156,19 +161,73 @@
   @media (max-width: 1200px) {
     .groupImage {
       display: block;
+
       .main {
         width: auto;
         height: 100%;
       }
+
       .right {
         display: none;
       }
     }
   }
+
+  .layout-mobile {
+    padding: 0 !important;
+
+    .wrap {
+      width: 103%;
+      height: 220px;
+      overflow: hidden;
+
+      .image-large {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .image-small {
+        width: 100%;
+        height: 110px;
+        object-fit: cover;
+      }
+    }
+
+    .info {
+      position: relative;
+      padding: 16px 10px;
+
+      .addition {
+        text-align: end !important;
+      }
+
+      .like {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background-color: #fff;
+        position: absolute;
+        top: 5px;
+        right: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 1000;
+
+        &:hover {
+          background-color: #d2666682;
+        }
+      }
+    }
+  }
+
   @media (max-width: 900px) {
     .groupImage {
       width: 50%;
     }
+
     // .main {
     //   width: 120px;
     //   height: 100%;
@@ -176,19 +235,43 @@
     .addition {
       text-align: start;
     }
+
     .right-text {
       text-align: start;
     }
   }
-  @media (max-width: 540px) {
-    .groupImage {
-      .main {
-        width: 120px;
-        height: 100%;
-      }
-      .right {
-        display: none;
-      }
-    }
+
+  // @media (max-width: 576px) {
+  //   .groupImage {
+  //     width: 100%;
+
+  //     .main {
+  //       width: 100%;
+  //       height: 100%;
+  //     }
+
+  //     .right {
+  //       display: none;
+  //     }
+  //   }
+  // }
+
+  // @media (max-width: 540px) {
+  //   .groupImage {
+  //     .main {
+  //       width: 120px;
+  //       height: 100%;
+  //     }
+
+  //     .right {
+  //       display: none;
+  //     }
+  //   }
+  // }
+}
+
+@media (max-width: 576px) {
+  .FilterCard {
+    max-height: none;
   }
 }

@@ -13,7 +13,7 @@ export const CustomerLayout = ({ children }) => {
   return (
     <div style={{ position: "relative" }} className="scroll-hide">
       {screens.xs ? <></> : user && <Chat />}
-      <Header />
+      {screens.xs ? <></> : <Header />}
       <div style={{ minHeight: "calc(100vh - 200px)" }}>
         {children ? children : <Outlet />}
       </div>

@@ -35,6 +35,7 @@ import {
   getCurrentUser,
   setupSocket,
 } from "./stores/actions/autheticateAction";
+import { SET_USER } from "./stores/types/authType";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +44,9 @@ function App() {
     dispatch(getCurrentUser());
     dispatch(setupSocket());
   }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch({ type: SET_USER, payload: { id: 1, Fullname: "Nguyen" } });
+  // }, [dispatch]);
   /// count and sent time accesses
   const countAndSendTimeAcc = async () => {
     try {
@@ -110,7 +114,8 @@ function App() {
             <CustomerLayout>
               <Verify />
             </CustomerLayout>
-          }></Route>
+          }
+        ></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route path="refund" element={<Refund />}></Route>
           <Route index element={<Home />}></Route>
@@ -120,7 +125,8 @@ function App() {
               <ProtectedRouter>
                 <UserAccount />
               </ProtectedRouter>
-            }></Route>
+            }
+          ></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />

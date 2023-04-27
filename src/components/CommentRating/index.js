@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, StarFilled } from "@ant-design/icons";
-import { Divider, Pagination, Rate } from "antd";
+import { Divider, Grid, Pagination, Rate } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import images from "../../assets/images";
@@ -8,6 +8,7 @@ import { convertImage } from "../../utils/convertImage";
 import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { ModalImage } from "../ModalImg";
 import "./commentRating.scss";
+import BackNav from "../BackNav/BackNav";
 
 const STAR_LIST = [
   { id: 0, label: "Tất cả" },
@@ -17,9 +18,10 @@ const STAR_LIST = [
   { id: 2, label: "2" },
   { id: 1, label: "1" },
 ];
+const { useBreakpoint } = Grid;
 const pageSize = 5;
 const Index = ({ data = [], className, isPerional }) => {
-  console.log("rating", data);
+  const screens = useBreakpoint();
   const ref = useRef(null);
   const [chooseRating, setChooseRating] = useState(0);
   const [state, setState] = useState({
@@ -67,7 +69,11 @@ const Index = ({ data = [], className, isPerional }) => {
   return (
     <>
       <div ref={ref} className={`rating ${className}`}>
-        <h3>Đánh giá</h3>
+        {screens?.xs ? (
+          <BackNav title="Đánh giá của tôi" to="/home/user" />
+        ) : (
+          <h3>Đánh giá</h3>
+        )}
         {isPerional ? (
           <></>
         ) : (
@@ -187,7 +193,7 @@ const Index = ({ data = [], className, isPerional }) => {
                           item?.MakeupServicePackage?.Name ||
                           item?.Item?.Name}
                       </div>
-                      {item.ReplyComment && (
+                      {item?.ReplyComment && (
                         <div className="d-flex">
                           <div className="w-28px h-28px me-15">
                             <img
@@ -201,7 +207,7 @@ const Index = ({ data = [], className, isPerional }) => {
                             <div>
                               <div className="name_reply text-medium-se">
                                 {data?.data?.Name ||
-                                  item?.Item.StudioPost?.Name}
+                                  item?.Item?.StudioPost?.Name}
                                 <CheckCircleOutlined
                                   className="w-14px h-14px"
                                   style={{
@@ -211,7 +217,7 @@ const Index = ({ data = [], className, isPerional }) => {
                                 />
                               </div>
                               <div className="cmt_reply text-medium-re">
-                                {item.ReplyComment || item.Item.Name}
+                                {item?.ReplyComment || item?.Item.Name}
                               </div>
                             </div>
                             {/* <span>1 tuần trước</span> */}

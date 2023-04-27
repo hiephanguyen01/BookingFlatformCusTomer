@@ -176,3 +176,21 @@
     }
 
 }
+
+@media (max-width: 576px) {
+    .rating {
+        padding: 0 !important;
+
+        .listRates {
+            flex-wrap: wrap;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            border-bottom: none;
+
+            .rate_item {
+                min-width: 100px;
+                justify-content: center;
+            }
+        }
+    }
+}

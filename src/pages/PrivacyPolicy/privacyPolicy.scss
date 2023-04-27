@@ -1,23 +1,47 @@
 .privacy-policy-container {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 25px 0;
+    .privacy-policy-content {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 25px 0;
 
-    .wrap-des {
-        margin-bottom: 10px;
+        .wrap-des {
+            margin-bottom: 10px;
 
-        p {
-            font-size: 18px;
-            padding-bottom: 10px;
+            p {
+                font-size: 18px;
+                padding-bottom: 10px;
 
-            a {
-                color: blue;
+                a {
+                    color: blue;
+                }
             }
+        }
+
+        h3 {
+            margin-bottom: 10px;
         }
     }
 
-    h3 {
-        margin-bottom: 10px;
+    .divider {
+        display: none;
     }
+}
 
+@media (max-width: 576px) {
+    .privacy-policy-container {
+        .privacy-policy-content {
+            padding: 0px 20px !important;
+        }
+
+        .nav-mobile-terms-user {
+            display: flex;
+        }
+
+        .divider {
+            display: block;
+            height: 10px;
+            background-color: #f6f6f6;
+            margin-bottom: 20px;
+        }
+    }
 }

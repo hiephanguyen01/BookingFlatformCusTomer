@@ -79,7 +79,7 @@ const ITEM_US_ASIDE = [
 const Aside = ({ children }) => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const ref = useRef(null);
-  const [name, setName] = useState(UserMe.Fullname);
+  const [name, setName] = useState(UserMe?.Fullname);
   const debounced = useDebounce(name, 1500);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
@@ -91,12 +91,14 @@ const Aside = ({ children }) => {
           pathname.includes(item.linkTo)
             ? { color: "#E22828" }
             : { color: "#222222" }
-        }>
+        }
+      >
         <div
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
-          }}>
+          }}
+        >
           {item.icon}
           <span
             style={
@@ -107,7 +109,8 @@ const Aside = ({ children }) => {
                     fontWeight: "600",
                   }
                 : { fontSize: "16px", marginLeft: "0.5rem", fontWeight: "400" }
-            }>
+            }
+          >
             {item.title}
           </span>
         </div>
@@ -123,11 +126,11 @@ const Aside = ({ children }) => {
 
     const fetchApi = async () => {
       if (debounced === UserMe.Fullname) {
-        setName(UserMe.Fullname);
+        setName(UserMe?.Fullname);
         return;
       }
       if (!debounced.trim()) {
-        setName(UserMe.Fullname);
+        setName(UserMe?.Fullname);
         return;
       }
       try {
@@ -138,7 +141,7 @@ const Aside = ({ children }) => {
       } catch (error) {}
     };
     fetchApi();
-  }, [debounced, dispatch, UserMe.Fullname]);
+  }, [debounced, dispatch, UserMe?.Fullname]);
 
   const hanldeChangeName = (e) => {
     setName(e.target.value);
@@ -150,15 +153,17 @@ const Aside = ({ children }) => {
         style={{
           paddingBottom: "1rem",
           borderBottom: "1px solid #CACACA",
-        }}>
+        }}
+      >
         <div
           className=""
           style={{
             height: "46px",
             marginRight: "1rem",
-          }}>
+          }}
+        >
           <img
-            src={UserMe.Image !== null ? ImageDetect(UserMe) : noBody}
+            src={UserMe?.Image !== null ? ImageDetect(UserMe) : noBody}
             alt=""
             width={60}
             height={60}
@@ -185,7 +190,8 @@ const Aside = ({ children }) => {
               onClick={() => {
                 ref.current.focus();
               }}
-              type="text">
+              type="text"
+            >
               <EditOutlined style={{ color: "#03AC84" }} />
             </Button>
           </div>
@@ -197,7 +203,8 @@ const Aside = ({ children }) => {
           marginTop: "1rem",
           borderBottom: "1px solid #CACACA",
           paddingBottom: "1rem",
-        }}>
+        }}
+      >
         <h5 style={{ textTransform: "uppercase" }}>Tài khoản của chúng tôi</h5>
         {ITEM_USER_ACCOUNT_ASIDE.map((item, index) => (
           <AsideItems item={item} key={index} />

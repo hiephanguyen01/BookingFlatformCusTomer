@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Button, Col, Modal, Row, Switch } from "antd";
+import { Button, Col, Grid, Modal, Row, Switch } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,7 @@ import { convertImage } from "../../../../utils/convertImage";
 import "./accountInfo.scss";
 import { authenticateService } from "../../../../services/AuthenticateService";
 import { SET_USER } from "../../../../stores/types/authType";
+import BackNav from "../../../../components/BackNav/BackNav";
 
 const APP_ID = "934722658638520488";
 const SECRET_KEY = "9D1oI4FcpFbS5GmQrK8K";
@@ -45,9 +46,12 @@ const generate_code_verifier = () => {
 //   .replace(/\+/g, "-")
 //   .replace(/\//g, "_");
 
+const { useBreakpoint } = Grid;
+
 const AccountInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const screens = useBreakpoint();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const [password, setPassword] = useState({
     passwordCurrent: "",
@@ -241,13 +245,23 @@ const AccountInfo = () => {
 
   return (
     <>
-      <h4 style={{ marginBottom: "8px", fontSize: "16px" }}>
-        Thông tin tài khoản
-      </h4>
+      {screens.xs ? (
+        <>
+          <BackNav title="Thông tin tài khoản" to="/home/user" />
+          <div
+            className=""
+            style={{ height: "10px", background: "#f6f6f6" }}
+          ></div>
+        </>
+      ) : (
+        <h4 style={{ marginBottom: "8px", fontSize: "16px" }}>
+          Thông tin tài khoản
+        </h4>
+      )}
       <div className="AccountInfo">
         <div className="AccountInfo__first">
           <Row className="f-flex align-items-center">
-            <Col lg={12} sm={24}>
+            <Col lg={12} md={24} sm={24} xs={0}>
               <EditText
                 label="Họ và tên"
                 name="Fullname"
@@ -258,15 +272,26 @@ const AccountInfo = () => {
                 }}
               />
             </Col>
-            <Col lg={12} sm={24}>
-              <div className="d-flex align-items-center">
-                <div className="ms-40 d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
+            <Col lg={12} sm={24} xs={24}>
+              <div
+                // className="d-flex align-items-center"
+                style={
+                  screens?.xs
+                    ? {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }
+                    : { display: "flex", alignItems: "center" }
+                }
+              >
+                <div className="d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
                   {file ? (
                     <img
                       src={
-                        file.preview
-                          ? file.preview
-                          : UserMe.Image !== null
+                        file?.preview
+                          ? file?.preview
+                          : UserMe?.Image !== null
                           ? myImg
                           : noBody
                       }
@@ -294,8 +319,19 @@ const AccountInfo = () => {
               </div>
             </Col>
           </Row>
-          <Row className="f-flex align-items-center">
-            <Col lg={12} sm={24}>
+          <Row align="middle">
+            <Col lg={0} md={0} sm={0} xs={24}>
+              <EditText
+                label="Họ và tên"
+                name="Fullname"
+                value={infoUser ? infoUser.Fullname : ""}
+                onChange={(e) => {
+                  let { value, name } = e.target;
+                  handleChangeValue(name, value);
+                }}
+              />
+            </Col>
+            <Col lg={12} sm={24} xs={24}>
               <EditText
                 label="Email"
                 value={infoUser ? infoUser.Email : ""}
@@ -319,7 +355,7 @@ const AccountInfo = () => {
                 <></>
               )}
             </Col>
-            <Col lg={12} sm={24}>
+            <Col lg={12} sm={24} xs={24}>
               <EditText
                 label="Số điện thoại"
                 value={infoUser ? infoUser.Phone : ""}
@@ -333,14 +369,15 @@ const AccountInfo = () => {
             </Col>
           </Row>
         </div>
+        {screens.xs && (
+          <div
+            className="mb-24"
+            style={{ height: "10px", background: "#f6f6f6" }}
+          ></div>
+        )}
         {!UserMe.FacebookToken && !UserMe.TokenEmail && (
-          <Row
-            style={{
-              borderBottom: "1px solid #CACACA",
-              paddingBottom: "1rem",
-            }}
-          >
-            <Col lg={12} sm={24}>
+          <Row className="AccountInfo__second">
+            <Col lg={12} sm={24} xs={24}>
               <EditText
                 label="Mật khẩu hiện tại"
                 isPass={true}
@@ -348,7 +385,10 @@ const AccountInfo = () => {
                 value={password.passwordCurrent}
                 // name="passwordCurrent"
                 onChange={(e) => {
-                  setPassword({ ...password, passwordCurrent: e.target.value });
+                  setPassword({
+                    ...password,
+                    passwordCurrent: e.target.value,
+                  });
                 }}
               />
               <TextInput
@@ -361,7 +401,7 @@ const AccountInfo = () => {
                 }
               />
             </Col>
-            <Col lg={12} sm={24}>
+            <Col lg={12} sm={24} xs={24}>
               <TextInput
                 label="Nhập lại mật khẩu mới"
                 isPass={true}
@@ -371,15 +411,29 @@ const AccountInfo = () => {
             </Col>
           </Row>
         )}
-        <div style={{ padding: "1.5rem 0" }}>
+        {screens.xs && (
+          <div
+            className="mb-24"
+            style={{ height: "10px", background: "#f6f6f6" }}
+          ></div>
+        )}
+        <div
+          style={
+            screens.xs ? { padding: "0 18px 16px" } : { padding: "1.5rem 0" }
+          }
+        >
           <div className="AccountInfo__social">Liên kết mạng xã hội</div>
           <Row
-            style={{
-              borderBottom: "1px solid #CACACA",
-              paddingBottom: "2rem",
-            }}
+            style={
+              screens.xs
+                ? { paddingBottom: "1rem" }
+                : {
+                    borderBottom: "1px solid #CACACA",
+                    paddingBottom: "2rem",
+                  }
+            }
           >
-            <Col span={12}>
+            <Col lg={12} md={12} sm={12} xs={24}>
               <div className="d-flex container justify-content-center align-items-center mb-30">
                 <img
                   src={imgZalo}
@@ -470,7 +524,19 @@ const AccountInfo = () => {
             <Col span={12}></Col>
           </Row>
         </div>
-        <div style={{ paddingBottom: "1.5rem" }}>
+        {screens.xs && (
+          <div
+            className="mb-24"
+            style={{ height: "10px", background: "#f6f6f6" }}
+          ></div>
+        )}
+        <div
+          style={
+            screens.xs
+              ? { padding: "0 18px 16px" }
+              : { paddingBottom: "1.5rem" }
+          }
+        >
           <div className="AccountInfo__delete">Xóa tài khoản</div>
           <div className="AccountInfo__delete__container">
             <div className="AccountInfo__delete__container__content">
@@ -487,7 +553,12 @@ const AccountInfo = () => {
             </Button>
           </div>
         </div>
-
+        {screens.xs && (
+          <div
+            className="mb-24"
+            style={{ height: "10px", background: "#f6f6f6" }}
+          ></div>
+        )}
         <div className="d-flex justify-content-center">
           <Button
             type="primary"
@@ -498,6 +569,12 @@ const AccountInfo = () => {
             {loading && <ClipLoader color="#fff" size={20} />} Lưu thay đổi
           </Button>
         </div>
+        {screens.xs && (
+          <div
+            className="my-24"
+            style={{ height: "10px", background: "#f6f6f6" }}
+          ></div>
+        )}
       </div>
       <Modal
         centered

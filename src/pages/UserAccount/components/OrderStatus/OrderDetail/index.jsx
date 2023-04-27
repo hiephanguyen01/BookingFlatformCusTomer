@@ -3,7 +3,7 @@ import {
   LeftOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Divider, Input, Modal, Row } from "antd";
+import { Button, Col, Divider, Grid, Input, Modal, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +34,12 @@ import NotiIcon from "../Icon/NotiIcon";
 import OrderIcon from "../Icon/OrderIcon";
 import { keyF } from "../OrderStatus";
 import "./OrderDetail.scss";
+import BackNav from "../../../../../components/BackNav/BackNav";
+
+const { useBreakpoint } = Grid;
+
 const OrderDetail = () => {
+  const screens = useBreakpoint();
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [booking, setBooking] = useState();
@@ -225,12 +230,15 @@ const OrderDetail = () => {
             EvidenceImage: booking?.EvidenceImage,
             updatePay: true,
             Category: searchParams.get("categoryId"),
-          }}>
+            path: `/home/user/orderStatus/${id}?categoryId=1`,
+          }}
+        >
           <Button
             type="primary"
             icon={<UploadOutlined />}
             size="large"
-            onClick={() => navigate(`/home/confirm-order/${id}`)}>
+            onClick={() => navigate(`/home/confirm-order/${id}`)}
+          >
             Cập nhật minh chứng
           </Button>
         </Link>
@@ -242,7 +250,8 @@ const OrderDetail = () => {
           type="text"
           onClick={() => setShowModal(true)}
           style={{ color: "#e60019", marginRight: "20px", borderRadius: "8px" }}
-          size="large">
+          size="large"
+        >
           Huỷ đơn
         </Button>
         <Button
@@ -256,7 +265,8 @@ const OrderDetail = () => {
             dispatch({ type: SHOW_CHAT });
             handleOpenChatPartner();
           }}
-          size="large">
+          size="large"
+        >
           Liên hệ
         </Button>
       </div>
@@ -267,7 +277,8 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
+        }}
+      >
         {/* <Button
           onClick={navigateToDetail}
           style={{
@@ -301,7 +312,8 @@ const OrderDetail = () => {
           footer={false}
           width={600}
           closable={false}
-          className="FooterStatus__complete__modal">
+          className="FooterStatus__complete__modal"
+        >
           <RateModal
             onOk={() => setVisible(false)}
             onCancel={() => setVisible(false)}
@@ -326,7 +338,8 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
+        }}
+      >
         <Button
           style={{
             color: "#009874",
@@ -334,7 +347,8 @@ const OrderDetail = () => {
             borderRadius: "8px",
             padding: "0 55.5px",
           }}
-          size="large">
+          size="large"
+        >
           Đặt lại
         </Button>
         <Button
@@ -348,7 +362,8 @@ const OrderDetail = () => {
             borderRadius: "6px",
             padding: "0 25.5px",
             backgroundColor: "#1fcba2",
-          }}>
+          }}
+        >
           Nhận hoàn tiền
         </Button>
       </div>
@@ -357,8 +372,8 @@ const OrderDetail = () => {
   const bill = {
     1: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -392,8 +407,8 @@ const OrderDetail = () => {
     ),
     2: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -437,8 +452,8 @@ const OrderDetail = () => {
     ),
     3: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -482,8 +497,8 @@ const OrderDetail = () => {
     ),
     4: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -574,14 +589,21 @@ const OrderDetail = () => {
 
   return (
     <div className="OrderDetail">
-      <div className="title">LỊCH SỬ ĐƠN ĐẶT</div>
-      <section className="chile df">
-        <LeftOutlined
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate("/home/user/orderStatus")}
-        />
-        <div className="sub_title">CHI TIẾT ĐƠN ĐẶT</div>
-      </section>
+      {screens?.xs ? (
+        <BackNav title="CHI TIẾT ĐƠN ĐẶT" to="/home/user/orderStatus" />
+      ) : (
+        <>
+          <div className="title">LỊCH SỬ ĐƠN ĐẶT</div>
+          <section className="chile df">
+            <LeftOutlined
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/home/user/orderStatus")}
+            />
+            <div className="sub_title">CHI TIẾT ĐƠN ĐẶT</div>
+          </section>
+        </>
+      )}
+
       <section className="chile df2">
         <Dolar />
         <div className="status_name">{title[status]}</div>
@@ -594,7 +616,7 @@ const OrderDetail = () => {
           <div className="sub_title">THÔNG TIN ĐƠN ĐẶT</div>
         </div>
         <Row gutter={[62, 62]} style={{ position: "relative" }}>
-          <Col md={12}>
+          <Col md={12} xs={24}>
             <div className="df_bt">
               <div className="tl">Mã booking</div>
               <div className="tr2">{booking?.IdentifyCode}</div>
@@ -616,7 +638,7 @@ const OrderDetail = () => {
               </div>
             </div>
           </Col>
-          <Col md={12}>
+          <Col md={12} xs={24}>
             <div className="df_bt">
               <div className="tl">Người đặt</div>
               <div className="tr">{booking?.BookingUserName}</div>
@@ -643,7 +665,7 @@ const OrderDetail = () => {
             <div className="">{post?.Name}</div>
             <CheckCircleTwoTone twoToneColor="#52c41a" />
           </div>
-          <div className="df">
+          <div className="df  ">
             <div className="tl">Mã booking</div>
             <div className="tr2">{booking?.IdentifyCode}</div>
           </div>
@@ -670,7 +692,7 @@ const OrderDetail = () => {
         {bill[status]}
       </section>
       <div className="df">
-        <NotiIcon />
+        {!screens?.xs && <NotiIcon />}
         <div className="noti_text">
           Bao gồm 40.000 VND thuế và phí. Quý khách sẽ thanh toán 300.000 VND
           vào ngày 13/02/2022
@@ -699,7 +721,7 @@ const OrderDetail = () => {
         </div>
       </section>
       <div className="flexx">
-        <NotiIcon />
+        {!screens?.xs && <NotiIcon />}
         <div className="noti_text">
           Quý khách có thể hủy đơn đặt cho đến 13/02/2022 11:50 PM mà không mất
           phí gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý
@@ -713,7 +735,8 @@ const OrderDetail = () => {
         okText="Đồng ý"
         cancelText="Thoát"
         onCancel={() => setShowModal(false)}
-        onOk={() => handleCancelOrder()}>
+        onOk={() => handleCancelOrder()}
+      >
         <>
           <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
           <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
@@ -721,7 +744,8 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
         </>
       </Modal>
     </div>

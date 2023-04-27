@@ -1,4 +1,5 @@
 import {
+  CheckOutlined,
   CloseOutlined,
   DownOutlined,
   SearchOutlined,
@@ -17,29 +18,48 @@ import {
   Select,
   Grid,
   Badge,
+  Slider,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import DaoIcon from "../../assets/header/DaoIcon.svg";
-import Logo from "../../assets/header/Logo.svg";
+import { ReactComponent as LogoCpn } from "../../assets/header/Logo.svg";
 import Chat from "../../assets/header/chat.svg";
 import { ReactComponent as SearchIcon } from "../../assets/header/SearchIcon.svg";
 import noBody from "../../assets/img/no-body.png";
 import { studioPostService } from "../../services/StudioPostService";
 import { logOut } from "../../stores/actions/autheticateAction";
-import { getFilterStudioPost } from "../../stores/actions/studioPostAction";
+import {
+  getFilterStudioPost,
+  getFilterStudioPostMobile,
+} from "../../stores/actions/studioPostAction";
 import { convertImage } from "../../utils/convertImage";
 import SearchButton from "../layouts/SearchButton";
 import toastMessage from "../ToastMessage";
 import Hotkey from "./Components/Hotkey";
 import "./Header.scss";
+import ModalBottom from "../ModalBottom/ModalBottom";
+import { convertPrice } from "../../utils/convert";
 const { Option } = Select;
 
 const { useBreakpoint } = Grid;
 
+const PRICE_FILTER = [
+  { value: 1, label: "Giá thấp nhất" },
+  { value: 2, label: "Giá cao nhất" },
+  { value: 3, label: "Giảm giá nhiều nhất" },
+];
+
 const Header = () => {
   const [provinces, setProvinces] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [priceRange, setPriceRange] = useState([0, 5000000]);
+  const [chooseProvince, setChooseProvince] = useState([]);
+  const [chooseDistrict, setChooseDistrict] = useState([]);
+  const [selectProvince, setSelectProvince] = useState(null);
+  const [chooseCategory, setChooseCategory] = useState([]);
+  const [choosePrice, setChoosePrice] = useState({});
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const img = convertImage(user?.Image);
   const filter = useSelector((state) => state.studioPostReducer.filter);
@@ -173,8 +193,22 @@ const Header = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (screens.xs) {
+      if (selectProvince) {
+        (async () => {
+          const res = await studioPostService.getDistrictByProvince(
+            selectProvince
+          );
+          console.log(res.data);
+          setDistricts(res.data);
+        })();
+      }
+    }
+  }, [selectProvince, screens]);
+
   const onFinish = (values) => {
-    const newFilter = {
+    let newFilter = {
       ...filter,
       category: values.category || "",
       provinceIds: values?.province ? values.province : "",
@@ -183,7 +217,23 @@ const Header = () => {
       ratingOption: 3,
     };
 
-    dispatch(getFilterStudioPost(5, 1, newFilter, user, navigate, setVisible));
+    if (screens.xs) {
+      newFilter = {
+        category: chooseCategory.map((item) => item.id),
+        provinces: chooseProvince.map((item) => item.Name),
+        keyString: values.keyString,
+        priceOption: choosePrice.value,
+        priceRange: priceRange,
+        districts: chooseDistrict.map((item) => item.Name),
+      };
+      dispatch(
+        getFilterStudioPostMobile(5, 1, newFilter, user, navigate, setVisible)
+      );
+    } else {
+      dispatch(
+        getFilterStudioPost(5, 1, newFilter, user, navigate, setVisible)
+      );
+    }
 
     // const tempFilter = {
     //   category: values.category,
@@ -196,6 +246,51 @@ const Header = () => {
   const handleSignOut = () => {
     dispatch(logOut(navigate));
   };
+
+  const handleChooseProvince = (province) => {
+    let newChooseProvince = [...chooseProvince];
+    const checkProvince = newChooseProvince.findIndex(
+      (item) => item?.Code === province?.Code
+    );
+    if (checkProvince !== -1) {
+      newChooseProvince.splice(checkProvince, 1);
+      const newChooseDistricts = [...chooseDistrict].filter(
+        (item) => item.ProvinceCode === province.Code
+      );
+      setChooseDistrict(newChooseDistricts);
+    } else {
+      newChooseProvince.push(province);
+      setSelectProvince(province.Code);
+    }
+    setChooseProvince(newChooseProvince);
+  };
+
+  const handleChooseDistrict = (district) => {
+    let newChooseDistricts = [...chooseDistrict];
+    const checkDistrict = newChooseDistricts.findIndex(
+      (item) => item?.Code === district?.Code
+    );
+    if (checkDistrict !== -1) {
+      newChooseDistricts.splice(checkDistrict, 1);
+    } else {
+      newChooseDistricts.push(district);
+    }
+    setChooseDistrict(newChooseDistricts);
+  };
+
+  const handleChooseCategory = (category) => {
+    let newChooseCategory = [...chooseCategory];
+    const checkCategory = newChooseCategory.findIndex(
+      (item) => item?.id === category?.id
+    );
+    if (checkCategory !== -1) {
+      newChooseCategory.splice(checkCategory, 1);
+    } else {
+      newChooseCategory.push(category);
+    }
+    setChooseCategory(newChooseCategory);
+  };
+
   return (
     <div className="Header">
       {screens.xs ? (
@@ -228,31 +323,175 @@ const Header = () => {
               </Row>
               <p className="filter">LỌC THEO</p>
               <div className="option d-flex justify-content-between">
-                <Form.Item
-                  name="province"
-                  style={{ width: "100%", marginRight: "20px" }}
+                <ModalBottom
+                  height={"40%"}
+                  modalContent={
+                    <div className="modal-province">
+                      <h3 className="px-10 mb-20">Địa điểm</h3>
+                      <div className="px-10 mb-26">
+                        <Input
+                          placeholder="Bạn đang tìm gì?"
+                          prefix={<SearchOutlined />}
+                          className="input-search-province "
+                        />
+                      </div>
+                      <Row
+                        gutter={[20, 20]}
+                        style={{ textAlign: "center", margin: "0 auto" }}
+                      >
+                        {selectProvince ? (
+                          <>
+                            {districts.map((val) => (
+                              <Col span={12}>
+                                <div
+                                  key={val.id}
+                                  className={`btn-province-item ${
+                                    chooseDistrict?.find(
+                                      (value) => value.Code === val.Code
+                                    )
+                                      ? "active"
+                                      : ""
+                                  } `}
+                                  onClick={() => {
+                                    handleChooseDistrict(val);
+                                  }}
+                                >
+                                  {val.Name}
+                                </div>
+                              </Col>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            {provinces.map((val) => (
+                              <Col span={12}>
+                                <div
+                                  key={val.id}
+                                  className={`btn-province-item ${
+                                    chooseProvince?.find(
+                                      (value) => value.Code === val.Code
+                                    )
+                                      ? "active"
+                                      : ""
+                                  } `}
+                                  onClick={() => {
+                                    handleChooseProvince(val);
+                                  }}
+                                >
+                                  {val.Name}
+                                </div>
+                              </Col>
+                            ))}
+                          </>
+                        )}
+                      </Row>
+                    </div>
+                  }
+                  close={true}
+                  btnClose={
+                    <CheckOutlined
+                      style={{ color: "#E22828" }}
+                      onClick={(e) => {
+                        if (selectProvince) {
+                          e.stopPropagation();
+                          setSelectProvince(null);
+                          setDistricts([]);
+                        }
+                      }}
+                    />
+                  }
                 >
-                  <Select
-                    defaultValue=""
-                    showSearch
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                    className="select-item"
-                  >
-                    <Option value="">Địa điểm</Option>
-                    {Boolean(provinces) &&
-                      provinces.map((val) => (
-                        <Option key={val.id} value={val.id}>
-                          {val.Name}
-                        </Option>
-                      ))}
-                  </Select>
-                </Form.Item>
-                <Form.Item
+                  <Button className="btn-item-filter">
+                    Địa điểm <DownOutlined className="icon" />
+                  </Button>
+                </ModalBottom>
+                <ModalBottom
+                  height={"35%"}
+                  modalContent={
+                    <div className="modal-category">
+                      <h3 className="px-10 mb-20">Danh mục</h3>
+                      <Row
+                        gutter={[20, 20]}
+                        style={{ textAlign: "center", margin: "0 auto" }}
+                      >
+                        {categories.slice(1, 7).map((val) => (
+                          <Col span={12}>
+                            <div
+                              key={val.id}
+                              className={`btn-category-item ${
+                                chooseCategory?.find(
+                                  (value) => value.id === val.id
+                                )
+                                  ? "active"
+                                  : ""
+                              } `}
+                              onClick={() => handleChooseCategory(val)}
+                            >
+                              {val.name}
+                            </div>
+                          </Col>
+                        ))}
+                      </Row>
+                    </div>
+                  }
+                  extendProp={false}
+                  close={true}
+                  btnClose={<CheckOutlined style={{ color: "#E22828" }} />}
+                >
+                  <Button className="btn-item-filter">
+                    Danh mục <DownOutlined className="icon" />
+                  </Button>
+                </ModalBottom>
+                <ModalBottom
+                  modalContent={
+                    <div className="modal-price">
+                      <h3 className="px-10 mb-20">Giá</h3>
+                      <Row
+                        gutter={[20, 20]}
+                        style={{ textAlign: "center", margin: "0 auto" }}
+                      >
+                        {PRICE_FILTER.map((val) => (
+                          <Col span={12}>
+                            <div
+                              key={val.value}
+                              className={`btn-price-item ${
+                                choosePrice?.value === val.value ? "active" : ""
+                              }`}
+                              onClick={() => setChoosePrice(val)}
+                            >
+                              {val.label}
+                            </div>
+                          </Col>
+                        ))}
+                      </Row>
+                      <div className="px-10 my-20">
+                        <div style={{ fontSize: 18 }}>
+                          {convertPrice(priceRange[0])} đ -{" "}
+                          {convertPrice(priceRange[1])} đ
+                        </div>
+                        <Row>
+                          <Slider
+                            className="w-100"
+                            range
+                            defaultValue={priceRange}
+                            step={100000}
+                            min={0}
+                            max={5000000}
+                            onChange={(value) => setPriceRange(value)}
+                          />
+                        </Row>
+                      </div>
+                    </div>
+                  }
+                  extendProp={false}
+                  close={true}
+                  btnClose={<CheckOutlined style={{ color: "#E22828" }} />}
+                >
+                  <Button className="btn-item-filter">
+                    Giá <DownOutlined className="icon" />
+                  </Button>
+                </ModalBottom>
+                {/* <Form.Item
                   name="category"
                   style={{ width: "100%", marginRight: "20px" }}
                 >
@@ -274,7 +513,7 @@ const Header = () => {
                     <Option value={1}>Giá thấp nhất </Option>
                     <Option value={3}>Giảm giá nhiều nhất </Option>
                   </Select>
-                </Form.Item>
+                </Form.Item> */}
               </div>
               {/* <p className="time">Khung giờ bạn muốn đặt</p>
 
@@ -351,7 +590,8 @@ const Header = () => {
           <div className="search-container">
             <div className="header-search">
               <div className="logo">
-                <img src={Logo} alt="" />
+                {/* <img src={Logo} alt="" /> */}
+                <LogoCpn style={{ height: "45px", width: "200px" }} />
               </div>
             </div>
             <Form onFinish={onFinish}>
@@ -494,13 +734,14 @@ const Header = () => {
           >
             <Link to="/home" className="link">
               <div className="img">
-                <img src={Logo} alt="" />
+                {/* <img src={Logo} alt="" /> */}
+                <LogoCpn style={{ height: "50px", width: "160px" }} />
               </div>
             </Link>
           </Col>
           <Col
             lg={12}
-            md={12}
+            md={24}
             sm={24}
             xs={24}
             style={{
@@ -551,10 +792,11 @@ const Header = () => {
               </Col>
             </Row>
           </Col>
-          <Col lg={6} md={12} sm={24} xs={0}>
+          <Col lg={6} md={24} sm={24} xs={0}>
             <Row
               align="middle"
               justify="space-around"
+              wrap={false}
               // className="container__right"
             >
               <div className="tip" onClick={() => navigate("/home/dao")}>
@@ -613,9 +855,9 @@ const Header = () => {
                     <div className="user">
                       <Avatar src={noBody} />
                       <div className="text">
-                        {!user?.id && <p>Đăng ký/Đăng nhập</p>}
+                        <p>Đăng ký/Đăng nhập</p>
                         <p>
-                          {user?.id ? user?.Fullname : "Tài khoản"}
+                          Tài khoản
                           <DownOutlined
                             style={{ fontSize: "10px", color: "#828282" }}
                           />

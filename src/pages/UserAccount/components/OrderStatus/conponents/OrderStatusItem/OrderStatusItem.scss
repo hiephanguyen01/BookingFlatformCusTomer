@@ -1,36 +1,44 @@
 @import "../../../../../../App.scss";
+
 .OrderStatusItem {
   width: 100%;
   display: flex;
   flex-direction: column;
   padding: 0px 18px;
   padding-top: 10px;
-  height: 230px;
+  min-height: 230px;
+
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 10px;
     cursor: pointer;
+
     &__name {
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s;
+
       &:hover {
         text-decoration: underline;
       }
     }
   }
+
   &__body {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 19px 0;
+    flex-wrap: wrap;
+
     &__info {
       width: 75%;
       display: flex;
       align-items: center;
+
       &__pic {
         cursor: pointer;
         width: 86px;
@@ -38,46 +46,56 @@
         margin-right: 10px;
         border-radius: 10px;
       }
+
       &__content {
         display: flex;
         flex-direction: column;
+
         &__title {
           cursor: pointer;
           font-weight: 600;
           font-size: 18px;
           line-height: 25px;
         }
+
         &__date {
           font-weight: 400;
           font-size: 14px;
           line-height: 25px;
+
           & span {
             font-weight: 600;
           }
         }
+
         &__time {
           font-weight: 400;
           font-size: 14px;
           line-height: 25px;
+
           & span {
             font-weight: 600;
           }
         }
       }
     }
+
     &__price {
       width: 25%;
       min-width: 170px;
       display: flex;
       flex-direction: column;
+
       &__total {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
       }
+
       &__deposit {
         display: flex;
         justify-content: space-between;
+
         & span {
           color: $primary-700;
           font-weight: 600;
@@ -85,12 +103,37 @@
       }
     }
   }
-  & .style-divider {
+
+  .style-divider-footer,
+  .style-divider {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
   }
 }
-.ant-tabs-top > .ant-tabs-nav {
+
+.ant-tabs-top>.ant-tabs-nav {
   margin: 0 !important;
   padding: 0 20px !important;
+}
+
+@media (max-width: 576px) {
+  .OrderStatusItem {
+    padding: 14px 18px !important;
+
+    &__body {
+
+      &__info {
+        width: 100%;
+      }
+
+      &__price {
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+
+    .style-divider-footer {
+      display: none
+    }
+  }
 }

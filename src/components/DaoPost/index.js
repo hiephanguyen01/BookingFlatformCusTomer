@@ -123,6 +123,9 @@ const DaoPost = (props) => {
       id: 4,
     },
   ];
+  const moreOptionOnEachPostMyPost = [
+    { icon: <LinkCopy />, title: "Sao chép liên kết", id: 3 },
+  ];
 
   const handleImageModal = (url) => {
     // setImageInModal(url);
@@ -455,53 +458,25 @@ const DaoPost = (props) => {
               placement="leftTop"
               content={
                 <div className="more-option-modal">
-                  {moreOptionOnEachPost.map((itm, idx) => (
+                  {post?.BookingUserId === currentUser?.id ? (
                     <>
-                      {itm.id === 3 ? (
-                        <li
-                          key={idx}
-                          onClick={(e) => {
-                            navigator.clipboard.writeText(
-                              `${window.location.origin}/home/dao/posts/${post?.id}`
-                            );
-                            handleMoreOptionClick(itm);
-                          }}
-                        >
-                          <div className="container d-flex">
-                            <div>{itm.icon}</div>
-                            <p>{itm.title}</p>
-                          </div>
-                        </li>
-                      ) : (
+                      {moreOptionOnEachPostMyPost.map((itm, idx) => (
                         <>
-                          {itm.id === 2 ? (
-                            <>
-                              {listNotificationUser?.some(
-                                (item) =>
-                                  item?.UserId === currentUser?.id &&
-                                  item.PostId === post?.id
-                              ) ? (
-                                <li
-                                  onClick={() => handleMoreOptionClick(itm)}
-                                  key={idx}
-                                >
-                                  <div className="container d-flex">
-                                    <div>{itm.icon}</div>
-                                    <p>Tắt thông báo về bài viết này</p>
-                                  </div>
-                                </li>
-                              ) : (
-                                <li
-                                  onClick={() => handleMoreOptionClick(itm)}
-                                  key={idx}
-                                >
-                                  <div className="container d-flex">
-                                    <div>{itm.icon}</div>
-                                    <p>{itm.title}</p>
-                                  </div>
-                                </li>
-                              )}
-                            </>
+                          {itm.id === 3 ? (
+                            <li
+                              key={idx}
+                              onClick={(e) => {
+                                navigator.clipboard.writeText(
+                                  `${window.location.origin}/home/dao/posts/${post?.id}`
+                                );
+                                handleMoreOptionClick(itm);
+                              }}
+                            >
+                              <div className="container d-flex">
+                                <div>{itm.icon}</div>
+                                <p>{itm.title}</p>
+                              </div>
+                            </li>
                           ) : (
                             <li
                               onClick={() => handleMoreOptionClick(itm)}
@@ -514,9 +489,74 @@ const DaoPost = (props) => {
                             </li>
                           )}
                         </>
-                      )}
+                      ))}
                     </>
-                  ))}
+                  ) : (
+                    <>
+                      {moreOptionOnEachPost.map((itm, idx) => (
+                        <>
+                          {itm.id === 3 ? (
+                            <li
+                              key={idx}
+                              onClick={(e) => {
+                                navigator.clipboard.writeText(
+                                  `${window.location.origin}/home/dao/posts/${post?.id}`
+                                );
+                                handleMoreOptionClick(itm);
+                              }}
+                            >
+                              <div className="container d-flex">
+                                <div>{itm.icon}</div>
+                                <p>{itm.title}</p>
+                              </div>
+                            </li>
+                          ) : (
+                            <>
+                              {itm.id === 2 ? (
+                                <>
+                                  {listNotificationUser?.some(
+                                    (item) =>
+                                      item?.UserId === currentUser?.id &&
+                                      item.PostId === post?.id
+                                  ) ? (
+                                    <li
+                                      onClick={() => handleMoreOptionClick(itm)}
+                                      key={idx}
+                                    >
+                                      <div className="container d-flex">
+                                        <div>{itm.icon}</div>
+                                        <p>Tắt thông báo về bài viết này</p>
+                                      </div>
+                                    </li>
+                                  ) : (
+                                    <li
+                                      onClick={() => handleMoreOptionClick(itm)}
+                                      key={idx}
+                                    >
+                                      <div className="container d-flex">
+                                        <div>{itm.icon}</div>
+                                        <p>{itm.title}</p>
+                                      </div>
+                                    </li>
+                                  )}
+                                </>
+                              ) : (
+                                <li
+                                  onClick={() => handleMoreOptionClick(itm)}
+                                  key={idx}
+                                >
+                                  <div className="container d-flex">
+                                    <div>{itm.icon}</div>
+                                    <p>{itm.title}</p>
+                                  </div>
+                                </li>
+                              )}
+                            </>
+                          )}
+                        </>
+                      ))}
+                    </>
+                  )}
                   {post?.BookingUserId === currentUser?.id && (
                     <li onClick={() => handleMoreOptionClick({ id: 5 })}>
                       <div className="container d-flex">
@@ -646,59 +686,25 @@ const DaoPost = (props) => {
                         placement="leftTop"
                         content={
                           <div className="more-option-modal">
-                            {moreOptionOnEachPost.map((itm, idx) => (
+                            {post?.BookingUserId === currentUser?.id ? (
                               <>
-                                {itm.id === 3 ? (
-                                  <li
-                                    onClick={(e) => {
-                                      navigator.clipboard.writeText(
-                                        `${window.location.origin}/home/dao/posts/${post?.id}`
-                                      );
-                                      handleMoreOptionClick(itm);
-                                    }}
-                                    key={idx}
-                                  >
-                                    <div className="container d-flex">
-                                      <div>{itm.icon}</div>
-                                      <p>{itm.title}</p>
-                                    </div>
-                                  </li>
-                                ) : (
+                                {moreOptionOnEachPostMyPost.map((itm, idx) => (
                                   <>
-                                    {itm.id === 2 ? (
-                                      <>
-                                        {listNotificationUser?.some(
-                                          (item) =>
-                                            item?.UserId === currentUser?.id &&
-                                            item.PostId === post?.id
-                                        ) ? (
-                                          <li
-                                            onClick={() =>
-                                              handleMoreOptionClick(itm)
-                                            }
-                                            key={idx}
-                                          >
-                                            <div className="container d-flex">
-                                              <div>{itm.icon}</div>
-                                              <p>
-                                                Tắt thông báo về bài viết này
-                                              </p>
-                                            </div>
-                                          </li>
-                                        ) : (
-                                          <li
-                                            onClick={() =>
-                                              handleMoreOptionClick(itm)
-                                            }
-                                            key={idx}
-                                          >
-                                            <div className="container d-flex">
-                                              <div>{itm.icon}</div>
-                                              <p>{itm.title}</p>
-                                            </div>
-                                          </li>
-                                        )}
-                                      </>
+                                    {itm.id === 3 ? (
+                                      <li
+                                        key={idx}
+                                        onClick={(e) => {
+                                          navigator.clipboard.writeText(
+                                            `${window.location.origin}/home/dao/posts/${post?.id}`
+                                          );
+                                          handleMoreOptionClick(itm);
+                                        }}
+                                      >
+                                        <div className="container d-flex">
+                                          <div>{itm.icon}</div>
+                                          <p>{itm.title}</p>
+                                        </div>
+                                      </li>
                                     ) : (
                                       <li
                                         onClick={() =>
@@ -713,9 +719,98 @@ const DaoPost = (props) => {
                                       </li>
                                     )}
                                   </>
-                                )}
+                                ))}
                               </>
-                            ))}
+                            ) : (
+                              <>
+                                {moreOptionOnEachPost.map((itm, idx) => (
+                                  <>
+                                    {itm.id === 3 ? (
+                                      <li
+                                        key={idx}
+                                        onClick={(e) => {
+                                          navigator.clipboard.writeText(
+                                            `${window.location.origin}/home/dao/posts/${post?.id}`
+                                          );
+                                          handleMoreOptionClick(itm);
+                                        }}
+                                      >
+                                        <div className="container d-flex">
+                                          <div>{itm.icon}</div>
+                                          <p>{itm.title}</p>
+                                        </div>
+                                      </li>
+                                    ) : (
+                                      <>
+                                        {itm.id === 2 ? (
+                                          <>
+                                            {listNotificationUser?.some(
+                                              (item) =>
+                                                item?.UserId ===
+                                                  currentUser?.id &&
+                                                item.PostId === post?.id
+                                            ) ? (
+                                              <li
+                                                onClick={() =>
+                                                  handleMoreOptionClick(itm)
+                                                }
+                                                key={idx}
+                                              >
+                                                <div className="container d-flex">
+                                                  <div>{itm.icon}</div>
+                                                  <p>
+                                                    Tắt thông báo về bài viết
+                                                    này
+                                                  </p>
+                                                </div>
+                                              </li>
+                                            ) : (
+                                              <li
+                                                onClick={() =>
+                                                  handleMoreOptionClick(itm)
+                                                }
+                                                key={idx}
+                                              >
+                                                <div className="container d-flex">
+                                                  <div>{itm.icon}</div>
+                                                  <p>{itm.title}</p>
+                                                </div>
+                                              </li>
+                                            )}
+                                          </>
+                                        ) : (
+                                          <li
+                                            onClick={() =>
+                                              handleMoreOptionClick(itm)
+                                            }
+                                            key={idx}
+                                          >
+                                            <div className="container d-flex">
+                                              <div>{itm.icon}</div>
+                                              <p>{itm.title}</p>
+                                            </div>
+                                          </li>
+                                        )}
+                                      </>
+                                    )}
+                                  </>
+                                ))}
+                              </>
+                            )}
+                            {post?.BookingUserId === currentUser?.id && (
+                              <li
+                                onClick={() => handleMoreOptionClick({ id: 5 })}
+                              >
+                                <div className="container d-flex">
+                                  <div>
+                                    <DeleteOutlined
+                                      style={{ fontSize: "18px" }}
+                                    />
+                                  </div>
+                                  <p>Xóa bài viết</p>
+                                </div>
+                              </li>
+                            )}
                           </div>
                         }
                         trigger="click"
