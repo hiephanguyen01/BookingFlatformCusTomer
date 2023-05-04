@@ -8,7 +8,18 @@ import {
   TeamOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Carousel, Image, Popover, Rate } from "antd";
+import {
+  Button,
+  Carousel,
+  Col,
+  Divider,
+  Grid,
+  Image,
+  Popover,
+  Rate,
+  Row,
+  Typography,
+} from "antd";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
@@ -19,7 +30,6 @@ import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-// import { VerifyOtp } from "../../components/Modal/verifyOtp/VerifyOtp";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
@@ -53,6 +63,13 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+import BackNav from "../../components/BackNav/BackNav";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+// import required modules
+import { Autoplay, Pagination } from "swiper";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -61,7 +78,13 @@ const COLUMN = [
 ];
 const cx = classNames.bind(styles);
 
+const { useBreakpoint } = Grid;
+
+const { Paragraph } = Typography;
+
 export const StudioDetail = () => {
+  const screens = useBreakpoint();
+
   const [visible, setVisible] = useState(false);
 
   const { id } = useParams();
@@ -279,7 +302,11 @@ export const StudioDetail = () => {
             <div style={{ marginTop: "5px" }}>
               <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
               <p
-                style={{ fontWeight: 400, fontSize: "16px", color: "#222222" }}
+                style={{
+                  fontWeight: 400,
+                  fontSize: "16px",
+                  color: "#222222",
+                }}
               >
                 {data?.Description}
               </p>
@@ -463,6 +490,9 @@ export const StudioDetail = () => {
       dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
     }
   };
+
+  console.log(studioDetail?.service);
+
   return (
     <>
       <MetaDecorator
@@ -493,106 +523,550 @@ export const StudioDetail = () => {
         </div>
       ) : (
         <div className="container_detail">
-          <div className={cx("wrapper")}>
-            <div className={cx("studioDetail")}>
-              <div className={cx("box1")}>
-                <div className={cx("top")}>
-                  <div className={cx("title")}>
-                    <h3>{studioDetail?.data?.Name} </h3>
-                    <CheckCircleOutlined
-                      style={{ fontSize: "20px", color: "#03AC84" }}
-                    />
-                  </div>
-                  <div className={cx("icons")}>
-                    <PopUpSignIn
-                      onClick={(e) => {
-                        e.stopPropagation();
+          {screens?.xs && (
+            <BackNav
+              icon={
+                <Popover
+                  placement="bottomRight"
+                  content={
+                    <div
+                      onClick={() => handleReport()}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                        padding: "10px",
                       }}
                     >
-                      {studioDetail?.data?.UsersLiked ? (
-                        <HeartFilled
-                          onClick={handleChangeLike}
-                          className={cx("item")}
-                        />
-                      ) : (
-                        <HeartOutlined
-                          onClick={handleChangeLike}
-                          className={cx("item")}
-                        />
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <WarningOutlined style={{ fontSize: "20px" }} />
+                        <span style={{ fontSize: "18px", fontWeight: "bold" }}>
+                          Báo cáo
+                        </span>
+                      </div>
+                    </div>
+                  }
+                  trigger="click"
+                >
+                  <MoreOutlined className={cx("item")} />
+                </Popover>
+              }
+            />
+          )}
+          <div className={cx("wrapper")}>
+            <div className={cx("studioDetail")}>
+              {screens?.xs ? (
+                <div>
+                  <Swiper
+                    pagination={{
+                      dynamicBullets: true,
+                    }}
+                    modules={[Pagination]}
+                    className={cx("swiper-slide-detail")}
+                  >
+                    {studioDetail?.data?.Image.map((item) => (
+                      <SwiperSlide>
+                        <img src={convertImage(item)} alt="" />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                  <div className={cx("box1")}>
+                    <div
+                      className={cx(
+                        "title",
+                        "d-flex justify-content-start align-items-center"
                       )}
-                    </PopUpSignIn>
-                    <Popover
-                      placement="bottomRight"
-                      content={
-                        <div
-                          onClick={() => handleReport()}
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "10px",
-                            padding: "10px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "10px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <WarningOutlined style={{ fontSize: "20px" }} />
-                            <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
-                              Báo cáo
-                            </span>
-                          </div>
-                        </div>
-                      }
-                      trigger="click"
                     >
-                      <MoreOutlined className={cx("item")} />
-                    </Popover>
+                      <h4>{studioDetail?.data?.Name} </h4>
+                      <CheckCircleOutlined
+                        style={{ fontSize: "20px", color: "#03AC84" }}
+                      />
+                    </div>
+                    <div className={cx("address")}>
+                      <img src={images.address} alt="sa" />
+                      <span>{studioDetail?.data?.Address}</span>
+                    </div>
+                    <Row justify="space-between">
+                      <div className={cx("rate")}>
+                        <Rate
+                          disabled
+                          allowHalf
+                          value={studioDetail?.data?.TotalRate}
+                        ></Rate>
+                        <span>{studioDetail?.data?.TotalRate}</span>
+                        <span
+                          className={cx("number-order")}
+                          style={{ fontSize: "15px" }}
+                        >
+                          {studioDetail?.data?.BookingCount} đã đặt{" "}
+                        </span>
+                      </div>
+                      <PopUpSignIn
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        {studioDetail?.data?.UsersLiked ? (
+                          <HeartFilled
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        ) : (
+                          <HeartOutlined
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        )}
+                      </PopUpSignIn>
+                    </Row>
                   </div>
                 </div>
-                <div className={cx("address")}>
-                  <img src={images.address} alt="sa" />
-                  <span>{studioDetail?.data?.Address}</span>
-                </div>
-                <div className={cx("rate")}>
-                  <Rate
-                    disabled
-                    allowHalf
-                    value={studioDetail?.data?.TotalRate}
-                  ></Rate>
-                  <span>{studioDetail?.data?.TotalRate}</span>
-                  <span
-                    className={cx("number-order")}
-                    style={{ fontSize: "15px" }}
-                  >
-                    {studioDetail?.data?.BookingCount} đã đặt{" "}
-                  </span>
-                </div>
+              ) : (
+                <div className={cx("box1")}>
+                  <div className={cx("top")}>
+                    <div className={cx("title")}>
+                      <h3>{studioDetail?.data?.Name} </h3>
+                      <CheckCircleOutlined
+                        style={{ fontSize: "20px", color: "#03AC84" }}
+                      />
+                    </div>
+                    <div className={cx("icons")}>
+                      <PopUpSignIn
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        {studioDetail?.data?.UsersLiked ? (
+                          <HeartFilled
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        ) : (
+                          <HeartOutlined
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        )}
+                      </PopUpSignIn>
+                      <Popover
+                        placement="bottomRight"
+                        content={
+                          <div
+                            onClick={() => handleReport()}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                              padding: "10px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <WarningOutlined style={{ fontSize: "20px" }} />
+                              <span
+                                style={{ fontSize: "18px", fontWeight: "bold" }}
+                              >
+                                Báo cáo
+                              </span>
+                            </div>
+                          </div>
+                        }
+                        trigger="click"
+                      >
+                        <MoreOutlined className={cx("item")} />
+                      </Popover>
+                    </div>
+                  </div>
+                  <div className={cx("address")}>
+                    <img src={images.address} alt="sa" />
+                    <span>{studioDetail?.data?.Address}</span>
+                  </div>
+                  <div className={cx("rate")}>
+                    <Rate
+                      disabled
+                      allowHalf
+                      value={studioDetail?.data?.TotalRate}
+                    ></Rate>
+                    <span>{studioDetail?.data?.TotalRate}</span>
+                    <span
+                      className={cx("number-order")}
+                      style={{ fontSize: "15px" }}
+                    >
+                      {studioDetail?.data?.BookingCount} đã đặt{" "}
+                    </span>
+                  </div>
 
-                <ImagePost data={studioDetail?.data?.Image} />
-              </div>
+                  <ImagePost data={studioDetail?.data?.Image} />
+                </div>
+              )}
               <div className={cx("box2")}>
                 <div className={cx("left")}>
                   <div className={cx("description")}>
-                    <ReadMoreDesc title="Chi tiết sản phẩm">
+                    <ReadMoreDesc title="Mô tả">
                       {studioDetail?.data?.Description}
                     </ReadMoreDesc>
                   </div>
                   <div className={cx("sale")}>
                     <PromotionList />
                   </div>
-                  {studioDetail && (
-                    <div className={cx("")}>
-                      <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                  <Col
+                    lg={0}
+                    md={0}
+                    sm={0}
+                    xs={24}
+                    className={cx("map-mobile")}
+                  >
+                    <div className={cx("map")}>
+                      <h3>Xem trên bản đồ</h3>
+                      <div className={cx("address")}>
+                        <img src={images.address} alt="" />
+                        <span>{studioDetail?.data?.Address}</span>
+                      </div>
+                      <div className={cx("mapouter")}>
+                        <div className={cx("gmap_canvas")}>
+                          <iframe
+                            title="map"
+                            className={cx("gmap_iframe")}
+                            width="100%"
+                            frameBorder={0}
+                            scrolling="no"
+                            marginHeight={0}
+                            marginWidth={0}
+                            src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                          />
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  </Col>
+                  {studioDetail &&
+                    (screens?.xs ? (
+                      <Row className="w-100" gutter={[0, 15]}>
+                        {studioDetail?.service?.map((data) => (
+                          <Col
+                            span={24}
+                            className={cx("wrapper-service-mobile")}
+                          >
+                            <Swiper
+                              pagination={{
+                                dynamicBullets: true,
+                              }}
+                              modules={[Autoplay, Pagination]}
+                              className={cx("service-image-swiper")}
+                              autoplay={{
+                                delay: 2500,
+                                disableOnInteraction: false,
+                              }}
+                            >
+                              {data?.Image.map((item) => (
+                                <SwiperSlide>
+                                  <img
+                                    src={convertImage(item)}
+                                    alt=""
+                                    className="w-100 h-100"
+                                  />
+                                </SwiperSlide>
+                              ))}
+                            </Swiper>
+                            <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Phòng</div>
+                              </Col>
+                              <Col span={16}>
+                                <div className={cx("service-name")}>
+                                  {data?.Name}
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Diện tích</div>
+                              </Col>
+                              <Col span={16}>
+                                <div className={cx("service-name")}>
+                                  {data?.Area}m2
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Phong cách</div>
+                              </Col>
+                              <Col span={16}>
+                                <div className={cx("service-name")}>
+                                  {data?.Style}
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Mô tả</div>
+                              </Col>
+                              <Col span={24}>
+                                <Paragraph
+                                  style={{ fontSize: "16px", marginBottom: 0 }}
+                                  ellipsis={{
+                                    rows: 4,
+                                    expandable: true,
+                                    suffix: "",
+                                    symbol: "Xem thêm",
+                                    onEllipsis: (ellipsis) => {},
+                                  }}
+                                  // title={`${article}--William Shakespeare`}
+                                >
+                                  {data?.Description}
+                                </Paragraph>
+                              </Col>
+                            </Row>
+                            <Divider style={{ margin: "10px 0" }} />
+                            <Row>
+                              <Col span={12}>
+                                <h5>Chọn thời gian</h5>
+                              </Col>
+                              <Col span={24}>
+                                <SelectTimeOptionService service={data} />
+                              </Col>
+                            </Row>
+                            <Divider style={{ margin: "0 0 20px" }} />
+                            {/* {chooseServiceList?.length > 0 && (
+                              <Row justify="end">
+                                <Col span={24} style={{ textAlign: "end" }}>
+                                  <div>Giá cho thời gian bạn đã chọn</div>
+                                </Col>{" "}
+                                <Col span={24}>
+                                  <Row align="middle">
+                                    <div
+                                      className="me-10"
+                                      style={{ textAlign: "end" }}
+                                    >
+                                      <span
+                                        style={{
+                                          textDecoration: "line-through",
+                                          fontSize: " 16px",
+                                          color: "#828282",
+                                        }}
+                                      >
+                                        {filterService?.OrderByTime === 1 &&
+                                          `${convertPrice(
+                                            chooseServiceList?.reduce(
+                                              (total, item) =>
+                                                total +
+                                                item.PriceByHour *
+                                                  calTime(
+                                                    filterService?.OrderByTimeFrom,
+                                                    filterService?.OrderByTimeTo
+                                                  ),
+                                              0
+                                            )
+                                          )}đ`}
+                                        {filterService?.OrderByTime === 0 &&
+                                          `${convertPrice(
+                                            chooseServiceList?.reduce(
+                                              (total, item) =>
+                                                total +
+                                                item.PriceByDate *
+                                                  calDate(
+                                                    filterService?.OrderByDateFrom,
+                                                    filterService?.OrderByDateTo
+                                                  ),
+                                              0
+                                            )
+                                          )}đ`}
+                                      </span>
+                                    </div>
+                                    <div
+                                      style={{
+                                        color: "#E22828",
+                                        fontSize: "20px",
+                                        fontWeight: "700",
+                                      }}
+                                    >
+                                      {filterService?.OrderByTime === 1 &&
+                                        `${convertPrice(
+                                          chooseServiceList?.reduce(
+                                            (total, item) =>
+                                              total +
+                                              item.PriceByHour *
+                                                calTime(
+                                                  filterService.OrderByTimeFrom,
+                                                  filterService.OrderByTimeTo
+                                                ),
+                                            0
+                                          )
+                                        )}đ`}
+                                      {filterService?.OrderByTime === 0 &&
+                                        `${convertPrice(
+                                          chooseServiceList?.reduce(
+                                            (total, item) =>
+                                              total +
+                                              item.PriceByDate *
+                                                calDate(
+                                                  filterService.OrderByDateFrom,
+                                                  filterService.OrderByDateTo
+                                                ),
+                                            0
+                                          )
+                                        )}đ`}
+                                    </div>
+                                  </Row>
+                                </Col>
+                              </Row>
+                            )} */}
+                            <Row>
+                              {listTimeSelected?.find(
+                                (item) => item.id === data?.id
+                              )?.OrderByTime !== -1 && (
+                                <div className="mb-20">
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      gap: "10px",
+                                      alignItems: "center",
+                                      flexWrap: "wrap",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        color: "#828282",
+                                        textDecoration: "line-through",
+                                        fontSize: "14px",
+                                        fontWeight: "400",
+                                      }}
+                                    >
+                                      {listTimeSelected?.find(
+                                        (item) => item.id === data?.id
+                                      )?.OrderByTime === 1 &&
+                                        data?.PriceByHour?.toLocaleString(
+                                          "it-IT",
+                                          {
+                                            style: "currency",
+                                            currency: "VND",
+                                          }
+                                        )}
+                                      {listTimeSelected?.find(
+                                        (item) => item.id === data?.id
+                                      )?.OrderByTime === 0 &&
+                                        data?.PriceByDate?.toLocaleString(
+                                          "it-IT",
+                                          {
+                                            style: "currency",
+                                            currency: "VND",
+                                          }
+                                        )}
+                                    </span>
+                                    <span
+                                      style={{
+                                        color: "#E22828",
+                                        fontSize: "20px",
+                                        fontWeight: "700",
+                                      }}
+                                    >
+                                      {listTimeSelected?.find(
+                                        (item) => item.id === data?.id
+                                      )?.OrderByTime === 1 &&
+                                        data?.PriceByHour?.toLocaleString(
+                                          "it-IT",
+                                          {
+                                            style: "currency",
+                                            currency: "VND",
+                                          }
+                                        )}
+                                      {listTimeSelected?.find(
+                                        (item) => item.id === data?.id
+                                      )?.OrderByTime === 0 &&
+                                        data?.PriceByDate?.toLocaleString(
+                                          "it-IT",
+                                          {
+                                            style: "currency",
+                                            currency: "VND",
+                                          }
+                                        )}
+                                    </span>
+                                  </div>
+                                  <p
+                                    style={{
+                                      color: "#828282",
+                                      fontSize: "14px",
+                                      fontWeight: "400",
+                                    }}
+                                  >
+                                    {data?.PriceNote}
+                                  </p>
+                                </div>
+                              )}
+                            </Row>
+                            <Row>
+                              <Col span={24}>
+                                {chooseServiceList?.find(
+                                  (item) => item.id === data?.id
+                                ) ? (
+                                  <Button
+                                    type="default"
+                                    size="large"
+                                    onClick={() => {
+                                      dispatch({ type: DELETE_CHOOSE_SERVICE });
+                                      dispatch({
+                                        type: "SET_SELECT_TIME_ORDER",
+                                      });
+                                    }}
+                                    style={{
+                                      width: "100%",
+                                      color: "#000",
+                                      backgroundColor: "#E7E7E7",
+                                      border: "none",
 
+                                      borderRadius: "8px",
+                                      fontWeight: "700",
+                                      fontSize: "13px",
+                                      lineHeight: "19px",
+
+                                      textTransform: "uppercase",
+                                    }}
+                                  >
+                                    Bỏ chọn
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    onClick={() => handleChooseService(data)}
+                                    style={{
+                                      width: "100%",
+                                      borderRadius: "8px",
+                                      fontWeight: "700",
+                                      fontSize: "13px",
+
+                                      lineHeight: "19px",
+                                      textTransform: "uppercase",
+                                    }}
+                                    size="large"
+                                  >
+                                    Chọn
+                                  </Button>
+                                )}
+                              </Col>
+                            </Row>
+                          </Col>
+                        ))}
+                      </Row>
+                    ) : (
+                      <div className={cx("")}>
+                        <Table
+                          column={COLUMN}
+                          row={ROW(studioDetail.service)}
+                        />
+                      </div>
+                    ))}
                   <div className={cx("rating")}>
                     <CommentRating
                       data={studioDetail}

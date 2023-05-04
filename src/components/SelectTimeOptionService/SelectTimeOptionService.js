@@ -153,6 +153,7 @@ const Option = ({ option, disabled, service }) => {
             label="Chọn ngày"
             style={{
               width: "100%",
+              marginTop: "20px",
               marginRight: "20px",
               marginBottom: "8px",
             }}
@@ -302,7 +303,12 @@ const Option = ({ option, disabled, service }) => {
           <Form.Item
             name="time"
             label="Chọn ngày"
-            style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
+            style={{
+              width: "100%",
+              marginRight: "20px",
+              marginBottom: "10px",
+              marginTop: "10px",
+            }}
             initialValue=""
           >
             <DatePicker.RangePicker
@@ -361,7 +367,6 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}
-        style={{ padding: "0 0 20px" }}
         value={selectTime?.OrderByTime}
         disabled={
           disabled
