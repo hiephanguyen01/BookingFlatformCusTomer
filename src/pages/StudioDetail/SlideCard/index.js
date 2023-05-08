@@ -34,7 +34,7 @@ export const SlideCard = ({ title, data, category, loading = false }) => {
         <div className={cx("title")}>
           <h3>{title}</h3>
         </div>
-        <div>
+        <div className="wrap-slide">
           <Swiper
             className="slideDetail"
             slidesPerView={1}

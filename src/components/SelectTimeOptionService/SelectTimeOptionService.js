@@ -8,8 +8,6 @@ import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
 import "./selectTimeOptionService.scss";
 import { handlerSelectServiceAction } from "../../stores/actions/studioPostAction";
 import { DELETE_CHOOSE_SERVICE } from "../../stores/types/OrderType";
-import axios from "axios";
-import { roomService } from "../../services/RoomService";
 
 function dateRange(startDate, endDate, steps = 1) {
   const dateArray = [];
@@ -83,29 +81,8 @@ const Option = ({ option, disabled, service }) => {
     setFilter(listTimeSelected.find((item) => item.id === service.id));
   }, [listTimeSelected, service]);
 
-  const handleOnchangeHour = async (t, timeString) => {
+  const handleOnchangeHour = (t, timeString) => {
     if (date) {
-      // const { data } = await axios(
-      //   `http://localhost:3003/api/booking/scheduleAndPrice?from=${
-      //     moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&to=${
-      //     moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&roomId=${service.id}`
-      // );
-      let from = `${
-        moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      }`;
-      let to = `${moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"}`;
-      const { data } = await roomService.getScheduleAndPrice(
-        from,
-        to,
-        service.id
-      );
-      dispatch({
-        type: "UPDATE_PRICE_SERVICE",
-        payload: data,
-      });
-      console.log("toi oi dadyas32131");
       setTime(timeString);
       dispatch({
         type: ADD_TIME_ORDER,
@@ -120,11 +97,9 @@ const Option = ({ option, disabled, service }) => {
             moment(date).toISOString().slice(0, 11) +
             timeString[1] +
             ":00.000Z",
-          prices: data.prices,
         },
       });
       if (chooseServiceList.find((item) => item?.id === service?.id)) {
-        console.log("toi oi dadyas");
         dispatch(
           handlerSelectServiceAction(service, {
             ...filterService,
@@ -141,31 +116,8 @@ const Option = ({ option, disabled, service }) => {
       }
     }
   };
-  const handleOnchangeDateRange = async (ds, datesString) => {
-    console.log("dsadsad", ds);
-
+  const handleOnchangeDateRange = (ds, datesString) => {
     if (ds) {
-      // const { data } = await axios(
-      //   `http://localhost:3003/api/booking/scheduleAndPrice?from=${
-      //     moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&to=${
-      //     moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&roomId=${service.id}`
-      // );
-      let from = `${
-        moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      }`;
-      let to = `${moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z"}`;
-      const { data } = await roomService.getScheduleAndPrice(
-        from,
-        to,
-        service.id
-      );
-      console.log("prices", data.prices);
-      dispatch({
-        type: "UPDATE_PRICE_SERVICE",
-        payload: data,
-      });
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
@@ -176,7 +128,6 @@ const Option = ({ option, disabled, service }) => {
           OrderByDateTo:
             moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
           disableDate: disableDate || [],
-          prices: data.prices,
         },
       });
       if (chooseServiceList.find((item) => item?.id === service?.id)) {
@@ -196,7 +147,7 @@ const Option = ({ option, disabled, service }) => {
   switch (Number(option)) {
     case 1:
       return (
-        <div className="timeContainer">
+        <div className="timeContainer mt-15">
           <Form.Item
             name="date"
             label="Chọn ngày"
@@ -347,7 +298,7 @@ const Option = ({ option, disabled, service }) => {
       );
     case 0:
       return (
-        <div>
+        <div className="mt-15">
           <Form.Item
             name="time"
             label="Chọn ngày"
@@ -410,7 +361,6 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}
-        style={{ padding: "0 0 20px" }}
         value={selectTime?.OrderByTime}
         disabled={
           disabled

@@ -112,3 +112,10 @@
     right: 0px;
   }
 }
+
+@media (max-width: 576px) {
+  .wrap-slide {
+    padding: 0 10px 20px;
+    background-color: #fff;
+  }
+}

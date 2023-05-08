@@ -14,68 +14,83 @@ const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
   return (
-    <div className="bottomNavContainer">
-      <Row
-        gutter={[10, 0]}
-        align="middle"
-        className="h-100"
-        justify="space-around"
-      >
-        <Col
-          span={6}
-          className={`item ${location.pathname === "/home" && "active"}`}
-          onClick={() => navigate("/home")}
-        >
-          <HomeIcon className="icon" />
-          <p>Trang chủ</p>
-        </Col>
-        <Col
-          span={6}
-          className={`item ${location.pathname === "/home/dao" && "active"}`}
-          onClick={() => {
-            window.scrollTo(0, 0);
+    <>
+      {" "}
+      {location.pathname.includes("/studio/") ||
+      location.pathname.includes("/photographer/") ||
+      location.pathname.includes("/clothes/") ||
+      location.pathname.includes("/makeup/") ||
+      location.pathname.includes("/device/") ? (
+        <></>
+      ) : (
+        <div className="bottomNavContainer">
+          <Row
+            gutter={[10, 0]}
+            align="middle"
+            className="h-100"
+            justify="space-around"
+          >
+            <Col
+              span={6}
+              className={`item ${location.pathname === "/home" && "active"}`}
+              onClick={() => navigate("/home")}
+            >
+              <HomeIcon className="icon" />
+              <p>Trang chủ</p>
+            </Col>
+            <Col
+              span={6}
+              className={`item ${
+                location.pathname === "/home/dao" && "active"
+              }`}
+              onClick={() => {
+                window.scrollTo(0, 0);
 
-            navigate("/home/dao");
-          }}
-        >
-          <DaoIcon className="icon" />
-          <p>Dạo</p>
-        </Col>
-        <Col
-          span={6}
-          className={`item ${
-            location.pathname === "/home/user/liked" && "active"
-          }`}
-          onClick={() => navigate("/home/user/liked")}
-        >
-          <FavoriteIcon className="item" />
-          <p>Đã thích</p>
-        </Col>
-        <Col
-          span={6}
-          className={`item ${location.pathname === "/home/user" && "active"}`}
-          onClick={() => {
-            if (user?.id) {
-              navigate("/home/user");
-            } else {
-              navigate("/auth/sign-in");
-            }
-          }}
-        >
-          {user?.id ? (
-            <>
-              <Avatar src={user.Image} alt="" size={"small"} />
-              <p>{user?.Fullname}</p>
-            </>
-          ) : (
-            <>
-              <MeIcon />
-              <p>Đăng nhập</p>
-            </>
-          )}
-        </Col>
-      </Row>
-    </div>
+                navigate("/home/dao");
+              }}
+            >
+              <DaoIcon className="icon" />
+              <p>Dạo</p>
+            </Col>
+            <Col
+              span={6}
+              className={`item ${
+                location.pathname === "/home/user/liked" && "active"
+              }`}
+              onClick={() => navigate("/home/user/liked")}
+            >
+              <FavoriteIcon className="item" />
+              <p>Đã thích</p>
+            </Col>
+            <Col
+              span={6}
+              className={`item ${
+                location.pathname === "/home/user" && "active"
+              }`}
+              onClick={() => {
+                if (user?.id) {
+                  navigate("/home/user");
+                } else {
+                  navigate("/auth/sign-in");
+                }
+              }}
+            >
+              {user?.id ? (
+                <>
+                  <Avatar src={user.Image} alt="" size={"small"} />
+                  <p>{user?.Fullname}</p>
+                </>
+              ) : (
+                <>
+                  <MeIcon />
+                  <p>Đăng nhập</p>
+                </>
+              )}
+            </Col>
+          </Row>
+        </div>
+      )}
+    </>
   );
 };
 
