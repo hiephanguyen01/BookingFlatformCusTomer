@@ -439,7 +439,20 @@
     }
 
     .right {
-      display: none !important;
+      // display: none !important;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 1050;
+      width: 100%;
+
+      .map {
+        display: none;
+      }
+
+      .order {
+        padding: 15px;
+      }
     }
 
     .left {

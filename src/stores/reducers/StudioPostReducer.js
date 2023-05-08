@@ -44,12 +44,12 @@ const initialState = {
   studioDetail1: [],
   studioNear: [],
   studioDetail: {},
-  listLikedCategory1: [],
-  listLikedCategory3: [],
-  listLikedCategory2: [],
-  listLikedCategory4: [],
-  listLikedCategory5: [],
-  listLikedCategory6: [],
+  // listLikedCategory1: [],
+  // listLikedCategory3: [],
+  // listLikedCategory2: [],
+  // listLikedCategory4: [],
+  // listLikedCategory5: [],
+  // listLikedCategory6: [],
   listLikedUser: [],
   listStudioSimilar: [],
   promotionCode: [],
@@ -91,6 +91,22 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         studioDetail: action.payload,
+      };
+    case "UPDATE_PRICE_SERVICE":
+      return {
+        ...state,
+        studioDetail: {
+          ...state.studioDetail,
+          service: state.studioDetail.service.map(item => {
+            if (item.id == action.payload.roomId) {
+              return {
+                ...item,
+                prices: action.payload.prices
+              };
+            }
+            return item;
+          })
+        }
       };
     case SET_STUDIO_DETAIL1:
       return {

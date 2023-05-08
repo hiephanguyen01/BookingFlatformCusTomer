@@ -812,7 +812,7 @@ const FilterPage = () => {
                 <EmptyPage />
               ) : (
                 <>
-                  <div ref={ref}>
+                  <div ref={ref} style={{ width: "100%" }}>
                     {studioPostList?.map((val) => (
                       <FilterCard
                         data={val}
@@ -824,33 +824,24 @@ const FilterPage = () => {
                       />
                     ))}
                   </div>
-                  {/* <div className="card-div-2">
-                    {studioPostList?.map((item) => (
-                      <Card
-                        category={
-                          categories.filter(
-                            (val) => val.id === filter.category
-                          )[0]
-                        }
-                        value={item}
-                      />
-                    ))}
-                  </div> */}
                 </>
               )}
-              <div
-                style={{
-                  padding: "10px 0px",
-                  marginLeft: "auto",
-                }}
-              >
-                <Pagination
-                  pageSize={pagination?.limit || 0}
-                  current={pagination?.currentPage}
-                  total={pagination?.total}
-                  onChange={onChangePage}
-                />
-              </div>
+              <Col span={24}>
+                <div
+                  style={{
+                    padding: "10px 0px",
+                    marginLeft: "auto",
+                    textAlign: "end",
+                  }}
+                >
+                  <Pagination
+                    pageSize={pagination?.limit || 0}
+                    current={pagination?.currentPage}
+                    total={pagination?.total}
+                    onChange={onChangePage}
+                  />
+                </div>
+              </Col>
             </Row>
           </Col>
         </Row>

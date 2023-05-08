@@ -147,13 +147,12 @@ const Option = ({ option, disabled, service }) => {
   switch (Number(option)) {
     case 1:
       return (
-        <div className="timeContainer">
+        <div className="timeContainer mt-15">
           <Form.Item
             name="date"
             label="Chọn ngày"
             style={{
               width: "100%",
-              marginTop: "20px",
               marginRight: "20px",
               marginBottom: "8px",
             }}
@@ -299,16 +298,11 @@ const Option = ({ option, disabled, service }) => {
       );
     case 0:
       return (
-        <div>
+        <div className="mt-15">
           <Form.Item
             name="time"
             label="Chọn ngày"
-            style={{
-              width: "100%",
-              marginRight: "20px",
-              marginBottom: "10px",
-              marginTop: "10px",
-            }}
+            style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
             initialValue=""
           >
             <DatePicker.RangePicker

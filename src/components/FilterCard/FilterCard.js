@@ -8,7 +8,7 @@ import { Col, Grid, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
 import images from "../../assets/images";
@@ -60,6 +60,7 @@ const categories = {
 const { useBreakpoint } = Grid;
 
 const FilterCard = ({ data, category }) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -96,7 +97,12 @@ const FilterCard = ({ data, category }) => {
               },
             });
             navigate(
-              `/home/${categories[newData?.category].value}/${newData?.id}`
+              `/home/${categories[newData?.category].value}/${newData?.id}`,
+              {
+                state: {
+                  pathname: `${location?.pathname + location?.search}`,
+                },
+              }
             );
           }}
         >

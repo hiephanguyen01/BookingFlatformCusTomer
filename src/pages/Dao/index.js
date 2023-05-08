@@ -23,7 +23,22 @@ import {
 } from "../../stores/actions/PostDaoAction";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import "./dao.scss";
-
+import Resizer from "react-image-file-resizer";
+export const resizeImage = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      1920, // max width
+      1920, // max height
+      "JPEG", // compress format
+      90, // quality
+      0, // rotation
+      (uri) => {
+        resolve(uri);
+      },
+      "file" // output type
+    );
+  });
 const tagItems = [
   {
     id: "studio",
@@ -96,7 +111,7 @@ const Dao = () => {
     dispatch(getAllDefaultComments());
   }, [dispatch]);
 
-  const onChangeFile = (e) => {
+  const onChangeFile = async (e) => {
     const newFiles = [...files];
     if (newFiles.length === 6) {
       toastMessage("Đạt tối đa 6 hình!!!", "error", null, null, {
@@ -113,6 +128,7 @@ const Dao = () => {
         file.type === "video/mp4" ||
         file.type === "video/x-m4v"
       ) {
+        file = await resizeImage(file);
         file.preview = URL.createObjectURL(file);
         newFiles.push(file);
       }
