@@ -71,6 +71,7 @@ export const VerifyOtp = ({ setValid, email }) => {
         VerifyCode: value,
         UserId: user?.id || undefined,
         Email: email,
+        isUpdate: true,
       });
       dispatch({ type: HIDE_MODAL });
       if (!user) {

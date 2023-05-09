@@ -59,7 +59,6 @@ $third-700: #f8d93a;
   padding: 0%;
   box-sizing: border-box;
   font-family: "Nunito", sans-serif !important;
-  user-select: none !important;
 }
 
 html {
@@ -205,6 +204,8 @@ h5 {
 }
 
 img {
+  user-select: none !important;
+
   // position: relative;
 
   // &::before {
