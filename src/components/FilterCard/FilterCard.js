@@ -147,14 +147,14 @@ const FilterCard = ({ data, category }) => {
                     <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
                   )}
                 </PopUpSignIn>
-                <p className="title ps-4">
-                  {data?.Name}&nbsp;
+                <Row className="w-90">
+                  <p className="title ps-4">{data?.Name}</p>
                   <CheckCircleTwoTone
                     style={{ fontSize: "20px" }}
                     className="pb-4"
                     twoToneColor="#52c41a"
                   />
-                </p>
+                </Row>
                 <Col span={24} className="mt-5">
                   <Row align="middle" justify="space-between" className="mb-10">
                     <p className="description w-80">

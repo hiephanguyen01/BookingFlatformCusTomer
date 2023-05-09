@@ -78,7 +78,7 @@ const Option = ({ option, disabled, service }) => {
   }, [service]);
 
   useEffect(() => {
-    setFilter(listTimeSelected.find((item) => item.id === service.id));
+    setFilter(listTimeSelected.find((item) => item?.id === service?.id));
   }, [listTimeSelected, service]);
 
   const handleOnchangeHour = (t, timeString) => {

@@ -41,6 +41,8 @@ import Hotkey from "./Components/Hotkey";
 import "./Header.scss";
 import ModalBottom from "../ModalBottom/ModalBottom";
 import { convertPrice } from "../../utils/convert";
+import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
+
 const { Option } = Select;
 
 const { useBreakpoint } = Grid;
@@ -389,8 +391,7 @@ const Header = () => {
                   }
                   close={true}
                   btnClose={
-                    <CheckOutlined
-                      style={{ color: "#E22828" }}
+                    <CheckSVG
                       onClick={(e) => {
                         if (selectProvince) {
                           e.stopPropagation();
@@ -436,7 +437,7 @@ const Header = () => {
                   }
                   extendProp={false}
                   close={true}
-                  btnClose={<CheckOutlined style={{ color: "#E22828" }} />}
+                  btnClose={<CheckSVG />}
                 >
                   <Button className="btn-item-filter">
                     Danh mục <DownOutlined className="icon" />
@@ -485,7 +486,7 @@ const Header = () => {
                   }
                   extendProp={false}
                   close={true}
-                  btnClose={<CheckOutlined style={{ color: "#E22828" }} />}
+                  btnClose={<CheckSVG />}
                 >
                   <Button className="btn-item-filter">
                     Giá <DownOutlined className="icon" />

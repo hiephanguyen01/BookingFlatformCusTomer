@@ -39,6 +39,8 @@ import ModalBottom from "../../components/ModalBottom/ModalBottom";
 import { ReactComponent as FilterIcon } from "../../assets/header/filter.svg";
 import toastMessage from "../../components/ToastMessage";
 import { useCallback } from "react";
+import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
+
 const { Option } = Select;
 const PRICE_FILTER = [
   { value: 1, label: "Giá thấp nhất" },
@@ -491,8 +493,7 @@ const FilterPage = () => {
                     }
                     close={true}
                     btnClose={
-                      <CheckOutlined
-                        style={{ color: "#E22828" }}
+                      <CheckSVG
                         onClick={(e) => {
                           if (selectProvince) {
                             e.stopPropagation();
@@ -557,8 +558,7 @@ const FilterPage = () => {
                     extendProp={false}
                     close={true}
                     btnClose={
-                      <CheckOutlined
-                        style={{ color: "#E22828" }}
+                      <CheckSVG
                         onClick={(e) => {
                           dispatch(
                             getFilterStudioPostMobile(
@@ -631,8 +631,7 @@ const FilterPage = () => {
                     extendProp={false}
                     close={true}
                     btnClose={
-                      <CheckOutlined
-                        style={{ color: "#E22828" }}
+                      <CheckSVG
                         onClick={(e) => {
                           dispatch(
                             getFilterStudioPostMobile(

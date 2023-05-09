@@ -902,7 +902,149 @@ const PhotographerDetail = () => {
                                 ))}
                               </Swiper>
 
-                              <Row align="middle" className={cx("wrap")}>
+                              <div
+                                className="mt-10"
+                                style={{
+                                  color: "#222222",
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                <div>
+                                  <CameraOutlined
+                                    style={{ marginRight: "10px" }}
+                                  />
+                                  Ekip
+                                </div>
+                                <ul className="ekip">
+                                  <li>2 Thợ chụp ảnh</li>
+                                  <li>1 Thợ trang điểm</li>
+                                  <li>1 Stylist</li>
+                                </ul>
+                              </div>
+                              <div
+                                className="mt-10"
+                                style={{
+                                  color: "#222222",
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                <div>
+                                  <img
+                                    src={jiwery}
+                                    className="me-10 mb-5"
+                                    alt=""
+                                  />
+                                  Trang phục, phụ kiện
+                                </div>
+                                <ul className="ekip">
+                                  <li>02 váy, 02 vest, 01 đồ tự chọn</li>
+                                  <li>Hoa cầm tay </li>
+                                </ul>
+                              </div>
+                              <div
+                                className="mt-10"
+                                style={{
+                                  color: "#222222",
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                <div>
+                                  <img
+                                    src={different}
+                                    className="me-10 mb-5"
+                                    alt=""
+                                  />
+                                  Khác
+                                </div>
+                                <div className="ekip">
+                                  <p>Bối cảnh: Ngoài trời</p>
+                                </div>
+                              </div>
+                              <div
+                                className="mt-10"
+                                style={{
+                                  color: "#222222",
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                <div>
+                                  <PictureOutlined
+                                    className="me-10 mb-2"
+                                    style={{ fontSize: "15px" }}
+                                  />
+                                  Sản phẩm nhận được
+                                </div>
+                                <ul className="ekip">
+                                  <li>
+                                    01 Album photobook cao cấp 20 x 30 (20
+                                    trang)
+                                  </li>
+                                  <li>01 Hình cổng laminate 60 x 90</li>
+                                  <li>10 ảnh trang trí 12 x 16 ép lụa</li>
+                                </ul>
+                              </div>
+                              <div
+                                className="mt-10"
+                                style={{
+                                  color: "#222222",
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                <div className="d-flex align-items-center">
+                                  <StopOutlined
+                                    className="me-10 mb-2"
+                                    style={{ fontSize: "12px" }}
+                                  />
+                                  Dịch vụ CHƯA bao gồm:
+                                </div>
+                                <div className="ekip">
+                                  <p>Di chuyển</p>
+                                </div>
+                              </div>
+                              <div
+                                className="mt-10"
+                                style={{
+                                  color: "#222222",
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                <div>
+                                  <EnvironmentOutlined
+                                    className="me-10 mb-2"
+                                    style={{ fontSize: "12px" }}
+                                  />
+                                  Địa điểm
+                                </div>
+                                <div className="ekip">
+                                  <p>26 Nguyễn Ái Quốc, Biên Hòa, Đồng Nai</p>
+                                </div>
+                              </div>
+                              <div
+                                className="mt-10"
+                                style={{
+                                  color: "#222222",
+                                  fontSize: "16px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                <div>
+                                  <ClockCircleOutlined
+                                    className="me-10 mb-2"
+                                    style={{ fontSize: "12px" }}
+                                  />
+                                  Thời gian thực hiện
+                                </div>
+                                <div className="ekip">
+                                  <p>2 giờ (ước lượng)</p>
+                                </div>
+                              </div>
+                              {/* <Row align="middle" className={cx("wrap")}>
                                 <Col span={8}>
                                   <div className={cx("label")}>Mô tả</div>
                                 </Col>
@@ -924,7 +1066,8 @@ const PhotographerDetail = () => {
                                     {data?.Description}
                                   </Paragraph>
                                 </Col>
-                              </Row>
+                              </Row> */}
+
                               <Divider style={{ margin: "10px 0" }} />
                               <Row>
                                 <Col span={12}>

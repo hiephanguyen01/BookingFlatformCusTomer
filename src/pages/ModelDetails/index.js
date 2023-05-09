@@ -3,10 +3,13 @@ import {
   ClockCircleOutlined,
   DeploymentUnitOutlined,
   DownOutlined,
+  ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
+  HomeOutlined,
   LoadingOutlined,
   MoreOutlined,
+  ShareAltOutlined,
   ShoppingCartOutlined,
   SkinOutlined,
   StarOutlined,
@@ -14,7 +17,7 @@ import {
   UserOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Popover, Rate, Row } from "antd";
+import { Button, Col, Grid, Popover, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -56,6 +59,14 @@ import ReactStickyBox from "react-sticky-box";
 import images from "../../assets/images";
 import classNames from "classnames/bind";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+// import required modules
+import { Autoplay, Pagination } from "swiper";
+import BackNav from "../../components/BackNav/BackNav";
+
 const COLUMN = [
   { title: "Dịch vụ", size: 7 },
   { title: "Chọn thời gian", size: 10 },
@@ -64,7 +75,10 @@ const COLUMN = [
 
 const cx = classNames.bind(styles);
 
+const { useBreakpoint } = Grid;
+
 const Index = () => {
+  const screens = useBreakpoint();
   const {
     studioDetail,
     listStudioSimilar,
@@ -93,6 +107,7 @@ const Index = () => {
       return [...arr, item];
     }, []);
 
+  const [open, setOpen] = useState(false);
   const [chooseService, setChooseService] = useState([]);
   const [toggleSeeMore, setToggleSeeMore] = useState(false);
   const dispatch = useDispatch();
@@ -440,44 +455,241 @@ const Index = () => {
         </div>
       ) : (
         <div className="container_detail">
-          <div className="costume_container">
-            <div className="wrapper_banner">
-              <div
-                className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}
-              >
-                <div className="header_title">
-                  {studioDetail?.data?.Name}
-                  <CheckCircleOutlined className="icon_check_circle" />
-                </div>
-                <div className="d-flex align-items-center">
-                  <PopUpSignIn
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
+          <div className="model_container">
+            {screens?.xs && (
+              <BackNav
+                to={location?.state?.pathname}
+                icon={
+                  <Popover
+                    placement="bottomRight"
+                    content={
+                      <Row
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                          padding: "10px",
+                        }}
+                      >
+                        <Col span={24}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              navigate("/home");
+                            }}
+                          >
+                            <HomeOutlined style={{ fontSize: "20px" }} />
+                            <span
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
+                              Trở về trang chủ
+                            </span>
+                          </div>
+                        </Col>{" "}
+                        <Col span={24}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              handleReport();
+                              setOpen(false);
+                            }}
+                          >
+                            <ExclamationCircleOutlined
+                              style={{ fontSize: "20px" }}
+                            />
+                            <span
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
+                              Báo cáo
+                            </span>
+                          </div>
+                        </Col>{" "}
+                        <Col span={24}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setOpen(false)}
+                          >
+                            <ShareAltOutlined style={{ fontSize: "20px" }} />
+                            <span
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
+                              Chia sẻ
+                            </span>
+                          </div>
+                        </Col>
+                      </Row>
+                    }
+                    trigger="click"
+                    visible={open}
+                    onVisibleChange={(value) => setOpen(value)}
                   >
-                    {studioDetail?.data?.UsersLiked ? (
-                      <HeartFilled
-                        style={{
-                          fontSize: "25px",
-                          color: "#E22828",
-                          marginRight: "10px",
-                        }}
-                        onClick={handleChangeLike}
-                      />
-                    ) : (
-                      <HeartOutlined
-                        style={{
-                          fontSize: "25px",
-                          color: "#E22828",
-                          marginRight: "10px",
-                        }}
-                        onClick={handleChangeLike}
-                      />
+                    <MoreOutlined className={cx("item")} />
+                  </Popover>
+                }
+              />
+            )}
+            {screens?.xs ? (
+              <div className={cx("wrapper-photo-header")}>
+                <Swiper
+                  pagination={{
+                    dynamicBullets: true,
+                  }}
+                  modules={[Pagination]}
+                  className={cx("swiper-slide-detail")}
+                >
+                  {studioDetail?.data?.Image.map((item) => (
+                    <SwiperSlide>
+                      <img src={convertImage(item)} alt="" />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+                <div className={cx("box1")}>
+                  <div
+                    className={cx(
+                      "title",
+                      "d-flex justify-content-start align-items-center"
                     )}
-                    {/* <HeartOutlined className="icon_heart" /> */}
-                  </PopUpSignIn>
-                  {/* <Dropdown overlay={menu_report} trigger={["click"]}>
+                  >
+                    <h4 style={{ marginBottom: 0, marginRight: "10px" }}>
+                      {studioDetail?.data?.Name}{" "}
+                    </h4>
+                    <CheckCircleOutlined
+                      style={{ fontSize: "20px", color: "#03AC84" }}
+                    />
+                  </div>
+                  <div className={cx("address")}>
+                    <img src={images.address} alt="sa" />
+                    <span>{studioDetail?.data?.Address}</span>
+                  </div>
+                  <Row justify="space-between" align="middle">
+                    <div className={cx("rate")}>
+                      <Rate
+                        className="me-5"
+                        disabled
+                        allowHalf
+                        value={studioDetail?.data?.TotalRate}
+                      ></Rate>
+                      <div className="mt-3">
+                        {studioDetail?.data?.TotalRate}
+                      </div>
+                      <div className={cx("line-col")}></div>
+                      <div
+                        className={cx("number-order")}
+                        style={{ fontSize: "15px", marginTop: "3px" }}
+                      >
+                        {studioDetail?.data?.BookingCount} đã đặt{" "}
+                      </div>
+                    </div>
+                    <PopUpSignIn
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      {studioDetail?.data?.UsersLiked ? (
+                        <HeartFilled
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
+                      ) : (
+                        <HeartOutlined
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
+                      )}
+                    </PopUpSignIn>
+                  </Row>
+                  {/* <Row justify="space-between" align="middle">
+                    <div className={cx("rate")}>
+                      <Rate
+                        className="me-5"
+                        disabled
+                        allowHalf
+                        value={studioDetail?.data?.TotalRate}
+                      ></Rate>
+                      <span className="ms-5">
+                        {studioDetail?.data?.TotalRate}
+                      </span>
+                      <div className={cx("line-col")}></div>
+                      <span
+                        className={cx("number-order")}
+                        style={{ fontSize: "15px" }}
+                      >
+                        {studioDetail?.data?.BookingCount} đã đặt{" "}
+                      </span>
+                    </div>
+                    <PopUpSignIn
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      {studioDetail?.data?.UsersLiked ? (
+                        <HeartFilled
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
+                      ) : (
+                        <HeartOutlined
+                          onClick={handleChangeLike}
+                          className={cx("item")}
+                        />
+                      )}
+                    </PopUpSignIn>
+                  </Row> */}
+                </div>
+              </div>
+            ) : (
+              <div className="wrapper_banner">
+                <div
+                  className="d-flex justify-content-between align-items-center header"
+                  style={{ marginBottom: "11px" }}
+                >
+                  <div className="header_title">
+                    {studioDetail?.data?.Name}
+                    <CheckCircleOutlined className="icon_check_circle" />
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <PopUpSignIn
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      {studioDetail?.data?.UsersLiked ? (
+                        <HeartFilled
+                          style={{
+                            fontSize: "25px",
+                            color: "#E22828",
+                            marginRight: "10px",
+                          }}
+                          onClick={handleChangeLike}
+                        />
+                      ) : (
+                        <HeartOutlined
+                          style={{
+                            fontSize: "25px",
+                            color: "#E22828",
+                            marginRight: "10px",
+                          }}
+                          onClick={handleChangeLike}
+                        />
+                      )}
+                      {/* <HeartOutlined className="icon_heart" /> */}
+                    </PopUpSignIn>
+                    {/* <Dropdown overlay={menu_report} trigger={["click"]}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
                         <MoreOutlined
@@ -489,70 +701,73 @@ const Index = () => {
                       </Space>
                     </a>
                   </Dropdown> */}
-                  <Popover
-                    placement="bottomRight"
-                    content={
-                      <div
-                        onClick={() => handleReport()}
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "10px",
-                          padding: "10px",
-                        }}
-                      >
+                    <Popover
+                      placement="bottomRight"
+                      content={
                         <div
+                          onClick={() => handleReport()}
                           style={{
                             display: "flex",
-                            alignItems: "center",
+                            flexDirection: "column",
                             gap: "10px",
-                            cursor: "pointer",
+                            padding: "10px",
                           }}
                         >
-                          <WarningOutlined style={{ fontSize: "20px" }} />
-                          <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              cursor: "pointer",
+                            }}
                           >
-                            Báo cáo
-                          </span>
+                            <WarningOutlined style={{ fontSize: "20px" }} />
+                            <span
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
+                              Báo cáo
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    }
-                    trigger="click"
-                  >
-                    <MoreOutlined
-                      style={{
-                        fontSize: "25px",
-                      }}
-                    />
-                  </Popover>
+                      }
+                      trigger="click"
+                    >
+                      <MoreOutlined
+                        style={{
+                          fontSize: "25px",
+                        }}
+                      />
+                    </Popover>
+                  </div>
+                </div>
+                <div className="location">
+                  <img
+                    src={svgLocation}
+                    style={{ marginRight: "0.5rem" }}
+                    alt=""
+                  />
+                  {studioDetail?.data?.Address}
+                </div>
+                <div className="d-flex align-items-center mb-15">
+                  <Rate
+                    disabled
+                    allowHalf
+                    value={studioDetail?.data?.TotalRate}
+                    // className="rating d-flex align-items-center"
+                  />
+
+                  <span className="reserve">
+                    {studioDetail?.data?.TotalRate}
+                  </span>
+                  <span className="reserve">
+                    Đã đặt {studioDetail?.data?.BookingCount}
+                  </span>
+                </div>
+                <div style={{ height: "" }}>
+                  <ImagePost data={studioDetail?.data?.Image} />
                 </div>
               </div>
-              <div className="location">
-                <img
-                  src={svgLocation}
-                  style={{ marginRight: "0.5rem" }}
-                  alt=""
-                />
-                {studioDetail?.data?.Address}
-              </div>
-              <div className="d-flex align-items-center mb-15">
-                <Rate
-                  disabled
-                  allowHalf
-                  value={studioDetail?.data?.TotalRate}
-                  className="rating d-flex align-items-center"
-                />
-
-                <span className="reserve">{studioDetail?.data?.TotalRate}</span>
-                <span className="reserve">
-                  Đã đặt {studioDetail?.data?.BookingCount}
-                </span>
-              </div>
-              <div style={{ height: "" }}>
-                <ImagePost data={studioDetail?.data?.Image} />
-              </div>
-            </div>
+            )}
 
             {/* <div className="wrapper_description">
               <Row style={{ height: "100%" }}>
@@ -760,7 +975,7 @@ const Index = () => {
               <div className={cx("left")}>
                 <div className={cx("description")}>
                   <Row>
-                    <Col span={12}>
+                    <Col lg={12} md={12} sm={12} xs={24}>
                       <div
                         className="mt-10"
                         style={{
@@ -804,7 +1019,7 @@ const Index = () => {
                         </ul>
                       </div>
                     </Col>
-                    <Col span={12}>
+                    <Col lg={12} md={12} sm={12} xs={24}>
                       <div
                         className="mt-10"
                         style={{
