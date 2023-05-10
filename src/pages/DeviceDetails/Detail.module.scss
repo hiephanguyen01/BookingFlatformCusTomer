@@ -158,8 +158,8 @@
       display: flex;
       flex-direction: column;
       background-color: #fff;
-      padding: 26px;
       position: relative;
+      margin-bottom: 15px;
 
       .listRates {
         display: flex;
@@ -322,6 +322,10 @@
   }
 }
 
+.shop-info-mobile {
+  display: none;
+}
+
 .shop-name {
   width: 85%;
 
@@ -351,6 +355,10 @@
 }
 
 @media (max-width: 576px) {
+  .shop-info-mobile {
+    display: block;
+  }
+
   .wrapper-device-header {
     background-color: #fff;
     margin-bottom: 10px;
@@ -412,6 +420,10 @@
 
   .left {
     width: 100%;
+
+    .rating {
+      padding: 15px;
+    }
   }
 
 

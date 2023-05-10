@@ -1,4 +1,13 @@
-import { Rate, Row, Col, Tabs, Pagination } from "antd";
+import {
+  Rate,
+  Row,
+  Col,
+  Tabs,
+  Pagination,
+  Grid,
+  Popover,
+  Typography,
+} from "antd";
 import React, { useState } from "react";
 import "./detailClothesShop.scss";
 
@@ -6,8 +15,16 @@ import ReadMoreDesc from "../../../../components/ReadMoreDesc";
 
 import imgPost from "../../../../assets/dao/Frame 163.jpg";
 import svgLocation from "../../../../assets/svg/location.svg";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  HomeOutlined,
+  MoreOutlined,
+  ShareAltOutlined,
+} from "@ant-design/icons";
 import { Card } from "../../../../components/Card";
+import BackNav from "../../../../components/BackNav/BackNav";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const TAGS = [
   { id: "1", value: "Phổ biến" },
@@ -25,50 +42,149 @@ const ASIDE_CATEGORY_ITEM = [
 
 const onShowSizeChange = (current, pageSize) => {};
 
-const Index = () => {
-  const [chooseAsideCategory, setChooseAsideCategory] = useState(0);
+const { useBreakpoint } = Grid;
 
+const { Paragraph } = Typography;
+
+const Index = () => {
+  const screens = useBreakpoint();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [chooseAsideCategory, setChooseAsideCategory] = useState(0);
+  const [open, setOpen] = useState(false);
+  console.log(location);
   return (
     <div
-      className=""
+      className="margin"
       style={{
         margin: "auto",
         backgroundColor: "rgb(245, 245, 245)",
         padding: "2rem 0",
       }}
     >
-      <div className="shop_container">
-        <div className="w-100 pt-38 pb-49 px-28  banner_container">
-          <Row className="">
-            <Col lg={8} sm={24}>
-              <img
-                src={imgPost}
-                style={{ height: "280px" }}
-                className="me-32"
-                alt=""
-              />
-            </Col>
-            <Col lg={16} sm={24}>
-              <div className="shop_name d-flex align-item-center">
-                Cho thuê trang phục FLUX{" "}
-                <CheckCircleOutlined className="check_circle pt-10 ms-10" />
-              </div>
-              <div className="location">
-                <img
-                  src={svgLocation}
-                  style={{ marginRight: "0.5rem" }}
-                  alt=""
+      <div className="clothes_shop_container">
+        {screens?.xs ? (
+          <>
+            <div className="header-mobile">
+              <div className="nav">
+                <BackNav
+                  className="background_transparent"
+                  title="Shop"
+                  to={location?.state?.pathname}
+                  icon={
+                    <Popover
+                      className="popover-header"
+                      style={{ backgroundColor: "#000" }}
+                      placement="bottomRight"
+                      content={
+                        <Row
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                            padding: "10px",
+                          }}
+                        >
+                          <Col span={24}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                navigate("/home");
+                              }}
+                            >
+                              <HomeOutlined style={{ fontSize: "20px" }} />
+                              <span
+                                style={{ fontSize: "18px", fontWeight: "bold" }}
+                              >
+                                Trở về trang chủ
+                              </span>
+                            </div>
+                          </Col>{" "}
+                          <Col span={24}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                // handleReport();
+                                setOpen(false);
+                              }}
+                            >
+                              <ExclamationCircleOutlined
+                                style={{ fontSize: "20px" }}
+                              />
+                              <span
+                                style={{ fontSize: "18px", fontWeight: "bold" }}
+                              >
+                                Báo cáo
+                              </span>
+                            </div>
+                          </Col>{" "}
+                          <Col span={24}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => setOpen(false)}
+                            >
+                              <ShareAltOutlined style={{ fontSize: "20px" }} />
+                              <span
+                                style={{ fontSize: "18px", fontWeight: "bold" }}
+                              >
+                                Chia sẻ
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+                      }
+                      trigger="click"
+                      visible={open}
+                      onVisibleChange={(value) => setOpen(value)}
+                    >
+                      <MoreOutlined className={"item"} />
+                    </Popover>
+                  }
                 />
-                Quận 1, TPHCM
               </div>
-              <div className="d-flex align-items-center mb-20">
-                <Rate disabled allowHalf defaultValue={5} className="rating " />
-                <div className="d-flex align-items-center mt-3">
-                  <span>5</span>
-                  <div className="reserve ms-20">Đã đặt 60</div>
-                </div>
+              <img src={imgPost} className="banner" alt="" />
+              <div className="px-18 py-15" style={{ backgroundColor: "#fff" }}>
+                <Row align="middle" className="mb-8">
+                  <div className="shop-name">Thuê trang phục fLux</div>
+                  <CheckCircleOutlined className={"check_circle ms-10"} />
+                </Row>
+                <Row align="middle">
+                  <img
+                    src={svgLocation}
+                    style={{ marginRight: "0.5rem" }}
+                    alt=""
+                  />
+                  <span> Quận 1, TPHCM</span>
+                </Row>
               </div>
-              <ReadMoreDesc>
+            </div>
+            <div className="description">
+              <div className="des">Mô tả</div>
+              <Paragraph
+                style={{ fontSize: "16px", marginBottom: 0 }}
+                ellipsis={{
+                  rows: 4,
+                  expandable: true,
+                  suffix: "",
+                  symbol: "Xem thêm",
+                  onEllipsis: (ellipsis) => {},
+                }}
+              >
                 Contrary to popular belief, Lorem Ipsum is not simply random
                 text. It has roots in a piece of classical Latin literature from
                 45 BC, making it over 2000 years old. Richard McClintock, a
@@ -86,10 +202,68 @@ const Index = () => {
                 containing Lorem Ipsum passages, and more recently with desktop
                 publishing software like Aldus PageMaker including versions of
                 Lorem Ipsum.
-              </ReadMoreDesc>
-            </Col>
-          </Row>
-        </div>
+              </Paragraph>
+            </div>
+          </>
+        ) : (
+          <div className="w-100 pt-38 pb-49 px-28  banner_container">
+            <Row className="">
+              <Col lg={8} sm={24}>
+                <img
+                  src={imgPost}
+                  style={{ height: "280px" }}
+                  className="me-32"
+                  alt=""
+                />
+              </Col>
+              <Col lg={16} sm={24}>
+                <div className="shop_name d-flex align-item-center">
+                  Cho thuê trang phục FLUX{" "}
+                  <CheckCircleOutlined className="check_circle pt-10 ms-10" />
+                </div>
+                <div className="location">
+                  <img
+                    src={svgLocation}
+                    style={{ marginRight: "0.5rem" }}
+                    alt=""
+                  />
+                  Quận 1, TPHCM
+                </div>
+                <div className="d-flex align-items-center mb-20">
+                  <Rate
+                    disabled
+                    allowHalf
+                    defaultValue={5}
+                    className="rating "
+                  />
+                  <div className="d-flex align-items-center mt-3">
+                    <span>5</span>
+                    <div className="reserve ms-20">Đã đặt 60</div>
+                  </div>
+                </div>
+                <ReadMoreDesc>
+                  Contrary to popular belief, Lorem Ipsum is not simply random
+                  text. It has roots in a piece of classical Latin literature
+                  from 45 BC, making it over 2000 years old. Richard McClintock,
+                  a Latin professor at Hampden-Sydney College in Virginia,
+                  looked up one of the more obscure Latin words, consectetur,
+                  from a Lorem Ipsum passage, and going through the cites of the
+                  word in classical literature, discovered the undoubtable
+                  source. Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book. It has survived not only five centuries, but
+                  also the leap into electronic typesetting, remaining
+                  essentially unchanged. It was popularised in the 1960s with
+                  the release of Letraset sheets containing Lorem Ipsum
+                  passages, and more recently with desktop publishing software
+                  like Aldus PageMaker including versions of Lorem Ipsum.
+                </ReadMoreDesc>
+              </Col>
+            </Row>
+          </div>
+        )}
         <Row>
           <div className="w-100 mt-28 tab_panel">
             <Tabs defaultActiveKey="1" onChange={{}}>

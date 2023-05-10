@@ -529,7 +529,6 @@ export const StudioDetail = () => {
           {screens?.xs && (
             <BackNav
               to={state?.pathname}
-              title="Xem phòng"
               icon={
                 <Popover
                   placement="bottomRight"

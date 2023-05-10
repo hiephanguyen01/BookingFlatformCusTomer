@@ -5,12 +5,24 @@ import {
   HeartOutlined,
   HomeOutlined,
   LoadingOutlined,
+  MinusOutlined,
   MoreOutlined,
+  PlusOutlined,
   ShareAltOutlined,
   ShoppingCartOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Divider, Grid, Popover, Rate, Row, Select } from "antd";
+import {
+  Button,
+  Col,
+  Divider,
+  Grid,
+  InputNumber,
+  Popover,
+  Rate,
+  Row,
+  Select,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -114,6 +126,7 @@ const Index = () => {
       return [...arr, item];
     }, []);
 
+  const [amount, setAmount] = useState(1);
   const [chooseService, setChooseService] = useState([]);
   const [open, setOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -165,252 +178,6 @@ const Index = () => {
     });
   };
 
-  const ROW = (dataSource = []) => {
-    if (dataSource?.length > 0) {
-      return dataSource?.map((data, index) => [
-        {
-          key: "title",
-          render: () => (
-            <div style={{}}>
-              <img
-                alt=""
-                style={{ width: "100%", borderRadius: " 6px" }}
-                src={
-                  data?.Image?.length > 0 ? convertImage(data?.Image[0]) : ""
-                }
-              />
-              <div
-                style={{
-                  marginTop: "10px",
-                  color: "#3F3F3F",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                {data.Name}
-              </div>
-              <div
-                className="mt-10"
-                style={{
-                  color: "#616161",
-                  fontSize: "16px",
-                  fontWeight: "400",
-                }}
-              >
-                {data.Description}
-              </div>
-            </div>
-          ),
-        },
-        {
-          key: "desc",
-          render: () => {
-            return (
-              <>
-                <div className="d-flex align-items-center mb-10">
-                  <div
-                    className=""
-                    style={{
-                      minWidth: "30%",
-                    }}
-                  >
-                    Size
-                  </div>
-                  <Select
-                    defaultValue={SIZE[0]}
-                    style={{
-                      width: "30%",
-                    }}
-                    onChange={handleChange}
-                  >
-                    {SIZE.map((item) => (
-                      <Option value={item.id}>{item.label}</Option>
-                    ))}
-                  </Select>
-                </div>
-                <div className="d-flex align-items-center mb-10">
-                  <div
-                    className=""
-                    style={{
-                      minWidth: "30%",
-                    }}
-                  >
-                    Màu sắc
-                  </div>
-                  <Select
-                    defaultValue={COLOR[0]}
-                    style={{
-                      width: "30%",
-                    }}
-                    onChange={handleChange}
-                  >
-                    {COLOR.map((item) => (
-                      <Option value={item.id}>{item.label}</Option>
-                    ))}
-                  </Select>
-                </div>
-                <div className="d-flex align-items-center mb-10">
-                  <div
-                    className=""
-                    style={{
-                      minWidth: "30%",
-                    }}
-                  >
-                    Số lượng
-                  </div>
-                  <Select
-                    defaultValue={QUANTITY[0]}
-                    style={{
-                      width: "30%",
-                    }}
-                    onChange={handleChange}
-                  >
-                    {QUANTITY.map((item) => (
-                      <Option value={item.id}>{item.label}</Option>
-                    ))}
-                  </Select>
-                </div>
-                <div className="mt-20">
-                  <div
-                    className="mb-10"
-                    style={{
-                      fontWeight: "bolder",
-                    }}
-                  >
-                    Khung giờ bạn muốn đặt
-                  </div>
-                  <SelectTimeOptionService service={data} />
-                </div>
-              </>
-            );
-          },
-        },
-        {
-          key: "currency",
-          render: () => (
-            <>
-              {filterService.OrderByTime !== -1 && (
-                <div className="mb-20">
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "5px",
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: "#E22828",
-                        fontSize: "20px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      {filterService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {filterService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                    </span>
-                    <span
-                      style={{
-                        color: "#828282",
-                        textDecoration: "line-through",
-                        fontSize: "14px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      {filterService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {filterService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      color: "#828282",
-                      fontSize: "14px",
-                      fontWeight: "400",
-                    }}
-                  >
-                    {data.PriceNote}
-                  </p>
-                  {/* <button
-                    style={{
-                      padding: "3px 21px",
-                      background: "#E22828",
-                      color: "#ffff",
-                      border: " 1px solid #E22828",
-                      borderRadius: " 8px",
-                    }}
-                  >
-                    Giảm 50%{" "}
-                  </button> */}
-                </div>
-              )}
-              <div className="">
-                {chooseService.filter((item) => item.id === data.id).length >
-                0 ? (
-                  <div
-                    onClick={() => handleChooseService(data)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "13px 25px",
-
-                      backgroundColor: "#E7E7E7",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Bỏ chọn
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => handleChooseService(data)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "13px 25px",
-
-                      border: "1px solid #E22828",
-                      color: "#E22828",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      lineHeight: "19px",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Chọn
-                  </div>
-                )}
-              </div>
-            </>
-          ),
-        },
-      ]);
-    }
-  };
-
   const handleBook = () => {
     if (chooseService.length > 0 && filter.OrderByTime !== -1) {
       dispatch(chooseServiceAction(chooseService));
@@ -423,6 +190,8 @@ const Index = () => {
       }
     }
   };
+
+  console.log(location);
 
   return (
     <>
@@ -726,7 +495,7 @@ const Index = () => {
                 <div className={cx("sale")}>
                   <PromotionList data={filter_promo} />
                 </div>
-                <Col lg={0} md={0} sm={0} xs={24} className={cx("map-mobile")}>
+                {/* <Col lg={0} md={0} sm={0} xs={24} className={cx("map-mobile")}>
                   <div className={cx("map")}>
                     <h3>Xem trên bản đồ</h3>
                     <div className={cx("address")}>
@@ -748,8 +517,8 @@ const Index = () => {
                       </div>
                     </div>
                   </div>
-                </Col>
-                {screens?.xs ? (
+                </Col> */}
+                {/* {screens?.xs ? (
                   <Row className="w-100" gutter={[0, 15]}>
                     {studioDetail?.service?.map((data) => (
                       <Col span={24} className={cx("wrapper-service-mobile")}>
@@ -1076,7 +845,114 @@ const Index = () => {
                   </Row>
                 ) : (
                   <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                )}
+                )} */}
+                <div>
+                  <div
+                    className=" py-22 mb-12 h-100 px-22"
+                    style={{
+                      backgroundColor: "#ffffff",
+                    }}
+                  >
+                    {filterService.OrderByTime === -1 && (
+                      <div className={cx("warning-choose-time")}>
+                        <ExclamationCircleOutlined className="me-5" />
+                        Chọn khung giờ và số lượng bạn muốn đặt để xem giá cho
+                        từng sản phẩm
+                      </div>
+                    )}
+                    <p className={cx("amount-label")}>Số lượng</p>
+                    <div className="d-flex amount-wrapper my-15">
+                      <MinusOutlined
+                        className={cx("btn-amount")}
+                        onClick={() => {
+                          if (amount > 1) {
+                            setAmount(amount - 1);
+                          }
+                        }}
+                      />
+                      <InputNumber
+                        min={1}
+                        max={100}
+                        value={amount}
+                        onChange={(value) => setAmount(value)}
+                        className={cx("amount-value")}
+                        controls={false}
+                      />
+                      {/* <div className="amount-value">
+                        <p>{amount}</p>
+                      </div> */}
+                      <PlusOutlined
+                        className={cx("btn-amount")}
+                        onClick={() => setAmount(amount + 1)}
+                      />
+                    </div>
+                    <p className={cx("amount-label")}>Khung giờ bạn muốn đặt</p>
+                    <br />
+                    <SelectTimeOptionService
+                      service={studioDetail?.service?.data}
+                      className=""
+                    />
+                  </div>
+                </div>
+                <div
+                  style={{ backgroundColor: "#fff" }}
+                  className={cx("shop-info-mobile")}
+                >
+                  <Row justify="space-between" align="middle" className="p-18">
+                    <Col span={4}>
+                      <img
+                        src={imgPost}
+                        style={{
+                          borderRadius: "50%",
+                          width: "40px",
+                          height: "40px",
+                        }}
+                        alt=""
+                      />
+                    </Col>
+                    <Col span={13}>
+                      <div>
+                        <Row>
+                          {/* {studioDetail?.shop?.Name} */}
+                          <div className={cx("shop-name")}>
+                            Thuê thiết bị quay phim xịn xò
+                          </div>
+                          <CheckCircleOutlined
+                            className={cx("icon_check_circle")}
+                          />
+                        </Row>
+                        <div style={{ fontSize: "12px", color: "#828282" }}>
+                          <img
+                            src={svgLocation}
+                            style={{ marginRight: "6px" }}
+                            alt=""
+                          />
+                          {/* {studioDetail?.shop?.Address} */}
+                          Quận 1, TPHCM
+                        </div>
+                      </div>
+                    </Col>
+                    <Col span={7}>
+                      {" "}
+                      <Button className={cx("btn-see-shop")}>
+                        <Link
+                          to="shop"
+                          state={{
+                            pathname: `/home/clothes/${studioDetail?.data?.id}`,
+                          }}
+                        >
+                          Xem shop
+                        </Link>
+                        {/* <iframe
+                      style={{ width: "100%", height: "100%", border: "0" }}
+                      src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe> */}
+                      </Button>
+                    </Col>
+                  </Row>
+                </div>
                 <div className={cx("rating")}>
                   <CommentRating data={studioDetail} className="mb-43 mt-12" />
                 </div>
@@ -1203,7 +1079,14 @@ const Index = () => {
                       </div>
                     </div>
                     <Button className={cx("btn_see")}>
-                      <Link to="shop">Xem shop</Link>
+                      <Link
+                        to="shop"
+                        state={{
+                          pathname: `/home/clothes/${studioDetail?.data?.id}`,
+                        }}
+                      >
+                        Xem shop
+                      </Link>
                       {/* <iframe
                       style={{ width: "100%", height: "100%", border: "0" }}
                       src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"

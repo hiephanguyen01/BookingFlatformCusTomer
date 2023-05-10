@@ -167,15 +167,12 @@ const Index = ({ linkTo = "" }) => {
         }
       case 0:
         const priceByDate =
-        chooseServiceList?.reduce(
-          (total, item) =>
-            total +
-            item.prices.reduce(
-              (sum, cur) => sum + cur.PriceByDate,
-              0
-            ),
-          0
-        ) || 0;
+          chooseServiceList?.reduce(
+            (total, item) =>
+              total +
+              item.prices.reduce((sum, cur) => sum + cur.PriceByDate, 0),
+            0
+          ) || 0;
         if (choosePromotionUser?.TypeReduce === 1) {
           return priceByDate - (choosePromotionUser?.ReduceValue || 0);
         } else {
@@ -464,7 +461,7 @@ const Index = ({ linkTo = "" }) => {
                         chooseServiceList?.reduce(
                           (total, item) =>
                             total +
-                            item.prices[0].PriceByHour *
+                            item?.prices[0].PriceByHour *
                               calTime(
                                 filterService.OrderByTimeFrom,
                                 filterService.OrderByTimeTo
