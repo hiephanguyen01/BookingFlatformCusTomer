@@ -78,7 +78,7 @@ const Option = ({ option, disabled, service }) => {
   }, [service]);
 
   useEffect(() => {
-    setFilter(listTimeSelected.find((item) => item.id === service.id));
+    setFilter(listTimeSelected.find((item) => item?.id === service?.id));
   }, [listTimeSelected, service]);
 
   const handleOnchangeHour = (t, timeString) => {
@@ -336,9 +336,7 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
 
   const [data, setData] = useState(service);
   const [selectTime, setSelectTime] = useState();
-  const { listTimeSelected, filterService } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { listTimeSelected } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {

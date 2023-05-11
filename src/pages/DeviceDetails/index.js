@@ -488,10 +488,17 @@ const Index = () => {
                     </div>
                     <p className={cx("amount-label")}>Khung giờ bạn muốn đặt</p>
                     <br />
-                    <SelectTimeOptionService className="" />
+                    <SelectTimeOptionService
+                      service={studioDetail?.service?.data}
+                      className=""
+                    />
                   </div>
                 </div>
-                <div style={{ backgroundColor: "#fff" }}>
+
+                <div
+                  style={{ backgroundColor: "#fff" }}
+                  className={cx("shop-info-mobile")}
+                >
                   <Row justify="space-between" align="middle" className="p-18">
                     <Col span={4}>
                       <img
@@ -529,7 +536,15 @@ const Index = () => {
                     <Col span={7}>
                       {" "}
                       <Button className={cx("btn-see-shop")}>
-                        <Link to="shop">Xem shop</Link>
+                        <Link
+                          to="shop"
+                          state={{
+                            pathname: `/home/device/${studioDetail?.data?.id}`,
+                            pathnameFilter: `${location?.state?.pathname}`,
+                          }}
+                        >
+                          Xem shop
+                        </Link>
                         {/* <iframe
                       style={{ width: "100%", height: "100%", border: "0" }}
                       src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
@@ -651,7 +666,15 @@ const Index = () => {
                       </div>
                     </div>
                     <Button className={cx("btn_see")}>
-                      <Link to="shop">Xem shop</Link>
+                      <Link
+                        to="shop"
+                        state={{
+                          pathname: `/home/device/${studioDetail?.data?.id}`,
+                          pathnameFilter: `${location?.state?.pathname}`,
+                        }}
+                      >
+                        Xem shop
+                      </Link>
                       {/* <iframe
                       style={{ width: "100%", height: "100%", border: "0" }}
                       src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"

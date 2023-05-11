@@ -83,7 +83,8 @@ export const Card = ({ value, category }) => {
         onClick={(e) => {
           e.stopPropagation();
           handleChangeLike();
-        }}>
+        }}
+      >
         <div className={cx("like")}>
           {newData?.UsersLiked?.some(
             (item) => item.UserId === currentUser?.id
@@ -95,8 +96,11 @@ export const Card = ({ value, category }) => {
         </div>
       </PopUpSignIn>
       <div className={cx("content")}>
-        <div className="h-43px mb-8">
-          <h5>{value?.Name}</h5>
+        <div className="mb-8" style={{ maxHeight: "43px" }}>
+          <h5>
+            {value?.Name}Contrary to popular belief, Lorem Ipsum is not simply
+            random text.{" "}
+          </h5>
         </div>
         <div className={cx("address")}>
           <img className={cx("icon-location")} alt="" src={images?.address} />

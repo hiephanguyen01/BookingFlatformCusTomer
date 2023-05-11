@@ -1,6 +1,7 @@
 import {
   ArrowLeftOutlined,
   CheckOutlined,
+  CloseOutlined,
   DownOutlined,
   LoadingOutlined,
   SearchOutlined,
@@ -14,6 +15,7 @@ import {
   Form,
   Grid,
   Input,
+  Modal,
   Pagination,
   Popover,
   Radio,
@@ -38,7 +40,8 @@ import { Card } from "../../components/Card";
 import ModalBottom from "../../components/ModalBottom/ModalBottom";
 import { ReactComponent as FilterIcon } from "../../assets/header/filter.svg";
 import toastMessage from "../../components/ToastMessage";
-import { useCallback } from "react";
+import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
+
 const { Option } = Select;
 const PRICE_FILTER = [
   { value: 1, label: "Giá thấp nhất" },
@@ -101,6 +104,11 @@ const FilterPage = () => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
 
+  const [visible, setVisible] = useState(false);
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
   const [province, setProvince] = useState(
     Number(querySearch?.provinceIds) || querySearch?.provinces || ""
   );
@@ -111,6 +119,7 @@ const FilterPage = () => {
   const [chooseCategory, setChooseCategory] = useState([]);
   const [choosePrice, setChoosePrice] = useState({});
   const [keyString, setKeyString] = useState("");
+
   const initState = (key) => {
     if (screens.xs) {
       dispatch(
@@ -157,6 +166,7 @@ const FilterPage = () => {
       );
     }
   };
+
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
@@ -235,6 +245,7 @@ const FilterPage = () => {
       )
     );
   };
+
   const onChangeFilterProvince = (value) => {
     dispatch(
       getFilterStudioPost(
@@ -246,6 +257,7 @@ const FilterPage = () => {
       )
     );
   };
+
   const onChangeInput = (e) => {
     dispatch(
       getFilterStudioPost(
@@ -257,6 +269,7 @@ const FilterPage = () => {
       )
     );
   };
+
   const onChangePriceOption = (e) => {
     dispatch(
       getFilterStudioPost(
@@ -268,6 +281,7 @@ const FilterPage = () => {
       )
     );
   };
+
   const onChangeRateOption = (e) => {
     dispatch(
       getFilterStudioPost(
@@ -279,12 +293,14 @@ const FilterPage = () => {
       )
     );
   };
+
   const onChangeSlideRange = (val) => {
     const [price1, price2] = val;
     dispatch(
       getFilterStudioPost(5, 1, { ...filter, price1, price2 }, {}, navigate)
     );
   };
+
   const onChangePage = (value) => {
     if (screens.xs) {
       dispatch(getFilterStudioPostMobile(5, value, filter), {}, navigate);
@@ -363,6 +379,60 @@ const FilterPage = () => {
     setChooseCategory(newChooseCategory);
   };
 
+  const onFinish = (values) => {
+    let newFilter = {
+      ...filter,
+      category: values.category || "",
+      provinceIds: values?.province ? values.province : "",
+      keyString: values.keyString,
+      priceOption: values.price || 1,
+      ratingOption: 3,
+    };
+
+    if (screens.xs) {
+      newFilter = {
+        category: chooseCategory?.map((item) => item.id),
+        provinces: chooseProvince?.map((item) => item.Name),
+        keyString: values.keyString,
+        priceOption: choosePrice.value || 1,
+        priceRange: priceRange,
+        districts: chooseDistrict.map((item) => item.Name),
+      };
+      dispatch(
+        getFilterStudioPostMobile(
+          5,
+          1,
+          newFilter,
+          currentUser,
+          navigate,
+          setVisible
+        )
+      );
+    } else {
+      dispatch(
+        getFilterStudioPost(5, 1, newFilter, currentUser, navigate, setVisible)
+      );
+    }
+  };
+
+  const handleChooseProvince = (province) => {
+    let newChooseProvince = [...chooseProvince];
+    const checkProvince = newChooseProvince.findIndex(
+      (item) => item?.Code === province?.Code
+    );
+    if (checkProvince !== -1) {
+      newChooseProvince.splice(checkProvince, 1);
+      const newChooseDistricts = [...chooseDistrict].filter(
+        (item) => item.ProvinceCode === province.Code
+      );
+      setChooseDistrict(newChooseDistricts);
+    } else {
+      newChooseProvince.push(province);
+      setSelectProvince(province.Code);
+    }
+    setChooseProvince(newChooseProvince);
+  };
+
   return (
     <div className="FilterPage">
       <div className="container">
@@ -386,6 +456,7 @@ const FilterPage = () => {
                     prefix={<SearchOutlined />}
                     className="input-search "
                     readOnly
+                    // onClick={() => setVisible(true)}
                   />
                 </Col>
                 <Col span={3}>
@@ -432,7 +503,11 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Địa điểm</h3>
                         <div className="px-10 mb-26">
                           <Input
-                            placeholder="Bạn đang tìm gì?"
+                            placeholder={`${
+                              selectProvince
+                                ? "Nhập tên quận, huyện"
+                                : "Nhập tên tỉnh, thành phố"
+                            }`}
                             prefix={<SearchOutlined />}
                             className="input-search-province "
                           />
@@ -491,8 +566,7 @@ const FilterPage = () => {
                     }
                     close={true}
                     btnClose={
-                      <CheckOutlined
-                        style={{ color: "#E22828" }}
+                      <CheckSVG
                         onClick={(e) => {
                           if (selectProvince) {
                             e.stopPropagation();
@@ -557,8 +631,7 @@ const FilterPage = () => {
                     extendProp={false}
                     close={true}
                     btnClose={
-                      <CheckOutlined
-                        style={{ color: "#E22828" }}
+                      <CheckSVG
                         onClick={(e) => {
                           dispatch(
                             getFilterStudioPostMobile(
@@ -631,8 +704,7 @@ const FilterPage = () => {
                     extendProp={false}
                     close={true}
                     btnClose={
-                      <CheckOutlined
-                        style={{ color: "#E22828" }}
+                      <CheckSVG
                         onClick={(e) => {
                           dispatch(
                             getFilterStudioPostMobile(
@@ -846,6 +918,289 @@ const FilterPage = () => {
           </Col>
         </Row>
       </div>
+      <Modal
+        onCancel={handleCancel}
+        className="search-modal mobile"
+        width={"100%"}
+        visible={visible}
+        footer={[]}
+        closable={false}
+      >
+        <div className="search-container pt-30">
+          <Form onFinish={onFinish}>
+            <Row className="w-100" justify="space-between" align="middle">
+              <Col span={2}>
+                <CloseOutlined
+                  className="mb-30"
+                  onClick={() => setVisible(false)}
+                />
+              </Col>
+              <Col span={22}>
+                <Form.Item name="keyString">
+                  <Input
+                    placeholder="Bạn đang tìm gì?"
+                    prefix={<SearchOutlined />}
+                    className="input-search "
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <p className="filter">LỌC THEO</p>
+            <div className="option d-flex justify-content-between">
+              <ModalBottom
+                height={"40%"}
+                modalContent={
+                  <div className="modal-province">
+                    <h3 className="px-10 mb-20">Địa điểm</h3>
+                    <div className="px-10 mb-26">
+                      <Input
+                        placeholder="Bạn đang tìm gì?"
+                        prefix={<SearchOutlined />}
+                        className="input-search-province "
+                      />
+                    </div>
+                    <Row
+                      gutter={[20, 20]}
+                      style={{ textAlign: "center", margin: "0 auto" }}
+                    >
+                      {selectProvince ? (
+                        <>
+                          {districts.map((val) => (
+                            <Col span={12}>
+                              <div
+                                key={val.id}
+                                className={`btn-province-item ${
+                                  chooseDistrict?.find(
+                                    (value) => value.Code === val.Code
+                                  )
+                                    ? "active"
+                                    : ""
+                                } `}
+                                onClick={() => {
+                                  handleChooseDistrict(val);
+                                }}
+                              >
+                                {val.Name}
+                              </div>
+                            </Col>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {provinces.map((val) => (
+                            <Col span={12}>
+                              <div
+                                key={val.id}
+                                className={`btn-province-item ${
+                                  chooseProvince?.find(
+                                    (value) => value?.Code === val?.Code
+                                  )
+                                    ? "active"
+                                    : ""
+                                } `}
+                                onClick={() => {
+                                  handleChooseProvince(val);
+                                }}
+                              >
+                                {val.Name}
+                              </div>
+                            </Col>
+                          ))}
+                        </>
+                      )}
+                    </Row>
+                  </div>
+                }
+                close={true}
+                btnClose={
+                  <CheckSVG
+                    onClick={(e) => {
+                      if (selectProvince) {
+                        e.stopPropagation();
+                        setSelectProvince(null);
+                        setDistricts([]);
+                      }
+                    }}
+                  />
+                }
+              >
+                <Button className="btn-item-filter">
+                  Địa điểm <DownOutlined className="icon" />
+                </Button>
+              </ModalBottom>
+              <ModalBottom
+                height={"35%"}
+                modalContent={
+                  <div className="modal-category">
+                    <h3 className="px-10 mb-20">Danh mục</h3>
+                    <Row
+                      gutter={[20, 20]}
+                      style={{ textAlign: "center", margin: "0 auto" }}
+                    >
+                      {categories.slice(1, 7).map((val) => (
+                        <Col span={12}>
+                          <div
+                            key={val.id}
+                            className={`btn-category-item ${
+                              chooseCategory?.find(
+                                (value) => value.id === val.id
+                              )
+                                ? "active"
+                                : ""
+                            } `}
+                            onClick={() => handleChooseCategory(val)}
+                          >
+                            {val.name}
+                          </div>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                }
+                extendProp={false}
+                close={true}
+                btnClose={<CheckSVG />}
+              >
+                <Button className="btn-item-filter">
+                  Danh mục <DownOutlined className="icon" />
+                </Button>
+              </ModalBottom>
+              <ModalBottom
+                modalContent={
+                  <div className="modal-price">
+                    <h3 className="px-10 mb-20">Giá</h3>
+                    <Row
+                      gutter={[20, 20]}
+                      style={{ textAlign: "center", margin: "0 auto" }}
+                    >
+                      {PRICE_FILTER.map((val) => (
+                        <Col span={12}>
+                          <div
+                            key={val.value}
+                            className={`btn-price-item ${
+                              choosePrice?.value === val.value ? "active" : ""
+                            }`}
+                            onClick={() => setChoosePrice(val)}
+                          >
+                            {val.label}
+                          </div>
+                        </Col>
+                      ))}
+                    </Row>
+                    <div className="px-10 my-20">
+                      <div style={{ fontSize: 18 }}>
+                        {convertPrice(priceRange[0])} đ -{" "}
+                        {convertPrice(priceRange[1])} đ
+                      </div>
+                      <Row>
+                        <Slider
+                          className="w-100"
+                          range
+                          defaultValue={priceRange}
+                          step={100000}
+                          min={0}
+                          max={5000000}
+                          onChange={(value) => setPriceRange(value)}
+                        />
+                      </Row>
+                    </div>
+                  </div>
+                }
+                extendProp={false}
+                close={true}
+                btnClose={<CheckSVG />}
+              >
+                <Button className="btn-item-filter">
+                  Giá <DownOutlined className="icon" />
+                </Button>
+              </ModalBottom>
+              {/* <Form.Item
+                  name="category"
+                  style={{ width: "100%", marginRight: "20px" }}
+                >
+                  <Select defaultValue="-1" className="select-item">
+                    <Option value="-1" disabled={true}>
+                      Danh mục
+                    </Option>
+                    {categories.map((val) => (
+                      <Option key={val.id} value={val.id}>
+                        {val.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name="price" style={{ width: "100%" }}>
+                  <Select defaultValue="" className="select-item">
+                    <Option value="">Giá</Option>
+                    <Option value={2}>Giá cao nhất</Option>
+                    <Option value={1}>Giá thấp nhất </Option>
+                    <Option value={3}>Giảm giá nhiều nhất </Option>
+                  </Select>
+                </Form.Item> */}
+            </div>
+            {/* <p className="time">Khung giờ bạn muốn đặt</p>
+
+          <SelectTime /> */}
+            <Form.Item
+              style={{
+                textAlign: "center",
+                width: "100%",
+                marginTop: "10px",
+                marginBottom: "35px",
+              }}
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                style={{ width: "50%" }}
+                className="btn-search"
+              >
+                Tìm kiếm
+              </Button>
+            </Form.Item>
+          </Form>
+          {/* {user ? (
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={user.Image ? img : noBody} />
+                  <div className="text ms-8">
+                    <p>Tài khoản</p>
+                    <p>
+                      {user?.Fullname ? user.Fullname : user.Email}
+                      <DownOutlined
+                        style={{
+                          fontSize: "10px",
+                          color: "#828282",
+                          marginLeft: "3px",
+                        }}
+                      />
+                    </p>
+                  </div>
+                </div>
+              </Dropdown>
+            </div>
+          ) : (
+            <div className="wrapper-user">
+              <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+                <div className="user">
+                  <Avatar src={noBody} />
+                  <div className="text">
+                    {!user && <p>Đăng ký/Đăng nhập</p>}
+                    <p>
+                      {user ? user.Fullname : "Tài khoản"}
+                      <DownOutlined
+                        style={{ fontSize: "10px", color: "#828282" }}
+                      />
+                    </p>
+                  </div>
+                </div>
+              </Dropdown>
+            </div>
+          )} */}
+        </div>
+      </Modal>
     </div>
   );
 };

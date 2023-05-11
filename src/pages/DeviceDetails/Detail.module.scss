@@ -158,8 +158,8 @@
       display: flex;
       flex-direction: column;
       background-color: #fff;
-      padding: 26px;
       position: relative;
+      margin-bottom: 15px;
 
       .listRates {
         display: flex;
@@ -322,6 +322,10 @@
   }
 }
 
+.shop-info-mobile {
+  display: none;
+}
+
 .shop-name {
   width: 85%;
 
@@ -341,8 +345,9 @@
 .btn-see-shop {
   height: 36px;
   background: #FFFFFF;
-  border: 1px solid #E22828;
   border-radius: 8px;
+  border: 1px solid #E22828;
+  color: #E22828;
 }
 
 .wrap-shop {
@@ -350,6 +355,10 @@
 }
 
 @media (max-width: 576px) {
+  .shop-info-mobile {
+    display: block;
+  }
+
   .wrapper-device-header {
     background-color: #fff;
     margin-bottom: 10px;
@@ -411,6 +420,10 @@
 
   .left {
     width: 100%;
+
+    .rating {
+      padding: 15px;
+    }
   }
 
 

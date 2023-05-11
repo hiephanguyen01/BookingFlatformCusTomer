@@ -20,6 +20,7 @@ const BottomNav = () => {
       location.pathname.includes("/photographer/") ||
       location.pathname.includes("/clothes/") ||
       location.pathname.includes("/makeup/") ||
+      location.pathname.includes("/model/") ||
       location.pathname.includes("/device/") ? (
         <></>
       ) : (

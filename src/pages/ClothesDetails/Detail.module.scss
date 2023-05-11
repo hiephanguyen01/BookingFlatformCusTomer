@@ -322,6 +322,38 @@
   }
 }
 
+.shop-info-mobile {
+  display: none;
+}
+
+.shop-name {
+  width: 85%;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: #3F3F3F;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  /* number of lines to show */
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.btn-see-shop {
+  height: 36px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #E22828;
+  color: #E22828;
+}
+
+.wrap-shop {
+  background-color: #fff;
+}
+
 @media (max-width: 576px) {
   .wrapper-clothes-header {
     background-color: #fff;
@@ -363,6 +395,10 @@
         }
       }
     }
+  }
+
+  .shop-info-mobile {
+    display: block;
   }
 
   .description,

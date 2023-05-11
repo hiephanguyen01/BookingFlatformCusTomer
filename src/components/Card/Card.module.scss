@@ -97,7 +97,7 @@ img {
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
-      height: 36px;
+      max-height: 36px;
     }
   }
 
@@ -136,11 +136,22 @@ img {
 
 @media (max-width: 576px) {
   .image {
-    height: 200px !important;
+    height: 130px !important;
   }
 
   .card {
     margin-top: 0;
-  }
 
+    .content {
+      h5 {
+        -webkit-line-clamp: 1;
+      }
+    }
+
+    .address {
+      span {
+        -webkit-line-clamp: 1;
+      }
+    }
+  }
 }
