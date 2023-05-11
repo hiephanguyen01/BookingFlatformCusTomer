@@ -130,14 +130,15 @@ export const StudioDetail = () => {
   }, [id, dispatch, cate, currentUser]);
 
   const priceService = (arr = [], OrderByTime) => {
-    console.log("arrrr", arr);
+    
 
     if (arr.length < 1) return null;
     const areAllEqual = arr.every(
       (num) =>
-        num.PriceByDate ===
+        (OrderByTime ? num.PriceByHour : num.PriceByDate) ==
         (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
     );
+    
     if (areAllEqual) {
       return OrderByTime
         ? arr[0].PriceByHour.toLocaleString("it-IT", {
@@ -372,7 +373,7 @@ export const StudioDetail = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {console.log(priceService(data?.prices, false))}
+                    
                     {/* {priceService(data?.prices)} */}
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 1 && priceService(data?.prices, true)}
