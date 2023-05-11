@@ -11,7 +11,7 @@ export const AuthLayout = ({ children }) => {
           <img alt="logo" src={logo} className="logo-booking" />
         </div>
       </Link>
-      <div className="body-login ">
+      <div className="body-login">
         <div className="body-contain-login">
           <div className="cover-image" style={{ height: "100%", width: "50%" }}>
             <img alt="pic" src={authPic} className="pic-login" />

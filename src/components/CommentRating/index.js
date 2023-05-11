@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, StarFilled } from "@ant-design/icons";
-import { Divider, Pagination, Rate } from "antd";
+import { Divider, Grid, Pagination, Rate } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import images from "../../assets/images";
@@ -8,6 +8,8 @@ import { convertImage } from "../../utils/convertImage";
 import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { ModalImage } from "../ModalImg";
 import "./commentRating.scss";
+import BackNav from "../BackNav/BackNav";
+import { useLocation } from "react-router";
 
 const STAR_LIST = [
   { id: 0, label: "Tất cả" },
@@ -17,9 +19,11 @@ const STAR_LIST = [
   { id: 2, label: "2" },
   { id: 1, label: "1" },
 ];
+const { useBreakpoint } = Grid;
 const pageSize = 5;
 const Index = ({ data = [], className, isPerional }) => {
-  console.log("rating", data);
+  const screens = useBreakpoint();
+  const location = useLocation();
   const ref = useRef(null);
   const [chooseRating, setChooseRating] = useState(0);
   const [state, setState] = useState({
@@ -67,7 +71,17 @@ const Index = ({ data = [], className, isPerional }) => {
   return (
     <>
       <div ref={ref} className={`rating ${className}`}>
-        <h3>Đánh giá</h3>
+        {screens?.xs ? (
+          <>
+            {location?.pathname?.includes("/home/user") ? (
+              <BackNav title="Đánh giá của tôi" to="/home/user" />
+            ) : (
+              <h4>Đánh giá</h4>
+            )}
+          </>
+        ) : (
+          <h3>Đánh giá</h3>
+        )}
         {isPerional ? (
           <></>
         ) : (
@@ -84,30 +98,34 @@ const Index = ({ data = [], className, isPerional }) => {
           </div>
         )}
 
-        <div className="listRates">
-          {STAR_LIST.map((star) => {
-            return (
-              <div
-                onClick={() => setChooseRating(star.id)}
-                key={star.id}
-                className={`rate_item ${
-                  chooseRating === star.id ? "active" : ""
-                }`}
-              >
-                <span>{star.label}</span>
-                <StarFilled style={{ color: "#F8D93A" }} />
-                <span>
-                  {star.id === 0
-                    ? `(${data?.rating?.length || 0})`
-                    : `(${
-                        data?.rating?.filter((d) => d.Rate === star.id)
-                          .length || 0
-                      })`}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+        {!screens?.xs && (
+          <div className="listRates">
+            {STAR_LIST.map((star) => {
+              return (
+                <div
+                  onClick={() => setChooseRating(star.id)}
+                  key={star.id}
+                  className={`rate_item ${
+                    chooseRating === star.id ? "active" : ""
+                  }`}
+                >
+                  <span>{star.label}</span>
+                  <StarFilled style={{ color: "#F8D93A" }} />
+                  <span>
+                    {star.id === 0
+                      ? `(${data?.rating?.length || 0})`
+                      : `(${
+                          data?.rating?.filter((d) => d.Rate === star.id)
+                            .length || 0
+                        })`}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {screens?.xs && <Divider style={{ marginBottom: 0 }} />}
+
         {values?.length > 0 && (
           <>
             <div className="rating_list">
@@ -187,7 +205,7 @@ const Index = ({ data = [], className, isPerional }) => {
                           item?.MakeupServicePackage?.Name ||
                           item?.Item?.Name}
                       </div>
-                      {item.ReplyComment && (
+                      {item?.ReplyComment && (
                         <div className="d-flex">
                           <div className="w-28px h-28px me-15">
                             <img
@@ -201,7 +219,7 @@ const Index = ({ data = [], className, isPerional }) => {
                             <div>
                               <div className="name_reply text-medium-se">
                                 {data?.data?.Name ||
-                                  item?.Item.StudioPost?.Name}
+                                  item?.Item?.StudioPost?.Name}
                                 <CheckCircleOutlined
                                   className="w-14px h-14px"
                                   style={{
@@ -211,7 +229,7 @@ const Index = ({ data = [], className, isPerional }) => {
                                 />
                               </div>
                               <div className="cmt_reply text-medium-re">
-                                {item.ReplyComment || item.Item.Name}
+                                {item?.ReplyComment || item?.Item.Name}
                               </div>
                             </div>
                             {/* <span>1 tuần trước</span> */}

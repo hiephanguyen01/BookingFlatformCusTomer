@@ -1,0 +1,56 @@
+.layout-mobile {
+    background-color: #f6f6f6;
+
+    .header {
+        background-color: #fff;
+        padding: 25px 15px;
+
+        .avatar-circle {
+            font-size: 50px;
+            width: 65px !important;
+            height: 65px !important;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 27px;
+            color: #3F3F3F;
+        }
+
+        .info {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 19px;
+            color: #616161;
+
+            .arrow-right {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .my-order {
+        background-color: #fff;
+        margin: 10px 0;
+        padding: 11px 18px;
+
+        h4 {
+            font-weight: 600;
+            font-size: 23px !important;
+            line-height: 25px;
+            color: #3F3F3F;
+        }
+
+        .icon-item {
+            width: 32px;
+            height: 32px;
+        }
+
+        .ant-badge-count {
+            background-color: #1FCBA2 !important;
+        }
+    }
+
+
+}

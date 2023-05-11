@@ -1,5 +1,6 @@
 .ListItem {
   margin-top: 36px;
+  margin-bottom: 100px;
 
   .title {
     display: flex;
@@ -109,5 +110,12 @@
 
   .swiper-button-next {
     right: 0px;
+  }
+}
+
+@media (max-width: 576px) {
+  .wrap-slide {
+    padding: 0 10px 20px;
+    background-color: #fff;
   }
 }

@@ -6,7 +6,7 @@ import {
   TeamOutlined,
   UpOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Divider, Input, Modal, Row } from "antd";
+import { Button, Col, Divider, Grid, Input, Modal, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,8 +40,12 @@ import chair from "../../../../../assets/svg/chair.svg";
 import conditional from "../../../../../assets/svg/conditional.svg";
 import expand from "../../../../../assets/svg/expand.svg";
 import "./OrderDetail.scss";
+import BackNav from "../../../../../components/BackNav/BackNav";
+
+const { useBreakpoint } = Grid;
 
 const OrderDetail = () => {
+  const screens = useBreakpoint();
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [booking, setBooking] = useState();
@@ -68,15 +72,14 @@ const OrderDetail = () => {
   const CancleFreeDate = moment(booking?.CreationTime)
     .add(
       booking?.OrderByTime
-        ? booking?.StudioRoom?.FreeCancelByHour?.match(/\d+/g)[0]
-        : booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0],
+        ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
+        : booking?.FreeCancelByDate?.match(/\d+/g)[0],
       `${booking?.OrderByTime ? "hours" : "days"}`
     )
     .format("DD/MM/YYYY HH:mm A");
-  const deposite = booking?.OrderByTime
-    ? booking?.StudioRoom?.DepositByHour
-    : booking?.StudioRoom?.DepositByDate;
-  console.log("CancleFreeDate", CancleFreeDate);
+  const depositPercent = booking?.OrderByTime
+    ? booking?.CancelPriceByHour
+    : booking?.CancelPriceByDate;
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -250,7 +253,9 @@ const OrderDetail = () => {
             EvidenceImage: booking?.EvidenceImage,
             updatePay: true,
             Category: searchParams.get("categoryId"),
-          }}>
+            path: `/home/user/orderStatus/${id}?categoryId=1`,
+          }}
+        >
           <Button
             type="primary"
             icon={<UploadOutlined />}
@@ -384,8 +389,8 @@ const OrderDetail = () => {
   const bill = {
     1: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -420,8 +425,8 @@ const OrderDetail = () => {
     ),
     2: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -465,8 +470,8 @@ const OrderDetail = () => {
     ),
     3: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -510,8 +515,8 @@ const OrderDetail = () => {
     ),
     4: (
       <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
+        <Col md={12} xs={0}></Col>
+        <Col md={12} xs={24}>
           <div className="df_bt">
             <div className="tl">1 phòng x {differ}</div>
             <div className="tr">
@@ -602,14 +607,21 @@ const OrderDetail = () => {
 
   return (
     <div className="OrderDetail">
-      <div className="title">LỊCH SỬ ĐƠN ĐẶT</div>
-      <section className="chile df">
-        <LeftOutlined
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate("/home/user/orderStatus")}
-        />
-        <div className="sub_title">CHI TIẾT ĐƠN ĐẶT</div>
-      </section>
+      {screens?.xs ? (
+        <BackNav title="CHI TIẾT ĐƠN ĐẶT" to="/home/user/orderStatus" />
+      ) : (
+        <>
+          <div className="title">LỊCH SỬ ĐƠN ĐẶT</div>
+          <section className="chile df">
+            <LeftOutlined
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/home/user/orderStatus")}
+            />
+            <div className="sub_title">CHI TIẾT ĐƠN ĐẶT</div>
+          </section>
+        </>
+      )}
+
       <section className="chile df2">
         <Dolar />
         <div className="status_name">{title[status]}</div>
@@ -622,7 +634,7 @@ const OrderDetail = () => {
           <div className="sub_title">THÔNG TIN ĐƠN ĐẶT</div>
         </div>
         <Row gutter={[62, 62]} style={{ position: "relative" }}>
-          <Col md={12}>
+          <Col md={12} xs={24}>
             <div className="df_bt">
               <div className="tl">Mã booking</div>
               <div className="tr2">{booking?.IdentifyCode}</div>
@@ -644,7 +656,7 @@ const OrderDetail = () => {
               </div>
             </div>
           </Col>
-          <Col md={12}>
+          <Col md={12} xs={24}>
             <div className="df_bt">
               <div className="tl">Người đặt</div>
               <div className="tr">{booking?.BookingUserName}</div>
@@ -671,7 +683,7 @@ const OrderDetail = () => {
             <div className="">{post?.Name}</div>
             <CheckCircleTwoTone twoToneColor="#52c41a" />
           </div>
-          <div className="df">
+          <div className="df  ">
             <div className="tl">Mã booking</div>
             <div className="tr2">{booking?.IdentifyCode}</div>
           </div>
@@ -894,7 +906,7 @@ const OrderDetail = () => {
         {bill[status]}
       </section>
       <div className="df">
-        <NotiIcon />
+        {!screens?.xs && <NotiIcon />}
         <div className="noti_text">
           Bao gồm{" "}
           <b>
@@ -934,14 +946,14 @@ const OrderDetail = () => {
           <div className="boxxx">
             <div className="fi b_red"></div>
             <div className="text">
-              <div className="text_title t_red">Hủy mất 50% cọc</div>
+              <div className="text_title t_red">Hủy mất {depositPercent}% cọc</div>
               <div className="text_title_2">Từ {CancleFreeDate}</div>
             </div>
           </div>
         </div>
       </section>
       <div className="flexx">
-        <NotiIcon />
+        {!screens?.xs && <NotiIcon />}
         <div className="noti_text">
           Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất phí
           gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý khách

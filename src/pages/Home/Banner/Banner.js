@@ -9,9 +9,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import BannerSkeleton from "../../../components/Skeleton/BannerSkeleton";
 import { convertImage } from "../../../utils/convertImage";
 import "./banner.scss";
+import { Grid } from "antd";
+const { useBreakpoint } = Grid;
 const Banner = ({ banners }) => {
+  const screens = useBreakpoint();
   return (
-    <div className="Banner">
+    <div className={`${screens.xs ? "Banner mobile" : "Banner"}`}>
       {banners.length <= 0 ? (
         <BannerSkeleton />
       ) : (

@@ -1,0 +1,88 @@
+@import url("../../../../../App.scss");
+
+.aside-mobile {
+
+    padding-bottom: 10px;
+
+    .info-account {}
+
+    a {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #222222;
+    }
+
+    .item-account-info-row {
+        margin-bottom: 10px;
+        padding: 15px 10px;
+        background-color: #fff;
+
+
+    }
+
+    .icon {
+        width: 18px;
+        height: 18px;
+        margin-top: 3px;
+    }
+
+    .title {
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        color: #3F3F3F;
+        margin-bottom: 10px;
+        padding: 0 20px;
+    }
+
+    .btn-logout {
+        background: #FFFFFF;
+        border: 1px solid #E22828;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        margin: 20px 20px;
+
+        span {
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 19px;
+            color: #E22828;
+        }
+
+    }
+}
+
+.modal-logout {
+    width: 90% !important;
+
+    .ant-modal-footer {
+        display: none;
+    }
+
+    .ant-modal-content {
+        border-radius: 6px !important;
+    }
+
+    p {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 25px;
+        color: #222222;
+    }
+
+    .btn {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 25px;
+        color: #616161;
+
+        &.logout {
+            color: #E22828;
+            margin-left: 25px;
+        }
+    }
+}

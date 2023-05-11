@@ -36,14 +36,20 @@ const ListItemLikeCard = ({ data, category }) => {
   };
   return (
     <div className={cx("ListItem")}>
-      <Row gutter={[16, 16]}>
+      <Row gutter={{ lg: [16, 16], md: [16, 16], sm: [16, 16], xs: [0, 0] }}>
         {values?.map((item, idx) => {
           return (
             idx >= minIndex &&
             idx < maxIndex && (
-              <Col span={6} key={idx}>
-                <CardLiked value={item} category={category} />
-              </Col>
+              <>
+                <Col lg={6} md={6} sm={12} xs={24} key={idx}>
+                  <CardLiked value={item} category={category} />
+                </Col>
+                <div
+                  style={{ height: "10px", backgroundColor: "#f6f6f6" }}
+                  className={cx("divider")}
+                ></div>
+              </>
             )
           );
         })}

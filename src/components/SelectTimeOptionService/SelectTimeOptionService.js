@@ -78,7 +78,7 @@ const Option = ({ option, disabled, service }) => {
   }, [service]);
 
   useEffect(() => {
-    setFilter(listTimeSelected.find((item) => item.id === service.id));
+    setFilter(listTimeSelected.find((item) => item?.id === service?.id));
   }, [listTimeSelected, service]);
 
   const handleOnchangeHour = (t, timeString) => {
@@ -147,7 +147,7 @@ const Option = ({ option, disabled, service }) => {
   switch (Number(option)) {
     case 1:
       return (
-        <div className="timeContainer">
+        <div className="timeContainer mt-15">
           <Form.Item
             name="date"
             label="Chọn ngày"
@@ -298,7 +298,7 @@ const Option = ({ option, disabled, service }) => {
       );
     case 0:
       return (
-        <div>
+        <div className="mt-15">
           <Form.Item
             name="time"
             label="Chọn ngày"
@@ -336,9 +336,7 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
 
   const [data, setData] = useState(service);
   const [selectTime, setSelectTime] = useState();
-  const { listTimeSelected, filterService } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { listTimeSelected } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -361,7 +359,6 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
       <Radio.Group
         name="radiogroup"
         onChange={handleOnChangeSelection}
-        style={{ padding: "0 0 20px" }}
         value={selectTime?.OrderByTime}
         disabled={
           disabled

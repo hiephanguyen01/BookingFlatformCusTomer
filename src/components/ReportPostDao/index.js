@@ -36,7 +36,7 @@ const ReportPost = (props) => {
           Content: valueText,
         });
       } else {
-         await reportService.createReportDao({
+        await reportService.createReportDao({
           PostId: Number(props.postId),
           Content: value,
         });
@@ -60,7 +60,8 @@ const ReportPost = (props) => {
             Báo cáo
           </button>,
         ]}
-        className="report-post-dao">
+        className="report-post-dao"
+      >
         <h3>Lý do báo cáo bài viết</h3>
         <Radio.Group onChange={onChange} value={value}>
           <Space
@@ -69,7 +70,8 @@ const ReportPost = (props) => {
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start",
-            }}>
+            }}
+          >
             {data.map((item, idx) => {
               return <Radio value={item.value}>{item.label}</Radio>;
             })}
@@ -92,7 +94,9 @@ const ReportPost = (props) => {
           <button onClick={() => setAfterReport(false)} className="ok-btn">
             OK
           </button>,
-        ]}>
+        ]}
+        style={{ top: 0 }}
+      >
         <h3>Cảm ơn bạn vì đã báo cáo</h3>
         <p
           style={{
@@ -100,7 +104,8 @@ const ReportPost = (props) => {
             fontSize: "18px",
             fontWeight: "400",
             lineHeight: "25px",
-          }}>
+          }}
+        >
           Đăng thông tin sai sự thật là vi phạm Nguyên tắc cộng đồng của chúng
           tôi. Cảm ơn bạn đã giúp Booking Studio duy trì sự an toàn và uy tín.
         </p>

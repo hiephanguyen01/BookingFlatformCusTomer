@@ -27,6 +27,8 @@ import { CATEGORIES } from "../../utils/category";
 import { SlideCard } from "../StudioDetail/SlideCard";
 import Banner from "./Banner/Banner";
 import styles from "./home.module.scss";
+import { Col, Grid } from "antd";
+import Header from "../../components/Header/Header";
 
 const cx = classNames.bind(styles);
 
@@ -151,13 +153,15 @@ const cx = classNames.bind(styles);
 //         </div>
 //       </Modal>
 
+const { useBreakpoint } = Grid;
+
 export const Home = () => {
   const { filter } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
   // const [chooseCate, setChooseCate] = useState();
   // const [provinces, setProvinces] = useState([]);
-
+  const screens = useBreakpoint();
   const navigate = useNavigate();
   const {
     listOustandingStudioPost,
@@ -209,30 +213,65 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className={cx("home_container")}>
-      <MetaDecorator
-        title="Trang chủ Booking Studio"
-        description="Chuyên cung cấp các loại dịch vụ"
-        imgUrl={logoImg}
-        type="article"
-        imgAlt="Booking Studio"
-      />
-      <div className={cx("home")}>
-        <div className={cx("filter")}>
-          {CATEGORIES.map((item) => (
-            <div
-              key={item.id}
-              className={cx("box")}
-              onClick={() => {
-                handleClickCategory(item.id);
-              }}>
-              <img src={item.img} alt="a" />
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
-        {/* Banner */}
-        {/* <div className={cx("banner")}>
+    <>
+      {screens.xs && <Header />}
+      <div className={cx("home_container")}>
+        <MetaDecorator
+          title="Trang chủ Booking Studio"
+          description="Chuyên cung cấp các loại dịch vụ"
+          imgUrl={logoImg}
+          type="article"
+          imgAlt="Booking Studio"
+        />
+        <div className={cx("home")}>
+          <div
+            className={cx("filter")}
+            style={
+              screens.xs
+                ? {
+                    backgroundColor: "",
+                    padding: 12,
+                  }
+                : {
+                    padding: 29,
+                    backgroundColor: "#ffff",
+                  }
+            }
+          >
+            {screens.xs
+              ? CATEGORIES.map((item) => (
+                  <Col span={24} style={{ textAlign: "center" }}>
+                    <div
+                      key={item.id}
+                      className={cx("box", "shadow", "mb-5")}
+                      onClick={() => {
+                        handleClickCategory(item.id);
+                      }}
+                      style={{
+                        backgroundColor: "#ffff",
+                        border: "none",
+                      }}
+                    >
+                      <img src={item.img} alt="a" />
+                    </div>
+                    <p style={{ fontSize: 16 }}>{item.label}</p>
+                  </Col>
+                ))
+              : CATEGORIES.map((item) => (
+                  <div
+                    key={item.id}
+                    className={cx("box")}
+                    onClick={() => {
+                      handleClickCategory(item.id);
+                    }}
+                  >
+                    <img src={item.img} alt="a" />
+                    <span>{item.label}</span>
+                  </div>
+                ))}
+          </div>
+          {/* Banner */}
+          {/* <div className={cx("banner")}>
           <div className={cx("box-container")}>
             <div className={cx("box")}>
               <img src={images.banner1} alt="sa" />
@@ -278,40 +317,41 @@ export const Home = () => {
             </div>
           </div>
         </div> */}
-        <Banner banners={banners} />
-        {/* <ListItem title="Được đặt nhiều nhất" />
+          <Banner banners={banners} />
+          {/* <ListItem title="Được đặt nhiều nhất" />
       <ListItem title="Đã xem gần đây" /> */}
-        <SlideCard
-          category={{ name: "studio", id: 1 }}
-          data={listOustandingStudioPost}
-          title="Top 10 Most Booked Studios"
-        />
-        <SlideCard
-          data={listOustandingModelPost}
-          category={{ name: "model", id: 6 }}
-          title="Top 10 Most Models"
-        />
-        <SlideCard
-          data={listOustandingClothesPost}
-          category={{ name: "clothes", id: 3 }}
-          title="Top 10 Most Clothes"
-        />
-        <SlideCard
-          data={listOustandingPhotographerPost}
-          category={{ name: "photographer", id: 2 }}
-          title="Top 10 Most Photographer"
-        />
-        <SlideCard
-          data={listOustandingDevicePost}
-          category={{ name: "device", id: 5 }}
-          title="Top 10 Most Devices"
-        />
-        <SlideCard
-          category={{ name: "makeup", id: 4 }}
-          data={listOustandingMakeupPost}
-          title="Top 10 Most Makeups"
-        />
+          <SlideCard
+            category={{ name: "studio", id: 1 }}
+            data={listOustandingStudioPost}
+            title="Top 10 Most Booked Studios"
+          />
+          <SlideCard
+            data={listOustandingModelPost}
+            category={{ name: "model", id: 6 }}
+            title="Top 10 Most Models"
+          />
+          <SlideCard
+            data={listOustandingClothesPost}
+            category={{ name: "clothes", id: 3 }}
+            title="Top 10 Most Clothes"
+          />
+          <SlideCard
+            data={listOustandingPhotographerPost}
+            category={{ name: "photographer", id: 2 }}
+            title="Top 10 Most Photographer"
+          />
+          <SlideCard
+            data={listOustandingDevicePost}
+            category={{ name: "device", id: 5 }}
+            title="Top 10 Most Devices"
+          />
+          <SlideCard
+            category={{ name: "makeup", id: 4 }}
+            data={listOustandingMakeupPost}
+            title="Top 10 Most Makeups"
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };

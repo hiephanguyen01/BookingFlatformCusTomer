@@ -1,5 +1,5 @@
-import { CheckCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Input, Row } from "antd";
+import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
+import { Button, Col, Divider, Grid, Input, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,10 @@ import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import toastMessage from "../ToastMessage";
 import "./order.scss";
 
+const { useBreakpoint } = Grid;
+
 const Index = ({ linkTo = "" }) => {
+  const screens = useBreakpoint();
   const socket = useSelector((state) => state.userReducer.socket);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -80,9 +83,9 @@ const Index = ({ linkTo = "" }) => {
       .add(studioDetail?.MinutesCloseDefault, "m"),
   });
   useEffect(() => {
-    if (chooseServiceList.length <= 0) {
-      navigate(`${location.pathname.split("/order")[0]}`);
-    }
+    // if (chooseServiceList.length <= 0) {
+    //   navigate(`${location.pathname.split("/order")[0]}`);
+    // }
     setInfoUser(user);
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
@@ -145,12 +148,12 @@ const Index = ({ linkTo = "" }) => {
     switch (filterService?.OrderByTime) {
       case 1:
         const priceByHour = chooseServiceList?.reduce(
-          (total, service) =>
+          (total, item) =>
             total +
-            service?.PriceByHour *
+            item.prices[0].PriceByHour *
               calTime(
-                filterService?.OrderByTimeFrom,
-                filterService?.OrderByTimeTo
+                filterService.OrderByTimeFrom,
+                filterService.OrderByTimeTo
               ),
           0
         );
@@ -168,13 +171,9 @@ const Index = ({ linkTo = "" }) => {
       case 0:
         const priceByDate =
           chooseServiceList?.reduce(
-            (total, service) =>
+            (total, item) =>
               total +
-              service.PriceByDate *
-                calDate(
-                  filterService?.OrderByDateFrom,
-                  filterService?.OrderByDateTo
-                ),
+              item.prices.reduce((sum, cur) => sum + cur.PriceByDate, 0),
             0
           ) || 0;
         if (choosePromotionUser?.TypeReduce === 1) {
@@ -332,11 +331,13 @@ const Index = ({ linkTo = "" }) => {
   return (
     <div className="order_container">
       <Row
+        gutter={[10, 0]}
         style={{
-          maxWidth: "1300px",
           margin: "auto",
-        }}>
-        <Col lg={9} sm={24}>
+          maxWidth: "1300px",
+        }}
+      >
+        <Col lg={9} sm={24} className="col">
           <div className="right_col">
             <div className="text-title">Bạn đã chọn</div>
             <div className="text-description">
@@ -355,7 +356,8 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="d-flex"
-                      style={{ height: "88px", marginRight: "0.5rem" }}>
+                      style={{ height: "88px", marginRight: "0.5rem" }}
+                    >
                       <img
                         src={`${
                           item?.Image?.length > 0
@@ -390,7 +392,8 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="text-title"
-                      style={{ marginBottom: "16px" }}>
+                      style={{ marginBottom: "16px" }}
+                    >
                       Khung giờ bạn muốn đặt
                     </div>
                     <SelectTimeOption disabled={true} />
@@ -411,7 +414,7 @@ const Index = ({ linkTo = "" }) => {
                 </p>
               )}
             </div>
-            <div className="border-bottom">
+            <div className={`${!screens?.xs && "border-bottom"}`}>
               <div className="text-title" style={{ marginBottom: "8px" }}>
                 Gửi lời nhắn
               </div>
@@ -426,98 +429,121 @@ const Index = ({ linkTo = "" }) => {
                 onResize={false}
               />
             </div>
-            <div
-              style={{
-                marginBottom: "0.5rem",
-                backgroundColor: "#FFFFFF",
-              }}>
+            {!screens?.xs && (
               <div
-                className="d-flex justify-content-between"
-                style={{ marginBottom: "28px" }}>
-                <div>Chọn mã khuyến mãi</div>
+                style={{
+                  marginBottom: "0.5rem",
+                  backgroundColor: "#FFFFFF",
+                }}
+              >
                 <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => onClickModal()}>
-                  Mã khuyến mãi
+                  className="d-flex justify-content-between"
+                  style={{ marginBottom: "28px" }}
+                >
+                  <div>Chọn mã khuyến mãi</div>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => onClickModal()}
+                  >
+                    Mã khuyến mãi
+                  </div>
+                </div>
+                <div
+                  style={{ backgroundColor: "#E3FAF4", padding: "16px 15px" }}
+                >
+                  <div className="d-flex justify-content-between">
+                    <div className="text-middle" style={{ color: "#222222" }}>
+                      Đã chọn {chooseServiceList.length} dịch vụ
+                    </div>
+                    <div
+                      className="text-description "
+                      style={{
+                        textDecoration: "line-through",
+                        color: "#828282",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      {filterService?.OrderByTime === 1 &&
+                        `${convertPrice(
+                          chooseServiceList?.reduce(
+                            (total, item) =>
+                              total +
+                              item?.prices[0].PriceByHour *
+                                calTime(
+                                  filterService.OrderByTimeFrom,
+                                  filterService.OrderByTimeTo
+                                ),
+                            0
+                          )
+                        )}đ`}
+                      {filterService?.OrderByTime === 0 &&
+                        `${convertPrice(
+                          chooseServiceList?.reduce(
+                            (total, item) =>
+                              total +
+                              item.prices.reduce(
+                                (sum, cur) => sum + cur.PriceByDate,
+                                0
+                              ),
+                            0
+                          )
+                        )}đ`}
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    <div
+                      className="text-description"
+                      style={{ color: "#616161" }}
+                    >
+                      Bao gồm 50.000đ thuế và phí
+                    </div>
+                    <div
+                      className=""
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        lineHeight: "28px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {convertPrice(calculatePriceUsePromo())}đ
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div style={{ backgroundColor: "#E3FAF4", padding: "16px 15px" }}>
-                <div className="d-flex justify-content-between">
-                  <div className="text-middle" style={{ color: "#222222" }}>
-                    Đã chọn {chooseServiceList.length} dịch vụ
-                  </div>
-                  <div
-                    className="text-description "
-                    style={{
-                      textDecoration: "line-through",
-                      color: "#828282",
-                      marginBottom: "12px",
-                    }}>
-                    {filterService?.OrderByTime === 1 &&
-                      `${convertPrice(
-                        chooseServiceList?.reduce(
-                          (total, service) =>
-                            total +
-                            service.PriceByHour *
-                              calTime(
-                                filterService?.OrderByTimeFrom,
-                                filterService?.OrderByTimeTo
-                              ),
-                          0
-                        )
-                      )}đ`}
-                    {filterService?.OrderByTime === 0 &&
-                      `${convertPrice(
-                        chooseServiceList?.reduce(
-                          (total, service) =>
-                            total +
-                            service.PriceByDate *
-                              calDate(
-                                filterService?.OrderByDateFrom,
-                                filterService?.OrderByDateTo
-                              ),
-                          0
-                        )
-                      )}đ`}
-                  </div>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <div
-                    className="text-description"
-                    style={{ color: "#616161" }}>
-                    Bao gồm 50.000đ thuế và phí
-                  </div>
-                  <div
-                    className=""
-                    style={{
-                      color: "#E22828",
-                      fontSize: "20px",
-                      lineHeight: "28px",
-                      fontWeight: "700",
-                    }}>
-                    {convertPrice(calculatePriceUsePromo())}đ
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </Col>
-        <Col lg={15} sm={24} style={{ padding: "0 1rem" }}>
+        <Col lg={15} sm={24} xs={24} className="col">
           <div
             style={{
               padding: "25px 25px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}>
-            <div
-              className="text-title"
-              style={{
-                fontSize: "22px",
-                lineHeight: "30px",
-                marginBottom: "0.25rem",
-              }}>
-              Vui lòng điền thông tin của bạn
-            </div>
+            }}
+          >
+            {screens?.xs ? (
+              <div
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "400",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Thông tin liên hệ *
+              </div>
+            ) : (
+              <div
+                className="text-title"
+                style={{
+                  fontSize: "22px",
+                  lineHeight: "30px",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Vui lòng điền thông tin của bạn
+              </div>
+            )}
             <TextInput
               placeholder="Tên khách hàng"
               styleContainer={{ width: "100%" }}
@@ -572,56 +598,104 @@ const Index = ({ linkTo = "" }) => {
                   } catch (error) {
                     console.log(error);
                   }
-                }}>
+                }}
+                className={`${screens?.xs && "ms-5"}`}
+              >
                 Verify Email
               </Button>
             )}
           </div>
 
-          <div
-            className="d-flex justify-content-end"
-            style={{ marginTop: "35px" }}>
-            {infoUser?.IsActiveEmail &&
-            infoUser?.Email?.trim() === user?.Email?.trim() ? (
+          {!screens?.xs ? (
+            <div
+              className="d-flex justify-content-end"
+              style={{ marginTop: "35px" }}
+            >
+              {infoUser?.IsActiveEmail &&
+              infoUser?.Email?.trim() === user?.Email?.trim() ? (
+                <Button
+                  onClick={(e) => {
+                    handleOnClickOrder();
+                  }}
+                  type="primary"
+                  // disabled={Valid ? false : true}
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              ) : Valid ? (
+                <Button
+                  onClick={(e) => {
+                    handleOnClickOrder();
+                  }}
+                  type="primary"
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  disabled={true}
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="order-bottom">
+              <Row align="middle" justify="space-between">
+                <div className="text-medium-re" style={{ color: "#222222" }}>
+                  Mã khuyến mãi
+                </div>
+                <Row
+                  align="middle"
+                  className="text-medium-re"
+                  style={{ fontSize: "14px" }}
+                >
+                  2 mã khuyến mãi{" "}
+                  <RightOutlined
+                    className="ms-5"
+                    style={{ fontSize: "10px" }}
+                  />
+                </Row>
+              </Row>
+              <Divider className="my-12" />
+              <Row align="middle" justify="space-between" className="mb-8">
+                <div className="text-medium-se">Đã chọn 2 phòng</div>
+                <div
+                  className="text-medium-re"
+                  style={{ textDecoration: "line-through" }}
+                >
+                  {convertPrice(1800000)}
+                </div>
+              </Row>
+              <Row align="middle" justify="space-between" className="mb-10">
+                <div>Bao gồm 50.000 thuế và phí</div>
+                <h4 style={{ color: "#E22828" }}>{convertPrice(1500000)}</h4>
+              </Row>
               <Button
-                onClick={(e) => {
-                  handleOnClickOrder();
-                }}
-                type="primary"
-                // disabled={Valid ? false : true}
-                style={{
-                  borderRadius: "8px",
-                  height: "45px",
-                  width: "270px",
-                }}>
+                type={"primary"}
+                className="w-100 h-40px"
+                style={{ borderRadius: "8px" }}
+              >
                 Hoàn tất đặt
               </Button>
-            ) : Valid ? (
-              <Button
-                onClick={(e) => {
-                  handleOnClickOrder();
-                }}
-                type="primary"
-                style={{
-                  borderRadius: "8px",
-                  height: "45px",
-                  width: "270px",
-                }}>
-                Hoàn tất đặt
-              </Button>
-            ) : (
-              <Button
-                type="primary"
-                disabled={true}
-                style={{
-                  borderRadius: "8px",
-                  height: "45px",
-                  width: "270px",
-                }}>
-                Hoàn tất đặt
-              </Button>
-            )}
-          </div>
+            </div>
+          )}
         </Col>
       </Row>
     </div>

@@ -1,30 +1,36 @@
 .AccountInfo {
-  .ant-input-affix-wrapper > input.ant-input {
+  .ant-input-affix-wrapper>input.ant-input {
     padding: 0;
     border: none;
     outline: none;
     background-color: #f4f4f4 !important;
   }
+
   background-color: #ffffff;
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.04);
   border-radius: 8px;
   padding: 28px 37px;
+
   &__first {
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid #cacaca;
+
     &__img {
       width: 64px;
       height: 64px;
       border-radius: 50%;
       background-color: #e7e7e7;
       overflow: hidden;
+      margin-left: 40px;
     }
+
     &__choose-pic {
       cursor: pointer;
       border: 1px solid #e7e7e7;
       border-radius: 4px;
       position: relative;
+
       &__button {
         opacity: 0;
         top: 0;
@@ -35,53 +41,68 @@
       }
     }
   }
+
+  &__second {
+    border-bottom: 1px solid #CACACA;
+    padding-bottom: 1rem;
+  }
+
   &__social {
     font-weight: 600;
     font-size: 18px;
     line-height: 25px;
     margin-bottom: 22px;
+
     &__itm {
       font-weight: 400;
       font-size: 18px;
       line-height: 25px;
     }
   }
+
   &__delete {
     font-weight: 600;
     font-size: 18px;
     line-height: 25px;
     margin-bottom: 11px;
+
     &__modal {
       display: flex;
       flex-direction: column;
+
       &__header {
         font-weight: 700;
         font-size: 20px;
         line-height: 50px;
       }
+
       &__content {
         font-weight: 400;
         font-size: 18px !important;
         margin-top: 10px;
         line-height: 25px;
       }
+
       &__group__btn {
         width: 100%;
         display: flex;
         justify-content: flex-end;
         margin-top: 40px;
         margin-bottom: 20px;
-        & > button {
+
+        &>button {
           padding: 10px 40px;
           border-radius: 6px;
           border: none;
           font-weight: 700;
           font-size: 16px;
           line-height: 19px;
+
           &:hover {
             cursor: pointer;
           }
         }
+
         &__cancel {
           margin-right: 10px;
           color: #616161;
@@ -93,9 +114,11 @@
         }
       }
     }
+
     &__container {
       border-bottom: 1px solid #cacaca;
       padding-bottom: 2rem;
+
       &__content {
         font-weight: 400;
         font-size: 16px;
@@ -103,10 +126,12 @@
         color: #222222;
         margin-bottom: 10px;
       }
+
       &__button {
         box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.04) !important;
         border-radius: 8px !important;
         height: 45px !important;
+
         &__content {
           font-weight: 700;
           font-size: 14px;
@@ -116,6 +141,7 @@
       }
     }
   }
+
   &__save {
     border-radius: 8px !important;
     height: 45px !important;
@@ -123,5 +149,43 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .AccountInfo {
+    padding: 24px 0 !important;
+
+    &__first {
+      margin-bottom: 0 !important;
+      border-bottom: none !important;
+      padding: 0 18px 16px;
+
+      &__img {
+        margin: 0 !important;
+        margin-bottom: 10px !important;
+      }
+    }
+
+    &__second {
+      padding: 0 18px 16px !important;
+      border-bottom: 0;
+
+    }
+
+
+
+    &__delete {
+      &__container {
+        border-bottom: none;
+        padding-bottom: 1rem;
+
+        &__button {
+          width: 100%;
+          margin-top: 10px;
+        }
+      }
+    }
+
   }
 }

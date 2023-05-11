@@ -3,7 +3,7 @@
 .confirm_order_container {
   width: #{"min(100% - 1em, 650px)"};
   margin-inline: auto;
-  padding: 41px 24px;
+  padding: 40px 24px;
   background-color: #fff;
 
   .confirm_title {
@@ -96,4 +96,15 @@
 .disable-checkout {
   pointer-events: none;
   filter: grayscale(0.6);
+}
+
+@media (max-width: 576px) {
+  .confirm_order_container {
+    width: 100%;
+    padding: 0 10px 40px;
+
+    .text-clipboard {
+      font-size: 15px !important;
+    }
+  }
 }

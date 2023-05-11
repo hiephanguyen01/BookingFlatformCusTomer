@@ -1,14 +1,28 @@
 import {
   CheckCircleOutlined,
+  ExclamationCircleOutlined,
   HeartFilled,
   HeartOutlined,
+  HomeOutlined,
   LoadingOutlined,
   MoreOutlined,
+  ShareAltOutlined,
   ShoppingCartOutlined,
   TeamOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Carousel, Image, Popover, Rate } from "antd";
+import {
+  Button,
+  Carousel,
+  Col,
+  Divider,
+  Grid,
+  Image,
+  Popover,
+  Rate,
+  Row,
+  Typography,
+} from "antd";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
@@ -19,7 +33,6 @@ import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-// import { VerifyOtp } from "../../components/Modal/verifyOtp/VerifyOtp";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
@@ -53,6 +66,13 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
+import BackNav from "../../components/BackNav/BackNav";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+// import required modules
+import { Autoplay, Pagination } from "swiper";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -61,11 +81,17 @@ const COLUMN = [
 ];
 const cx = classNames.bind(styles);
 
+const { useBreakpoint } = Grid;
+
+const { Paragraph } = Typography;
+
 export const StudioDetail = () => {
+  const screens = useBreakpoint();
+
   const [visible, setVisible] = useState(false);
 
   const { id } = useParams();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -82,6 +108,8 @@ export const StudioDetail = () => {
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
       ? 1
       : undefined;
+
+  const [open, setOpen] = useState(false);
 
   // const filter_promo = promotionCode
   //   ?.filter((item) => item.SaleCode.DateTimeExpire > new Date().toISOString())
@@ -128,6 +156,52 @@ export const StudioDetail = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
+  const priceService = (arr = [], OrderByTime) => {
+    
+
+    if (arr.length < 1) return null;
+    const areAllEqual = arr.every(
+      (num) =>
+        (OrderByTime ? num.PriceByHour : num.PriceByDate) ==
+        (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
+    );
+    
+    if (areAllEqual) {
+      return OrderByTime
+        ? arr[0].PriceByHour.toLocaleString("it-IT", {
+            style: "currency",
+            currency: "VND",
+          })
+        : arr[0].PriceByDate.toLocaleString("it-IT", {
+            style: "currency",
+            currency: "VND",
+          });
+    } else {
+      const result = arr.reduce(
+        (acc, curr) => {
+          const id = OrderByTime ? curr.PriceByHour : curr.PriceByDate;
+          if (id < acc.min) {
+            acc.min = id;
+          } else if (id > acc.max) {
+            acc.max = id;
+          }
+          return acc;
+        },
+        {
+          min: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+          max: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+        }
+      );
+      return `
+       ${result?.min?.toLocaleString("it-IT", {
+         style: "currency",
+         currency: "VND",
+       })} - ${result?.max?.toLocaleString("it-IT", {
+        style: "currency",
+        currency: "VND",
+      })}`;
+    }
+  };
   const handleReport = () => {
     dispatch({
       type: SHOW_MODAL,
@@ -279,7 +353,11 @@ export const StudioDetail = () => {
             <div style={{ marginTop: "5px" }}>
               <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
               <p
-                style={{ fontWeight: 400, fontSize: "16px", color: "#222222" }}
+                style={{
+                  fontWeight: 400,
+                  fontSize: "16px",
+                  color: "#222222",
+                }}
               >
                 {data?.Description}
               </p>
@@ -463,6 +541,7 @@ export const StudioDetail = () => {
       dispatch(getLikeStudioPostAction(id, cate, currentUser?.id));
     }
   };
+
   return (
     <>
       <MetaDecorator
@@ -493,106 +572,768 @@ export const StudioDetail = () => {
         </div>
       ) : (
         <div className="container_detail">
-          <div className={cx("wrapper")}>
-            <div className={cx("studioDetail")}>
-              <div className={cx("box1")}>
-                <div className={cx("top")}>
-                  <div className={cx("title")}>
-                    <h3>{studioDetail?.data?.Name} </h3>
-                    <CheckCircleOutlined
-                      style={{ fontSize: "20px", color: "#03AC84" }}
-                    />
-                  </div>
-                  <div className={cx("icons")}>
-                    <PopUpSignIn
-                      onClick={(e) => {
-                        e.stopPropagation();
+          {screens?.xs && (
+            <BackNav
+              to={state?.pathname}
+              icon={
+                <Popover
+                  placement="bottomRight"
+                  content={
+                    <Row
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                        padding: "10px",
                       }}
                     >
-                      {studioDetail?.data?.UsersLiked ? (
-                        <HeartFilled
-                          onClick={handleChangeLike}
-                          className={cx("item")}
-                        />
-                      ) : (
-                        <HeartOutlined
-                          onClick={handleChangeLike}
-                          className={cx("item")}
-                        />
-                      )}
-                    </PopUpSignIn>
-                    <Popover
-                      placement="bottomRight"
-                      content={
+                      <Col span={24}>
                         <div
-                          onClick={() => handleReport()}
                           style={{
                             display: "flex",
-                            flexDirection: "column",
+                            alignItems: "center",
                             gap: "10px",
-                            padding: "10px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            navigate("/home");
                           }}
                         >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "10px",
-                              cursor: "pointer",
-                            }}
+                          <HomeOutlined style={{ fontSize: "20px" }} />
+                          <span
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
                           >
-                            <WarningOutlined style={{ fontSize: "20px" }} />
-                            <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
-                              Báo cáo
-                            </span>
-                          </div>
+                            Trở về trang chủ
+                          </span>
                         </div>
-                      }
-                      trigger="click"
+                      </Col>{" "}
+                      <Col span={24}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            handleReport();
+                            setOpen(false);
+                          }}
+                        >
+                          <ExclamationCircleOutlined
+                            style={{ fontSize: "20px" }}
+                          />
+                          <span
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
+                            Báo cáo
+                          </span>
+                        </div>
+                      </Col>{" "}
+                      <Col span={24}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => setOpen(false)}
+                        >
+                          <ShareAltOutlined style={{ fontSize: "20px" }} />
+                          <span
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
+                            Chia sẻ
+                          </span>
+                        </div>
+                      </Col>
+                    </Row>
+                  }
+                  trigger="click"
+                  visible={open}
+                  onVisibleChange={(value) => setOpen(value)}
+                >
+                  <MoreOutlined className={cx("item")} />
+                </Popover>
+              }
+            />
+          )}
+          <div className={cx("wrapper")}>
+            <div className={cx("studioDetail")}>
+              {screens?.xs ? (
+                <div>
+                  <Swiper
+                    pagination={{
+                      dynamicBullets: true,
+                    }}
+                    modules={[Pagination]}
+                    className={cx("swiper-slide-detail")}
+                  >
+                    {studioDetail?.data?.Image.map((item) => (
+                      <SwiperSlide>
+                        <img src={convertImage(item)} alt="" />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                  <div className={cx("box1")}>
+                    <div
+                      className={cx(
+                        "title",
+                        "d-flex justify-content-start align-items-center"
+                      )}
                     >
-                      <MoreOutlined className={cx("item")} />
-                    </Popover>
+                      <h4>{studioDetail?.data?.Name} </h4>
+                      <CheckCircleOutlined
+                        style={{ fontSize: "20px", color: "#03AC84" }}
+                      />
+                    </div>
+                    <div className={cx("address")}>
+                      <img src={images.address} alt="sa" />
+                      <span>{studioDetail?.data?.Address}</span>
+                    </div>
+                    <Row justify="space-between">
+                      <div className={cx("rate")}>
+                        <Rate
+                          disabled
+                          allowHalf
+                          value={studioDetail?.data?.TotalRate}
+                        ></Rate>
+                        <span>{studioDetail?.data?.TotalRate}</span>
+                        <span
+                          className={cx("number-order")}
+                          style={{ fontSize: "15px" }}
+                        >
+                          {studioDetail?.data?.BookingCount} đã đặt{" "}
+                        </span>
+                      </div>
+                      <PopUpSignIn
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        {studioDetail?.data?.UsersLiked ? (
+                          <HeartFilled
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        ) : (
+                          <HeartOutlined
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        )}
+                      </PopUpSignIn>
+                    </Row>
                   </div>
                 </div>
-                <div className={cx("address")}>
-                  <img src={images.address} alt="sa" />
-                  <span>{studioDetail?.data?.Address}</span>
-                </div>
-                <div className={cx("rate")}>
-                  <Rate
-                    disabled
-                    allowHalf
-                    value={studioDetail?.data?.TotalRate}
-                  ></Rate>
-                  <span>{studioDetail?.data?.TotalRate}</span>
-                  <span
-                    className={cx("number-order")}
-                    style={{ fontSize: "15px" }}
-                  >
-                    {studioDetail?.data?.BookingCount} đã đặt{" "}
-                  </span>
-                </div>
+              ) : (
+                <div className={cx("box1")}>
+                  <div className={cx("top")}>
+                    <div className={cx("title")}>
+                      <h3>{studioDetail?.data?.Name} </h3>
+                      <CheckCircleOutlined
+                        style={{ fontSize: "20px", color: "#03AC84" }}
+                      />
+                    </div>
+                    <div className={cx("icons")}>
+                      <PopUpSignIn
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        {studioDetail?.data?.UsersLiked ? (
+                          <HeartFilled
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        ) : (
+                          <HeartOutlined
+                            onClick={handleChangeLike}
+                            className={cx("item")}
+                          />
+                        )}
+                      </PopUpSignIn>
+                      <Popover
+                        placement="bottomRight"
+                        content={
+                          <div
+                            onClick={() => handleReport()}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                              padding: "10px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <WarningOutlined style={{ fontSize: "20px" }} />
+                              <span
+                                style={{ fontSize: "18px", fontWeight: "bold" }}
+                              >
+                                Báo cáo
+                              </span>
+                            </div>
+                          </div>
+                        }
+                        trigger="click"
+                      >
+                        <MoreOutlined className={cx("item")} />
+                      </Popover>
+                    </div>
+                  </div>
+                  <div className={cx("address")}>
+                    <img src={images.address} alt="sa" />
+                    <span>{studioDetail?.data?.Address}</span>
+                  </div>
+                  <div className={cx("rate")}>
+                    <Rate
+                      disabled
+                      allowHalf
+                      value={studioDetail?.data?.TotalRate}
+                    ></Rate>
+                    <span>{studioDetail?.data?.TotalRate}</span>
+                    <span
+                      className={cx("number-order")}
+                      style={{ fontSize: "15px" }}
+                    >
+                      {studioDetail?.data?.BookingCount} đã đặt{" "}
+                    </span>
+                  </div>
 
-                <ImagePost data={studioDetail?.data?.Image} />
-              </div>
+                  <ImagePost data={studioDetail?.data?.Image} />
+                </div>
+              )}
               <div className={cx("box2")}>
                 <div className={cx("left")}>
                   <div className={cx("description")}>
-                    <ReadMoreDesc title="Chi tiết sản phẩm">
+                    <ReadMoreDesc title="Mô tả">
                       {studioDetail?.data?.Description}
                     </ReadMoreDesc>
                   </div>
                   <div className={cx("sale")}>
                     <PromotionList />
                   </div>
-                  {studioDetail && (
-                    <div className={cx("")}>
-                      <Table column={COLUMN} row={ROW(studioDetail.service)} />
+                  <Col
+                    lg={0}
+                    md={0}
+                    sm={0}
+                    xs={24}
+                    className={cx("map-mobile")}
+                  >
+                    <div className={cx("map")}>
+                      <h3>Xem trên bản đồ</h3>
+                      <div className={cx("address")}>
+                        <img src={images.address} alt="" />
+                        <span>{studioDetail?.data?.Address}</span>
+                      </div>
+                      <div className={cx("mapouter")}>
+                        <div className={cx("gmap_canvas")}>
+                          <iframe
+                            title="map"
+                            className={cx("gmap_iframe")}
+                            width="100%"
+                            frameBorder={0}
+                            scrolling="no"
+                            marginHeight={0}
+                            marginWidth={0}
+                            src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                          />
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  </Col>
+                  {studioDetail &&
+                    (screens?.xs ? (
+                      <Row className="w-100" gutter={[0, 15]}>
+                        {studioDetail?.service?.map((data) => (
+                          <Col
+                            span={24}
+                            className={cx("wrapper-service-mobile")}
+                          >
+                            <Swiper
+                              pagination={{
+                                dynamicBullets: true,
+                              }}
+                              modules={[Autoplay, Pagination]}
+                              className={cx("service-image-swiper")}
+                              autoplay={{
+                                delay: 2500,
+                                disableOnInteraction: false,
+                              }}
+                            >
+                              {data?.Image.map((item) => (
+                                <SwiperSlide>
+                                  <img
+                                    src={convertImage(item)}
+                                    alt=""
+                                    className="w-100 h-100"
+                                  />
+                                </SwiperSlide>
+                              ))}
+                            </Swiper>
+                            {/* <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Phòng</div>
+                              </Col>
+                              <Col span={16}>
+                                <div className={cx("service-name")}>
+                                  {data?.Name}
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Diện tích</div>
+                              </Col>
+                              <Col span={16}>
+                                <div className={cx("service-name")}>
+                                  {data?.Area}m2
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Phong cách</div>
+                              </Col>
+                              <Col span={16}>
+                                <div className={cx("service-name")}>
+                                  {data?.Style}
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row align="middle" className={cx("wrap")}>
+                              <Col span={8}>
+                                <div className={cx("label")}>Mô tả</div>
+                              </Col>
+                              <Col span={24}>
+                                <Paragraph
+                                  style={{ fontSize: "16px", marginBottom: 0 }}
+                                  ellipsis={{
+                                    rows: 4,
+                                    expandable: true,
+                                    suffix: "",
+                                    symbol: "Xem thêm",
+                                    onEllipsis: (ellipsis) => {},
+                                  }}
+                                  // title={`${article}--William Shakespeare`}
+                                >
+                                  {data?.Description}
+                                </Paragraph>
+                              </Col>
+                            </Row> */}
+                            <div
+                              className="mt-10"
+                              style={{
+                                color: "#222222",
+                                fontSize: "16px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <div>
+                                <img
+                                  alt=""
+                                  src={expand}
+                                  className="me-10 mb-2"
+                                  style={{ fontSize: "15px" }}
+                                />
+                                Kích thước
+                              </div>
+                              <ul className={cx("detail-description")}>
+                                <li>Diện tích {data?.Area}m2</li>
+                                <li>Chiều rộng {data?.Width}m</li>
+                                <li>Chiều dài {data?.Length}m</li>
+                                <li>Chiều cao trần {data?.Height}m</li>
+                              </ul>
+                            </div>
+                            <div
+                              className="mt-10"
+                              style={{
+                                color: "#222222",
+                                fontSize: "16px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <div>
+                                <img
+                                  alt=""
+                                  src={chair}
+                                  className="me-10 mb-2"
+                                  style={{ fontSize: "15px" }}
+                                />
+                                Thiết bị có sẵn
+                              </div>
+                              <ul className={cx("detail-description")}>
+                                {data?.HasBackground && (
+                                  <li>{data?.BackgroundDescription}</li>
+                                )}
+                                {data?.HasLamp && (
+                                  <li>{data?.LampDescription}</li>
+                                )}
+                                {data?.HasTable && <li>Bàn</li>}
+                                {data?.HasChair && <li>Ghế</li>}
+                                {data?.HasSofa && <li>Sofa</li>}
+                                {data?.HasFlower && <li>Hoa</li>}
+                                {data?.HasOtherDevice && (
+                                  <li>{data?.OtherDeviceDescription}</li>
+                                )}
+                              </ul>
+                            </div>
+                            <div
+                              className="mt-10"
+                              style={{
+                                color: "#222222",
+                                fontSize: "16px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <div>
+                                <img
+                                  alt=""
+                                  src={conditional}
+                                  className="me-10 mb-2"
+                                  style={{ fontSize: "15px" }}
+                                />
+                                Tiện ích đi kèm
+                              </div>
+                              <ul className={cx("detail-description")}>
+                                {data?.HasAirConditioner && <li>Máy lạnh</li>}
+                                {data?.HasFan && <li>Quạt</li>}
+                                {data?.HasDressingRoom && (
+                                  <li>Phòng thay đồ riêng</li>
+                                )}
+                                {data?.HasWC && <li>Nhà vệ sinh</li>}
+                                {data?.HasCamera && <li>Camera</li>}
+                                {data?.HasWifi && <li>Wifi</li>}
+                                {data?.HasMotorBikeParking && (
+                                  <li>Chổ để xe máy</li>
+                                )}
+                                {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
+                                {data?.HasSupporter && <li>Người hỗ trợ</li>}
+                              </ul>
+                            </div>
+                            <div
+                              className="mt-10"
+                              style={{
+                                color: "#222222",
+                                fontSize: "16px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              <div>
+                                <TeamOutlined
+                                  className="me-10 mb-2"
+                                  style={{ fontSize: "15px" }}
+                                />
+                                Số lượng khách
+                              </div>
+                              <ul className={cx("detail-description")}>
+                                <li>
+                                  Số lượng khách tối đa: {data?.MaximumCustomer}{" "}
+                                  người
+                                </li>
+                                <li>
+                                  Phụ thu: {convertPrice(data?.Surcharge)}{" "}
+                                  VND/người
+                                </li>
+                              </ul>
+                            </div>
+                            <Divider style={{ margin: "10px 0" }} />
+                            <Row>
+                              <Col span={12}>
+                                <h5>Chọn thời gian</h5>
+                              </Col>
+                              <Col span={24}>
+                                <SelectTimeOptionService service={data} />
+                              </Col>
+                            </Row>
+                            <Divider style={{ margin: "0 0 20px" }} />
+                            <Row justify="end">
+                              {chooseServiceList.find(
+                                (item) => item?.id === data?.id
+                              ) ? (
+                                <>
+                                  <Col span={24} style={{ textAlign: "end" }}>
+                                    <div>Giá cho thời gian bạn đã chọn</div>
+                                  </Col>{" "}
+                                  <Col span={24} className="mb-10">
+                                    <Row align="middle" justify="end">
+                                      <div
+                                        className="me-10"
+                                        style={{ textAlign: "end" }}
+                                      >
+                                        {chooseServiceList?.length > 0 && (
+                                          <span
+                                            style={{
+                                              textDecoration: "line-through",
+                                              fontSize: " 16px",
+                                              color: "#828282",
+                                            }}
+                                          >
+                                            {filterService?.OrderByTime === 1 &&
+                                              `${convertPrice(
+                                                chooseServiceList?.reduce(
+                                                  (total, item) =>
+                                                    total +
+                                                    item.PriceByHour *
+                                                      calTime(
+                                                        filterService?.OrderByTimeFrom,
+                                                        filterService?.OrderByTimeTo
+                                                      ),
+                                                  0
+                                                )
+                                              )}đ`}
+                                            {filterService?.OrderByTime === 0 &&
+                                              `${convertPrice(
+                                                chooseServiceList?.reduce(
+                                                  (total, item) =>
+                                                    total +
+                                                    item.PriceByDate *
+                                                      calDate(
+                                                        filterService?.OrderByDateFrom,
+                                                        filterService?.OrderByDateTo
+                                                      ),
+                                                  0
+                                                )
+                                              )}đ`}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div
+                                        style={{
+                                          color: "#E22828",
+                                          fontSize: "20px",
+                                          fontWeight: "700",
+                                        }}
+                                      >
+                                        {filterService?.OrderByTime === 1 &&
+                                          `${convertPrice(
+                                            chooseServiceList?.reduce(
+                                              (total, item) =>
+                                                total +
+                                                item.PriceByHour *
+                                                  calTime(
+                                                    filterService.OrderByTimeFrom,
+                                                    filterService.OrderByTimeTo
+                                                  ),
+                                              0
+                                            )
+                                          )}đ`}
+                                        {filterService?.OrderByTime === 0 &&
+                                          `${convertPrice(
+                                            chooseServiceList?.reduce(
+                                              (total, item) =>
+                                                total +
+                                                item.PriceByDate *
+                                                  calDate(
+                                                    filterService.OrderByDateFrom,
+                                                    filterService.OrderByDateTo
+                                                  ),
+                                              0
+                                            )
+                                          )}đ`}
+                                      </div>
+                                      <span>Bao gồm 50.000đ thuế và phí</span>
+                                    </Row>
+                                  </Col>
+                                </>
+                              ) : (
+                                <>
+                                  {listTimeSelected.length > 0 &&
+                                    listTimeSelected?.find(
+                                      (item) => item.id === data?.id
+                                    ) && (
+                                      <>
+                                        <Col
+                                          span={24}
+                                          style={{ textAlign: "end" }}
+                                        >
+                                          <div>
+                                            Giá cho thời gian bạn đã chọn
+                                          </div>
+                                        </Col>{" "}
+                                        <div
+                                          className="mb-20"
+                                          style={{ textAlign: "end" }}
+                                        >
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              gap: "10px",
+                                              alignItems: "center",
+                                              flexWrap: "wrap",
+                                              justifyContent: "end",
+                                            }}
+                                          >
+                                            <span
+                                              style={{
+                                                color: "#828282",
+                                                textDecoration: "line-through",
+                                                fontSize: "16px",
+                                                fontWeight: "400",
+                                              }}
+                                            >
+                                              {listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.OrderByTime === 1 &&
+                                                convertPrice(
+                                                  data?.PriceByHour *
+                                                    calTime(
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeFrom,
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeTo
+                                                    )
+                                                )}
+                                              {listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.OrderByTime === 0 &&
+                                                convertPrice(
+                                                  data?.PriceByDate *
+                                                    calDate(
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByDateFrom,
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByDateTo
+                                                    )
+                                                )}
+                                              đ
+                                            </span>
+                                            <span
+                                              style={{
+                                                color: "#E22828",
+                                                fontSize: "20px",
+                                                fontWeight: "700",
+                                              }}
+                                            >
+                                              {listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.OrderByTime === 1 &&
+                                                convertPrice(
+                                                  data?.PriceByHour *
+                                                    calTime(
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeFrom,
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeTo
+                                                    )
+                                                )}
+                                              {listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.OrderByTime === 0 &&
+                                                convertPrice(
+                                                  data?.PriceByDate *
+                                                    calDate(
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByDateFrom,
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByDateTo
+                                                    )
+                                                )}
+                                              đ
+                                            </span>
+                                          </div>
+                                          <p
+                                            style={{
+                                              color: "#828282",
+                                              fontSize: "14px",
+                                              fontWeight: "400",
+                                            }}
+                                          >
+                                            {data?.PriceNote}
+                                          </p>
+                                          <span>
+                                            Bao gồm 50.000đ thuế và phí
+                                          </span>
+                                        </div>
+                                      </>
+                                    )}
+                                </>
+                              )}
+                            </Row>
+                            <Row>
+                              <Col span={24}>
+                                {chooseServiceList?.find(
+                                  (item) => item.id === data?.id
+                                ) ? (
+                                  <Button
+                                    type="default"
+                                    size="large"
+                                    onClick={() => {
+                                      dispatch({ type: DELETE_CHOOSE_SERVICE });
+                                      dispatch({
+                                        type: "SET_SELECT_TIME_ORDER",
+                                      });
+                                    }}
+                                    style={{
+                                      width: "100%",
+                                      color: "#000",
+                                      backgroundColor: "#E7E7E7",
+                                      border: "none",
 
+                                      borderRadius: "8px",
+                                      fontWeight: "700",
+                                      fontSize: "13px",
+                                      lineHeight: "19px",
+
+                                      textTransform: "uppercase",
+                                    }}
+                                  >
+                                    Bỏ chọn
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    onClick={() => handleChooseService(data)}
+                                    style={{
+                                      width: "100%",
+                                      borderRadius: "8px",
+                                      fontWeight: "700",
+                                      fontSize: "13px",
+
+                                      lineHeight: "19px",
+                                      textTransform: "uppercase",
+                                    }}
+                                    size="large"
+                                  >
+                                    Chọn
+                                  </Button>
+                                )}
+                              </Col>
+                            </Row>
+                          </Col>
+                        ))}
+                      </Row>
+                    ) : (
+                      <div className={cx("")}>
+                        <Table
+                          column={COLUMN}
+                          row={ROW(studioDetail.service)}
+                        />
+                      </div>
+                    ))}
                   <div className={cx("rating")}>
                     <CommentRating
                       data={studioDetail}
@@ -600,38 +1341,200 @@ export const StudioDetail = () => {
                     />
                   </div>
                 </div>
-                <div className={cx("right")}>
-                  <div className={cx("map")}>
-                    <h3>Xem trên bản đồ</h3>
-                    <div className={cx("address")}>
-                      <img src={images.address} alt="" />
-                      <span>{studioDetail?.data?.Address}</span>
-                    </div>
-                    <div className="mapouter">
-                      <div className="gmap_canvas">
-                        <iframe
-                          title="map"
-                          className="gmap_iframe"
-                          width="100%"
-                          frameBorder={0}
-                          scrolling="no"
-                          marginHeight={0}
-                          marginWidth={0}
-                          src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
-                        />
+                {screens?.xs ? (
+                  <>
+                    {chooseServiceList.length > 0 && (
+                      <div className={cx("right")}>
+                        <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                          <div className={cx("order")}>
+                            <div className={cx("item")}>
+                              <h3>Đã chọn {chooseServiceList?.length} phòng</h3>
+                              {chooseServiceList?.length > 0 && (
+                                <span
+                                  style={{
+                                    textDecoration: "line-through",
+                                    fontSize: " 16px",
+                                    color: "#828282",
+                                  }}
+                                >
+                                  {filterService?.OrderByTime === 1 &&
+                                    `${convertPrice(
+                                      chooseServiceList?.reduce(
+                                        (total, item) =>
+                                          total +
+                                          item.PriceByHour *
+                                            calTime(
+                                              filterService?.OrderByTimeFrom,
+                                              filterService?.OrderByTimeTo
+                                            ),
+                                        0
+                                      )
+                                    )}đ`}
+                                  {filterService?.OrderByTime === 0 &&
+                                    `${convertPrice(
+                                      chooseServiceList?.reduce(
+                                        (total, item) =>
+                                          total +
+                                          item.PriceByDate *
+                                            calDate(
+                                              filterService?.OrderByDateFrom,
+                                              filterService?.OrderByDateTo
+                                            ),
+                                        0
+                                      )
+                                    )}đ`}
+                                </span>
+                              )}
+                            </div>
+                            <div className={cx("item")}>
+                              <span className="mt-3">
+                                Bao gồm 50.000đ thuế và phí{" "}
+                              </span>
+                              <span
+                                style={{
+                                  color: "#E22828",
+                                  fontSize: "20px",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                {filterService?.OrderByTime === 1 &&
+                                  `${convertPrice(
+                                    chooseServiceList?.reduce(
+                                      (total, item) =>
+                                        total +
+                                        item.PriceByHour *
+                                          calTime(
+                                            filterService.OrderByTimeFrom,
+                                            filterService.OrderByTimeTo
+                                          ),
+                                      0
+                                    )
+                                  )}đ`}
+                                {filterService?.OrderByTime === 0 &&
+                                  `${convertPrice(
+                                    chooseServiceList?.reduce(
+                                      (total, item) =>
+                                        total +
+                                        item.PriceByDate *
+                                          calDate(
+                                            filterService.OrderByDateFrom,
+                                            filterService.OrderByDateTo
+                                          ),
+                                      0
+                                    )
+                                  )}đ`}
+                              </span>
+                            </div>
+                            <div className="w-100 d-flex justify-content-between mt-20">
+                              <Button
+                                className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                                disabled={
+                                  chooseServiceList?.length > 0 ? false : true
+                                }
+                                onClick={() =>
+                                  toastMessage(
+                                    "Chức năng này đang phát triển!",
+                                    "info",
+                                    1,
+                                    "",
+                                    {}
+                                  )
+                                }
+                              >
+                                <ShoppingCartOutlined />
+                                Thêm vào giỏ hàng
+                              </Button>
+                              <Button
+                                className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                                onClick={handleBook}
+                                disabled={
+                                  chooseServiceList.length > 0 &&
+                                  filterService.id > 0
+                                    ? false
+                                    : true
+                                }
+                              >
+                                Đặt ngay
+                              </Button>
+                            </div>
+                          </div>
+                        </ReactStickyBox>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className={cx("right")}>
+                    <div className={cx("map")}>
+                      <h3>Xem trên bản đồ</h3>
+                      <div className={cx("address")}>
+                        <img src={images.address} alt="" />
+                        <span>{studioDetail?.data?.Address}</span>
+                      </div>
+                      <div className="mapouter">
+                        <div className="gmap_canvas">
+                          <iframe
+                            title="map"
+                            className="gmap_iframe"
+                            width="100%"
+                            frameBorder={0}
+                            scrolling="no"
+                            marginHeight={0}
+                            marginWidth={0}
+                            src={`https://www.google.com/maps?q=${studioDetail?.data?.Latitude},${studioDetail?.data?.Longtitude}&t=&z=13&ie=UTF8&iwloc=B&output=embed`}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
-                    <div className={cx("order")}>
-                      <div className={cx("item")}>
-                        <h3>Đã chọn {chooseServiceList?.length} phòng</h3>
-                        {chooseServiceList?.length > 0 && (
+                    <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                      <div className={cx("order")}>
+                        <div className={cx("item")}>
+                          <h3>Đã chọn {chooseServiceList?.length} phòng</h3>
+                          {chooseServiceList?.length > 0 && (
+                            <span
+                              style={{
+                                textDecoration: "line-through",
+                                fontSize: " 16px",
+                                color: "#828282",
+                              }}
+                            >
+                              {filterService?.OrderByTime === 1 &&
+                                `${convertPrice(
+                                  chooseServiceList?.reduce(
+                                    (total, item) =>
+                                      total +
+                                      item.PriceByHour *
+                                        calTime(
+                                          filterService?.OrderByTimeFrom,
+                                          filterService?.OrderByTimeTo
+                                        ),
+                                    0
+                                  )
+                                )}đ`}
+                              {filterService?.OrderByTime === 0 &&
+                                `${convertPrice(
+                                  chooseServiceList?.reduce(
+                                    (total, item) =>
+                                      total +
+                                      item.PriceByDate *
+                                        calDate(
+                                          filterService?.OrderByDateFrom,
+                                          filterService?.OrderByDateTo
+                                        ),
+                                    0
+                                  )
+                                )}đ`}
+                            </span>
+                          )}
+                        </div>
+                        <div className={cx("item")}>
+                          <span className="mt-3">
+                            Bao gồm 50.000đ thuế và phí{" "}
+                          </span>
                           <span
                             style={{
-                              textDecoration: "line-through",
-                              fontSize: " 16px",
-                              color: "#828282",
+                              color: "#E22828",
+                              fontSize: "20px",
+                              fontWeight: "700",
                             }}
                           >
                             {filterService?.OrderByTime === 1 &&
@@ -641,8 +1544,8 @@ export const StudioDetail = () => {
                                     total +
                                     item.PriceByHour *
                                       calTime(
-                                        filterService?.OrderByTimeFrom,
-                                        filterService?.OrderByTimeTo
+                                        filterService.OrderByTimeFrom,
+                                        filterService.OrderByTimeTo
                                       ),
                                   0
                                 )
@@ -654,88 +1557,50 @@ export const StudioDetail = () => {
                                     total +
                                     item.PriceByDate *
                                       calDate(
-                                        filterService?.OrderByDateFrom,
-                                        filterService?.OrderByDateTo
+                                        filterService.OrderByDateFrom,
+                                        filterService.OrderByDateTo
                                       ),
                                   0
                                 )
                               )}đ`}
                           </span>
-                        )}
-                      </div>
-                      <div className={cx("item")}>
-                        <span className="mt-3">
-                          Bao gồm 50.000đ thuế và phí{" "}
-                        </span>
-                        <span
-                          style={{
-                            color: "#E22828",
-                            fontSize: "20px",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {filterService?.OrderByTime === 1 &&
-                            `${convertPrice(
-                              chooseServiceList?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByHour *
-                                    calTime(
-                                      filterService.OrderByTimeFrom,
-                                      filterService.OrderByTimeTo
-                                    ),
-                                0
+                        </div>
+                        <div className="w-100 d-flex justify-content-between mt-20">
+                          <Button
+                            className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                            disabled={
+                              chooseServiceList?.length > 0 ? false : true
+                            }
+                            onClick={() =>
+                              toastMessage(
+                                "Chức năng này đang phát triển!",
+                                "info",
+                                1,
+                                "",
+                                {}
                               )
-                            )}đ`}
-                          {filterService?.OrderByTime === 0 &&
-                            `${convertPrice(
-                              chooseServiceList?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByDate *
-                                    calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
-                                    ),
-                                0
-                              )
-                            )}đ`}
-                        </span>
+                            }
+                          >
+                            <ShoppingCartOutlined />
+                            Thêm vào giỏ hàng
+                          </Button>
+                          <Button
+                            className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                            onClick={handleBook}
+                            disabled={
+                              chooseServiceList.length > 0 &&
+                              filterService.id > 0
+                                ? false
+                                : true
+                            }
+                          >
+                            Đặt ngay
+                          </Button>
+                        </div>
                       </div>
-                      <div className="w-100 d-flex justify-content-between mt-20">
-                        <Button
-                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                          disabled={
-                            chooseServiceList?.length > 0 ? false : true
-                          }
-                          onClick={() =>
-                            toastMessage(
-                              "Chức năng này đang phát triển!",
-                              "info",
-                              1,
-                              "",
-                              {}
-                            )
-                          }
-                        >
-                          <ShoppingCartOutlined />
-                          Thêm vào giỏ hàng
-                        </Button>
-                        <Button
-                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                          onClick={handleBook}
-                          disabled={
-                            chooseServiceList.length > 0 && filterService.id > 0
-                              ? false
-                              : true
-                          }
-                        >
-                          Đặt ngay
-                        </Button>
-                      </div>
-                    </div>
-                  </ReactStickyBox>
-                </div>
+                    </ReactStickyBox>
+                  </div>
+                )}
               </div>
               {listStudioSimilar?.length > 1 && (
                 <SlideCard

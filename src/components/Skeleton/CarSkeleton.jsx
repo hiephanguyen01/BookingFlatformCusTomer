@@ -6,9 +6,10 @@ const CarSkeleton = () => {
     <div className="CarSkeleton">
       <div>
         <Skeleton.Button
+          className="image"
           block
           active
-          style={{ marginBottom: "10px", height: "140px" }}
+          style={{ marginBottom: "10px" }}
         />
         <Skeleton
           active

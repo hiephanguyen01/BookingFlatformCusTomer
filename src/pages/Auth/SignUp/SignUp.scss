@@ -1,4 +1,5 @@
 @import "../../../App.scss";
+
 .sign-up-button {
   border: none;
   background-color: #fff;
@@ -14,6 +15,8 @@
   color: $neutral-400;
   font-size: 20px;
   font-weight: 700;
+  margin-right: 30px;
+
   &:hover {
     transform: scale(1.03);
     cursor: pointer;
@@ -24,16 +27,18 @@
   display: flex;
   width: 100%;
   flex-direction: column;
-  height: 140px;
+  height: 110px;
   justify-content: space-between;
 }
+
 .facebook-button,
 .google-button {
   position: relative;
   border-radius: 10px;
-  padding: 15px 10px;
+  padding: 10px 10px;
   border: 1px solid $neutral-300;
   background-color: #fff;
+
   &:hover {
     transform: scale(1.01);
     cursor: pointer;
@@ -71,6 +76,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+
   .phone-zone-sign-up {
     margin-bottom: 40px;
     width: 100%;
@@ -80,23 +86,28 @@
     border-radius: 10px;
     margin-top: 15px;
     position: relative;
+
     input:focus {
       outline: none !important;
     }
+
     .code-vn-login {
       color: $neutral-500;
       padding: 0 5px;
     }
+
     .invalidPhone {
       position: absolute;
       bottom: -30px;
       right: 0px;
       color: $primary-700;
     }
+
     .input-phone {
       border: none;
       width: 100%;
     }
+
     .white-hide {
       padding: 20px;
       position: absolute;
@@ -104,6 +115,7 @@
       background-color: #fff;
       top: 5px;
     }
+
     .d-none {
       display: none;
     }
@@ -121,10 +133,12 @@
   background-color: $primary-700;
   border: none;
   border-radius: 8px;
+
   &:hover {
     cursor: pointer;
     transform: scale(1.02);
   }
+
   .loadingEffect {
     width: 20px;
     height: 10px;
@@ -140,13 +154,16 @@
   justify-content: center;
   font-size: 16px;
   font-weight: 400;
+
   .have-account-content {
     color: $neutral-500;
   }
+
   .have-account-button {
     padding-left: 5px;
 
     color: $primary-700;
+
     &:hover {
       color: $primary-500;
       cursor: pointer;
@@ -159,11 +176,13 @@
     display: none;
   }
 }
+
 @media only screen and (max-height: 800px) {
   .divine-login {
     margin-top: 30px;
     margin-bottom: 30px;
   }
+
   .confirm-sign-up {
     margin-top: 70px;
   }

@@ -5,7 +5,13 @@ import DaoPost from "../../../../components/DaoPost";
 import { getLikePostList } from "../../../../stores/actions/PostDaoAction";
 import { getSavedPostList } from "../../../../stores/actions/userAction";
 import "./postSaved.scss";
+import BackNav from "../../../../components/BackNav/BackNav";
+import { Grid } from "antd";
+
+const { useBreakpoint } = Grid;
+
 const PostSaved = () => {
+  const screens = useBreakpoint();
   const dispatch = useDispatch();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const { savedPostList } = useSelector((state) => state.userReducer);
@@ -45,7 +51,14 @@ const PostSaved = () => {
         </div>
       ) : (
         <>
-          <h4 className="PostSaved__header">Bài viết đã lưu</h4>
+          {screens?.xs ? (
+            <>
+              <BackNav title="Bài viết đã lưu" to="/home/user" />
+              <div style={{ height: "5px", backgroundColor: "#f6f6f6" }}></div>
+            </>
+          ) : (
+            <h4 className="PostSaved__header">Bài viết đã lưu</h4>
+          )}{" "}
           <div className="post-save-container">
             {savedPosts.map((itm, index) => (
               <div key={index} className="PostSaved__body">
