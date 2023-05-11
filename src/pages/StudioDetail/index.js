@@ -156,6 +156,52 @@ export const StudioDetail = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
+  const priceService = (arr = [], OrderByTime) => {
+    
+
+    if (arr.length < 1) return null;
+    const areAllEqual = arr.every(
+      (num) =>
+        (OrderByTime ? num.PriceByHour : num.PriceByDate) ==
+        (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
+    );
+    
+    if (areAllEqual) {
+      return OrderByTime
+        ? arr[0].PriceByHour.toLocaleString("it-IT", {
+            style: "currency",
+            currency: "VND",
+          })
+        : arr[0].PriceByDate.toLocaleString("it-IT", {
+            style: "currency",
+            currency: "VND",
+          });
+    } else {
+      const result = arr.reduce(
+        (acc, curr) => {
+          const id = OrderByTime ? curr.PriceByHour : curr.PriceByDate;
+          if (id < acc.min) {
+            acc.min = id;
+          } else if (id > acc.max) {
+            acc.max = id;
+          }
+          return acc;
+        },
+        {
+          min: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+          max: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+        }
+      );
+      return `
+       ${result?.min?.toLocaleString("it-IT", {
+         style: "currency",
+         currency: "VND",
+       })} - ${result?.max?.toLocaleString("it-IT", {
+        style: "currency",
+        currency: "VND",
+      })}`;
+    }
+  };
   const handleReport = () => {
     dispatch({
       type: SHOW_MODAL,
