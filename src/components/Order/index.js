@@ -453,7 +453,7 @@ const Index = ({ linkTo = "" }) => {
                 >
                   <div className="d-flex justify-content-between">
                     <div className="text-middle" style={{ color: "#222222" }}>
-                      Đã chọn {chooseServiceList.length} dịch vụ
+                      Đã chọn {chooseServiceList?.length} dịch vụ
                     </div>
                     <div
                       className="text-description "
