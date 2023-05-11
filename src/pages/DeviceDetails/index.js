@@ -540,6 +540,7 @@ const Index = () => {
                           to="shop"
                           state={{
                             pathname: `/home/device/${studioDetail?.data?.id}`,
+                            pathnameFilter: `${location?.state?.pathname}`,
                           }}
                         >
                           Xem shop
@@ -669,6 +670,7 @@ const Index = () => {
                         to="shop"
                         state={{
                           pathname: `/home/device/${studioDetail?.data?.id}`,
+                          pathnameFilter: `${location?.state?.pathname}`,
                         }}
                       >
                         Xem shop

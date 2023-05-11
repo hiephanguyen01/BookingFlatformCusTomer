@@ -71,6 +71,7 @@ const Index = () => {
                   className="background_transparent"
                   title="Shop"
                   to={location?.state?.pathname}
+                  state={{ pathname: location?.state?.pathnameFilter }}
                   icon={
                     <Popover
                       className="popover-header"

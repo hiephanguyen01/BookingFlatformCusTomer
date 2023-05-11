@@ -32,7 +32,6 @@ import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
-import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
 import { chooseServiceAction } from "../../stores/actions/OrderAction";
 import {
@@ -64,16 +63,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 // import required modules
 import { Autoplay, Pagination } from "swiper";
-import Paragraph from "antd/lib/skeleton/Paragraph";
-import { calDate, calTime } from "../../utils/calculate";
-import { DELETE_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 
 const cx = classNames.bind(styles);
-const SIZE = [
-  { id: "S", label: "S" },
-  { id: "M", label: "M" },
-  { id: "L", label: "L" },
-];
+
 const COLOR = [
   { id: "Trắng", label: "Trắng" },
   { id: "Đen", label: "Đen" },
@@ -154,8 +146,6 @@ const Index = () => {
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, [id]);
-
-  const handleChange = (value) => {};
 
   const handleChooseService = (data) => {
     if (chooseService.filter((item) => item.id === data.id).length > 0) {
@@ -939,6 +929,7 @@ const Index = () => {
                           to="shop"
                           state={{
                             pathname: `/home/clothes/${studioDetail?.data?.id}`,
+                            pathnameFilter: `${location?.state?.pathname}`,
                           }}
                         >
                           Xem shop
@@ -1083,6 +1074,7 @@ const Index = () => {
                         to="shop"
                         state={{
                           pathname: `/home/clothes/${studioDetail?.data?.id}`,
+                          pathnameFilter: `${location?.state?.pathname}`,
                         }}
                       >
                         Xem shop

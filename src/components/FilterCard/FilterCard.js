@@ -110,7 +110,7 @@ const FilterCard = ({ data, category }) => {
             // mobile
             <Col className="layout-mobile" xs={24}>
               <Row className="wrap" gutter={[10, 0]}>
-                <Col span={16}>
+                <Col span={16} className="h-100">
                   <img
                     className="image-large"
                     src={convertImage(newData?.Image[0])}

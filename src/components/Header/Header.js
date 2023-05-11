@@ -22,7 +22,7 @@ import {
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import DaoIcon from "../../assets/header/DaoIcon.svg";
 import { ReactComponent as LogoCpn } from "../../assets/header/Logo.svg";
 import Chat from "../../assets/header/chat.svg";
@@ -42,6 +42,7 @@ import "./Header.scss";
 import ModalBottom from "../ModalBottom/ModalBottom";
 import { convertPrice } from "../../utils/convert";
 import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
+import ChatModal from "../ChatModal/ChatModal";
 
 const { Option } = Select;
 
@@ -61,12 +62,15 @@ const Header = () => {
   const [chooseDistrict, setChooseDistrict] = useState([]);
   const [selectProvince, setSelectProvince] = useState(null);
   const [chooseCategory, setChooseCategory] = useState([]);
+  const [openModalChat, setOpenModalChat] = useState(false);
   const [choosePrice, setChoosePrice] = useState({});
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const img = convertImage(user?.Image);
   const filter = useSelector((state) => state.studioPostReducer.filter);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
   const screens = useBreakpoint();
   const categories = [
     {
@@ -766,7 +770,11 @@ const Header = () => {
               <Col lg={0} md={0} sm={0} xs={7}>
                 <Row align="middle" justify="space-around" className="h-100">
                   <Col>
-                    <Badge count={0} size="default">
+                    <Badge
+                      count={0}
+                      size="default"
+                      onClick={() => setOpenModalChat(true)}
+                    >
                       <img src={Chat} className="h-20px" alt="" />
                     </Badge>
                     <p>Chat</p>
@@ -879,6 +887,9 @@ const Header = () => {
           </Col>
         </Row>
       </div>
+      {screens?.xs && openModalChat && (
+        <ChatModal handleCancel={() => setOpenModalChat(false)} />
+      )}
     </div>
   );
 };

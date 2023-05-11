@@ -17,7 +17,7 @@ import {
   UserOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Grid, Popover, Rate, Row } from "antd";
+import { Button, Col, Divider, Grid, Popover, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -58,7 +58,10 @@ import SelectTimeOptionService from "../../components/SelectTimeOptionService/Se
 import ReactStickyBox from "react-sticky-box";
 import images from "../../assets/images";
 import classNames from "classnames/bind";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import {
+  DELETE_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE,
+} from "../../stores/types/OrderType";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -1067,9 +1070,374 @@ const Index = () => {
                   <PromotionList data={filter_promo} />
                 </div>
 
-                <div className={cx("")}>
-                  <Table column={COLUMN} row={ROW(studioDetail?.service)} />
-                </div>
+                {screens?.xs ? (
+                  <Row className="w-100" gutter={[0, 15]}>
+                    {studioDetail?.service?.map((data) => (
+                      <Col span={24} className={cx("wrapper-service-mobile")}>
+                        <Swiper
+                          pagination={{
+                            dynamicBullets: true,
+                          }}
+                          modules={[Autoplay, Pagination]}
+                          className={cx("service-image-swiper")}
+                          autoplay={{
+                            delay: 2500,
+                            disableOnInteraction: false,
+                          }}
+                        >
+                          {data?.Image.map((item) => (
+                            <SwiperSlide>
+                              <img
+                                src={convertImage(item)}
+                                alt=""
+                                className="w-100 h-100"
+                              />
+                            </SwiperSlide>
+                          ))}
+                        </Swiper>
+
+                        <div
+                          className="mt-10"
+                          style={{
+                            color: "#222222",
+                            fontSize: "16px",
+                            fontWeight: "700",
+                          }}
+                        >
+                          <div>
+                            <ClockCircleOutlined
+                              className="me-10 mb-2"
+                              style={{ fontSize: "15px" }}
+                            />
+                            Thời gian thực hiện tối đa
+                          </div>
+                          <div className="detail-description">
+                            <p>2 giờ</p>
+                          </div>
+                        </div>
+                        <div
+                          className="mt-10"
+                          style={{
+                            color: "#222222",
+                            fontSize: "16px",
+                            fontWeight: "700",
+                          }}
+                        >
+                          <div>
+                            <SkinOutlined
+                              className="me-10 mb-2"
+                              style={{ fontSize: "15px" }}
+                            />
+                            Số sản phẩm tối đa
+                          </div>
+                          <div className="detail-description">
+                            <p>3 sản phẩm</p>
+                          </div>
+                        </div>
+                        <Divider className="my-10" />
+                        <div
+                          className="mt-10"
+                          style={{
+                            color: "#222222",
+                            fontSize: "16px",
+                            fontWeight: "700",
+                          }}
+                        >
+                          <div>
+                            <StopOutlined
+                              className="me-10 mb-2"
+                              style={{ fontSize: "15px" }}
+                            />
+                            Dịch vụ CHƯA bao gồm:
+                          </div>
+                          <ul className="detail-description">
+                            <li>
+                              Phí đi theo để dặm phấn, chỉnh tóc, thay trang
+                              phục
+                            </li>
+                          </ul>
+                        </div>
+                        <Divider style={{ margin: "10px 0" }} />
+                        <Row>
+                          <Col span={12}>
+                            <h5>Chọn thời gian</h5>
+                          </Col>
+                          <Col span={24}>
+                            <SelectTimeOptionService service={data} />
+                          </Col>
+                        </Row>
+                        <Divider style={{ margin: "0 0 20px" }} />
+                        <Row justify="end">
+                          {chooseServiceList.find(
+                            (item) => item?.id === data?.id
+                          ) ? (
+                            <>
+                              <Col span={24} style={{ textAlign: "end" }}>
+                                <div>Giá cho thời gian bạn đã chọn</div>
+                              </Col>{" "}
+                              <Col span={24} className="mb-10">
+                                <Row align="middle" justify="end">
+                                  <div
+                                    className="me-10"
+                                    style={{ textAlign: "end" }}
+                                  >
+                                    {chooseServiceList?.length > 0 && (
+                                      <span
+                                        style={{
+                                          textDecoration: "line-through",
+                                          fontSize: " 16px",
+                                          color: "#828282",
+                                        }}
+                                      >
+                                        {filterService?.OrderByTime === 1 &&
+                                          `${convertPrice(
+                                            chooseServiceList?.reduce(
+                                              (total, item) =>
+                                                total +
+                                                item.PriceByHour *
+                                                  calTime(
+                                                    filterService?.OrderByTimeFrom,
+                                                    filterService?.OrderByTimeTo
+                                                  ),
+                                              0
+                                            )
+                                          )}đ`}
+                                        {filterService?.OrderByTime === 0 &&
+                                          `${convertPrice(
+                                            chooseServiceList?.reduce(
+                                              (total, item) =>
+                                                total +
+                                                item.PriceByDate *
+                                                  calDate(
+                                                    filterService?.OrderByDateFrom,
+                                                    filterService?.OrderByDateTo
+                                                  ),
+                                              0
+                                            )
+                                          )}đ`}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div
+                                    style={{
+                                      color: "#E22828",
+                                      fontSize: "20px",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {filterService?.OrderByTime === 1 &&
+                                      `${convertPrice(
+                                        chooseServiceList?.reduce(
+                                          (total, item) =>
+                                            total +
+                                            item.PriceByHour *
+                                              calTime(
+                                                filterService.OrderByTimeFrom,
+                                                filterService.OrderByTimeTo
+                                              ),
+                                          0
+                                        )
+                                      )}đ`}
+                                    {filterService?.OrderByTime === 0 &&
+                                      `${convertPrice(
+                                        chooseServiceList?.reduce(
+                                          (total, item) =>
+                                            total +
+                                            item.PriceByDate *
+                                              calDate(
+                                                filterService.OrderByDateFrom,
+                                                filterService.OrderByDateTo
+                                              ),
+                                          0
+                                        )
+                                      )}đ`}
+                                  </div>
+                                  <span>Bao gồm 50.000đ thuế và phí</span>
+                                </Row>
+                              </Col>
+                            </>
+                          ) : (
+                            <>
+                              {listTimeSelected.length > 0 &&
+                                listTimeSelected?.find(
+                                  (item) => item.id === data?.id
+                                ) && (
+                                  <>
+                                    <Col span={24} style={{ textAlign: "end" }}>
+                                      <div>Giá cho thời gian bạn đã chọn</div>
+                                    </Col>{" "}
+                                    <div
+                                      className="mb-20"
+                                      style={{ textAlign: "end" }}
+                                    >
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          gap: "10px",
+                                          alignItems: "center",
+                                          flexWrap: "wrap",
+                                          justifyContent: "end",
+                                        }}
+                                      >
+                                        <span
+                                          style={{
+                                            color: "#828282",
+                                            textDecoration: "line-through",
+                                            fontSize: "16px",
+                                            fontWeight: "400",
+                                          }}
+                                        >
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 1 &&
+                                            convertPrice(
+                                              data?.PriceByHour *
+                                                calTime(
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByTimeFrom,
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByTimeTo
+                                                )
+                                            )}
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 0 &&
+                                            convertPrice(
+                                              data?.PriceByDate *
+                                                calDate(
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByDateFrom,
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByDateTo
+                                                )
+                                            )}
+                                          đ
+                                        </span>
+                                        <span
+                                          style={{
+                                            color: "#E22828",
+                                            fontSize: "20px",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 1 &&
+                                            convertPrice(
+                                              data?.PriceByHour *
+                                                calTime(
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByTimeFrom,
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByTimeTo
+                                                )
+                                            )}
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 0 &&
+                                            convertPrice(
+                                              data?.PriceByDate *
+                                                calDate(
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByDateFrom,
+                                                  listTimeSelected?.find(
+                                                    (item) =>
+                                                      item.id === data?.id
+                                                  )?.OrderByDateTo
+                                                )
+                                            )}
+                                          đ
+                                        </span>
+                                      </div>
+                                      <p
+                                        style={{
+                                          color: "#828282",
+                                          fontSize: "14px",
+                                          fontWeight: "400",
+                                        }}
+                                      >
+                                        {data?.PriceNote}
+                                      </p>
+                                      <span>Bao gồm 50.000đ thuế và phí</span>
+                                    </div>
+                                  </>
+                                )}
+                            </>
+                          )}
+                        </Row>
+                        <Row>
+                          <Col span={24}>
+                            {chooseServiceList?.find(
+                              (item) => item.id === data?.id
+                            ) ? (
+                              <Button
+                                type="default"
+                                size="large"
+                                onClick={() => {
+                                  dispatch({
+                                    type: DELETE_CHOOSE_SERVICE,
+                                  });
+                                  dispatch({
+                                    type: "SET_SELECT_TIME_ORDER",
+                                  });
+                                }}
+                                style={{
+                                  width: "100%",
+                                  color: "#000",
+                                  backgroundColor: "#E7E7E7",
+                                  border: "none",
+
+                                  borderRadius: "8px",
+                                  fontWeight: "700",
+                                  fontSize: "13px",
+                                  lineHeight: "19px",
+
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                Bỏ chọn
+                              </Button>
+                            ) : (
+                              <Button
+                                onClick={() => handleChooseService(data)}
+                                style={{
+                                  width: "100%",
+                                  borderRadius: "8px",
+                                  fontWeight: "700",
+                                  fontSize: "13px",
+
+                                  lineHeight: "19px",
+                                  textTransform: "uppercase",
+                                }}
+                                size="large"
+                              >
+                                Chọn
+                              </Button>
+                            )}
+                          </Col>
+                        </Row>
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <div className={cx("")}>
+                    <Table column={COLUMN} row={ROW(studioDetail?.service)} />
+                  </div>
+                )}
 
                 <div className={cx("rating")}>
                   <CommentRating data={studioDetail} className="mb-43 mt-12" />
