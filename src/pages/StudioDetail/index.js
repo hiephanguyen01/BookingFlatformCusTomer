@@ -157,15 +157,13 @@ export const StudioDetail = () => {
   }, [id, dispatch, cate, currentUser]);
 
   const priceService = (arr = [], OrderByTime) => {
-    
-
     if (arr.length < 1) return null;
     const areAllEqual = arr.every(
       (num) =>
         (OrderByTime ? num.PriceByHour : num.PriceByDate) ==
         (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
     );
-    
+
     if (areAllEqual) {
       return OrderByTime
         ? arr[0].PriceByHour.toLocaleString("it-IT", {
@@ -230,8 +228,7 @@ export const StudioDetail = () => {
                 preview={{
                   visible: Boolean(visible === data.id),
                   onVisibleChange: (vis) => setVisible(vis),
-                }}
-              >
+                }}>
                 {data.Image.map((val) => (
                   <Image src={convertImage(val)} />
                 ))}
@@ -244,8 +241,7 @@ export const StudioDetail = () => {
                 fontSize: "16px",
                 fontWeight: "700",
                 textTransform: "uppercase",
-              }}
-            >
+              }}>
               {data?.Name}
             </div>
             <div
@@ -254,8 +250,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -278,8 +273,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -307,8 +301,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -336,8 +329,7 @@ export const StudioDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <TeamOutlined
                   className="me-10 mb-2"
@@ -357,8 +349,7 @@ export const StudioDetail = () => {
                   fontWeight: 400,
                   fontSize: "16px",
                   color: "#222222",
-                }}
-              >
+                }}>
                 {data?.Description}
               </p>
             </div>
@@ -395,15 +386,13 @@ export const StudioDetail = () => {
                     gap: "10px",
                     alignItems: "center",
                     flexWrap: "wrap",
-                  }}
-                >
+                  }}>
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
@@ -423,8 +412,7 @@ export const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}
-                  >
+                    }}>
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 1 &&
                       data?.PriceByHour?.toLocaleString("it-IT", {
@@ -444,8 +432,7 @@ export const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}
-                >
+                  }}>
                   {data?.PriceNote}
                 </p>
               </div>
@@ -471,8 +458,7 @@ export const StudioDetail = () => {
                     lineHeight: "19px",
 
                     textTransform: "uppercase",
-                  }}
-                >
+                  }}>
                   Bỏ chọn
                 </Button>
               ) : (
@@ -487,8 +473,7 @@ export const StudioDetail = () => {
                     lineHeight: "19px",
                     textTransform: "uppercase",
                   }}
-                  size="large"
-                >
+                  size="large">
                   Chọn
                 </Button>
               )}
@@ -556,8 +541,7 @@ export const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -565,8 +549,7 @@ export const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -585,8 +568,7 @@ export const StudioDetail = () => {
                         flexDirection: "column",
                         gap: "10px",
                         padding: "10px",
-                      }}
-                    >
+                      }}>
                       <Col span={24}>
                         <div
                           style={{
@@ -597,12 +579,10 @@ export const StudioDetail = () => {
                           }}
                           onClick={() => {
                             navigate("/home");
-                          }}
-                        >
+                          }}>
                           <HomeOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Trở về trang chủ
                           </span>
                         </div>
@@ -618,14 +598,12 @@ export const StudioDetail = () => {
                           onClick={() => {
                             handleReport();
                             setOpen(false);
-                          }}
-                        >
+                          }}>
                           <ExclamationCircleOutlined
                             style={{ fontSize: "20px" }}
                           />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Báo cáo
                           </span>
                         </div>
@@ -638,12 +616,10 @@ export const StudioDetail = () => {
                             gap: "10px",
                             cursor: "pointer",
                           }}
-                          onClick={() => setOpen(false)}
-                        >
+                          onClick={() => setOpen(false)}>
                           <ShareAltOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Chia sẻ
                           </span>
                         </div>
@@ -652,8 +628,7 @@ export const StudioDetail = () => {
                   }
                   trigger="click"
                   visible={open}
-                  onVisibleChange={(value) => setOpen(value)}
-                >
+                  onVisibleChange={(value) => setOpen(value)}>
                   <MoreOutlined className={cx("item")} />
                 </Popover>
               }
@@ -668,8 +643,7 @@ export const StudioDetail = () => {
                       dynamicBullets: true,
                     }}
                     modules={[Pagination]}
-                    className={cx("swiper-slide-detail")}
-                  >
+                    className={cx("swiper-slide-detail")}>
                     {studioDetail?.data?.Image.map((item) => (
                       <SwiperSlide>
                         <img src={convertImage(item)} alt="" />
@@ -681,8 +655,7 @@ export const StudioDetail = () => {
                       className={cx(
                         "title",
                         "d-flex justify-content-start align-items-center"
-                      )}
-                    >
+                      )}>
                       <h4>{studioDetail?.data?.Name} </h4>
                       <CheckCircleOutlined
                         style={{ fontSize: "20px", color: "#03AC84" }}
@@ -697,21 +670,18 @@ export const StudioDetail = () => {
                         <Rate
                           disabled
                           allowHalf
-                          value={studioDetail?.data?.TotalRate}
-                        ></Rate>
+                          value={studioDetail?.data?.TotalRate}></Rate>
                         <span>{studioDetail?.data?.TotalRate}</span>
                         <span
                           className={cx("number-order")}
-                          style={{ fontSize: "15px" }}
-                        >
+                          style={{ fontSize: "15px" }}>
                           {studioDetail?.data?.BookingCount} đã đặt{" "}
                         </span>
                       </div>
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                        }}
-                      >
+                        }}>
                         {studioDetail?.data?.UsersLiked ? (
                           <HeartFilled
                             onClick={handleChangeLike}
@@ -740,8 +710,7 @@ export const StudioDetail = () => {
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                        }}
-                      >
+                        }}>
                         {studioDetail?.data?.UsersLiked ? (
                           <HeartFilled
                             onClick={handleChangeLike}
@@ -764,27 +733,26 @@ export const StudioDetail = () => {
                               flexDirection: "column",
                               gap: "10px",
                               padding: "10px",
-                            }}
-                          >
+                            }}>
                             <div
                               style={{
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "10px",
                                 cursor: "pointer",
-                              }}
-                            >
+                              }}>
                               <WarningOutlined style={{ fontSize: "20px" }} />
                               <span
-                                style={{ fontSize: "18px", fontWeight: "bold" }}
-                              >
+                                style={{
+                                  fontSize: "18px",
+                                  fontWeight: "bold",
+                                }}>
                                 Báo cáo
                               </span>
                             </div>
                           </div>
                         }
-                        trigger="click"
-                      >
+                        trigger="click">
                         <MoreOutlined className={cx("item")} />
                       </Popover>
                     </div>
@@ -797,13 +765,11 @@ export const StudioDetail = () => {
                     <Rate
                       disabled
                       allowHalf
-                      value={studioDetail?.data?.TotalRate}
-                    ></Rate>
+                      value={studioDetail?.data?.TotalRate}></Rate>
                     <span>{studioDetail?.data?.TotalRate}</span>
                     <span
                       className={cx("number-order")}
-                      style={{ fontSize: "15px" }}
-                    >
+                      style={{ fontSize: "15px" }}>
                       {studioDetail?.data?.BookingCount} đã đặt{" "}
                     </span>
                   </div>
@@ -826,8 +792,7 @@ export const StudioDetail = () => {
                     md={0}
                     sm={0}
                     xs={24}
-                    className={cx("map-mobile")}
-                  >
+                    className={cx("map-mobile")}>
                     <div className={cx("map")}>
                       <h3>Xem trên bản đồ</h3>
                       <div className={cx("address")}>
@@ -856,8 +821,7 @@ export const StudioDetail = () => {
                         {studioDetail?.service?.map((data) => (
                           <Col
                             span={24}
-                            className={cx("wrapper-service-mobile")}
-                          >
+                            className={cx("wrapper-service-mobile")}>
                             <Swiper
                               pagination={{
                                 dynamicBullets: true,
@@ -867,8 +831,7 @@ export const StudioDetail = () => {
                               autoplay={{
                                 delay: 2500,
                                 disableOnInteraction: false,
-                              }}
-                            >
+                              }}>
                               {data?.Image.map((item) => (
                                 <SwiperSlide>
                                   <img
@@ -935,8 +898,7 @@ export const StudioDetail = () => {
                                 color: "#222222",
                                 fontSize: "16px",
                                 fontWeight: "700",
-                              }}
-                            >
+                              }}>
                               <div>
                                 <img
                                   alt=""
@@ -959,8 +921,7 @@ export const StudioDetail = () => {
                                 color: "#222222",
                                 fontSize: "16px",
                                 fontWeight: "700",
-                              }}
-                            >
+                              }}>
                               <div>
                                 <img
                                   alt=""
@@ -992,8 +953,7 @@ export const StudioDetail = () => {
                                 color: "#222222",
                                 fontSize: "16px",
                                 fontWeight: "700",
-                              }}
-                            >
+                              }}>
                               <div>
                                 <img
                                   alt=""
@@ -1025,8 +985,7 @@ export const StudioDetail = () => {
                                 color: "#222222",
                                 fontSize: "16px",
                                 fontWeight: "700",
-                              }}
-                            >
+                              }}>
                               <div>
                                 <TeamOutlined
                                   className="me-10 mb-2"
@@ -1067,16 +1026,14 @@ export const StudioDetail = () => {
                                     <Row align="middle" justify="end">
                                       <div
                                         className="me-10"
-                                        style={{ textAlign: "end" }}
-                                      >
+                                        style={{ textAlign: "end" }}>
                                         {chooseServiceList?.length > 0 && (
                                           <span
                                             style={{
                                               textDecoration: "line-through",
                                               fontSize: " 16px",
                                               color: "#828282",
-                                            }}
-                                          >
+                                            }}>
                                             {filterService?.OrderByTime === 1 &&
                                               `${convertPrice(
                                                 chooseServiceList?.reduce(
@@ -1111,8 +1068,7 @@ export const StudioDetail = () => {
                                           color: "#E22828",
                                           fontSize: "20px",
                                           fontWeight: "700",
-                                        }}
-                                      >
+                                        }}>
                                         {filterService?.OrderByTime === 1 &&
                                           `${convertPrice(
                                             chooseServiceList?.reduce(
@@ -1153,16 +1109,14 @@ export const StudioDetail = () => {
                                       <>
                                         <Col
                                           span={24}
-                                          style={{ textAlign: "end" }}
-                                        >
+                                          style={{ textAlign: "end" }}>
                                           <div>
                                             Giá cho thời gian bạn đã chọn
                                           </div>
                                         </Col>{" "}
                                         <div
                                           className="mb-20"
-                                          style={{ textAlign: "end" }}
-                                        >
+                                          style={{ textAlign: "end" }}>
                                           <div
                                             style={{
                                               display: "flex",
@@ -1170,16 +1124,14 @@ export const StudioDetail = () => {
                                               alignItems: "center",
                                               flexWrap: "wrap",
                                               justifyContent: "end",
-                                            }}
-                                          >
+                                            }}>
                                             <span
                                               style={{
                                                 color: "#828282",
                                                 textDecoration: "line-through",
                                                 fontSize: "16px",
                                                 fontWeight: "400",
-                                              }}
-                                            >
+                                              }}>
                                               {listTimeSelected?.find(
                                                 (item) => item.id === data?.id
                                               )?.OrderByTime === 1 &&
@@ -1219,8 +1171,7 @@ export const StudioDetail = () => {
                                                 color: "#E22828",
                                                 fontSize: "20px",
                                                 fontWeight: "700",
-                                              }}
-                                            >
+                                              }}>
                                               {listTimeSelected?.find(
                                                 (item) => item.id === data?.id
                                               )?.OrderByTime === 1 &&
@@ -1261,8 +1212,7 @@ export const StudioDetail = () => {
                                               color: "#828282",
                                               fontSize: "14px",
                                               fontWeight: "400",
-                                            }}
-                                          >
+                                            }}>
                                             {data?.PriceNote}
                                           </p>
                                           <span>
@@ -1300,8 +1250,7 @@ export const StudioDetail = () => {
                                       lineHeight: "19px",
 
                                       textTransform: "uppercase",
-                                    }}
-                                  >
+                                    }}>
                                     Bỏ chọn
                                   </Button>
                                 ) : (
@@ -1316,8 +1265,7 @@ export const StudioDetail = () => {
                                       lineHeight: "19px",
                                       textTransform: "uppercase",
                                     }}
-                                    size="large"
-                                  >
+                                    size="large">
                                     Chọn
                                   </Button>
                                 )}
@@ -1355,8 +1303,7 @@ export const StudioDetail = () => {
                                     textDecoration: "line-through",
                                     fontSize: " 16px",
                                     color: "#828282",
-                                  }}
-                                >
+                                  }}>
                                   {filterService?.OrderByTime === 1 &&
                                     `${convertPrice(
                                       chooseServiceList?.reduce(
@@ -1395,8 +1342,7 @@ export const StudioDetail = () => {
                                   color: "#E22828",
                                   fontSize: "20px",
                                   fontWeight: "700",
-                                }}
-                              >
+                                }}>
                                 {filterService?.OrderByTime === 1 &&
                                   `${convertPrice(
                                     chooseServiceList?.reduce(
@@ -1439,8 +1385,7 @@ export const StudioDetail = () => {
                                     "",
                                     {}
                                   )
-                                }
-                              >
+                                }>
                                 <ShoppingCartOutlined />
                                 Thêm vào giỏ hàng
                               </Button>
@@ -1452,8 +1397,7 @@ export const StudioDetail = () => {
                                   filterService.id > 0
                                     ? false
                                     : true
-                                }
-                              >
+                                }>
                                 Đặt ngay
                               </Button>
                             </div>
@@ -1495,8 +1439,7 @@ export const StudioDetail = () => {
                                 textDecoration: "line-through",
                                 fontSize: " 16px",
                                 color: "#828282",
-                              }}
-                            >
+                              }}>
                               {filterService?.OrderByTime === 1 &&
                                 `${convertPrice(
                                   chooseServiceList?.reduce(
@@ -1535,8 +1478,7 @@ export const StudioDetail = () => {
                               color: "#E22828",
                               fontSize: "20px",
                               fontWeight: "700",
-                            }}
-                          >
+                            }}>
                             {filterService?.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
@@ -1579,8 +1521,7 @@ export const StudioDetail = () => {
                                 "",
                                 {}
                               )
-                            }
-                          >
+                            }>
                             <ShoppingCartOutlined />
                             Thêm vào giỏ hàng
                           </Button>
@@ -1592,8 +1533,7 @@ export const StudioDetail = () => {
                               filterService.id > 0
                                 ? false
                                 : true
-                            }
-                          >
+                            }>
                             Đặt ngay
                           </Button>
                         </div>
