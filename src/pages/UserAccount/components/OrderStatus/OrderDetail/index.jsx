@@ -4,7 +4,7 @@ import {
   UploadOutlined,
   DownOutlined,
   TeamOutlined,
-  UpOutlined
+  UpOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Divider, Input, Modal, Row } from "antd";
 import moment from "moment";
@@ -250,14 +250,12 @@ const OrderDetail = () => {
             EvidenceImage: booking?.EvidenceImage,
             updatePay: true,
             Category: searchParams.get("categoryId"),
-          }}
-        >
+          }}>
           <Button
             type="primary"
             icon={<UploadOutlined />}
             size="large"
-            onClick={() => navigate(`/home/confirm-order/${id}`)}
-          >
+            onClick={() => navigate(`/home/confirm-order/${id}`)}>
             Cập nhật minh chứng
           </Button>
         </Link>
@@ -269,8 +267,7 @@ const OrderDetail = () => {
           type="text"
           onClick={() => setShowModal(true)}
           style={{ color: "#e60019", marginRight: "20px", borderRadius: "8px" }}
-          size="large"
-        >
+          size="large">
           Huỷ đơn
         </Button>
         <Button
@@ -284,8 +281,7 @@ const OrderDetail = () => {
             dispatch({ type: SHOW_CHAT });
             handleOpenChatPartner();
           }}
-          size="large"
-        >
+          size="large">
           Liên hệ
         </Button>
       </div>
@@ -296,8 +292,7 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}
-      >
+        }}>
         {/* <Button
           onClick={navigateToDetail}
           style={{
@@ -331,8 +326,7 @@ const OrderDetail = () => {
           footer={false}
           width={600}
           closable={false}
-          className="FooterStatus__complete__modal"
-        >
+          className="FooterStatus__complete__modal">
           <RateModal
             onOk={() => setVisible(false)}
             onCancel={() => setVisible(false)}
@@ -357,8 +351,7 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}
-      >
+        }}>
         <Button
           onClick={navigateToDetail}
           style={{
@@ -367,8 +360,7 @@ const OrderDetail = () => {
             borderRadius: "8px",
             padding: "0 55.5px",
           }}
-          size="large"
-        >
+          size="large">
           Đặt lại
         </Button>
         {/* <Button
@@ -707,10 +699,9 @@ const OrderDetail = () => {
             cursor: "pointer",
             gap: ".5rem",
           }}
-          onClick={() => setShowDetail(!showDetail)}
-        >
+          onClick={() => setShowDetail(!showDetail)}>
           <p> {showDetail ? "Ẩn chi tiết" : "Xem chi tiết"} </p>
-          {showDetail ?<UpOutlined/> :<DownOutlined />}
+          {showDetail ? <UpOutlined /> : <DownOutlined />}
         </div>
         {showDetail && (
           <div>
@@ -720,8 +711,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -756,8 +746,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -814,8 +803,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -882,8 +870,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <TeamOutlined
                   className="me-10 mb-2"
@@ -909,8 +896,26 @@ const OrderDetail = () => {
       <div className="df">
         <NotiIcon />
         <div className="noti_text">
-          Bao gồm 40.000 VND thuế và phí. Quý khách sẽ thanh toán 300.000 VND
-          vào ngày 13/02/2022
+          Bao gồm{" "}
+          <b>
+            {booking?.BookingValueBeforeDiscount
+              ? `${convertPrice(
+                  Math.round(((booking?.BookingValue / 1.1) * 10) / 100)
+                )} VND`
+              : "Không"}{" "}
+          </b>
+          thuế và phí. Quý khách sẽ thanh toán{" "}
+          <b>
+            {booking?.BookingValue
+              ? `${convertPrice(lastPrice)} VND`
+              : `${convertPrice(booking?.BookingValue)} VND`}{" "}
+          </b>
+          vào ngày{" "}
+          <b>
+            {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
+              .utc()
+              .format("DD/MM/YYYY")}
+          </b>
         </div>
       </div>
       <section className="chile">
@@ -950,8 +955,7 @@ const OrderDetail = () => {
         okText="Đồng ý"
         cancelText="Thoát"
         onCancel={() => setShowModal(false)}
-        onOk={() => handleCancelOrder()}
-      >
+        onOk={() => handleCancelOrder()}>
         <>
           <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
           <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
@@ -959,8 +963,7 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}
-          ></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
         </>
       </Modal>
     </div>
