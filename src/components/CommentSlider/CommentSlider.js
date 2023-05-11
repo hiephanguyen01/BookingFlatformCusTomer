@@ -48,11 +48,11 @@ const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
             spaceBetween: 10,
           },
           768: {
-            slidesPerView: 3,
+            slidesPerView: 2.5,
             spaceBetween: 10,
           },
           1024: {
-            slidesPerView: 5,
+            slidesPerView: 2.5,
             spaceBetween: 10,
           },
         }}
@@ -70,7 +70,11 @@ const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
                   src={convertImage(item.Image[0])}
                   alt=""
                   className="me-12"
-                  style={{ width: "100px", objectFit: "cover" }}
+                  style={{
+                    minWidth: "100px",
+                    width: "100px",
+                    objectFit: "cover",
+                  }}
                 />
                 <div className="py-5 ">
                   <div className="post_slider_item_name mb-5">{item.Name}</div>

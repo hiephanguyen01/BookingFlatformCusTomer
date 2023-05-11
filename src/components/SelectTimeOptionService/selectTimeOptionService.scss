@@ -1,6 +1,6 @@
 .selectTimeOptionServiceContainer {
     height: 100%;
-  
+
     .ant-form-item {
         label {
             width: 100px;
@@ -17,5 +17,13 @@
 .ant-picker-time-panel-column {
     &::after {
         display: none !important;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .ant-picker-panels {
+        display: flex;
+        flex-direction: column !important;
     }
 }

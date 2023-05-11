@@ -8,7 +8,7 @@ import { Col, Grid, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Logo2 from "../../assets/img/Logo2.png";
 import Logo3 from "../../assets/img/Logo3.png";
 import images from "../../assets/images";
@@ -60,6 +60,7 @@ const categories = {
 const { useBreakpoint } = Grid;
 
 const FilterCard = ({ data, category }) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -96,7 +97,12 @@ const FilterCard = ({ data, category }) => {
               },
             });
             navigate(
-              `/home/${categories[newData?.category].value}/${newData?.id}`
+              `/home/${categories[newData?.category].value}/${newData?.id}`,
+              {
+                state: {
+                  pathname: `${location?.pathname + location?.search}`,
+                },
+              }
             );
           }}
         >
@@ -104,7 +110,7 @@ const FilterCard = ({ data, category }) => {
             // mobile
             <Col className="layout-mobile" xs={24}>
               <Row className="wrap" gutter={[10, 0]}>
-                <Col span={16}>
+                <Col span={16} className="h-100">
                   <img
                     className="image-large"
                     src={convertImage(newData?.Image[0])}
@@ -141,14 +147,14 @@ const FilterCard = ({ data, category }) => {
                     <HeartOutlined style={{ color: "red", fontSize: "20px" }} />
                   )}
                 </PopUpSignIn>
-                <p className="title ps-4">
-                  {data?.Name}&nbsp;
+                <Row className="w-90">
+                  <p className="title ps-4">{data?.Name}</p>
                   <CheckCircleTwoTone
                     style={{ fontSize: "20px" }}
                     className="pb-4"
                     twoToneColor="#52c41a"
                   />
-                </p>
+                </Row>
                 <Col span={24} className="mt-5">
                   <Row align="middle" justify="space-between" className="mb-10">
                     <p className="description w-80">

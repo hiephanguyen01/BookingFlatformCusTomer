@@ -1,4 +1,4 @@
-import { BackTop } from "antd";
+import { BackTop, Grid } from "antd";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -37,7 +37,10 @@ import {
 } from "./stores/actions/autheticateAction";
 import { SET_USER } from "./stores/types/authType";
 
+const { useBreakpoint } = Grid;
+
 function App() {
+  const screens = useBreakpoint();
   const dispatch = useDispatch();
   const { search } = useLocation();
   useEffect(() => {

@@ -1,6 +1,6 @@
 @import "../../../../App.scss";
 
-.shop_container {
+.clothes_shop_container {
     max-width: 1300px;
     margin: auto;
 
@@ -169,4 +169,84 @@
             }
         }
     }
+}
+
+@media (max-width: 576px) {
+    .margin {
+        padding: 0 !important;
+    }
+
+    .clothes_shop_container {
+        padding: 0 !important;
+
+        .header-mobile {
+            // position: relative;
+
+            .banner {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+            }
+
+            .nav {
+                // position: absolute;
+                width: 100%;
+
+                .background_transparent {
+                    background-color: transparent;
+                }
+            }
+
+            .shop-name {
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 25px;
+                color: #222222;
+            }
+
+            .check_circle {
+                font-size: 16px;
+                color: #03AC84;
+            }
+        }
+
+        .description {
+            padding: 15px 18px;
+            background-color: #fff;
+            margin-top: 10px;
+
+            .ant-typography-expand {
+                color: #009874 !important;
+            }
+
+            .des {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 22px;
+                color: #3F3F3F;
+            }
+
+        }
+
+        .tab_panel {
+            margin-top: 10px !important;
+
+            .ant-tabs-content-holder {
+                margin-top: 12px;
+            }
+
+            .wrap_card {
+                // margin-top: 5px;
+                display: grid;
+
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+                // grid-template-columns: repeat(auto-fill, 200px);
+                gap: 9px;
+            }
+
+        }
+
+
+    }
+
 }

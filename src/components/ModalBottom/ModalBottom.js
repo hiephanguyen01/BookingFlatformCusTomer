@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./modalBottom.scss";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
 
 const ModalBottom = ({
   children,

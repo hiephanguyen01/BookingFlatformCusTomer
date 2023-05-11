@@ -1,0 +1,119 @@
+.chat-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 1055;
+    padding: 20px 0;
+
+    .arrow {
+        margin-right: 15px;
+    }
+
+    .title {
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 22px;
+        color: #3F3F3F;
+    }
+
+    .input-search {
+        border-radius: 10px;
+        background: #f4f4f4;
+        padding: 10px 20px;
+        outline: none;
+        width: 100% !important;
+        border: 0;
+        margin-bottom: 10px;
+
+        .ant-input {
+            background: #f4f4f4;
+            margin-left: 5px;
+        }
+    }
+
+    .tab-header-container {
+        height: 50px;
+
+        .tab-header {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            color: #3F3F3F;
+
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 100%;
+
+            &.active {
+                font-weight: 700;
+                color: #E22828;
+
+                border-bottom: 2px solid #E22828;
+            }
+        }
+    }
+
+    .divider {
+        background-color: #f6f6f6;
+        height: 10px;
+    }
+
+    .conversation-container {
+        overflow-y: scroll;
+        height: calc(100% - 160px);
+
+        &::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        .pre-conversation {
+            padding: 10px 0 0;
+
+            .avatar {
+                width: 100%;
+                border-radius: 5px;
+            }
+
+            .name {
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 20px;
+                color: #222222;
+                margin-bottom: 3px;
+            }
+
+            .pre-message {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 19px;
+                color: #616161;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-bottom: 5px;
+            }
+
+            .sending-time {
+                font-weight: 400;
+                font-size: 11px;
+                line-height: 15px;
+                color: #B2B2B2;
+            }
+
+            .status {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: #1FCBA2;
+            }
+        }
+    }
+}

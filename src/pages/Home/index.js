@@ -240,7 +240,7 @@ export const Home = () => {
           >
             {screens.xs
               ? CATEGORIES.map((item) => (
-                  <Col style={{ textAlign: "center" }}>
+                  <Col span={24} style={{ textAlign: "center" }}>
                     <div
                       key={item.id}
                       className={cx("box", "shadow", "mb-5")}
