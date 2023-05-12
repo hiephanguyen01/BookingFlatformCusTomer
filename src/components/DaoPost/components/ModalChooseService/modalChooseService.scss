@@ -69,6 +69,8 @@
 
     .search-body {
         height: 85%;
+        width: 100%;
+
 
         .number-service-select {
             font-weight: 400;
@@ -82,7 +84,9 @@
 
         .service-list {
             height: 95%;
-            overflow: scroll;
+            width: 100%;
+
+            overflow-y: scroll;
 
             .choose-service-list {
                 display: flex;
@@ -100,18 +104,15 @@
             }
 
             .service-list-item {
-                height: 95px;
-                // min-height: 80px;
+                height: 95px !important;
+                width: 100%;
                 display: flex;
                 justify-content: flex-start;
 
                 align-items: center;
-                margin-bottom: 15px;
-                padding-right: 10px;
                 border-bottom: 1px solid #E7E7E7;
-
                 padding-bottom: 15px;
-
+                margin: 0 0 15px !important;
 
                 &:last-child {
                     margin-top: 0;
@@ -119,15 +120,12 @@
 
                 .service-image {
                     height: 100%;
-                    width: 120px;
-                    min-width: 120px;
+                    width: 100%;
                     object-fit: cover;
-                    margin-right: 10px;
                 }
 
                 .service-content {
                     width: 100%;
-                    margin-right: 15px;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-around;
@@ -170,9 +168,14 @@
     }
 
     .search-footer {
-        height: 40px;
-        display: flex;
-        justify-content: end;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+        padding: 10px;
+        background-color: #fff;
+        text-align: end;
 
         .ant-btn {
             border-radius: 8px;

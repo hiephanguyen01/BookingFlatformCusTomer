@@ -23,10 +23,15 @@ const Footer = () => {
         <div className="Footer">
           <div className="container">
             <Row gutter={[40, 20]}>
-              <Col sm={24} md={12} lg={6}>
+              <Col sm={24} md={12} lg={6} xs={24}>
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
-                <Row className="logo" align="middle" gutter={[5, 0]}>
-                  <Col span={12}>
+                <Row
+                  className="logo"
+                  align="middle"
+                  justify={`${screens?.xs && "center"}`}
+                  gutter={screens?.xs ? [15, 0] : [5, 0]}
+                >
+                  <Col lg={12} md={12} sm={12} xs={7}>
                     {/* <img src={QRCode} /> */}
                     <QRCode
                       size={256}
@@ -41,7 +46,7 @@ const Footer = () => {
                       // viewBox={`0 0 256 256`}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col lg={12} md={12} sm={12} xs={8}>
                     <a
                       href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
                       target="_blank"
