@@ -774,7 +774,10 @@ export const StudioDetail = () => {
                             >
                               <WarningOutlined style={{ fontSize: "20px" }} />
                               <span
-                                style={{ fontSize: "18px", fontWeight: "bold" }}
+                                style={{
+                                  fontSize: "18px",
+                                  fontWeight: "bold",
+                                }}
                               >
                                 Báo cáo
                               </span>

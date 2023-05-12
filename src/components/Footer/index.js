@@ -45,7 +45,7 @@ export const Footer = () => {
           <a>Quy định chung </a>
         </div>
         <div className={cx("box")}>
-          <a>V130423</a>
+          <a>V1105</a>
           <h4>Công ty Cổ phần Công nghệ và Đầu tư VNPLUS</h4>
           <img src={images.reg} />
         </div>
