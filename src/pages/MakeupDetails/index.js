@@ -83,7 +83,7 @@ const Index = () => {
     studioDetail,
     listStudioSimilar,
     promotionCode,
-    filterService,
+    chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -330,7 +330,7 @@ const Index = () => {
           key: "currency",
           render: () => (
             <>
-              {filterService.OrderByTime !== -1 && (
+              {chooseService.OrderByTime !== -1 && (
                 <div className="mb-20">
                   <div
                     style={{
@@ -347,12 +347,12 @@ const Index = () => {
                         fontWeight: "700",
                       }}
                     >
-                      {filterService.OrderByTime === 1 &&
+                      {chooseService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
                         })}
-                      {filterService.OrderByTime === 0 &&
+                      {chooseService.OrderByTime === 0 &&
                         data?.PriceByDate?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
@@ -366,12 +366,12 @@ const Index = () => {
                         fontWeight: "400",
                       }}
                     >
-                      {filterService.OrderByTime === 1 &&
+                      {chooseService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
                         })}
-                      {filterService.OrderByTime === 0 &&
+                      {chooseService.OrderByTime === 0 &&
                         data?.PriceByDate?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
@@ -390,7 +390,7 @@ const Index = () => {
                 </div>
               )}
               <div className="">
-                {filterService.id === data.id ? (
+                {chooseService.id === data.id ? (
                   <div
                     onClick={() => {
                       dispatch({ type: "REMOVE_SELECT_TIME" });
@@ -858,28 +858,28 @@ const Index = () => {
                                           color: "#828282",
                                         }}
                                       >
-                                        {filterService?.OrderByTime === 1 &&
+                                        {chooseService?.OrderByTime === 1 &&
                                           `${convertPrice(
                                             chooseServiceList?.reduce(
                                               (total, item) =>
                                                 total +
                                                 item.PriceByHour *
                                                   calTime(
-                                                    filterService?.OrderByTimeFrom,
-                                                    filterService?.OrderByTimeTo
+                                                    chooseService?.OrderByTimeFrom,
+                                                    chooseService?.OrderByTimeTo
                                                   ),
                                               0
                                             )
                                           )}đ`}
-                                        {filterService?.OrderByTime === 0 &&
+                                        {chooseService?.OrderByTime === 0 &&
                                           `${convertPrice(
                                             chooseServiceList?.reduce(
                                               (total, item) =>
                                                 total +
                                                 item.PriceByDate *
                                                   calDate(
-                                                    filterService?.OrderByDateFrom,
-                                                    filterService?.OrderByDateTo
+                                                    chooseService?.OrderByDateFrom,
+                                                    chooseService?.OrderByDateTo
                                                   ),
                                               0
                                             )
@@ -894,28 +894,28 @@ const Index = () => {
                                       fontWeight: "700",
                                     }}
                                   >
-                                    {filterService?.OrderByTime === 1 &&
+                                    {chooseService?.OrderByTime === 1 &&
                                       `${convertPrice(
                                         chooseServiceList?.reduce(
                                           (total, item) =>
                                             total +
                                             item.PriceByHour *
                                               calTime(
-                                                filterService.OrderByTimeFrom,
-                                                filterService.OrderByTimeTo
+                                                chooseService.OrderByTimeFrom,
+                                                chooseService.OrderByTimeTo
                                               ),
                                           0
                                         )
                                       )}đ`}
-                                    {filterService?.OrderByTime === 0 &&
+                                    {chooseService?.OrderByTime === 0 &&
                                       `${convertPrice(
                                         chooseServiceList?.reduce(
                                           (total, item) =>
                                             total +
                                             item.PriceByDate *
                                               calDate(
-                                                filterService.OrderByDateFrom,
-                                                filterService.OrderByDateTo
+                                                chooseService.OrderByDateFrom,
+                                                chooseService.OrderByDateTo
                                               ),
                                           0
                                         )
@@ -1125,28 +1125,28 @@ const Index = () => {
                               color: "#828282",
                             }}
                           >
-                            {filterService.OrderByTime === 1 &&
+                            {chooseService.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
                                     item.PriceByHour *
                                       calTime(
-                                        filterService.OrderByTimeFrom,
-                                        filterService.OrderByTimeTo
+                                        chooseService.OrderByTimeFrom,
+                                        chooseService.OrderByTimeTo
                                       ),
                                   0
                                 )
                               )}đ`}
-                            {filterService.OrderByTime === 0 &&
+                            {chooseService.OrderByTime === 0 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
                                     item.PriceByDate *
                                       calDate(
-                                        filterService.OrderByDateFrom,
-                                        filterService.OrderByDateTo
+                                        chooseService.OrderByDateFrom,
+                                        chooseService.OrderByDateTo
                                       ),
                                   0
                                 )
@@ -1165,28 +1165,28 @@ const Index = () => {
                             fontWeight: "700",
                           }}
                         >
-                          {filterService.OrderByTime === 1 &&
+                          {chooseService.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByHour *
                                     calTime(
-                                      filterService.OrderByTimeFrom,
-                                      filterService.OrderByTimeTo
+                                      chooseService.OrderByTimeFrom,
+                                      chooseService.OrderByTimeTo
                                     ),
                                 0
                               )
                             )}đ`}
-                          {filterService.OrderByTime === 0 &&
+                          {chooseService.OrderByTime === 0 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByDate *
                                     calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
+                                      chooseService.OrderByDateFrom,
+                                      chooseService.OrderByDateTo
                                     ),
                                 0
                               )
@@ -1216,7 +1216,7 @@ const Index = () => {
                           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                           onClick={handleBook}
                           disabled={
-                            chooseServiceList.length > 0 && filterService.id > 0
+                            chooseServiceList.length > 0 && chooseService.id > 0
                               ? false
                               : true
                           }
@@ -1262,28 +1262,28 @@ const Index = () => {
                               color: "#828282",
                             }}
                           >
-                            {filterService.OrderByTime === 1 &&
+                            {chooseService.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
                                     item.PriceByHour *
                                       calTime(
-                                        filterService.OrderByTimeFrom,
-                                        filterService.OrderByTimeTo
+                                        chooseService.OrderByTimeFrom,
+                                        chooseService.OrderByTimeTo
                                       ),
                                   0
                                 )
                               )}đ`}
-                            {filterService.OrderByTime === 0 &&
+                            {chooseService.OrderByTime === 0 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
                                     item.PriceByDate *
                                       calDate(
-                                        filterService.OrderByDateFrom,
-                                        filterService.OrderByDateTo
+                                        chooseService.OrderByDateFrom,
+                                        chooseService.OrderByDateTo
                                       ),
                                   0
                                 )
@@ -1302,28 +1302,28 @@ const Index = () => {
                             fontWeight: "700",
                           }}
                         >
-                          {filterService.OrderByTime === 1 &&
+                          {chooseService.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByHour *
                                     calTime(
-                                      filterService.OrderByTimeFrom,
-                                      filterService.OrderByTimeTo
+                                      chooseService.OrderByTimeFrom,
+                                      chooseService.OrderByTimeTo
                                     ),
                                 0
                               )
                             )}đ`}
-                          {filterService.OrderByTime === 0 &&
+                          {chooseService.OrderByTime === 0 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
                                 (total, item) =>
                                   total +
                                   item.PriceByDate *
                                     calDate(
-                                      filterService.OrderByDateFrom,
-                                      filterService.OrderByDateTo
+                                      chooseService.OrderByDateFrom,
+                                      chooseService.OrderByDateTo
                                     ),
                                 0
                               )
@@ -1353,7 +1353,7 @@ const Index = () => {
                           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                           onClick={handleBook}
                           disabled={
-                            chooseServiceList.length > 0 && filterService.id > 0
+                            chooseServiceList.length > 0 && chooseService.id > 0
                               ? false
                               : true
                           }

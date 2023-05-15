@@ -17,7 +17,7 @@ const Index = () => {
   const { promoCodeUserSave, choosePromotionUser } = useSelector(
     (state) => state.promoCodeReducer
   );
-  const { filterService } = useSelector((state) => state.studioPostReducer);
+  const { chooseService } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
 
   const [choose, setChoose] = useState({ ...choosePromotionUser });
@@ -35,15 +35,15 @@ const Index = () => {
 
   const priceOrder = () => {
     let price = 0;
-    switch (filterService?.OrderByTime) {
+    switch (chooseService?.OrderByTime) {
       case 1:
         price = chooseServiceList?.reduce(
           (total, service) =>
             total +
             service.PriceByHour *
               calTime(
-                filterService?.OrderByTimeFrom,
-                filterService?.OrderByTimeTo
+                chooseService?.OrderByTimeFrom,
+                chooseService?.OrderByTimeTo
               ),
           0
         );
@@ -55,8 +55,8 @@ const Index = () => {
             total +
             service.PriceByDate *
               calDate(
-                filterService?.OrderByDateFrom,
-                filterService?.OrderByDateTo
+                chooseService?.OrderByDateFrom,
+                chooseService?.OrderByDateTo
               ),
           0
         );

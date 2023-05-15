@@ -93,7 +93,7 @@ const Index = () => {
     filter,
     listStudioSimilar,
     promotionCode,
-    filterService,
+    chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -119,7 +119,7 @@ const Index = () => {
     }, []);
 
   const [amount, setAmount] = useState(1);
-  const [chooseService, setChooseService] = useState([]);
+  // const [chooseService, setChooseService] = useState([]);
   const [open, setOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
@@ -147,13 +147,13 @@ const Index = () => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, [id]);
 
-  const handleChooseService = (data) => {
-    if (chooseService.filter((item) => item.id === data.id).length > 0) {
-      setChooseService([]);
-    } else {
-      setChooseService([{ ...data }]);
-    }
-  };
+  // const handleChooseService = (data) => {
+  //   if (chooseService.filter((item) => item.id === data.id).length > 0) {
+  //     setChooseService([]);
+  //   } else {
+  //     setChooseService([{ ...data }]);
+  //   }
+  // };
   const handleChangeLike = (e) => {
     // if (!currentUser) navigate("/auth/sign-in");
     if (currentUser) {
@@ -589,28 +589,28 @@ const Index = () => {
                                           color: "#828282",
                                         }}
                                       >
-                                        {filterService?.OrderByTime === 1 &&
+                                        {chooseService?.OrderByTime === 1 &&
                                           `${convertPrice(
                                             chooseServiceList?.reduce(
                                               (total, item) =>
                                                 total +
                                                 item.PriceByHour *
                                                   calTime(
-                                                    filterService?.OrderByTimeFrom,
-                                                    filterService?.OrderByTimeTo
+                                                    chooseService?.OrderByTimeFrom,
+                                                    chooseService?.OrderByTimeTo
                                                   ),
                                               0
                                             )
                                           )}đ`}
-                                        {filterService?.OrderByTime === 0 &&
+                                        {chooseService?.OrderByTime === 0 &&
                                           `${convertPrice(
                                             chooseServiceList?.reduce(
                                               (total, item) =>
                                                 total +
                                                 item.PriceByDate *
                                                   calDate(
-                                                    filterService?.OrderByDateFrom,
-                                                    filterService?.OrderByDateTo
+                                                    chooseService?.OrderByDateFrom,
+                                                    chooseService?.OrderByDateTo
                                                   ),
                                               0
                                             )
@@ -625,28 +625,28 @@ const Index = () => {
                                       fontWeight: "700",
                                     }}
                                   >
-                                    {filterService?.OrderByTime === 1 &&
+                                    {chooseService?.OrderByTime === 1 &&
                                       `${convertPrice(
                                         chooseServiceList?.reduce(
                                           (total, item) =>
                                             total +
                                             item.PriceByHour *
                                               calTime(
-                                                filterService.OrderByTimeFrom,
-                                                filterService.OrderByTimeTo
+                                                chooseService.OrderByTimeFrom,
+                                                chooseService.OrderByTimeTo
                                               ),
                                           0
                                         )
                                       )}đ`}
-                                    {filterService?.OrderByTime === 0 &&
+                                    {chooseService?.OrderByTime === 0 &&
                                       `${convertPrice(
                                         chooseServiceList?.reduce(
                                           (total, item) =>
                                             total +
                                             item.PriceByDate *
                                               calDate(
-                                                filterService.OrderByDateFrom,
-                                                filterService.OrderByDateTo
+                                                chooseService.OrderByDateFrom,
+                                                chooseService.OrderByDateTo
                                               ),
                                           0
                                         )
@@ -843,7 +843,7 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    {filterService.OrderByTime === -1 && (
+                    {chooseService.OrderByTime === -1 && (
                       <div className={cx("warning-choose-time")}>
                         <ExclamationCircleOutlined className="me-5" />
                         Chọn khung giờ và số lượng bạn muốn đặt để xem giá cho

@@ -61,7 +61,7 @@ const { useBreakpoint } = Grid;
 
 const Index = () => {
   const screens = useBreakpoint();
-  const { studioDetail, listStudioSimilar, promotionCode, filterService } =
+  const { studioDetail, listStudioSimilar, promotionCode, chooseService } =
     useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
 
@@ -121,7 +121,7 @@ const Index = () => {
   };
 
   const handleBook = () => {
-    if (amount > 0 && filterService.OrderByTime !== -1) {
+    if (amount > 0 && chooseService.OrderByTime !== -1) {
       // dispatch(chooseServiceAction(chooseService));
       navigate("order");
     }
@@ -453,7 +453,7 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    {filterService.OrderByTime === -1 && (
+                    {chooseService.OrderByTime === -1 && (
                       <div className={cx("warning-choose-time")}>
                         <ExclamationCircleOutlined className="me-5" />
                         Chọn khung giờ và số lượng bạn muốn đặt để xem giá cho

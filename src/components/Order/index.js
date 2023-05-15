@@ -37,7 +37,7 @@ const Index = ({ linkTo = "" }) => {
   const { choosePromotionUser, promoCodeUserSave } = useSelector(
     (state) => state.promoCodeReducer
   );
-  const { studioDetail, filterService } = useSelector(
+  const { studioDetail, chooseService } = useSelector(
     (state) => state.studioPostReducer
   );
   const [infoUser, setInfoUser] = useState();
@@ -82,9 +82,9 @@ const Index = ({ linkTo = "" }) => {
     dispatch(studioDetailAction(id, cate));
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
     return () => {
-      dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
-      dispatch({ type: SET_FILTER_SERVICE, payload: {} });
+      // dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+      // dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
+      // dispatch({ type: SET_FILTER_SERVICE, payload: {} });
     };
   }, [cate, dispatch, id, user]);
   useEffect(() => {
@@ -103,15 +103,15 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const calculatePrice = () => {
-    switch (filterService?.OrderByTime) {
+    switch (chooseService?.OrderByTime) {
       case 1:
         return chooseServiceList?.reduce(
           (total, service) =>
             total +
             service?.PriceByHour *
               calTime(
-                filterService?.OrderByTimeFrom,
-                filterService?.OrderByTimeTo
+                chooseService?.OrderByTimeFrom,
+                chooseService?.OrderByTimeTo
               ),
           0
         );
@@ -121,8 +121,8 @@ const Index = ({ linkTo = "" }) => {
             total +
             service.PriceByDate *
               calDate(
-                filterService?.OrderByDateFrom,
-                filterService?.OrderByDateTo
+                chooseService?.OrderByDateFrom,
+                chooseService?.OrderByDateTo
               ),
           0
         );
@@ -136,15 +136,15 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const calculatePriceUsePromo = () => {
-    switch (filterService?.OrderByTime) {
+    switch (chooseService?.OrderByTime) {
       case 1:
         const priceByHour = chooseServiceList?.reduce(
           (total, item) =>
             total +
             item.prices[0].PriceByHour *
               calTime(
-                filterService.OrderByTimeFrom,
-                filterService.OrderByTimeTo
+                chooseService.OrderByTimeFrom,
+                chooseService.OrderByTimeTo
               ),
           0
         );
@@ -200,14 +200,14 @@ const Index = ({ linkTo = "" }) => {
 
         //**************************************
         let response;
-        if (filterService?.OrderByTime === 0) {
+        if (chooseService?.OrderByTime === 0) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
+              OrderByDateFrom: moment(new Date(chooseService?.OrderByDateFrom))
                 .add(studioDetail?.data?.HourOpenDefault, "h")
                 .add(studioDetail?.data?.MinutesOpenDefault, "m"),
-              OrderByDateTo: moment(new Date(filterService?.OrderByDateTo))
+              OrderByDateTo: moment(new Date(chooseService?.OrderByDateTo))
                 .add(studioDetail?.data?.HourCloseDefault, "h")
                 .add(studioDetail?.data?.MinutesCloseDefault, "m"),
               PaymentType: 0,
@@ -232,15 +232,15 @@ const Index = ({ linkTo = "" }) => {
             response = await orderService.addOrder({
               ...newData,
               numberOfTime: `${calDate(
-                filterService?.OrderByDateFrom,
-                filterService?.OrderByDateTo
+                chooseService?.OrderByDateFrom,
+                chooseService?.OrderByDateTo
               )} ngày`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByDate) *
                 calDate(
-                  filterService?.OrderByDateFrom,
-                  filterService?.OrderByDateTo
+                  chooseService?.OrderByDateFrom,
+                  chooseService?.OrderByDateTo
                 ),
             });
             if (AffiliateUserId != null) {
@@ -249,12 +249,12 @@ const Index = ({ linkTo = "" }) => {
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
           }
-        } else if (filterService?.OrderByTime === 1) {
+        } else if (chooseService?.OrderByTime === 1) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 1,
-              OrderByTimeFrom: moment(filterService?.OrderByTimeFrom),
-              OrderByTimeTo: moment(filterService?.OrderByTimeTo),
+              OrderByTimeFrom: moment(chooseService?.OrderByTimeFrom),
+              OrderByTimeTo: moment(chooseService?.OrderByTimeTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -277,15 +277,15 @@ const Index = ({ linkTo = "" }) => {
             response = await orderService.addOrder({
               ...newData,
               numberOfTime: `${calTime(
-                filterService?.OrderByTimeFrom,
-                filterService?.OrderByTimeTo
+                chooseService?.OrderByTimeFrom,
+                chooseService?.OrderByTimeTo
               )} giờ`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByHour) *
                 calTime(
-                  filterService?.OrderByTimeFrom,
-                  filterService?.OrderByTimeTo
+                  chooseService?.OrderByTimeFrom,
+                  chooseService?.OrderByTimeTo
                 ),
             });
             if (AffiliateUserId != null) {
@@ -371,9 +371,9 @@ const Index = ({ linkTo = "" }) => {
                           Trắng, size S, Số lượng 1
                         </div> */}
                         <div className="text-middle mt-8">
-                          {filterService?.OrderByTime === 1 &&
+                          {chooseService?.OrderByTime === 1 &&
                             convertPrice(item.PriceByHour)}
-                          {filterService?.OrderByTime === 0 &&
+                          {chooseService?.OrderByTime === 0 &&
                             convertPrice(item.PriceByDate)}
                           đ
                         </div>
@@ -454,30 +454,20 @@ const Index = ({ linkTo = "" }) => {
                         marginBottom: "12px",
                       }}
                     >
-                      {filterService?.OrderByTime === 1 &&
+                      {chooseService?.OrderByTime === 1 &&
                         `${convertPrice(
-                          chooseServiceList?.reduce(
-                            (total, item) =>
-                              total +
-                              item?.prices[0].PriceByHour *
-                                calTime(
-                                  filterService.OrderByTimeFrom,
-                                  filterService.OrderByTimeTo
-                                ),
-                            0
-                          )
+                          chooseService?.pricesByHour[0].PriceByHour *
+                            calTime(
+                              chooseService.OrderByTimeFrom,
+                              chooseService.OrderByTimeTo
+                            )
                         )}đ`}
-                      {filterService?.OrderByTime === 0 &&
+                      {chooseService?.OrderByTime === 0 &&
                         `${convertPrice(
-                          chooseServiceList?.reduce(
-                            (total, item) =>
-                              total +
-                              item.prices.reduce(
-                                (sum, cur) => sum + cur.PriceByDate,
-                                0
-                              ),
-                            0
-                          )
+                          chooseService?.pricesByDate.reduce(
+                            (total, item) => total + item?.priceByDate
+                          ),
+                          0
                         )}đ`}
                     </div>
                   </div>
@@ -674,20 +664,20 @@ const Index = ({ linkTo = "" }) => {
                   className="text-medium-re"
                   style={{ textDecoration: "line-through" }}
                 >
-                  {filterService?.OrderByTime === 1 &&
+                  {chooseService?.OrderByTime === 1 &&
                     `${convertPrice(
                       chooseServiceList?.reduce(
                         (total, item) =>
                           total +
                           item?.prices[0].PriceByHour *
                             calTime(
-                              filterService.OrderByTimeFrom,
-                              filterService.OrderByTimeTo
+                              chooseService.OrderByTimeFrom,
+                              chooseService.OrderByTimeTo
                             ),
                         0
                       )
                     )}đ`}
-                  {filterService?.OrderByTime === 0 &&
+                  {chooseService?.OrderByTime === 0 &&
                     `${convertPrice(
                       chooseServiceList?.reduce(
                         (total, item) =>
