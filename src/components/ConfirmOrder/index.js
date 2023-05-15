@@ -12,12 +12,15 @@ import { numberWithDot } from "../../utils/convert";
 import { useSelector } from "react-redux";
 import BackNav from "../BackNav/BackNav";
 import moment from "moment";
+import { Grid } from "antd";
+
+const { useBreakpoint } = Grid;
 
 const Index = () => {
+  const screens = useBreakpoint();
   const socket = useSelector((state) => state.userReducer.socket);
   const [checkoutDisable, setCheckoutDisable] = useState(false);
   const location = useLocation();
-  console.log(location?.state?.path);
   const navigate = useNavigate();
   let cate;
   const nameCategory = location.pathname
@@ -108,7 +111,7 @@ const Index = () => {
   };
   return (
     <div
-      className="py-12"
+      className={screens?.xs ? "" : "py-12"}
       style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
     >
       <BackNav

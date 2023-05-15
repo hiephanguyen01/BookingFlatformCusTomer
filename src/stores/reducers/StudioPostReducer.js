@@ -53,7 +53,7 @@ const initialState = {
   listLikedUser: [],
   listStudioSimilar: [],
   promotionCode: [],
-  filterService: {
+  chooseService: {
     OrderByTime: -1,
     OrderByTimeFrom: "",
     OrderByTimeTo: "",
@@ -97,16 +97,19 @@ export const studioPostReducer = (state = initialState, action) => {
         ...state,
         studioDetail: {
           ...state.studioDetail,
-          service: state.studioDetail.service.map(item => {
+          service: state.studioDetail.service.map((item) => {
             if (item.id == action.payload.roomId) {
               return {
                 ...item,
-                prices: action.payload.prices
+                pricesByHour:
+                  action?.payload?.pricesByHour || item?.pricesByHour,
+                pricesByDate:
+                  action?.payload?.pricesByDate || item?.pricesByDate,
               };
             }
             return item;
-          })
-        }
+          }),
+        },
       };
     case SET_STUDIO_DETAIL1:
       return {
@@ -172,7 +175,7 @@ export const studioPostReducer = (state = initialState, action) => {
     case SET_FILTER_SERVICE:
       return {
         ...state,
-        filterService: { ...action.payload },
+        chooseService: { ...action.payload },
       };
     case SET_SERVICE_SELECT:
       return {
@@ -203,7 +206,7 @@ export const studioPostReducer = (state = initialState, action) => {
         listTimeSelected: newArray,
       };
     case SELECT_TIME_ORDER:
-      let newFilter = { ...state.filterService };
+      let newFilter = { ...state.chooseService };
       if (Number(newFilter.id) === Number(action.data.id)) {
         newFilter = {};
       } else {
@@ -225,7 +228,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                // filterService: {},
+                // chooseService: {},
               };
             }
           } else {
@@ -257,7 +260,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                // filterService: {},
+                // chooseService: {},
               };
             }
           }
@@ -270,22 +273,22 @@ export const studioPostReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        filterService: newFilter,
+        chooseService: newFilter,
       };
     case "SET_SELECT_TIME_ORDER":
       return {
         ...state,
-        filterService: {},
+        chooseService: {},
       };
     case "REMOVE_SELECT_TIME":
       return {
         ...state,
-        filterService: {},
+        chooseService: {},
       };
     case "SET_TIME_ORDER_SELECTED":
       return {
         ...state,
-        filterService: {
+        chooseService: {
           OrderByTime: -1,
           OrderByTimeFrom: "",
           OrderByTimeTo: "",

@@ -53,7 +53,7 @@ function remove_duplicates_es6(arr) {
 }
 const Option = ({ option, disabled, service }) => {
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
-  const { listTimeSelected, studioDetail, filterService } = useSelector(
+  const { listTimeSelected, studioDetail, chooseService } = useSelector(
     (state) => state.studioPostReducer
   );
   const dispatch = useDispatch();
@@ -103,9 +103,9 @@ const Option = ({ option, disabled, service }) => {
       );
       dispatch({
         type: "UPDATE_PRICE_SERVICE",
-        payload: data,
+        payload: { ...data, pricesByHour: data?.prices },
       });
-      console.log("toi oi dadyas32131");
+
       setTime(timeString);
       dispatch({
         type: ADD_TIME_ORDER,
@@ -120,14 +120,14 @@ const Option = ({ option, disabled, service }) => {
             moment(date).toISOString().slice(0, 11) +
             timeString[1] +
             ":00.000Z",
-          prices: data.prices,
+          pricesByHour: data.prices,
         },
       });
       if (chooseServiceList.find((item) => item?.id === service?.id)) {
         console.log("toi oi dadyas");
         dispatch(
           handlerSelectServiceAction(service, {
-            ...filterService,
+            ...chooseService,
             OrderByTimeFrom:
               moment(date).toISOString().slice(0, 11) +
               timeString[0] +
@@ -142,8 +142,6 @@ const Option = ({ option, disabled, service }) => {
     }
   };
   const handleOnchangeDateRange = async (ds, datesString) => {
-    console.log("dsadsad", ds);
-
     if (ds) {
       // const { data } = await axios(
       //   `http://localhost:3003/api/booking/scheduleAndPrice?from=${
@@ -161,10 +159,9 @@ const Option = ({ option, disabled, service }) => {
         to,
         service.id
       );
-      console.log("prices", data.prices);
       dispatch({
         type: "UPDATE_PRICE_SERVICE",
-        payload: data,
+        payload: { ...data, pricesByDate: data?.prices },
       });
       dispatch({
         type: ADD_TIME_ORDER,
@@ -176,17 +173,18 @@ const Option = ({ option, disabled, service }) => {
           OrderByDateTo:
             moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
           disableDate: disableDate || [],
-          prices: data.prices,
+          pricesByDate: data.prices,
         },
       });
       if (chooseServiceList.find((item) => item?.id === service?.id)) {
         dispatch(
           handlerSelectServiceAction(service, {
-            ...filterService,
+            ...chooseService,
             OrderByDateFrom:
               moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
             OrderByDateTo:
               moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
+            pricesByDate: data.prices,
           })
         );
       }
@@ -204,7 +202,8 @@ const Option = ({ option, disabled, service }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "8px",
-            }}>
+            }}
+          >
             <DatePicker
               onChange={(d, dString) => {
                 dispatch({ type: DELETE_CHOOSE_SERVICE });
@@ -310,7 +309,8 @@ const Option = ({ option, disabled, service }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}>
+            }}
+          >
             <div className="" style={{ width: "160px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
@@ -350,7 +350,8 @@ const Option = ({ option, disabled, service }) => {
             name="time"
             label="Chọn ngày"
             style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
-            initialValue="">
+            initialValue=""
+          >
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
               defaultValue={[
@@ -382,9 +383,7 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
 
   const [data, setData] = useState(service);
   const [selectTime, setSelectTime] = useState();
-  const { listTimeSelected, filterService } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { listTimeSelected } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -415,7 +414,8 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
           disabled
             ? disabled
             : chooseServiceList.find((item) => item?.id === service?.id)
-        }>
+        }
+      >
         <Space direction="vertical">
           <Radio value={1}>Đặt theo giờ</Radio>
           <Radio value={0}>Đặt theo ngày</Radio>

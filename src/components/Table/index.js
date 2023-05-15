@@ -7,12 +7,12 @@ import { ExclamationCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useRef } from "react";
 
 const Index = ({ column, row = [], rowNumber = 5, className = "", style }) => {
-  const { filterService } = useSelector((state) => state.studioPostReducer);
+  const { chooseService } = useSelector((state) => state.studioPostReducer);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const ref = useRef(null);
 
-  useEffect(() => {}, [filterService]);
+  useEffect(() => {}, [chooseService]);
 
   const handleChangePageCurrent = (page) => {
     setLoading(true);

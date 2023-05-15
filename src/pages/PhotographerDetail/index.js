@@ -98,7 +98,7 @@ const PhotographerDetail = () => {
     studioDetail,
     listStudioSimilar,
     promotionCode,
-    filterService,
+    chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -355,8 +355,8 @@ const PhotographerDetail = () => {
           key: "currency",
           render: () => (
             <>
-              {filterService.OrderByTime !== -1 && (
-                <div className="mb-20">
+              {chooseService.OrderByTime !== -1 && (
+                <div className="mb-10">
                   <div
                     style={{
                       display: "flex",
@@ -372,12 +372,12 @@ const PhotographerDetail = () => {
                         fontWeight: "700",
                       }}
                     >
-                      {filterService.OrderByTime === 1 &&
+                      {chooseService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
                         })}
-                      {filterService.OrderByTime === 0 &&
+                      {chooseService.OrderByTime === 0 &&
                         data?.PriceByDate?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
@@ -391,12 +391,12 @@ const PhotographerDetail = () => {
                         fontWeight: "400",
                       }}
                     >
-                      {filterService.OrderByTime === 1 &&
+                      {chooseService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
                         })}
-                      {filterService.OrderByTime === 0 &&
+                      {chooseService.OrderByTime === 0 &&
                         data?.PriceByDate?.toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
@@ -412,7 +412,7 @@ const PhotographerDetail = () => {
                   >
                     {data.PriceNote}
                   </p>
-                  <button
+                  {/* <button
                     style={{
                       padding: "3px 21px",
                       background: "#E22828",
@@ -422,11 +422,11 @@ const PhotographerDetail = () => {
                     }}
                   >
                     Giảm 50%{" "}
-                  </button>
+                  </button> */}
                 </div>
               )}
               <div className="">
-                {filterService.id === data.id ? (
+                {chooseService.id === data.id ? (
                   <div
                     onClick={() => {
                       dispatch({ type: "REMOVE_SELECT_TIME" });
@@ -1100,7 +1100,7 @@ const PhotographerDetail = () => {
                                                 color: "#828282",
                                               }}
                                             >
-                                              {filterService?.OrderByTime ===
+                                              {chooseService?.OrderByTime ===
                                                 1 &&
                                                 `${convertPrice(
                                                   chooseServiceList?.reduce(
@@ -1108,13 +1108,13 @@ const PhotographerDetail = () => {
                                                       total +
                                                       item.PriceByHour *
                                                         calTime(
-                                                          filterService?.OrderByTimeFrom,
-                                                          filterService?.OrderByTimeTo
+                                                          chooseService?.OrderByTimeFrom,
+                                                          chooseService?.OrderByTimeTo
                                                         ),
                                                     0
                                                   )
                                                 )}đ`}
-                                              {filterService?.OrderByTime ===
+                                              {chooseService?.OrderByTime ===
                                                 0 &&
                                                 `${convertPrice(
                                                   chooseServiceList?.reduce(
@@ -1122,8 +1122,8 @@ const PhotographerDetail = () => {
                                                       total +
                                                       item.PriceByDate *
                                                         calDate(
-                                                          filterService?.OrderByDateFrom,
-                                                          filterService?.OrderByDateTo
+                                                          chooseService?.OrderByDateFrom,
+                                                          chooseService?.OrderByDateTo
                                                         ),
                                                     0
                                                   )
@@ -1138,28 +1138,28 @@ const PhotographerDetail = () => {
                                             fontWeight: "700",
                                           }}
                                         >
-                                          {filterService?.OrderByTime === 1 &&
+                                          {chooseService?.OrderByTime === 1 &&
                                             `${convertPrice(
                                               chooseServiceList?.reduce(
                                                 (total, item) =>
                                                   total +
                                                   item.PriceByHour *
                                                     calTime(
-                                                      filterService.OrderByTimeFrom,
-                                                      filterService.OrderByTimeTo
+                                                      chooseService.OrderByTimeFrom,
+                                                      chooseService.OrderByTimeTo
                                                     ),
                                                 0
                                               )
                                             )}đ`}
-                                          {filterService?.OrderByTime === 0 &&
+                                          {chooseService?.OrderByTime === 0 &&
                                             `${convertPrice(
                                               chooseServiceList?.reduce(
                                                 (total, item) =>
                                                   total +
                                                   item.PriceByDate *
                                                     calDate(
-                                                      filterService.OrderByDateFrom,
-                                                      filterService.OrderByDateTo
+                                                      chooseService.OrderByDateFrom,
+                                                      chooseService.OrderByDateTo
                                                     ),
                                                 0
                                               )
@@ -1414,28 +1414,28 @@ const PhotographerDetail = () => {
                                 color: "#828282",
                               }}
                             >
-                              {filterService.OrderByTime === 1 &&
+                              {chooseService.OrderByTime === 1 &&
                                 `${convertPrice(
                                   chooseServiceList?.reduce(
                                     (total, item) =>
                                       total +
                                       item.PriceByHour *
                                         calTime(
-                                          filterService.OrderByTimeFrom,
-                                          filterService.OrderByTimeTo
+                                          chooseService.OrderByTimeFrom,
+                                          chooseService.OrderByTimeTo
                                         ),
                                     0
                                   )
                                 )}đ`}
-                              {filterService.OrderByTime === 0 &&
+                              {chooseService.OrderByTime === 0 &&
                                 `${convertPrice(
                                   chooseServiceList?.reduce(
                                     (total, item) =>
                                       total +
                                       item.PriceByDate *
                                         calDate(
-                                          filterService.OrderByDateFrom,
-                                          filterService.OrderByDateTo
+                                          chooseService.OrderByDateFrom,
+                                          chooseService.OrderByDateTo
                                         ),
                                     0
                                   )
@@ -1454,28 +1454,28 @@ const PhotographerDetail = () => {
                               fontWeight: "700",
                             }}
                           >
-                            {filterService.OrderByTime === 1 &&
+                            {chooseService.OrderByTime === 1 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
                                     item.PriceByHour *
                                       calTime(
-                                        filterService.OrderByTimeFrom,
-                                        filterService.OrderByTimeTo
+                                        chooseService.OrderByTimeFrom,
+                                        chooseService.OrderByTimeTo
                                       ),
                                   0
                                 )
                               )}đ`}
-                            {filterService.OrderByTime === 0 &&
+                            {chooseService.OrderByTime === 0 &&
                               `${convertPrice(
                                 chooseServiceList?.reduce(
                                   (total, item) =>
                                     total +
                                     item.PriceByDate *
                                       calDate(
-                                        filterService.OrderByDateFrom,
-                                        filterService.OrderByDateTo
+                                        chooseService.OrderByDateFrom,
+                                        chooseService.OrderByDateTo
                                       ),
                                   0
                                 )
@@ -1504,7 +1504,7 @@ const PhotographerDetail = () => {
                             onClick={handleBook}
                             disabled={
                               chooseServiceList.length > 0 &&
-                              filterService.id > 0
+                              chooseService.id > 0
                                 ? false
                                 : true
                             }

@@ -1,4 +1,4 @@
-import { Col, Pagination, Row } from "antd";
+import { Col, Grid, Pagination, Row } from "antd";
 import classNames from "classnames/bind";
 import React, { memo, useEffect, useState } from "react";
 import { CardLiked } from "../../../components/Card/CardLiked";
@@ -6,7 +6,9 @@ import { CardLiked } from "../../../components/Card/CardLiked";
 import styles from "./ListCard.module.scss";
 const cx = classNames.bind(styles);
 const pageSize = 8;
+const { useBreakpoint } = Grid;
 const ListItemLikeCard = ({ data, category }) => {
+  const screens = useBreakpoint();
   const [state, setState] = useState({
     values: [],
     totalPage: 0,
@@ -36,20 +38,20 @@ const ListItemLikeCard = ({ data, category }) => {
   };
   return (
     <div className={cx("ListItem")}>
-      <Row gutter={{ lg: [16, 16], md: [16, 16], sm: [16, 16], xs: [0, 0] }}>
+      <Row gutter={screens?.xs ? [0, 15] : [16, 16]}>
         {values?.map((item, idx) => {
           return (
             idx >= minIndex &&
             idx < maxIndex && (
-              <>
-                <Col lg={6} md={6} sm={12} xs={24} key={idx}>
-                  <CardLiked value={item} category={category} />
-                </Col>
-                <div
-                  style={{ height: "10px", backgroundColor: "#f6f6f6" }}
-                  className={cx("divider")}
-                ></div>
-              </>
+              <Col lg={6} md={6} sm={12} xs={24} key={idx}>
+                <CardLiked value={item} category={category} />
+                {screens?.xs && (
+                  <div
+                    style={{ height: "10px", backgroundColor: "#f6f6f6" }}
+                    className={cx("divider")}
+                  ></div>
+                )}
+              </Col>
             )
           );
         })}

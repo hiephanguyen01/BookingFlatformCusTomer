@@ -93,7 +93,7 @@ const Index = () => {
     filter,
     listStudioSimilar,
     promotionCode,
-    filterService,
+    chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
@@ -119,7 +119,7 @@ const Index = () => {
     }, []);
 
   const [amount, setAmount] = useState(1);
-  const [chooseService, setChooseService] = useState([]);
+  // const [chooseService, setChooseService] = useState([]);
   const [open, setOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
@@ -147,13 +147,13 @@ const Index = () => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, [id]);
 
-  const handleChooseService = (data) => {
-    if (chooseService.filter((item) => item.id === data.id).length > 0) {
-      setChooseService([]);
-    } else {
-      setChooseService([{ ...data }]);
-    }
-  };
+  // const handleChooseService = (data) => {
+  //   if (chooseService.filter((item) => item.id === data.id).length > 0) {
+  //     setChooseService([]);
+  //   } else {
+  //     setChooseService([{ ...data }]);
+  //   }
+  // };
   const handleChangeLike = (e) => {
     // if (!currentUser) navigate("/auth/sign-in");
     if (currentUser) {
@@ -589,28 +589,28 @@ const Index = () => {
                                           color: "#828282",
                                         }}
                                       >
-                                        {filterService?.OrderByTime === 1 &&
+                                        {chooseService?.OrderByTime === 1 &&
                                           `${convertPrice(
                                             chooseServiceList?.reduce(
                                               (total, item) =>
                                                 total +
                                                 item.PriceByHour *
                                                   calTime(
-                                                    filterService?.OrderByTimeFrom,
-                                                    filterService?.OrderByTimeTo
+                                                    chooseService?.OrderByTimeFrom,
+                                                    chooseService?.OrderByTimeTo
                                                   ),
                                               0
                                             )
                                           )}đ`}
-                                        {filterService?.OrderByTime === 0 &&
+                                        {chooseService?.OrderByTime === 0 &&
                                           `${convertPrice(
                                             chooseServiceList?.reduce(
                                               (total, item) =>
                                                 total +
                                                 item.PriceByDate *
                                                   calDate(
-                                                    filterService?.OrderByDateFrom,
-                                                    filterService?.OrderByDateTo
+                                                    chooseService?.OrderByDateFrom,
+                                                    chooseService?.OrderByDateTo
                                                   ),
                                               0
                                             )
@@ -625,28 +625,28 @@ const Index = () => {
                                       fontWeight: "700",
                                     }}
                                   >
-                                    {filterService?.OrderByTime === 1 &&
+                                    {chooseService?.OrderByTime === 1 &&
                                       `${convertPrice(
                                         chooseServiceList?.reduce(
                                           (total, item) =>
                                             total +
                                             item.PriceByHour *
                                               calTime(
-                                                filterService.OrderByTimeFrom,
-                                                filterService.OrderByTimeTo
+                                                chooseService.OrderByTimeFrom,
+                                                chooseService.OrderByTimeTo
                                               ),
                                           0
                                         )
                                       )}đ`}
-                                    {filterService?.OrderByTime === 0 &&
+                                    {chooseService?.OrderByTime === 0 &&
                                       `${convertPrice(
                                         chooseServiceList?.reduce(
                                           (total, item) =>
                                             total +
                                             item.PriceByDate *
                                               calDate(
-                                                filterService.OrderByDateFrom,
-                                                filterService.OrderByDateTo
+                                                chooseService.OrderByDateFrom,
+                                                chooseService.OrderByDateTo
                                               ),
                                           0
                                         )
@@ -843,7 +843,7 @@ const Index = () => {
                       backgroundColor: "#ffffff",
                     }}
                   >
-                    {filterService.OrderByTime === -1 && (
+                    {chooseService.OrderByTime === -1 && (
                       <div className={cx("warning-choose-time")}>
                         <ExclamationCircleOutlined className="me-5" />
                         Chọn khung giờ và số lượng bạn muốn đặt để xem giá cho
@@ -949,101 +949,97 @@ const Index = () => {
                 </div>
               </div>
               {screens?.xs ? (
-                <>
-                  {chooseServiceList.length > 0 && (
-                    <div className={cx("right")}>
-                      <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                <div className={cx("right")}>
+                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                    <div
+                      style={{
+                        padding: "24px 26px",
+                        backgroundColor: "#ffffff",
+                        // height: "100%",
+                      }}
+                    >
+                      <div className="d-flex justify-content-between mb-12">
                         <div
+                          className=""
                           style={{
-                            padding: "24px 26px",
-                            backgroundColor: "#ffffff",
-                            // height: "100%",
+                            fontWeight: "600",
+                            fontSize: "18px",
+                            lineHeight: "25px",
+                            /* Neutral/Grey 700 */
+                            color: "#222222",
                           }}
                         >
-                          <div className="d-flex justify-content-between mb-12">
-                            <div
-                              className=""
-                              style={{
-                                fontWeight: "600",
-                                fontSize: "18px",
-                                lineHeight: "25px",
-                                /* Neutral/Grey 700 */
-                                color: "#222222",
-                              }}
-                            >
-                              Đã chọn {chooseService.length} sản phẩm
-                            </div>
-                            {chooseService.length > 0 && (
-                              <div
-                                style={{
-                                  fontWeight: "400",
-                                  fontSize: "16px",
-                                  lineHeight: "22px",
-                                  textDecorationLine: "line-through",
-                                  /* Neutral/Grey 400 */
-                                  color: "#828282",
-                                }}
-                              >
-                                {`${convertPrice(
-                                  chooseService?.reduce(
-                                    (total, item) => total + item.Price,
-                                    0
-                                  )
-                                )}`}
-                                đ
-                              </div>
-                            )}
-                          </div>
-                          <div className="d-flex justify-content-between mb-26">
-                            <div className="text-medium-re">
-                              Bao gồm 50.000đ thuế và phí
-                            </div>
-                            <div
-                              style={{
-                                fontWeight: "700",
-                                fontSize: "20px",
-                                lineHeight: "27px",
-                                /* Primary/Red 700 */
-                                color: "#E22828",
-                              }}
-                            >
-                              {`${convertPrice(
-                                chooseService?.reduce(
-                                  (total, item) => total + item.Sales,
-                                  0
-                                )
-                              )}`}
-                              đ
-                            </div>
-                          </div>
-                          <div className="w-100 d-flex justify-content-between">
-                            <Button
-                              className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                              onClick={() =>
-                                toastMessage(
-                                  "Chức năng này đang phát triển!",
-                                  "info",
-                                  1,
-                                  "",
-                                  {}
-                                )
-                              }
-                            >
-                              <ShoppingCartOutlined />
-                              Thêm vào giỏ hàng
-                            </Button>
-                            <Button
-                              className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                              onClick={handleBook}
-                            >
-                              Đặt ngay
-                            </Button>
-                          </div>
+                          Đã chọn {chooseService.length} sản phẩm
                         </div>
-                      </ReactStickyBox>
+                        {chooseService.length > 0 && (
+                          <div
+                            style={{
+                              fontWeight: "400",
+                              fontSize: "16px",
+                              lineHeight: "22px",
+                              textDecorationLine: "line-through",
+                              /* Neutral/Grey 400 */
+                              color: "#828282",
+                            }}
+                          >
+                            {`${convertPrice(
+                              chooseService?.reduce(
+                                (total, item) => total + item.Price,
+                                0
+                              )
+                            )}`}
+                            đ
+                          </div>
+                        )}
+                      </div>
+                      <div className="d-flex justify-content-between mb-26">
+                        <div className="text-medium-re">
+                          Bao gồm 50.000đ thuế và phí
+                        </div>
+                        <div
+                          style={{
+                            fontWeight: "700",
+                            fontSize: "20px",
+                            lineHeight: "27px",
+                            /* Primary/Red 700 */
+                            color: "#E22828",
+                          }}
+                        >
+                          {`${convertPrice(
+                            chooseService?.reduce(
+                              (total, item) => total + item.Sales,
+                              0
+                            )
+                          )}`}
+                          đ
+                        </div>
+                      </div>
+                      <div className="w-100 d-flex justify-content-between">
+                        <Button
+                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                          onClick={() =>
+                            toastMessage(
+                              "Chức năng này đang phát triển!",
+                              "info",
+                              1,
+                              "",
+                              {}
+                            )
+                          }
+                        >
+                          <ShoppingCartOutlined />
+                          Thêm vào giỏ hàng
+                        </Button>
+                        <Button
+                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                          onClick={handleBook}
+                        >
+                          Đặt ngay
+                        </Button>
+                      </div>
                     </div>
-                  )}
-                </>
+                  </ReactStickyBox>
+                </div>
               ) : (
                 <div className={cx("right")}>
                   <div className={cx("desc_col_right")}>
