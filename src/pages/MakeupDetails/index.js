@@ -1112,126 +1112,121 @@ const Index = () => {
                 </div>
               </div>
               {screens?.xs ? (
-                <>
-                  {chooseServiceList.length > 0 && (
-                    <div className={cx("right")}>
-                      <ReactStickyBox offsetTop={20} offsetBottom={20}>
-                        <div className={cx("order")}>
-                          <div className={cx("item")}>
-                            <h3>Đã chọn {chooseServiceList.length} phòng</h3>
-                            {chooseServiceList.length > 0 && (
-                              <span
-                                style={{
-                                  textDecoration: "line-through",
-                                  fontSize: " 16px",
-                                  color: "#828282",
-                                }}
-                              >
-                                {filterService.OrderByTime === 1 &&
-                                  `${convertPrice(
-                                    chooseServiceList?.reduce(
-                                      (total, item) =>
-                                        total +
-                                        item.PriceByHour *
-                                          calTime(
-                                            filterService.OrderByTimeFrom,
-                                            filterService.OrderByTimeTo
-                                          ),
-                                      0
-                                    )
-                                  )}đ`}
-                                {filterService.OrderByTime === 0 &&
-                                  `${convertPrice(
-                                    chooseServiceList?.reduce(
-                                      (total, item) =>
-                                        total +
-                                        item.PriceByDate *
-                                          calDate(
-                                            filterService.OrderByDateFrom,
-                                            filterService.OrderByDateTo
-                                          ),
-                                      0
-                                    )
-                                  )}đ`}
-                              </span>
-                            )}
-                          </div>
-                          <div className={cx("item")}>
-                            <span className="mt-3">
-                              Bao gồm 50.000đ thuế và phí{" "}
-                            </span>
-                            <span
-                              style={{
-                                color: "#E22828",
-                                fontSize: "20px",
-                                fontWeight: "700",
-                              }}
-                            >
-                              {filterService.OrderByTime === 1 &&
-                                `${convertPrice(
-                                  chooseServiceList?.reduce(
-                                    (total, item) =>
-                                      total +
-                                      item.PriceByHour *
-                                        calTime(
-                                          filterService.OrderByTimeFrom,
-                                          filterService.OrderByTimeTo
-                                        ),
-                                    0
-                                  )
-                                )}đ`}
-                              {filterService.OrderByTime === 0 &&
-                                `${convertPrice(
-                                  chooseServiceList?.reduce(
-                                    (total, item) =>
-                                      total +
-                                      item.PriceByDate *
-                                        calDate(
-                                          filterService.OrderByDateFrom,
-                                          filterService.OrderByDateTo
-                                        ),
-                                    0
-                                  )
-                                )}đ`}
-                            </span>
-                          </div>
-                          <div className="w-100 d-flex justify-content-between mt-20">
-                            <Button
-                              className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                              disabled={
-                                chooseServiceList?.length > 0 ? false : true
-                              }
-                              onClick={() =>
-                                toastMessage(
-                                  "Chức năng này đang phát triển!",
-                                  "info",
-                                  1,
-                                  "",
-                                  {}
+                <div className={cx("right")}>
+                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                    <div className={cx("order")}>
+                      <div className={cx("item")}>
+                        <h3>Đã chọn {chooseServiceList.length} phòng</h3>
+                        {chooseServiceList.length > 0 && (
+                          <span
+                            style={{
+                              textDecoration: "line-through",
+                              fontSize: " 16px",
+                              color: "#828282",
+                            }}
+                          >
+                            {filterService.OrderByTime === 1 &&
+                              `${convertPrice(
+                                chooseServiceList?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByHour *
+                                      calTime(
+                                        filterService.OrderByTimeFrom,
+                                        filterService.OrderByTimeTo
+                                      ),
+                                  0
                                 )
-                              }
-                            >
-                              <ShoppingCartOutlined />
-                              Thêm vào giỏ hàng
-                            </Button>
-                            <Button
-                              className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                              onClick={handleBook}
-                              disabled={
-                                chooseServiceList.length > 0 &&
-                                filterService.id > 0
-                                  ? false
-                                  : true
-                              }
-                            >
-                              Đặt ngay
-                            </Button>
-                          </div>
-                        </div>
-                      </ReactStickyBox>
+                              )}đ`}
+                            {filterService.OrderByTime === 0 &&
+                              `${convertPrice(
+                                chooseServiceList?.reduce(
+                                  (total, item) =>
+                                    total +
+                                    item.PriceByDate *
+                                      calDate(
+                                        filterService.OrderByDateFrom,
+                                        filterService.OrderByDateTo
+                                      ),
+                                  0
+                                )
+                              )}đ`}
+                          </span>
+                        )}
+                      </div>
+                      <div className={cx("item")}>
+                        <span className="mt-3">
+                          Bao gồm 50.000đ thuế và phí{" "}
+                        </span>
+                        <span
+                          style={{
+                            color: "#E22828",
+                            fontSize: "20px",
+                            fontWeight: "700",
+                          }}
+                        >
+                          {filterService.OrderByTime === 1 &&
+                            `${convertPrice(
+                              chooseServiceList?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByHour *
+                                    calTime(
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}đ`}
+                          {filterService.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseServiceList?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.PriceByDate *
+                                    calDate(
+                                      filterService.OrderByDateFrom,
+                                      filterService.OrderByDateTo
+                                    ),
+                                0
+                              )
+                            )}đ`}
+                        </span>
+                      </div>
+                      <div className="w-100 d-flex justify-content-between mt-20">
+                        <Button
+                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                          disabled={
+                            chooseServiceList?.length > 0 ? false : true
+                          }
+                          onClick={() =>
+                            toastMessage(
+                              "Chức năng này đang phát triển!",
+                              "info",
+                              1,
+                              "",
+                              {}
+                            )
+                          }
+                        >
+                          <ShoppingCartOutlined />
+                          Thêm vào giỏ hàng
+                        </Button>
+                        <Button
+                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                          onClick={handleBook}
+                          disabled={
+                            chooseServiceList.length > 0 && filterService.id > 0
+                              ? false
+                              : true
+                          }
+                        >
+                          Đặt ngay
+                        </Button>
+                      </div>
                     </div>
-                  )}
-                </>
+                  </ReactStickyBox>
+                </div>
               ) : (
                 <div className={cx("right")}>
                   <div className={cx("map")}>

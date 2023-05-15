@@ -560,86 +560,85 @@ const Index = () => {
                 </div>
               </div>
               {screens?.xs ? (
-                // <div className={cx("right")}>
-                //   <ReactStickyBox offsetTop={20} offsetBottom={20}>
-                //     <div
-                //       style={{
-                //         padding: "24px 26px",
-                //         backgroundColor: "#ffffff",
-                //         // height: "100%",
-                //       }}
-                //     >
-                //       <div className="d-flex justify-content-between mb-12">
-                //         <div
-                //           className=""
-                //           style={{
-                //             fontWeight: "600",
-                //             fontSize: "18px",
-                //             lineHeight: "25px",
-                //             /* Neutral/Grey 700 */
-                //             color: "#222222",
-                //           }}
-                //         >
-                //           Đã chọn {amount} sản phẩm
-                //         </div>
-                //         {amount > 0 && (
-                //           <div
-                //             style={{
-                //               fontWeight: "400",
-                //               fontSize: "16px",
-                //               lineHeight: "22px",
-                //               textDecorationLine: "line-through",
-                //               /* Neutral/Grey 400 */
-                //               color: "#828282",
-                //             }}
-                //           >
-                //             0 đ
-                //           </div>
-                //         )}
-                //       </div>
-                //       <div className="d-flex justify-content-between mb-26">
-                //         <div className="text-medium-re">
-                //           Bao gồm 50.000đ thuế và phí
-                //         </div>
-                //         <div
-                //           style={{
-                //             fontWeight: "700",
-                //             fontSize: "20px",
-                //             lineHeight: "27px",
-                //             /* Primary/Red 700 */
-                //             color: "#E22828",
-                //           }}
-                //         >
-                //           0 đ
-                //         </div>
-                //       </div>
-                //       <div className="w-100 d-flex justify-content-between">
-                //         <Button
-                //           className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                //           onClick={() =>
-                //             toastMessage(
-                //               "Chức năng này đang phát triển!",
-                //               "info",
-                //               1,
-                //               "",
-                //               {}
-                //             )
-                //           }
-                //         >
-                //           <ShoppingCartOutlined />
-                //           Thêm vào giỏ hàng
-                //         </Button>
-                //         <Button
-                //           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                //           onClick={handleBook}
-                //         >
-                //           Đặt ngay
-                //         </Button>
-                //       </div>
-                //     </div>
-                //   </ReactStickyBox>
-                // </div>
-                <></>
+                <div className={cx("right")}>
+                  <ReactStickyBox offsetTop={20} offsetBottom={20}>
+                    <div
+                      style={{
+                        padding: "24px 26px",
+                        backgroundColor: "#ffffff",
+                        // height: "100%",
+                      }}
+                    >
+                      <div className="d-flex justify-content-between mb-12">
+                        <div
+                          className=""
+                          style={{
+                            fontWeight: "600",
+                            fontSize: "18px",
+                            lineHeight: "25px",
+                            /* Neutral/Grey 700 */
+                            color: "#222222",
+                          }}
+                        >
+                          Đã chọn {amount} sản phẩm
+                        </div>
+                        {amount > 0 && (
+                          <div
+                            style={{
+                              fontWeight: "400",
+                              fontSize: "16px",
+                              lineHeight: "22px",
+                              textDecorationLine: "line-through",
+                              /* Neutral/Grey 400 */
+                              color: "#828282",
+                            }}
+                          >
+                            0 đ
+                          </div>
+                        )}
+                      </div>
+                      <div className="d-flex justify-content-between mb-26">
+                        <div className="text-medium-re">
+                          Bao gồm 50.000đ thuế và phí
+                        </div>
+                        <div
+                          style={{
+                            fontWeight: "700",
+                            fontSize: "20px",
+                            lineHeight: "27px",
+                            /* Primary/Red 700 */
+                            color: "#E22828",
+                          }}
+                        >
+                          0 đ
+                        </div>
+                      </div>
+                      <div className="w-100 d-flex justify-content-between">
+                        <Button
+                          className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
+                          onClick={() =>
+                            toastMessage(
+                              "Chức năng này đang phát triển!",
+                              "info",
+                              1,
+                              "",
+                              {}
+                            )
+                          }
+                        >
+                          <ShoppingCartOutlined />
+                          Thêm vào giỏ hàng
+                        </Button>
+                        <Button
+                          className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
+                          onClick={handleBook}
+                        >
+                          Đặt ngay
+                        </Button>
+                      </div>
+                    </div>
+                  </ReactStickyBox>
+                </div>
               ) : (
                 <div className={cx("right")}>
                   <div className={cx("desc_col_right")}>

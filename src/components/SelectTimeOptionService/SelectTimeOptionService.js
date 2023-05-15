@@ -142,8 +142,6 @@ const Option = ({ option, disabled, service }) => {
     }
   };
   const handleOnchangeDateRange = async (ds, datesString) => {
-    console.log("dsadsad", ds);
-
     if (ds) {
       // const { data } = await axios(
       //   `http://localhost:3003/api/booking/scheduleAndPrice?from=${
@@ -204,7 +202,8 @@ const Option = ({ option, disabled, service }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "8px",
-            }}>
+            }}
+          >
             <DatePicker
               onChange={(d, dString) => {
                 dispatch({ type: DELETE_CHOOSE_SERVICE });
@@ -310,7 +309,8 @@ const Option = ({ option, disabled, service }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}>
+            }}
+          >
             <div className="" style={{ width: "160px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
@@ -350,7 +350,8 @@ const Option = ({ option, disabled, service }) => {
             name="time"
             label="Chọn ngày"
             style={{ width: "100%", marginRight: "20px", marginBottom: "10px" }}
-            initialValue="">
+            initialValue=""
+          >
             <DatePicker.RangePicker
               onChange={handleOnchangeDateRange}
               defaultValue={[
@@ -415,7 +416,8 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
           disabled
             ? disabled
             : chooseServiceList.find((item) => item?.id === service?.id)
-        }>
+        }
+      >
         <Space direction="vertical">
           <Radio value={1}>Đặt theo giờ</Radio>
           <Radio value={0}>Đặt theo ngày</Radio>

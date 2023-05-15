@@ -34,7 +34,7 @@ const Index = ({ linkTo = "" }) => {
   const { partnerDetail } = useSelector(
     (state) => state.registerPartnerReducer
   );
-  const { choosePromotionUser } = useSelector(
+  const { choosePromotionUser, promoCodeUserSave } = useSelector(
     (state) => state.promoCodeReducer
   );
   const { studioDetail, filterService } = useSelector(
@@ -73,15 +73,6 @@ const Index = ({ linkTo = "" }) => {
       break;
   }
   const dispatch = useDispatch();
-  console.log({
-    OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
-      .add(studioDetail?.data?.HourOpenDefault, "h")
-      .add(studioDetail?.data?.MinutesOpenDefault, "m")
-      .toISOString(),
-    OrderByDateTo: moment(filterService?.OrderByDateTo)
-      .add(studioDetail?.HourCloseDefault, "h")
-      .add(studioDetail?.MinutesCloseDefault, "m"),
-  });
   useEffect(() => {
     // if (chooseServiceList.length <= 0) {
     //   navigate(`${location.pathname.split("/order")[0]}`);
@@ -665,8 +656,9 @@ const Index = ({ linkTo = "" }) => {
                   align="middle"
                   className="text-medium-re"
                   style={{ fontSize: "14px" }}
+                  onClick={() => onClickModal()}
                 >
-                  2 mã khuyến mãi{" "}
+                  {promoCodeUserSave.length} mã khuyến mãi{" "}
                   <RightOutlined
                     className="ms-5"
                     style={{ fontSize: "10px" }}
@@ -675,25 +667,82 @@ const Index = ({ linkTo = "" }) => {
               </Row>
               <Divider className="my-12" />
               <Row align="middle" justify="space-between" className="mb-8">
-                <div className="text-medium-se">Đã chọn 2 phòng</div>
+                <div className="text-medium-se">
+                  Đã chọn {chooseServiceList?.length} phòng
+                </div>
                 <div
                   className="text-medium-re"
                   style={{ textDecoration: "line-through" }}
                 >
-                  {convertPrice(1800000)}
+                  {filterService?.OrderByTime === 1 &&
+                    `${convertPrice(
+                      chooseServiceList?.reduce(
+                        (total, item) =>
+                          total +
+                          item?.prices[0].PriceByHour *
+                            calTime(
+                              filterService.OrderByTimeFrom,
+                              filterService.OrderByTimeTo
+                            ),
+                        0
+                      )
+                    )}đ`}
+                  {filterService?.OrderByTime === 0 &&
+                    `${convertPrice(
+                      chooseServiceList?.reduce(
+                        (total, item) =>
+                          total +
+                          item.prices.reduce(
+                            (sum, cur) => sum + cur.PriceByDate,
+                            0
+                          ),
+                        0
+                      )
+                    )}đ`}
                 </div>
               </Row>
               <Row align="middle" justify="space-between" className="mb-10">
                 <div>Bao gồm 50.000 thuế và phí</div>
-                <h4 style={{ color: "#E22828" }}>{convertPrice(1500000)}</h4>
+                <h4 style={{ color: "#E22828" }}>
+                  {convertPrice(calculatePriceUsePromo())}đ
+                </h4>
               </Row>
-              <Button
-                type={"primary"}
-                className="w-100 h-40px"
-                style={{ borderRadius: "8px" }}
-              >
-                Hoàn tất đặt
-              </Button>
+              <Row>
+                {infoUser?.IsActiveEmail &&
+                infoUser?.Email?.trim() === user?.Email?.trim() ? (
+                  <Button
+                    onClick={(e) => {
+                      handleOnClickOrder();
+                    }}
+                    type="primary"
+                    // disabled={Valid ? false : true}
+                    className="w-100 h-40px"
+                    style={{ borderRadius: "8px" }}
+                  >
+                    Hoàn tất đặt
+                  </Button>
+                ) : Valid ? (
+                  <Button
+                    onClick={(e) => {
+                      handleOnClickOrder();
+                    }}
+                    type="primary"
+                    className="w-100 h-40px"
+                    style={{ borderRadius: "8px" }}
+                  >
+                    Hoàn tất đặt
+                  </Button>
+                ) : (
+                  <Button
+                    type="primary"
+                    disabled={true}
+                    className="w-100 h-40px"
+                    style={{ borderRadius: "8px" }}
+                  >
+                    Hoàn tất đặt
+                  </Button>
+                )}
+              </Row>
             </div>
           )}
         </Col>

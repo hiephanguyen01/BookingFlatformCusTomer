@@ -1446,12 +1446,12 @@ export const StudioDetail = () => {
                           <Button
                             className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
                             onClick={handleBook}
-                            disabled={
-                              chooseServiceList.length > 0 &&
-                              filterService.id > 0
-                                ? false
-                                : true
-                            }
+                            // disabled={
+                            //   chooseServiceList.length > 0 &&
+                            //   filterService.id > 0
+                            //     ? false
+                            //     : true
+                            // }
                           >
                             Đặt ngay
                           </Button>
