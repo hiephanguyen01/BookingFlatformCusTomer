@@ -123,6 +123,7 @@ export const StudioDetail = () => {
   //     return [...arr, item];
   //   }, []);
 
+  console.log("first")
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
