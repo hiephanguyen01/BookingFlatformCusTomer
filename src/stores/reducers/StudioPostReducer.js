@@ -24,6 +24,7 @@ import {
   ADD_TIME_ORDER,
   SELECT_TIME_ORDER,
 } from "../types/studioPostType";
+import { DELETE_CHOOSE_SERVICE } from "../types/OrderType";
 
 const initialState = {
   loading: false,
@@ -93,23 +94,43 @@ export const studioPostReducer = (state = initialState, action) => {
         studioDetail: action.payload,
       };
     case "UPDATE_PRICE_SERVICE":
+      if (Number(action.payload.category) === 3) {
+        return {
+          ...state,
+          studioDetail: {
+            ...state.studioDetail,
+            data: {
+              ...state.studioDetail.data,
+              pricesByHour: action?.payload?.pricesByHour,
+              pricesByDate: action?.payload?.pricesByDate,
+            },
+          },
+        };
+      } else {
+        return {
+          ...state,
+          studioDetail: {
+            ...state.studioDetail,
+            service: state.studioDetail.service.map((item) => {
+              if (item.id == action.payload.serviceId) {
+                return {
+                  ...item,
+                  pricesByHour:
+                    action?.payload?.pricesByHour || item?.pricesByHour,
+                  pricesByDate:
+                    action?.payload?.pricesByDate || item?.pricesByDate,
+                };
+              }
+              return item;
+            }),
+          },
+        };
+      }
+
+    case DELETE_CHOOSE_SERVICE:
       return {
         ...state,
-        studioDetail: {
-          ...state.studioDetail,
-          service: state.studioDetail.service.map((item) => {
-            if (item.id == action.payload.roomId) {
-              return {
-                ...item,
-                pricesByHour:
-                  action?.payload?.pricesByHour || item?.pricesByHour,
-                pricesByDate:
-                  action?.payload?.pricesByDate || item?.pricesByDate,
-              };
-            }
-            return item;
-          }),
-        },
+        chooseService: {},
       };
     case SET_STUDIO_DETAIL1:
       return {

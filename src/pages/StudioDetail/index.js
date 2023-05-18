@@ -54,7 +54,7 @@ import {
   SET_CHOOSE_SERVICE,
 } from "../../stores/types/OrderType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
-import { calDate, calTime } from "../../utils/calculate";
+import { calDate, calTime, priceService } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 // import { openNotification } from "../../utils/Notification";
@@ -156,50 +156,6 @@ export const StudioDetail = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
-  const priceService = (arr = [], OrderByTime) => {
-    if (arr.length < 1) return null;
-    const areAllEqual = arr.every(
-      (num) =>
-        (OrderByTime ? num.PriceByHour : num.PriceByDate) ==
-        (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
-    );
-
-    if (areAllEqual) {
-      return OrderByTime
-        ? arr[0].PriceByHour.toLocaleString("it-IT", {
-            style: "currency",
-            currency: "VND",
-          })
-        : arr[0].PriceByDate.toLocaleString("it-IT", {
-            style: "currency",
-            currency: "VND",
-          });
-    } else {
-      const result = arr.reduce(
-        (acc, curr) => {
-          const id = OrderByTime ? curr.PriceByHour : curr.PriceByDate;
-          if (id < acc.min) {
-            acc.min = id;
-          } else if (id > acc.max) {
-            acc.max = id;
-          }
-          return acc;
-        },
-        {
-          min: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
-          max: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
-        }
-      );
-      return `
-        ${result?.min?.toLocaleString("it-IT", {
-          style: "currency",
-          currency: "VND",
-        })} - ${result?.max?.toLocaleString("it-IT", {
-        style: "currency",
-        currency: "VND",
-      })}`;
-    }
-  };
   const handleReport = () => {
     dispatch({
       type: SHOW_MODAL,
@@ -366,7 +322,9 @@ export const StudioDetail = () => {
       {
         key: "desc",
         render: (item) => {
-          return <SelectTimeOptionService service={data} />;
+          return (
+            <SelectTimeOptionService service={{ ...data, category: cate }} />
+          );
         },
       },
       {
@@ -1029,210 +987,155 @@ export const StudioDetail = () => {
                                 <h5>Chọn thời gian</h5>
                               </Col>
                               <Col span={24}>
-                                <SelectTimeOptionService service={data} />
+                                <SelectTimeOptionService
+                                  service={{ ...data, category: cate }}
+                                />
                               </Col>
                             </Row>
                             <Divider style={{ margin: "0 0 20px" }} />
                             <Row justify="end">
-                              {chooseServiceList.find(
-                                (item) => item?.id === data?.id
-                              ) ? (
-                                <>
-                                  <Col span={24} style={{ textAlign: "end" }}>
-                                    <div>Giá cho thời gian bạn đã chọn</div>
-                                  </Col>{" "}
-                                  <Col span={24} className="mb-10">
-                                    <Row align="middle" justify="end">
-                                      <div
-                                        className="me-10"
-                                        style={{ textAlign: "end" }}
-                                      >
-                                        {chooseServiceList?.length > 0 && (
-                                          <span
-                                            style={{
-                                              textDecoration: "line-through",
-                                              fontSize: " 16px",
-                                              color: "#828282",
-                                            }}
-                                          >
-                                            {listTimeSelected?.find(
-                                              (item) => item.id === data?.id
-                                            )?.OrderByTime === 1 &&
-                                              priceService(data?.prices, true)}
-                                            {listTimeSelected?.find(
-                                              (item) => item.id === data?.id
-                                            )?.OrderByTime === 0 &&
-                                              priceService(data?.prices, false)}
-                                          </span>
-                                        )}
-                                      </div>
+                              {listTimeSelected.length > 0 &&
+                                listTimeSelected?.find(
+                                  (item) => item.id === data?.id
+                                ) && (
+                                  <>
+                                    <Col span={24} style={{ textAlign: "end" }}>
+                                      <div>Giá cho thời gian bạn đã chọn</div>
+                                    </Col>{" "}
+                                    <div
+                                      className="mb-20"
+                                      style={{ textAlign: "end" }}
+                                    >
                                       <div
                                         style={{
-                                          color: "#E22828",
-                                          fontSize: "20px",
-                                          fontWeight: "700",
+                                          display: "flex",
+                                          gap: "10px",
+                                          alignItems: "center",
+                                          flexWrap: "wrap",
+                                          justifyContent: "end",
                                         }}
                                       >
-                                        {chooseService?.OrderByTime === 1 &&
-                                          `${convertPrice(
-                                            chooseServiceList?.reduce(
-                                              (total, item) =>
-                                                total +
-                                                item.PriceByHour *
-                                                  calTime(
-                                                    chooseService.OrderByTimeFrom,
-                                                    chooseService.OrderByTimeTo
-                                                  ),
-                                              0
-                                            )
-                                          )}đ`}
-                                        {chooseService?.OrderByTime === 0 &&
-                                          `${convertPrice(
-                                            chooseServiceList?.reduce(
-                                              (total, item) =>
-                                                total +
-                                                item.PriceByDate *
-                                                  calDate(
-                                                    chooseService.OrderByDateFrom,
-                                                    chooseService.OrderByDateTo
-                                                  ),
-                                              0
-                                            )
-                                          )}đ`}
+                                        <span
+                                          style={{
+                                            color: "#828282",
+                                            textDecoration: "line-through",
+                                            fontSize: "16px",
+                                            fontWeight: "400",
+                                          }}
+                                        >
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 1 && (
+                                            <>
+                                              {listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.pricesByHour?.length > 0 ? (
+                                                <>
+                                                  {(
+                                                    listTimeSelected?.find(
+                                                      (item) =>
+                                                        item.id === data?.id
+                                                    )?.pricesByHour[0]
+                                                      ?.PriceByHour *
+                                                    calTime(
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeFrom,
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeTo
+                                                    )
+                                                  )
+                                                    .toLocaleString("vi", {
+                                                      style: "currency",
+                                                      currency: "VND",
+                                                    })
+                                                    .replace("₫", "đ")}
+                                                </>
+                                              ) : (
+                                                <></>
+                                              )}
+                                            </>
+                                          )}
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 0 &&
+                                            priceService(
+                                              listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.pricesByDate,
+                                              false
+                                            )}
+                                        </span>
+                                        <span
+                                          style={{
+                                            color: "#E22828",
+                                            fontSize: "20px",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 1 && (
+                                            <>
+                                              {listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.pricesByHour?.length > 0 ? (
+                                                <>
+                                                  {(
+                                                    listTimeSelected?.find(
+                                                      (item) =>
+                                                        item.id === data?.id
+                                                    )?.pricesByHour[0]
+                                                      ?.PriceByHour *
+                                                    calTime(
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeFrom,
+                                                      listTimeSelected?.find(
+                                                        (item) =>
+                                                          item.id === data?.id
+                                                      )?.OrderByTimeTo
+                                                    )
+                                                  )
+                                                    .toLocaleString("vi", {
+                                                      style: "currency",
+                                                      currency: "VND",
+                                                    })
+                                                    .replace("₫", "đ")}
+                                                </>
+                                              ) : (
+                                                <></>
+                                              )}
+                                            </>
+                                          )}
+                                          {listTimeSelected?.find(
+                                            (item) => item.id === data?.id
+                                          )?.OrderByTime === 0 &&
+                                            priceService(
+                                              listTimeSelected?.find(
+                                                (item) => item.id === data?.id
+                                              )?.pricesByDate,
+                                              false
+                                            )}
+                                        </span>
                                       </div>
+                                      <p
+                                        style={{
+                                          color: "#828282",
+                                          fontSize: "14px",
+                                          fontWeight: "400",
+                                        }}
+                                      >
+                                        {data?.PriceNote}
+                                      </p>
                                       <span>Bao gồm 50.000đ thuế và phí</span>
-                                    </Row>
-                                  </Col>
-                                </>
-                              ) : (
-                                <>
-                                  {listTimeSelected.length > 0 &&
-                                    listTimeSelected?.find(
-                                      (item) => item.id === data?.id
-                                    ) && (
-                                      <>
-                                        <Col
-                                          span={24}
-                                          style={{ textAlign: "end" }}
-                                        >
-                                          <div>
-                                            Giá cho thời gian bạn đã chọn
-                                          </div>
-                                        </Col>{" "}
-                                        <div
-                                          className="mb-20"
-                                          style={{ textAlign: "end" }}
-                                        >
-                                          <div
-                                            style={{
-                                              display: "flex",
-                                              gap: "10px",
-                                              alignItems: "center",
-                                              flexWrap: "wrap",
-                                              justifyContent: "end",
-                                            }}
-                                          >
-                                            <span
-                                              style={{
-                                                color: "#828282",
-                                                textDecoration: "line-through",
-                                                fontSize: "16px",
-                                                fontWeight: "400",
-                                              }}
-                                            >
-                                              {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 1 &&
-                                                convertPrice(
-                                                  data?.PriceByHour *
-                                                    calTime(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeTo
-                                                    )
-                                                )}
-                                              {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 0 &&
-                                                convertPrice(
-                                                  data?.PriceByDate *
-                                                    calDate(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateTo
-                                                    )
-                                                )}
-                                              đ
-                                            </span>
-                                            <span
-                                              style={{
-                                                color: "#E22828",
-                                                fontSize: "20px",
-                                                fontWeight: "700",
-                                              }}
-                                            >
-                                              {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 1 &&
-                                                convertPrice(
-                                                  data?.PriceByHour *
-                                                    calTime(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeTo
-                                                    )
-                                                )}
-                                              {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 0 &&
-                                                convertPrice(
-                                                  data?.PriceByDate *
-                                                    calDate(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateTo
-                                                    )
-                                                )}
-                                              đ
-                                            </span>
-                                          </div>
-                                          <p
-                                            style={{
-                                              color: "#828282",
-                                              fontSize: "14px",
-                                              fontWeight: "400",
-                                            }}
-                                          >
-                                            {data?.PriceNote}
-                                          </p>
-                                          <span>
-                                            Bao gồm 50.000đ thuế và phí
-                                          </span>
-                                        </div>
-                                      </>
-                                    )}
-                                </>
-                              )}
+                                    </div>
+                                  </>
+                                )}
                             </Row>
                             <Row>
                               <Col span={24}>
@@ -1316,31 +1219,22 @@ export const StudioDetail = () => {
                               }}
                             >
                               {chooseService?.OrderByTime === 1 &&
-                                `${convertPrice(
-                                  chooseServiceList?.reduce(
-                                    (total, item) =>
-                                      total +
-                                      item.PriceByHour *
-                                        calTime(
-                                          chooseService?.OrderByTimeFrom,
-                                          chooseService?.OrderByTimeTo
-                                        ),
-                                    0
-                                  )
-                                )}đ`}
+                                convertPrice(
+                                  chooseService?.pricesByHour[0]?.PriceByHour *
+                                    calTime(
+                                      chooseService?.OrderByTimeFrom,
+                                      chooseService?.OrderByTimeTo
+                                    )
+                                )}
                               {chooseService?.OrderByTime === 0 &&
-                                `${convertPrice(
-                                  chooseServiceList?.reduce(
-                                    (total, item) =>
-                                      total +
-                                      item.PriceByDate *
-                                        calDate(
-                                          chooseService?.OrderByDateFrom,
-                                          chooseService?.OrderByDateTo
-                                        ),
+                                convertPrice(
+                                  chooseService?.pricesByDate?.reduce(
+                                    (totalPrice, item) =>
+                                      totalPrice + item?.PriceByDate,
                                     0
                                   )
-                                )}đ`}
+                                )}
+                              đ
                             </span>
                           )}
                         </div>
@@ -1348,40 +1242,33 @@ export const StudioDetail = () => {
                           <span className="mt-3">
                             Bao gồm 50.000đ thuế và phí{" "}
                           </span>
-                          <span
-                            style={{
-                              color: "#E22828",
-                              fontSize: "20px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            {chooseService?.OrderByTime === 1 &&
-                              `${convertPrice(
-                                chooseServiceList?.reduce(
-                                  (total, item) =>
-                                    total +
-                                    item.PriceByHour *
-                                      calTime(
-                                        chooseService.OrderByTimeFrom,
-                                        chooseService.OrderByTimeTo
-                                      ),
-                                  0
-                                )
-                              )}đ`}
-                            {chooseService?.OrderByTime === 0 &&
-                              `${convertPrice(
-                                chooseServiceList?.reduce(
-                                  (total, item) =>
-                                    total +
-                                    item.PriceByDate *
-                                      calDate(
-                                        chooseService.OrderByDateFrom,
-                                        chooseService.OrderByDateTo
-                                      ),
-                                  0
-                                )
-                              )}đ`}
-                          </span>
+                          {Object.keys(chooseService)?.length > 0 && (
+                            <span
+                              style={{
+                                color: "#E22828",
+                                fontSize: "20px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              {chooseService?.OrderByTime === 1 &&
+                                convertPrice(
+                                  chooseService?.pricesByHour[0]?.PriceByHour *
+                                    calTime(
+                                      chooseService?.OrderByTimeFrom,
+                                      chooseService?.OrderByTimeTo
+                                    )
+                                )}
+                              {chooseService?.OrderByTime === 0 &&
+                                convertPrice(
+                                  chooseService?.pricesByDate?.reduce(
+                                    (totalPrice, item) =>
+                                      totalPrice + item?.PriceByDate,
+                                    0
+                                  )
+                                )}
+                              đ
+                            </span>
+                          )}
                         </div>
                         <div className="w-100 d-flex justify-content-between mt-20">
                           <Button

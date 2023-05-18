@@ -114,14 +114,16 @@ const Index = () => {
       className={screens?.xs ? "" : "py-12"}
       style={{ margin: "auto", backgroundColor: "#f2f4f5" }}
     >
-      <BackNav
-        title="Cập nhật minh chứng"
-        to={`${
-          location?.state?.path
-            ? location?.state?.path
-            : "/home/user/orderStatus"
-        }`}
-      />
+      {screens?.xs && (
+        <BackNav
+          title="Cập nhật minh chứng"
+          to={`${
+            location?.state?.path
+              ? location?.state?.path
+              : "/home/user/orderStatus"
+          }`}
+        />
+      )}
       <div className="confirm_order_container">
         <div className="border_bottom">
           <div className="confirm_title">
