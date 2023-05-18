@@ -108,7 +108,7 @@ const Index = ({ linkTo = "" }) => {
         return chooseServiceList?.reduce(
           (total, service) =>
             total +
-            service?.PriceByHour *
+            service?.pricesByHour[0].PriceByHour *
               calTime(
                 chooseService?.OrderByTimeFrom,
                 chooseService?.OrderByTimeTo
@@ -117,13 +117,9 @@ const Index = ({ linkTo = "" }) => {
         );
       case 0:
         return chooseServiceList?.reduce(
-          (total, service) =>
+          (total, item) =>
             total +
-            service.PriceByDate *
-              calDate(
-                chooseService?.OrderByDateFrom,
-                chooseService?.OrderByDateTo
-              ),
+            item?.pricesByDate?.reduce((sum, cur) => sum + cur.PriceByDate, 0),
           0
         );
 
@@ -141,7 +137,7 @@ const Index = ({ linkTo = "" }) => {
         const priceByHour = chooseServiceList?.reduce(
           (total, item) =>
             total +
-            item.prices[0].PriceByHour *
+            item.pricesByHour[0].PriceByHour *
               calTime(
                 chooseService.OrderByTimeFrom,
                 chooseService.OrderByTimeTo
@@ -164,7 +160,10 @@ const Index = ({ linkTo = "" }) => {
           chooseServiceList?.reduce(
             (total, item) =>
               total +
-              item.prices.reduce((sum, cur) => sum + cur.PriceByDate, 0),
+              item?.pricesByDate?.reduce(
+                (sum, cur) => sum + cur.PriceByDate,
+                0
+              ),
             0
           ) || 0;
         if (choosePromotionUser?.TypeReduce === 1) {
@@ -222,7 +221,7 @@ const Index = ({ linkTo = "" }) => {
               IsPayDeposit: 1,
               BookingValueBeforeDiscount: calculatePrice(),
               BookingValue: calculatePriceUsePromo(),
-              DepositValue: (calculatePriceUsePromo() * 15) / 100,
+              // DepositValue: (calculatePriceUsePromo() * 15) / 100,
               AffiliateCommission: calculateCommisionAffiliate(
                 calculatePriceUsePromo()
               ),
@@ -267,7 +266,7 @@ const Index = ({ linkTo = "" }) => {
               IsPayDeposit: 1,
               BookingValueBeforeDiscount: calculatePrice(),
               BookingValue: calculatePriceUsePromo(),
-              DepositValue: (calculatePriceUsePromo() * 15) / 100,
+              // DepositValue: (calculatePriceUsePromo() * 15) / 100,
               AffiliateCommission: calculateCommisionAffiliate(
                 calculatePriceUsePromo()
               ),
@@ -328,7 +327,7 @@ const Index = ({ linkTo = "" }) => {
           maxWidth: "1300px",
         }}
       >
-        <Col lg={9} sm={24} className="col">
+        <Col lg={9} sm={24} xs={24} className="col">
           <div className="right_col">
             <div className="text-title">Bạn đã chọn</div>
             <div className="text-description">
@@ -454,7 +453,7 @@ const Index = ({ linkTo = "" }) => {
                         marginBottom: "12px",
                       }}
                     >
-                      {chooseService?.OrderByTime === 1 &&
+                      {/* {chooseService?.OrderByTime === 1 &&
                         `${convertPrice(
                           chooseService?.pricesByHour[0].PriceByHour *
                             calTime(
@@ -468,7 +467,8 @@ const Index = ({ linkTo = "" }) => {
                             (total, item) => total + item?.priceByDate
                           ),
                           0
-                        )}đ`}
+                        )}đ`} */}
+                      {convertPrice(calculatePrice())}
                     </div>
                   </div>
                   <div className="d-flex justify-content-between">
@@ -664,7 +664,7 @@ const Index = ({ linkTo = "" }) => {
                   className="text-medium-re"
                   style={{ textDecoration: "line-through" }}
                 >
-                  {chooseService?.OrderByTime === 1 &&
+                  {/* {chooseService?.OrderByTime === 1 &&
                     `${convertPrice(
                       chooseServiceList?.reduce(
                         (total, item) =>
@@ -688,7 +688,8 @@ const Index = ({ linkTo = "" }) => {
                           ),
                         0
                       )
-                    )}đ`}
+                    )}đ`} */}
+                  {convertPrice(calculatePrice())}
                 </div>
               </Row>
               <Row align="middle" justify="space-between" className="mb-10">

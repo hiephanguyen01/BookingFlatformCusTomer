@@ -8,7 +8,6 @@ import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
 import "./selectTimeOptionService.scss";
 import { handlerSelectServiceAction } from "../../stores/actions/studioPostAction";
 import { DELETE_CHOOSE_SERVICE } from "../../stores/types/OrderType";
-import axios from "axios";
 import { roomService } from "../../services/RoomService";
 
 function dateRange(startDate, endDate, steps = 1) {
@@ -19,7 +18,6 @@ function dateRange(startDate, endDate, steps = 1) {
     dateArray.push(currentDate.format("DD-MM-YYYY"));
     currentDate.add(steps, "d");
   }
-
   return dateArray;
 }
 function range(start, end) {
@@ -51,6 +49,7 @@ function remove_duplicates_es6(arr) {
   let it = s.values();
   return Array.from(it);
 }
+
 const Option = ({ option, disabled, service }) => {
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
   const { listTimeSelected, studioDetail, chooseService } = useSelector(
@@ -85,13 +84,6 @@ const Option = ({ option, disabled, service }) => {
 
   const handleOnchangeHour = async (t, timeString) => {
     if (date) {
-      // const { data } = await axios(
-      //   `http://localhost:3003/api/booking/scheduleAndPrice?from=${
-      //     moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&to=${
-      //     moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&roomId=${service.id}`
-      // );
       let from = `${
         moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"
       }`;
@@ -99,11 +91,16 @@ const Option = ({ option, disabled, service }) => {
       const { data } = await roomService.getScheduleAndPrice(
         from,
         to,
-        service.id
+        service.id,
+        service?.category
       );
       dispatch({
         type: "UPDATE_PRICE_SERVICE",
-        payload: { ...data, pricesByHour: data?.prices },
+        payload: {
+          ...data,
+          pricesByHour: data?.prices,
+          category: service?.category,
+        },
       });
 
       setTime(timeString);
@@ -124,7 +121,6 @@ const Option = ({ option, disabled, service }) => {
         },
       });
       if (chooseServiceList.find((item) => item?.id === service?.id)) {
-        console.log("toi oi dadyas");
         dispatch(
           handlerSelectServiceAction(service, {
             ...chooseService,
@@ -143,13 +139,6 @@ const Option = ({ option, disabled, service }) => {
   };
   const handleOnchangeDateRange = async (ds, datesString) => {
     if (ds) {
-      // const { data } = await axios(
-      //   `http://localhost:3003/api/booking/scheduleAndPrice?from=${
-      //     moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&to=${
-      //     moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z"
-      //   }&roomId=${service.id}`
-      // );
       let from = `${
         moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z"
       }`;
@@ -157,11 +146,16 @@ const Option = ({ option, disabled, service }) => {
       const { data } = await roomService.getScheduleAndPrice(
         from,
         to,
-        service.id
+        service.id,
+        service?.category
       );
       dispatch({
         type: "UPDATE_PRICE_SERVICE",
-        payload: { ...data, pricesByDate: data?.prices },
+        payload: {
+          ...data,
+          pricesByDate: data?.prices,
+          category: service?.category,
+        },
       });
       dispatch({
         type: ADD_TIME_ORDER,
@@ -262,6 +256,7 @@ const Option = ({ option, disabled, service }) => {
                       return remove_duplicates_es6(acc);
                     }, []);
                   }
+                  console.log(array);
                   dispatch({
                     type: ADD_TIME_ORDER,
                     data: {
@@ -400,9 +395,6 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
       },
     });
   };
-  console.log("first");
-  console.log("first");
-  console.log("  ");
   return (
     <div className="selectTimeOptionServiceContainer mb-20">
       <Radio.Group

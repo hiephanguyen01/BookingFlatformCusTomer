@@ -95,3 +95,52 @@ export const calTimeMinus = (timeFrom, timeTo) => {
   }
   return sumMinus;
 };
+
+export const priceService = (arr = [], OrderByTime) => {
+  if (arr.length < 1) return null;
+  const areAllEqual = arr.every(
+    (num) =>
+      (OrderByTime ? num.PriceByHour : num.PriceByDate) ==
+      (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
+  );
+
+  if (areAllEqual) {
+    return OrderByTime
+      ? arr[0].PriceByHour.toLocaleString("vi", {
+          style: "currency",
+          currency: "VND",
+        }).replace("₫", "đ")
+      : arr[0].PriceByDate.toLocaleString("vi", {
+          style: "currency",
+          currency: "VND",
+        }).replace("₫", "đ");
+  } else {
+    const result = arr.reduce(
+      (acc, curr) => {
+        const id = OrderByTime ? curr.PriceByHour : curr.PriceByDate;
+        if (id < acc.min) {
+          acc.min = id;
+        } else if (id > acc.max) {
+          acc.max = id;
+        }
+        return acc;
+      },
+      {
+        min: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+        max: OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate,
+      }
+    );
+    return `
+      ${result?.min
+        ?.toLocaleString("vi", {
+          style: "currency",
+          currency: "VND",
+        })
+        .replace("₫", "đ")} - ${result?.max
+      ?.toLocaleString("vi", {
+        style: "currency",
+        currency: "VND",
+      })
+      .replace("₫", "đ")}`;
+  }
+};
