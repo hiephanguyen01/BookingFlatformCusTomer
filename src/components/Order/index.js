@@ -230,17 +230,20 @@ const Index = ({ linkTo = "" }) => {
             };
             response = await orderService.addOrder({
               ...newData,
-              numberOfTime: `${calDate(
-                chooseService?.OrderByDateFrom,
-                chooseService?.OrderByDateTo
-              )} ngày`,
+              numberOfTime: `${
+                moment(filterService?.OrderByDateTo).diff(
+                  moment(filterService?.OrderByDateFrom),
+                  "days"
+                ) + 1
+              } ngày`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByDate) *
-                calDate(
-                  chooseService?.OrderByDateFrom,
-                  chooseService?.OrderByDateTo
-                ),
+                (moment(filterService?.OrderByDateTo).diff(
+                  moment(filterService?.OrderByDateFrom),
+                  "days"
+                ) +
+                  1),
             });
             if (AffiliateUserId != null) {
               localStorage.removeItem("qs");
@@ -325,6 +328,7 @@ const Index = ({ linkTo = "" }) => {
         style={{
           margin: "auto",
           maxWidth: "1300px",
+
         }}
       >
         <Col lg={9} sm={24} xs={24} className="col">
@@ -346,8 +350,7 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="d-flex"
-                      style={{ height: "88px", marginRight: "0.5rem" }}
-                    >
+                      style={{ height: "88px", marginRight: "0.5rem" }}>
                       <img
                         src={`${
                           item?.Image?.length > 0
@@ -382,8 +385,7 @@ const Index = ({ linkTo = "" }) => {
                   <div className="border-bottom">
                     <div
                       className="text-title"
-                      style={{ marginBottom: "16px" }}
-                    >
+                      style={{ marginBottom: "16px" }}>
                       Khung giờ bạn muốn đặt
                     </div>
                     <SelectTimeOption disabled={true} />
@@ -424,23 +426,19 @@ const Index = ({ linkTo = "" }) => {
                 style={{
                   marginBottom: "0.5rem",
                   backgroundColor: "#FFFFFF",
-                }}
-              >
+                }}>
                 <div
                   className="d-flex justify-content-between"
-                  style={{ marginBottom: "28px" }}
-                >
+                  style={{ marginBottom: "28px" }}>
                   <div>Chọn mã khuyến mãi</div>
                   <div
                     style={{ cursor: "pointer" }}
-                    onClick={() => onClickModal()}
-                  >
+                    onClick={() => onClickModal()}>
                     Mã khuyến mãi
                   </div>
                 </div>
                 <div
-                  style={{ backgroundColor: "#E3FAF4", padding: "16px 15px" }}
-                >
+                  style={{ backgroundColor: "#E3FAF4", padding: "16px 15px" }}>
                   <div className="d-flex justify-content-between">
                     <div className="text-middle" style={{ color: "#222222" }}>
                       Đã chọn {chooseServiceList?.length} dịch vụ
@@ -474,8 +472,7 @@ const Index = ({ linkTo = "" }) => {
                   <div className="d-flex justify-content-between">
                     <div
                       className="text-description"
-                      style={{ color: "#616161" }}
-                    >
+                      style={{ color: "#616161" }}>
                       Bao gồm 50.000đ thuế và phí
                     </div>
                     <div
@@ -485,8 +482,7 @@ const Index = ({ linkTo = "" }) => {
                         fontSize: "20px",
                         lineHeight: "28px",
                         fontWeight: "700",
-                      }}
-                    >
+                      }}>
                       {convertPrice(calculatePriceUsePromo())}đ
                     </div>
                   </div>
@@ -501,16 +497,14 @@ const Index = ({ linkTo = "" }) => {
               padding: "25px 25px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}
-          >
+            }}>
             {screens?.xs ? (
               <div
                 style={{
                   fontSize: "16px",
                   fontWeight: "400",
                   marginBottom: "0.25rem",
-                }}
-              >
+                }}>
                 Thông tin liên hệ *
               </div>
             ) : (
@@ -520,8 +514,7 @@ const Index = ({ linkTo = "" }) => {
                   fontSize: "22px",
                   lineHeight: "30px",
                   marginBottom: "0.25rem",
-                }}
-              >
+                }}>
                 Vui lòng điền thông tin của bạn
               </div>
             )}
@@ -580,8 +573,7 @@ const Index = ({ linkTo = "" }) => {
                     console.log(error);
                   }
                 }}
-                className={`${screens?.xs && "ms-5"}`}
-              >
+                className={`${screens?.xs && "ms-5"}`}>
                 Verify Email
               </Button>
             )}
@@ -590,8 +582,7 @@ const Index = ({ linkTo = "" }) => {
           {!screens?.xs ? (
             <div
               className="d-flex justify-content-end"
-              style={{ marginTop: "35px" }}
-            >
+              style={{ marginTop: "35px" }}>
               {infoUser?.IsActiveEmail &&
               infoUser?.Email?.trim() === user?.Email?.trim() ? (
                 <Button
@@ -604,8 +595,7 @@ const Index = ({ linkTo = "" }) => {
                     borderRadius: "8px",
                     height: "45px",
                     width: "270px",
-                  }}
-                >
+                  }}>
                   Hoàn tất đặt
                 </Button>
               ) : Valid ? (
@@ -618,8 +608,7 @@ const Index = ({ linkTo = "" }) => {
                     borderRadius: "8px",
                     height: "45px",
                     width: "270px",
-                  }}
-                >
+                  }}>
                   Hoàn tất đặt
                 </Button>
               ) : (
@@ -630,8 +619,7 @@ const Index = ({ linkTo = "" }) => {
                     borderRadius: "8px",
                     height: "45px",
                     width: "270px",
-                  }}
-                >
+                  }}>
                   Hoàn tất đặt
                 </Button>
               )}
