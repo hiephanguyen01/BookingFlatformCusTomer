@@ -64,11 +64,6 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
-  console.log("bookingshds", booking);
-  console.log(
-    "bookingshds",
-    booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0]
-  );
   const CancleFreeDate = moment(booking?.CreationTime)
     .add(
       booking?.OrderByTime
@@ -115,6 +110,7 @@ const OrderDetail = () => {
         data?.StudioRoom ||
           data?.PhotographerServicePackage ||
           data?.MakeupServicePackage
+        // data
       );
       const p_inf = await studioPostService.getPostByTenantId({
         TenantId: data.TenantId,
@@ -260,7 +256,8 @@ const OrderDetail = () => {
             type="primary"
             icon={<UploadOutlined />}
             size="large"
-            onClick={() => navigate(`/home/confirm-order/${id}`)}>
+            onClick={() => navigate(`/home/confirm-order/${id}`)}
+          >
             Cập nhật minh chứng
           </Button>
         </Link>
@@ -272,7 +269,8 @@ const OrderDetail = () => {
           type="text"
           onClick={() => setShowModal(true)}
           style={{ color: "#e60019", marginRight: "20px", borderRadius: "8px" }}
-          size="large">
+          size="large"
+        >
           Huỷ đơn
         </Button>
         <Button
@@ -286,7 +284,8 @@ const OrderDetail = () => {
             dispatch({ type: SHOW_CHAT });
             handleOpenChatPartner();
           }}
-          size="large">
+          size="large"
+        >
           Liên hệ
         </Button>
       </div>
@@ -297,7 +296,8 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
+        }}
+      >
         {/* <Button
           onClick={navigateToDetail}
           style={{
@@ -331,7 +331,8 @@ const OrderDetail = () => {
           footer={false}
           width={600}
           closable={false}
-          className="FooterStatus__complete__modal">
+          className="FooterStatus__complete__modal"
+        >
           <RateModal
             onOk={() => setVisible(false)}
             onCancel={() => setVisible(false)}
@@ -356,7 +357,8 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
+        }}
+      >
         <Button
           onClick={navigateToDetail}
           style={{
@@ -365,7 +367,8 @@ const OrderDetail = () => {
             borderRadius: "8px",
             padding: "0 55.5px",
           }}
-          size="large">
+          size="large"
+        >
           Đặt lại
         </Button>
         {/* <Button
@@ -711,7 +714,8 @@ const OrderDetail = () => {
             cursor: "pointer",
             gap: ".5rem",
           }}
-          onClick={() => setShowDetail(!showDetail)}>
+          onClick={() => setShowDetail(!showDetail)}
+        >
           <p> {showDetail ? "Ẩn chi tiết" : "Xem chi tiết"} </p>
           {showDetail ? <UpOutlined /> : <DownOutlined />}
         </div>
@@ -723,7 +727,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <img
                   alt=""
@@ -758,7 +763,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <img
                   alt=""
@@ -815,7 +821,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <img
                   alt=""
@@ -882,7 +889,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <TeamOutlined
                   className="me-10 mb-2"
@@ -946,7 +954,9 @@ const OrderDetail = () => {
           <div className="boxxx">
             <div className="fi b_red"></div>
             <div className="text">
-              <div className="text_title t_red">Hủy mất {depositPercent}% cọc</div>
+              <div className="text_title t_red">
+                Hủy mất {depositPercent}% cọc
+              </div>
               <div className="text_title_2">Từ {CancleFreeDate}</div>
             </div>
           </div>
@@ -967,7 +977,8 @@ const OrderDetail = () => {
         okText="Đồng ý"
         cancelText="Thoát"
         onCancel={() => setShowModal(false)}
-        onOk={() => handleCancelOrder()}>
+        onOk={() => handleCancelOrder()}
+      >
         <>
           <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
           <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
@@ -975,7 +986,8 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
         </>
       </Modal>
     </div>

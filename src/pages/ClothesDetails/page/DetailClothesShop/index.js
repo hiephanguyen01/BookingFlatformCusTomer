@@ -230,14 +230,17 @@ const Index = () => {
                   />
                   Quận 1, TPHCM
                 </div>
-                <div className="d-flex align-items-center mb-20">
+                <div className="d-flex align-items-center mb-10">
                   <Rate
                     disabled
                     allowHalf
                     defaultValue={5}
-                    className="rating "
+                    className="rating-clothes"
                   />
-                  <div className="d-flex align-items-center mt-3">
+                  <div
+                    className="d-flex align-items-center mt-3 ms-4"
+                    style={{ fontSize: 18 }}
+                  >
                     <span>5</span>
                     <div className="reserve ms-20">Đã đặt 60</div>
                   </div>

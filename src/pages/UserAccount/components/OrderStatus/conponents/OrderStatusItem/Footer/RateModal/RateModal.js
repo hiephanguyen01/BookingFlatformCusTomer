@@ -94,7 +94,7 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
     <div className="FooterStatus__complete__modal__body">
       <h3>Viết đánh giá</h3>
       <div className="FooterStatus__complete__modal__body__info">
-        <img alt="" src={IMG(Item.Image1)} height={80} width={118} />
+        <img alt="" src={IMG(Item?.Image1)} height={80} width={118} />
         <div className="FooterStatus__complete__modal__body__info__content">
           <div className="FooterStatus__complete__modal__body__info__content__title">
             {post.Name}

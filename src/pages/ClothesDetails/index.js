@@ -101,6 +101,8 @@ const Index = () => {
     }, []);
 
   const [amount, setAmount] = useState(1);
+  const [size, setSize] = useState("S");
+  const [color, setColor] = useState("Trắng");
   // const [chooseService, setChooseService] = useState([]);
   const [open, setOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -153,7 +155,11 @@ const Index = () => {
         findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
       ) {
         dispatch(
-          handlerSelectServiceAction(studioDetail?.data, findSelectTime)
+          handlerSelectServiceAction(studioDetail?.data, {
+            ...findSelectTime,
+            size,
+            color,
+          })
         );
       } else if (
         findSelectTime.OrderByTime === 0 &&
@@ -163,7 +169,11 @@ const Index = () => {
         findSelectTime.OrderByDateTo !== ""
       ) {
         dispatch(
-          handlerSelectServiceAction(studioDetail?.data, findSelectTime)
+          handlerSelectServiceAction(studioDetail?.data, {
+            ...findSelectTime,
+            size,
+            color,
+          })
         );
       } else {
         return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
@@ -177,10 +187,6 @@ const Index = () => {
     // } else {
     //   toastMessage("Bạn cần chọn dịch vụ!", "warn");
     // }
-  };
-
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
   };
 
   return (
@@ -464,11 +470,8 @@ const Index = () => {
                     value={studioDetail?.data?.TotalRate}
                     className="rating d-flex align-items-center"
                   />
-
-                  <span className="reserve">
-                    {studioDetail?.data?.TotalRate}
-                  </span>
-                  <span className="reserve">
+                  <div className="reserve">{studioDetail?.data?.TotalRate}</div>
+                  <span className="reserve_count">
                     Đã đặt {studioDetail?.data?.BookingCount}
                   </span>
                 </div>
@@ -504,11 +507,11 @@ const Index = () => {
                         <span>Size</span>
                       </Col>
                       <Select
-                        defaultValue="S"
+                        value={size}
                         style={{
                           width: 120,
                         }}
-                        onChange={handleChange}
+                        onChange={(value) => setSize(value)}
                         options={[
                           {
                             value: "S",
@@ -530,11 +533,11 @@ const Index = () => {
                         <span>Màu sắc</span>
                       </Col>
                       <Select
-                        defaultValue="Trắng"
+                        value={color}
                         style={{
                           width: 120,
                         }}
-                        onChange={handleChange}
+                        onChange={(value) => setColor(value)}
                         options={[
                           {
                             value: "Trắng",

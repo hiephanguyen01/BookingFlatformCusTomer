@@ -47,6 +47,7 @@ const OrderStatusItem = ({
       }
     })();
   }, [TenantId, category]);
+  console.log(post, item);
   const navigateToDetail = () => {
     switch (category) {
       case 1:
@@ -178,7 +179,7 @@ const OrderStatusItem = ({
           Category={category}
           pageBooking={pageBooking}
           setPageBooking={setPageBooking}
-          Item={Item}
+          Item={Item || item}
           post={post}
         />
       </div>
