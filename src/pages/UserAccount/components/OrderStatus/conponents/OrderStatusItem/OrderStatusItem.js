@@ -79,8 +79,7 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}
-          >
+            onClick={navigateToDetail}>
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
@@ -111,8 +110,7 @@ const OrderStatusItem = ({
                   navigate(
                     `/home/user/orderStatus/${id}?categoryId=${category}`
                   )
-                }
-              >
+                }>
                 {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">
@@ -124,13 +122,15 @@ const OrderStatusItem = ({
                 <span>
                   {moment(OrderByTimeFrom || OrderByDateFrom)
                     .utc()
-                    .format("HH:mm DD/MM/YYYY")}
+                    .format(
+                      OrderByDateFrom ? "DD/MM/YYYY" : "HH:mm DD/MM/YYYY"
+                    )}
                 </span>{" "}
                 đến{" "}
                 <span>
                   {moment(OrderByTimeTo || OrderByDateTo)
                     .utc()
-                    .format("HH:mm DD/MM/YYYY")}
+                    .format(OrderByDateTo ? "DD/MM/YYYY" : "HH:mm DD/MM/YYYY")}
                 </span>
               </div>
             </div>

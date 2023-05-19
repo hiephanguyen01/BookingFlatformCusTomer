@@ -132,7 +132,7 @@ const OrderDetail = () => {
           moment(data?.OrderByDateFrom),
           "days"
         );
-        setDiffer(time + " ngày");
+        setDiffer(time + 1 + " ngày");
       }
       if (data?.BookingValueBeforeDiscount && data?.DepositValue) {
         setLastPrice(data?.BookingValue - data?.DepositValue);
@@ -254,8 +254,7 @@ const OrderDetail = () => {
             updatePay: true,
             Category: searchParams.get("categoryId"),
             path: `/home/user/orderStatus/${id}?categoryId=1`,
-          }}
-        >
+          }}>
           <Button
             type="primary"
             icon={<UploadOutlined />}
@@ -644,7 +643,11 @@ const OrderDetail = () => {
               <div className="tr">
                 {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
                   .utc()
-                  .format("DD/MM/YYYY hh:mm A")}
+                  .format(
+                    booking?.OrderByDateFrom
+                      ? "DD/MM/YYYY"
+                      : "DD/MM/YYYY hh:mm A"
+                  )}
               </div>
             </div>
             <div className="df_bt">
@@ -652,7 +655,9 @@ const OrderDetail = () => {
               <div className="tr">
                 {moment(booking?.OrderByDateTo || booking?.OrderByTimeTo)
                   .utc()
-                  .format("DD/MM/YYYY hh:mm A")}
+                  .format(
+                    booking?.OrderByDateTo ? "DD/MM/YYYY" : "DD/MM/YYYY hh:mm A"
+                  )}
               </div>
             </div>
           </Col>
@@ -946,7 +951,9 @@ const OrderDetail = () => {
           <div className="boxxx">
             <div className="fi b_red"></div>
             <div className="text">
-              <div className="text_title t_red">Hủy mất {depositPercent}% cọc</div>
+              <div className="text_title t_red">
+                Hủy mất {depositPercent}% cọc
+              </div>
               <div className="text_title_2">Từ {CancleFreeDate}</div>
             </div>
           </div>
