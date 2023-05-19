@@ -380,7 +380,7 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
       }
       dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
       dispatch({ type: SET_FILTER_SERVICE, payload: chooseServiceTime });
-      // if (filterService.id == data.id) {
+      // if (chooseService.id == data.id) {
       //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
       //       setChooseService([]);
       //     } else {

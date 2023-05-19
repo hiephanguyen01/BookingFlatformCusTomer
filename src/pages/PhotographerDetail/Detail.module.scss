@@ -287,6 +287,8 @@
       left: 0;
       z-index: 1050;
       width: 100%;
+      box-shadow: 1px 0 10px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
 
       .map {
         display: none;

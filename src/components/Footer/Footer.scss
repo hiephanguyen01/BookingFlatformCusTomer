@@ -74,3 +74,13 @@
     color: #616161;
   }
 }
+
+@media (max-width: 576px) {
+  .Footer {
+
+    .title {
+      text-align: center !important;
+    }
+  }
+
+}
