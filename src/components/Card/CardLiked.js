@@ -19,9 +19,7 @@ export const CardLiked = ({ value, category }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleChangeLike = async (e) => {
-    // e.stopPropagation();
     if (!currentUser) navigate("/auth/sign-in");
-    // dispatch(getLikeStudioPostAction(value?.id, category.id));
     if (currentUser) {
       // dispatch(getLikeStudioPostAction(data?.id, data?.category));
       await studioPostService.getLikeStudioPost({

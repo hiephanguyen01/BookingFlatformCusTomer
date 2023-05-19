@@ -79,7 +79,7 @@ const BottomNav = () => {
               {user?.id ? (
                 <>
                   <Avatar src={user.Image} alt="" size={"small"} />
-                  <p>{user?.Fullname}</p>
+                  <p>Tài khoản</p>
                 </>
               ) : (
                 <>

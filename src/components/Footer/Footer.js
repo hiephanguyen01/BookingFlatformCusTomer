@@ -23,10 +23,15 @@ const Footer = () => {
         <div className="Footer">
           <div className="container">
             <Row gutter={[40, 20]}>
-              <Col sm={24} md={12} lg={6}>
+              <Col sm={24} md={12} lg={6} xs={24}>
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
-                <Row className="logo" align="middle" gutter={[5, 0]}>
-                  <Col span={12}>
+                <Row
+                  className="logo"
+                  align="middle"
+                  justify={`${screens?.xs && "center"}`}
+                  gutter={screens?.xs ? [15, 0] : [5, 0]}
+                >
+                  <Col lg={12} md={12} sm={12} xs={7}>
                     {/* <img src={QRCode} /> */}
                     <QRCode
                       size={256}
@@ -41,20 +46,18 @@ const Footer = () => {
                       // viewBox={`0 0 256 256`}
                     />
                   </Col>
-                  <Col span={12}>
+                  <Col lg={12} md={12} sm={12} xs={8}>
                     <a
                       href="https://play.google.com/store/apps/details?id=com.vnplus.bookingstudio"
                       target="_blank"
-                      rel="noreferrer"
-                    >
+                      rel="noreferrer">
                       <img src={Android} alt="" className="" />
                     </a>
                     <a
                       href="https://apps.apple.com/vn/app/booking-studio/id1563362722"
                       target="_blank"
                       className=""
-                      rel="noreferrer"
-                    >
+                      rel="noreferrer">
                       <img
                         src={Ios}
                         target="_blank"
@@ -67,8 +70,7 @@ const Footer = () => {
                 </Row>
                 <Col
                   align={`${screens.xs ? "middle" : "start"}`}
-                  style={screens.xs ? { margin: "30px 0" } : {}}
-                >
+                  style={screens.xs ? { margin: "30px 0" } : {}}>
                   <span className="item">Theo dõi chúng tôi trên</span>
                   <div className="icons">
                     <Facebook />
@@ -82,20 +84,17 @@ const Footer = () => {
                 md={12}
                 lg={6}
                 xs={24}
-                align={`${screens.xs ? "middle" : "start"}`}
-              >
+                align={`${screens.xs ? "middle" : "start"}`}>
                 <span className="title">VỀ CHÚNG TÔI</span>
                 <ul className="pt-10">
                   <a
                     href="https://vnplus.vn"
                     alt=""
                     target="_blank"
-                    rel="noreferrer"
-                  >
+                    rel="noreferrer">
                     <li
                       className="item mt-20 "
-                      style={screens.xs ? { textAlign: "center" } : {}}
-                    >
+                      style={screens.xs ? { textAlign: "center" } : {}}>
                       Giới thiệu VNPLUS
                     </li>
                   </a>
@@ -116,22 +115,19 @@ const Footer = () => {
                 md={12}
                 lg={6}
                 xs={24}
-                align={`${screens.xs ? "middle" : "start"}`}
-              >
+                align={`${screens.xs ? "middle" : "start"}`}>
                 <span className="title">HỖ TRỢ KHÁCH HÀNG</span>
                 <ul className="pt-10">
                   <Link to={"helpCenter"}>
                     <li
                       className="item mt-20"
-                      style={screens.xs ? { textAlign: "center" } : {}}
-                    >
+                      style={screens.xs ? { textAlign: "center" } : {}}>
                       Trung tâm trợ giúp
                     </li>
                   </Link>
                   <li
                     className="item mt-20"
-                    style={screens.xs ? { textAlign: "center" } : {}}
-                  >
+                    style={screens.xs ? { textAlign: "center" } : {}}>
                     Quy định chung
                   </li>
                 </ul>
@@ -141,15 +137,13 @@ const Footer = () => {
                 md={12}
                 lg={6}
                 xs={24}
-                align={`${screens.xs ? "middle" : "start"}`}
-              >
+                align={`${screens.xs ? "middle" : "start"}`}>
                 <Logo style={{ height: "45px", width: "150px" }} />
 
                 {/* <Enter /> */}
                 <p
                   className="title exten"
-                  style={screens.xs ? { textAlign: "center" } : {}}
-                >
+                  style={screens.xs ? { textAlign: "center" } : {}}>
                   Công ty Cổ phần Công nghệ và Đầu tư VNPLUS
                 </p>
                 {/* <BCTVN /> */}
@@ -158,7 +152,7 @@ const Footer = () => {
           </div>
           <p className="copywrite">
             <CopyrightOutlined /> 2021 - Bản quyền thuộc công ty Cổ phần Công
-            nghệ và Đầu tư VNPLUS V130423
+            nghệ và Đầu tư VNPLUS V1105
           </p>
         </div>
       )}
