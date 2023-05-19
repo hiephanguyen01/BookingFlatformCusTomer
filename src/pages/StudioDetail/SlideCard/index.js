@@ -30,8 +30,8 @@ export const SlideCard = ({ title, data, category, loading = false }) => {
 
   return (
     <>
-      <div className={cx("ListItem")}>
-        <div className={cx("title")}>
+      <div className={"ListItem"}>
+        <div className={"title"}>
           <h3>{title}</h3>
         </div>
         <div className="wrap-slide">
