@@ -123,7 +123,6 @@ export const StudioDetail = () => {
   //     return [...arr, item];
   //   }, []);
 
-  console.log("first")
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
@@ -158,15 +157,13 @@ export const StudioDetail = () => {
   }, [id, dispatch, cate, currentUser]);
 
   const priceService = (arr = [], OrderByTime) => {
-    
-
     if (arr.length < 1) return null;
     const areAllEqual = arr.every(
       (num) =>
         (OrderByTime ? num.PriceByHour : num.PriceByDate) ==
         (OrderByTime ? arr[0].PriceByHour : arr[0].PriceByDate)
     );
-    
+
     if (areAllEqual) {
       return OrderByTime
         ? arr[0].PriceByHour.toLocaleString("it-IT", {
@@ -406,17 +403,9 @@ export const StudioDetail = () => {
                     }}
                   >
                     {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 1 &&
-                      data?.PriceByHour?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      ?.OrderByTime === 1 && priceService(data?.prices, true)}
                     {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 0 &&
-                      data?.PriceByDate?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      ?.OrderByTime === 0 && priceService(data?.prices, false)}
                   </span>
                   <span
                     style={{
@@ -427,17 +416,9 @@ export const StudioDetail = () => {
                     }}
                   >
                     {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 1 &&
-                      data?.PriceByHour?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      ?.OrderByTime === 1 && priceService(data?.prices, true)}
                     {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 0 &&
-                      data?.PriceByDate?.toLocaleString("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      ?.OrderByTime === 0 && priceService(data?.prices, false)}
                   </span>
                 </div>
                 <p
@@ -1078,32 +1059,14 @@ export const StudioDetail = () => {
                                               color: "#828282",
                                             }}
                                           >
-                                            {filterService?.OrderByTime === 1 &&
-                                              `${convertPrice(
-                                                chooseServiceList?.reduce(
-                                                  (total, item) =>
-                                                    total +
-                                                    item.PriceByHour *
-                                                      calTime(
-                                                        filterService?.OrderByTimeFrom,
-                                                        filterService?.OrderByTimeTo
-                                                      ),
-                                                  0
-                                                )
-                                              )}đ`}
-                                            {filterService?.OrderByTime === 0 &&
-                                              `${convertPrice(
-                                                chooseServiceList?.reduce(
-                                                  (total, item) =>
-                                                    total +
-                                                    item.PriceByDate *
-                                                      calDate(
-                                                        filterService?.OrderByDateFrom,
-                                                        filterService?.OrderByDateTo
-                                                      ),
-                                                  0
-                                                )
-                                              )}đ`}
+                                           {listTimeSelected?.find(
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 1 &&
+                                              priceService(data?.prices, true)}
+                                            {listTimeSelected?.find(
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 0 &&
+                                              priceService(data?.prices, false)}
                                           </span>
                                         )}
                                       </div>
@@ -1114,32 +1077,14 @@ export const StudioDetail = () => {
                                           fontWeight: "700",
                                         }}
                                       >
-                                        {filterService?.OrderByTime === 1 &&
-                                          `${convertPrice(
-                                            chooseServiceList?.reduce(
-                                              (total, item) =>
-                                                total +
-                                                item.PriceByHour *
-                                                  calTime(
-                                                    filterService.OrderByTimeFrom,
-                                                    filterService.OrderByTimeTo
-                                                  ),
-                                              0
-                                            )
-                                          )}đ`}
-                                        {filterService?.OrderByTime === 0 &&
-                                          `${convertPrice(
-                                            chooseServiceList?.reduce(
-                                              (total, item) =>
-                                                total +
-                                                item.PriceByDate *
-                                                  calDate(
-                                                    filterService.OrderByDateFrom,
-                                                    filterService.OrderByDateTo
-                                                  ),
-                                              0
-                                            )
-                                          )}đ`}
+                                        {listTimeSelected?.find(
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 1 &&
+                                              priceService(data?.prices, true)}
+                                            {listTimeSelected?.find(
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 0 &&
+                                              priceService(data?.prices, false)}
                                       </div>
                                       <span>Bao gồm 50.000đ thuế và phí</span>
                                     </Row>
@@ -1182,38 +1127,13 @@ export const StudioDetail = () => {
                                               }}
                                             >
                                               {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 1 &&
-                                                convertPrice(
-                                                  data?.PriceByHour *
-                                                    calTime(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeTo
-                                                    )
-                                                )}
-                                              {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 0 &&
-                                                convertPrice(
-                                                  data?.PriceByDate *
-                                                    calDate(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateTo
-                                                    )
-                                                )}
-                                              đ
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 1 &&
+                                              priceService(data?.prices, true)}
+                                            {listTimeSelected?.find(
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 0 &&
+                                              priceService(data?.prices, false)}
                                             </span>
                                             <span
                                               style={{
@@ -1223,38 +1143,13 @@ export const StudioDetail = () => {
                                               }}
                                             >
                                               {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 1 &&
-                                                convertPrice(
-                                                  data?.PriceByHour *
-                                                    calTime(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByTimeTo
-                                                    )
-                                                )}
-                                              {listTimeSelected?.find(
-                                                (item) => item.id === data?.id
-                                              )?.OrderByTime === 0 &&
-                                                convertPrice(
-                                                  data?.PriceByDate *
-                                                    calDate(
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateFrom,
-                                                      listTimeSelected?.find(
-                                                        (item) =>
-                                                          item.id === data?.id
-                                                      )?.OrderByDateTo
-                                                    )
-                                                )}
-                                              đ
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 1 &&
+                                              priceService(data?.prices, true)}
+                                            {listTimeSelected?.find(
+                                              (item) => item.id === data?.id
+                                            )?.OrderByTime === 0 &&
+                                              priceService(data?.prices, false)}
                                             </span>
                                           </div>
                                           <p
@@ -1363,10 +1258,10 @@ export const StudioDetail = () => {
                                       chooseServiceList?.reduce(
                                         (total, item) =>
                                           total +
-                                          item.PriceByHour *
+                                          item.prices[0].PriceByHour *
                                             calTime(
-                                              filterService?.OrderByTimeFrom,
-                                              filterService?.OrderByTimeTo
+                                              filterService.OrderByTimeFrom,
+                                              filterService.OrderByTimeTo
                                             ),
                                         0
                                       )
@@ -1376,11 +1271,10 @@ export const StudioDetail = () => {
                                       chooseServiceList?.reduce(
                                         (total, item) =>
                                           total +
-                                          item.PriceByDate *
-                                            calDate(
-                                              filterService?.OrderByDateFrom,
-                                              filterService?.OrderByDateTo
-                                            ),
+                                          item.prices.reduce(
+                                            (sum, cur) => sum + cur.PriceByDate,
+                                            0
+                                          ),
                                         0
                                       )
                                     )}đ`}
@@ -1403,7 +1297,7 @@ export const StudioDetail = () => {
                                     chooseServiceList?.reduce(
                                       (total, item) =>
                                         total +
-                                        item.PriceByHour *
+                                        item.prices[0].PriceByHour *
                                           calTime(
                                             filterService.OrderByTimeFrom,
                                             filterService.OrderByTimeTo
@@ -1416,11 +1310,10 @@ export const StudioDetail = () => {
                                     chooseServiceList?.reduce(
                                       (total, item) =>
                                         total +
-                                        item.PriceByDate *
-                                          calDate(
-                                            filterService.OrderByDateFrom,
-                                            filterService.OrderByDateTo
-                                          ),
+                                        item.prices.reduce(
+                                          (sum, cur) => sum + cur.PriceByDate,
+                                          0
+                                        ),
                                       0
                                     )
                                   )}đ`}
@@ -1539,31 +1432,30 @@ export const StudioDetail = () => {
                             }}
                           >
                             {filterService?.OrderByTime === 1 &&
-                              `${convertPrice(
-                                chooseServiceList?.reduce(
-                                  (total, item) =>
-                                    total +
-                                    item.PriceByHour *
-                                      calTime(
-                                        filterService.OrderByTimeFrom,
-                                        filterService.OrderByTimeTo
-                                      ),
-                                  0
-                                )
-                              )}đ`}
-                            {filterService?.OrderByTime === 0 &&
-                              `${convertPrice(
-                                chooseServiceList?.reduce(
-                                  (total, item) =>
-                                    total +
-                                    item.PriceByDate *
-                                      calDate(
-                                        filterService.OrderByDateFrom,
-                                        filterService.OrderByDateTo
-                                      ),
-                                  0
-                                )
-                              )}đ`}
+                            `${convertPrice(
+                              chooseServiceList?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.prices[0].PriceByHour *
+                                    calTime(
+                                      filterService.OrderByTimeFrom,
+                                      filterService.OrderByTimeTo
+                                    ),
+                                0
+                              )
+                            )}đ`}
+                          {filterService?.OrderByTime === 0 &&
+                            `${convertPrice(
+                              chooseServiceList?.reduce(
+                                (total, item) =>
+                                  total +
+                                  item.prices.reduce(
+                                    (sum, cur) => sum + cur.PriceByDate,
+                                    0
+                                  ),
+                                0
+                              )
+                            )}đ`}
                           </span>
                         </div>
                         <div className="w-100 d-flex justify-content-between mt-20">

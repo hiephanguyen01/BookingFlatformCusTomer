@@ -180,6 +180,7 @@ const OrderStatusItem = ({
           setPageBooking={setPageBooking}
           Item={Item}
           post={post}
+          booking = {item}
         />
       </div>
     </>
