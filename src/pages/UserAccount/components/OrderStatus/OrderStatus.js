@@ -1,9 +1,10 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import { Input, Pagination, Tabs } from "antd";
+import { Grid, Input, Pagination, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { orderService } from "../../../../services/OrderService";
 import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";
 import "./orderStatus.scss";
+import BackNav from "../../../../components/BackNav/BackNav";
 const { TabPane } = Tabs;
 export const keyF = {
   1: { BookingStatus: 4, PaymentStatus: [1] }, //chờ thanh toán
@@ -12,8 +13,23 @@ export const keyF = {
   4: { BookingStatus: 2, PaymentStatus: [1, 2, 3, 4] }, //đã huỷ
   5: { BookingStatus: 3, PaymentStatus: [2, 3, 4] }, //vắng mặt
 };
+
+// queryString.parse(location?.search)?.orderStatus
+//                 ? Number(queryString.parse(location?.search)?.orderStatus)
+//                 : ""
+
+const { useBreakpoint } = Grid;
 const OrderStatus = () => {
-  const [booking, setBooking] = useState([]);
+  const screens = useBreakpoint();
+  const [booking, setBooking] = useState([
+    {
+      Name: "Đơn đặt khuyến mãi",
+      id: 1,
+      BookingStatus: 1,
+      category: 1,
+      PaymentStatus: 1,
+    },
+  ]);
   const [filter, setFilter] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pageSize] = useState(5);
@@ -50,6 +66,7 @@ const OrderStatus = () => {
     (async () => {
       setLoading(true);
       try {
+        console.log("params",params)
         const { data } = await orderService.getOrderStatus(params);
         setBooking(data.data);
       } catch (error) {
@@ -69,7 +86,11 @@ const OrderStatus = () => {
 
   return (
     <>
-      <h4 className="OrderStatus__header">Lịch sử đơn đặt</h4>
+      {screens?.xs ? (
+        <BackNav title="Lịch sử đơn đặt" to="/home/user" />
+      ) : (
+        <h4 className="OrderStatus__header">Lịch sử đơn đặt</h4>
+      )}
       <div className="OrderStatus__body">
         {loading ? (
           <div

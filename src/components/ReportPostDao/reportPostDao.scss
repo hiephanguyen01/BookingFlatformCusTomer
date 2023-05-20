@@ -1,4 +1,5 @@
 @import "../../App.scss";
+
 .cancel-btn {
   color: $neutral-500;
   background-color: $neutral-100;
@@ -19,9 +20,14 @@
   font-weight: 600;
   line-height: 25px;
 }
+
 .cancel-btn,
 .ok-btn {
   border-radius: 8px;
   border: none;
   cursor: pointer;
+}
+
+.report-post-dao {
+  top: 0 !important;
 }

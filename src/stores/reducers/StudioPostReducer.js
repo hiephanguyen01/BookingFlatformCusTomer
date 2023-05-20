@@ -24,6 +24,7 @@ import {
   ADD_TIME_ORDER,
   SELECT_TIME_ORDER,
 } from "../types/studioPostType";
+import { DELETE_CHOOSE_SERVICE } from "../types/OrderType";
 
 const initialState = {
   loading: false,
@@ -44,16 +45,16 @@ const initialState = {
   studioDetail1: [],
   studioNear: [],
   studioDetail: {},
-  listLikedCategory1: [],
-  listLikedCategory3: [],
-  listLikedCategory2: [],
-  listLikedCategory4: [],
-  listLikedCategory5: [],
-  listLikedCategory6: [],
+  // listLikedCategory1: [],
+  // listLikedCategory3: [],
+  // listLikedCategory2: [],
+  // listLikedCategory4: [],
+  // listLikedCategory5: [],
+  // listLikedCategory6: [],
   listLikedUser: [],
   listStudioSimilar: [],
   promotionCode: [],
-  filterService: {
+  chooseService: {
     OrderByTime: -1,
     OrderByTimeFrom: "",
     OrderByTimeTo: "",
@@ -91,6 +92,45 @@ export const studioPostReducer = (state = initialState, action) => {
       return {
         ...state,
         studioDetail: action.payload,
+      };
+    case "UPDATE_PRICE_SERVICE":
+      if (Number(action.payload.category) === 3) {
+        return {
+          ...state,
+          studioDetail: {
+            ...state.studioDetail,
+            data: {
+              ...state.studioDetail.data,
+              pricesByHour: action?.payload?.pricesByHour,
+              pricesByDate: action?.payload?.pricesByDate,
+            },
+          },
+        };
+      } else {
+        return {
+          ...state,
+          studioDetail: {
+            ...state.studioDetail,
+            service: state.studioDetail.service.map((item) => {
+              if (item.id == action.payload.serviceId) {
+                return {
+                  ...item,
+                  pricesByHour:
+                    action?.payload?.pricesByHour || item?.pricesByHour,
+                  pricesByDate:
+                    action?.payload?.pricesByDate || item?.pricesByDate,
+                };
+              }
+              return item;
+            }),
+          },
+        };
+      }
+
+    case DELETE_CHOOSE_SERVICE:
+      return {
+        ...state,
+        chooseService: {},
       };
     case SET_STUDIO_DETAIL1:
       return {
@@ -156,7 +196,7 @@ export const studioPostReducer = (state = initialState, action) => {
     case SET_FILTER_SERVICE:
       return {
         ...state,
-        filterService: { ...action.payload },
+        chooseService: { ...action.payload },
       };
     case SET_SERVICE_SELECT:
       return {
@@ -187,7 +227,7 @@ export const studioPostReducer = (state = initialState, action) => {
         listTimeSelected: newArray,
       };
     case SELECT_TIME_ORDER:
-      let newFilter = { ...state.filterService };
+      let newFilter = { ...state.chooseService };
       if (Number(newFilter.id) === Number(action.data.id)) {
         newFilter = {};
       } else {
@@ -209,7 +249,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                // filterService: {},
+                // chooseService: {},
               };
             }
           } else {
@@ -241,7 +281,7 @@ export const studioPostReducer = (state = initialState, action) => {
               );
               return {
                 ...state,
-                // filterService: {},
+                // chooseService: {},
               };
             }
           }
@@ -254,22 +294,22 @@ export const studioPostReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        filterService: newFilter,
+        chooseService: newFilter,
       };
     case "SET_SELECT_TIME_ORDER":
       return {
         ...state,
-        filterService: {},
+        chooseService: {},
       };
     case "REMOVE_SELECT_TIME":
       return {
         ...state,
-        filterService: {},
+        chooseService: {},
       };
     case "SET_TIME_ORDER_SELECTED":
       return {
         ...state,
-        filterService: {
+        chooseService: {
           OrderByTime: -1,
           OrderByTimeFrom: "",
           OrderByTimeTo: "",

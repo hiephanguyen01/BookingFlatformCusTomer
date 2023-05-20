@@ -38,6 +38,24 @@ const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
         navigation={true}
         modules={[Navigation, Pagination]}
         className="post_slider"
+        breakpoints={{
+          0: {
+            slidesPerView: 1.5,
+            spaceBetween: 10,
+          },
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 10,
+          },
+          768: {
+            slidesPerView: 2.5,
+            spaceBetween: 10,
+          },
+          1024: {
+            slidesPerView: 2.5,
+            spaceBetween: 10,
+          },
+        }}
       >
         {data?.map((item, index) => (
           <SwiperSlide key={index} className="post_slider_item w-100">
@@ -52,7 +70,11 @@ const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
                   src={convertImage(item.Image[0])}
                   alt=""
                   className="me-12"
-                  style={{ width: "100px", objectFit: "cover" }}
+                  style={{
+                    minWidth: "100px",
+                    width: "100px",
+                    objectFit: "cover",
+                  }}
                 />
                 <div className="py-5 ">
                   <div className="post_slider_item_name mb-5">{item.Name}</div>

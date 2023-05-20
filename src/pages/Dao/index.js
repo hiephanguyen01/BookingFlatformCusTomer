@@ -4,7 +4,7 @@ import {
   LoadingOutlined,
   PictureOutlined,
 } from "@ant-design/icons";
-import { Button, Input, message, Modal, Row } from "antd";
+import { Button, Grid, Input, message, Modal, Row } from "antd";
 import { useEffect, useState } from "react";
 // import InfiniteScroll from "react-infinite-scroll-component";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -23,7 +23,22 @@ import {
 } from "../../stores/actions/PostDaoAction";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import "./dao.scss";
-
+import Resizer from "react-image-file-resizer";
+export const resizeImage = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      1920, // max width
+      1920, // max height
+      "JPEG", // compress format
+      90, // quality
+      0, // rotation
+      (uri) => {
+        resolve(uri);
+      },
+      "file" // output type
+    );
+  });
 const tagItems = [
   {
     id: "studio",
@@ -67,7 +82,10 @@ const tagItems = [
 //     reader.onerror = (error) => reject(error);
 //   });
 
+const { useBreakpoint } = Grid;
+
 const Dao = () => {
+  const screens = useBreakpoint();
   const [files, setFiles] = useState([]);
   const [filesDrive, setFilesDrive] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -93,7 +111,7 @@ const Dao = () => {
     dispatch(getAllDefaultComments());
   }, [dispatch]);
 
-  const onChangeFile = (e) => {
+  const onChangeFile = async (e) => {
     const newFiles = [...files];
     if (newFiles.length === 6) {
       toastMessage("Đạt tối đa 6 hình!!!", "error", null, null, {
@@ -110,6 +128,7 @@ const Dao = () => {
         file.type === "video/mp4" ||
         file.type === "video/x-m4v"
       ) {
+        file = await resizeImage(file);
         file.preview = URL.createObjectURL(file);
         newFiles.push(file);
       }
@@ -259,46 +278,95 @@ const Dao = () => {
           </PopUpSignIn>
         </header>
         <article className="dao__container__tag d-flex align-items-center justify-content-evenly">
-          <Row>
-            <li
-              className={`dao__container__tag__item d-flex align-items-center ${
-                filter.tags.length > 0 && filter.tags.length !== tagItems.length
-                  ? ""
-                  : "active"
-              }`}
-              onClick={() => {
-                setFilter({ ...filter, tags: [] });
-              }}>
-              {filter.tags.length > 0 &&
-              filter.tags.length !== tagItems.length ? (
-                ""
-              ) : (
-                <CheckOutlined style={{ color: "#03AC84" }} />
-              )}
-              <p>Tất cả</p>
-            </li>
-            {tagItems.map((item, idx) => (
+          {screens.xs ? (
+            <div className="category-mobile-slide">
               <li
                 className={`dao__container__tag__item d-flex align-items-center ${
-                  filter.tags.includes(item.id) ? "active" : ""
+                  filter.tags.length > 0 &&
+                  filter.tags.length !== tagItems.length
+                    ? ""
+                    : "active"
                 }`}
-                key={item.id}
                 onClick={() => {
-                  let newFilter = { ...filter };
-                  if (newFilter.tags.includes(item.id)) {
-                    newFilter.tags = newFilter.tags.filter(
-                      (val) => val !== item.id
-                    );
-                  } else {
-                    newFilter.tags.push(item.id);
-                  }
-                  setFilter(newFilter);
-                }}>
-                {filter.tags.includes(item.id) ? item.icon : ""}
-                <p>{item.name}</p>
+                  setFilter({ ...filter, tags: [] });
+                }}
+              >
+                {filter.tags.length > 0 &&
+                filter.tags.length !== tagItems.length ? (
+                  ""
+                ) : (
+                  <CheckOutlined style={{ color: "#03AC84" }} />
+                )}
+                <p>Tất cả</p>
               </li>
-            ))}
-          </Row>
+              {tagItems.map((item, idx) => (
+                <li
+                  className={`dao__container__tag__item d-flex align-items-center ${
+                    filter.tags.includes(item.id) ? "active" : ""
+                  }`}
+                  key={item.id}
+                  onClick={() => {
+                    let newFilter = { ...filter };
+                    if (newFilter.tags.includes(item.id)) {
+                      newFilter.tags = newFilter.tags.filter(
+                        (val) => val !== item.id
+                      );
+                    } else {
+                      newFilter.tags.push(item.id);
+                    }
+                    setFilter(newFilter);
+                  }}
+                >
+                  {filter.tags.includes(item.id) ? item.icon : ""}
+                  <p>{item.name}</p>
+                </li>
+              ))}
+            </div>
+          ) : (
+            <Row>
+              <li
+                className={`dao__container__tag__item d-flex align-items-center ${
+                  filter.tags.length > 0 &&
+                  filter.tags.length !== tagItems.length
+                    ? ""
+                    : "active"
+                }`}
+                onClick={() => {
+                  setFilter({ ...filter, tags: [] });
+                }}
+              >
+                {filter.tags.length > 0 &&
+                filter.tags.length !== tagItems.length ? (
+                  ""
+                ) : (
+                  <CheckOutlined style={{ color: "#03AC84" }} />
+                )}
+                <p>Tất cả</p>
+              </li>
+              {tagItems.map((item, idx) => (
+                <li
+                  className={`dao__container__tag__item d-flex align-items-center ${
+                    filter.tags.includes(item.id) ? "active" : ""
+                  }`}
+                  key={item.id}
+                  onClick={() => {
+                    let newFilter = { ...filter };
+                    if (newFilter.tags.includes(item.id)) {
+                      newFilter.tags = newFilter.tags.filter(
+                        (val) => val !== item.id
+                      );
+                    } else {
+                      newFilter.tags.push(item.id);
+                    }
+                    setFilter(newFilter);
+                  }}
+                >
+                  {filter.tags.includes(item.id) ? item.icon : ""}
+                  <p>{item.name}</p>
+                </li>
+              ))}
+            </Row>
+          )}
         </article>
         <ul id="infinity-list-post-dao">
           <InfiniteScroll
@@ -308,7 +376,8 @@ const Dao = () => {
             }}
             hasMore={pagination.hasNextPage}
             loader={<DaoPostSkeleton />}
-            endMessage={<DaoPostSkeleton />}>
+            endMessage={<DaoPostSkeleton />}
+          >
             {listPost.map((item) => (
               <DaoPost key={item.Id} item={item} likePostList={likePostList} />
             ))}
@@ -322,7 +391,8 @@ const Dao = () => {
         className="modalDao"
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
-        width={""}>
+        width={""}
+      >
         <Input.TextArea
           rows={4}
           placeholder="Bạn muốn tìm gì"
@@ -333,12 +403,14 @@ const Dao = () => {
         />
         <div
           className="text-medium-re mt-20 mb-16"
-          style={{ color: "#222222" }}>
+          style={{ color: "#222222" }}
+        >
           Tải hình ảnh
         </div>
         <div
           className="mb-15 d-flex "
-          style={{ gap: "10px", flexWrap: "wrap" }}>
+          style={{ gap: "10px", flexWrap: "wrap" }}
+        >
           <UploadImage
             onChangeFile={onChangeFile}
             style={{
@@ -347,7 +419,8 @@ const Dao = () => {
               border: "0.6px dashed #1FCBA2",
               borderRadius: "10px",
             }}
-            multiple={true}>
+            multiple={true}
+          >
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "25px" }} />
           </UploadImage>
           {/* <GoogleDrivePicker files={filesDrive} setFiles={setFilesDrive} /> */}
@@ -391,7 +464,8 @@ const Dao = () => {
         </div>
         <div
           className="text-medium-re mb-16"
-          style={{ color: "#222222", margin: "" }}>
+          style={{ color: "#222222", margin: "" }}
+        >
           Chọn danh mục liên quan
         </div>
         <Row>
@@ -411,7 +485,8 @@ const Dao = () => {
                   errorMess("Số hash tag vượt quá giới hạn !");
                 }
                 setPost(newPost);
-              }}>
+              }}
+            >
               {item.name}
             </p>
           ))}
@@ -422,7 +497,8 @@ const Dao = () => {
             className="btn btn-huy"
             onClick={() => {
               setVisible(false);
-            }}>
+            }}
+          >
             Hủy
           </Button>
           <Button
@@ -432,7 +508,8 @@ const Dao = () => {
             disabled={loading}
             onClick={() => {
               handleCreatePost();
-            }}>
+            }}
+          >
             {loading && (
               <LoadingOutlined color="primary" style={{ fontSize: "20px" }} />
             )}

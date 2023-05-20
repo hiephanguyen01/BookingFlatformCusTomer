@@ -55,3 +55,26 @@
 .text-area textarea {
     background-color: #F4F4F4;
 }
+
+@media (max-width: 576px) {
+    .order_container {
+        padding: 0;
+
+        .col {
+            padding: 0 !important;
+        }
+
+        .order-bottom {
+            padding: 12px 17px;
+            background-color: #FFFFFF;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            z-index: 1049;
+            box-shadow: 0 0px 5px 0px #cbcbcb;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+    }
+}

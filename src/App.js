@@ -1,4 +1,4 @@
-import { BackTop } from "antd";
+import { BackTop, Grid } from "antd";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -35,14 +35,21 @@ import {
   getCurrentUser,
   setupSocket,
 } from "./stores/actions/autheticateAction";
+import { SET_USER } from "./stores/types/authType";
+
+const { useBreakpoint } = Grid;
 
 function App() {
+  const screens = useBreakpoint();
   const dispatch = useDispatch();
   const { search } = useLocation();
   useEffect(() => {
     dispatch(getCurrentUser());
     dispatch(setupSocket());
   }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch({ type: SET_USER, payload: { id: 1, Fullname: "Nguyen" } });
+  // }, [dispatch]);
   /// count and sent time accesses
   const countAndSendTimeAcc = async () => {
     try {
@@ -110,7 +117,8 @@ function App() {
             <CustomerLayout>
               <Verify />
             </CustomerLayout>
-          }></Route>
+          }
+        ></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route path="refund" element={<Refund />}></Route>
           <Route index element={<Home />}></Route>
@@ -120,7 +128,8 @@ function App() {
               <ProtectedRouter>
                 <UserAccount />
               </ProtectedRouter>
-            }></Route>
+            }
+          ></Route>
           <Route path="filter" element={<FilterPage />}></Route>
           <Route path="dao" element={<Dao />} />
           <Route path="dao/posts/:postId" element={<PostDetail />} />

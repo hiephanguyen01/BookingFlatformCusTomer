@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Button, Input, AutoComplete, Checkbox, Tag } from "antd";
+import { Button, Input, AutoComplete, Checkbox, Tag, Row, Col } from "antd";
 
 import "./modalChooseService.scss";
 import { LoadingOutlined, SearchOutlined, StarFilled } from "@ant-design/icons";
@@ -161,13 +161,25 @@ const ModalChooseService = ({
                 ))}
               </ul>
               {services.map((item, index) => (
-                <li key={index} className="service-list-item">
-                  <div className="d-flex w-100 h-100">
+                <Row
+                  key={index}
+                  className="service-list-item"
+                  gutter={[15, 0]}
+                  align="middle"
+                >
+                  <Col className="h-100" span={8}>
                     <img
                       className="service-image"
                       src={convertImage(item?.Image[0])}
                       alt=""
                     />
+                  </Col>
+                  <Col
+                    className="h-100 d-flex align-items-center"
+                    span={13}
+                    justify="center"
+                  >
+                    {" "}
                     <div className="service-content">
                       <h5 className="service-content-name">{item.Name}</h5>
                       <p className="service-content-price">
@@ -180,26 +192,29 @@ const ModalChooseService = ({
                         <span>Đã đặt {item.BookingCount}</span>
                       </div>
                     </div>
-                  </div>
-                  <Checkbox
-                    className="check-box"
-                    checked={
-                      selectService.some(
-                        (itm) =>
-                          item.id === itm.id && item.category === itm.category
-                      )
-                        ? true
-                        : false
-                    }
-                    onChange={() => handleCheckBox(item)}
-                  ></Checkbox>
-                </li>
+                  </Col>
+                  <Col className="h-100 d-flex align-items-center" span={3}>
+                    {" "}
+                    <Checkbox
+                      className="check-box"
+                      checked={
+                        selectService.some(
+                          (itm) =>
+                            item.id === itm.id && item.category === itm.category
+                        )
+                          ? true
+                          : false
+                      }
+                      onChange={() => handleCheckBox(item)}
+                    ></Checkbox>
+                  </Col>
+                </Row>
               ))}
             </ul>
           </div>
           <div className="search-footer">
             <Button
-              className="h-100 me-20"
+              className="h-40px me-20"
               onClick={() => {
                 dispatch({ type: HIDE_MODAL });
                 // dispatch(setRelatedService([]));
@@ -209,7 +224,7 @@ const ModalChooseService = ({
               Hủy
             </Button>
             <Button
-              className="h-100 px-50"
+              className="h-40px px-50"
               type="primary"
               onClick={() => {
                 dispatch({ type: HIDE_MODAL });

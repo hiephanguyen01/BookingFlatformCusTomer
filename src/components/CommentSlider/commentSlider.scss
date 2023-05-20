@@ -6,7 +6,7 @@
 
     .post_slider {
         height: 100%;
-        // width: 95% !important;
+        width: 100% !important;
 
         .post_slider_item {
             height: 100%;
@@ -21,6 +21,7 @@
             .wrapper {
                 display: flex;
                 justify-content: space-between;
+                overflow: hidden;
             }
 
             &_info {

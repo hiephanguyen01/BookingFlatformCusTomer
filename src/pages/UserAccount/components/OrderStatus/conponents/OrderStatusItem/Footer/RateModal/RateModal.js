@@ -31,7 +31,7 @@ export const RateModal = ({ onOk, onCancel, Category, id, Item, post }) => {
       formData.append("Description", newPost.Description);
       formData.append("IsAnonymous", newPost.IsAnonymous);
       formData.append("Rate", newPost.Rate);
-      await ratingService.createRatingBookign(id, Category, formData);
+      await ratingService.createRatingBooking(id, Category, formData);
       setData({
         Rate: "",
         Description: "",

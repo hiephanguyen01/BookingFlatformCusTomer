@@ -93,7 +93,8 @@ export const SignUpWithPhone = ({
         ) : onClickSignUp ? (
           <button
             className="back-button-sign-up"
-            onClick={() => onClickSignUp(5)}>
+            onClick={() => onClickSignUp(5)}
+          >
             <img alt="back" src={back} style={{ height: "16px" }} />
           </button>
         ) : (
@@ -112,6 +113,7 @@ export const SignUpWithPhone = ({
       <div className="verify-code-sign-up">
         <StyledReactInputVerificationCode isInvalid={isInvalid}>
           <ReactInputVerificationCode
+            className={"verifyCode"}
             length={6}
             autoFocus={true}
             placeholder={""}
@@ -145,7 +147,8 @@ export const SignUpWithPhone = ({
               }, 1000);
 
               return () => clearInterval(timerId);
-            }}>
+            }}
+          >
             Gửi lại
           </button>
         </div>
@@ -159,7 +162,8 @@ export const SignUpWithPhone = ({
           ) : onClickSignUp ? (
             <button
               className="continue-sign-up"
-              onClick={() => onClickSignUp(7)}>
+              onClick={() => onClickSignUp(7)}
+            >
               Tiếp tục
             </button>
           ) : (

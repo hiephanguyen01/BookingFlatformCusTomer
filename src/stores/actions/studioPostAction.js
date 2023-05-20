@@ -68,6 +68,40 @@ export const getFilterStudioPost =
     dispatch({ type: LOADING, payload: false });
   };
 
+export const getFilterStudioPostMobile =
+  (limit, page, filter, currentUser, navigate, setVisible = () => {}) =>
+  async (dispatch) => {
+    dispatch({ type: LOADING, payload: true });
+    try {
+      const { data } = await studioPostService.getFilterStudioPostMobile(
+        limit,
+        page,
+        filter
+      );
+      dispatch({ type: SET_POST_LIST, payload: data.data });
+      dispatch({ type: SET_POST_PAGINATION, payload: data.pagination });
+      dispatch({ type: SET_FILTER, payload: filter });
+      if (currentUser !== null) {
+        dispatch(getAllStudioLikedAction1(filter.category));
+      }
+      setVisible(false);
+      navigate(
+        `/home/filter?${queryString.stringify(
+          Object.keys(filter)?.reduce(
+            (newFilter, key) =>
+              filter[key] === "" || filter[key] === undefined
+                ? { ...newFilter }
+                : { ...newFilter, [key]: filter[key] },
+            {}
+          )
+        )}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch({ type: LOADING, payload: false });
+  };
+
 export const studioDetailAction = (id, category, currentUser) => {
   return async (dispatch) => {
     dispatch({ type: LOADING, payload: true });
@@ -346,7 +380,7 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
       }
       dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
       dispatch({ type: SET_FILTER_SERVICE, payload: chooseServiceTime });
-      // if (filterService.id == data.id) {
+      // if (chooseService.id == data.id) {
       //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
       //       setChooseService([]);
       //     } else {

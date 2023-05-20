@@ -1,5 +1,5 @@
-import { CheckCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Input, Row } from "antd";
+import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
+import { Button, Col, Divider, Grid, Input, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,17 +24,20 @@ import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import toastMessage from "../ToastMessage";
 import "./order.scss";
 
+const { useBreakpoint } = Grid;
+
 const Index = ({ linkTo = "" }) => {
+  const screens = useBreakpoint();
   const socket = useSelector((state) => state.userReducer.socket);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
   const { partnerDetail } = useSelector(
     (state) => state.registerPartnerReducer
   );
-  const { choosePromotionUser } = useSelector(
+  const { choosePromotionUser, promoCodeUserSave } = useSelector(
     (state) => state.promoCodeReducer
   );
-  const { studioDetail, filterService } = useSelector(
+  const { studioDetail, chooseService } = useSelector(
     (state) => state.studioPostReducer
   );
   const [infoUser, setInfoUser] = useState();
@@ -70,27 +73,19 @@ const Index = ({ linkTo = "" }) => {
       break;
   }
   const dispatch = useDispatch();
-  // console.log({
-  //   OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
-  //     .add(studioDetail?.data?.HourOpenDefault, "h")
-  //     .add(studioDetail?.data?.MinutesOpenDefault, "m")
-  //     .toISOString(),
-  //   OrderByDateTo: moment(filterService?.OrderByDateTo)
-  //     .add(studioDetail?.HourCloseDefault, "h")
-  //     .add(studioDetail?.MinutesCloseDefault, "m"),
-  // });
+
   useEffect(() => {
-    if (chooseServiceList.length <= 0) {
-      navigate(`${location.pathname.split("/order")[0]}`);
-    }
+    // if (chooseServiceList.length <= 0) {
+    //   navigate(`${location.pathname.split("/order")[0]}`);
+    // }
     setInfoUser(user);
     dispatch(setStudioPostIdAction(id));
     dispatch(studioDetailAction(id, cate));
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
     return () => {
-      dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
-      dispatch({ type: SET_FILTER_SERVICE, payload: {} });
+      // dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+      // dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
+      // dispatch({ type: SET_FILTER_SERVICE, payload: {} });
     };
   }, [cate, dispatch, id, user]);
   useEffect(() => {
@@ -109,27 +104,23 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const calculatePrice = () => {
-    switch (filterService?.OrderByTime) {
+    switch (chooseService?.OrderByTime) {
       case 1:
         return chooseServiceList?.reduce(
           (total, service) =>
             total +
-            service?.PriceByHour *
+            service?.pricesByHour[0].PriceByHour *
               calTime(
-                filterService?.OrderByTimeFrom,
-                filterService?.OrderByTimeTo
+                chooseService?.OrderByTimeFrom,
+                chooseService?.OrderByTimeTo
               ),
           0
         );
       case 0:
         return chooseServiceList?.reduce(
-          (total, service) =>
+          (total, item) =>
             total +
-            service.PriceByDate *
-              calDate(
-                filterService?.OrderByDateFrom,
-                filterService?.OrderByDateTo
-              ),
+            item?.pricesByDate?.reduce((sum, cur) => sum + cur.PriceByDate, 0),
           0
         );
 
@@ -142,15 +133,15 @@ const Index = ({ linkTo = "" }) => {
   };
 
   const calculatePriceUsePromo = () => {
-    switch (filterService?.OrderByTime) {
+    switch (chooseService?.OrderByTime) {
       case 1:
         const priceByHour = chooseServiceList?.reduce(
-          (total, service) =>
+          (total, item) =>
             total +
-            service?.PriceByHour *
+            item.pricesByHour[0].PriceByHour *
               calTime(
-                filterService?.OrderByTimeFrom,
-                filterService?.OrderByTimeTo
+                chooseService.OrderByTimeFrom,
+                chooseService.OrderByTimeTo
               ),
           0
         );
@@ -168,13 +159,12 @@ const Index = ({ linkTo = "" }) => {
       case 0:
         const priceByDate =
           chooseServiceList?.reduce(
-            (total, service) =>
+            (total, item) =>
               total +
-              service.PriceByDate *
-                calDate(
-                  filterService?.OrderByDateFrom,
-                  filterService?.OrderByDateTo
-                ),
+              item?.pricesByDate?.reduce(
+                (sum, cur) => sum + cur.PriceByDate,
+                0
+              ),
             0
           ) || 0;
         if (choosePromotionUser?.TypeReduce === 1) {
@@ -210,14 +200,14 @@ const Index = ({ linkTo = "" }) => {
 
         //**************************************
         let response;
-        if (filterService?.OrderByTime === 0) {
+        if (chooseService?.OrderByTime === 0) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 0,
-              OrderByDateFrom: moment(new Date(filterService?.OrderByDateFrom))
+              OrderByDateFrom: moment(new Date(chooseService?.OrderByDateFrom))
                 .add(studioDetail?.data?.HourOpenDefault, "h")
                 .add(studioDetail?.data?.MinutesOpenDefault, "m"),
-              OrderByDateTo: moment(new Date(filterService?.OrderByDateTo))
+              OrderByDateTo: moment(new Date(chooseService?.OrderByDateTo))
                 .add(studioDetail?.data?.HourCloseDefault, "h")
                 .add(studioDetail?.data?.MinutesCloseDefault, "m"),
               PaymentType: 0,
@@ -232,7 +222,7 @@ const Index = ({ linkTo = "" }) => {
               IsPayDeposit: 1,
               BookingValueBeforeDiscount: calculatePrice(),
               BookingValue: calculatePriceUsePromo(),
-              DepositValue: (calculatePriceUsePromo() * 15) / 100,
+              // DepositValue: (calculatePriceUsePromo() * 15) / 100,
               AffiliateCommission: calculateCommisionAffiliate(
                 calculatePriceUsePromo()
               ),
@@ -241,17 +231,20 @@ const Index = ({ linkTo = "" }) => {
             };
             response = await orderService.addOrder({
               ...newData,
-              numberOfTime: `${calDate(
-                filterService?.OrderByDateFrom,
-                filterService?.OrderByDateTo
-              )} ngày`,
+              numberOfTime: `${
+                moment(filterService?.OrderByDateTo).diff(
+                  moment(filterService?.OrderByDateFrom),
+                  "days"
+                ) + 1
+              } ngày`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByDate) *
-                calDate(
-                  filterService?.OrderByDateFrom,
-                  filterService?.OrderByDateTo
-                ),
+                (moment(filterService?.OrderByDateTo).diff(
+                  moment(filterService?.OrderByDateFrom),
+                  "days"
+                ) +
+                  1),
             });
             if (AffiliateUserId != null) {
               localStorage.removeItem("qs");
@@ -259,12 +252,12 @@ const Index = ({ linkTo = "" }) => {
             IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
             TenantId = response.data.TenantId;
           }
-        } else if (filterService?.OrderByTime === 1) {
+        } else if (chooseService?.OrderByTime === 1) {
           for (let i = 0; i < chooseServiceList.length; i++) {
             const newData = {
               OrderByTime: 1,
-              OrderByTimeFrom: moment(filterService?.OrderByTimeFrom),
-              OrderByTimeTo: moment(filterService?.OrderByTimeTo),
+              OrderByTimeFrom: moment(chooseService?.OrderByTimeFrom),
+              OrderByTimeTo: moment(chooseService?.OrderByTimeTo),
               PaymentType: 0,
               OrderNote: infoUser.Message,
               BookingUserName: infoUser.Fullname,
@@ -277,7 +270,7 @@ const Index = ({ linkTo = "" }) => {
               IsPayDeposit: 1,
               BookingValueBeforeDiscount: calculatePrice(),
               BookingValue: calculatePriceUsePromo(),
-              DepositValue: (calculatePriceUsePromo() * 15) / 100,
+              // DepositValue: (calculatePriceUsePromo() * 15) / 100,
               AffiliateCommission: calculateCommisionAffiliate(
                 calculatePriceUsePromo()
               ),
@@ -287,15 +280,15 @@ const Index = ({ linkTo = "" }) => {
             response = await orderService.addOrder({
               ...newData,
               numberOfTime: `${calTime(
-                filterService?.OrderByTimeFrom,
-                filterService?.OrderByTimeTo
+                chooseService?.OrderByTimeFrom,
+                chooseService?.OrderByTimeTo
               )} giờ`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByHour) *
                 calTime(
-                  filterService?.OrderByTimeFrom,
-                  filterService?.OrderByTimeTo
+                  chooseService?.OrderByTimeFrom,
+                  chooseService?.OrderByTimeTo
                 ),
             });
             if (AffiliateUserId != null) {
@@ -332,12 +325,13 @@ const Index = ({ linkTo = "" }) => {
   return (
     <div className="order_container">
       <Row
+        gutter={[10, 0]}
         style={{
-          maxWidth: "1300px",
           margin: "auto",
+          maxWidth: "1300px",
         }}
       >
-        <Col lg={9} sm={24}>
+        <Col lg={9} sm={24} xs={24} className="col">
           <div className="right_col">
             <div className="text-title">Bạn đã chọn</div>
             <div className="text-description">
@@ -380,9 +374,9 @@ const Index = ({ linkTo = "" }) => {
                           Trắng, size S, Số lượng 1
                         </div> */}
                         <div className="text-middle mt-8">
-                          {filterService?.OrderByTime === 1 &&
+                          {chooseService?.OrderByTime === 1 &&
                             convertPrice(item.PriceByHour)}
-                          {filterService?.OrderByTime === 0 &&
+                          {chooseService?.OrderByTime === 0 &&
                             convertPrice(item.PriceByDate)}
                           đ
                         </div>
@@ -414,7 +408,7 @@ const Index = ({ linkTo = "" }) => {
                 </p>
               )}
             </div>
-            <div className="border-bottom">
+            <div className={`${!screens?.xs && "border-bottom"}`}>
               <div className="text-title" style={{ marginBottom: "8px" }}>
                 Gửi lời nhắn
               </div>
@@ -429,89 +423,83 @@ const Index = ({ linkTo = "" }) => {
                 onResize={false}
               />
             </div>
-            <div
-              style={{
-                marginBottom: "0.5rem",
-                backgroundColor: "#FFFFFF",
-              }}
-            >
+            {!screens?.xs && (
               <div
-                className="d-flex justify-content-between"
-                style={{ marginBottom: "28px" }}
+                style={{
+                  marginBottom: "0.5rem",
+                  backgroundColor: "#FFFFFF",
+                }}
               >
-                <div>Chọn mã khuyến mãi</div>
                 <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => onClickModal()}
+                  className="d-flex justify-content-between"
+                  style={{ marginBottom: "28px" }}
                 >
-                  Mã khuyến mãi
-                </div>
-              </div>
-              <div style={{ backgroundColor: "#E3FAF4", padding: "16px 15px" }}>
-                <div className="d-flex justify-content-between">
-                  <div className="text-middle" style={{ color: "#222222" }}>
-                    Đã chọn {chooseServiceList.length} dịch vụ
-                  </div>
+                  <div>Chọn mã khuyến mãi</div>
                   <div
-                    className="text-description "
-                    style={{
-                      textDecoration: "line-through",
-                      color: "#828282",
-                      marginBottom: "12px",
-                    }}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => onClickModal()}
                   >
-                    {filterService?.OrderByTime === 1 &&
-                      `${convertPrice(
-                        chooseServiceList?.reduce(
-                          (total, service) =>
-                            total +
-                            service.PriceByHour *
-                              calTime(
-                                filterService?.OrderByTimeFrom,
-                                filterService?.OrderByTimeTo
-                              ),
-                          0
-                        )
-                      )}đ`}
-                    {filterService?.OrderByTime === 0 &&
-                      `${convertPrice(
-                        chooseServiceList?.reduce(
-                          (total, service) =>
-                            total +
-                            service.PriceByDate *
-                              calDate(
-                                filterService?.OrderByDateFrom,
-                                filterService?.OrderByDateTo
-                              ),
-                          0
-                        )
-                      )}đ`}
+                    Mã khuyến mãi
                   </div>
                 </div>
-                <div className="d-flex justify-content-between">
-                  <div
-                    className="text-description"
-                    style={{ color: "#616161" }}
-                  >
-                    Bao gồm 50.000đ thuế và phí
+                <div
+                  style={{ backgroundColor: "#E3FAF4", padding: "16px 15px" }}
+                >
+                  <div className="d-flex justify-content-between">
+                    <div className="text-middle" style={{ color: "#222222" }}>
+                      Đã chọn {chooseServiceList?.length} dịch vụ
+                    </div>
+                    <div
+                      className="text-description "
+                      style={{
+                        textDecoration: "line-through",
+                        color: "#828282",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      {/* {chooseService?.OrderByTime === 1 &&
+                        `${convertPrice(
+                          chooseService?.pricesByHour[0].PriceByHour *
+                            calTime(
+                              chooseService.OrderByTimeFrom,
+                              chooseService.OrderByTimeTo
+                            )
+                        )}đ`}
+                      {chooseService?.OrderByTime === 0 &&
+                        `${convertPrice(
+                          chooseService?.pricesByDate.reduce(
+                            (total, item) => total + item?.priceByDate
+                          ),
+                          0
+                        )}đ`} */}
+                      {convertPrice(calculatePrice())}
+                    </div>
                   </div>
-                  <div
-                    className=""
-                    style={{
-                      color: "#E22828",
-                      fontSize: "20px",
-                      lineHeight: "28px",
-                      fontWeight: "700",
-                    }}
-                  >
-                    {convertPrice(calculatePriceUsePromo())}đ
+                  <div className="d-flex justify-content-between">
+                    <div
+                      className="text-description"
+                      style={{ color: "#616161" }}
+                    >
+                      Bao gồm 50.000đ thuế và phí
+                    </div>
+                    <div
+                      className=""
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        lineHeight: "28px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {convertPrice(calculatePriceUsePromo())}đ
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </Col>
-        <Col lg={15} sm={24} style={{ padding: "0 1rem" }}>
+        <Col lg={15} sm={24} xs={24} className="col">
           <div
             style={{
               padding: "25px 25px",
@@ -519,16 +507,28 @@ const Index = ({ linkTo = "" }) => {
               backgroundColor: "#FFFFFF",
             }}
           >
-            <div
-              className="text-title"
-              style={{
-                fontSize: "22px",
-                lineHeight: "30px",
-                marginBottom: "0.25rem",
-              }}
-            >
-              Vui lòng điền thông tin của bạn
-            </div>
+            {screens?.xs ? (
+              <div
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "400",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Thông tin liên hệ *
+              </div>
+            ) : (
+              <div
+                className="text-title"
+                style={{
+                  fontSize: "22px",
+                  lineHeight: "30px",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Vui lòng điền thông tin của bạn
+              </div>
+            )}
             <TextInput
               placeholder="Tên khách hàng"
               styleContainer={{ width: "100%" }}
@@ -584,60 +584,162 @@ const Index = ({ linkTo = "" }) => {
                     console.log(error);
                   }
                 }}
+                className={`${screens?.xs && "ms-5"}`}
               >
                 Verify Email
               </Button>
             )}
           </div>
 
-          <div
-            className="d-flex justify-content-end"
-            style={{ marginTop: "35px" }}
-          >
-            {infoUser?.IsActiveEmail &&
-            infoUser?.Email?.trim() === user?.Email?.trim() ? (
-              <Button
-                onClick={(e) => {
-                  handleOnClickOrder();
-                }}
-                type="primary"
-                // disabled={Valid ? false : true}
-                style={{
-                  borderRadius: "8px",
-                  height: "45px",
-                  width: "270px",
-                }}
-              >
-                Hoàn tất đặt
-              </Button>
-            ) : Valid ? (
-              <Button
-                onClick={(e) => {
-                  handleOnClickOrder();
-                }}
-                type="primary"
-                style={{
-                  borderRadius: "8px",
-                  height: "45px",
-                  width: "270px",
-                }}
-              >
-                Hoàn tất đặt
-              </Button>
-            ) : (
-              <Button
-                type="primary"
-                disabled={true}
-                style={{
-                  borderRadius: "8px",
-                  height: "45px",
-                  width: "270px",
-                }}
-              >
-                Hoàn tất đặt
-              </Button>
-            )}
-          </div>
+          {!screens?.xs ? (
+            <div
+              className="d-flex justify-content-end"
+              style={{ marginTop: "35px" }}
+            >
+              {infoUser?.IsActiveEmail &&
+              infoUser?.Email?.trim() === user?.Email?.trim() ? (
+                <Button
+                  onClick={(e) => {
+                    handleOnClickOrder();
+                  }}
+                  type="primary"
+                  // disabled={Valid ? false : true}
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              ) : Valid ? (
+                <Button
+                  onClick={(e) => {
+                    handleOnClickOrder();
+                  }}
+                  type="primary"
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  disabled={true}
+                  style={{
+                    borderRadius: "8px",
+                    height: "45px",
+                    width: "270px",
+                  }}
+                >
+                  Hoàn tất đặt
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="order-bottom">
+              <Row align="middle" justify="space-between">
+                <div className="text-medium-re" style={{ color: "#222222" }}>
+                  Mã khuyến mãi
+                </div>
+                <Row
+                  align="middle"
+                  className="text-medium-re"
+                  style={{ fontSize: "14px" }}
+                  onClick={() => onClickModal()}
+                >
+                  {promoCodeUserSave.length} mã khuyến mãi{" "}
+                  <RightOutlined
+                    className="ms-5"
+                    style={{ fontSize: "10px" }}
+                  />
+                </Row>
+              </Row>
+              <Divider className="my-12" />
+              <Row align="middle" justify="space-between" className="mb-8">
+                <div className="text-medium-se">
+                  Đã chọn {chooseServiceList?.length} phòng
+                </div>
+                <div
+                  className="text-medium-re"
+                  style={{ textDecoration: "line-through" }}
+                >
+                  {/* {chooseService?.OrderByTime === 1 &&
+                    `${convertPrice(
+                      chooseServiceList?.reduce(
+                        (total, item) =>
+                          total +
+                          item?.prices[0].PriceByHour *
+                            calTime(
+                              chooseService.OrderByTimeFrom,
+                              chooseService.OrderByTimeTo
+                            ),
+                        0
+                      )
+                    )}đ`}
+                  {chooseService?.OrderByTime === 0 &&
+                    `${convertPrice(
+                      chooseServiceList?.reduce(
+                        (total, item) =>
+                          total +
+                          item.prices.reduce(
+                            (sum, cur) => sum + cur.PriceByDate,
+                            0
+                          ),
+                        0
+                      )
+                    )}đ`} */}
+                  {convertPrice(calculatePrice())}
+                </div>
+              </Row>
+              <Row align="middle" justify="space-between" className="mb-10">
+                <div>Bao gồm 50.000 thuế và phí</div>
+                <h4 style={{ color: "#E22828" }}>
+                  {convertPrice(calculatePriceUsePromo())}đ
+                </h4>
+              </Row>
+              <Row>
+                {infoUser?.IsActiveEmail &&
+                infoUser?.Email?.trim() === user?.Email?.trim() ? (
+                  <Button
+                    onClick={(e) => {
+                      handleOnClickOrder();
+                    }}
+                    type="primary"
+                    // disabled={Valid ? false : true}
+                    className="w-100 h-40px"
+                    style={{ borderRadius: "8px" }}
+                  >
+                    Hoàn tất đặt
+                  </Button>
+                ) : Valid ? (
+                  <Button
+                    onClick={(e) => {
+                      handleOnClickOrder();
+                    }}
+                    type="primary"
+                    className="w-100 h-40px"
+                    style={{ borderRadius: "8px" }}
+                  >
+                    Hoàn tất đặt
+                  </Button>
+                ) : (
+                  <Button
+                    type="primary"
+                    disabled={true}
+                    className="w-100 h-40px"
+                    style={{ borderRadius: "8px" }}
+                  >
+                    Hoàn tất đặt
+                  </Button>
+                )}
+              </Row>
+            </div>
+          )}
         </Col>
       </Row>
     </div>

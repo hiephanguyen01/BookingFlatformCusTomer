@@ -4,9 +4,10 @@ import {
   UploadOutlined,
   DownOutlined,
   TeamOutlined,
-  UpOutlined
+  UpOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Divider, Input, Modal, Row } from "antd";
+import { Button, Col, Divider, Grid, Input, Modal, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,8 +41,14 @@ import chair from "../../../../../assets/svg/chair.svg";
 import conditional from "../../../../../assets/svg/conditional.svg";
 import expand from "../../../../../assets/svg/expand.svg";
 import "./OrderDetail.scss";
+import BackNav from "../../../../../components/BackNav/BackNav";
+import DropFileInput from "../../../../../components/UploadImage";
+import { convertImageUrl } from "../../../../../utils/convertImage";
+
+const { useBreakpoint } = Grid;
 
 const OrderDetail = () => {
+  const screens = useBreakpoint();
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [booking, setBooking] = useState();
@@ -55,28 +62,39 @@ const OrderDetail = () => {
   const [cancelReason, setCancelReason] = useState("");
   const [visible, setVisible] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
-
+  const [file, setFile] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
-  console.log("bookingshds", booking);
-  console.log(
-    "bookingshds",
-    booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0]
-  );
-  const CancleFreeDate = moment(booking?.CreationTime)
+  const onChangeFile = (e) => {
+    const newFile = e.target.files[0];
+    newFile.preview = URL.createObjectURL(newFile);
+    if (newFile.preview !== null) {
+      setFile(newFile);
+    }
+  };
+  const CancleFreeDate = moment(
+    booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
+  )
     .add(
       booking?.OrderByTime
-        ? booking?.StudioRoom?.FreeCancelByHour?.match(/\d+/g)[0]
-        : booking?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0],
+        ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
+        : booking?.FreeCancelByDate?.match(/\d+/g)[0],
       `${booking?.OrderByTime ? "hours" : "days"}`
     )
     .format("DD/MM/YYYY HH:mm A");
-  const deposite = booking?.OrderByTime
-    ? booking?.StudioRoom?.DepositByHour
-    : booking?.StudioRoom?.DepositByDate;
-  console.log("CancleFreeDate", CancleFreeDate);
+  // const CancleFreeDate = moment(booking?.CreationTime)
+  //   .add(
+  //     booking?.OrderByTime
+  //       ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
+  //       : booking?.FreeCancelByDate?.match(/\d+/g)[0],
+  //     `${booking?.OrderByTime ? "hours" : "days"}`
+  //   )
+  //   .format("DD/MM/YYYY HH:mm A");
+  const depositPercent = booking?.OrderByTime
+    ? booking?.CancelPriceByHour
+    : booking?.CancelPriceByDate;
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -129,7 +147,7 @@ const OrderDetail = () => {
           moment(data?.OrderByDateFrom),
           "days"
         );
-        setDiffer(time + " ngày");
+        setDiffer(time + 1 + " ngày");
       }
       if (data?.BookingValueBeforeDiscount && data?.DepositValue) {
         setLastPrice(data?.BookingValue - data?.DepositValue);
@@ -150,12 +168,13 @@ const OrderDetail = () => {
       }
     }
   };
+
   const title = {
     1: "CHỜ THANH TOÁN CỌC",
     2: "SẮP TỚI",
     3: "HOÀN TẤT",
-    4: "ĐÃ HUỶ",
-    5: "VẮNG MẶT",
+    4: "ĐƠN ĐẶT ĐÃ HỦY",
+    5: "BẠN ĐÃ LỠ HẸN",
   };
   const subtitle = {
     1: (
@@ -241,7 +260,7 @@ const OrderDetail = () => {
   };
   const button = {
     1: (
-      <div className="cx">
+      <div className="cx" style={{ display: "flex", justifyContent: "center" }}>
         <Link
           to={`/home/confirm-order/${id}`}
           state={{
@@ -250,8 +269,8 @@ const OrderDetail = () => {
             EvidenceImage: booking?.EvidenceImage,
             updatePay: true,
             Category: searchParams.get("categoryId"),
-          }}
-        >
+            path: `/home/user/orderStatus/${id}?categoryId=1`,
+          }}>
           <Button
             type="primary"
             icon={<UploadOutlined />}
@@ -345,11 +364,36 @@ const OrderDetail = () => {
       </div>
     ),
     4: (
-      <div className="cx">
-        <Button type="primary" size="large" onClick={navigateToDetail}>
-          Đặt lại
-        </Button>
-      </div>
+      <>
+        {booking?.PaymentStatus === 2 ? (
+          <div
+            className="cx"
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
+            <Button
+              type="primary"
+              ghost
+              size="large"
+              onClick={navigateToDetail}
+              style={{ color: "#1fcba2", background: "#fff" }}
+            >
+              Đặt lại
+            </Button>
+            <Button type="primary" size="large" onClick={navigateToDetail}>
+              Nhận tiền hoàn
+            </Button>
+          </div>
+        ) : (
+          <div
+            className="cx"
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
+            <Button type="primary" size="large" onClick={navigateToDetail}>
+              Đặt lại
+            </Button>
+          </div>
+        )}
+      </>
     ),
     5: (
       <div
@@ -362,10 +406,12 @@ const OrderDetail = () => {
         <Button
           onClick={navigateToDetail}
           style={{
-            color: "#009874",
+            color: "#fff",
             borderColor: "#009874",
             borderRadius: "8px",
             padding: "0 55.5px",
+            background: "#009874",
+            width:"300px"
           }}
           size="large"
         >
@@ -391,246 +437,354 @@ const OrderDetail = () => {
   };
   const bill = {
     1: (
-      <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
-          <div className="df_bt">
-            <div className="tl">1 phòng x {differ}</div>
-            <div className="tr">
-              {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+      <>
+        <div className="df">
+          <Dolar2 />
+          <div className="sub_title">THÔNG TIN THANH TOÁN</div>
+        </div>
+        <Row>
+          <Col md={12} xs={0}></Col>
+          <Col md={12} xs={24}>
+            <div className="df_bt">
+              <div className="tl">1 phòng x {differ}</div>
+              <div className="tr">
+                {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Khuyến mãi</div>
-            <div className="tr">-{convertPrice(saleValue)} VND</div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tổng tạm tính</div>
-            <div className="tr">
-              {booking?.BookingValueBeforeDiscount
-                ? `${convertPrice(booking?.BookingValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Khuyến mãi</div>
+              <div className="tr">-{convertPrice(saleValue)} VND</div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="trt">Tiền cọc (Chưa thanh toán)</div>
-            <div className="trt">
-              {booking?.DepositValue &&
-                `${convertPrice(booking?.DepositValue)} VND`}
-              {/* {convertPrice(deposite)} VND */}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tổng tạm tính</div>
+              <div className="tr">
+                {booking?.BookingValueBeforeDiscount
+                  ? `${convertPrice(booking?.BookingValue)} VND`
+                  : "Không"}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+            <Divider />
+            <div className="df_bt">
+              <div className="trt">Tiền cọc (Chưa thanh toán)</div>
+              <div className="trt">
+                {booking?.DepositValue &&
+                  `${convertPrice(booking?.DepositValue)} VND`}
+                {/* {convertPrice(deposite)} VND */}
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </>
     ),
     2: (
-      <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
-          <div className="df_bt">
-            <div className="tl">1 phòng x {differ}</div>
-            <div className="tr">
-              {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+      <>
+        <div className="df">
+          <Dolar2 />
+          <div className="sub_title">THÔNG TIN THANH TOÁN</div>
+        </div>
+        <Row>
+          <Col md={12} xs={0}></Col>
+          <Col md={12} xs={24}>
+            <div className="df_bt">
+              <div className="tl">1 phòng x {differ}</div>
+              <div className="tr">
+                {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Khuyến mãi</div>
-            <div className="tr">-{convertPrice(saleValue)} VND</div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tổng tạm tính</div>
-            <div className="tr">
-              {booking?.BookingValueBeforeDiscount
-                ? `${convertPrice(booking?.BookingValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Khuyến mãi</div>
+              <div className="tr">-{convertPrice(saleValue)} VND</div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tiền cọc (Đã thanh toán)</div>
-            <div className="tr">
-              {booking?.DepositValue
-                ? `${convertPrice(booking?.DepositValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tổng tạm tính</div>
+              <div className="tr">
+                {booking?.BookingValueBeforeDiscount
+                  ? `${convertPrice(booking?.BookingValue)} VND`
+                  : "Không"}
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="trt">Tiền còn lại (Chưa thanh toán)</div>
-            <div className="trt">
-              {booking?.BookingValue
-                ? `${convertPrice(lastPrice)} VND`
-                : `${convertPrice(booking?.BookingValue)} VND`}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tiền cọc (Đã thanh toán)</div>
+              <div className="tr">
+                {booking?.DepositValue
+                  ? `${convertPrice(booking?.DepositValue)} VND`
+                  : "Không"}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+            <Divider />
+            <div className="df_bt">
+              <div className="trt">Tiền còn lại (Chưa thanh toán)</div>
+              <div className="trt">
+                {booking?.BookingValue
+                  ? `${convertPrice(lastPrice)} VND`
+                  : `${convertPrice(booking?.BookingValue)} VND`}
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </>
     ),
     3: (
-      <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
-          <div className="df_bt">
-            <div className="tl">1 phòng x {differ}</div>
-            <div className="tr">
-              {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+      <>
+        <div className="df">
+          <Dolar2 />
+          <div className="sub_title">THÔNG TIN THANH TOÁN</div>
+        </div>
+        <Row>
+          <Col md={12} xs={0}></Col>
+          <Col md={12} xs={24}>
+            <div className="df_bt">
+              <div className="tl">1 phòng x {differ}</div>
+              <div className="tr">
+                {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Khuyến mãi</div>
-            <div className="tr">-{convertPrice(saleValue)} VND</div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tổng tạm tính</div>
-            <div className="tr">
-              {booking?.BookingValueBeforeDiscount
-                ? `${convertPrice(booking?.BookingValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Khuyến mãi</div>
+              <div className="tr">-{convertPrice(saleValue)} VND</div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tiền cọc (Đã thanh toán)</div>
-            <div className="tr">
-              {booking?.DepositValue
-                ? `${convertPrice(booking?.DepositValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tổng tạm tính</div>
+              <div className="tr">
+                {booking?.BookingValueBeforeDiscount
+                  ? `${convertPrice(booking?.BookingValue)} VND`
+                  : "Không"}
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="trt">Tổng thanh toán</div>
-            <div className="trt">
-              {booking?.BookingValue
-                ? `${convertPrice(booking?.BookingValue)} VND`
-                : `${convertPrice(booking?.BookingValue)} VND`}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tiền cọc (Đã thanh toán)</div>
+              <div className="tr">
+                {booking?.DepositValue
+                  ? `${convertPrice(booking?.DepositValue)} VND`
+                  : "Không"}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+            <Divider />
+            <div className="df_bt">
+              <div className="trt">Tổng thanh toán</div>
+              <div className="trt">
+                {booking?.BookingValue
+                  ? `${convertPrice(booking?.BookingValue)} VND`
+                  : `${convertPrice(booking?.BookingValue)} VND`}
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </>
     ),
     4: (
-      <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
-          <div className="df_bt">
-            <div className="tl">1 phòng x {differ}</div>
-            <div className="tr">
-              {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+      <>
+        <div className="df">
+          <Dolar2 />
+          <div className="sub_title">HỦY ĐƠN VÀ HOÀN TIỀN</div>
+        </div>
+        <Row>
+          <Col md={12} xs={0}></Col>
+          <Col md={12} xs={24}>
+            <div className="df_bt">
+              <div className="tl">Trạng thái</div>
+              <div className="tr">Đã huỷ</div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Khuyến mãi</div>
-            <div className="tr">-{convertPrice(saleValue)} VND</div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tổng tạm tính</div>
-            <div className="tr">
-              {booking?.BookingValueBeforeDiscount
-                ? `${convertPrice(booking?.BookingValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Chính sách</div>
+              <div className="tr">
+                Hủy mất{" "}
+                {booking?.OrderByTime
+                  ? booking?.CancelPriceByHour
+                  : booking?.CancelPriceByDate}
+                % cọc
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tiền cọc (Đã thanh toán)</div>
-            <div className="tr">
-              {booking?.DepositValue
-                ? `${convertPrice(booking?.DepositValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tiền cọc</div>
+              <div className="tr">
+                {`${convertPrice(booking?.DepositValue)} VND`}
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="trt">Tổng thanh toán</div>
-            <div className="trt">
-              {booking?.BookingValue
-                ? `${convertPrice(lastPrice)} VND`
-                : `${convertPrice(booking?.BookingValue)} VND`}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Phí hủy đơn</div>
+              <div className="tr">
+                {`${convertPrice(booking?.CancelPrice)} VND`}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+            <Divider />
+            <div className="df_bt">
+              <div className="trt">Tiền hoàn trả</div>
+              <div className="trt">
+                {`${convertPrice(
+                  booking?.DepositValue - booking?.CancelPrice
+                )} VND`}
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </>
     ),
     5: (
-      <Row>
-        <Col md={12}></Col>
-        <Col md={12}>
-          <div className="df_bt">
-            <div className="tl">1 phòng x {differ}</div>
-            <div className="tr">
-              {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+      <>
+        <div className="df">
+          <Dolar2 />
+          <div className="sub_title">THÔNG TIN THANH TOÁN</div>
+        </div>
+        <Row>
+          <Col md={12}></Col>
+          <Col md={12}>
+            <div className="df_bt">
+              <div className="tl">1 phòng x {differ}</div>
+              <div className="tr">
+                {convertPrice(booking?.BookingValueBeforeDiscount)} VND
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Khuyến mãi</div>
-            <div className="tr">-{convertPrice(saleValue)} VND</div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tổng tạm tính</div>
-            <div className="tr">
-              {booking?.BookingValueBeforeDiscount
-                ? `${convertPrice(booking?.BookingValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Khuyến mãi</div>
+              <div className="tr">-{convertPrice(saleValue)} VND</div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="tl">Tiền cọc (Đã thanh toán)</div>
-            <div className="tr">
-              {booking?.DepositValue
-                ? `${convertPrice(booking?.DepositValue)} VND`
-                : "Không"}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tổng tạm tính</div>
+              <div className="tr">
+                {booking?.BookingValueBeforeDiscount
+                  ? `${convertPrice(booking?.BookingValue)} VND`
+                  : "Không"}
+              </div>
             </div>
-          </div>
-          <Divider />
-          <div className="df_bt">
-            <div className="trt">Tổng thanh toán</div>
-            <div className="trt">
-              {booking?.BookingValue
-                ? `${convertPrice(lastPrice)} VND`
-                : `${convertPrice(booking?.BookingValue)} VND`}
+            <Divider />
+            <div className="df_bt">
+              <div className="tl">Tiền cọc (Đã thanh toán)</div>
+              <div className="tr">
+                -{booking?.DepositValue
+                  ? `${convertPrice(booking?.DepositValue)} VND`
+                  : "Không"}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+            <Divider />
+            <div className="df_bt">
+              <div className="trt">Tổng thanh toán</div>
+              <div className="trt">
+                {booking?.BookingValue
+                  ? `${convertPrice(lastPrice)} VND`
+                  : `${convertPrice(booking?.BookingValue)} VND`}
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </>
     ),
   };
 
   return (
     <div className="OrderDetail">
-      <div className="title">LỊCH SỬ ĐƠN ĐẶT</div>
-      <section className="chile df">
-        <LeftOutlined
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate("/home/user/orderStatus")}
-        />
-        <div className="sub_title">CHI TIẾT ĐƠN ĐẶT</div>
-      </section>
-      <section className="chile df2">
-        <Dolar />
-        <div className="status_name">{title[status]}</div>
-        {subtitle[status]}
-        {button[status]}
-      </section>
+      {screens?.xs ? (
+        <BackNav title="CHI TIẾT ĐƠN ĐẶT" to="/home/user/orderStatus" />
+      ) : (
+        <>
+          <div className="title">LỊCH SỬ ĐƠN ĐẶT</div>
+          <section className="chile df">
+            <LeftOutlined
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/home/user/orderStatus")}
+            />
+            <div className="sub_title">CHI TIẾT ĐƠN ĐẶT</div>
+          </section>
+        </>
+      )}
+
+      {booking?.DeletedNote === "Quá hạn thanh toán" ? (
+        <></>
+      ) : (
+        <section className="chile df2">
+          <Dolar />
+          <div className="status_name">{title[status]}</div>
+          {subtitle[status]}
+          {button[status]}
+        </section>
+      )}
+
+      {booking?.DeletedNote === "Quá hạn thanh toán" && (
+        <section
+          className="chile df2"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Dolar />
+          <div className="status_name">ĐÃ QUÁ HẠN THANH TOÁN</div>
+          <p
+            style={{
+              textAlign: "center",
+              width: "500px",
+              marginBottom: "1rem",
+            }}
+          >
+            Đã quá thời hạn thanh toán, nếu quý khách đã thanh toán vui lòng tải
+            hình ảnh chứa thông tin chuyển khoản tiền đặt cọc.{" "}
+          </p>
+          <div className="w-60 wrapper_input">
+            <DropFileInput
+              // disable={moment(booking?.CreationTime)
+              //   .add(30, "minutes")
+              //   .isBefore(moment())}
+              onChangeFile={onChangeFile}
+              multiple={true}
+              image={file.preview || convertImageUrl(booking?.EvidenceImage)}
+            >
+              <div className="btn_upload">Tải ảnh lên</div>
+            </DropFileInput>
+          </div>
+          <div
+            style={{
+              width: "500px",
+              display: "inline-flex",
+              flexDirection: "column",
+              gap: "1rem",
+            }}
+          >
+            <Button
+              // type="primary"
+
+              size="large"
+              // onClick={navigateToDetail}
+              style={{ color: "#ffff", background: "#009874" }}
+            >
+              Cập nhật minh chứng
+            </Button>
+            <div className="d-flex">
+              <ExclamationCircleOutlined
+                className="w-15px me-8 mt-5"
+                style={{ color: "#616161" }}
+              />
+              <div className="description">
+                Đơn đặt sẽ được xác nhận chậm nhất sau 30 phút sau khi chuyển
+                khoản thành công, trong khung giờ 08h-20h. Sau khung giờ trên sẽ
+                được xác nhận vào 8h ngày kế tiếp.
+              </div>
+            </div>
+          </div>
+          {/* {button[status]} */}
+        </section>
+      )}
+
       <section className="chile">
         <div className="df">
           <OrderIcon />
           <div className="sub_title">THÔNG TIN ĐƠN ĐẶT</div>
         </div>
         <Row gutter={[62, 62]} style={{ position: "relative" }}>
-          <Col md={12}>
+          <Col md={12} xs={24}>
             <div className="df_bt">
               <div className="tl">Mã booking</div>
               <div className="tr2">{booking?.IdentifyCode}</div>
@@ -640,7 +794,11 @@ const OrderDetail = () => {
               <div className="tr">
                 {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
                   .utc()
-                  .format("DD/MM/YYYY hh:mm A")}
+                  .format(
+                    booking?.OrderByDateFrom
+                      ? "DD/MM/YYYY"
+                      : "DD/MM/YYYY hh:mm A"
+                  )}
               </div>
             </div>
             <div className="df_bt">
@@ -648,11 +806,13 @@ const OrderDetail = () => {
               <div className="tr">
                 {moment(booking?.OrderByDateTo || booking?.OrderByTimeTo)
                   .utc()
-                  .format("DD/MM/YYYY hh:mm A")}
+                  .format(
+                    booking?.OrderByDateTo ? "DD/MM/YYYY" : "DD/MM/YYYY hh:mm A"
+                  )}
               </div>
             </div>
           </Col>
-          <Col md={12}>
+          <Col md={12} xs={24}>
             <div className="df_bt">
               <div className="tl">Người đặt</div>
               <div className="tr">{booking?.BookingUserName}</div>
@@ -679,7 +839,7 @@ const OrderDetail = () => {
             <div className="">{post?.Name}</div>
             <CheckCircleTwoTone twoToneColor="#52c41a" />
           </div>
-          <div className="df">
+          <div className="df  ">
             <div className="tl">Mã booking</div>
             <div className="tr2">{booking?.IdentifyCode}</div>
           </div>
@@ -710,7 +870,7 @@ const OrderDetail = () => {
           onClick={() => setShowDetail(!showDetail)}
         >
           <p> {showDetail ? "Ẩn chi tiết" : "Xem chi tiết"} </p>
-          {showDetail ?<UpOutlined/> :<DownOutlined />}
+          {showDetail ? <UpOutlined /> : <DownOutlined />}
         </div>
         {showDetail && (
           <div>
@@ -899,18 +1059,40 @@ const OrderDetail = () => {
           </div>
         )}
       </section>
-      <section className="chile">
-        <div className="df">
-          <Dolar2 />
-          <div className="sub_title">THÔNG TIN THANH TOÁN</div>
-        </div>
-        {bill[status]}
-      </section>
+      {booking?.DeletedNote === "Quá hạn thanh toán" ? (
+        <></>
+      ) : (
+        <section className="chile">
+          {/* <div className="df">
+      <Dolar2 />
+      <div className="sub_title">THÔNG TIN THANH TOÁN</div>
+    </div> */}
+          {bill[status]}
+        </section>
+      )}
       <div className="df">
-        <NotiIcon />
+        {!screens?.xs && <NotiIcon />}
         <div className="noti_text">
-          Bao gồm 40.000 VND thuế và phí. Quý khách sẽ thanh toán 300.000 VND
-          vào ngày 13/02/2022
+          Bao gồm{" "}
+          <b>
+            {booking?.BookingValueBeforeDiscount
+              ? `${convertPrice(
+                  Math.round(((booking?.BookingValue / 1.1) * 10) / 100)
+                )} VND`
+              : "Không"}{" "}
+          </b>
+          thuế và phí. Quý khách sẽ thanh toán{" "}
+          <b>
+            {booking?.BookingValue
+              ? `${convertPrice(lastPrice)} VND`
+              : `${convertPrice(booking?.BookingValue)} VND`}{" "}
+          </b>
+          vào ngày{" "}
+          <b>
+            {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
+              .utc()
+              .format("DD/MM/YYYY")}
+          </b>
         </div>
       </div>
       <section className="chile">
@@ -929,14 +1111,16 @@ const OrderDetail = () => {
           <div className="boxxx">
             <div className="fi b_red"></div>
             <div className="text">
-              <div className="text_title t_red">Hủy mất 50% cọc</div>
+              <div className="text_title t_red">
+                Hủy mất {depositPercent}% cọc
+              </div>
               <div className="text_title_2">Từ {CancleFreeDate}</div>
             </div>
           </div>
         </div>
       </section>
       <div className="flexx">
-        <NotiIcon />
+        {!screens?.xs && <NotiIcon />}
         <div className="noti_text">
           Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất phí
           gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý khách
@@ -945,7 +1129,7 @@ const OrderDetail = () => {
       </div>
       <Modal
         className="confirm"
-        title={"Xác nhận!"}
+        title={"Huỷ đơn có thể bị mất phí"}
         visible={showModal}
         okText="Đồng ý"
         cancelText="Thoát"
@@ -953,6 +1137,16 @@ const OrderDetail = () => {
         onOk={() => handleCancelOrder()}
       >
         <>
+          <div>
+            Quý khách có thể huỷ đơn đặt cho đến{" "}
+            <p style={{ color: "#009874", display: "inline-block" }}>
+              {CancleFreeDate}
+            </p>{" "}
+            mà không mất phí gì và được hoàn tiền cọc 100% (nếu có thanh toán
+            trước đó).Quý khách sẽ không được hoàn tiền nếu vắng mặt vào ngày
+            thưc hiện đơn đặt.
+          </div>
+          <Divider style={{ margin: "14px 0" }} />
           <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
           <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
           <Input.TextArea
@@ -961,6 +1155,31 @@ const OrderDetail = () => {
             style={{ resize: "none" }}
             onChange={(e) => setCancelReason(e.target.value)}
           ></Input.TextArea>
+          <Divider />
+          <section className="chile">
+            <div className="df">
+              <CancelIcon />
+              <div className="sub_title">CHÍNH SÁCH HỦY</div>
+            </div>
+            <div className="df" style={{ justifyContent: "space-between" }}>
+              <div className="boxxx">
+                <div className="fi b_green"></div>
+                <div className="text">
+                  <div className="text_title t_green">Hủy miễn phí</div>
+                  <div className="text_title_2">Cho đến {CancleFreeDate}</div>
+                </div>
+              </div>
+              <div className="boxxx">
+                <div className="fi b_red"></div>
+                <div className="text">
+                  <div className="text_title t_red">
+                    Hủy mất {depositPercent}% cọc
+                  </div>
+                  <div className="text_title_2">Từ {CancleFreeDate}</div>
+                </div>
+              </div>
+            </div>
+          </section>
         </>
       </Modal>
     </div>

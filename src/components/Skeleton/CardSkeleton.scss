@@ -1,6 +1,31 @@
 .CarSkeleton {
   border-radius: 8px;
   overflow: hidden;
+
+  .image {
+    height: 150px;
+  }
 }
-.BannerSkeleton {
+
+.BannerSkeleton {}
+
+@media (max-width: 1024px) {
+  .image {
+    height: 220px !important;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .image {
+    height: 250px !important;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .image {
+    height: 280px !important;
+  }
+
 }

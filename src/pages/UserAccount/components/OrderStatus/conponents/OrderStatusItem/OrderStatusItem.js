@@ -1,5 +1,5 @@
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { Divider } from "antd";
+import { Col, Divider } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -86,9 +86,11 @@ const OrderStatusItem = ({
               twoToneColor="#52c41a"
             />
           </div>
-          <div className="OrderStatusItem__header__code">
-            Mã booking: <span>{IdentifyCode}</span>
-          </div>
+          <Col xs={0}>
+            <div className="OrderStatusItem__header__code">
+              Mã booking: <span>{IdentifyCode}</span>
+            </div>
+          </Col>
         </div>
         <Divider className="style-divider" />
         <div className="OrderStatusItem__body">
@@ -120,26 +122,34 @@ const OrderStatusItem = ({
                 <span>
                   {moment(OrderByTimeFrom || OrderByDateFrom)
                     .utc()
-                    .format("HH:mm DD/MM/YYYY")}
+                    .format(
+                      OrderByDateFrom ? "DD/MM/YYYY" : "HH:mm DD/MM/YYYY"
+                    )}
                 </span>{" "}
                 đến{" "}
                 <span>
                   {moment(OrderByTimeTo || OrderByDateTo)
                     .utc()
-                    .format("HH:mm DD/MM/YYYY")}
+                    .format(OrderByDateTo ? "DD/MM/YYYY" : "HH:mm DD/MM/YYYY")}
                 </span>
               </div>
             </div>
           </div>
           <div className="OrderStatusItem__body__price">
+            <Col lg={0} md={0} sm={0} xs={24}>
+              <div className="OrderStatusItem__body__price__total">
+                <span>Mã booking:</span> <span>{IdentifyCode}</span>
+              </div>
+            </Col>
             <div className="OrderStatusItem__body__price__total">
               {BookingStatus !== 1 ? (
                 <>
-                  Tiền cọc <span>{numberWithDot(DepositValue) || "0"}đ</span>
+                  <span> Tiền cọc</span>{" "}
+                  <span>{numberWithDot(DepositValue) || "0"}đ</span>
                 </>
               ) : (
                 <>
-                  Tổng thanh toán{" "}
+                  <span>Tổng thanh toán</span>{" "}
                   <span>{numberWithDot(BookingValue) || "0"}đ</span>
                 </>
               )}
@@ -158,7 +168,7 @@ const OrderStatusItem = ({
             </div>
           </div>
         </div>
-        <Divider className="style-divider" />
+        <Divider className="style-divider-footer" />
         <Footer
           id={id}
           status={BookingStatus}
@@ -170,6 +180,7 @@ const OrderStatusItem = ({
           setPageBooking={setPageBooking}
           Item={Item}
           post={post}
+          booking = {item}
         />
       </div>
     </>

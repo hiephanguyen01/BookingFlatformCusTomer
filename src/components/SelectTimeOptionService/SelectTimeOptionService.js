@@ -8,6 +8,7 @@ import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
 import "./selectTimeOptionService.scss";
 import { handlerSelectServiceAction } from "../../stores/actions/studioPostAction";
 import { DELETE_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import { roomService } from "../../services/RoomService";
 
 function dateRange(startDate, endDate, steps = 1) {
   const dateArray = [];
@@ -17,7 +18,6 @@ function dateRange(startDate, endDate, steps = 1) {
     dateArray.push(currentDate.format("DD-MM-YYYY"));
     currentDate.add(steps, "d");
   }
-
   return dateArray;
 }
 function range(start, end) {
@@ -49,9 +49,10 @@ function remove_duplicates_es6(arr) {
   let it = s.values();
   return Array.from(it);
 }
+
 const Option = ({ option, disabled, service }) => {
   const { chooseServiceList } = useSelector((state) => state.OrderReducer);
-  const { listTimeSelected, studioDetail, filterService } = useSelector(
+  const { listTimeSelected, studioDetail, chooseService } = useSelector(
     (state) => state.studioPostReducer
   );
   const dispatch = useDispatch();
@@ -81,8 +82,27 @@ const Option = ({ option, disabled, service }) => {
     setFilter(listTimeSelected.find((item) => item.id === service.id));
   }, [listTimeSelected, service]);
 
-  const handleOnchangeHour = (t, timeString) => {
+  const handleOnchangeHour = async (t, timeString) => {
     if (date) {
+      let from = `${
+        moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"
+      }`;
+      let to = `${moment(date).toISOString()?.slice(0, 11) + "00:00:00.000Z"}`;
+      const { data } = await roomService.getScheduleAndPrice(
+        from,
+        to,
+        service.id,
+        service?.category
+      );
+      dispatch({
+        type: "UPDATE_PRICE_SERVICE",
+        payload: {
+          ...data,
+          pricesByHour: data?.prices,
+          category: service?.category,
+        },
+      });
+
       setTime(timeString);
       dispatch({
         type: ADD_TIME_ORDER,
@@ -97,12 +117,13 @@ const Option = ({ option, disabled, service }) => {
             moment(date).toISOString().slice(0, 11) +
             timeString[1] +
             ":00.000Z",
+          pricesByHour: data.prices,
         },
       });
       if (chooseServiceList.find((item) => item?.id === service?.id)) {
         dispatch(
           handlerSelectServiceAction(service, {
-            ...filterService,
+            ...chooseService,
             OrderByTimeFrom:
               moment(date).toISOString().slice(0, 11) +
               timeString[0] +
@@ -116,8 +137,26 @@ const Option = ({ option, disabled, service }) => {
       }
     }
   };
-  const handleOnchangeDateRange = (ds, datesString) => {
+  const handleOnchangeDateRange = async (ds, datesString) => {
     if (ds) {
+      let from = `${
+        moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z"
+      }`;
+      let to = `${moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z"}`;
+      const { data } = await roomService.getScheduleAndPrice(
+        from,
+        to,
+        service.id,
+        service?.category
+      );
+      dispatch({
+        type: "UPDATE_PRICE_SERVICE",
+        payload: {
+          ...data,
+          pricesByDate: data?.prices,
+          category: service?.category,
+        },
+      });
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
@@ -128,16 +167,18 @@ const Option = ({ option, disabled, service }) => {
           OrderByDateTo:
             moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
           disableDate: disableDate || [],
+          pricesByDate: data.prices,
         },
       });
       if (chooseServiceList.find((item) => item?.id === service?.id)) {
         dispatch(
           handlerSelectServiceAction(service, {
-            ...filterService,
+            ...chooseService,
             OrderByDateFrom:
               moment(ds[0]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
             OrderByDateTo:
               moment(ds[1]).toISOString()?.slice(0, 11) + "00:00:00.000Z" || "",
+            pricesByDate: data.prices,
           })
         );
       }
@@ -215,6 +256,7 @@ const Option = ({ option, disabled, service }) => {
                       return remove_duplicates_es6(acc);
                     }, []);
                   }
+                  console.log(array);
                   dispatch({
                     type: ADD_TIME_ORDER,
                     data: {
@@ -336,9 +378,7 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
 
   const [data, setData] = useState(service);
   const [selectTime, setSelectTime] = useState();
-  const { listTimeSelected, filterService } = useSelector(
-    (state) => state.studioPostReducer
-  );
+  const { listTimeSelected } = useSelector((state) => state.studioPostReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -355,7 +395,6 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
       },
     });
   };
-
   return (
     <div className="selectTimeOptionServiceContainer mb-20">
       <Radio.Group
