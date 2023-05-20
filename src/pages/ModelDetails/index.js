@@ -14,7 +14,7 @@ import {
   UserOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Popover, Rate, Row, Space } from "antd";
+import { Button, Col, Popover, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -24,7 +24,6 @@ import styles from "./Detail.module.scss";
 
 import Table from "../../components/Table";
 import CommentRating from "../../components/CommentRating";
-import ReadMoreDesc from "../../components/ReadMoreDesc";
 
 import svgLocation from "../../assets/svg/location.svg";
 import ImagePost from "../../components/imagePost/ImagePost";
@@ -71,7 +70,6 @@ const Index = () => {
     listStudioSimilar,
     promotionCode,
     filterService,
-    serviceSelected,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
@@ -149,7 +147,8 @@ const Index = () => {
                   color: "#3F3F3F",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 {data.Name}
               </div>
               <div
@@ -158,7 +157,8 @@ const Index = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <ClockCircleOutlined
                     className="me-10 mb-2"
@@ -176,7 +176,8 @@ const Index = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <SkinOutlined
                     className="me-10 mb-2"
@@ -194,7 +195,8 @@ const Index = () => {
                   color: "#222222",
                   fontSize: "16px",
                   fontWeight: "700",
-                }}>
+                }}
+              >
                 <div>
                   <StopOutlined
                     className="me-10 mb-2"
@@ -205,6 +207,18 @@ const Index = () => {
                 <ul className="detail-description">
                   <li>Phí đi theo để dặm phấn, chỉnh tóc, thay trang phục</li>
                 </ul>
+              </div>
+              <div style={{ marginTop: "5px" }}>
+                <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
+                <p
+                  style={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    color: "#222222",
+                  }}
+                >
+                  {data?.Description}
+                </p>
               </div>
             </div>
           ),
@@ -238,13 +252,15 @@ const Index = () => {
                       gap: "5px",
                       alignItems: "center",
                       flexWrap: "wrap",
-                    }}>
+                    }}
+                  >
                     <span
                       style={{
                         color: "#E22828",
                         fontSize: "20px",
                         fontWeight: "700",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -262,7 +278,8 @@ const Index = () => {
                         textDecoration: "line-through",
                         fontSize: "14px",
                         fontWeight: "400",
-                      }}>
+                      }}
+                    >
                       {filterService.OrderByTime === 1 &&
                         data?.PriceByHour?.toLocaleString("it-IT", {
                           style: "currency",
@@ -280,7 +297,8 @@ const Index = () => {
                       color: "#828282",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
+                    }}
+                  >
                     {data.PriceNote}
                   </p>
                   {/* <button
@@ -313,7 +331,8 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Bỏ chọn
                   </div>
                 ) : (
@@ -333,7 +352,8 @@ const Index = () => {
                       fontSize: "13px",
                       lineHeight: "19px",
                       textTransform: "uppercase",
-                    }}>
+                    }}
+                  >
                     Chọn
                   </div>
                 )}
@@ -404,7 +424,8 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -412,7 +433,8 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -422,7 +444,8 @@ const Index = () => {
             <div className="wrapper_banner">
               <div
                 className="d-flex justify-content-between align-items-center header"
-                style={{ marginBottom: "11px" }}>
+                style={{ marginBottom: "11px" }}
+              >
                 <div className="header_title">
                   {studioDetail?.data?.Name}
                   <CheckCircleOutlined className="icon_check_circle" />
@@ -431,7 +454,8 @@ const Index = () => {
                   <PopUpSignIn
                     onClick={(e) => {
                       e.stopPropagation();
-                    }}>
+                    }}
+                  >
                     {studioDetail?.data?.UsersLiked ? (
                       <HeartFilled
                         style={{
@@ -475,23 +499,27 @@ const Index = () => {
                           flexDirection: "column",
                           gap: "10px",
                           padding: "10px",
-                        }}>
+                        }}
+                      >
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
                             cursor: "pointer",
-                          }}>
+                          }}
+                        >
                           <WarningOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Báo cáo
                           </span>
                         </div>
                       </div>
                     }
-                    trigger="click">
+                    trigger="click"
+                  >
                     <MoreOutlined
                       style={{
                         fontSize: "25px",
@@ -739,7 +767,8 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}>
+                        }}
+                      >
                         <div>
                           <UserOutlined
                             className="me-10 mb-2"
@@ -760,7 +789,8 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}>
+                        }}
+                      >
                         <div>
                           <DeploymentUnitOutlined
                             className="me-10 mb-2"
@@ -781,7 +811,8 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}>
+                        }}
+                      >
                         <div>
                           <StarOutlined
                             className="me-10 mb-2"
@@ -801,7 +832,8 @@ const Index = () => {
                           color: "#222222",
                           fontSize: "16px",
                           fontWeight: "700",
-                        }}>
+                        }}
+                      >
                         <div>
                           <StarOutlined
                             className="me-10 mb-2"
@@ -832,7 +864,8 @@ const Index = () => {
                 <div className={cx("map")}>
                   <h3 className="mb-5">Xem trên bản đồ</h3>
                   <div
-                    className={cx("address d-flex align-items-center mb-10")}>
+                    className={cx("address d-flex align-items-center mb-10")}
+                  >
                     <img src={images.address} alt="" className="me-10" />
                     <span>{studioDetail?.data?.Address}</span>
                   </div>
@@ -861,7 +894,8 @@ const Index = () => {
                             textDecoration: "line-through",
                             fontSize: " 16px",
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           {chooseServiceList?.OrderByTime === 1 &&
                             `${convertPrice(
                               chooseServiceList?.reduce(
@@ -898,7 +932,8 @@ const Index = () => {
                           color: "#E22828",
                           fontSize: "20px",
                           fontWeight: "700",
-                        }}>
+                        }}
+                      >
                         {filterService.OrderByTime === 1 &&
                           `${convertPrice(
                             chooseServiceList?.reduce(
@@ -939,7 +974,8 @@ const Index = () => {
                             "",
                             {}
                           )
-                        }>
+                        }
+                      >
                         <ShoppingCartOutlined />
                         Thêm vào giỏ hàng
                       </Button>
@@ -950,7 +986,8 @@ const Index = () => {
                           chooseServiceList.length > 0 && filterService.id > 0
                             ? false
                             : true
-                        }>
+                        }
+                      >
                         Đặt ngay
                       </Button>
                     </div>
@@ -981,7 +1018,8 @@ const Index = () => {
                         {studioDetail?.album?.length > 3 && (
                           <div
                             className="btn_see_more"
-                            onClick={() => setToggleSeeMore(true)}>
+                            onClick={() => setToggleSeeMore(true)}
+                          >
                             Xem thêm <DownOutlined className="icon" />
                           </div>
                         )}

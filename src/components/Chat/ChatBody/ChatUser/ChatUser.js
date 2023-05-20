@@ -18,10 +18,10 @@ export const ChatUser = React.memo(
     const [isRead, setIsRead] = useState(false);
     const [isOnline, setIsOnline] = useState(false);
     const [lastMessage, setLastMessage] = useState(
-      userInfo.newestMessage ? userInfo.newestMessage : null
+      userInfo?.newestMessage ? userInfo?.newestMessage : null
     );
     useEffect(() => {
-      if (userInfo.newestMessage) {
+      if (userInfo?.newestMessage) {
         if (userInfo.newestMessage?.UserId !== -1) {
           setIsRead(true);
         } else {
@@ -30,12 +30,12 @@ export const ChatUser = React.memo(
         setLastMessage(userInfo.newestMessage);
       }
     }, [userInfo]);
-    useEffect(() => {
-      setIsOnline(onlinePartnerList.includes(userInfo.PartnerId.id));
-    }, [onlinePartnerList]);
-    useEffect(() => {
-      setIsOnline(offlinePartnerList.includes(userInfo.PartnerId.id));
-    }, [offlinePartnerList]);
+    // useEffect(() => {
+    //   setIsOnline(onlinePartnerList.includes(userInfo.PartnerId.id));
+    // }, [onlinePartnerList]);
+    // useEffect(() => {
+    //   setIsOnline(offlinePartnerList.includes(userInfo.PartnerId.id));
+    // }, [offlinePartnerList]);
     // useEffect(() => {
     //   return () => {
     //     setToggleState(1);
@@ -44,17 +44,17 @@ export const ChatUser = React.memo(
     return (
       <div
         className={
-          toggleState === userInfo.id ? "User  User__current " : "User "
+          toggleState === userInfo?.id ? "User  User__current " : "User "
         }
         onClick={() => {
-          toggleClick(userInfo.id);
+          toggleClick(userInfo?.id);
           setIsRead(true);
           if (
-            userInfo.newestMessage.UserId === -1 &&
-            userInfo.newestMessage.IsRead === false
+            userInfo?.newestMessage.UserId === -1 &&
+            userInfo?.newestMessage.IsRead === false
           ) {
             (async () => {
-              await chatService.readMessage(userInfo.newestMessage.id);
+              await chatService.readMessage(userInfo?.newestMessage.id);
             })();
           }
         }}
@@ -62,7 +62,7 @@ export const ChatUser = React.memo(
         <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
           <div className="d-flex align-items-center h-100">
             <HandleImg
-              Name={userInfo.PartnerId.PartnerName}
+              Name={userInfo?.PartnerId.PartnerName}
               src={""}
               width={34}
               className="d-flex align-self-center me-10"
@@ -71,18 +71,18 @@ export const ChatUser = React.memo(
           <div className="py-2 h-100 w-100 d-flex flex-column justify-content-between">
             <div className="d-flex justify-content-between align-items-center h-100">
               <p className="User__name">
-                {userInfo.PartnerId.PartnerName.toString().length <= 15
-                  ? userInfo.PartnerId.PartnerName
-                  : `${userInfo.PartnerId.PartnerName.toString().slice(
+                {userInfo?.PartnerId.PartnerName.toString().length <= 15
+                  ? userInfo?.PartnerId.PartnerName
+                  : `${userInfo?.PartnerId.PartnerName.toString().slice(
                       0,
                       15
                     )}...`}
               </p>
-              {isOnline ? (
+              {/* {isOnline ? (
                 <span className="User__isOnline"></span>
               ) : (
                 <span className="User__isOffline"></span>
-              )}
+              )} */}
             </div>
             {lastMessage ? (
               lastMessage.UserId === userInfo.UserId.id ? (

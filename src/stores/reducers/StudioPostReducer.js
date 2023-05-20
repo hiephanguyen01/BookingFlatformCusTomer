@@ -188,11 +188,11 @@ export const studioPostReducer = (state = initialState, action) => {
       };
     case SELECT_TIME_ORDER:
       let newFilter = { ...state.filterService };
-      if (newFilter.id == action.data.id) {
+      if (Number(newFilter.id) === Number(action.data.id)) {
         newFilter = {};
       } else {
         let data = state.listTimeSelected.find(
-          (item) => item.id == action.data.id
+          (item) => Number(item.id) === Number(action.data.id)
         );
         if (data) {
           if (data.OrderByTime === 1) {

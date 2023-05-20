@@ -12,7 +12,6 @@ import "./styles.scss";
 
 // import required modules
 import { Navigation, Autoplay } from "swiper";
-import { useEffect, useState } from "react";
 import CarSkeleton from "../../../components/Skeleton/CarSkeleton";
 const cx = classNames.bind(styles);
 

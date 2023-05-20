@@ -3,6 +3,7 @@ import { useRef } from "react";
 import "./uploadImage.scss";
 
 const DropFileInput = ({
+  disable,
   onChangeFile,
   children,
   image = "",
@@ -18,7 +19,9 @@ const DropFileInput = ({
   return (
     <div
       ref={wrapperRef}
-      className="d-flex flex-column w-100 h-100 justify-content-center align-items-center drop-file-input"
+      className={`d-flex flex-column w-100 h-100 justify-content-center align-items-center ${
+        disable ? "disable-select" : "drop-file-input"
+      }`}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
@@ -28,7 +31,7 @@ const DropFileInput = ({
         <img
           src={image}
           alt=""
-          className="w-100 h-100"
+          className="w-100 h-100 disable"
           style={{ objectFit: "cover" }}
         />
       ) : (
@@ -36,6 +39,7 @@ const DropFileInput = ({
       )}
 
       <input
+        disabled={disable}
         type="file"
         multiple={multiple}
         value={""}

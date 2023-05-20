@@ -78,7 +78,6 @@ export const StudioDetail = () => {
     filterService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
-  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const cate =
     pathname.split("/").filter((item) => item !== "")[1] === "studio"
       ? 1
@@ -137,7 +136,6 @@ export const StudioDetail = () => {
   };
 
   const ROW = (dataSource) => {
-    // console.log("dataSource", dataSource);
     return dataSource?.map((data, index) => [
       {
         key: "title",
@@ -277,6 +275,14 @@ export const StudioDetail = () => {
                 <li>Số lượng khách tối đa: {data?.MaximumCustomer} người</li>
                 <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
               </ul>
+            </div>
+            <div style={{ marginTop: "5px" }}>
+              <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
+              <p
+                style={{ fontWeight: 400, fontSize: "16px", color: "#222222" }}
+              >
+                {data?.Description}
+              </p>
             </div>
           </div>
         ),

@@ -3,7 +3,6 @@ import "../SignIn.scss";
 import ggLogo from "../../../../assets/imgAuth/google.png";
 import { googleSignIn } from "../../../../stores/actions/autheticateAction";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 export const GoogleSignIn = () => {
   const dispatch = useDispatch();
   const handleGoogleSignIn = async () => {

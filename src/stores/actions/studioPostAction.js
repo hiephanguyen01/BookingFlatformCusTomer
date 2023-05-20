@@ -4,7 +4,6 @@ import { userService } from "../../services/UserService";
 import {
   LOADING,
   LOADING_SERVICE,
-  SELECT_TIME_ORDER,
   SET_FILTER,
   SET_FILTER_SERVICE,
   SET_LIST_LIKED_CATEGORY,
@@ -16,7 +15,7 @@ import {
   SET_STUDIO_NEAR,
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
-import { SET_CHOOSE_SERVICE } from "../types/OrderType";
+import { DELETE_CHOOSE_SERVICE, SET_CHOOSE_SERVICE } from "../types/OrderType";
 import moment from "moment";
 import toastMessage from "../../components/ToastMessage";
 
@@ -321,6 +320,7 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
             );
           })
         ) {
+          dispatch({ type: DELETE_CHOOSE_SERVICE });
           return toastMessage(
             "Đã có người đặt trong khoảng thời gian này!",
             "warning"
@@ -336,6 +336,7 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
                 moment(chooseServiceTime?.OrderByDateTo)
           )
         ) {
+          dispatch({ type: DELETE_CHOOSE_SERVICE });
           return toastMessage(
             "Đã có người đặt trong khoảng thời gian này!",
             "warning"
