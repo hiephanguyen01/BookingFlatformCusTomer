@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export const FooterRating = ({ id, setVisible, visible }) => {
+export const FooterRating = ({ id, setVisible, visible, category }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -31,12 +31,12 @@ export const FooterRating = ({ id, setVisible, visible }) => {
     <>
       {data.findIndex(
         (item) =>
-          item.StudioBookingId === id ||
-          item.PhotographerBookingId === id ||
-          item.ModelBookingId === id ||
-          item.MakeupBookingId === id ||
-          item.DeviceBookingId === id ||
-          item.ClothesBookingId === id
+          (item.StudioBookingId === id && item?.category === category) ||
+          (item.PhotographerBookingId === id && item?.category === category) ||
+          (item.ModelBookingId === id && item?.category === category) ||
+          (item.MakeupBookingId === id && item?.category === category) ||
+          (item.DeviceBookingId === id && item?.category === category) ||
+          (item.ClothesBookingId === id && item?.category === category)
       ) > -1 ? (
         <></>
       ) : (

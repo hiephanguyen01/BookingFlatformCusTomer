@@ -215,7 +215,12 @@ export const Footer = ({
     case 3:
       return (
         <div className="FooterStatus__complete">
-          <FooterRating id={id} visible={visible} setVisible={setVisible} />
+          <FooterRating
+            id={id}
+            visible={visible}
+            setVisible={setVisible}
+            category={Category}
+          />
           {/* {data.findIndex(
             (item) =>
               item.StudioBookingId === id ||

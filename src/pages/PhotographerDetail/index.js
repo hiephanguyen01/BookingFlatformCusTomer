@@ -720,9 +720,12 @@ const PhotographerDetail = () => {
                             <Rate
                               style={{ fontSize: "13px" }}
                               disabled
-                              defaultValue={5}
+                              allowHalf
+                              value={studioDetail?.data?.TotalRate}
                             />
-                            <div className="star-number">{5}</div>
+                            <div className="star-number">
+                              {studioDetail?.data?.TotalRate}
+                            </div>
                           </div>
                           <div className="has-booked">
                             <p>Đã đặt {studioDetail?.data?.BookingCount}</p>

@@ -47,16 +47,35 @@
       font-size: 15px;
       // padding-right: 10px;
       padding: 0 6.25px 0 0 !important;
-      border-right: 0.6px solid #b2b2b2;
+
       flex-direction: row !important;
+    }
+
+    .reserve_count {
+      margin-top: 3px;
+      font-weight: 400;
+      font-size: 16px;
+      margin-left: 15px;
+      line-height: 22px;
     }
 
     .reserve {
       margin-top: 3px;
       font-weight: 400;
       font-size: 16px;
-      margin-left: 10px;
+      margin-left: 5px;
       line-height: 22px;
+      position: relative;
+
+      &::after {
+        position: absolute;
+        content: "";
+        right: -80%;
+        top: 0%;
+        width: 1px;
+        height: 90%;
+        background-color: $neutral-300;
+      }
     }
   }
 
