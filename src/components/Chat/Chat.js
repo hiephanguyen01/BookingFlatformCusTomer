@@ -8,6 +8,8 @@ import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn"; */
 import {
   getOnlinePartner,
   getOfflinePartner,
+  getOnlineAdmin,
+  getOfflineAdmin,
 } from "../../stores/actions/OnlineAction";
 import { socket } from "../ConnectSocket/ConnectSocket";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,29 +21,74 @@ const Chat = () => {
   const closeConversation = useSelector(closeConversationSelector);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
-  const [notiMessage /* , setNotiMessage */] = useState(0);
-  const showLargeDrawer = () => {
-    setVisible(true);
-  };
-  const onClose = () => {
-    setVisible(false);
-  };
+  const [notiMessage, setNotiMessage] = useState(0);
+  // const showLargeDrawer = () => {
+  //   setVisible(true);
+  // };
+  // const onClose = () => {
+  //   setVisible(false);
+  // };
+
   useEffect(() => {
+    const socketListenerEvent = (typeOfUser, receivedMessage, status) => {
+      switch (typeOfUser) {
+        case "partner":
+          if (status === "online") {
+            dispatch(getOnlinePartner(receivedMessage));
+          } else {
+            dispatch(getOfflinePartner(receivedMessage));
+          }
+          break;
+        case "admin":
+          if (status === "online") {
+            dispatch(getOnlineAdmin(receivedMessage));
+          } else {
+            dispatch(getOfflineAdmin(receivedMessage));
+          }
+          break;
+      }
+    };
+
     socket.emit("login_user", {
       userId: UserMe.id,
     });
-    socket.on("online_partner", (partner) => {
-      dispatch(getOnlinePartner(partner));
-    });
-    socket.on("offline_partner", (partner) => {
-      dispatch(getOfflinePartner(partner));
-    });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    socket.on("online_partner", (partner) =>
+      socketListenerEvent("partner", partner, "online")
+    );
+    socket.on("offline_partner", (partner) =>
+      socketListenerEvent("partner", partner, "offline")
+    );
+    socket.on("online_admin", (admin) =>
+      socketListenerEvent("admin", admin, "online")
+    );
+    socket.on("offline_admin", (admin) =>
+      socketListenerEvent("admin", admin, "offline")
+    );
+
+    return () => {
+      socket.off("online_partner", (partner) =>
+        socketListenerEvent("partner", partner, "online")
+      );
+      socket.off("offline_partner", (partner) =>
+        socketListenerEvent("partner", partner, "offline")
+      );
+      socket.off("online_admin", (admin) =>
+        socketListenerEvent("admin", admin, "online")
+      );
+      socket.off("offline_admin", (admin) =>
+        socketListenerEvent("admin", admin, "offline")
+      );
+    };
   }, [socket]);
   useEffect(() => {
     setVisible(false);
   }, [closeConversation]);
+
+  // useEffect(() => {
+
+  // });
+
   return (
     <div>
       <div

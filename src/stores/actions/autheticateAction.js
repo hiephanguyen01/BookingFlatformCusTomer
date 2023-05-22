@@ -178,7 +178,7 @@ export const facebookLink =
             ...error.customData["_tokenResponse"],
             providerId: error.customData["_tokenResponse"].providerId,
           });
-          console.log(respError.data);
+          // console.log(respError.data);
           setCheckedLink(!checkedLink);
           dispatch({ type: SET_USER, payload: respError.data.data });
         } catch (error) {

@@ -14,6 +14,9 @@ export const convertTime = (time) => {
 };
 
 export const convertPrice = (price) => {
+  if (Number.isNaN(price)) {
+    price = 0;
+  }
   let format;
   if (!isNaN(price)) {
     format = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
