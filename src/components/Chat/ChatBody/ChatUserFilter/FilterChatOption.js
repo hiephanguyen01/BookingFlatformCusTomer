@@ -7,15 +7,15 @@ import {
   offlinePartnerSelector,
 } from "../../../../stores/selector/OnlineSelector";
 export const FilterChatOption = ({ info }) => {
-  const onlinePartnerList = useSelector(onlinePartnerSelector);
-  const offlinePartnerList = useSelector(offlinePartnerSelector);
-  const [isOnline, setIsOnline] = useState();
-  useEffect(() => {
-    setIsOnline(onlinePartnerList.includes(info.id));
-  }, [onlinePartnerList]);
-  useEffect(() => {
-    setIsOnline(offlinePartnerList.includes(info.id));
-  }, [offlinePartnerList]);
+  // const onlinePartnerList = useSelector(onlinePartnerSelector);
+  // const offlinePartnerList = useSelector(offlinePartnerSelector);
+  // const [isOnline, setIsOnline] = useState();
+  // useEffect(() => {
+  //   setIsOnline(onlinePartnerList.includes(info?.id));
+  // }, [onlinePartnerList]);
+  // useEffect(() => {
+  //   setIsOnline(offlinePartnerList.includes(info?.id));
+  // }, [offlinePartnerList]);
   return (
     <div className="User">
       <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
@@ -29,12 +29,12 @@ export const FilterChatOption = ({ info }) => {
         </div>
         <div className="py-2 h-100 w-100 d-flex flex-column justify-content-between">
           <div className="d-flex justify-content-between align-items-center h-100">
-            <p className="User__name">{info.PartnerName}</p>
-            {isOnline ? (
+            <p className="User__name">{info?.PartnerName}</p>
+            {/* {isOnline ? (
               <span className="User__isOnline"></span>
             ) : (
               <span className="User__isOffline"></span>
-            )}
+            )} */}
           </div>
         </div>
       </div>

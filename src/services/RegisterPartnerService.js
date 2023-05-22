@@ -7,6 +7,9 @@ class RegisterPartnerService extends BaseService {
   getPartnerByTenantId = (tenantId) => {
     return this.get(`/api/register-partner/byTenant/${tenantId}`);
   };
+  searchForRegisterPartner = (keyword = null) => {
+    return this.get(`/api/register-partner/search/${keyword}`);
+  };
 }
 
 export const registerPartnerService = new RegisterPartnerService();

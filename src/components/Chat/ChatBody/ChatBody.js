@@ -13,7 +13,8 @@ import {
 } from "../../../stores/selector/ChatSelector";
 import { updateMAction } from "../../../stores/actions/ChatAction";
 import { TOGGLE_STATE } from "../../../stores/types/messType";
-export const ChatBody = React.memo(() => {
+
+export const ChatBody = () => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const getToggleState = useSelector((state) => state.chatReducer.toggleState);
   const updateConversation = useSelector(findConverSelector);
@@ -25,42 +26,45 @@ export const ChatBody = React.memo(() => {
   const [conversation, setConversation] = useState(initMountStateUser.current);
   const [hasMore, setHasMore] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
-  useEffect(() => {
-    setToggleState(getToggleState);
-  }, [getToggleState]);
+
   const userChat = () => {
-    return conversation.map((chat) => (
-      <ChatUser
-        key={chat.id}
-        userInfo={chat}
-        toggleState={toggleState}
-        toggleClick={(e) => {
-          setToggleState(e);
-          dispatch({ type: TOGGLE_STATE, payload: e });
-          dispatch(updateMAction());
-        }}
-      />
-    ));
+    return conversation.map(
+      (chat) =>
+        chat && (
+          <ChatUser
+            key={chat.id}
+            userInfo={chat}
+            toggleState={toggleState}
+            toggleClick={(e) => {
+              setToggleState(e);
+              dispatch({ type: TOGGLE_STATE, payload: e });
+              dispatch(updateMAction());
+            }}
+          />
+        )
+    );
   };
 
   const contentChat = () => {
-    return conversation.map((chat) => (
-      <div
-        className={toggleState === chat.id ? "Chat__body__content" : "d-none"}
-        key={chat.id}>
-        <ChatContent chatInfo={chat} />
-      </div>
-    ));
+    return conversation.map(
+      (chat) =>
+        chat && (
+          <div
+            className={
+              toggleState === chat?.id ? "Chat__body__content" : "d-none"
+            }
+            key={chat.id}
+          >
+            <ChatContent chatInfo={chat} />
+          </div>
+        )
+    );
   };
+
   useEffect(() => {
-    (async () => {
-      const res = await chatService.getConversation(8, 1, UserMe.id, 1);
-      initMountStateUser.current = res.data.data;
-      setConversation(res.data.data);
-      setToggleState(res.data.data[0].id);
-      dispatch({ type: TOGGLE_STATE, payload: res.data.data[0].id });
-    })();
-  }, [UserMe?.id, dispatch]);
+    setToggleState(getToggleState);
+  }, [getToggleState]);
+
   useEffect(() => {
     if (flagCreateConver) {
       setToggleState(flagCreateConver);
@@ -68,12 +72,6 @@ export const ChatBody = React.memo(() => {
     }
   }, [flagCreateConver, dispatch]);
 
-  useEffect(() => {
-    (async () => {
-      const res = await chatService.getConversationVsAdmin(UserMe.id, 0);
-      setInfoChatAdmin(res.data.data);
-    })();
-  }, [UserMe?.id]);
   useEffect(() => {
     if (updateConversation) {
       (async () => {
@@ -105,6 +103,19 @@ export const ChatBody = React.memo(() => {
       })();
     }
   }, [updateConversation, dispatch]);
+
+  // ******* Get all conversations *******
+  useEffect(() => {
+    (async () => {
+      const res = await chatService.getConversation(8, 1, UserMe.id, 1);
+      initMountStateUser.current = res?.data?.data;
+      setConversation(res?.data?.data);
+      setToggleState(res?.data?.data[0]?.id);
+      dispatch({ type: TOGGLE_STATE, payload: res?.data?.data[0]?.id });
+    })();
+  }, [UserMe?.id, dispatch]);
+
+  // ******* Utilize the socket *******
   useEffect(() => {
     socket.on("receive_message", () => {
       (async () => {
@@ -129,12 +140,28 @@ export const ChatBody = React.memo(() => {
       })();
     });
   }, [UserMe?.id]);
+
+  const retrieveConversationMessages = async (setInfoChatAdmin) => {
+    const res = await chatService.getConversationVsAdmin(UserMe.id, 0, 10);
+    setInfoChatAdmin(res?.data?.data);
+  };
+  //******* Call API to retrieve the ConversationId with Admin *******
+  useEffect(() => {
+    retrieveConversationMessages(setInfoChatAdmin);
+  }, [UserMe?.id]);
+
   return (
     <div className="Chat__body">
       <div className="Chat__body__user">
-        <ChatUserFilter />
+        <ChatUserFilter
+          initMountStateUser={initMountStateUser}
+          setToggleState={setToggleState}
+          setConversation={setConversation}
+        />
         <ChatAdmin
           info={infoChatAdmin}
+          setInfoChatAdmin={setInfoChatAdmin}
+          retrieveConversationMessages={retrieveConversationMessages}
           toggleState={toggleState}
           setToggleState={setToggleState}
           toggleClick={(e) => {
@@ -156,7 +183,7 @@ export const ChatBody = React.memo(() => {
                 8,
                 Math.floor(conversation.length / 8) + 1,
                 UserMe.id,
-                1
+                0
               );
 
               if (data.data.length !== 0) {
@@ -182,7 +209,8 @@ export const ChatBody = React.memo(() => {
                 setLoadMore(false);
               }
             }
-          }}>
+          }}
+        >
           {userChat()}
           {!hasMore && (
             <div className="Chat__body__userlist__no-more">
@@ -201,10 +229,11 @@ export const ChatBody = React.memo(() => {
       <div className="Chat__body__divider"></div>
       <div
         className={toggleState === 1000000 ? "Chat__body__content" : "d-none"}
-        key={1000000}>
+        key={1000000}
+      >
         <ChatContentAdmin info={infoChatAdmin} />
       </div>
       {contentChat()}
     </div>
   );
-});
+};
