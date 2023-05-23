@@ -73,6 +73,7 @@ const Index = ({ linkTo = "" }) => {
       break;
   }
   const dispatch = useDispatch();
+
   useEffect(() => {
     // if (chooseServiceList.length <= 0) {
     //   navigate(`${location.pathname.split("/order")[0]}`);
@@ -233,17 +234,20 @@ const Index = ({ linkTo = "" }) => {
             };
             response = await orderService.addOrder({
               ...newData,
-              numberOfTime: `${calDate(
-                chooseService?.OrderByDateFrom,
-                chooseService?.OrderByDateTo
-              )} ngày`,
+              numberOfTime: `${
+                moment(chooseService?.OrderByDateTo).diff(
+                  moment(chooseService?.OrderByDateFrom),
+                  "days"
+                ) + 1
+              } ngày`,
               initValue:
                 (chooseServiceList[i].Sales ||
                   chooseServiceList[i].PriceByDate) *
-                calDate(
-                  chooseService?.OrderByDateFrom,
-                  chooseService?.OrderByDateTo
-                ),
+                (moment(chooseService?.OrderByDateTo).diff(
+                  moment(chooseService?.OrderByDateFrom),
+                  "days"
+                ) +
+                  1),
             });
             if (AffiliateUserId != null) {
               localStorage.removeItem("qs");
@@ -331,8 +335,7 @@ const Index = ({ linkTo = "" }) => {
         style={{
           margin: "auto",
           maxWidth: "1300px",
-        }}
-      >
+        }}>
         <Col lg={9} sm={24} xs={24} className="col">
           <div className="right_col">
             <div className="text-title">Bạn đã chọn</div>
@@ -457,8 +460,7 @@ const Index = ({ linkTo = "" }) => {
                         textDecoration: "line-through",
                         color: "#828282",
                         marginBottom: "12px",
-                      }}
-                    >
+                      }}>
                       {/* {chooseService?.OrderByTime === 1 &&
                         `${convertPrice(
                           chooseService?.pricesByHour[0].PriceByHour *
@@ -652,8 +654,7 @@ const Index = ({ linkTo = "" }) => {
                   align="middle"
                   className="text-medium-re"
                   style={{ fontSize: "14px" }}
-                  onClick={() => onClickModal()}
-                >
+                  onClick={() => onClickModal()}>
                   {promoCodeUserSave.length} mã khuyến mãi{" "}
                   <RightOutlined
                     className="ms-5"
@@ -668,8 +669,7 @@ const Index = ({ linkTo = "" }) => {
                 </div>
                 <div
                   className="text-medium-re"
-                  style={{ textDecoration: "line-through" }}
-                >
+                  style={{ textDecoration: "line-through" }}>
                   {/* {chooseService?.OrderByTime === 1 &&
                     `${convertPrice(
                       chooseServiceList?.reduce(
@@ -714,8 +714,7 @@ const Index = ({ linkTo = "" }) => {
                     type="primary"
                     // disabled={Valid ? false : true}
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}
-                  >
+                    style={{ borderRadius: "8px" }}>
                     Hoàn tất đặt
                   </Button>
                 ) : Valid ? (
@@ -725,8 +724,7 @@ const Index = ({ linkTo = "" }) => {
                     }}
                     type="primary"
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}
-                  >
+                    style={{ borderRadius: "8px" }}>
                     Hoàn tất đặt
                   </Button>
                 ) : (
@@ -734,8 +732,7 @@ const Index = ({ linkTo = "" }) => {
                     type="primary"
                     disabled={true}
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}
-                  >
+                    style={{ borderRadius: "8px" }}>
                     Hoàn tất đặt
                   </Button>
                 )}

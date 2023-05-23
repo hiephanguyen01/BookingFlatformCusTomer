@@ -66,6 +66,7 @@ const OrderStatus = () => {
     (async () => {
       setLoading(true);
       try {
+        console.log("params",params)
         const { data } = await orderService.getOrderStatus(params);
         setBooking(data.data);
       } catch (error) {

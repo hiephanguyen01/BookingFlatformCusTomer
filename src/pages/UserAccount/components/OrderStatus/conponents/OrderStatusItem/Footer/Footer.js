@@ -1,5 +1,5 @@
 import { InfoCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { Input, Modal } from "antd";
+import { Divider, Input, Modal } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import {
 import { FooterRating } from "./FooterRating";
 import "./FooterStatus.scss";
 import { RateModal } from "./RateModal/RateModal";
+import CancelIcon from "../../../Icon/CancelIcon";
 export const Footer = ({
   id,
   status,
@@ -29,6 +30,7 @@ export const Footer = ({
   setPageBooking,
   Item,
   post,
+  booking,
 }) => {
   const socket = useSelector((state) => state.userReducer.socket);
   const [visible, setVisible] = useState(false);
@@ -38,7 +40,20 @@ export const Footer = ({
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
   const dispatch = useDispatch();
-
+  const CancleFreeDate = moment(
+    booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
+  )
+    .add(
+      booking?.OrderByTime
+        ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
+        : booking?.FreeCancelByDate?.match(/\d+/g)[0],
+      `${booking?.OrderByTime ? "hours" : "days"}`
+    )
+    .format("DD/MM/YYYY HH:mm A");
+ 
+  const depositPercent = booking?.OrderByTime
+    ? booking?.CancelPriceByHour
+    : booking?.CancelPriceByDate;
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -142,7 +157,7 @@ export const Footer = ({
             Liên hệ
           </button>
           <Modal
-            title={"Xác nhận!"}
+            title={"Huỷ đơn có thế bị mất phí"}
             visible={showModal}
             okText="Đồng ý"
             cancelText="Thoát"
@@ -150,14 +165,49 @@ export const Footer = ({
             onOk={() => handleCancelOrder()}
           >
             <>
-              <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
-              <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
-              <Input.TextArea
-                className="mt-3"
-                rows={4}
-                style={{ resize: "none" }}
-                onChange={(e) => setCancelReason(e.target.value)}
-              ></Input.TextArea>
+            <div>
+            Quý khách có thể huỷ đơn đặt cho đến{" "}
+            <p style={{ color: "#009874", display: "inline-block" }}>
+              {CancleFreeDate}
+            </p>{" "}
+            mà không mất phí gì và được hoàn tiền cọc 100% (nếu có thanh toán
+            trước đó).Quý khách sẽ không được hoàn tiền nếu vắng mặt vào ngày
+            thưc hiện đơn đặt.
+          </div>
+          <Divider style={{margin:"14px 0"}} />
+          <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
+          <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
+          <Input.TextArea
+            className="mt-3"
+            rows={4}
+            style={{ resize: "none" }}
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
+          <Divider />
+          <section className="chile">
+            <div className="df">
+              <CancelIcon />
+              <div className="sub_title">CHÍNH SÁCH HỦY</div>
+            </div>
+            <div className="df" style={{ justifyContent: "space-between" }}>
+              <div className="boxxx">
+                <div className="fi b_green"></div>
+                <div className="text">
+                  <div className="text_title t_green">Hủy miễn phí</div>
+                  <div className="text_title_2">Cho đến {CancleFreeDate}</div>
+                </div>
+              </div>
+              <div className="boxxx">
+                <div className="fi b_red"></div>
+                <div className="text">
+                  <div className="text_title t_red">
+                    Hủy mất {depositPercent}% cọc
+                  </div>
+                  <div className="text_title_2">Từ {CancleFreeDate}</div>
+                </div>
+              </div>
+            </div>
+          </section>
             </>
           </Modal>
         </div>
