@@ -159,6 +159,7 @@ const Index = () => {
             ...findSelectTime,
             size,
             color,
+            amount,
           })
         );
       } else if (
@@ -173,6 +174,7 @@ const Index = () => {
             ...findSelectTime,
             size,
             color,
+            amount,
           })
         );
       } else {
@@ -789,7 +791,7 @@ const Index = () => {
                                   (totalPrice, item) =>
                                     totalPrice + item?.PriceByDate,
                                   0
-                                )
+                                ) * amount
                             )}
                           đ
                         </div>
@@ -982,7 +984,8 @@ const Index = () => {
                                           (item) =>
                                             item?.id === studioDetail?.data?.id
                                         )?.OrderByTimeTo
-                                      )
+                                      ) *
+                                      amount
                                   )}
                                 </>
                               ) : (

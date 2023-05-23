@@ -39,10 +39,10 @@ const Index = () => {
     case "makeup":
       cate = 4;
       break;
-    case "model":
+    case "device":
       cate = 5;
       break;
-    case "device":
+    case "model":
       cate = 6;
       break;
     case "confirm-order":

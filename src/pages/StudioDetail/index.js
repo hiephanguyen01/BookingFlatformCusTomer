@@ -815,56 +815,9 @@ export const StudioDetail = () => {
                                 </SwiperSlide>
                               ))}
                             </Swiper>
-                            {/* <Row align="middle" className={cx("wrap")}>
-                              <Col span={8}>
-                                <div className={cx("label")}>Phòng</div>
-                              </Col>
-                              <Col span={16}>
-                                <div className={cx("service-name")}>
-                                  {data?.Name}
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row align="middle" className={cx("wrap")}>
-                              <Col span={8}>
-                                <div className={cx("label")}>Diện tích</div>
-                              </Col>
-                              <Col span={16}>
-                                <div className={cx("service-name")}>
-                                  {data?.Area}m2
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row align="middle" className={cx("wrap")}>
-                              <Col span={8}>
-                                <div className={cx("label")}>Phong cách</div>
-                              </Col>
-                              <Col span={16}>
-                                <div className={cx("service-name")}>
-                                  {data?.Style}
-                                </div>
-                              </Col>
-                            </Row>
-                            <Row align="middle" className={cx("wrap")}>
-                              <Col span={8}>
-                                <div className={cx("label")}>Mô tả</div>
-                              </Col>
-                              <Col span={24}>
-                                <Paragraph
-                                  style={{ fontSize: "16px", marginBottom: 0 }}
-                                  ellipsis={{
-                                    rows: 4,
-                                    expandable: true,
-                                    suffix: "",
-                                    symbol: "Xem thêm",
-                                    onEllipsis: (ellipsis) => {},
-                                  }}
-                                  // title={`${article}--William Shakespeare`}
-                                >
-                                  {data?.Description}
-                                </Paragraph>
-                              </Col>
-                            </Row> */}
+                            <div className={cx("service_name")}>
+                              {data?.Name}
+                            </div>
                             <div
                               className="mt-10"
                               style={{

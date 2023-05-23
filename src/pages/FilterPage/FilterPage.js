@@ -455,8 +455,9 @@ const FilterPage = () => {
                     placeholder="Bạn đang tìm gì?"
                     prefix={<SearchOutlined />}
                     className="input-search "
-                    readOnly
                     // onClick={() => setVisible(true)}
+                    // onChange={onChangeInput}
+                    onPressEnter={onChangeInput}
                   />
                 </Col>
                 <Col span={3}>

@@ -13,9 +13,9 @@
 }
 
 .tab_search {
-  .ant-tabs-content {
-    flex-direction: column !important;
-  }
+  // .ant-tabs-content {
+  //   flex-direction: column !important;
+  // }
 
   .ant-tabs-extra-content {
     margin: 20px 0px;
@@ -36,10 +36,10 @@
 
   .ant-tabs-nav-wrap {
 
-    &::after,
-    &::before {
-      display: none;
-    }
+    // &::after,
+    // &::before {
+    //   display: none;
+    // }
   }
 
   .ant-tabs-nav-operations {

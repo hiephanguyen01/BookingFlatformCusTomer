@@ -358,7 +358,7 @@ const Option = ({ option, disabled, service }) => {
               inputReadOnly={true}
               disabledDate={(current) => {
                 return (
-                  disableDate.some(
+                  disableDate?.some(
                     (date) => moment(current).format("DD-MM-YYYY") === date
                   ) ||
                   (current && current <= moment())

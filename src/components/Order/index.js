@@ -229,6 +229,7 @@ const Index = ({ linkTo = "" }) => {
               AffiliateUserId: Number(AffiliateUserId),
               size: chooseService?.size,
               color: chooseService?.color,
+              amount: chooseService?.amount,
             };
             response = await orderService.addOrder({
               ...newData,
@@ -276,6 +277,7 @@ const Index = ({ linkTo = "" }) => {
               AffiliateUserId: Number(AffiliateUserId),
               size: chooseService?.size,
               color: chooseService?.color,
+              amount: chooseService?.amount,
             };
             response = await orderService.addOrder({
               ...newData,

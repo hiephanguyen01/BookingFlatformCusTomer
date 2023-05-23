@@ -114,7 +114,7 @@ const OrderStatus = () => {
         ) : (
           <Tabs
             className="tab_search"
-            defaultActiveKey={params.key}
+            activeKey={params.key}
             onChange={onChange}
             tabBarExtraContent={{
               right: (
