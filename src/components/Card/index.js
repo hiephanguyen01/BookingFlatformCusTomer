@@ -96,7 +96,7 @@ export const Card = ({ value, category }) => {
         </div>
       </PopUpSignIn>
       <div className={cx("content")}>
-        <div className="mb-8" >
+        <div className="mb-8">
           <h5>{value?.Name}</h5>
         </div>
         <div className={cx("address")}>

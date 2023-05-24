@@ -12,37 +12,36 @@
   }
 }
 
-.tab_search {
-  // .ant-tabs-content {
-  //   flex-direction: column !important;
-  // }
+// .tab_search {
+//   // .ant-tabs-content {
+//   //   flex-direction: column !important;
+//   // }
 
-  .ant-tabs-extra-content {
-    margin: 20px 0px;
-    width: 100% !important;
+.ant-tabs-extra-content {
+  margin: 20px 0px;
+  width: 100% !important;
 
-    input {
-      padding: 10px;
-    }
-
-    .ant-input-affix-wrapper {
-      border-radius: 10px !important;
-    }
+  input {
+    padding: 10px !important;
   }
 
-  .ant-tabs-nav {
-    flex-direction: column !important;
+  .ant-input-affix-wrapper {
+    border-radius: 10px !important;
   }
+}
 
-  .ant-tabs-nav-wrap {
-
-    // &::after,
-    // &::before {
-    //   display: none;
-    // }
-  }
+.ant-tabs-nav {
+  flex-direction: column !important;
 
   .ant-tabs-nav-operations {
     display: none !important;
   }
+}
+
+.ant-tabs-nav-wrap {
+  //     // &::after,
+  //     // &::before {
+  //     //   display: none;
+  //     // }
+  //   }
 }

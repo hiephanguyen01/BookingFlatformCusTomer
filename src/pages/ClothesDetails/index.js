@@ -211,7 +211,7 @@ const Index = () => {
         >
           {screens?.xs && (
             <BackNav
-              to={location?.state?.pathname}
+              to={location?.state?.pathname || "/home/filter?category=3"}
               icon={
                 <Popover
                   placement="bottomRight"
@@ -633,7 +633,7 @@ const Index = () => {
                       {" "}
                       <Button className={cx("btn-see-shop")}>
                         <Link
-                          to="shop"
+                          to={`shop/${studioDetail?.shop?.id}`}
                           state={{
                             pathname: `/home/clothes/${studioDetail?.data?.id}`,
                             pathnameFilter: `${location?.state?.pathname}`,
@@ -849,7 +849,7 @@ const Index = () => {
                     </div>
                     <Button className={cx("btn_see")}>
                       <Link
-                        to="shop"
+                        to={`shop/${studioDetail?.shop?.id}`}
                         state={{
                           pathname: `/home/clothes/${studioDetail?.data?.id}`,
                           pathnameFilter: `${location?.state?.pathname}`,

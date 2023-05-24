@@ -453,7 +453,7 @@ const Index = () => {
           <div className="model_container">
             {screens?.xs && (
               <BackNav
-                to={location?.state?.pathname}
+                to={location?.state?.pathname || "/home/filter?category=6"}
                 icon={
                   <Popover
                     placement="bottomRight"

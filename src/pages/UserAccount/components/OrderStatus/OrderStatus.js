@@ -66,7 +66,7 @@ const OrderStatus = () => {
     (async () => {
       setLoading(true);
       try {
-        console.log("params",params)
+        console.log("params", params);
         const { data } = await orderService.getOrderStatus(params);
         setBooking(data.data);
       } catch (error) {
@@ -115,7 +115,7 @@ const OrderStatus = () => {
         ) : (
           <Tabs
             className="tab_search"
-            activeKey={params.key}
+            defaultActiveKey={params.key}
             onChange={onChange}
             tabBarExtraContent={{
               right: (
@@ -128,7 +128,7 @@ const OrderStatus = () => {
               ),
             }}
           >
-            <TabPane tab="Chờ thanh toán" key={1}>
+            <Tabs.TabPane tab="Chờ thanh toán" key={1}>
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
@@ -140,8 +140,8 @@ const OrderStatus = () => {
                     setPageBooking={setPageBooking}
                   />
                 ))}
-            </TabPane>
-            <TabPane tab="Sắp tới" key={2}>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Sắp tới" key={2}>
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
@@ -153,8 +153,8 @@ const OrderStatus = () => {
                     setPageBooking={setPageBooking}
                   />
                 ))}
-            </TabPane>
-            <TabPane tab="Đã hoàn tất" key={3}>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Đã hoàn tất" key={3}>
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
@@ -166,8 +166,8 @@ const OrderStatus = () => {
                     setPageBooking={setPageBooking}
                   />
                 ))}
-            </TabPane>
-            <TabPane tab="Đã hủy" key={4}>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Đã hủy" key={4}>
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
@@ -179,8 +179,8 @@ const OrderStatus = () => {
                     setBooking={setBooking}
                   />
                 ))}
-            </TabPane>
-            <TabPane tab="Vắng mặt" key={5}>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Vắng mặt" key={5}>
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
@@ -192,7 +192,7 @@ const OrderStatus = () => {
                     setBooking={setBooking}
                   />
                 ))}
-            </TabPane>
+            </Tabs.TabPane>
           </Tabs>
         )}
       </div>

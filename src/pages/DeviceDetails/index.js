@@ -205,7 +205,7 @@ const Index = () => {
           <div className="device_container">
             {screens?.xs && (
               <BackNav
-                to={location?.state?.pathname}
+                to={location?.state?.pathname || "/home/filter?category=5"}
                 icon={
                   <Popover
                     placement="bottomRight"

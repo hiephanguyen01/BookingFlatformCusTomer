@@ -156,7 +156,6 @@ export const StudioDetail = () => {
     dispatch(getStudioSimilarAction(id, cate));
   }, [id, dispatch, cate, currentUser]);
 
-
   const handleReport = () => {
     dispatch({
       type: SHOW_MODAL,
@@ -351,13 +350,11 @@ export const StudioDetail = () => {
                     }}
                   >
                     {listTimeSelected?.find((item) => item.id === data?.id)
-
                       ?.OrderByTime === 1 &&
                       priceService(data?.pricesByHour, true)}
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 0 &&
                       priceService(data?.pricesByDate, false)}
-
                   </span>
                   <span
                     style={{
@@ -368,13 +365,11 @@ export const StudioDetail = () => {
                     }}
                   >
                     {listTimeSelected?.find((item) => item.id === data?.id)
-
                       ?.OrderByTime === 1 &&
                       priceService(data?.pricesByHour, true)}
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 0 &&
                       priceService(data?.pricesByDate, false)}
-
                   </span>
                 </div>
                 <p
@@ -512,7 +507,7 @@ export const StudioDetail = () => {
         <div className="container_detail">
           {screens?.xs && (
             <BackNav
-              to={state?.pathname}
+              to={state?.pathname || "/home/filter?category=1"}
               icon={
                 <Popover
                   placement="bottomRight"
@@ -952,7 +947,6 @@ export const StudioDetail = () => {
                             </Row>
                             <Divider style={{ margin: "0 0 20px" }} />
                             <Row justify="end">
-
                               {listTimeSelected.length > 0 &&
                                 listTimeSelected?.find(
                                   (item) => item.id === data?.id
@@ -965,7 +959,6 @@ export const StudioDetail = () => {
                                       className="mb-20"
                                       style={{ textAlign: "end" }}
                                     >
-
                                       <div
                                         style={{
                                           display: "flex",
@@ -975,7 +968,6 @@ export const StudioDetail = () => {
                                           justifyContent: "end",
                                         }}
                                       >
-
                                         <span
                                           style={{
                                             color: "#828282",
@@ -983,14 +975,12 @@ export const StudioDetail = () => {
                                             fontSize: "16px",
                                             fontWeight: "400",
                                           }}
-
                                         >
                                           {listTimeSelected?.find(
                                             (item) => item.id === data?.id
                                           )?.OrderByTime === 1 && (
                                             <>
                                               {listTimeSelected?.find(
-
                                                 (item) => item.id === data?.id
                                               )?.pricesByHour?.length > 0 ? (
                                                 <>
@@ -1099,7 +1089,6 @@ export const StudioDetail = () => {
                                     </div>
                                   </>
                                 )}
-
                             </Row>
                             <Row>
                               <Col span={24}>
@@ -1169,7 +1158,6 @@ export const StudioDetail = () => {
                   </div>
                 </div>
                 {screens?.xs ? (
-
                   <div className={cx("right")}>
                     <ReactStickyBox offsetTop={20} offsetBottom={20}>
                       <div className={cx("order")}>
@@ -1221,7 +1209,6 @@ export const StudioDetail = () => {
                                     calTime(
                                       chooseService?.OrderByTimeFrom,
                                       chooseService?.OrderByTimeTo
-
                                     )
                                 )}
                               {chooseService?.OrderByTime === 0 &&
@@ -1358,7 +1345,6 @@ export const StudioDetail = () => {
                               đ
                             </span>
                           )}
-
                         </div>
                         <div className="w-100 d-flex justify-content-between mt-20">
                           <Button
