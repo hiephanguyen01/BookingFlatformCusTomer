@@ -29,8 +29,7 @@ const Footer = () => {
                   className="logo"
                   align="middle"
                   justify={`${screens?.xs && "center"}`}
-                  gutter={screens?.xs ? [15, 0] : [5, 0]}
-                >
+                  gutter={screens?.xs ? [15, 0] : [5, 0]}>
                   <Col lg={12} md={12} sm={12} xs={7}>
                     {/* <img src={QRCode} /> */}
                     <QRCode
@@ -152,7 +151,7 @@ const Footer = () => {
           </div>
           <p className="copywrite">
             <CopyrightOutlined /> 2021 - Bản quyền thuộc công ty Cổ phần Công
-            nghệ và Đầu tư VNPLUS V1105
+            nghệ và Đầu tư VNPLUS V2505
           </p>
         </div>
       )}
