@@ -50,7 +50,7 @@ export const Footer = ({
       `${booking?.OrderByTime ? "hours" : "days"}`
     )
     .format("DD/MM/YYYY HH:mm A");
- 
+
   const depositPercent = booking?.OrderByTime
     ? booking?.CancelPriceByHour
     : booking?.CancelPriceByDate;
@@ -108,7 +108,14 @@ export const Footer = ({
             <InfoCircleOutlined />
             <div>Thanh toán và cập nhật minh chứng trong 15 phút</div>
           </div>
-          <div className="FooterStatus__wait__button">
+          <div
+            className="FooterStatus__wait__button"
+            style={{
+              cursor:
+                moment().diff(booking?.CreationTime, "minutes") > 15
+                  ? "not-allowed"
+                  : "",
+            }}>
             <Link
               to={`/home/confirm-order/${id}`}
               state={{
@@ -118,8 +125,14 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__1"
-            >
+              //
+              style={{
+                pointerEvents:
+                  moment().diff(booking.CreationTime, "minutes") > 15
+                    ? "none"
+                    : "auto",
+              }}
+              className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
             <Link
@@ -131,8 +144,7 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__2"
-            >
+              className="FooterStatus__wait__button__2">
               Thanh toán cọc
             </Link>
           </div>
@@ -143,8 +155,7 @@ export const Footer = ({
         <div className="FooterStatus__comming">
           <button
             className="FooterStatus__comming__cancel"
-            onClick={() => setShowModal(true)}
-          >
+            onClick={() => setShowModal(true)}>
             Hủy đơn
           </button>
           <button
@@ -152,8 +163,7 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}
-          >
+            }}>
             Liên hệ
           </button>
           <Modal
@@ -162,52 +172,54 @@ export const Footer = ({
             okText="Đồng ý"
             cancelText="Thoát"
             onCancel={() => setShowModal(false)}
-            onOk={() => handleCancelOrder()}
-          >
+            onOk={() => handleCancelOrder()}>
             <>
-            <div>
-            Quý khách có thể huỷ đơn đặt cho đến{" "}
-            <p style={{ color: "#009874", display: "inline-block" }}>
-              {CancleFreeDate}
-            </p>{" "}
-            mà không mất phí gì và được hoàn tiền cọc 100% (nếu có thanh toán
-            trước đó).Quý khách sẽ không được hoàn tiền nếu vắng mặt vào ngày
-            thưc hiện đơn đặt.
-          </div>
-          <Divider style={{margin:"14px 0"}} />
-          <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
-          <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
-          <Input.TextArea
-            className="mt-3"
-            rows={4}
-            style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}
-          ></Input.TextArea>
-          <Divider />
-          <section className="chile">
-            <div className="df">
-              <CancelIcon />
-              <div className="sub_title">CHÍNH SÁCH HỦY</div>
-            </div>
-            <div className="df" style={{ justifyContent: "space-between" }}>
-              <div className="boxxx">
-                <div className="fi b_green"></div>
-                <div className="text">
-                  <div className="text_title t_green">Hủy miễn phí</div>
-                  <div className="text_title_2">Cho đến {CancleFreeDate}</div>
-                </div>
+              <div>
+                Quý khách có thể huỷ đơn đặt cho đến{" "}
+                <p style={{ color: "#009874", display: "inline-block" }}>
+                  {CancleFreeDate}
+                </p>{" "}
+                mà không mất phí gì và được hoàn tiền cọc 100% (nếu có thanh
+                toán trước đó).Quý khách sẽ không được hoàn tiền nếu vắng mặt
+                vào ngày thưc hiện đơn đặt.
               </div>
-              <div className="boxxx">
-                <div className="fi b_red"></div>
-                <div className="text">
-                  <div className="text_title t_red">
-                    Hủy mất {depositPercent}% cọc
+              <Divider style={{ margin: "14px 0" }} />
+              <h5 className="">Bạn có chắc muốn hủy đơn hàng này không?</h5>
+              <div className="mt-3">Vui lòng nhập lý do hủy đơn:</div>
+              <Input.TextArea
+                className="mt-3"
+                rows={4}
+                style={{ resize: "none" }}
+                onChange={(e) =>
+                  setCancelReason(e.target.value)
+                }></Input.TextArea>
+              <Divider />
+              <section className="chile">
+                <div className="df">
+                  <CancelIcon />
+                  <div className="sub_title">CHÍNH SÁCH HỦY</div>
+                </div>
+                <div className="df" style={{ justifyContent: "space-between" }}>
+                  <div className="boxxx">
+                    <div className="fi b_green"></div>
+                    <div className="text">
+                      <div className="text_title t_green">Hủy miễn phí</div>
+                      <div className="text_title_2">
+                        Cho đến {CancleFreeDate}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text_title_2">Từ {CancleFreeDate}</div>
+                  <div className="boxxx">
+                    <div className="fi b_red"></div>
+                    <div className="text">
+                      <div className="text_title t_red">
+                        Hủy mất {depositPercent}% cọc
+                      </div>
+                      <div className="text_title_2">Từ {CancleFreeDate}</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </section>
+              </section>
             </>
           </Modal>
         </div>
@@ -247,8 +259,7 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal"
-          >
+            className="FooterStatus__complete__modal">
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}
