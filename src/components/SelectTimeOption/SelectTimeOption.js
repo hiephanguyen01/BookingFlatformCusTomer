@@ -21,7 +21,7 @@ const Option = ({ disabled }) => {
             }}
           >
             <DatePicker
-              defaultValue={moment(chooseService?.OrderByTimeFrom)}
+              defaultValue={moment(chooseService?.OrderByTimeFrom).utc()}
               format={"DD/MM/YYYY"}
               disabled={disabled}
             />
