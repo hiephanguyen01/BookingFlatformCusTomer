@@ -246,6 +246,34 @@
 
         }
 
+        .header_aside_category {
+            display: none;
+        }
+
+        .header_aside_category_container {
+            margin-bottom: 15px;
+            padding-right: 0;
+        }
+
+        .aside_category_list {
+            display: flex;
+            overflow-x: scroll;
+            width: 100%;
+            padding: 15px 0;
+            background-color: #fff;
+            margin-bottom: 15px;
+
+            &::-webkit-scrollbar {
+                height: 0px;
+                /* Độ rộng thanh cuộn */
+            }
+
+            .aside_category_item {
+                margin-top: 0 !important;
+                white-space: nowrap;
+                padding: 0 20px;
+            }
+        }
 
     }
 

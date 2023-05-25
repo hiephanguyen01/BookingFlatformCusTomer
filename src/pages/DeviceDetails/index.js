@@ -29,6 +29,7 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   getLikeStudioPostAction,
   getStudioSimilarAction,
+  handlerSelectServiceAction,
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
@@ -55,14 +56,21 @@ import "swiper/css/pagination";
 // import required modules
 import { Autoplay, Pagination } from "swiper";
 import { convertImage } from "../../utils/convertImage";
+import { convertPrice } from "../../utils/convert";
+import { calTime } from "../../utils/calculate";
 const cx = classNames.bind(styles);
 
 const { useBreakpoint } = Grid;
 
 const Index = () => {
   const screens = useBreakpoint();
-  const { studioDetail, listStudioSimilar, promotionCode, chooseService } =
-    useSelector((state) => state.studioPostReducer);
+  const {
+    studioDetail,
+    listStudioSimilar,
+    promotionCode,
+    chooseService,
+    listTimeSelected,
+  } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
 
   const { id } = useParams();
@@ -121,10 +129,44 @@ const Index = () => {
   };
 
   const handleBook = () => {
-    if (amount > 0 && chooseService.OrderByTime !== -1) {
-      // dispatch(chooseServiceAction(chooseService));
-      navigate("order");
+    const findSelectTime = listTimeSelected.find(
+      (item) => item.id === studioDetail?.data.id
+    );
+    if (findSelectTime) {
+      if (
+        findSelectTime.OrderByTime === 1 &&
+        findSelectTime.OrderByTimeFrom !== undefined &&
+        findSelectTime.OrderByTimeFrom !== "" &&
+        findSelectTime.OrderByTimeTo !== undefined &&
+        findSelectTime.OrderByTimeTo !== "" &&
+        findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+      ) {
+        dispatch(
+          handlerSelectServiceAction(studioDetail?.data, {
+            ...findSelectTime,
+            amount,
+          })
+        );
+      } else if (
+        findSelectTime.OrderByTime === 0 &&
+        findSelectTime.OrderByDateFrom !== undefined &&
+        findSelectTime.OrderByDateFrom !== "" &&
+        findSelectTime.OrderByDateTo !== undefined &&
+        findSelectTime.OrderByDateTo !== ""
+      ) {
+        dispatch(
+          handlerSelectServiceAction(studioDetail?.data, {
+            ...findSelectTime,
+            amount,
+          })
+        );
+      } else {
+        return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+      }
+    } else {
+      return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
     }
+    navigate("order");
   };
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
@@ -163,7 +205,7 @@ const Index = () => {
           <div className="device_container">
             {screens?.xs && (
               <BackNav
-                to={location?.state?.pathname}
+                to={location?.state?.pathname || "/home/filter?category=5"}
                 icon={
                   <Popover
                     placement="bottomRight"
@@ -489,7 +531,7 @@ const Index = () => {
                     <p className={cx("amount-label")}>Khung giờ bạn muốn đặt</p>
                     <br />
                     <SelectTimeOptionService
-                      service={studioDetail?.service?.data}
+                      service={{ ...studioDetail?.data, category: cate }}
                       className=""
                     />
                   </div>
@@ -593,7 +635,55 @@ const Index = () => {
                               color: "#828282",
                             }}
                           >
-                            0 đ
+                            {listTimeSelected?.find(
+                              (item) => item?.id === studioDetail?.data?.id
+                            )?.OrderByTime === 1 && (
+                              <>
+                                {listTimeSelected?.find(
+                                  (item) => item.id === studioDetail?.data?.id
+                                )?.pricesByHour?.length > 0 ? (
+                                  <>
+                                    {convertPrice(
+                                      listTimeSelected?.find(
+                                        (item) =>
+                                          item?.id === studioDetail?.data?.id
+                                      ).pricesByHour[0]?.PriceByHour *
+                                        calTime(
+                                          listTimeSelected?.find(
+                                            (item) =>
+                                              item?.id ===
+                                              studioDetail?.data?.id
+                                          )?.OrderByTimeFrom,
+                                          listTimeSelected?.find(
+                                            (item) =>
+                                              item?.id ===
+                                              studioDetail?.data?.id
+                                          )?.OrderByTimeTo
+                                        ) *
+                                        amount
+                                    )}
+                                  </>
+                                ) : (
+                                  <></>
+                                )}
+                              </>
+                            )}
+                            {listTimeSelected?.find(
+                              (item) => item?.id === studioDetail?.data?.id
+                            )?.OrderByTime === 0 &&
+                              convertPrice(
+                                listTimeSelected
+                                  ?.find(
+                                    (item) =>
+                                      item?.id === studioDetail?.data?.id
+                                  )
+                                  ?.pricesByDate?.reduce(
+                                    (totalPrice, item) =>
+                                      totalPrice + item?.PriceByDate,
+                                    0
+                                  ) * amount
+                              )}
+                            đ
                           </div>
                         )}
                       </div>
@@ -610,7 +700,52 @@ const Index = () => {
                             color: "#E22828",
                           }}
                         >
-                          0 đ
+                          {listTimeSelected?.find(
+                            (item) => item?.id === studioDetail?.data?.id
+                          )?.OrderByTime === 1 && (
+                            <>
+                              {listTimeSelected?.find(
+                                (item) => item.id === studioDetail?.data?.id
+                              )?.pricesByHour?.length > 0 ? (
+                                <>
+                                  {convertPrice(
+                                    listTimeSelected?.find(
+                                      (item) =>
+                                        item?.id === studioDetail?.data?.id
+                                    ).pricesByHour[0]?.PriceByHour *
+                                      calTime(
+                                        listTimeSelected?.find(
+                                          (item) =>
+                                            item?.id === studioDetail?.data?.id
+                                        )?.OrderByTimeFrom,
+                                        listTimeSelected?.find(
+                                          (item) =>
+                                            item?.id === studioDetail?.data?.id
+                                        )?.OrderByTimeTo
+                                      ) *
+                                      amount
+                                  )}
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                          {listTimeSelected?.find(
+                            (item) => item?.id === studioDetail?.data?.id
+                          )?.OrderByTime === 0 &&
+                            convertPrice(
+                              listTimeSelected
+                                ?.find(
+                                  (item) => item?.id === studioDetail?.data?.id
+                                )
+                                ?.pricesByDate?.reduce(
+                                  (totalPrice, item) =>
+                                    totalPrice + item?.PriceByDate,
+                                  0
+                                ) * amount
+                            )}
+                          đ
                         </div>
                       </div>
                       <div className="w-100 d-flex justify-content-between">
@@ -714,7 +849,55 @@ const Index = () => {
                               color: "#828282",
                             }}
                           >
-                            0 đ
+                            {listTimeSelected?.find(
+                              (item) => item?.id === studioDetail?.data?.id
+                            )?.OrderByTime === 1 && (
+                              <>
+                                {listTimeSelected?.find(
+                                  (item) => item.id === studioDetail?.data?.id
+                                )?.pricesByHour?.length > 0 ? (
+                                  <>
+                                    {convertPrice(
+                                      listTimeSelected?.find(
+                                        (item) =>
+                                          item?.id === studioDetail?.data?.id
+                                      ).pricesByHour[0]?.PriceByHour *
+                                        calTime(
+                                          listTimeSelected?.find(
+                                            (item) =>
+                                              item?.id ===
+                                              studioDetail?.data?.id
+                                          )?.OrderByTimeFrom,
+                                          listTimeSelected?.find(
+                                            (item) =>
+                                              item?.id ===
+                                              studioDetail?.data?.id
+                                          )?.OrderByTimeTo
+                                        ) *
+                                        amount
+                                    )}
+                                  </>
+                                ) : (
+                                  <></>
+                                )}
+                              </>
+                            )}
+                            {listTimeSelected?.find(
+                              (item) => item?.id === studioDetail?.data?.id
+                            )?.OrderByTime === 0 &&
+                              convertPrice(
+                                listTimeSelected
+                                  ?.find(
+                                    (item) =>
+                                      item?.id === studioDetail?.data?.id
+                                  )
+                                  ?.pricesByDate?.reduce(
+                                    (totalPrice, item) =>
+                                      totalPrice + item?.PriceByDate,
+                                    0
+                                  ) * amount
+                              )}
+                            đ
                           </div>
                         )}
                       </div>
@@ -731,7 +914,52 @@ const Index = () => {
                             color: "#E22828",
                           }}
                         >
-                          0 đ
+                          {listTimeSelected?.find(
+                            (item) => item?.id === studioDetail?.data?.id
+                          )?.OrderByTime === 1 && (
+                            <>
+                              {listTimeSelected?.find(
+                                (item) => item.id === studioDetail?.data?.id
+                              )?.pricesByHour?.length > 0 ? (
+                                <>
+                                  {convertPrice(
+                                    listTimeSelected?.find(
+                                      (item) =>
+                                        item?.id === studioDetail?.data?.id
+                                    ).pricesByHour[0]?.PriceByHour *
+                                      calTime(
+                                        listTimeSelected?.find(
+                                          (item) =>
+                                            item?.id === studioDetail?.data?.id
+                                        )?.OrderByTimeFrom,
+                                        listTimeSelected?.find(
+                                          (item) =>
+                                            item?.id === studioDetail?.data?.id
+                                        )?.OrderByTimeTo
+                                      ) *
+                                      amount
+                                  )}
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                          {listTimeSelected?.find(
+                            (item) => item?.id === studioDetail?.data?.id
+                          )?.OrderByTime === 0 &&
+                            convertPrice(
+                              listTimeSelected
+                                ?.find(
+                                  (item) => item?.id === studioDetail?.data?.id
+                                )
+                                ?.pricesByDate?.reduce(
+                                  (totalPrice, item) =>
+                                    totalPrice + item?.PriceByDate,
+                                  0
+                                ) * amount
+                            )}
+                          đ
                         </div>
                       </div>
                       <div className="w-100 d-flex justify-content-between">

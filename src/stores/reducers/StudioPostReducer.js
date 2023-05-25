@@ -94,7 +94,10 @@ export const studioPostReducer = (state = initialState, action) => {
         studioDetail: action.payload,
       };
     case "UPDATE_PRICE_SERVICE":
-      if (Number(action.payload.category) === 3) {
+      if (
+        Number(action.payload.category) === 3 ||
+        Number(action.payload.category) === 5
+      ) {
         return {
           ...state,
           studioDetail: {

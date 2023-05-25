@@ -538,7 +538,7 @@ const PhotographerDetail = () => {
           >
             {screens?.xs && (
               <BackNav
-                to={location?.state?.pathname}
+                to={location?.state?.pathname || "/home/filter?category=2"}
                 icon={
                   <Popover
                     placement="bottomRight"

@@ -106,22 +106,29 @@ const Index = ({ linkTo = "" }) => {
   const calculatePrice = () => {
     switch (chooseService?.OrderByTime) {
       case 1:
-        return chooseServiceList?.reduce(
-          (total, service) =>
-            total +
-            service?.pricesByHour[0].PriceByHour *
-              calTime(
-                chooseService?.OrderByTimeFrom,
-                chooseService?.OrderByTimeTo
-              ),
-          0
+        return (
+          chooseServiceList?.reduce(
+            (total, service) =>
+              total +
+              service?.pricesByHour[0].PriceByHour *
+                calTime(
+                  chooseService?.OrderByTimeFrom,
+                  chooseService?.OrderByTimeTo
+                ),
+            0
+          ) * (chooseService?.amount || 1)
         );
       case 0:
-        return chooseServiceList?.reduce(
-          (total, item) =>
-            total +
-            item?.pricesByDate?.reduce((sum, cur) => sum + cur.PriceByDate, 0),
-          0
+        return (
+          chooseServiceList?.reduce(
+            (total, item) =>
+              total +
+              item?.pricesByDate?.reduce(
+                (sum, cur) => sum + cur.PriceByDate,
+                0
+              ),
+            0
+          ) * (chooseService?.amount || 1)
         );
 
       default:
@@ -135,16 +142,17 @@ const Index = ({ linkTo = "" }) => {
   const calculatePriceUsePromo = () => {
     switch (chooseService?.OrderByTime) {
       case 1:
-        const priceByHour = chooseServiceList?.reduce(
-          (total, item) =>
-            total +
-            item.pricesByHour[0].PriceByHour *
-              calTime(
-                chooseService.OrderByTimeFrom,
-                chooseService.OrderByTimeTo
-              ),
-          0
-        );
+        const priceByHour =
+          chooseServiceList?.reduce(
+            (total, item) =>
+              total +
+              item.pricesByHour[0].PriceByHour *
+                calTime(
+                  chooseService.OrderByTimeFrom,
+                  chooseService.OrderByTimeTo
+                ),
+            0
+          ) * (chooseService?.amount || 1);
         if (choosePromotionUser?.TypeReduce === 1) {
           return priceByHour - (choosePromotionUser?.ReduceValue || 0);
         } else {
@@ -166,7 +174,7 @@ const Index = ({ linkTo = "" }) => {
                 0
               ),
             0
-          ) || 0;
+          ) * (chooseService?.amount || 1) || 0;
         if (choosePromotionUser?.TypeReduce === 1) {
           return priceByDate - (choosePromotionUser?.ReduceValue || 0);
         } else {
@@ -230,6 +238,7 @@ const Index = ({ linkTo = "" }) => {
               AffiliateUserId: Number(AffiliateUserId),
               size: chooseService?.size,
               color: chooseService?.color,
+              amount: chooseService?.amount,
             };
             response = await orderService.addOrder({
               ...newData,
@@ -280,6 +289,7 @@ const Index = ({ linkTo = "" }) => {
               AffiliateUserId: Number(AffiliateUserId),
               size: chooseService?.size,
               color: chooseService?.color,
+              amount: chooseService?.amount,
             };
             response = await orderService.addOrder({
               ...newData,
@@ -333,7 +343,8 @@ const Index = ({ linkTo = "" }) => {
         style={{
           margin: "auto",
           maxWidth: "1300px",
-        }}>
+        }}
+      >
         <Col lg={9} sm={24} xs={24} className="col">
           <div className="right_col">
             <div className="text-title">Bạn đã chọn</div>
@@ -458,7 +469,8 @@ const Index = ({ linkTo = "" }) => {
                         textDecoration: "line-through",
                         color: "#828282",
                         marginBottom: "12px",
-                      }}>
+                      }}
+                    >
                       {/* {chooseService?.OrderByTime === 1 &&
                         `${convertPrice(
                           chooseService?.pricesByHour[0].PriceByHour *
@@ -652,7 +664,8 @@ const Index = ({ linkTo = "" }) => {
                   align="middle"
                   className="text-medium-re"
                   style={{ fontSize: "14px" }}
-                  onClick={() => onClickModal()}>
+                  onClick={() => onClickModal()}
+                >
                   {promoCodeUserSave.length} mã khuyến mãi{" "}
                   <RightOutlined
                     className="ms-5"
@@ -667,7 +680,8 @@ const Index = ({ linkTo = "" }) => {
                 </div>
                 <div
                   className="text-medium-re"
-                  style={{ textDecoration: "line-through" }}>
+                  style={{ textDecoration: "line-through" }}
+                >
                   {/* {chooseService?.OrderByTime === 1 &&
                     `${convertPrice(
                       chooseServiceList?.reduce(
@@ -712,7 +726,8 @@ const Index = ({ linkTo = "" }) => {
                     type="primary"
                     // disabled={Valid ? false : true}
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}>
+                    style={{ borderRadius: "8px" }}
+                  >
                     Hoàn tất đặt
                   </Button>
                 ) : Valid ? (
@@ -722,7 +737,8 @@ const Index = ({ linkTo = "" }) => {
                     }}
                     type="primary"
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}>
+                    style={{ borderRadius: "8px" }}
+                  >
                     Hoàn tất đặt
                   </Button>
                 ) : (
@@ -730,7 +746,8 @@ const Index = ({ linkTo = "" }) => {
                     type="primary"
                     disabled={true}
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}>
+                    style={{ borderRadius: "8px" }}
+                  >
                     Hoàn tất đặt
                   </Button>
                 )}

@@ -46,7 +46,7 @@ import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import SlideAlbum from "../../components/SlideAlbum";
 import { convertImage } from "../../utils/convertImage";
 import { SlideCard } from "../StudioDetail/SlideCard";
-import { calDate, calTime } from "../../utils/calculate";
+import { calDate, calTime, priceService } from "../../utils/calculate";
 // import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import {
   SET_PROMOTION_CODE,
@@ -253,7 +253,7 @@ const Index = () => {
                 //     ? false
                 //     : true
                 // }
-                service={data}
+                service={{ ...data, category: cate }}
               />
             );
           },
@@ -279,16 +279,12 @@ const Index = () => {
                         fontWeight: "700",
                       }}
                     >
-                      {chooseService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {chooseService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 1 &&
+                        priceService(data?.pricesByHour, true)}
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 0 &&
+                        priceService(data?.pricesByDate, false)}
                     </span>
                     <span
                       style={{
@@ -298,16 +294,12 @@ const Index = () => {
                         fontWeight: "400",
                       }}
                     >
-                      {chooseService.OrderByTime === 1 &&
-                        data?.PriceByHour?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      {chooseService.OrderByTime === 0 &&
-                        data?.PriceByDate?.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 1 &&
+                        priceService(data?.pricesByHour, true)}
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 0 &&
+                        priceService(data?.pricesByDate, false)}
                     </span>
                   </div>
                   <p
@@ -461,7 +453,7 @@ const Index = () => {
           <div className="model_container">
             {screens?.xs && (
               <BackNav
-                to={location?.state?.pathname}
+                to={location?.state?.pathname || "/home/filter?category=6"}
                 icon={
                   <Popover
                     placement="bottomRight"
@@ -1163,7 +1155,9 @@ const Index = () => {
                             <h5>Chọn thời gian</h5>
                           </Col>
                           <Col span={24}>
-                            <SelectTimeOptionService service={data} />
+                            <SelectTimeOptionService
+                              service={{ ...data, category: cate }}
+                            />
                           </Col>
                         </Row>
                         <Divider style={{ margin: "0 0 20px" }} />
@@ -1471,7 +1465,7 @@ const Index = () => {
                   <div className={cx("order")}>
                     <div className={cx("item")}>
                       <h3>Đã chọn {chooseServiceList?.length} phòng</h3>
-                      {chooseServiceList?.length > 0 && (
+                      {Object.keys(chooseService)?.length > 0 && (
                         <span
                           style={{
                             textDecoration: "line-through",
@@ -1479,71 +1473,55 @@ const Index = () => {
                             color: "#828282",
                           }}
                         >
-                          {chooseServiceList?.OrderByTime === 1 &&
-                            `${convertPrice(
-                              chooseServiceList?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByHour *
-                                    calTime(
-                                      chooseService.OrderByTimeFrom,
-                                      chooseService.OrderByTimeTo
-                                    ),
+                          {chooseService?.OrderByTime === 1 &&
+                            convertPrice(
+                              chooseService?.pricesByHour[0]?.PriceByHour *
+                                calTime(
+                                  chooseService?.OrderByTimeFrom,
+                                  chooseService?.OrderByTimeTo
+                                )
+                            )}
+                          {chooseService?.OrderByTime === 0 &&
+                            convertPrice(
+                              chooseService?.pricesByDate?.reduce(
+                                (totalPrice, item) =>
+                                  totalPrice + item?.PriceByDate,
                                 0
                               )
-                            )}đ`}
-                          {chooseService.OrderByTime === 0 &&
-                            `${convertPrice(
-                              chooseServiceList?.reduce(
-                                (total, item) =>
-                                  total +
-                                  item.PriceByDate *
-                                    calDate(
-                                      chooseService.OrderByDateFrom,
-                                      chooseService.OrderByDateTo
-                                    ),
-                                0
-                              )
-                            )}đ`}
+                            )}
+                          đ
                         </span>
                       )}
                     </div>
                     <div className={cx("item")}>
                       <span className="mt-3">Bao gồm 50.000đ thuế và phí </span>
-                      <span
-                        style={{
-                          color: "#E22828",
-                          fontSize: "20px",
-                          fontWeight: "700",
-                        }}
-                      >
-                        {chooseService.OrderByTime === 1 &&
-                          `${convertPrice(
-                            chooseServiceList?.reduce(
-                              (total, item) =>
-                                total +
-                                item.PriceByHour *
-                                  calTime(
-                                    chooseService.OrderByTimeFrom,
-                                    chooseService.OrderByTimeTo
-                                  ),
-                              0
-                            )
-                          )}đ`}
-                        {chooseService.OrderByTime === 0 &&
-                          `${convertPrice(
-                            chooseServiceList?.reduce(
-                              (total, item) =>
-                                total +
-                                item.PriceByDate *
-                                  calDate(
-                                    chooseService.OrderByDateFrom,
-                                    chooseService.OrderByDateTo
-                                  ),
-                              0
-                            )
-                          )}đ`}
-                      </span>
+                      {Object.keys(chooseService)?.length > 0 && (
+                        <span
+                          style={{
+                            color: "#E22828",
+                            fontSize: "20px",
+                            fontWeight: "700",
+                          }}
+                        >
+                          {chooseService?.OrderByTime === 1 &&
+                            convertPrice(
+                              chooseService?.pricesByHour[0]?.PriceByHour *
+                                calTime(
+                                  chooseService?.OrderByTimeFrom,
+                                  chooseService?.OrderByTimeTo
+                                )
+                            )}
+                          {chooseService?.OrderByTime === 0 &&
+                            convertPrice(
+                              chooseService?.pricesByDate?.reduce(
+                                (totalPrice, item) =>
+                                  totalPrice + item?.PriceByDate,
+                                0
+                              )
+                            )}
+                          đ
+                        </span>
+                      )}
                     </div>
                     <div className="w-100 d-flex justify-content-between mt-20">
                       <Button
