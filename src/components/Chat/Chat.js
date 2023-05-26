@@ -15,6 +15,8 @@ import { socket } from "../ConnectSocket/ConnectSocket";
 import { useDispatch, useSelector } from "react-redux";
 import { closeConversationSelector } from "../../stores/selector/ChatSelector";
 import { SHOW_CHAT } from "../../stores/types/messType";
+import Draggable from "react-draggable";
+
 const Chat = () => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const { showChat } = useSelector((state) => state.chatReducer);
@@ -91,29 +93,31 @@ const Chat = () => {
 
   return (
     <div>
-      <div
-        onClick={() => dispatch({ type: SHOW_CHAT })}
-        className={notiMessage ? "Chat__noti-message Chat" : "Chat"}
-      >
-        {notiMessage ? (
-          <div className="Chat__noti-message__count">
-            {notiMessage > 0 && notiMessage <= 10 ? notiMessage : "10+"}
-          </div>
-        ) : (
-          <div></div>
-        )}
-        <img
-          alt="chatIcon"
-          src={notiMessage ? ChatIconNoti : ChatIcon}
-          className="Chat__icon"
-        ></img>
-        Chat
-      </div>
+      <Draggable axis="y">
+        <div
+          onClick={() => dispatch({ type: SHOW_CHAT })}
+          className={notiMessage ? "Chat__noti-message Chat" : "Chat"}
+        >
+          {notiMessage ? (
+            <div className="Chat__noti-message__count">
+              {notiMessage > 0 && notiMessage <= 10 ? notiMessage : "10+"}
+            </div>
+          ) : (
+            <div></div>
+          )}
+          <img
+            alt="chatIcon"
+            src={notiMessage ? ChatIconNoti : ChatIcon}
+            className="Chat__icon"
+          ></img>
+          Chat
+        </div>
+      </Draggable>
       <Drawer
         placement="right"
         width={750}
         onClose={() => dispatch({ type: SHOW_CHAT })}
-        visible={showChat}
+        open={showChat}
       >
         <div className="Chat__container__header">
           <div className="Chat__container__header__left">
