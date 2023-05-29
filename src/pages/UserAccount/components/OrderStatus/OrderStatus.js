@@ -1,11 +1,10 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import { Grid, Input, Pagination, Tabs } from "antd";
+import { Col, Divider, Grid, Input, Pagination, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { orderService } from "../../../../services/OrderService";
 import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";
 import "./orderStatus.scss";
 import BackNav from "../../../../components/BackNav/BackNav";
-const { TabPane } = Tabs;
 export const keyF = {
   1: { BookingStatus: 4, PaymentStatus: [1] }, //chờ thanh toán
   2: { BookingStatus: 4, PaymentStatus: [4, 3, 2] }, //sắp tới
@@ -14,9 +13,13 @@ export const keyF = {
   5: { BookingStatus: 3, PaymentStatus: [2, 3, 4] }, //vắng mặt
 };
 
-// queryString.parse(location?.search)?.orderStatus
-//                 ? Number(queryString.parse(location?.search)?.orderStatus)
-//                 : ""
+const HEADER_TAB = [
+  { key: 1, title: "Chờ thanh toán" },
+  { key: 2, title: "Sắp tới" },
+  { key: 3, title: "Đã hoàn tất" },
+  { key: 4, title: "Đã hủy" },
+  { key: 5, title: "Vắng mặt" },
+];
 
 const { useBreakpoint } = Grid;
 const OrderStatus = () => {
@@ -37,6 +40,7 @@ const OrderStatus = () => {
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
+    key: 1,
     BookingStatus: 4,
     PaymentStatus: [1],
   });
@@ -66,7 +70,7 @@ const OrderStatus = () => {
     (async () => {
       setLoading(true);
       try {
-        console.log("params",params)
+        console.log("params", params);
         const { data } = await orderService.getOrderStatus(params);
         setBooking(data.data);
       } catch (error) {
@@ -113,22 +117,110 @@ const OrderStatus = () => {
             </div>
           </div>
         ) : (
-          <Tabs
-            className="tab_search"
-            defaultActiveKey={params.key}
-            onChange={onChange}
-            tabBarExtraContent={{
-              right: (
-                <Input
-                  onChange={onChangeInput}
-                  prefix={<SearchOutlined />}
-                  className="input"
-                  placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
-                />
-              ),
-            }}
-          >
-            <TabPane tab="Chờ thanh toán" key={1}>
+          // <Tabs
+          //   className="tab_search"
+          //   defaultActiveKey={params.key}
+          //   onChange={onChange}
+          //   tabBarExtraContent={{
+          //     right: (
+          //       <Input
+          //         onChange={onChangeInput}
+          //         prefix={<SearchOutlined />}
+          //         className="input"
+          //         placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
+          //       />
+          //     ),
+          //   }}
+          // >
+          //   <Tabs.TabPane tab="Chờ thanh toán" key={1}>
+          //     {booking &&
+          //       pageBooking.map((item, idx) => (
+          //         <OrderStatusItem
+          //           id={item.id}
+          //           BookingStatus={params.key || 1}
+          //           key={idx}
+          //           item={item}
+          //           pageBooking={pageBooking}
+          //           setPageBooking={setPageBooking}
+          //         />
+          //       ))}
+          //   </Tabs.TabPane>
+          //   <Tabs.TabPane tab="Sắp tới" key={2}>
+          //     {booking &&
+          //       pageBooking.map((item, idx) => (
+          //         <OrderStatusItem
+          //           id={item.id}
+          //           BookingStatus={params.key}
+          //           key={idx}
+          //           item={item}
+          //           pageBooking={pageBooking}
+          //           setPageBooking={setPageBooking}
+          //         />
+          //       ))}
+          //   </Tabs.TabPane>
+          //   <Tabs.TabPane tab="Đã hoàn tất" key={3}>
+          //     {booking &&
+          //       pageBooking.map((item, idx) => (
+          //         <OrderStatusItem
+          //           id={item.id}
+          //           BookingStatus={params.key}
+          //           key={idx}
+          //           item={item}
+          //           pageBooking={pageBooking}
+          //           setPageBooking={setPageBooking}
+          //         />
+          //       ))}
+          //   </Tabs.TabPane>
+          //   <Tabs.TabPane tab="Đã hủy" key={4}>
+          //     {booking &&
+          //       pageBooking.map((item, idx) => (
+          //         <OrderStatusItem
+          //           id={item.id}
+          //           BookingStatus={params.key}
+          //           key={idx}
+          //           item={item}
+          //           booking={booking}
+          //           setBooking={setBooking}
+          //         />
+          //       ))}
+          //   </Tabs.TabPane>
+          //   <Tabs.TabPane tab="Vắng mặt" key={5}>
+          //     {booking &&
+          //       pageBooking.map((item, idx) => (
+          //         <OrderStatusItem
+          //           id={item.id}
+          //           BookingStatus={params.key}
+          //           key={idx}
+          //           item={item}
+          //           booking={booking}
+          //           setBooking={setBooking}
+          //         />
+          //       ))}
+          //   </Tabs.TabPane>
+          // </Tabs>
+          <Col className="w-100 ">
+            <div className="header-tab">
+              {HEADER_TAB.map((item) => (
+                <div
+                  className={`header-tab-item ${
+                    item.key === params?.key && "active"
+                  }`}
+                  onClick={() => onChange(item.key)}
+                >
+                  {item.title}
+                </div>
+              ))}
+            </div>
+            <Divider
+              style={{ height: "10px", backgroundColor: "#f5f5f5", margin: 0 }}
+            />
+            <Input
+              onChange={onChangeInput}
+              prefix={<SearchOutlined />}
+              className="input"
+              placeholder="Tìm đơn đặt theo mã booking, tên studio, thợ make up, thiết bị, trang phục,..."
+            />
+            <div>
               {booking &&
                 pageBooking.map((item, idx) => (
                   <OrderStatusItem
@@ -140,60 +232,8 @@ const OrderStatus = () => {
                     setPageBooking={setPageBooking}
                   />
                 ))}
-            </TabPane>
-            <TabPane tab="Sắp tới" key={2}>
-              {booking &&
-                pageBooking.map((item, idx) => (
-                  <OrderStatusItem
-                    id={item.id}
-                    BookingStatus={params.key}
-                    key={idx}
-                    item={item}
-                    pageBooking={pageBooking}
-                    setPageBooking={setPageBooking}
-                  />
-                ))}
-            </TabPane>
-            <TabPane tab="Đã hoàn tất" key={3}>
-              {booking &&
-                pageBooking.map((item, idx) => (
-                  <OrderStatusItem
-                    id={item.id}
-                    BookingStatus={params.key}
-                    key={idx}
-                    item={item}
-                    pageBooking={pageBooking}
-                    setPageBooking={setPageBooking}
-                  />
-                ))}
-            </TabPane>
-            <TabPane tab="Đã hủy" key={4}>
-              {booking &&
-                pageBooking.map((item, idx) => (
-                  <OrderStatusItem
-                    id={item.id}
-                    BookingStatus={params.key}
-                    key={idx}
-                    item={item}
-                    booking={booking}
-                    setBooking={setBooking}
-                  />
-                ))}
-            </TabPane>
-            <TabPane tab="Vắng mặt" key={5}>
-              {booking &&
-                pageBooking.map((item, idx) => (
-                  <OrderStatusItem
-                    id={item.id}
-                    BookingStatus={params.key}
-                    key={idx}
-                    item={item}
-                    booking={booking}
-                    setBooking={setBooking}
-                  />
-                ))}
-            </TabPane>
-          </Tabs>
+            </div>
+          </Col>
         )}
       </div>
       {booking && (

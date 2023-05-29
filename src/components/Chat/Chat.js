@@ -87,10 +87,6 @@ const Chat = () => {
     setVisible(false);
   }, [closeConversation]);
 
-  // useEffect(() => {
-
-  // });
-
   return (
     <div>
       <Draggable axis="y">
