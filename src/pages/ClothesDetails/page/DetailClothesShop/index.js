@@ -300,28 +300,35 @@ const Index = () => {
                             {tag.value}
                           </div>
                           <ul className="aside_category_list">
-                            {ASIDE_CATEGORY_ITEM.map((item, index) => (
+                            {clothesShop?.ClothesGroups.map((item, index) => (
                               <li
                                 key={index}
                                 className={`aside_category_item ${
-                                  index === chooseAsideCategory ? "active" : ""
+                                  item?.id === chooseAsideCategory
+                                    ? "active"
+                                    : ""
                                 }`}
                                 onClick={() => {
-                                  setChooseAsideCategory(index);
+                                  setChooseAsideCategory(item?.id);
                                 }}
                               >
-                                {item.name}
+                                {item?.Name}
                               </li>
                             ))}
                           </ul>
                         </Col>
                         <Col lg={20} md={20} sm={20} xs={24}>
                           <div className="wrap_card w-100 mb-40" style={{}}>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-                              (item, index) => (
-                                <Card />
-                              )
-                            )}
+                            {clothesShop?.ClothesGroups.find(
+                              (item) => item.id === chooseAsideCategory
+                            )?.GroupMaps.map((item, index) => (
+                              <div className="item">
+                                <Card
+                                  value={item?.ClothesPost}
+                                  category={{ name: "clothes", id: 3 }}
+                                />
+                              </div>
+                            ))}
                           </div>
                           <div className="d-flex justify-content-center">
                             <Pagination

@@ -77,9 +77,9 @@
                 .wrap_card {
                     // margin-top: 5px;
                     display: grid;
-
                     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    // grid-template-columns: repeat(auto-fill, 200px);
+                    // grid-template-columns: repeat(auto-fill, minmax(200px, 4000px));
+
                     gap: 9px;
                 }
 
@@ -171,7 +171,14 @@
     }
 }
 
+@media (min-width: 1000px) {
+    .wrap_card {
+        grid-template-columns: repeat(auto-fit, 200px);
+    }
+}
+
 @media (max-width: 576px) {
+
     .margin {
         padding: 0 !important;
     }

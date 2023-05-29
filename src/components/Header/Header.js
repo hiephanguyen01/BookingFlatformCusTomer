@@ -852,8 +852,10 @@ const Header = () => {
                   </Dropdown>
                   <div
                     // type="secondary"
-                    className="btn-become-partner w-80 ms-30 mt-5 d-select"
-                    // onClick={() => navigate("/home/user/")}
+                    className="btn-become-partner w-80 ms-30 mt-5"
+                    onClick={() =>
+                      window.open("https://partner.bookingstudio.vn", "blank")
+                    }
                   >
                     Trở thành đối tác
                   </div>
