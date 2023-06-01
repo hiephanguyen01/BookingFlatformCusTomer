@@ -13,7 +13,7 @@ export const SignIn = ({ onClickPop }) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (user?.id) {
-      navigate("/home/dao");
+      navigate("/home");
     }
   }, [user, navigate]);
   const onFinish = (values) => {

@@ -103,12 +103,15 @@ export const Card = ({ value, category }) => {
           <img className={cx("icon-location")} alt="" src={images?.address} />
           <span>{value?.Address}</span>
         </div>
-        <div className={cx("rate")}>
+      </div>
+      <div className={cx("rate")}>
+        <div className="mb-2">
           <Rate disabled allowHalf value={value?.TotalRate || 5} />
-          <span style={{ color: "828282", fontSize: "12px" }}>
-            {value?.BookingCount} đã đặt
-          </span>
+          <span>{value?.TotalRate}</span>
         </div>
+        <span style={{ color: "#828282", fontSize: "12px" }}>
+          {value?.BookingCount} đã đặt
+        </span>
       </div>
     </div>
   );

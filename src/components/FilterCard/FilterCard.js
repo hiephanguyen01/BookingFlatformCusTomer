@@ -2,6 +2,7 @@ import {
   CheckCircleTwoTone,
   HeartFilled,
   HeartOutlined,
+  StarFilled,
   StarOutlined,
 } from "@ant-design/icons";
 import { Col, Grid, Row } from "antd";
@@ -17,6 +18,7 @@ import { studioPostService } from "../../services/StudioPostService";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
 import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
 import { convertImage } from "../../utils/convertImage";
+import { ReactComponent as LocationIcon } from "../../assets/svg/location.svg";
 import "./FilterCard.scss";
 const categories = {
   1: {
@@ -161,9 +163,10 @@ const FilterCard = ({ data, category }) => {
                       <img src={Logo3} alt="" /> {data?.Address}
                     </p>
                     <p className="right-text">
-                      <StarOutlined
+                      <StarFilled
                         style={{ color: "#F8D93A" }}
                         twoToneColor="#F8D93A"
+                        className="me-5"
                       />
                       {data?.TotalRate} ({data?.NumberOfRating})
                     </p>
@@ -233,42 +236,49 @@ const FilterCard = ({ data, category }) => {
               </div>
 
               <div className="text">
-                <p className="title">
-                  {data?.Name}&nbsp;
+                <Row align="middle">
+                  <p className="title">{data?.Name}&nbsp;</p>
                   <CheckCircleTwoTone
-                    style={{ fontSize: "20px" }}
-                    className="pb-4"
+                    style={{ fontSize: "16px" }}
+                    className="pb-2"
                     twoToneColor="#52c41a"
                   />
-                </p>
-                <Row style={{ width: "100%" }}>
-                  <Col md={12} sm={24} xs={24}>
-                    <p className="description">
-                      <img src={Logo3} alt="" /> {data?.Address}
-                    </p>
-                  </Col>
-                  <Col md={12} sm={24} xs={24} className="right-text">
-                    <p>
-                      <StarOutlined
-                        style={{ color: "#F8D93A" }}
-                        twoToneColor="#F8D93A"
-                      />
-                      {data?.TotalRate} ({data?.NumberOfRating})
-                    </p>
-                  </Col>
-                  <Col md={12} sm={24} xs={24}>
-                    <div className="description-category">
-                      <img
-                        src={categories[data?.category]?.img}
-                        alt=""
-                        className="pb-3"
-                      />{" "}
-                      {categories[data?.category]?.name}
-                    </div>
-                  </Col>
-                  <Col md={12} sm={24} xs={24} className="right-text">
-                    <p>Đã đặt {data?.BookingCount}</p>
-                  </Col>
+                </Row>
+
+                <Row style={{ width: "100%" }} className="mt-10">
+                  <Row className="w-100 mb-10">
+                    <Col lg={19} md={18} sm={24} xs={24}>
+                      <Row className="w-100" align="middle">
+                        <LocationIcon className="me-10" />
+                        <p className="description ">{data?.Address}</p>
+                      </Row>
+                    </Col>
+                    <Col lg={5} md={6} sm={24} xs={24} className="right-text">
+                      <p>
+                        <StarFilled
+                          style={{ color: "#F8D93A" }}
+                          twoToneColor="#F8D93A"
+                          className="me-5"
+                        />
+                        {data?.TotalRate} ({data?.NumberOfRating})
+                      </p>
+                    </Col>
+                  </Row>
+                  <Row className="w-100 mb-10">
+                    <Col lg={19} md={18} sm={24} xs={24}>
+                      <div className="description-category">
+                        <img
+                          src={categories[data?.category]?.img}
+                          alt=""
+                          className="pb-3 me-5"
+                        />
+                        {categories[data?.category]?.name}
+                      </div>
+                    </Col>
+                    <Col lg={5} md={6} sm={24} xs={24} className="right-text">
+                      <p>Đã đặt {data?.BookingCount}</p>
+                    </Col>
+                  </Row>
                   <CurrencyFormat
                     value={data?.Price}
                     displayType={"text"}

@@ -7,7 +7,7 @@ const EmptyPage = () => {
       <Damage />
       <h3>Không tìm thấy kết quả</h3>
       <p>
-        Booking Studio không tìm thấy kết quả khớp với sự tìm kiếm của quý khách
+        Booking Studio không tìm thấy kết quả khớp với tìm kiếm của quý khách
       </p>
     </div>
   );
