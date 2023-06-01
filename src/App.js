@@ -105,7 +105,7 @@ function App() {
     <div className="App">
       <ModalCustom />
       <BackTop>
-        <BackTopIcon />
+        <BackTopIcon style={{ height: "28px" }} />
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />

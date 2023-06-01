@@ -25,8 +25,6 @@ import {
 import { Card } from "../../../../components/Card";
 import BackNav from "../../../../components/BackNav/BackNav";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { shopService } from "../../../../services/ShopService";
-import { CardLiked } from "../../../../components/Card/CardLiked";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailShopAction } from "../../../../stores/actions/ShopAction";
 
@@ -35,13 +33,6 @@ const TAGS = [
   { id: "2", value: "Danh mục" },
   { id: "3", value: "Bán chạy" },
   { id: "4", value: "Mới nhất" },
-];
-
-const ASIDE_CATEGORY_ITEM = [
-  { value: 0, name: "Váy cưới" },
-  { value: 1, name: "Áo dài" },
-  { value: 2, name: "Trang phục biểu diễn" },
-  { value: 3, name: "Khác" },
 ];
 
 const onShowSizeChange = (current, pageSize) => {};
@@ -59,7 +50,6 @@ const Index = () => {
   const { clothesShop } = useSelector((state) => state.shopReducer);
   const [chooseAsideCategory, setChooseAsideCategory] = useState(0);
   const [open, setOpen] = useState(false);
-  const [shop, setShop] = useState([]);
 
   useEffect(() => {
     dispatch(getDetailShopAction(params?.shopId, 3));
@@ -269,7 +259,14 @@ const Index = () => {
                   <Tabs.TabPane tab={tag.value} key={tag.id}>
                     {Number(tag.id) === 1 && (
                       <Row style={{}}>
-                        <div className="wrap_card w-100 mb-40" style={{}}>
+                        <div
+                          className="wrap_card w-100 mb-40"
+                          style={
+                            clothesShop?.ClothesPosts?.length > 4
+                              ? {}
+                              : { gridTemplateColumns: "repeat(auto-fit, 19%)" }
+                          }
+                        >
                           {clothesShop?.ClothesPosts?.map((item, index) => (
                             <Card
                               value={item}
@@ -300,26 +297,39 @@ const Index = () => {
                             {tag.value}
                           </div>
                           <ul className="aside_category_list">
-                            {clothesShop?.ClothesGroups.map((item, index) => (
-                              <li
-                                key={index}
-                                className={`aside_category_item ${
-                                  item?.id === chooseAsideCategory
-                                    ? "active"
-                                    : ""
-                                }`}
-                                onClick={() => {
-                                  setChooseAsideCategory(item?.id);
-                                }}
-                              >
-                                {item?.Name}
-                              </li>
-                            ))}
+                            {clothesShop?.ClothesGroups?.length > 0 &&
+                              clothesShop?.ClothesGroups.map((item, index) => (
+                                <li
+                                  key={index}
+                                  className={`aside_category_item ${
+                                    item?.id === chooseAsideCategory
+                                      ? "active"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setChooseAsideCategory(item?.id);
+                                  }}
+                                >
+                                  {item?.Name}
+                                </li>
+                              ))}
                           </ul>
                         </Col>
                         <Col lg={20} md={20} sm={20} xs={24}>
-                          <div className="wrap_card w-100 mb-40" style={{}}>
-                            {clothesShop?.ClothesGroups.find(
+                          <div
+                            className="wrap_card_category w-100 mb-40"
+                            style={
+                              clothesShop?.ClothesGroups?.find(
+                                (item) => item.id === chooseAsideCategory
+                              )?.GroupMaps?.length > 4
+                                ? {}
+                                : {
+                                    gridTemplateColumns:
+                                      "repeat(auto-fit, 24%)",
+                                  }
+                            }
+                          >
+                            {clothesShop?.ClothesGroups?.find(
                               (item) => item.id === chooseAsideCategory
                             )?.GroupMaps.map((item, index) => (
                               <div className="item">

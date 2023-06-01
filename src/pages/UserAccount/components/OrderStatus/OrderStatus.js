@@ -1,5 +1,5 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import { Col, Divider, Grid, Input, Pagination, Tabs } from "antd";
+import { Col, Divider, Grid, Input, Pagination } from "antd";
 import React, { useEffect, useState } from "react";
 import { orderService } from "../../../../services/OrderService";
 import OrderStatusItem from "./conponents/OrderStatusItem/OrderStatusItem";

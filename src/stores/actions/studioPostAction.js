@@ -360,20 +360,6 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
             "warning"
           );
         }
-
-        if (
-          Math.ceil(
-            Math.abs(moment(chooseServiceTime?.OrderByTimeTo) - moment()) /
-              (1000 * 60 * 60 * 24) +
-              1
-          ) > 360
-        ) {
-          dispatch({ type: DELETE_CHOOSE_SERVICE });
-          return toastMessage(
-            "Thời gian đặt không được vượt quá 1 năm!",
-            "warning"
-          );
-        }
       } else if (chooseServiceTime.OrderByTime === 0) {
         if (
           chooseServiceTime.disableDate.some(
@@ -390,28 +376,15 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
             "warning"
           );
         }
-
-        if (
-          Math.ceil(
-            Math.abs(
-              moment(chooseServiceTime?.OrderByDateFrom) -
-                moment(chooseServiceTime?.OrderByDateTo)
-            ) /
-              (1000 * 60 * 60 * 24) +
-              1
-          ) > 360
-        ) {
-          dispatch({ type: DELETE_CHOOSE_SERVICE });
-          return toastMessage(
-            "Thời gian đặt không được vượt quá 1 năm!",
-            "warning"
-          );
-        }
-
-        // dispatch({ type: SELECT_TIME_ORDER, data: { id: data.id } });
       }
       dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
-      dispatch({ type: SET_FILTER_SERVICE, payload: chooseServiceTime });
+      dispatch({
+        type: SET_FILTER_SERVICE,
+        payload: {
+          ...chooseServiceTime,
+          ...data,
+        },
+      });
       // if (chooseService.id == data.id) {
       //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
       //       setChooseService([]);

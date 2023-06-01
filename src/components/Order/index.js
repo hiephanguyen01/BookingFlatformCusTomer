@@ -16,7 +16,7 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
 import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
 import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
-import { calDate, calTime } from "../../utils/calculate";
+import { calDate, calTime, priceService } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
@@ -107,26 +107,17 @@ const Index = ({ linkTo = "" }) => {
     switch (chooseService?.OrderByTime) {
       case 1:
         return (
-          chooseServiceList?.reduce(
-            (total, service) =>
-              total +
-              service?.pricesByHour[0].PriceByHour *
-                calTime(
-                  chooseService?.OrderByTimeFrom,
-                  chooseService?.OrderByTimeTo
-                ),
-            0
-          ) * (chooseService?.amount || 1)
+          chooseService?.pricesByHour[0].PriceByHour *
+          calTime(
+            chooseService?.OrderByTimeFrom,
+            chooseService?.OrderByTimeTo
+          ) *
+          (chooseService?.amount || 1)
         );
       case 0:
         return (
-          chooseServiceList?.reduce(
-            (total, item) =>
-              total +
-              item?.pricesByDate?.reduce(
-                (sum, cur) => sum + cur.PriceByDate,
-                0
-              ),
+          chooseService?.pricesByDate?.reduce(
+            (sum, cur) => sum + cur.PriceByDate,
             0
           ) * (chooseService?.amount || 1)
         );
@@ -136,23 +127,22 @@ const Index = ({ linkTo = "" }) => {
     }
   };
   const calculateCommisionAffiliate = (price) => {
-    return (price / 1.1) * 0.05;
+    return (
+      (price *
+        ((chooseService?.OrderByTime
+          ? chooseService?.AffiliateCommissionByHour
+          : chooseService?.AffiliateCommissionByDate) || 5)) /
+      100
+    );
   };
 
   const calculatePriceUsePromo = () => {
     switch (chooseService?.OrderByTime) {
       case 1:
         const priceByHour =
-          chooseServiceList?.reduce(
-            (total, item) =>
-              total +
-              item.pricesByHour[0].PriceByHour *
-                calTime(
-                  chooseService.OrderByTimeFrom,
-                  chooseService.OrderByTimeTo
-                ),
-            0
-          ) * (chooseService?.amount || 1);
+          chooseService?.pricesByHour[0].PriceByHour *
+          calTime(chooseService.OrderByTimeFrom, chooseService.OrderByTimeTo) *
+          (chooseService?.amount || 1);
         if (choosePromotionUser?.TypeReduce === 1) {
           return priceByHour - (choosePromotionUser?.ReduceValue || 0);
         } else {
@@ -166,13 +156,8 @@ const Index = ({ linkTo = "" }) => {
         }
       case 0:
         const priceByDate =
-          chooseServiceList?.reduce(
-            (total, item) =>
-              total +
-              item?.pricesByDate?.reduce(
-                (sum, cur) => sum + cur.PriceByDate,
-                0
-              ),
+          chooseService?.pricesByDate?.reduce(
+            (sum, cur) => sum + cur.PriceByDate,
             0
           ) * (chooseService?.amount || 1) || 0;
         if (choosePromotionUser?.TypeReduce === 1) {
@@ -209,108 +194,102 @@ const Index = ({ linkTo = "" }) => {
         //**************************************
         let response;
         if (chooseService?.OrderByTime === 0) {
-          for (let i = 0; i < chooseServiceList.length; i++) {
-            const newData = {
-              OrderByTime: 0,
-              OrderByDateFrom: moment(new Date(chooseService?.OrderByDateFrom))
-                .add(studioDetail?.data?.HourOpenDefault, "h")
-                .add(studioDetail?.data?.MinutesOpenDefault, "m"),
-              OrderByDateTo: moment(new Date(chooseService?.OrderByDateTo))
-                .add(studioDetail?.data?.HourCloseDefault, "h")
-                .add(studioDetail?.data?.MinutesCloseDefault, "m"),
-              PaymentType: 0,
-              OrderNote: infoUser.Message,
-              BookingUserName: infoUser.Fullname,
-              BookingPhone: infoUser.Phone,
-              BookingEmail: infoUser.Email,
-              BookingUserId: user?.id || undefined,
-              CreatorUserId: user?.id || undefined,
-              ProductId: chooseServiceList[i].id,
-              Category: cate,
-              IsPayDeposit: 1,
-              BookingValueBeforeDiscount: calculatePrice(),
-              BookingValue: calculatePriceUsePromo(),
-              // DepositValue: (calculatePriceUsePromo() * 15) / 100,
-              AffiliateCommission: calculateCommisionAffiliate(
-                calculatePriceUsePromo()
-              ),
-              PromoCodeId: choosePromotionUser.id,
-              AffiliateUserId: Number(AffiliateUserId),
-              size: chooseService?.size,
-              color: chooseService?.color,
-              amount: chooseService?.amount,
-            };
-            response = await orderService.addOrder({
-              ...newData,
-              numberOfTime: `${
-                moment(chooseService?.OrderByDateTo).diff(
-                  moment(chooseService?.OrderByDateFrom),
-                  "days"
-                ) + 1
-              } ngày`,
-              initValue:
-                (chooseServiceList[i].Sales ||
-                  chooseServiceList[i].PriceByDate) *
-                (moment(chooseService?.OrderByDateTo).diff(
-                  moment(chooseService?.OrderByDateFrom),
-                  "days"
-                ) +
-                  1),
-            });
-            if (AffiliateUserId != null) {
-              localStorage.removeItem("qs");
-            }
-            IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
-            TenantId = response.data.TenantId;
+          const newData = {
+            OrderByTime: 0,
+            OrderByDateFrom: moment(new Date(chooseService?.OrderByDateFrom))
+              .add(studioDetail?.data?.HourOpenDefault, "h")
+              .add(studioDetail?.data?.MinutesOpenDefault, "m"),
+            OrderByDateTo: moment(new Date(chooseService?.OrderByDateTo))
+              .add(studioDetail?.data?.HourCloseDefault, "h")
+              .add(studioDetail?.data?.MinutesCloseDefault, "m"),
+            PaymentType: 0,
+            OrderNote: infoUser.Message,
+            BookingUserName: infoUser.Fullname,
+            BookingPhone: infoUser.Phone,
+            BookingEmail: infoUser.Email,
+            BookingUserId: user?.id || undefined,
+            CreatorUserId: user?.id || undefined,
+            ProductId: chooseService?.id,
+            Category: cate,
+            IsPayDeposit: 1,
+            BookingValueBeforeDiscount: calculatePrice(),
+            BookingValue: calculatePriceUsePromo(),
+            // DepositValue: (calculatePriceUsePromo() * 15) / 100,
+            AffiliateCommission: calculateCommisionAffiliate(
+              calculatePriceUsePromo()
+            ),
+            PromoCodeId: choosePromotionUser.id,
+            AffiliateUserId: Number(AffiliateUserId),
+            size: chooseService?.size,
+            color: chooseService?.color,
+            amount: chooseService?.amount,
+          };
+          response = await orderService.addOrder({
+            ...newData,
+            numberOfTime: `${
+              moment(chooseService?.OrderByDateTo).diff(
+                moment(chooseService?.OrderByDateFrom),
+                "days"
+              ) + 1
+            } ngày`,
+            initValue:
+              (chooseService?.Sales || chooseService?.PriceByDate) *
+              (moment(chooseService?.OrderByDateTo).diff(
+                moment(chooseService?.OrderByDateFrom),
+                "days"
+              ) +
+                1),
+          });
+          if (AffiliateUserId != null) {
+            localStorage.removeItem("qs");
           }
+          IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
+          TenantId = response.data.TenantId;
         } else if (chooseService?.OrderByTime === 1) {
-          for (let i = 0; i < chooseServiceList.length; i++) {
-            const newData = {
-              OrderByTime: 1,
-              OrderByTimeFrom: moment(chooseService?.OrderByTimeFrom),
-              OrderByTimeTo: moment(chooseService?.OrderByTimeTo),
-              PaymentType: 0,
-              OrderNote: infoUser.Message,
-              BookingUserName: infoUser.Fullname,
-              BookingPhone: infoUser.Phone,
-              BookingEmail: infoUser.Email,
-              BookingUserId: user?.id || undefined,
-              CreatorUserId: user?.id || undefined,
-              ProductId: chooseServiceList[i].id,
-              Category: cate,
-              IsPayDeposit: 1,
-              BookingValueBeforeDiscount: calculatePrice(),
-              BookingValue: calculatePriceUsePromo(),
-              // DepositValue: (calculatePriceUsePromo() * 15) / 100,
-              AffiliateCommission: calculateCommisionAffiliate(
-                calculatePriceUsePromo()
-              ),
-              PromoCodeId: choosePromotionUser.id,
-              AffiliateUserId: Number(AffiliateUserId),
-              size: chooseService?.size,
-              color: chooseService?.color,
-              amount: chooseService?.amount,
-            };
-            response = await orderService.addOrder({
-              ...newData,
-              numberOfTime: `${calTime(
+          const newData = {
+            OrderByTime: 1,
+            OrderByTimeFrom: moment(chooseService?.OrderByTimeFrom),
+            OrderByTimeTo: moment(chooseService?.OrderByTimeTo),
+            PaymentType: 0,
+            OrderNote: infoUser.Message,
+            BookingUserName: infoUser.Fullname,
+            BookingPhone: infoUser.Phone,
+            BookingEmail: infoUser.Email,
+            BookingUserId: user?.id || undefined,
+            CreatorUserId: user?.id || undefined,
+            ProductId: chooseService?.id,
+            Category: cate,
+            IsPayDeposit: 1,
+            BookingValueBeforeDiscount: calculatePrice(),
+            BookingValue: calculatePriceUsePromo(),
+            // DepositValue: (calculatePriceUsePromo() * 15) / 100,
+            AffiliateCommission: calculateCommisionAffiliate(
+              calculatePriceUsePromo()
+            ),
+            PromoCodeId: choosePromotionUser.id,
+            AffiliateUserId: Number(AffiliateUserId),
+            size: chooseService?.size,
+            color: chooseService?.color,
+            amount: chooseService?.amount,
+          };
+          response = await orderService.addOrder({
+            ...newData,
+            numberOfTime: `${calTime(
+              chooseService?.OrderByTimeFrom,
+              chooseService?.OrderByTimeTo
+            )} giờ`,
+            initValue:
+              (chooseService?.Sales || chooseService?.PriceByHour) *
+              calTime(
                 chooseService?.OrderByTimeFrom,
                 chooseService?.OrderByTimeTo
-              )} giờ`,
-              initValue:
-                (chooseServiceList[i].Sales ||
-                  chooseServiceList[i].PriceByHour) *
-                calTime(
-                  chooseService?.OrderByTimeFrom,
-                  chooseService?.OrderByTimeTo
-                ),
-            });
-            if (AffiliateUserId != null) {
-              localStorage.removeItem("qs");
-            }
-            IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
-            TenantId = response.data.TenantId;
+              ),
+          });
+          if (AffiliateUserId != null) {
+            localStorage.removeItem("qs");
           }
+          IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
+          TenantId = response.data.TenantId;
         }
         socket?.emit("newBooking", response.data);
         dispatch(getCurrentUser());
@@ -358,56 +337,53 @@ const Index = ({ linkTo = "" }) => {
                 }}
               />
             </div>
-            {chooseServiceList.length > 0 &&
-              chooseServiceList?.map((item) => (
-                <>
-                  <div className="border-bottom">
-                    <div
-                      className="d-flex"
-                      style={{ height: "88px", marginRight: "0.5rem" }}
-                    >
-                      <img
-                        src={`${
-                          item?.Image?.length > 0
-                            ? convertImage(item?.Image[0])
-                            : ""
-                        }`}
-                        className="img_service"
-                        alt=""
-                      />
-                      <div>
-                        <span className="text-middle">
-                          {item?.Name.length > 30
-                            ? `${item.Name.slice(0, 30)}...`
-                            : item.Name}
-                        </span>
-                        {/* <div
+            {Object.keys(chooseService).length > 0 && (
+              <>
+                <div className="border-bottom">
+                  <div
+                    className="d-flex"
+                    style={{ height: "88px", marginRight: "0.5rem" }}
+                  >
+                    <img
+                      src={`${
+                        chooseService?.Image?.length > 0
+                          ? convertImage(chooseService?.Image[0])
+                          : ""
+                      }`}
+                      className="img_service"
+                      alt=""
+                    />
+                    <div>
+                      <span className="text-middle">
+                        {chooseService?.Name.length > 30
+                          ? `${chooseService?.Name.slice(0, 30)}...`
+                          : chooseService?.Name}
+                      </span>
+                      {/* <div
                           className="text-description mt-6 "
                           style={{ color: "#3F3F3F" }}
                         >
                           Trắng, size S, Số lượng 1
                         </div> */}
-                        <div className="text-middle mt-8">
-                          {chooseService?.OrderByTime === 1 &&
-                            convertPrice(item.PriceByHour)}
-                          {chooseService?.OrderByTime === 0 &&
-                            convertPrice(item.PriceByDate)}
-                          đ
-                        </div>
+                      <div className="text-middle mt-8">
+                        {chooseService?.OrderByTime === 1 &&
+                          `${convertPrice(
+                            chooseService?.pricesByHour[0].PriceByHour
+                          )} đ`}
+                        {chooseService?.OrderByTime === 0 &&
+                          priceService(chooseService?.pricesByDate, false)}
                       </div>
                     </div>
                   </div>
-                  <div className="border-bottom">
-                    <div
-                      className="text-title"
-                      style={{ marginBottom: "16px" }}
-                    >
-                      Khung giờ bạn muốn đặt
-                    </div>
-                    <SelectTimeOption disabled={true} />
+                </div>
+                <div className="border-bottom">
+                  <div className="text-title" style={{ marginBottom: "16px" }}>
+                    Khung giờ bạn muốn đặt
                   </div>
-                </>
-              ))}
+                  <SelectTimeOption disabled={true} />
+                </div>
+              </>
+            )}
             <div className="border-bottom">
               <div className="text-title" style={{ marginBottom: "8px" }}>
                 Phương thức thanh toán
@@ -453,7 +429,8 @@ const Index = ({ linkTo = "" }) => {
                     style={{ cursor: "pointer" }}
                     onClick={() => onClickModal()}
                   >
-                    Mã khuyến mãi
+                    {promoCodeUserSave.length} Mã khuyến mãi{" "}
+                    <RightOutlined style={{ fontSize: "10px" }} />
                   </div>
                 </div>
                 <div
@@ -482,7 +459,7 @@ const Index = ({ linkTo = "" }) => {
                       {chooseService?.OrderByTime === 0 &&
                         `${convertPrice(
                           chooseService?.pricesByDate.reduce(
-                            (total, item) => total + item?.priceByDate
+                            (total, item) => total + chooseService?.priceByDate
                           ),
                           0
                         )}đ`} */}

@@ -78,10 +78,16 @@
                     // margin-top: 5px;
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 15px;
                     // grid-template-columns: repeat(auto-fill, minmax(200px, 4000px));
 
-                    gap: 9px;
+                    &_category {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                        gap: 13px;
+                    }
                 }
+
 
                 .tab_category {
 
@@ -171,11 +177,7 @@
     }
 }
 
-@media (min-width: 1000px) {
-    .wrap_card {
-        grid-template-columns: repeat(auto-fit, 200px);
-    }
-}
+
 
 @media (max-width: 576px) {
 
