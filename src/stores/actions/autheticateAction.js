@@ -329,13 +329,11 @@ export const deleteMe = (navigate) => async (dispatch) => {
 
 export const setupSocket = () => (dispatch) => {
   const newSocket = io(process.env.REACT_APP_DB_BASE_URL + "/");
-  console.log("🚀 ~ setupSocket ~ newSocket:", newSocket);
   newSocket.on("disconnect", () => {
     dispatch({ type: SET_SOCKET, payload: null });
     setTimeout(setupSocket, 3000);
   });
   newSocket.on("connect", () => {
-    console.log("aaaaas");
     dispatch({ type: SET_SOCKET, payload: newSocket });
   });
 };

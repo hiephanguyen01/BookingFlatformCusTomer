@@ -70,7 +70,6 @@ export const Footer = ({
         (item) => item.IdentifyCode !== IdentifyCode
       );
       setPageBooking(newPageBooking);
-      console.log("🚀 ~ handleCancelOrder ~ newPageBooking:", IdentifyCode);
       socket?.emit("cancelBooking", { IdentifyCode });
       setShowModal(false);
       toastMessage("Hủy đơn thành công!", "success");
