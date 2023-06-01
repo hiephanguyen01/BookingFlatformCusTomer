@@ -53,16 +53,6 @@ const Index = () => {
   }
   const [file, setFile] = useState({});
   const [booking, setBooking] = useState({});
-  useEffect(() => {
-    const getBookingByIdentify = async () => {
-      const res = await orderService.getOrderByIdentify(
-        location?.state?.IdentifyCode[0],
-        cate
-      );
-      setBooking(res.data);
-    };
-    getBookingByIdentify();
-  }, [location, cate]);
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(location?.state?.IdentifyCode);
@@ -109,6 +99,18 @@ const Index = () => {
       toastMessage("Cập nhật minh chứng thất bại!", "error");
     }
   };
+
+  useEffect(() => {
+    const getBookingByIdentify = async () => {
+      const res = await orderService.getOrderByIdentify(
+        location?.state?.IdentifyCode[0],
+        cate
+      );
+      setBooking(res.data);
+    };
+    getBookingByIdentify();
+  }, [location, cate]);
+
   return (
     <div
       className={screens?.xs ? "" : "py-12"}
