@@ -31,16 +31,17 @@ const Hotkey = () => {
       <Carousel
         arrows
         prevArrow={<LeftOutlined />}
-        nextArrow={<RightOutlined />}>
+        nextArrow={<RightOutlined />}
+      >
         {hotKey?.map((smallArr) => (
           <div style={{ display: "flex" }}>
             {smallArr.map((val) => (
               <div style={{ width: "fit-content", marginRight: "20px" }}>
                 <p
+                  className="text"
                   style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    navigate(`/home/filter?keyString=${val.name}`)
-                  }>
+                  onClick={() => navigate(`/home/filter?keyString=${val.name}`)}
+                >
                   {val.name}
                 </p>
               </div>

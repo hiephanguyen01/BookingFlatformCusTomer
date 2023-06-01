@@ -1,4 +1,13 @@
+@import "../../../../App.scss";
+
 .Hotkey {
+  margin-top: 10px;
+
+  .text {
+    color: $neutral-500;
+
+  }
+
   .ant-carousel .slick-prev,
   .ant-carousel .slick-next,
   .ant-carousel .slick-prev:hover,
@@ -9,7 +18,8 @@
     z-index: 10000;
     display: flex !important;
   }
-  .ant-carousel .slick-list .slick-slide > div > div {
+
+  .ant-carousel .slick-list .slick-slide>div>div {
     display: flex !important;
   }
 }

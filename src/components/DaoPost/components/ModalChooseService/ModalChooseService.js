@@ -31,8 +31,6 @@ const ModalChooseService = ({
 
   useEffect(() => {
     setSearch("");
-    //   setSelectService([]);
-    //   setRelatedServices([]);
   }, [hasTags]);
 
   useEffect(() => {
@@ -73,33 +71,12 @@ const ModalChooseService = ({
     setSelectService(newSelectService);
   };
   const handleCmtRelatedService = async () => {
-    // dispatch(setRelatedService([...relatedServices]));
     setRelatedServices(selectService);
-    // const newData = selectService.reduce(
-    //   (arr, item) => [...arr, { category: item.category, serviceId: item.id }],
-    //   []
-    // );
-    // try {
-    //   const res = await postDaoService.createComment({
-    //     PostId,
-    //     Content:
-    //       (chooseCommentDefault.Content || "") +
-    //       "---" +
-    //       newData.map((item) => JSON.stringify(item)).join("//") +
-    //       "//",
-    //   });
-    //   if (res) {
-    //     handleState();
-    //   }
-    // } catch (error) {
-    //   toastMessage("Add related service fail!", "error");
-    // }
   };
 
   const handleCloseTag = (e, tag) => {
     e.preventDefault();
-    // newSelectService = newSelectService.filter((item) => item.id !== tag.id);
-    setRelatedServices(relatedServices.filter((item) => item.id !== tag.id));
+    setSelectService(selectService.filter((item) => item.id !== tag.id));
   };
   return (
     <div className="search-container">

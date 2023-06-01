@@ -14,6 +14,7 @@ import { chatReducer } from "./ChatReducer";
 import { OrderReducer } from "./OrderReducer";
 import { userReducer } from "./UserReducer";
 import { registerPartnerReducer } from "./RegisterPartnerReducer";
+import { shopReducer } from "./ShopsReducer";
 const rootReducer = combineReducers({
   postDaoReducer,
   modalReducer,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   OrderReducer,
   userReducer,
   registerPartnerReducer,
+  shopReducer,
 });
 
 export default rootReducer;

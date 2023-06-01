@@ -1263,13 +1263,6 @@ const PhotographerDetail = () => {
                           />
                         </div>
                       ))}
-
-                    <div className={cx("rating")}>
-                      <CommentRating
-                        data={studioDetail}
-                        className="mb-43 mt-12"
-                      />
-                    </div>
                   </div>
                   <div className={cx("right")}>
                     <div className={cx("map")}>
@@ -1433,6 +1426,9 @@ const PhotographerDetail = () => {
                     </Col>
                   </Row>
                 )}
+                <div className={cx("rating")}>
+                  <CommentRating data={studioDetail} className="mb-43 mt-12" />
+                </div>
                 {listStudioSimilar.length > 0 ? (
                   <SlideCard
                     data={listStudioSimilar}

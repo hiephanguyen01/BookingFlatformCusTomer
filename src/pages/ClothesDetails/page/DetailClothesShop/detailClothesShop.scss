@@ -40,7 +40,7 @@
         .ant-tabs-nav {
             background-color: white !important;
             height: 50px !important;
-            margin-bottom: 6px;
+            margin-bottom: 6px !important;
 
             .ant-tabs-nav-wrap {
 
@@ -77,11 +77,17 @@
                 .wrap_card {
                     // margin-top: 5px;
                     display: grid;
-
                     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    // grid-template-columns: repeat(auto-fill, 200px);
-                    gap: 9px;
+                    gap: 15px;
+                    // grid-template-columns: repeat(auto-fill, minmax(200px, 4000px));
+
+                    &_category {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                        gap: 13px;
+                    }
                 }
+
 
                 .tab_category {
 
@@ -171,7 +177,10 @@
     }
 }
 
+
+
 @media (max-width: 576px) {
+
     .margin {
         padding: 0 !important;
     }

@@ -1,5 +1,4 @@
 import {
-  CheckOutlined,
   CloseOutlined,
   DownOutlined,
   SearchOutlined,
@@ -711,8 +710,9 @@ const Header = () => {
       )}
       <div
         className="container"
-        style={{ padding: `${screens.xs ? "0 10px" : "0 50px"}` }}>
-        <Row justify="space-around">
+        // style={{ padding: `${screens.xs ? "0 10px" : "0 50px"}` }}
+      >
+        <Row justify="space-between" align={"top"}>
           <Col
             lg={4}
             md={24}
@@ -788,7 +788,7 @@ const Header = () => {
           </Col>
           <Col lg={6} md={24} sm={24} xs={0}>
             <Row
-              align="middle"
+              align="top"
               justify="space-around"
               wrap={false}
               // className="container__right"
@@ -821,13 +821,13 @@ const Header = () => {
                       <Avatar src={user.Image ? img : noBody} />
                       <div className="text">
                         <p>Tài khoản</p>
-                        <p>
+                        <p className="account-text">
                           {user?.Fullname ? user.Fullname : user.Email}
                           <DownOutlined
                             style={{
                               fontSize: "10px",
                               color: "#828282",
-                              marginLeft: "3px",
+                              marginLeft: "5px",
                             }}
                           />
                         </p>
@@ -836,8 +836,10 @@ const Header = () => {
                   </Dropdown>
                   <div
                     // type="secondary"
-                    className="btn-become-partner w-80 ms-30 mt-5 d-select"
-                    // onClick={() => navigate("/home/user/")}
+                    className="btn-become-partner w-80 ms-30 mt-5"
+                    onClick={() =>
+                      window.open("https://partner.bookingstudio.vn", "blank")
+                    }
                   >
                     Trở thành đối tác
                   </div>
@@ -849,10 +851,14 @@ const Header = () => {
                       <Avatar src={noBody} />
                       <div className="text">
                         <p>Đăng ký/Đăng nhập</p>
-                        <p>
+                        <p className="account-text">
                           Tài khoản
                           <DownOutlined
-                            style={{ fontSize: "10px", color: "#828282" }}
+                            style={{
+                              fontSize: "10px",
+                              color: "#828282",
+                              marginLeft: "5px",
+                            }}
                           />
                         </p>
                       </div>

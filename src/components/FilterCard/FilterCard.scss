@@ -113,16 +113,16 @@
   p.title {
     padding-right: 5px;
     font-weight: 700;
-    font-size: 20px;
-    display: -webkit-box;
+    font-size: 19px;
+    line-height: 28px;
 
-    line-height: 22px;
+    display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
 
     text-overflow: ellipsis;
-    max-width: 90%;
+    max-width: 95%;
   }
 
   p.description {
@@ -154,6 +154,8 @@
     color: #e22828;
     text-align: end;
     font-weight: 600;
+    font-size: 18px;
+    line-height: 25px;
   }
 
   .right-text {

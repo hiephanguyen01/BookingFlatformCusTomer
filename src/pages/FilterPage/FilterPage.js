@@ -776,6 +776,7 @@ const FilterPage = () => {
                   <Col lg={24} md={12} sm={12} xs={12}>
                     <Form.Item label="Tên" name="keyString">
                       <Input
+                        style={{ borderRadius: "8px" }}
                         onChange={onChangeInput}
                         defaultValue={keyString}
                       />
@@ -784,6 +785,7 @@ const FilterPage = () => {
                   <Col lg={24} md={12} sm={12} xs={12}>
                     <Form.Item label="Thành phố" name="location1">
                       <Select
+                        className="select_location"
                         showSearch
                         onChange={onChangeFilterProvince}
                         optionFilterProp="children"
@@ -924,7 +926,11 @@ const FilterPage = () => {
                 <EmptyPage />
               ) : (
                 <>
-                  <div ref={ref} style={{ width: "100%" }}>
+                  <div
+                    ref={ref}
+                    style={{ width: "100%", backgroundColor: "#fff" }}
+                    className="px-16 py-20"
+                  >
                     {studioPostList?.map((val) => (
                       <FilterCard
                         data={val}
@@ -938,21 +944,24 @@ const FilterPage = () => {
                   </div>
                 </>
               )}
-              <Col span={24}>
-                <div
-                  style={{
-                    padding: "10px 0px",
-                    marginLeft: "auto",
-                    textAlign: "end",
-                  }}>
-                  <Pagination
-                    pageSize={pagination?.limit || 0}
-                    current={pagination?.currentPage}
-                    total={pagination?.total}
-                    onChange={onChangePage}
-                  />
-                </div>
-              </Col>
+              {studioPostList?.length > 0 && (
+                <Col span={24}>
+                  <div
+                    style={{
+                      padding: "10px 0px",
+                      marginLeft: "auto",
+                      textAlign: "end",
+                    }}
+                  >
+                    <Pagination
+                      pageSize={pagination?.limit || 0}
+                      current={pagination?.currentPage}
+                      total={pagination?.total}
+                      onChange={onChangePage}
+                    />
+                  </div>
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>

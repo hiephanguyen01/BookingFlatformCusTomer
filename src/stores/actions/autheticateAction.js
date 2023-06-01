@@ -229,7 +229,7 @@ export const SignUpWithPhoneNumber = (data, navigate) => async (dispatch) => {
       localStorage.setItem("access_token", resp.data.token);
       setAuthToken(resp.data.token);
       dispatch({ type: SET_USER, payload: resp.data.data });
-      navigate("/home/dao");
+      navigate("/home");
     } else {
       dispatch({ type: PHONE, payload: data });
     }
@@ -246,7 +246,6 @@ export const LoginWithPhoneNumber = (data, navigate) => async (dispatch) => {
     localStorage.removeItem("providerId");
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
-    navigate("/home/dao");
   } catch (error) {
     console.log(error);
     openNotificationWithIcon("error", "Somthing fail", "please try again");
