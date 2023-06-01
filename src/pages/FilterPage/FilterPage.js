@@ -110,7 +110,7 @@ const FilterPage = () => {
   };
 
   const [province, setProvince] = useState(
-    Number(querySearch?.provinceIds) || querySearch?.provinces || ""
+    Number(querySearch?.location) || querySearch?.provinces || ""
   );
   const [priceRange, setPriceRange] = useState([0, 5000000]);
   const [selectProvince, setSelectProvince] = useState(null);
@@ -157,7 +157,7 @@ const FilterPage = () => {
             priceOption: +querySearch?.priceOption,
             price1: +querySearch?.price1 || undefined,
             price2: +querySearch?.price2 || undefined,
-            provinceIds: +querySearch?.provinceIds || "",
+            location: querySearch?.location || "",
             ratingOption: +querySearch?.ratingOption || 1,
           },
           null,
@@ -179,7 +179,7 @@ const FilterPage = () => {
     ) {
       initState(querySearch?.keyString || "");
     }
-  }, [querySearch?.keyString, screens]);
+  }, [screens]);
 
   useEffect(() => {
     if (Object.keys(filter).length > 0) {
@@ -197,21 +197,23 @@ const FilterPage = () => {
           ? [filter?.provinces]
           : filter?.provinces
       );
+      const province = provinces.find((p) => p.Name === filter?.location);
+
+      province && form.setFieldsValue({ location1: +province?.Code || "" });
+      setSelectProvince(province?.Code || "");
     }
-  }, [filter]);
+  }, [filter, province]);
 
   useEffect(() => {
-    if (screens.xs) {
-      if (selectProvince) {
-        (async () => {
-          const res = await studioPostService.getDistrictByProvince(
-            selectProvince
-          );
-          setDistricts(res.data);
-        })();
-      }
+    if (selectProvince) {
+      (async () => {
+        const res = await studioPostService.getDistrictByProvince(
+          selectProvince
+        );
+        setDistricts(res.data);
+      })();
     }
-  }, [selectProvince, screens]);
+  }, [selectProvince]);
 
   const layout = {
     labelCol: { span: 24 },
@@ -247,11 +249,46 @@ const FilterPage = () => {
   };
 
   const onChangeFilterProvince = (value) => {
+    let newValue;
+    const prov = provinces.find((p) => +p.Code === value);
+    if (value === "") {
+      setSelectProvince(null);
+      setDistricts([]);
+    } else {
+      setSelectProvince(value);
+      if (prov?.Name?.includes("TP")) {
+        newValue = prov.Name.split("TP")[1];
+      } else {
+        newValue = prov.Name;
+      }
+      dispatch(
+        getFilterStudioPost(
+          5,
+          1,
+          { ...filter, location: newValue },
+          currentUser,
+          navigate
+        )
+      );
+    }
+    form.setFieldsValue({ location: "" });
+  };
+
+  const onChangeFilterDistrict = (value) => {
+    let newValue;
+    const prov = provinces.find((p) => +p.Code === selectProvince);
+    if (value.includes("quận")) {
+      newValue = value.split("quận")[1];
+    } else if (value.includes("huyện")) {
+      newValue = value.split("huyện")[1];
+    } else {
+      newValue = value;
+    }
     dispatch(
       getFilterStudioPost(
         5,
         1,
-        { ...filter, provinceIds: value },
+        { ...filter, location: newValue },
         currentUser,
         navigate
       )
@@ -323,7 +360,7 @@ const FilterPage = () => {
           priceOption: 1,
           price1: undefined,
           price2: undefined,
-          provinceIds: "",
+          location1: province,
           ratingOption: 3,
         },
         {},
@@ -383,7 +420,6 @@ const FilterPage = () => {
     let newFilter = {
       ...filter,
       category: values.category || "",
-      provinceIds: values?.province ? values.province : "",
       keyString: values.keyString,
       priceOption: values.price || 1,
       ratingOption: 3,
@@ -442,8 +478,7 @@ const FilterPage = () => {
               <Row
                 align="middle"
                 justify="space-around"
-                style={{ textAlign: "center" }}
-              >
+                style={{ textAlign: "center" }}>
                 <Col span={3}>
                   <ArrowLeftOutlined
                     style={{ fontSize: "18px" }}
@@ -455,8 +490,9 @@ const FilterPage = () => {
                     placeholder="Bạn đang tìm gì?"
                     prefix={<SearchOutlined />}
                     className="input-search "
-                    readOnly
                     // onClick={() => setVisible(true)}
+                    // onChange={onChangeInput}
+                    onPressEnter={onChangeInput}
                   />
                 </Col>
                 <Col span={3}>
@@ -483,8 +519,7 @@ const FilterPage = () => {
                       "",
                       {}
                     )
-                  }
-                >
+                  }>
                   <Badge count={0} size="default">
                     <ShoppingOutlined
                       style={{ fontSize: "25px", color: "#828282" }}
@@ -514,8 +549,7 @@ const FilterPage = () => {
                         </div>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {selectProvince ? (
                             <>
                               {districts.map((val) => (
@@ -531,8 +565,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseDistrict(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -553,8 +586,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseProvinceMobile(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -593,8 +625,7 @@ const FilterPage = () => {
                           }
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Địa điểm <DownOutlined className="icon" />
                     </Button>
@@ -606,8 +637,7 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Danh mục</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {categories.slice(1, 7).map((val) => (
                             <Col span={12}>
                               <div
@@ -619,8 +649,7 @@ const FilterPage = () => {
                                     ? "active"
                                     : ""
                                 } `}
-                                onClick={() => handleChooseCategory(val)}
-                              >
+                                onClick={() => handleChooseCategory(val)}>
                                 {val.name}
                               </div>
                             </Col>
@@ -652,8 +681,7 @@ const FilterPage = () => {
                           );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Danh mục <DownOutlined className="icon" />
                     </Button>
@@ -664,8 +692,7 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Giá</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {PRICE_FILTER.map((val) => (
                             <Col span={12}>
                               <div
@@ -673,8 +700,7 @@ const FilterPage = () => {
                                 className={`btn-price-item ${
                                   choosePrice === val.value ? "active" : ""
                                 }`}
-                                onClick={() => setChoosePrice(val.value)}
-                              >
+                                onClick={() => setChoosePrice(val.value)}>
                                 {val.label}
                               </div>
                             </Col>
@@ -725,8 +751,7 @@ const FilterPage = () => {
                           );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Giá <DownOutlined className="icon" />
                     </Button>
@@ -751,14 +776,16 @@ const FilterPage = () => {
                   <Col lg={24} md={12} sm={12} xs={12}>
                     <Form.Item label="Tên" name="keyString">
                       <Input
+                        style={{ borderRadius: "8px" }}
                         onChange={onChangeInput}
                         defaultValue={keyString}
                       />
                     </Form.Item>
                   </Col>
                   <Col lg={24} md={12} sm={12} xs={12}>
-                    <Form.Item label="Địa điểm" name="location">
+                    <Form.Item label="Thành phố" name="location1">
                       <Select
+                        className="select_location"
                         showSearch
                         onChange={onChangeFilterProvince}
                         optionFilterProp="children"
@@ -767,12 +794,32 @@ const FilterPage = () => {
                             .toLowerCase()
                             .includes(input.toLowerCase())
                         }
-                        defaultValue={province}
-                      >
+                        defaultValue={province}>
                         <Option value={""}>Tất cả</Option>
                         {provinces &&
                           provinces.map((val) => (
                             <Option value={Number(val.Code)}>{val.Name}</Option>
+                          ))}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="Quận/Huyện" name="location">
+                      <Select
+                        disabled={!provinces.length}
+                        showSearch
+                        onChange={onChangeFilterDistrict}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        defaultValue={province}>
+                        <Option value={""}>Tất cả</Option>
+                        {districts &&
+                          districts.map((val) => (
+                            <Option value={val.Name.toLowerCase()}>
+                              {val.Name}
+                            </Option>
                           ))}
                       </Select>
                     </Form.Item>
@@ -783,8 +830,7 @@ const FilterPage = () => {
                       <div className="category_radio_group">
                         <Radio.Group
                           onChange={onChangeFilterCategory}
-                          value={filter.category}
-                        >
+                          value={filter.category}>
                           {categories &&
                             categories?.map((val) => (
                               <Radio key={val.id} value={val.id}>
@@ -802,8 +848,7 @@ const FilterPage = () => {
                       <div className="filter_price_container">
                         <Radio.Group
                           onChange={onChangePriceOption}
-                          value={filter.priceOption}
-                        >
+                          value={filter.priceOption}>
                           <Row>
                             <Col span={24}>
                               <Radio value={2}>Giá cao nhất</Radio>
@@ -837,8 +882,7 @@ const FilterPage = () => {
                       <div className="filter_rating_container">
                         <Radio.Group
                           onChange={onChangeRateOption}
-                          value={filter.ratingOption}
-                        >
+                          value={filter.ratingOption}>
                           <Row>
                             <Col span={24}>
                               <Radio value={1}>Đánh giá nhiều nhất</Radio>
@@ -866,8 +910,7 @@ const FilterPage = () => {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                  }}
-                >
+                  }}>
                   <div
                     style={{
                       background: "white",
@@ -875,8 +918,7 @@ const FilterPage = () => {
                       borderRadius: "50%",
                       padding: "10px",
                       margin: "10px",
-                    }}
-                  >
+                    }}>
                     <LoadingOutlined style={{ fontSize: "40px" }} />
                   </div>
                 </div>
@@ -884,7 +926,11 @@ const FilterPage = () => {
                 <EmptyPage />
               ) : (
                 <>
-                  <div ref={ref} style={{ width: "100%" }}>
+                  <div
+                    ref={ref}
+                    style={{ width: "100%", backgroundColor: "#fff" }}
+                    className="px-16 py-20"
+                  >
                     {studioPostList?.map((val) => (
                       <FilterCard
                         data={val}
@@ -898,22 +944,24 @@ const FilterPage = () => {
                   </div>
                 </>
               )}
-              <Col span={24}>
-                <div
-                  style={{
-                    padding: "10px 0px",
-                    marginLeft: "auto",
-                    textAlign: "end",
-                  }}
-                >
-                  <Pagination
-                    pageSize={pagination?.limit || 0}
-                    current={pagination?.currentPage}
-                    total={pagination?.total}
-                    onChange={onChangePage}
-                  />
-                </div>
-              </Col>
+              {studioPostList?.length > 0 && (
+                <Col span={24}>
+                  <div
+                    style={{
+                      padding: "10px 0px",
+                      marginLeft: "auto",
+                      textAlign: "end",
+                    }}
+                  >
+                    <Pagination
+                      pageSize={pagination?.limit || 0}
+                      current={pagination?.currentPage}
+                      total={pagination?.total}
+                      onChange={onChangePage}
+                    />
+                  </div>
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>
@@ -924,8 +972,7 @@ const FilterPage = () => {
         width={"100%"}
         visible={visible}
         footer={[]}
-        closable={false}
-      >
+        closable={false}>
         <div className="search-container pt-30">
           <Form onFinish={onFinish}>
             <Row className="w-100" justify="space-between" align="middle">
@@ -961,8 +1008,7 @@ const FilterPage = () => {
                     </div>
                     <Row
                       gutter={[20, 20]}
-                      style={{ textAlign: "center", margin: "0 auto" }}
-                    >
+                      style={{ textAlign: "center", margin: "0 auto" }}>
                       {selectProvince ? (
                         <>
                           {districts.map((val) => (
@@ -978,8 +1024,7 @@ const FilterPage = () => {
                                 } `}
                                 onClick={() => {
                                   handleChooseDistrict(val);
-                                }}
-                              >
+                                }}>
                                 {val.Name}
                               </div>
                             </Col>
@@ -1000,8 +1045,7 @@ const FilterPage = () => {
                                 } `}
                                 onClick={() => {
                                   handleChooseProvince(val);
-                                }}
-                              >
+                                }}>
                                 {val.Name}
                               </div>
                             </Col>
@@ -1022,8 +1066,7 @@ const FilterPage = () => {
                       }
                     }}
                   />
-                }
-              >
+                }>
                 <Button className="btn-item-filter">
                   Địa điểm <DownOutlined className="icon" />
                 </Button>
@@ -1035,8 +1078,7 @@ const FilterPage = () => {
                     <h3 className="px-10 mb-20">Danh mục</h3>
                     <Row
                       gutter={[20, 20]}
-                      style={{ textAlign: "center", margin: "0 auto" }}
-                    >
+                      style={{ textAlign: "center", margin: "0 auto" }}>
                       {categories.slice(1, 7).map((val) => (
                         <Col span={12}>
                           <div
@@ -1048,8 +1090,7 @@ const FilterPage = () => {
                                 ? "active"
                                 : ""
                             } `}
-                            onClick={() => handleChooseCategory(val)}
-                          >
+                            onClick={() => handleChooseCategory(val)}>
                             {val.name}
                           </div>
                         </Col>
@@ -1059,8 +1100,7 @@ const FilterPage = () => {
                 }
                 extendProp={false}
                 close={true}
-                btnClose={<CheckSVG />}
-              >
+                btnClose={<CheckSVG />}>
                 <Button className="btn-item-filter">
                   Danh mục <DownOutlined className="icon" />
                 </Button>
@@ -1071,8 +1111,7 @@ const FilterPage = () => {
                     <h3 className="px-10 mb-20">Giá</h3>
                     <Row
                       gutter={[20, 20]}
-                      style={{ textAlign: "center", margin: "0 auto" }}
-                    >
+                      style={{ textAlign: "center", margin: "0 auto" }}>
                       {PRICE_FILTER.map((val) => (
                         <Col span={12}>
                           <div
@@ -1080,8 +1119,7 @@ const FilterPage = () => {
                             className={`btn-price-item ${
                               choosePrice?.value === val.value ? "active" : ""
                             }`}
-                            onClick={() => setChoosePrice(val)}
-                          >
+                            onClick={() => setChoosePrice(val)}>
                             {val.label}
                           </div>
                         </Col>
@@ -1108,8 +1146,7 @@ const FilterPage = () => {
                 }
                 extendProp={false}
                 close={true}
-                btnClose={<CheckSVG />}
-              >
+                btnClose={<CheckSVG />}>
                 <Button className="btn-item-filter">
                   Giá <DownOutlined className="icon" />
                 </Button>
@@ -1147,15 +1184,13 @@ const FilterPage = () => {
                 width: "100%",
                 marginTop: "10px",
                 marginBottom: "35px",
-              }}
-            >
+              }}>
               <Button
                 type="primary"
                 htmlType="submit"
                 size="large"
                 style={{ width: "50%" }}
-                className="btn-search"
-              >
+                className="btn-search">
                 Tìm kiếm
               </Button>
             </Form.Item>

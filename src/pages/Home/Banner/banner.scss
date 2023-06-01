@@ -1,4 +1,6 @@
 .Banner {
+  height: 340px;
+
   &.mobile {
     .swiper {
       width: 100%;
@@ -8,7 +10,7 @@
 
   .swiper {
     width: 100%;
-    height: 500px;
+    height: 100%;
   }
 
   .swiper-pagination-bullet-active {

@@ -229,7 +229,7 @@ export const SignUpWithPhoneNumber = (data, navigate) => async (dispatch) => {
       localStorage.setItem("access_token", resp.data.token);
       setAuthToken(resp.data.token);
       dispatch({ type: SET_USER, payload: resp.data.data });
-      navigate("/home/dao");
+      navigate("/home");
     } else {
       dispatch({ type: PHONE, payload: data });
     }
@@ -246,7 +246,6 @@ export const LoginWithPhoneNumber = (data, navigate) => async (dispatch) => {
     localStorage.removeItem("providerId");
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
-    navigate("/home/dao");
   } catch (error) {
     console.log(error);
     openNotificationWithIcon("error", "Somthing fail", "please try again");
@@ -329,13 +328,11 @@ export const deleteMe = (navigate) => async (dispatch) => {
 
 export const setupSocket = () => (dispatch) => {
   const newSocket = io(process.env.REACT_APP_DB_BASE_URL + "/");
-  console.log("🚀 ~ setupSocket ~ newSocket:", newSocket);
   newSocket.on("disconnect", () => {
     dispatch({ type: SET_SOCKET, payload: null });
     setTimeout(setupSocket, 3000);
   });
   newSocket.on("connect", () => {
-    console.log("aaaaas");
     dispatch({ type: SET_SOCKET, payload: newSocket });
   });
 };

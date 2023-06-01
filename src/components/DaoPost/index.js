@@ -213,24 +213,6 @@ const DaoPost = (props) => {
 
   let ImageSection = null;
   let tempCount = post?.Image?.length;
-  // Object.entries(post).forEach((post2, idx) => {
-  //   if (post2[0].includes("Image")) tempCount++;
-  // });
-
-  // const getCommentsByPostId = (id) => {
-  //   const newChooseComment = [...showComment];
-  //   const checkIndex = newChooseComment.indexOf(id);
-  //   if (checkIndex === -1) {
-  //     newChooseComment.push(id);
-  //   } else {
-  //     newChooseComment.splice(checkIndex, 1);
-  //   }
-  //   const tempCmt = [...comments];
-  //   if (tempCmt.find((cmt) => cmt.PostId === id)) {
-  //   } else {
-  //   }
-  //   setShowComment(newChooseComment);
-  // };
 
   const handleShowModalChooseService = () => {
     dispatch({
@@ -1139,7 +1121,13 @@ const DaoPost = (props) => {
       >
         <hr color="#E7E7E7" className="mb-20" />
         <div className="d-flex w-100" style={{ position: "relative" }}>
-          {!screens?.xs && <img className="avt" src={img1} alt="" />}
+          {!screens?.xs && (
+            <img
+              className="avt"
+              src={convertImage(currentUser?.Image)}
+              alt=""
+            />
+          )}
           <div className="post__middle__right-side me-20 w-100">
             <ul className="d-flex align-posts-center">
               {defaultComments.map((item) => (

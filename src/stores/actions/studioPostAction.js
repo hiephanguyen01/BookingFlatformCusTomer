@@ -376,10 +376,15 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
             "warning"
           );
         }
-        // dispatch({ type: SELECT_TIME_ORDER, data: { id: data.id } });
       }
       dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
-      dispatch({ type: SET_FILTER_SERVICE, payload: chooseServiceTime });
+      dispatch({
+        type: SET_FILTER_SERVICE,
+        payload: {
+          ...chooseServiceTime,
+          ...data,
+        },
+      });
       // if (chooseService.id == data.id) {
       //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
       //       setChooseService([]);

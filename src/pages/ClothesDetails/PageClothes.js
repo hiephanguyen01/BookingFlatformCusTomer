@@ -10,7 +10,7 @@ const PageCostume = () => {
   return (
     <Routes>
       <Route path=":id" element={<ClothesDetail />} />
-      <Route path=":id/shop" element={<DetailClothesShop />} />
+      <Route path=":id/shop/:shopId" element={<DetailClothesShop />} />
       <Route path=":id/order" element={<Order />} />
       <Route path=":id/order/confirm" element={<ConfirmOrder />} />
       <Route path=":id/order/confirm/orderSuccess" element={<OrderSuccess />} />

@@ -30,7 +30,7 @@ export const CardLiked = ({ value, category }) => {
     }
   };
   const handleNavigate = () => {
-    navigate(`/home/${category?.name}/${value.id}`);
+    navigate(`/home/${category?.name}/${value?.id}`);
   };
   return (
     <div className={cx("card")} onClick={handleNavigate}>

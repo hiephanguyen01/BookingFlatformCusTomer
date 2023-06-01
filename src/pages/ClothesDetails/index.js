@@ -159,6 +159,7 @@ const Index = () => {
             ...findSelectTime,
             size,
             color,
+            amount,
           })
         );
       } else if (
@@ -173,6 +174,7 @@ const Index = () => {
             ...findSelectTime,
             size,
             color,
+            amount,
           })
         );
       } else {
@@ -209,7 +211,7 @@ const Index = () => {
         >
           {screens?.xs && (
             <BackNav
-              to={location?.state?.pathname}
+              to={location?.state?.pathname || "/home/filter?category=3"}
               icon={
                 <Popover
                   placement="bottomRight"
@@ -631,7 +633,7 @@ const Index = () => {
                       {" "}
                       <Button className={cx("btn-see-shop")}>
                         <Link
-                          to="shop"
+                          to={`shop/${studioDetail?.shop?.id}`}
                           state={{
                             pathname: `/home/clothes/${studioDetail?.data?.id}`,
                             pathnameFilter: `${location?.state?.pathname}`,
@@ -789,7 +791,7 @@ const Index = () => {
                                   (totalPrice, item) =>
                                     totalPrice + item?.PriceByDate,
                                   0
-                                )
+                                ) * amount
                             )}
                           đ
                         </div>
@@ -847,7 +849,7 @@ const Index = () => {
                     </div>
                     <Button className={cx("btn_see")}>
                       <Link
-                        to="shop"
+                        to={`shop/${studioDetail?.shop?.id}`}
                         state={{
                           pathname: `/home/clothes/${studioDetail?.data?.id}`,
                           pathnameFilter: `${location?.state?.pathname}`,
@@ -982,7 +984,8 @@ const Index = () => {
                                           (item) =>
                                             item?.id === studioDetail?.data?.id
                                         )?.OrderByTimeTo
-                                      )
+                                      ) *
+                                      amount
                                   )}
                                 </>
                               ) : (
