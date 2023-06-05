@@ -76,7 +76,8 @@ export const SignUp = ({ onClickSignUp }) => {
           />
           <div
             className={
-              phoneNum.length >= 9 && phoneNum.length <= 11
+              (phoneNum.length >= 9 && phoneNum.length <= 11) ||
+              phoneNum.length === 0
                 ? "d-none"
                 : "invalidPhone"
             }
@@ -84,6 +85,11 @@ export const SignUp = ({ onClickSignUp }) => {
             Vui lòng nhập số điện thoại hợp lệ !
           </div>
         </div>
+      </div>
+      <div className="mb-20 text-confirm">
+        Bằng việc nhấn vào nút Đăng ký Bạn đã đồng ý và chấp nhận với{" "}
+        <a href="/home/terms-use">Điều khoản sử dụng</a> và{" "}
+        <a href="/home/privacy-policy">Chính sách bảo mật</a> của Booking Studio
       </div>
       <div id="sign-in-button"></div>
       {/* Capcha --------------- */}

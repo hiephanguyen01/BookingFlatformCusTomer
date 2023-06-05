@@ -1,15 +1,8 @@
 import {
-  CommentOutlined,
   EditOutlined,
-  EyeOutlined,
-  FileTextOutlined,
-  HeartOutlined,
   PhoneOutlined,
   ReadOutlined,
-  ReconciliationOutlined,
   SafetyCertificateOutlined,
-  SaveOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import React, { useEffect, useRef, useState } from "react";
@@ -20,59 +13,82 @@ import useDebounce from "../../../../components/hooks/useDebounce";
 import { ImageDetect } from "../../../../components/ImageDetect/ImageDetect";
 import { userService } from "../../../../services/UserService";
 import { getCurrentUser } from "../../../../stores/actions/autheticateAction";
+import { ReactComponent as UserInfo } from "../../../../assets/account/UserInfo.svg";
+import { ReactComponent as Liked } from "../../../../assets/account/Liked.svg";
+import { ReactComponent as MyPost } from "../../../../assets/account/MyPost.svg";
+import { ReactComponent as MyRating } from "../../../../assets/account/MyRating.svg";
+import { ReactComponent as OrderStatus } from "../../../../assets/account/OrderStatus.svg";
+import { ReactComponent as SavedPost } from "../../../../assets/account/SavedPost.svg";
+import { ReactComponent as See } from "../../../../assets/account/See.svg";
+import { ReactComponent as Terms } from "../../../../assets/account/terms.svg";
+import { ReactComponent as Policy } from "../../../../assets/account/policy.svg";
+import { ReactComponent as Support } from "../../../../assets/account/support.svg";
+
+import "./aside.scss";
+import { convertImage } from "../../../../utils/convertImage";
 
 const ITEM_USER_ACCOUNT_ASIDE = [
   {
-    icon: <UserOutlined style={{ height: "100%" }} />,
+    icon: <UserInfo />,
+    iconActive: <UserInfo className="aside-active" />,
     title: "Thông tin tài khoản",
     linkTo: "accountInfo",
   },
   {
-    icon: <ReconciliationOutlined style={{ height: "100%" }} />,
+    icon: <OrderStatus />,
+    iconActive: <OrderStatus className="aside-active" />,
     title: "Lịch sử đơn đặt",
     linkTo: "orderStatus",
   },
   {
-    icon: <HeartOutlined style={{ height: "100%" }} />,
+    icon: <Liked />,
+    iconActive: <Liked className="aside-active" />,
     title: "Đã thích",
     linkTo: "liked",
   },
   {
-    icon: <CommentOutlined style={{ height: "100%" }} />,
+    icon: <MyRating />,
+    iconActive: <MyRating className="aside-active" />,
     title: "Đánh giá của tôi",
     linkTo: "rating",
   },
   {
-    icon: <FileTextOutlined style={{ height: "100%" }} />,
+    icon: <MyPost />,
+    iconActive: <MyPost className="aside-active" />,
     title: "Bài viết của tôi",
     linkTo: "posts",
   },
   {
-    icon: <SaveOutlined style={{ height: "100%" }} />,
+    icon: <SavedPost />,
+    iconActive: <SavedPost className="aside-active" />,
     title: "Bài viết đã lưu",
     linkTo: "post-saved",
   },
   {
-    icon: <EyeOutlined style={{ height: "100%" }} />,
+    icon: <See />,
+    iconActive: <See className="aside-active" />,
     title: "Đã xem gần đây",
     linkTo: "recently-viewed",
   },
 ];
 const ITEM_US_ASIDE = [
   {
-    icon: <ReadOutlined style={{ height: "100%" }} />,
+    icon: <Terms />,
+    iconActive: <Terms className="aside-active" />,
     title: "Điều khoản sử dụng",
     linkTo: "terms-use",
   },
   {
-    icon: <SafetyCertificateOutlined style={{ height: "100%" }} />,
+    icon: <Policy />,
+    iconActive: <Policy className="aside-active" />,
     title: "Chính sách an toàn & bảo mật",
     linkTo: "privacy-policy",
   },
   {
-    icon: <PhoneOutlined style={{ height: "100%" }} />,
+    icon: <Support />,
+    iconActive: <Support className="aside-active" />,
     title: "Hỗ trợ",
-    linkTo: "support",
+    linkTo: "/home/helpCenter",
   },
 ];
 
@@ -94,25 +110,32 @@ const Aside = ({ children }) => {
         }
       >
         <div
+          className="d-flex align-items-center"
           style={{
             padding: "0.5rem 0",
             cursor: "pointer",
           }}
         >
-          {item.icon}
-          <span
+          {pathname.includes(item.linkTo) ? item?.iconActive : item?.icon}
+          <div
             style={
               pathname.includes(item.linkTo)
                 ? {
                     fontSize: "16px",
                     marginLeft: "0.5rem",
                     fontWeight: "600",
+                    marginTop: "2px",
                   }
-                : { fontSize: "16px", marginLeft: "0.5rem", fontWeight: "400" }
+                : {
+                    fontSize: "16px",
+                    marginLeft: "0.5rem",
+                    fontWeight: "400",
+                    marginTop: "2px",
+                  }
             }
           >
             {item.title}
-          </span>
+          </div>
         </div>
       </Link>
     );
@@ -147,7 +170,7 @@ const Aside = ({ children }) => {
     setName(e.target.value);
   };
   return (
-    <div className="container" style={{ margin: "auto" }}>
+    <div className="container aside-container" style={{ margin: "auto" }}>
       <div
         className="d-flex"
         style={{
@@ -163,7 +186,7 @@ const Aside = ({ children }) => {
           }}
         >
           <img
-            src={UserMe?.Image !== null ? ImageDetect(UserMe) : noBody}
+            src={UserMe?.Image !== null ? convertImage(UserMe?.Image) : noBody}
             alt=""
             width={60}
             height={60}

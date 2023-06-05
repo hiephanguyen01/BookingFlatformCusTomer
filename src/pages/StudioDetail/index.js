@@ -68,6 +68,7 @@ import styles from "./Detail.module.scss";
 import { Report } from "./Report";
 import { SlideCard } from "./SlideCard";
 import BackNav from "../../components/BackNav/BackNav";
+import { ReactComponent as LocationIcon } from "../../assets/svg/location.svg";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -630,7 +631,7 @@ export const StudioDetail = () => {
                       <img src={images.address} alt="sa" />
                       <span>{studioDetail?.data?.Address}</span>
                     </div>
-                    <Row justify="space-between">
+                    <Row justify="space-between" className="w-100">
                       <div className={cx("rate")}>
                         <Rate
                           disabled
@@ -638,10 +639,8 @@ export const StudioDetail = () => {
                           value={studioDetail?.data?.TotalRate}
                         ></Rate>
                         <span>{studioDetail?.data?.TotalRate}</span>
-                        <span
-                          className={cx("number-order")}
-                          style={{ fontSize: "15px" }}
-                        >
+                        <span className={cx("number-order")}></span>
+                        <span style={{ fontSize: "15px" }}>
                           {studioDetail?.data?.BookingCount} đã đặt{" "}
                         </span>
                       </div>
@@ -731,7 +730,7 @@ export const StudioDetail = () => {
                     </div>
                   </div>
                   <div className={cx("address")}>
-                    <img src={images.address} alt="sa" />
+                    <LocationIcon />
                     <span>{studioDetail?.data?.Address}</span>
                   </div>
                   <div className={cx("rate")}>
@@ -770,7 +769,7 @@ export const StudioDetail = () => {
                     <div className={cx("map")}>
                       <h3>Xem trên bản đồ</h3>
                       <div className={cx("address")}>
-                        <img src={images.address} alt="" />
+                        <LocationIcon />
                         <span>{studioDetail?.data?.Address}</span>
                       </div>
                       <div className={cx("mapouter")}>
@@ -1266,7 +1265,7 @@ export const StudioDetail = () => {
                     <div className={cx("map")}>
                       <h3>Xem trên bản đồ</h3>
                       <div className={cx("address")}>
-                        <img src={images.address} alt="" className="me-5" />
+                        <LocationIcon className="me-5" />
                         <span>{studioDetail?.data?.Address}</span>
                       </div>
                       <div className={cx("mapouter")}>

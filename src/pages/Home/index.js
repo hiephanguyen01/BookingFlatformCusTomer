@@ -225,7 +225,7 @@ export const Home = () => {
         />
         <div className={cx("container")}>
           <div
-            className={cx("filter")}
+            className={cx(screens?.xs ? "filter-mobile" : "filter")}
             style={
               screens.xs
                 ? {

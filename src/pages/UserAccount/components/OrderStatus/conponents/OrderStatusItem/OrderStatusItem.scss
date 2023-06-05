@@ -25,6 +25,10 @@
         text-decoration: underline;
       }
     }
+
+    &__code {
+      align-items: end;
+    }
   }
 
   &__body {
