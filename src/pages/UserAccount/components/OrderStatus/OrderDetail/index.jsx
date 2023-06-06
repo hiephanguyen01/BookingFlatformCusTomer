@@ -67,7 +67,6 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
-
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
@@ -272,7 +271,8 @@ const OrderDetail = () => {
             updatePay: true,
             Category: searchParams.get("categoryId"),
             path: `/home/user/orderStatus/${id}?categoryId=1`,
-          }}>
+          }}
+        >
           <Button
             type="primary"
             icon={<UploadOutlined />}
@@ -370,13 +370,15 @@ const OrderDetail = () => {
         {booking?.PaymentStatus === 2 ? (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
             <Button
               type="primary"
               ghost
               size="large"
               onClick={navigateToDetail}
-              style={{ color: "#1fcba2", background: "#fff" }}>
+              style={{ color: "#1fcba2", background: "#fff" }}
+            >
               Đặt lại
             </Button>
             <Button type="primary" size="large" onClick={navigateToDetail}>
@@ -386,7 +388,8 @@ const OrderDetail = () => {
         ) : (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
             <Button type="primary" size="large" onClick={navigateToDetail}>
               Đặt lại
             </Button>
@@ -719,15 +722,17 @@ const OrderDetail = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Dolar />
           <div className="status_name">ĐÃ QUÁ HẠN THANH TOÁN</div>
           <p
             style={{
               textAlign: "center",
-              width: "500px",
+              maxWidth: "500px",
               marginBottom: "1rem",
-            }}>
+            }}
+          >
             Đã quá thời hạn thanh toán, nếu quý khách đã thanh toán vui lòng tải
             hình ảnh chứa thông tin chuyển khoản tiền đặt cọc.{" "}
           </p>
@@ -738,23 +743,26 @@ const OrderDetail = () => {
               //   .isBefore(moment())}
               onChangeFile={onChangeFile}
               multiple={true}
-              image={file.preview || convertImageUrl(booking?.EvidenceImage)}>
+              image={file.preview || convertImageUrl(booking?.EvidenceImage)}
+            >
               <div className="btn_upload">Tải ảnh lên</div>
             </DropFileInput>
           </div>
           <div
             style={{
-              width: "500px",
+              maxWidth: "500px",
               display: "inline-flex",
               flexDirection: "column",
               gap: "1rem",
-            }}>
+            }}
+          >
             <Button
               // type="primary"
 
               size="large"
               // onClick={navigateToDetail}
-              style={{ color: "#ffff", background: "#009874" }}>
+              style={{ color: "#ffff", background: "#009874" }}
+            >
               Cập nhật minh chứng
             </Button>
             <div className="d-flex">
@@ -1065,31 +1073,34 @@ const OrderDetail = () => {
           {bill[status]}
         </section>
       )}
-      <div className="df">
-        {!screens?.xs && <NotiIcon />}
-        <div className="noti_text">
-          Bao gồm{" "}
-          <b>
-            {booking?.BookingValueBeforeDiscount
-              ? `${convertPrice(
-                  Math.round(((booking?.BookingValue / 1.1) * 10) / 100)
-                )} VND`
-              : "Không"}{" "}
-          </b>
-          thuế và phí. Quý khách sẽ thanh toán{" "}
-          <b>
-            {booking?.BookingValue
-              ? `${convertPrice(lastPrice)} VND`
-              : `${convertPrice(booking?.BookingValue)} VND`}{" "}
-          </b>
-          vào ngày{" "}
-          <b>
-            {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
-              .utc()
-              .format("DD/MM/YYYY")}
-          </b>
+      {+status !== 4 && (
+        <div className="df">
+          {!screens?.xs && <NotiIcon />}
+
+          <div className="noti_text">
+            Bao gồm{" "}
+            <b>
+              {booking?.BookingValueBeforeDiscount
+                ? `${convertPrice(
+                    Math.round(((booking?.BookingValue / 1.1) * 10) / 100)
+                  )} VND`
+                : "Không"}{" "}
+            </b>
+            thuế và phí. Quý khách sẽ thanh toán{" "}
+            <b>
+              {booking?.BookingValue
+                ? `${convertPrice(lastPrice)} VND`
+                : `${convertPrice(booking?.BookingValue)} VND`}{" "}
+            </b>
+            vào ngày{" "}
+            <b>
+              {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
+                .utc()
+                .format("DD/MM/YYYY")}
+            </b>
+          </div>
         </div>
-      </div>
+      )}
       <section className="chile">
         <div className="df">
           <CancelIcon />
@@ -1114,14 +1125,17 @@ const OrderDetail = () => {
           </div>
         </div>
       </section>
-      <div className="flexx">
-        {!screens?.xs && <NotiIcon />}
-        <div className="noti_text">
-          Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất phí
-          gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý khách
-          sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn đặt.
+      {+status !== 4 && (
+        <div className="flexx">
+          {!screens?.xs && <NotiIcon />}
+          <div className="noti_text">
+            Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất
+            phí gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý
+            khách sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn
+            đặt.
+          </div>
         </div>
-      </div>
+      )}
       <Modal
         className="confirm"
         title={"Huỷ đơn có thể bị mất phí"}
@@ -1148,7 +1162,8 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
           <Divider />
           <section className="chile">
             <div className="df">

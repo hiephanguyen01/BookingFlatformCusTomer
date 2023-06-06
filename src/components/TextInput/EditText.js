@@ -19,7 +19,7 @@ const EditText = ({
 }) => {
   return (
     <div
-      className="d-flex flex-column container-input container"
+      className="d-flex flex-column container-input"
       style={{ marginBottom: "1rem", ...styleContainer }}
     >
       <span

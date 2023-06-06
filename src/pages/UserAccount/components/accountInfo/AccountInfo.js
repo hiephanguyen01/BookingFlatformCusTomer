@@ -261,8 +261,12 @@ const AccountInfo = () => {
       <div className="AccountInfo">
         <div className="AccountInfo__first">
           <Row
-            className="f-flex align-items-center"
-            gutter={[60, 0]}
+            className={`f-flex align-items-center ${
+              ((!screens?.lg && screens?.md) ||
+                (!screens?.lg && !screens?.md && screens?.sm)) &&
+              "mb-20"
+            }`}
+            gutter={[60, 15]}
             justify="start"
             align="top"
           >
@@ -324,7 +328,7 @@ const AccountInfo = () => {
               </div>
             </Col>
           </Row>
-          <Row align="top" gutter={[60, 0]} justify="start">
+          <Row align="top" gutter={[60, 15]} justify="start">
             <Col lg={0} md={0} sm={0} xs={24}>
               <EditText
                 label="Họ và tên"
@@ -345,6 +349,7 @@ const AccountInfo = () => {
                   let { value, name } = e.target;
                   handleChangeValue(name, value);
                 }}
+                styleContainer={{ marginBottom: "0.5rem" }}
               />
               {UserMe?.IsActiveEmail ? (
                 <p
@@ -381,7 +386,11 @@ const AccountInfo = () => {
           ></div>
         )}
         {!UserMe.FacebookToken && !UserMe.TokenEmail && (
-          <Row className="AccountInfo__second" justify="start" gutter={[60, 0]}>
+          <Row
+            className="AccountInfo__second"
+            justify="start"
+            gutter={[60, 10]}
+          >
             <Col lg={11} sm={24} xs={24}>
               <EditText
                 label="Mật khẩu hiện tại"
@@ -439,7 +448,7 @@ const AccountInfo = () => {
             }
             gutter={[60, 0]}
           >
-            <Col lg={11} md={12} sm={12} xs={24}>
+            <Col lg={11} md={24} sm={24} xs={24}>
               <div className="d-flex justify-content-center align-items-center mb-30">
                 <ZaloLogo className="me-16" />
                 {/* <img

@@ -7,9 +7,13 @@
   }
 
   &__body {
-    background-color: #fff;
+    // background-color: #fff;
     padding: 0 0;
     margin-bottom: 12px;
+
+    .ant-tabs-nav {
+      background-color: #fff;
+    }
 
     .ant-tabs-nav-wrap {
 

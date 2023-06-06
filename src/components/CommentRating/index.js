@@ -128,7 +128,10 @@ const Index = ({ data = [], className, isPerional }) => {
 
         {values?.length > 0 && (
           <>
-            <div className="rating_list">
+            <div
+              className="rating_list"
+              style={screens?.xs ? { padding: "20px 20px" } : {}}
+            >
               {values?.map(
                 (item, idx) =>
                   idx >= minIndex &&
