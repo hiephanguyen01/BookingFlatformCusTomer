@@ -125,12 +125,7 @@ export const Footer = ({
                 Category: Category,
               }}
               //
-              style={{
-                pointerEvents:
-                  moment().diff(booking.CreationTime, "minutes") > 15
-                    ? "none"
-                    : "auto",
-              }}
+
               className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
@@ -143,7 +138,13 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__2">
+              className="FooterStatus__wait__button__2"
+              style={{
+                pointerEvents:
+                  moment().diff(booking.CreationTime, "minutes") > 15
+                    ? "none"
+                    : "auto",
+              }}>
               Thanh toán cọc
             </Link>
           </div>
