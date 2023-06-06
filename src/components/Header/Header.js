@@ -610,7 +610,6 @@ const Header = () => {
                     </Select>
                   </Form.Item>
                 </div>
-                </Form.Item>
                 <Form.Item
                   style={{
                     textAlign: "center",
@@ -823,17 +822,6 @@ const Header = () => {
           <ChatModal handleCancel={() => setOpenModalChat(false)} />
         )}
       </div>
-    </div>
-                  </div>
-                </div>
-              )}
-            </Row>
-          </Col>
-        </Row>
-      </div>
-      {screens?.xs && openModalChat && (
-        <ChatModal handleCancel={() => setOpenModalChat(false)} />
-      )}
     </div>
   );
 };
