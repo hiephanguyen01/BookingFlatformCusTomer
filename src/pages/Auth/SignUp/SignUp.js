@@ -10,7 +10,7 @@ import "./SignUp.scss";
 export const SignUp = ({ onClickSignUp }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [phoneNum, setPhoneNum] = useState("");
+  const [phoneNum, setPhoneNum] = useState("0917773564");
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const handleSendOtpp = () => {
@@ -86,6 +86,11 @@ export const SignUp = ({ onClickSignUp }) => {
         </div>
       </div>
       <div id="sign-in-button"></div>
+      <div style={{marginBottom:".5rem",fontWeight:"500"}}>
+        Bằng việc nhấn vào nút Đăng ký Bạn đã đồng ý và chấp nhận với{" "}
+        <p style={{ color: "blue",display:"inline-block" }}> Thỏa thuận Đối tác liên kết </p> với
+        Booking Studio của Chúng tôi.
+      </div>
       {/* Capcha --------------- */}
       <Button
         onClick={() => {
@@ -99,6 +104,7 @@ export const SignUp = ({ onClickSignUp }) => {
       >
         Đăng ký
       </Button>
+      
       <div className="have-account">
         <span className="have-account-content">Bạn đã có tài khoản?</span>
         {onClickSignUp ? (

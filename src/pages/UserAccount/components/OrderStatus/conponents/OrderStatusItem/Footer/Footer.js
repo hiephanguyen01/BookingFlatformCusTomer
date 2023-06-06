@@ -39,11 +39,12 @@ export const Footer = ({
   // const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
+  const checkOrderByDateFrom = booking?.OrderByDateFrom > moment().format();
   const dispatch = useDispatch();
   const CancleFreeDate = moment(
     booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
   )
-    .add(
+    .subtract(
       booking?.OrderByTime
         ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
         : booking?.FreeCancelByDate?.match(/\d+/g)[0],
@@ -115,7 +116,8 @@ export const Footer = ({
                 moment().diff(booking?.CreationTime, "minutes") > 15
                   ? "not-allowed"
                   : "",
-            }}>
+            }}
+          >
             <Link
               to={`/home/confirm-order/${id}`}
               state={{
@@ -132,7 +134,8 @@ export const Footer = ({
                     ? "none"
                     : "auto",
               }}
-              className="FooterStatus__wait__button__1">
+              className="FooterStatus__wait__button__1"
+            >
               <UploadOutlined /> Đã thanh toán
             </Link>
             <Link
@@ -144,7 +147,8 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__2">
+              className="FooterStatus__wait__button__2"
+            >
               Thanh toán cọc
             </Link>
           </div>
@@ -153,17 +157,22 @@ export const Footer = ({
     case 2:
       return (
         <div className="FooterStatus__comming">
-          <button
-            className="FooterStatus__comming__cancel"
-            onClick={() => setShowModal(true)}>
-            Hủy đơn
-          </button>
+          {checkOrderByDateFrom && (
+            <button
+              className="FooterStatus__comming__cancel"
+              onClick={() => setShowModal(true)}
+            >
+              Hủy đơn
+            </button>
+          )}
+
           <button
             className="FooterStatus__comming__contact"
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}>
+            }}
+          >
             Liên hệ
           </button>
           <Modal
@@ -172,7 +181,8 @@ export const Footer = ({
             okText="Đồng ý"
             cancelText="Thoát"
             onCancel={() => setShowModal(false)}
-            onOk={() => handleCancelOrder()}>
+            onOk={() => handleCancelOrder()}
+          >
             <>
               <div>
                 Quý khách có thể huỷ đơn đặt cho đến{" "}
@@ -190,9 +200,8 @@ export const Footer = ({
                 className="mt-3"
                 rows={4}
                 style={{ resize: "none" }}
-                onChange={(e) =>
-                  setCancelReason(e.target.value)
-                }></Input.TextArea>
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></Input.TextArea>
               <Divider />
               <section className="chile">
                 <div className="df">
@@ -259,7 +268,8 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal">
+            className="FooterStatus__complete__modal"
+          >
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

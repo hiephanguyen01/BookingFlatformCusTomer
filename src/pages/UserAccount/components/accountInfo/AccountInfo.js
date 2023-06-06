@@ -288,6 +288,13 @@ const AccountInfo = () => {
                 <div className="d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
                   {file ? (
                     <img
+                      // src={
+                      //   file?.preview
+                      //     ? file?.preview
+                      //     : UserMe?.Image !== null
+                      //     ? myImg
+                      //     : noBody
+                      // }
                       src={
                         file?.preview
                           ? file?.preview

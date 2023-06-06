@@ -6,7 +6,7 @@ export const ImageDetect = (USER = "") => {
     if (Image?.includes("http")) {
       return Image;
     } else {
-      const img = Image;
+      const img = IMG(Image);
       return img;
     }
   } else {

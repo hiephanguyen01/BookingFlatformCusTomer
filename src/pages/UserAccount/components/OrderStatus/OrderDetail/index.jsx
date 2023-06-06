@@ -67,7 +67,6 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
-
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
@@ -96,6 +95,7 @@ const OrderDetail = () => {
   const depositPercent = booking?.OrderByTime
     ? booking?.CancelPriceByHour
     : booking?.CancelPriceByDate;
+  const checkOrderByDateFrom = booking?.OrderByDateFrom > moment().format();
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -272,7 +272,8 @@ const OrderDetail = () => {
             updatePay: true,
             Category: searchParams.get("categoryId"),
             path: `/home/user/orderStatus/${id}?categoryId=1`,
-          }}>
+          }}
+        >
           <Button
             type="primary"
             icon={<UploadOutlined />}
@@ -286,14 +287,15 @@ const OrderDetail = () => {
     ),
     2: (
       <div style={{ margin: "0 auto", gap: "8px" }} align="center">
-        <Button
+        {checkOrderByDateFrom && <Button
           type="text"
           onClick={() => setShowModal(true)}
           style={{ color: "#e60019", marginRight: "20px", borderRadius: "8px" }}
           size="large"
         >
           Huỷ đơn
-        </Button>
+        </Button>} 
+        
         <Button
           style={{
             color: "#009874",
@@ -370,13 +372,15 @@ const OrderDetail = () => {
         {booking?.PaymentStatus === 2 ? (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
             <Button
               type="primary"
               ghost
               size="large"
               onClick={navigateToDetail}
-              style={{ color: "#1fcba2", background: "#fff" }}>
+              style={{ color: "#1fcba2", background: "#fff" }}
+            >
               Đặt lại
             </Button>
             <Button type="primary" size="large" onClick={navigateToDetail}>
@@ -386,7 +390,8 @@ const OrderDetail = () => {
         ) : (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
             <Button type="primary" size="large" onClick={navigateToDetail}>
               Đặt lại
             </Button>
@@ -719,7 +724,8 @@ const OrderDetail = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Dolar />
           <div className="status_name">ĐÃ QUÁ HẠN THANH TOÁN</div>
           <p
@@ -727,7 +733,8 @@ const OrderDetail = () => {
               textAlign: "center",
               width: "500px",
               marginBottom: "1rem",
-            }}>
+            }}
+          >
             Đã quá thời hạn thanh toán, nếu quý khách đã thanh toán vui lòng tải
             hình ảnh chứa thông tin chuyển khoản tiền đặt cọc.{" "}
           </p>
@@ -738,7 +745,8 @@ const OrderDetail = () => {
               //   .isBefore(moment())}
               onChangeFile={onChangeFile}
               multiple={true}
-              image={file.preview || convertImageUrl(booking?.EvidenceImage)}>
+              image={file.preview || convertImageUrl(booking?.EvidenceImage)}
+            >
               <div className="btn_upload">Tải ảnh lên</div>
             </DropFileInput>
           </div>
@@ -748,13 +756,15 @@ const OrderDetail = () => {
               display: "inline-flex",
               flexDirection: "column",
               gap: "1rem",
-            }}>
+            }}
+          >
             <Button
               // type="primary"
 
               size="large"
               // onClick={navigateToDetail}
-              style={{ color: "#ffff", background: "#009874" }}>
+              style={{ color: "#ffff", background: "#009874" }}
+            >
               Cập nhật minh chứng
             </Button>
             <div className="d-flex">
@@ -1148,7 +1158,8 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
           <Divider />
           <section className="chile">
             <div className="df">
