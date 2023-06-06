@@ -26,13 +26,16 @@ export const ChatAdmin = React.memo(
     const dispatch = useDispatch();
 
     const createConversationIfNoneWereFound = async () => {
+      console.log("Before creating the conversation");
       const { data } = await chatService.createConversation(
         null,
         UserMe.id,
         true
       );
+      console.log("After creating the conversation", data);
 
       if (data.payload.appropriateResponseType === "create") {
+        console.log("Calling the socket");
         socket.emit("send_message_admin", {
           messageContent: {
             id: Math.random(),
