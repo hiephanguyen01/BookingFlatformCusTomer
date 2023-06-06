@@ -54,6 +54,7 @@ const PRICE_FILTER = [
 ];
 
 const Header = () => {
+  const inputSearchRef = useRef(null);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 5000000]);
@@ -116,8 +117,7 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}
-              >
+                style={{ borderRadius: "5px" }}>
                 Đăng nhập
               </Button>
             </Link>
@@ -155,8 +155,7 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}
-            >
+              onClick={() => navigate("/home/user/")}>
               Thông tin tài khoản
             </Button>
           ),
@@ -169,8 +168,7 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}
-            >
+              onClick={() => handleSignOut()}>
               Đăng xuất
             </Button>
           ),
@@ -214,7 +212,7 @@ const Header = () => {
     let newFilter = {
       ...filter,
       category: values.category || "",
-      provinceIds: values?.province ? values.province : "",
+      location: values?.province ? values.province : "",
       keyString: values.keyString,
       priceOption: values.price || 1,
       ratingOption: 3,
@@ -293,6 +291,14 @@ const Header = () => {
     }
     setChooseCategory(newChooseCategory);
   };
+
+  useEffect(() => {
+    if (visible === true) {
+      inputSearchRef?.current?.blur();
+
+      inputSearchRef?.current?.focus();
+    }
+  }, [visible]);
 
   return (
     <div className="container">
@@ -523,7 +529,7 @@ const Header = () => {
                       </Button>
                     </Form.Item>
                   </Form>
-                </div>
+                <div className="user">
               </Modal>
             )}
           </>
@@ -601,7 +607,7 @@ const Header = () => {
                     </Select>
                   </Form.Item>
                 </div>
-
+                </Form.Item>
                 <Form.Item
                   style={{
                     textAlign: "center",
@@ -814,6 +820,17 @@ const Header = () => {
           <ChatModal handleCancel={() => setOpenModalChat(false)} />
         )}
       </div>
+    </div>
+                  </div>
+                </div>
+              )}
+            </Row>
+          </Col>
+        </Row>
+      </div>
+      {screens?.xs && openModalChat && (
+        <ChatModal handleCancel={() => setOpenModalChat(false)} />
+      )}
     </div>
   );
 };

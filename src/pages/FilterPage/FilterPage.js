@@ -107,7 +107,7 @@ const FilterPage = () => {
   };
 
   const [province, setProvince] = useState(
-    Number(querySearch?.provinceIds) || querySearch?.provinces || ""
+    Number(querySearch?.location) || querySearch?.provinces || ""
   );
   const [priceRange, setPriceRange] = useState([0, 5000000]);
   const [selectProvince, setSelectProvince] = useState(null);
@@ -154,7 +154,7 @@ const FilterPage = () => {
             priceOption: +querySearch?.priceOption,
             price1: +querySearch?.price1 || undefined,
             price2: +querySearch?.price2 || undefined,
-            provinceIds: +querySearch?.provinceIds || "",
+            location: querySearch?.location || "",
             ratingOption: +querySearch?.ratingOption || 1,
           },
           null,
@@ -176,7 +176,7 @@ const FilterPage = () => {
     ) {
       initState(querySearch?.keyString || "");
     }
-  }, [querySearch?.keyString, screens]);
+  }, [screens]);
 
   useEffect(() => {
     if (Object.keys(filter).length > 0) {
@@ -194,21 +194,23 @@ const FilterPage = () => {
           ? [filter?.provinces]
           : filter?.provinces
       );
+      const province = provinces.find((p) => p.Name === filter?.location);
+
+      province && form.setFieldsValue({ location1: +province?.Code || "" });
+      setSelectProvince(province?.Code || "");
     }
-  }, [filter]);
+  }, [filter, province]);
 
   useEffect(() => {
-    if (screens.xs) {
-      if (selectProvince) {
-        (async () => {
-          const res = await studioPostService.getDistrictByProvince(
-            selectProvince
-          );
-          setDistricts(res.data);
-        })();
-      }
+    if (selectProvince) {
+      (async () => {
+        const res = await studioPostService.getDistrictByProvince(
+          selectProvince
+        );
+        setDistricts(res.data);
+      })();
     }
-  }, [selectProvince, screens]);
+  }, [selectProvince]);
 
   const layout = {
     labelCol: { span: 24 },
@@ -244,11 +246,46 @@ const FilterPage = () => {
   };
 
   const onChangeFilterProvince = (value) => {
+    let newValue;
+    const prov = provinces.find((p) => +p.Code === value);
+    if (value === "") {
+      setSelectProvince(null);
+      setDistricts([]);
+    } else {
+      setSelectProvince(value);
+      if (prov?.Name?.includes("TP")) {
+        newValue = prov.Name.split("TP")[1];
+      } else {
+        newValue = prov.Name;
+      }
+      dispatch(
+        getFilterStudioPost(
+          5,
+          1,
+          { ...filter, location: newValue },
+          currentUser,
+          navigate
+        )
+      );
+    }
+    form.setFieldsValue({ location: "" });
+  };
+
+  const onChangeFilterDistrict = (value) => {
+    let newValue;
+    const prov = provinces.find((p) => +p.Code === selectProvince);
+    if (value.includes("quận")) {
+      newValue = value.split("quận")[1];
+    } else if (value.includes("huyện")) {
+      newValue = value.split("huyện")[1];
+    } else {
+      newValue = value;
+    }
     dispatch(
       getFilterStudioPost(
         5,
         1,
-        { ...filter, provinceIds: value },
+        { ...filter, location: newValue },
         currentUser,
         navigate
       )
@@ -320,7 +357,7 @@ const FilterPage = () => {
           priceOption: 1,
           price1: undefined,
           price2: undefined,
-          provinceIds: "",
+          location1: province,
           ratingOption: 3,
         },
         {},
@@ -380,7 +417,6 @@ const FilterPage = () => {
     let newFilter = {
       ...filter,
       category: values.category || "",
-      provinceIds: values?.province ? values.province : "",
       keyString: values.keyString,
       priceOption: values.price || 1,
       ratingOption: 3,
@@ -442,8 +478,7 @@ const FilterPage = () => {
               <Row
                 align="middle"
                 justify="space-around"
-                style={{ textAlign: "center" }}
-              >
+                style={{ textAlign: "center" }}>
                 <Col span={3}>
                   <ArrowLeftOutlined
                     style={{ fontSize: "18px" }}
@@ -484,8 +519,7 @@ const FilterPage = () => {
                       "",
                       {}
                     )
-                  }
-                >
+                  }>
                   <Badge count={0} size="default">
                     <ShoppingOutlined
                       style={{ fontSize: "25px", color: "#828282" }}
@@ -515,8 +549,7 @@ const FilterPage = () => {
                         </div>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {selectProvince ? (
                             <>
                               {districts.map((val) => (
@@ -532,8 +565,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseDistrict(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -554,8 +586,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseProvinceMobile(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -594,8 +625,7 @@ const FilterPage = () => {
                           }
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Địa điểm <DownOutlined className="icon" />
                     </Button>
@@ -607,8 +637,7 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Danh mục</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {categories.slice(1, 7).map((val) => (
                             <Col span={12}>
                               <div
@@ -620,8 +649,7 @@ const FilterPage = () => {
                                     ? "active"
                                     : ""
                                 } `}
-                                onClick={() => handleChooseCategory(val)}
-                              >
+                                onClick={() => handleChooseCategory(val)}>
                                 {val.name}
                               </div>
                             </Col>
@@ -653,8 +681,7 @@ const FilterPage = () => {
                           );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Danh mục <DownOutlined className="icon" />
                     </Button>
@@ -665,8 +692,7 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Giá</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {PRICE_FILTER.map((val) => (
                             <Col span={12}>
                               <div
@@ -674,8 +700,7 @@ const FilterPage = () => {
                                 className={`btn-price-item ${
                                   choosePrice === val.value ? "active" : ""
                                 }`}
-                                onClick={() => setChoosePrice(val.value)}
-                              >
+                                onClick={() => setChoosePrice(val.value)}>
                                 {val.label}
                               </div>
                             </Col>
@@ -726,8 +751,7 @@ const FilterPage = () => {
                           );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Giá <DownOutlined className="icon" />
                     </Button>
@@ -877,8 +901,7 @@ const FilterPage = () => {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                  }}
-                >
+                  }}>
                   <div
                     style={{
                       background: "white",
@@ -886,8 +909,7 @@ const FilterPage = () => {
                       borderRadius: "50%",
                       padding: "10px",
                       margin: "10px",
-                    }}
-                  >
+                    }}>
                     <LoadingOutlined style={{ fontSize: "40px" }} />
                   </div>
                 </div>
