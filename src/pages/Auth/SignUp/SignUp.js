@@ -86,11 +86,6 @@ export const SignUp = ({ onClickSignUp }) => {
         </div>
       </div>
       <div id="sign-in-button"></div>
-      <div style={{marginBottom:".5rem",fontWeight:"500"}}>
-        Bằng việc nhấn vào nút Đăng ký Bạn đã đồng ý và chấp nhận với{" "}
-        <p style={{ color: "blue",display:"inline-block" }}> Thỏa thuận Đối tác liên kết </p> với
-        Booking Studio của Chúng tôi.
-      </div>
       {/* Capcha --------------- */}
       <Button
         onClick={() => {
