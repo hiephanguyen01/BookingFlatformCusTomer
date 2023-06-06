@@ -29,7 +29,7 @@ export const SignUp = ({ onClickSignUp }) => {
 
   useEffect(() => {
     if (user?.Email) {
-      navigate("/home/dao");
+      navigate("/home");
     }
   }, [user, navigate]);
   return (

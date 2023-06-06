@@ -6,6 +6,7 @@ import "./readMoreDesc.scss";
 
 const Index = ({ title = "", children }) => {
   const [toggle, setToggle] = useState(false);
+  console.log(addLinebreaks(children));
   return (
     <div className="wrap-read-more">
       {title && <div className="title">{title}</div>}
@@ -20,31 +21,18 @@ const Index = ({ title = "", children }) => {
           onClick={() => setToggle(true)}
         />
       ) : (
-        <p
-          className="see-more"
-          dangerouslySetInnerHTML={{
-            __html: addLinebreaks(children),
-          }}
-        />
+        <div className="see-more">
+          <p
+            className="content"
+            dangerouslySetInnerHTML={{
+              __html: addLinebreaks(children),
+            }}
+          />
+          <div className="show-less" onClick={() => setToggle(false)}>
+            Rút gọn
+          </div>
+        </div>
       )}
-      {/* <div className={`see-more ${toggle && "active"}`}>
-        {children}
-        {children?.length > 600 ? (
-          <div
-            className={`more ${toggle && "none"}`}
-            onClick={() => setToggle(true)}
-          >
-            Xem thêm
-          </div>
-        ) : (
-          <></>
-        )}
-        {toggle && (
-          <div className="see-less" onClick={() => setToggle(false)}>
-            Thu gọn
-          </div>
-        )}
-      </div> */}
     </div>
   );
 };

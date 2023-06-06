@@ -153,11 +153,11 @@ export const ChatBody = () => {
   return (
     <div className="Chat__body">
       <div className="Chat__body__user">
-        <ChatUserFilter
+        {/* <ChatUserFilter
           initMountStateUser={initMountStateUser}
           setToggleState={setToggleState}
           setConversation={setConversation}
-        />
+        /> */}
         <ChatAdmin
           info={infoChatAdmin}
           setInfoChatAdmin={setInfoChatAdmin}

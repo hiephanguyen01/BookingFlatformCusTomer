@@ -35,6 +35,7 @@ import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
+import ReadMoreInfoService from "../../components/ReadMoreInfoService";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
@@ -202,120 +203,124 @@ export const StudioDetail = () => {
             >
               {data?.Name}
             </div>
-            <div
-              className="mt-10"
-              style={{
-                color: "#222222",
-                fontSize: "16px",
-                fontWeight: "700",
-              }}
-            >
-              <div>
-                <img
-                  alt=""
-                  src={expand}
-                  className="me-10 mb-2"
-                  style={{ fontSize: "15px" }}
-                />
-                Kích thước
-              </div>
-              <ul className={cx("detail-description")}>
-                <li>Diện tích {data?.Area}m2</li>
-                <li>Chiều rộng {data?.Width}m</li>
-                <li>Chiều dài {data?.Length}m</li>
-                <li>Chiều cao trần {data?.Height}m</li>
-              </ul>
-            </div>
-            <div
-              className="mt-10"
-              style={{
-                color: "#222222",
-                fontSize: "16px",
-                fontWeight: "700",
-              }}
-            >
-              <div>
-                <img
-                  alt=""
-                  src={chair}
-                  className="me-10 mb-2"
-                  style={{ fontSize: "15px" }}
-                />
-                Thiết bị có sẵn
-              </div>
-              <ul className={cx("detail-description")}>
-                {data?.HasBackground && <li>{data?.BackgroundDescription}</li>}
-                {data?.HasLamp && <li>{data?.LampDescription}</li>}
-                {data?.HasTable && <li>Bàn</li>}
-                {data?.HasChair && <li>Ghế</li>}
-                {data?.HasSofa && <li>Sofa</li>}
-                {data?.HasFlower && <li>Hoa</li>}
-                {data?.HasOtherDevice && (
-                  <li>{data?.OtherDeviceDescription}</li>
-                )}
-              </ul>
-            </div>
-            <div
-              className="mt-10"
-              style={{
-                color: "#222222",
-                fontSize: "16px",
-                fontWeight: "700",
-              }}
-            >
-              <div>
-                <img
-                  alt=""
-                  src={conditional}
-                  className="me-10 mb-2"
-                  style={{ fontSize: "15px" }}
-                />
-                Tiện ích đi kèm
-              </div>
-              <ul className={cx("detail-description")}>
-                {data?.HasAirConditioner && <li>Máy lạnh</li>}
-                {data?.HasFan && <li>Quạt</li>}
-                {data?.HasDressingRoom && <li>Phòng thay đồ riêng</li>}
-                {data?.HasWC && <li>Nhà vệ sinh</li>}
-                {data?.HasCamera && <li>Camera</li>}
-                {data?.HasWifi && <li>Wifi</li>}
-                {data?.HasMotorBikeParking && <li>Chổ để xe máy</li>}
-                {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
-                {data?.HasSupporter && <li>Người hỗ trợ</li>}
-              </ul>
-            </div>
-            <div
-              className="mt-10"
-              style={{
-                color: "#222222",
-                fontSize: "16px",
-                fontWeight: "700",
-              }}
-            >
-              <div>
-                <TeamOutlined
-                  className="me-10 mb-2"
-                  style={{ fontSize: "15px" }}
-                />
-                Số lượng khách
-              </div>
-              <ul className={cx("detail-description")}>
-                <li>Số lượng khách tối đa: {data?.MaximumCustomer} người</li>
-                <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
-              </ul>
-            </div>
-            <div style={{ marginTop: "5px" }}>
-              <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
-              <p
+            <ReadMoreInfoService>
+              <div
+                className="mt-10"
                 style={{
-                  fontWeight: 400,
-                  fontSize: "16px",
                   color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
                 }}
               >
-                {data?.Description}
-              </p>
-            </div>
+                <div>
+                  <img
+                    alt=""
+                    src={expand}
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Kích thước
+                </div>
+                <ul className={cx("detail-description")}>
+                  <li>Diện tích {data?.Area}m2</li>
+                  <li>Chiều rộng {data?.Width}m</li>
+                  <li>Chiều dài {data?.Length}m</li>
+                  <li>Chiều cao trần {data?.Height}m</li>
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <img
+                    alt=""
+                    src={chair}
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Thiết bị có sẵn
+                </div>
+                <ul className={cx("detail-description")}>
+                  {data?.HasBackground && (
+                    <li>{data?.BackgroundDescription}</li>
+                  )}
+                  {data?.HasLamp && <li>{data?.LampDescription}</li>}
+                  {data?.HasTable && <li>Bàn</li>}
+                  {data?.HasChair && <li>Ghế</li>}
+                  {data?.HasSofa && <li>Sofa</li>}
+                  {data?.HasFlower && <li>Hoa</li>}
+                  {data?.HasOtherDevice && (
+                    <li>{data?.OtherDeviceDescription}</li>
+                  )}
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <img
+                    alt=""
+                    src={conditional}
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Tiện ích đi kèm
+                </div>
+                <ul className={cx("detail-description")}>
+                  {data?.HasAirConditioner && <li>Máy lạnh</li>}
+                  {data?.HasFan && <li>Quạt</li>}
+                  {data?.HasDressingRoom && <li>Phòng thay đồ riêng</li>}
+                  {data?.HasWC && <li>Nhà vệ sinh</li>}
+                  {data?.HasCamera && <li>Camera</li>}
+                  {data?.HasWifi && <li>Wifi</li>}
+                  {data?.HasMotorBikeParking && <li>Chổ để xe máy</li>}
+                  {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
+                  {data?.HasSupporter && <li>Người hỗ trợ</li>}
+                </ul>
+              </div>
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                }}
+              >
+                <div>
+                  <TeamOutlined
+                    className="me-10 mb-2"
+                    style={{ fontSize: "15px" }}
+                  />
+                  Số lượng khách
+                </div>
+                <ul className={cx("detail-description")}>
+                  <li>Số lượng khách tối đa: {data?.MaximumCustomer} người</li>
+                  <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
+                </ul>
+              </div>
+              <div style={{ marginTop: "5px" }}>
+                <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
+                <p
+                  style={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    color: "#222222",
+                  }}
+                >
+                  {data?.Description}
+                </p>
+              </div>
+            </ReadMoreInfoService>
           </div>
         ),
       },
@@ -735,13 +740,11 @@ export const StudioDetail = () => {
                       allowHalf
                       value={studioDetail?.data?.TotalRate}
                     ></Rate>
-                    <span>{studioDetail?.data?.TotalRate}</span>
-                    <span
-                      className={cx("number-order")}
-                      style={{ fontSize: "15px" }}
-                    >
+                    <div className="mt-2">{studioDetail?.data?.TotalRate}</div>
+                    <div className={cx("number-order")}></div>
+                    <div style={{ fontSize: "15px" }} className="mt-2">
                       {studioDetail?.data?.BookingCount} đã đặt{" "}
-                    </span>
+                    </div>
                   </div>
 
                   <ImagePost data={studioDetail?.data?.Image} />
@@ -1263,14 +1266,14 @@ export const StudioDetail = () => {
                     <div className={cx("map")}>
                       <h3>Xem trên bản đồ</h3>
                       <div className={cx("address")}>
-                        <img src={images.address} alt="" />
+                        <img src={images.address} alt="" className="me-5" />
                         <span>{studioDetail?.data?.Address}</span>
                       </div>
-                      <div className="mapouter">
-                        <div className="gmap_canvas">
+                      <div className={cx("mapouter")}>
+                        <div className={cx("gmap_canvas")}>
                           <iframe
                             title="map"
-                            className="gmap_iframe"
+                            className={cx("gmap_iframe")}
                             width="100%"
                             frameBorder={0}
                             scrolling="no"

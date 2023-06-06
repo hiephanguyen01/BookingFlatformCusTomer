@@ -28,6 +28,9 @@ import "./accountInfo.scss";
 import { authenticateService } from "../../../../services/AuthenticateService";
 import { SET_USER } from "../../../../stores/types/authType";
 import BackNav from "../../../../components/BackNav/BackNav";
+// import { ReactComponent as GoogleLogo } from "../../../../assets/LogoGoogle.svg";
+import { ReactComponent as FacebookLogo } from "../../../../assets/Logofacebook.svg";
+// import { ReactComponent as ZaloLogo } from "../../../../assets/LogoZalo.svg";
 
 const APP_ID = "934722658638520488";
 const SECRET_KEY = "9D1oI4FcpFbS5GmQrK8K";
@@ -260,8 +263,13 @@ const AccountInfo = () => {
       )}
       <div className="AccountInfo">
         <div className="AccountInfo__first">
-          <Row className="f-flex align-items-center">
-            <Col lg={12} md={24} sm={24} xs={0}>
+          <Row
+            className="f-flex align-items-center"
+            gutter={[60, 0]}
+            justify="start"
+            align="top"
+          >
+            <Col lg={11} md={24} sm={24} xs={0}>
               <EditText
                 label="Họ và tên"
                 name="Fullname"
@@ -272,7 +280,7 @@ const AccountInfo = () => {
                 }}
               />
             </Col>
-            <Col lg={12} sm={24} xs={24}>
+            <Col lg={11} sm={24} xs={24}>
               <div
                 // className="d-flex align-items-center"
                 style={
@@ -326,7 +334,7 @@ const AccountInfo = () => {
               </div>
             </Col>
           </Row>
-          <Row align="middle">
+          <Row align="top" gutter={[60, 0]} justify="start">
             <Col lg={0} md={0} sm={0} xs={24}>
               <EditText
                 label="Họ và tên"
@@ -338,7 +346,7 @@ const AccountInfo = () => {
                 }}
               />
             </Col>
-            <Col lg={12} sm={24} xs={24}>
+            <Col lg={11} sm={24} xs={24}>
               <EditText
                 label="Email"
                 value={infoUser ? infoUser.Email : ""}
@@ -362,7 +370,7 @@ const AccountInfo = () => {
                 <></>
               )}
             </Col>
-            <Col lg={12} sm={24} xs={24}>
+            <Col lg={11} sm={24} xs={24}>
               <EditText
                 label="Số điện thoại"
                 value={infoUser ? infoUser.Phone : ""}
@@ -383,8 +391,8 @@ const AccountInfo = () => {
           ></div>
         )}
         {!UserMe.FacebookToken && !UserMe.TokenEmail && (
-          <Row className="AccountInfo__second">
-            <Col lg={12} sm={24} xs={24}>
+          <Row className="AccountInfo__second" justify="start" gutter={[60, 0]}>
+            <Col lg={11} sm={24} xs={24}>
               <EditText
                 label="Mật khẩu hiện tại"
                 isPass={true}
@@ -408,7 +416,7 @@ const AccountInfo = () => {
                 }
               />
             </Col>
-            <Col lg={12} sm={24} xs={24}>
+            <Col lg={11} sm={24} xs={24}>
               <TextInput
                 label="Nhập lại mật khẩu mới"
                 isPass={true}
@@ -439,9 +447,11 @@ const AccountInfo = () => {
                     paddingBottom: "2rem",
                   }
             }
+            gutter={[60, 0]}
           >
-            <Col lg={12} md={12} sm={12} xs={24}>
+            <Col lg={11} md={12} sm={12} xs={24}>
               <div className="d-flex container justify-content-center align-items-center mb-30">
+                {/* <ZaloLogo /> */}
                 <img
                   src={imgZalo}
                   alt=""
@@ -467,11 +477,12 @@ const AccountInfo = () => {
                 className="d-flex container justify-content-center align-items-center"
                 style={{ marginBottom: "30px" }}
               >
-                <img
+                {/* <img
                   src={imgFB}
                   alt=""
                   style={{ height: "100%", marginRight: "1rem" }}
-                />
+                /> */}
+                <FacebookLogo />
                 <div
                   className="d-flex justify-content-between"
                   style={{ flex: "1" }}
@@ -528,7 +539,7 @@ const AccountInfo = () => {
                 </div>
               </div>
             </Col>
-            <Col span={12}></Col>
+            <Col span={11}></Col>
           </Row>
         </div>
         {screens.xs && (

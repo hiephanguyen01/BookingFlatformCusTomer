@@ -164,13 +164,13 @@ h5 {
 
 .container {
   margin: 0 auto;
-  width: 80%;
+  max-width: 1300px;
 }
 
 .container_detail {
   margin: auto !important;
   background-color: rgb(245, 245, 245) !important;
-  padding: 2rem 0 !important;
+  padding: 12px 0 !important;
 }
 
 .w-20 {
@@ -322,9 +322,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 //Styling
 .ant-back-top {
-  width: 50px !important;
-  height: 50px !important;
-  padding: 20px;
+  width: 60px !important;
+  height: 60px !important;
   background-color: $primary-700;
   border-radius: 50px;
   bottom: 88px;

@@ -25,21 +25,14 @@ import {
 import { Card } from "../../../../components/Card";
 import BackNav from "../../../../components/BackNav/BackNav";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { shopService } from "../../../../services/ShopService";
-import { CardLiked } from "../../../../components/Card/CardLiked";
+import { useDispatch, useSelector } from "react-redux";
+import { getDetailShopAction } from "../../../../stores/actions/ShopAction";
 
 const TAGS = [
   { id: "1", value: "Phổ biến" },
   { id: "2", value: "Danh mục" },
   { id: "3", value: "Bán chạy" },
   { id: "4", value: "Mới nhất" },
-];
-
-const ASIDE_CATEGORY_ITEM = [
-  { value: 0, name: "Váy cưới" },
-  { value: 1, name: "Áo dài" },
-  { value: 2, name: "Trang phục biểu diễn" },
-  { value: 3, name: "Khác" },
 ];
 
 const onShowSizeChange = (current, pageSize) => {};
@@ -52,24 +45,16 @@ const Index = () => {
   const screens = useBreakpoint();
   const location = useLocation();
   const params = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { clothesShop } = useSelector((state) => state.shopReducer);
   const [chooseAsideCategory, setChooseAsideCategory] = useState(0);
   const [open, setOpen] = useState(false);
-  const [shop, setShop] = useState([]);
-  console.log(location, params);
 
   useEffect(() => {
-    const getShop = async () => {
-      const res = await shopService.getShopDetail(params?.shopId, 3);
-      console.log(res);
-      if (res?.data?.success) {
-        setShop(res.data.data);
-      }
-    };
-
-    getShop();
+    dispatch(getDetailShopAction(params?.shopId, 3));
     return () => {};
-  }, [params]);
+  }, [params, dispatch]);
 
   return (
     <div
@@ -194,7 +179,7 @@ const Index = () => {
                   style={{ backgroundColor: "#fff" }}
                 >
                   <Row align="middle" className="mb-8">
-                    <div className="shop-name">{shop?.Name}</div>
+                    <div className="shop-name">{clothesShop?.Name}</div>
                     <CheckCircleOutlined className={"check_circle ms-10"} />
                   </Row>
                   <Row align="middle">
@@ -203,7 +188,7 @@ const Index = () => {
                       style={{ marginRight: "0.5rem" }}
                       alt=""
                     />
-                    <span>{shop?.Address}</span>
+                    <span>{clothesShop?.Address}</span>
                   </Row>
                 </div>
               </div>
@@ -219,7 +204,7 @@ const Index = () => {
                     onEllipsis: (ellipsis) => {},
                   }}
                 >
-                  {shop?.Description}
+                  {clothesShop?.Description}
                 </Paragraph>
               </div>
             </>
@@ -236,7 +221,7 @@ const Index = () => {
                 </Col>
                 <Col lg={16} md={16} sm={24}>
                   <div className="shop_name d-flex align-item-center">
-                    {shop?.Name}
+                    {clothesShop?.Name}
                     <CheckCircleOutlined className="check_circle pt-10 ms-10" />
                   </div>
                   <div className="location">
@@ -245,7 +230,7 @@ const Index = () => {
                       style={{ marginRight: "0.5rem" }}
                       alt=""
                     />
-                    {shop?.Address}
+                    {clothesShop?.Address}
                   </div>
                   <div className="d-flex align-items-center mb-10">
                     <Rate
@@ -262,7 +247,7 @@ const Index = () => {
                       <div className="reserve ms-20">Đã đặt 60</div>
                     </div>
                   </div>
-                  <ReadMoreDesc>{shop?.Description}</ReadMoreDesc>
+                  <ReadMoreDesc>{clothesShop?.Description}</ReadMoreDesc>
                 </Col>
               </Row>
             </div>
@@ -274,9 +259,19 @@ const Index = () => {
                   <Tabs.TabPane tab={tag.value} key={tag.id}>
                     {Number(tag.id) === 1 && (
                       <Row style={{}}>
-                        <div className="wrap_card w-100 mb-40" style={{}}>
-                          {shop?.ClothesPosts?.map((item, index) => (
-                            <CardLiked value={item} category={3} />
+                        <div
+                          className="wrap_card w-100 mb-40"
+                          style={
+                            clothesShop?.ClothesPosts?.length > 4
+                              ? {}
+                              : { gridTemplateColumns: "repeat(auto-fit, 19%)" }
+                          }
+                        >
+                          {clothesShop?.ClothesPosts?.map((item, index) => (
+                            <Card
+                              value={item}
+                              category={{ name: "clothes", id: 3 }}
+                            />
                           ))}
                         </div>
                         <div className="d-flex justify-content-center w-100">
@@ -302,28 +297,48 @@ const Index = () => {
                             {tag.value}
                           </div>
                           <ul className="aside_category_list">
-                            {ASIDE_CATEGORY_ITEM.map((item, index) => (
-                              <li
-                                key={index}
-                                className={`aside_category_item ${
-                                  index === chooseAsideCategory ? "active" : ""
-                                }`}
-                                onClick={() => {
-                                  setChooseAsideCategory(index);
-                                }}
-                              >
-                                {item.name}
-                              </li>
-                            ))}
+                            {clothesShop?.ClothesGroups?.length > 0 &&
+                              clothesShop?.ClothesGroups.map((item, index) => (
+                                <li
+                                  key={index}
+                                  className={`aside_category_item ${
+                                    item?.id === chooseAsideCategory
+                                      ? "active"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setChooseAsideCategory(item?.id);
+                                  }}
+                                >
+                                  {item?.Name}
+                                </li>
+                              ))}
                           </ul>
                         </Col>
                         <Col lg={20} md={20} sm={20} xs={24}>
-                          <div className="wrap_card w-100 mb-40" style={{}}>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-                              (item, index) => (
-                                <Card />
-                              )
-                            )}
+                          <div
+                            className="wrap_card_category w-100 mb-40"
+                            style={
+                              clothesShop?.ClothesGroups?.find(
+                                (item) => item.id === chooseAsideCategory
+                              )?.GroupMaps?.length > 4
+                                ? {}
+                                : {
+                                    gridTemplateColumns:
+                                      "repeat(auto-fit, 24%)",
+                                  }
+                            }
+                          >
+                            {clothesShop?.ClothesGroups?.find(
+                              (item) => item.id === chooseAsideCategory
+                            )?.GroupMaps.map((item, index) => (
+                              <div className="item">
+                                <Card
+                                  value={item?.ClothesPost}
+                                  category={{ name: "clothes", id: 3 }}
+                                />
+                              </div>
+                            ))}
                           </div>
                           <div className="d-flex justify-content-center">
                             <Pagination

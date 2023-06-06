@@ -8,7 +8,6 @@ import "./promotionList.scss";
 
 const PromotionList = () => {
   const { promotionCode } = useSelector((state) => state.studioPostReducer);
-  const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
 
   const dispatch = useDispatch();

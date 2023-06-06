@@ -18,8 +18,13 @@ export const CustomerLayout = ({ children }) => {
         {children ? children : <Outlet />}
       </div>
       <Footer />
-      <div className="h-40px"></div>
-      {screens.xs && <BottomNav />}
+
+      {screens.xs && (
+        <>
+          <div className="h-40px"></div>
+          <BottomNav />
+        </>
+      )}
     </div>
   );
 };
