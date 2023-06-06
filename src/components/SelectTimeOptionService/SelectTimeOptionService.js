@@ -256,7 +256,6 @@ const Option = ({ option, disabled, service }) => {
                       return remove_duplicates_es6(acc);
                     }, []);
                   }
-                  console.log(array);
                   dispatch({
                     type: ADD_TIME_ORDER,
                     data: {
@@ -288,7 +287,10 @@ const Option = ({ option, disabled, service }) => {
                     ) ||
                   (current &&
                     moment(current).utc().toISOString() <=
-                      moment().subtract(1, "days").toISOString())
+                      moment().subtract(1, "days").toISOString()) ||
+                  (current &&
+                    moment(current).toISOString() >=
+                      moment().add(1, "y").toISOString())
                 );
               }}
               format={"DD-MM-YYYY"}
@@ -358,10 +360,13 @@ const Option = ({ option, disabled, service }) => {
               inputReadOnly={true}
               disabledDate={(current) => {
                 return (
-                  disableDate.some(
+                  disableDate?.some(
                     (date) => moment(current).format("DD-MM-YYYY") === date
                   ) ||
-                  (current && current <= moment())
+                  (current && current <= moment()) ||
+                  (current &&
+                    moment(current).toISOString() >=
+                      moment().add(1, "y").toISOString())
                 );
               }}
             />

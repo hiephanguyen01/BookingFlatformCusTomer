@@ -10,6 +10,17 @@
     }
 
     .timeContainer {}
+
+    .ant-picker-input {
+        input {
+            color: #3F3F3F;
+            background-color: inherit !important;
+        }
+    }
+
+    .ant-picker-disabled {
+        background-color: inherit !important;
+    }
 }
 
 .ant-picker-time-panel-column {

@@ -21,7 +21,7 @@ const Option = ({ disabled }) => {
             }}
           >
             <DatePicker
-              defaultValue={moment(chooseService?.OrderByTimeFrom)}
+              defaultValue={moment(chooseService?.OrderByTimeFrom).utc()}
               format={"DD/MM/YYYY"}
               disabled={disabled}
             />
@@ -90,14 +90,14 @@ const SelectTimeOption = ({ disabled }) => {
         name="radiogroup"
         style={{ padding: "0 0 20px" }}
         value={chooseService.OrderByTime}
-        disabled={disabled}
+        // disabled={disabled}
       >
         <Space direction="vertical">
           <Radio value={1}>Đặt theo giờ</Radio>
           <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
-      <Option disabled={disabled} />
+      <Option disabled={true} />
     </div>
   );
 };

@@ -1,6 +1,10 @@
 .ListItem {
   margin-top: 36px;
-  margin-bottom: 100px;
+  margin-bottom: 46px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   .title {
     display: flex;
@@ -8,6 +12,7 @@
     align-items: center;
     padding: 15px 20px;
     background: #ffffff;
+    margin-bottom: 10px;
     // background-color: #f5f5f5;
 
     h3 {
@@ -27,6 +32,10 @@
     }
   }
 
+  .wrap-slide {
+    background-color: inherit;
+  }
+
   .box-container {
     padding-top: 10px;
     display: grid;
@@ -44,12 +53,12 @@
 }
 
 .slideDetail {
-  background-color: #fff;
+
   .swiper-slide {
     display: block !important;
     text-align: center;
     font-size: 18px;
-    background: #fff;
+    background: inherit;
 
     /* Center slide text vertically */
     display: -webkit-box;

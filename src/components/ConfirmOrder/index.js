@@ -39,10 +39,10 @@ const Index = () => {
     case "makeup":
       cate = 4;
       break;
-    case "model":
+    case "device":
       cate = 5;
       break;
-    case "device":
+    case "model":
       cate = 6;
       break;
     case "confirm-order":
@@ -139,7 +139,7 @@ const Index = () => {
         <div className="border_bottom">
           <div className="d-flex justify-content-between mb-12">
             <div className="booking_code d-flex text-medium-re">
-              <p>Mã Booking:</p>
+              <p style={{ color: "#616161" }}>Mã Booking:</p>
               <div className="banking-mess text-medium-se">
                 {booking?.IdentifyCode}
               </div>

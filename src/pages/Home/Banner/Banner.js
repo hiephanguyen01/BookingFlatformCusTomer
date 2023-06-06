@@ -32,8 +32,8 @@ const Banner = ({ banners }) => {
               (banner) =>
                 banner.IsVisible && (
                   <SwiperSlide key={banner.id}>
-                    <a href={banner.Description}>
-                      <div data-swiper-parallax="-300" className="banner">
+                    <a href={banner.Description} className="h-100">
+                      <div data-swiper-parallax="-300" className="banner h-100">
                         <img
                           data-swiper-parallax="-300"
                           slot="container-start"
@@ -48,7 +48,7 @@ const Banner = ({ banners }) => {
                           <h1 className="" data-swiper-parallax="-200">
                             {banner.name}
                           </h1>
-                          <p data-swiper-parallax="-100">
+                          <p data-swiper-parallax="w-100">
                             {banner.description}
                           </p>
                         </div>

@@ -78,7 +78,7 @@ const OrderDetail = () => {
   const CancleFreeDate = moment(
     booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
   )
-    .add(
+    .subtract(
       booking?.OrderByTime
         ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
         : booking?.FreeCancelByDate?.match(/\d+/g)[0],

@@ -223,7 +223,7 @@ export const Home = () => {
           type="article"
           imgAlt="Booking Studio"
         />
-        <div className={cx("home")}>
+        <div className={cx("container")}>
           <div
             className={cx("filter")}
             style={
@@ -270,56 +270,7 @@ export const Home = () => {
                   </div>
                 ))}
           </div>
-          {/* Banner */}
-          {/* <div className={cx("banner")}>
-          <div className={cx("box-container")}>
-            <div className={cx("box")}>
-              <img src={images.banner1} alt="sa" />
-              <div className={cx("content")}>
-                <h3
-                  style={{
-                    fontSize: "26px",
-                    color: "#616161",
-                    padding: "0",
-                    margin: "0",
-                  }}>
-                  ART STUDIO{" "}
-                </h3>
-                <img src={images.special} alt="bannẻ" />
-                <h5
-                  style={{
-                    fontSize: "30px",
-                    color: "#E22828",
-                    fontWeight: "600",
-                    padding: "0",
-                    margin: "0",
-                  }}>
-                  -1.000.000 vnd{" "}
-                </h5>
-                <p
-                  style={{
-                    fontSize: "22px",
-                    color: "#616161",
-                    marginTop: "28px",
-                  }}>
-                  Khi đăng ký trước 1 tháng{" "}
-                </p>
-              </div>
-            </div>
-            <div className={cx("box2", { box: "box" })}>
-              <img src={images.banner2} alt="" />
-              <div className={cx("content")}>
-                <h4>CITI’ S BEST </h4>
-                <h4 style={{ color: "#E22828" }}>PROFESSIONAL </h4>
-                <h4>PHOTOGRAPHY</h4>
-                <h4>STUDIO</h4>
-              </div>
-            </div>
-          </div>
-        </div> */}
           <Banner banners={banners} />
-          {/* <ListItem title="Được đặt nhiều nhất" />
-      <ListItem title="Đã xem gần đây" /> */}
           <SlideCard
             category={{ name: "studio", id: 1 }}
             data={listOustandingStudioPost}
