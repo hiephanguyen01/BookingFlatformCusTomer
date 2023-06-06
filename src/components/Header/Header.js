@@ -54,6 +54,7 @@ const PRICE_FILTER = [
 ];
 
 const Header = () => {
+  const inputSearchRef = useRef(null);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 5000000]);
@@ -214,7 +215,7 @@ const Header = () => {
     let newFilter = {
       ...filter,
       category: values.category || "",
-      provinceIds: values?.province ? values.province : "",
+      location: values?.province ? values.province : "",
       keyString: values.keyString,
       priceOption: values.price || 1,
       ratingOption: 3,
@@ -293,6 +294,14 @@ const Header = () => {
     }
     setChooseCategory(newChooseCategory);
   };
+
+  useEffect(() => {
+    if (visible === true) {
+      inputSearchRef?.current?.blur();
+
+      inputSearchRef?.current?.focus();
+    }
+  }, [visible]);
 
   return (
     <div className="container">

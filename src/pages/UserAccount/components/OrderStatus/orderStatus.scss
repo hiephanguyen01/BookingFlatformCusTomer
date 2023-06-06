@@ -27,8 +27,9 @@
         user-select: none;
 
         &.active {
-          border-bottom: 2px solid #E22828;
-          color: #E22828;
+          border-bottom: 2px solid #e22828;
+          color: #e22828;
+          //color: #E22828;
         }
       }
     }
@@ -72,4 +73,5 @@
   //     //   display: none;
   //     // }
   //   }
+
 }
