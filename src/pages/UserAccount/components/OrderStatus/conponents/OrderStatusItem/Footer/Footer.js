@@ -126,15 +126,8 @@ export const Footer = ({
                 Category: Category,
               }}
               //
-              style={{
-                pointerEvents:
-                  moment().diff(booking.CreationTime, "minutes") > 15
-                    ? "none"
-                    : "auto",
-              }}
-              className="FooterStatus__wait__button__1"
-            >
-              <UploadOutlined className="me-7" /> Đã thanh toán
+              className="FooterStatus__wait__button__1">
+              <UploadOutlined /> Đã thanh toán
             </Link>
             <Link
               to={`/home/confirm-order/${id}`}
@@ -146,7 +139,12 @@ export const Footer = ({
                 Category: Category,
               }}
               className="FooterStatus__wait__button__2"
-            >
+              style={{
+                pointerEvents:
+                  moment().diff(booking.CreationTime, "minutes") > 15
+                    ? "none"
+                    : "auto",
+              }}>
               Thanh toán cọc
             </Link>
           </div>
