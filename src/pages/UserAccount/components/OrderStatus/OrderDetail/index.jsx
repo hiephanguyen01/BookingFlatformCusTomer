@@ -731,7 +731,7 @@ const OrderDetail = () => {
           <p
             style={{
               textAlign: "center",
-              width: "500px",
+              maxWidth: "500px",
               marginBottom: "1rem",
             }}
           >
@@ -752,7 +752,7 @@ const OrderDetail = () => {
           </div>
           <div
             style={{
-              width: "500px",
+              maxWidth: "500px",
               display: "inline-flex",
               flexDirection: "column",
               gap: "1rem",
@@ -1075,31 +1075,34 @@ const OrderDetail = () => {
           {bill[status]}
         </section>
       )}
-      <div className="df">
-        {!screens?.xs && <NotiIcon />}
-        <div className="noti_text">
-          Bao gồm{" "}
-          <b>
-            {booking?.BookingValueBeforeDiscount
-              ? `${convertPrice(
-                  Math.round(((booking?.BookingValue / 1.1) * 10) / 100)
-                )} VND`
-              : "Không"}{" "}
-          </b>
-          thuế và phí. Quý khách sẽ thanh toán{" "}
-          <b>
-            {booking?.BookingValue
-              ? `${convertPrice(lastPrice)} VND`
-              : `${convertPrice(booking?.BookingValue)} VND`}{" "}
-          </b>
-          vào ngày{" "}
-          <b>
-            {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
-              .utc()
-              .format("DD/MM/YYYY")}
-          </b>
+      {+status !== 4 && (
+        <div className="df">
+          {!screens?.xs && <NotiIcon />}
+
+          <div className="noti_text">
+            Bao gồm{" "}
+            <b>
+              {booking?.BookingValueBeforeDiscount
+                ? `${convertPrice(
+                    Math.round(((booking?.BookingValue / 1.1) * 10) / 100)
+                  )} VND`
+                : "Không"}{" "}
+            </b>
+            thuế và phí. Quý khách sẽ thanh toán{" "}
+            <b>
+              {booking?.BookingValue
+                ? `${convertPrice(lastPrice)} VND`
+                : `${convertPrice(booking?.BookingValue)} VND`}{" "}
+            </b>
+            vào ngày{" "}
+            <b>
+              {moment(booking?.OrderByDateFrom || booking?.OrderByTimeFrom)
+                .utc()
+                .format("DD/MM/YYYY")}
+            </b>
+          </div>
         </div>
-      </div>
+      )}
       <section className="chile">
         <div className="df">
           <CancelIcon />
@@ -1124,14 +1127,17 @@ const OrderDetail = () => {
           </div>
         </div>
       </section>
-      <div className="flexx">
-        {!screens?.xs && <NotiIcon />}
-        <div className="noti_text">
-          Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất phí
-          gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý khách
-          sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn đặt.
+      {+status !== 4 && (
+        <div className="flexx">
+          {!screens?.xs && <NotiIcon />}
+          <div className="noti_text">
+            Quý khách có thể hủy đơn đặt cho đến {CancleFreeDate} mà không mất
+            phí gì và được hoàn tiền cọc 100% (nếu có thanh toán trước đó). Quý
+            khách sẽ không được hoàn tiền nếu vắng mặt vào ngày thực hiện đơn
+            đặt.
+          </div>
         </div>
-      </div>
+      )}
       <Modal
         className="confirm"
         title={"Huỷ đơn có thể bị mất phí"}

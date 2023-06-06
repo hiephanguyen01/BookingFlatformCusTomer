@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import "./ModalImage.scss";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,13 +18,19 @@ import { HIDE_MODAL } from "../../stores/types/modalTypes";
 import { convertImage } from "../../utils/convertImage";
 import { Grid } from "antd";
 const { useBreakpoint } = Grid;
-export const ModalImage = ({ title = "", data }) => {
+const ModalImage = ({
+  title = "",
+  data,
+  setOpenModal = () => {},
+  index = 0,
+}) => {
   const screens = useBreakpoint();
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   useEffect(() => {
     return () => {};
   }, []);
+
   return (
     <div
       style={{
@@ -36,7 +42,7 @@ export const ModalImage = ({ title = "", data }) => {
       }}
     >
       <h3>{title}</h3>
-      <div onClick={() => dispatch({ type: HIDE_MODAL })} className={"close"}>
+      <div onClick={() => setOpenModal(false)} className={"close"}>
         <CloseOutlined style={{ fontSize: "22px" }} />
       </div>
       {screens?.xs ? (
@@ -45,6 +51,7 @@ export const ModalImage = ({ title = "", data }) => {
         <>
           <div style={{ marginTop: "20px" }}>
             <Swiper
+              initialSlide={index}
               style={{
                 width: "758px",
                 height: "448px",
@@ -81,10 +88,11 @@ export const ModalImage = ({ title = "", data }) => {
               onSwiper={setThumbsSwiper}
               spaceBetween={10}
               slidesPerView={4}
-              //   freeMode={true}
+              freeMode={true}
               watchSlidesProgress={true}
               modules={[FreeMode, Navigation, Thumbs]}
               className="swiperThumb"
+              // onActiveIndexChange={()}
             >
               {data?.map((item, idx) => {
                 return (
@@ -112,3 +120,5 @@ export const ModalImage = ({ title = "", data }) => {
     </div>
   );
 };
+
+export default memo(ModalImage);

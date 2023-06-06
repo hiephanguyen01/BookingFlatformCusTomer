@@ -43,7 +43,7 @@ const ListItemLikeCard = ({ data, category }) => {
           return (
             idx >= minIndex &&
             idx < maxIndex && (
-              <Col lg={6} md={6} sm={12} xs={24} key={idx}>
+              <Col lg={6} md={8} sm={12} xs={24} key={idx}>
                 <CardLiked value={item} category={category} />
                 {screens?.xs && (
                   <div
@@ -57,17 +57,19 @@ const ListItemLikeCard = ({ data, category }) => {
         })}
       </Row>
       {/* </div> */}
-      <Pagination
-        pageSize={pageSize}
-        current={current || 1}
-        total={values?.length}
-        onChange={handleChange}
-        style={{
-          paddingTop: "10px",
-          background: "#f5f5f5",
-          textAlign: "right",
-        }}
-      />
+      {values?.length > 0 && (
+        <Pagination
+          pageSize={pageSize}
+          current={current || 1}
+          total={values?.length}
+          onChange={handleChange}
+          style={{
+            paddingTop: "10px",
+            background: "#f5f5f5",
+            textAlign: "right",
+          }}
+        />
+      )}
     </div>
   );
 };

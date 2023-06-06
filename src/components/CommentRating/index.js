@@ -6,7 +6,7 @@ import images from "../../assets/images";
 import { convertTime } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-import { ModalImage } from "../ModalImg";
+import ModalImage from "../ModalImg";
 import "./commentRating.scss";
 import BackNav from "../BackNav/BackNav";
 import { useLocation } from "react-router";
@@ -128,7 +128,10 @@ const Index = ({ data = [], className, isPerional }) => {
 
         {values?.length > 0 && (
           <>
-            <div className="rating_list">
+            <div
+              className="rating_list"
+              style={screens?.xs ? { padding: "20px 20px" } : {}}
+            >
               {values?.map(
                 (item, idx) =>
                   idx >= minIndex &&

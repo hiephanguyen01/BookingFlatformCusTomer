@@ -9,9 +9,6 @@ import sha256 from "crypto-js/sha256";
 import Base64 from "crypto-js/enc-base64";
 import queryString from "query-string";
 import noBody from "../../../../assets/img/no-body.png";
-import imgFB from "../../../../assets/img/userAccount/facebook (4) 1facebook.png";
-import imgGG from "../../../../assets/img/userAccount/google 1google.png";
-import imgZalo from "../../../../assets/img/userAccount/zalo-logo-B0A0B2B326-seeklogo 1zalo.png";
 import EditText from "../../../../components/TextInput/EditText";
 import TextInput from "../../../../components/TextInput/TextInput";
 import toastMessage from "../../../../components/ToastMessage";
@@ -28,9 +25,9 @@ import "./accountInfo.scss";
 import { authenticateService } from "../../../../services/AuthenticateService";
 import { SET_USER } from "../../../../stores/types/authType";
 import BackNav from "../../../../components/BackNav/BackNav";
-// import { ReactComponent as GoogleLogo } from "../../../../assets/LogoGoogle.svg";
-import { ReactComponent as FacebookLogo } from "../../../../assets/Logofacebook.svg";
-// import { ReactComponent as ZaloLogo } from "../../../../assets/LogoZalo.svg";
+import { ReactComponent as GoogleLogo } from "../../../../assets/GoogleLogo.svg";
+import { ReactComponent as FacebookLogo } from "../../../../assets/FacebookLogo.svg";
+import { ReactComponent as ZaloLogo } from "../../../../assets/ZaloLogo.svg";
 
 const APP_ID = "934722658638520488";
 const SECRET_KEY = "9D1oI4FcpFbS5GmQrK8K";
@@ -264,8 +261,12 @@ const AccountInfo = () => {
       <div className="AccountInfo">
         <div className="AccountInfo__first">
           <Row
-            className="f-flex align-items-center"
-            gutter={[60, 0]}
+            className={`f-flex align-items-center ${
+              ((!screens?.lg && screens?.md) ||
+                (!screens?.lg && !screens?.md && screens?.sm)) &&
+              "mb-20"
+            }`}
+            gutter={[60, 15]}
             justify="start"
             align="top"
           >
@@ -334,7 +335,7 @@ const AccountInfo = () => {
               </div>
             </Col>
           </Row>
-          <Row align="top" gutter={[60, 0]} justify="start">
+          <Row align="top" gutter={[60, 15]} justify="start">
             <Col lg={0} md={0} sm={0} xs={24}>
               <EditText
                 label="Họ và tên"
@@ -355,6 +356,7 @@ const AccountInfo = () => {
                   let { value, name } = e.target;
                   handleChangeValue(name, value);
                 }}
+                styleContainer={{ marginBottom: "0.5rem" }}
               />
               {UserMe?.IsActiveEmail ? (
                 <p
@@ -391,7 +393,11 @@ const AccountInfo = () => {
           ></div>
         )}
         {!UserMe.FacebookToken && !UserMe.TokenEmail && (
-          <Row className="AccountInfo__second" justify="start" gutter={[60, 0]}>
+          <Row
+            className="AccountInfo__second"
+            justify="start"
+            gutter={[60, 10]}
+          >
             <Col lg={11} sm={24} xs={24}>
               <EditText
                 label="Mật khẩu hiện tại"
@@ -449,14 +455,14 @@ const AccountInfo = () => {
             }
             gutter={[60, 0]}
           >
-            <Col lg={11} md={12} sm={12} xs={24}>
-              <div className="d-flex container justify-content-center align-items-center mb-30">
-                {/* <ZaloLogo /> */}
-                <img
+            <Col lg={11} md={24} sm={24} xs={24}>
+              <div className="d-flex justify-content-center align-items-center mb-30">
+                <ZaloLogo className="me-16" />
+                {/* <img
                   src={imgZalo}
                   alt=""
                   style={{ height: "100%", marginRight: "1rem" }}
-                />
+                /> */}
                 <div
                   className="d-flex justify-content-between"
                   style={{ flex: "1" }}
@@ -474,7 +480,7 @@ const AccountInfo = () => {
                 </div>
               </div>
               <div
-                className="d-flex container justify-content-center align-items-center"
+                className="d-flex justify-content-center align-items-center"
                 style={{ marginBottom: "30px" }}
               >
                 {/* <img
@@ -482,7 +488,7 @@ const AccountInfo = () => {
                   alt=""
                   style={{ height: "100%", marginRight: "1rem" }}
                 /> */}
-                <FacebookLogo />
+                <FacebookLogo className="me-16" />
                 <div
                   className="d-flex justify-content-between"
                   style={{ flex: "1" }}
@@ -507,12 +513,13 @@ const AccountInfo = () => {
                 </div>
               </div>{" "}
               <div id="sign-in-button"></div>
-              <div className="d-flex container justify-content-center align-items-center">
-                <img
+              <div className="d-flex justify-content-center align-items-center">
+                <GoogleLogo className="me-16" />
+                {/* <img
                   src={imgGG}
                   alt=""
                   style={{ height: "100%", marginRight: "1rem" }}
-                />
+                /> */}
                 <div
                   className="d-flex justify-content-between"
                   style={{ flex: "1" }}

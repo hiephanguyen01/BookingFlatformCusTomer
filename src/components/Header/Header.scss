@@ -4,17 +4,17 @@
   font-size: 15px;
   color: #828282;
   padding: 17px 0;
-  box-shadow: 4px 4px 10px 1px #00000005;
+  // box-shadow: 4px 4px 10px 1px #00000005;
   /* position: fixed; */
   z-index: 1;
   width: 100%;
-  top: 0;
+  // top: 0;
   background-color: #fff;
   display: flex;
   justify-content: center;
 
   /* height: 85px; */
-  .container {
+  .container-header {
     width: 100%;
 
     .img {

@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import HTMLEllipsis from "react-lines-ellipsis/lib/html";
 import { addLinebreaks } from "../../utils/convert";
 
-import "./readMoreDesc.scss";
+import "./readMoreInfoService.scss";
 
 const Index = ({ title = "", children }) => {
   const [toggle, setToggle] = useState(false);
 
   return (
-    <div className={`wrap-read-more ${toggle && "show"}`}>
+    <div className={`wrap-read-more-service ${toggle && "show"}`}>
       {title && <div className="title">{title}</div>}
       {!toggle ? (
         <div className="hide-text">

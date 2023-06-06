@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "./slideAlbum.scss";
 import { convertImage } from "../../utils/convertImage";
-import { ModalImage } from "../../components/ModalImg";
+import ModalImage from "../../components/ModalImg";
 import { studioPostService } from "../../services/StudioPostService";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CATEGORIES } from "../../utils/category";

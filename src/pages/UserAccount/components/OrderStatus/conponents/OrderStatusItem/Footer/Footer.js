@@ -135,7 +135,8 @@ export const Footer = ({
               }}
               className="FooterStatus__wait__button__1"
             >
-              <UploadOutlined /> Đã thanh toán
+
+              <UploadOutlined className="me-7" /> Đã thanh toán
             </Link>
             <Link
               to={`/home/confirm-order/${id}`}
@@ -164,7 +165,6 @@ export const Footer = ({
               Hủy đơn
             </button>
           )}
-
           <button
             className="FooterStatus__comming__contact"
             onClick={() => {

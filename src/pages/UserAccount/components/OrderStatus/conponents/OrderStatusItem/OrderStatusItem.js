@@ -1,5 +1,5 @@
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { Col, Divider } from "antd";
+import { Col, Divider, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -80,17 +80,18 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}>
+            onClick={navigateToDetail}
+          >
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
               twoToneColor="#52c41a"
             />
           </div>
-          <Col xs={0}>
-            <div className="OrderStatusItem__header__code">
+          <Col lg={8} md={12} sm={12} xs={0}>
+            <Row className="OrderStatusItem__header__code" justify="end">
               Mã booking: <span>{IdentifyCode}</span>
-            </div>
+            </Row>
           </Col>
         </div>
         <Divider className="style-divider" />
@@ -111,7 +112,8 @@ const OrderStatusItem = ({
                   navigate(
                     `/home/user/orderStatus/${id}?categoryId=${category}`
                   )
-                }>
+                }
+              >
                 {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">
@@ -181,7 +183,7 @@ const OrderStatusItem = ({
           setPageBooking={setPageBooking}
           Item={Item || item}
           post={post}
-          booking = {item}
+          booking={item}
         />
       </div>
     </>

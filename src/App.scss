@@ -165,6 +165,7 @@ h5 {
 .container {
   margin: 0 auto;
   max-width: 1300px;
+
 }
 
 .container_detail {
@@ -187,6 +188,7 @@ h5 {
 
 .App {
   width: 100%;
+  overflow: hidden;
 }
 
 .text-medium-re {
@@ -333,6 +335,16 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: center;
 }
 
+@media (max-width: 1300px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 992px) {}
+
+@media (max-width: 768px) {}
+
 @media (max-width: 576px) {
   .App {
     overflow: hidden;
@@ -342,4 +354,7 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 0 !important;
   }
 
+  .container {
+    padding: 0;
+  }
 }

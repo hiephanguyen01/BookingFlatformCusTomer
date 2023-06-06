@@ -1,5 +1,3 @@
-import classNames from "classnames/bind";
-import styles from "../../Home/ListCard/ListCard.module.scss";
 import "./styles.scss";
 import { Card } from "../../../components/Card";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,21 +11,8 @@ import "./styles.scss";
 // import required modules
 import { Navigation, Autoplay } from "swiper";
 import CarSkeleton from "../../../components/Skeleton/CarSkeleton";
-const cx = classNames.bind(styles);
 
 export const SlideCard = ({ title, data, category, loading = false }) => {
-  // const [fakeLoading, setFakeLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const a = setTimeout(() => {
-  //     setFakeLoading(false);
-  //   }, 3000);
-
-  //   return () => {
-  //     clearTimeout(a);
-  //   };
-  // }, [data]);
-
   return (
     <>
       <div className={"ListItem"}>
@@ -51,15 +36,23 @@ export const SlideCard = ({ title, data, category, loading = false }) => {
                 slidesPerView: 1.5,
                 spaceBetween: 10,
               },
-              640: {
+              560: {
                 slidesPerView: 2,
                 spaceBetween: 10,
               },
-              768: {
+              740: {
                 slidesPerView: 3,
                 spaceBetween: 10,
               },
-              1024: {
+              860: {
+                slidesPerView: 4,
+                spaceBetween: 10,
+              },
+              1050: {
+                slidesPerView: 5,
+                spaceBetween: 10,
+              },
+              1250: {
                 slidesPerView: 6,
                 spaceBetween: 10,
               },
