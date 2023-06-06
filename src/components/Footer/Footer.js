@@ -18,15 +18,19 @@ const Footer = () => {
   const location = useLocation();
   const screens = useBreakpoint();
   return (
-    <>
+    <div className="container">
       {!location.pathname.includes("dao/posts") && (
         <div className="Footer">
           <div className="container">
             <Row gutter={[40, 20]}>
-              <Col sm={24} md={12} lg={6} xs={24}>
+              <Col sm={12} md={6} lg={6} xs={24}>
                 <p className="title">TẢI ỨNG DỤNG BOOKING STUDIO</p>
                 <Row
-                  className="logo"
+                  className={`logo ${
+                    screens?.sm && !screens?.lg && !screens?.md
+                      ? "w-60"
+                      : "w-100"
+                  }`}
                   align="middle"
                   justify={`${screens?.xs && "center"}`}
                   gutter={screens?.xs ? [15, 0] : [12, 0]}
@@ -74,7 +78,7 @@ const Footer = () => {
                   </Col>
                 </Row>
                 <Col
-                  align={"start"}
+                  align={screens?.xs ? "middle" : "start"}
                   style={screens.xs ? { margin: "30px 0" } : { padding: 0 }}
                 >
                   <span className="item">Theo dõi chúng tôi trên</span>
@@ -86,8 +90,8 @@ const Footer = () => {
                 </Col>
               </Col>
               <Col
-                sm={24}
-                md={12}
+                sm={12}
+                md={6}
                 lg={6}
                 xs={24}
                 align={`${screens.xs ? "middle" : "start"}`}
@@ -108,20 +112,20 @@ const Footer = () => {
                     </li>
                   </a>
                   <li className="mt-20">
-                    <Link className="item " to="/home/user/privacy-policy">
+                    <Link className="item " to="/home/privacy-policy">
                       Chính sách bảo mật
                     </Link>
                   </li>
                   <li className="mt-20">
-                    <Link className="item" to="/home/user/terms-use">
+                    <Link className="item" to="/home/terms-use">
                       Điều khoản sử dụng
                     </Link>
                   </li>
                 </ul>
               </Col>
               <Col
-                sm={24}
-                md={12}
+                sm={12}
+                md={6}
                 lg={6}
                 xs={24}
                 align={`${screens.xs ? "middle" : "start"}`}
@@ -145,8 +149,8 @@ const Footer = () => {
                 </ul>
               </Col>
               <Col
-                sm={24}
-                md={12}
+                sm={12}
+                md={6}
                 lg={6}
                 xs={24}
                 align={`${screens.xs ? "middle" : "start"}`}
@@ -170,7 +174,7 @@ const Footer = () => {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

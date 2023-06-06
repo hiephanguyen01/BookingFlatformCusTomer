@@ -14,13 +14,8 @@ const Liked = () => {
   const screens = useBreakpoint();
   const dispatch = useDispatch();
   const { TabPane } = Tabs;
-  // const onChange = (key) => {
-  //   dispatch(getAllStudioLikedAction1(+key));
-  //   dispatch(getAllStudioLikedAction(+key));
-  // };
   useEffect(() => {
     dispatch(getAllStudioLikedAction(1));
-    // dispatch(getAllStudioLikedAction1(1));
   }, [dispatch]);
   const { listLikedUser } = useSelector((state) => state.studioPostReducer);
   return (

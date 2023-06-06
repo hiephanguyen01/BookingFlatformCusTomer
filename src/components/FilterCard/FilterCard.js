@@ -246,14 +246,14 @@ const FilterCard = ({ data, category }) => {
                 </Row>
 
                 <Row style={{ width: "100%" }} className="mt-10">
-                  <Row className="w-100 mb-10">
-                    <Col lg={19} md={18} sm={24} xs={24}>
-                      <Row className="w-100" align="middle">
+                  <Row className="w-100 mb-10" align="middle">
+                    <Col lg={19} md={18} sm={18} xs={24}>
+                      <div className="w-100 d-flex align-items-center">
                         <LocationIcon className="me-10" />
                         <p className="description ">{data?.Address}</p>
-                      </Row>
+                      </div>
                     </Col>
-                    <Col lg={5} md={6} sm={24} xs={24} className="right-text">
+                    <Col lg={5} md={6} sm={6} xs={24} className="right-text">
                       <p>
                         <StarFilled
                           style={{ color: "#F8D93A" }}
@@ -264,8 +264,8 @@ const FilterCard = ({ data, category }) => {
                       </p>
                     </Col>
                   </Row>
-                  <Row className="w-100 mb-10">
-                    <Col lg={19} md={18} sm={24} xs={24}>
+                  <Row className="w-100 mb-10" align="middle">
+                    <Col lg={19} md={18} sm={18} xs={24}>
                       <div className="description-category">
                         <img
                           src={categories[data?.category]?.img}
@@ -275,7 +275,7 @@ const FilterCard = ({ data, category }) => {
                         {categories[data?.category]?.name}
                       </div>
                     </Col>
-                    <Col lg={5} md={6} sm={24} xs={24} className="right-text">
+                    <Col lg={5} md={6} sm={6} xs={24} className="right-text">
                       <p>Đã đặt {data?.BookingCount}</p>
                     </Col>
                   </Row>

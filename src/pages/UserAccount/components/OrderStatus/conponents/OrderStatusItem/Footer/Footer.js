@@ -114,7 +114,8 @@ export const Footer = ({
                 moment().diff(booking?.CreationTime, "minutes") > 15
                   ? "not-allowed"
                   : "",
-            }}>
+            }}
+          >
             <Link
               to={`/home/confirm-order/${id}`}
               state={{
@@ -125,7 +126,6 @@ export const Footer = ({
                 Category: Category,
               }}
               //
-
               className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
@@ -155,7 +155,8 @@ export const Footer = ({
         <div className="FooterStatus__comming">
           <button
             className="FooterStatus__comming__cancel"
-            onClick={() => setShowModal(true)}>
+            onClick={() => setShowModal(true)}
+          >
             Hủy đơn
           </button>
           <button
@@ -163,7 +164,8 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}>
+            }}
+          >
             Liên hệ
           </button>
           <Modal
@@ -172,7 +174,8 @@ export const Footer = ({
             okText="Đồng ý"
             cancelText="Thoát"
             onCancel={() => setShowModal(false)}
-            onOk={() => handleCancelOrder()}>
+            onOk={() => handleCancelOrder()}
+          >
             <>
               <div>
                 Quý khách có thể huỷ đơn đặt cho đến{" "}
@@ -190,9 +193,8 @@ export const Footer = ({
                 className="mt-3"
                 rows={4}
                 style={{ resize: "none" }}
-                onChange={(e) =>
-                  setCancelReason(e.target.value)
-                }></Input.TextArea>
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></Input.TextArea>
               <Divider />
               <section className="chile">
                 <div className="df">
@@ -259,7 +261,8 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal">
+            className="FooterStatus__complete__modal"
+          >
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

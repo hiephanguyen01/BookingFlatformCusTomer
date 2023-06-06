@@ -9,6 +9,8 @@ import { ReactComponent as UpComing } from "../../../../../assets/infoUser/upcom
 import { ReactComponent as CancelOrder } from "../../../../../assets/infoUser/cancelOrder.svg";
 import { ReactComponent as RatingOrder } from "../../../../../assets/infoUser/rating.svg";
 import "./account.scss";
+import { convertImage } from "../../../../../utils/convertImage";
+import { ImageDetect } from "../../../../../components/ImageDetect/ImageDetect";
 
 const Account = () => {
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -18,7 +20,7 @@ const Account = () => {
         <Col span={6} align={"middle"}>
           <Avatar
             size={"large"}
-            src={currentUser?.Image}
+            src={ImageDetect(currentUser)}
             icon={<UserOutlined />}
             className="avatar-circle"
           />

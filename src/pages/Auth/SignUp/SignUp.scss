@@ -78,7 +78,7 @@
   width: 100%;
 
   .phone-zone-sign-up {
-    margin-bottom: 40px;
+    margin-bottom: 25px;
     width: 100%;
     border: 1px solid #d9d9d9;
     padding: 6.5px 11px;
@@ -98,9 +98,10 @@
 
     .invalidPhone {
       position: absolute;
-      bottom: -30px;
+      bottom: -25px;
       right: 0px;
       color: $primary-700;
+      font-size: 14px;
     }
 
     .input-phone {
@@ -119,6 +120,13 @@
     .d-none {
       display: none;
     }
+  }
+}
+
+.text-confirm {
+
+  a {
+    color: #1976d2;
   }
 }
 

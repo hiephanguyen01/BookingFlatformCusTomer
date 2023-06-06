@@ -2,8 +2,8 @@
 
 .FilterPage {
   width: 100%;
-  // height: 100vh;
   background-color: #f5f5f5;
+  overflow: hidden;
 
   .filterHeader {
     background-color: #fff;
@@ -143,66 +143,56 @@
     display: none;
   }
 
-  .container {
-    .ant-form-item-label {
-      label {
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 22px;
-        color: #3f3f3f;
-      }
-    }
-
-    .category_radio_group {
+  .ant-form-item-label {
+    label {
       font-weight: 700;
       font-size: 16px;
       line-height: 22px;
-      /* identical to box height */
-
-      /* Neutral/Grey 600 */
-
       color: #3f3f3f;
+    }
+  }
 
-      .ant-radio-wrapper {
-        width: 100%;
-        margin: 5px 0;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 22px;
-        color: #3f3f3f;
-      }
+  .category_radio_group {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: #3f3f3f;
+
+    .ant-radio-wrapper {
+      width: 100%;
+      margin: 5px 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      color: #3f3f3f;
     }
 
-    .filter_price_container {
-      .ant-radio-wrapper {
-        width: 100%;
-        margin: 5px 0;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 22px;
-        color: #3f3f3f;
-      }
 
-      .ant-slider {
-        &-mark {
-          &-text {
-            &:last-child {
-              transform: translateX(-90%) !important;
-            }
-          }
-        }
-      }
+  }
+
+  .filter_price_container {
+    .ant-radio-wrapper {
+      width: 100%;
+      margin: 5px 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      color: #3f3f3f;
     }
 
-    .filter_rating_container {
-      .ant-radio-wrapper {
-        width: 100%;
-        margin: 5px 0;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 22px;
-        color: #3f3f3f;
-      }
+    .ant-slider-mark-text:last-child {
+      transform: translateX(-100%) !important;
+    }
+  }
+
+  .filter_rating_container {
+    .ant-radio-wrapper {
+      width: 100%;
+      margin: 5px 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      color: #3f3f3f;
     }
   }
 
@@ -223,11 +213,7 @@
   }
 }
 
-@media (max-width: 576px) {
-  .container {
-    width: 95% !important;
-  }
-}
+@media (max-width: 576px) {}
 
 .popover_price {
   width: 250px !important;
