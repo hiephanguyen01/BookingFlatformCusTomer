@@ -117,7 +117,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -155,7 +156,8 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}>
+              onClick={() => navigate("/home/user/")}
+            >
               Thông tin tài khoản
             </Button>
           ),
@@ -168,7 +170,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -529,7 +532,7 @@ const Header = () => {
                       </Button>
                     </Form.Item>
                   </Form>
-                <div className="user">
+                </div>
               </Modal>
             )}
           </>

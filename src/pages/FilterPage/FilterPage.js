@@ -478,7 +478,8 @@ const FilterPage = () => {
               <Row
                 align="middle"
                 justify="space-around"
-                style={{ textAlign: "center" }}>
+                style={{ textAlign: "center" }}
+              >
                 <Col span={3}>
                   <ArrowLeftOutlined
                     style={{ fontSize: "18px" }}
@@ -519,7 +520,8 @@ const FilterPage = () => {
                       "",
                       {}
                     )
-                  }>
+                  }
+                >
                   <Badge count={0} size="default">
                     <ShoppingOutlined
                       style={{ fontSize: "25px", color: "#828282" }}
@@ -549,7 +551,8 @@ const FilterPage = () => {
                         </div>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}>
+                          style={{ textAlign: "center", margin: "0 auto" }}
+                        >
                           {selectProvince ? (
                             <>
                               {districts.map((val) => (
@@ -565,7 +568,8 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseDistrict(val);
-                                    }}>
+                                    }}
+                                  >
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -586,7 +590,8 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseProvinceMobile(val);
-                                    }}>
+                                    }}
+                                  >
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -625,7 +630,8 @@ const FilterPage = () => {
                           }
                         }}
                       />
-                    }>
+                    }
+                  >
                     <Button className="btn-item-filter">
                       Địa điểm <DownOutlined className="icon" />
                     </Button>
@@ -637,7 +643,8 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Danh mục</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}>
+                          style={{ textAlign: "center", margin: "0 auto" }}
+                        >
                           {categories.slice(1, 7).map((val) => (
                             <Col span={12}>
                               <div
@@ -649,7 +656,8 @@ const FilterPage = () => {
                                     ? "active"
                                     : ""
                                 } `}
-                                onClick={() => handleChooseCategory(val)}>
+                                onClick={() => handleChooseCategory(val)}
+                              >
                                 {val.name}
                               </div>
                             </Col>
@@ -681,7 +689,8 @@ const FilterPage = () => {
                           );
                         }}
                       />
-                    }>
+                    }
+                  >
                     <Button className="btn-item-filter">
                       Danh mục <DownOutlined className="icon" />
                     </Button>
@@ -692,7 +701,8 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Giá</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}>
+                          style={{ textAlign: "center", margin: "0 auto" }}
+                        >
                           {PRICE_FILTER.map((val) => (
                             <Col span={12}>
                               <div
@@ -700,7 +710,8 @@ const FilterPage = () => {
                                 className={`btn-price-item ${
                                   choosePrice === val.value ? "active" : ""
                                 }`}
-                                onClick={() => setChoosePrice(val.value)}>
+                                onClick={() => setChoosePrice(val.value)}
+                              >
                                 {val.label}
                               </div>
                             </Col>
@@ -751,7 +762,8 @@ const FilterPage = () => {
                           );
                         }}
                       />
-                    }>
+                    }
+                  >
                     <Button className="btn-item-filter">
                       Giá <DownOutlined className="icon" />
                     </Button>
@@ -901,7 +913,8 @@ const FilterPage = () => {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                  }}>
+                  }}
+                >
                   <div
                     style={{
                       background: "white",
@@ -909,7 +922,8 @@ const FilterPage = () => {
                       borderRadius: "50%",
                       padding: "10px",
                       margin: "10px",
-                    }}>
+                    }}
+                  >
                     <LoadingOutlined style={{ fontSize: "40px" }} />
                   </div>
                 </div>
