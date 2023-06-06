@@ -95,6 +95,7 @@ const OrderDetail = () => {
   const depositPercent = booking?.OrderByTime
     ? booking?.CancelPriceByHour
     : booking?.CancelPriceByDate;
+  const checkOrderByDateFrom = booking?.OrderByDateFrom > moment().format();
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -286,14 +287,15 @@ const OrderDetail = () => {
     ),
     2: (
       <div style={{ margin: "0 auto", gap: "8px" }} align="center">
-        <Button
+        {checkOrderByDateFrom && <Button
           type="text"
           onClick={() => setShowModal(true)}
           style={{ color: "#e60019", marginRight: "20px", borderRadius: "8px" }}
           size="large"
         >
           Huỷ đơn
-        </Button>
+        </Button>} 
+        
         <Button
           style={{
             color: "#009874",

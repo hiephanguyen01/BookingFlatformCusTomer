@@ -39,11 +39,12 @@ export const Footer = ({
   // const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
+  const checkOrderByDateFrom = booking?.OrderByDateFrom > moment().format();
   const dispatch = useDispatch();
   const CancleFreeDate = moment(
     booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
   )
-    .add(
+    .subtract(
       booking?.OrderByTime
         ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
         : booking?.FreeCancelByDate?.match(/\d+/g)[0],
@@ -126,6 +127,7 @@ export const Footer = ({
                 Category: Category,
               }}
               //
+
               className="FooterStatus__wait__button__1">
               <UploadOutlined /> Đã thanh toán
             </Link>
@@ -153,12 +155,14 @@ export const Footer = ({
     case 2:
       return (
         <div className="FooterStatus__comming">
-          <button
-            className="FooterStatus__comming__cancel"
-            onClick={() => setShowModal(true)}
-          >
-            Hủy đơn
-          </button>
+          {checkOrderByDateFrom && (
+            <button
+              className="FooterStatus__comming__cancel"
+              onClick={() => setShowModal(true)}
+            >
+              Hủy đơn
+            </button>
+          )}
           <button
             className="FooterStatus__comming__contact"
             onClick={() => {

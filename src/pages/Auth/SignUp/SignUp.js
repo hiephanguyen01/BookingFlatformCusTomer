@@ -10,7 +10,7 @@ import "./SignUp.scss";
 export const SignUp = ({ onClickSignUp }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [phoneNum, setPhoneNum] = useState("");
+  const [phoneNum, setPhoneNum] = useState("0917773564");
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const handleSendOtpp = () => {
@@ -105,6 +105,7 @@ export const SignUp = ({ onClickSignUp }) => {
       >
         Đăng ký
       </Button>
+      
       <div className="have-account">
         <span className="have-account-content">Bạn đã có tài khoản?</span>
         {onClickSignUp ? (
