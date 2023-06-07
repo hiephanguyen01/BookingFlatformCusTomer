@@ -46,6 +46,7 @@
     "react-scroll": "^1.8.7",
     "react-scroll-to-bottom": "^4.2.0",
     "react-spinners": "^0.13.4",
+    "react-sticky": "^6.0.3",
     "react-sticky-box": "^1.0.2",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",

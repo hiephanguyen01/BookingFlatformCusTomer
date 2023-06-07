@@ -1,3 +1,5 @@
+@import "../../App.scss";
+
 .wrapper {
   max-width: 1300px;
   margin: auto;
@@ -186,7 +188,6 @@
 
 .box2 {
   display: flex;
-  gap: 12px;
 
   .left {
     display: flex;
@@ -457,12 +458,82 @@
           }
         }
       }
+
+      .wrap_btn {
+        gap: 8px;
+
+        .btn_add {
+          height: 50px;
+          width: 60%;
+          background-color: $neutral-100 !important;
+          border-radius: 8px !important;
+          font-weight: 700 !important;
+          font-size: 14px !important;
+          line-height: 19px !important;
+          color: #000000 !important;
+          text-transform: uppercase !important;
+        }
+
+        .btn_order {
+          height: 50px;
+          width: 40%;
+          background-color: $primary-700 !important;
+          border-radius: 8px !important;
+          font-weight: 700 !important;
+          font-size: 14px !important;
+          line-height: 19px !important;
+          color: #FFFFFF !important;
+          text-transform: uppercase !important;
+        }
+      }
     }
   }
 }
 
 .paginate {
   margin-top: 16px !important;
+}
+
+@media (max-width: 992px) {
+  .studioDetail {
+
+    .right {
+
+      .item {
+        flex-wrap: wrap;
+        gap: 6px;
+
+        h3 {
+          margin-bottom: 0px !important;
+        }
+
+        &+.item {
+          margin-top: 12px;
+        }
+      }
+
+      .wrap_btn {
+        flex-wrap: wrap;
+        gap: 20px !important;
+
+        .btn_add,
+        .btn_order {
+          width: 100% !important;
+        }
+      }
+
+
+    }
+  }
+
+}
+
+@media (max-width: 768px) {
+  .studioDetail {
+
+    .right {}
+  }
+
 }
 
 @media (max-width: 576px) {
@@ -506,6 +577,18 @@
       .order {
         padding: 15px;
       }
+
+      .wrap_btn {
+        flex-wrap: nowrap;
+
+        .btn_add {
+          width: 60% !important;
+        }
+
+        .btn_order {
+          width: 40% !important;
+        }
+      }
     }
 
     .left {
@@ -521,6 +604,12 @@
 
       h3 {
         font-size: 18px !important;
+      }
+
+      .address {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
       }
 
       .map {
