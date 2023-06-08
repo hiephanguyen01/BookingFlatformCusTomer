@@ -83,9 +83,9 @@ const Index = ({ linkTo = "" }) => {
     dispatch(studioDetailAction(id, cate));
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
     return () => {
-      // dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      // dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
-      // dispatch({ type: SET_FILTER_SERVICE, payload: {} });
+      dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+      dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
+      dispatch({ type: SET_FILTER_SERVICE, payload: {} });
     };
   }, [cate, dispatch, id, user]);
   useEffect(() => {
