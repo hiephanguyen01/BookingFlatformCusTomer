@@ -108,37 +108,49 @@ export const ChatBody = () => {
   useEffect(() => {
     (async () => {
       const res = await chatService.getConversation(8, 1, UserMe.id, 1);
-      initMountStateUser.current = res?.data?.data;
-      setConversation(res?.data?.data);
-      setToggleState(res?.data?.data[0]?.id);
-      dispatch({ type: TOGGLE_STATE, payload: res?.data?.data[0]?.id });
+      let newData = res?.data?.data.filter(
+        (val) => !val.hasOwnProperty("AdminId")
+      );
+      console.log(newData);
+      initMountStateUser.current = newData;
+      setConversation(newData);
+      setToggleState(newData[0]?.id);
+      dispatch({ type: TOGGLE_STATE, payload: newData[0]?.id });
     })();
   }, [UserMe?.id, dispatch]);
 
   // ******* Utilize the socket *******
   useEffect(() => {
-    socket.on("receive_message", () => {
-      (async () => {
-        const { data } = await chatService.getConversation(1, 1, UserMe.id, 1);
-        let newConversationUser = [...initMountStateUser.current];
-        if (
-          newConversationUser.findIndex((i) => i.id === data.data[0].id) !== -1
-        ) {
-          var indexofff = newConversationUser.reduce(function (a, e, i) {
-            if (e.id === data.data[0].id) a.push(i);
-            return a;
-          }, []);
-          for (const itm of indexofff) {
-            newConversationUser.splice(itm, 1);
+    if (socket) {
+      socket.on("receive_message", () => {
+        (async () => {
+          const { data } = await chatService.getConversation(
+            1,
+            1,
+            UserMe.id,
+            1
+          );
+          let newConversationUser = [...initMountStateUser.current];
+          if (
+            newConversationUser.findIndex((i) => i.id === data.data[0].id) !==
+            -1
+          ) {
+            var indexofff = newConversationUser.reduce(function (a, e, i) {
+              if (e.id === data.data[0].id) a.push(i);
+              return a;
+            }, []);
+            for (const itm of indexofff) {
+              newConversationUser.splice(itm, 1);
+            }
+            initMountStateUser.current = [data.data[0], ...newConversationUser];
+            setConversation(initMountStateUser.current);
+          } else {
+            initMountStateUser.current = [data.data[0], ...newConversationUser];
+            setConversation(initMountStateUser.current);
           }
-          initMountStateUser.current = [data.data[0], ...newConversationUser];
-          setConversation(initMountStateUser.current);
-        } else {
-          initMountStateUser.current = [data.data[0], ...newConversationUser];
-          setConversation(initMountStateUser.current);
-        }
-      })();
-    });
+        })();
+      });
+    }
   }, [UserMe?.id]);
 
   const retrieveConversationMessages = async (setInfoChatAdmin) => {

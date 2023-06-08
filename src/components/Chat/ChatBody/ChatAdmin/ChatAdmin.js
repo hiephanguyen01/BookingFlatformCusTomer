@@ -26,16 +26,13 @@ export const ChatAdmin = React.memo(
     const dispatch = useDispatch();
 
     const createConversationIfNoneWereFound = async () => {
-      console.log("Before creating the conversation");
       const { data } = await chatService.createConversation(
         null,
         UserMe.id,
         true
       );
-      console.log("After creating the conversation", data);
 
       if (data.payload.appropriateResponseType === "create") {
-        console.log("Calling the socket");
         socket.emit("send_message_admin", {
           messageContent: {
             id: Math.random(),
@@ -50,6 +47,11 @@ export const ChatAdmin = React.memo(
         });
       }
       retrieveConversationMessages(setInfoChatAdmin);
+
+      // Remove this ConversationId out of notiMessage in Redux
+      // console.log(data.payload.id);
+      dispatch({ type: "REMOVE_NOTIFY_MESS", payload: data.payload.id });
+      //*******************************************************
 
       dispatch(createConverAction(data?.payload?.id));
     };
@@ -104,9 +106,11 @@ export const ChatAdmin = React.memo(
         className={toggleState === 1000000 ? "User  User__current " : "User "}
         onClick={async () => {
           //Create conversation in ConversationUser table
-          createConversationIfNoneWereFound();
-
+          if (socket) {
+            createConversationIfNoneWereFound();
+          }
           //**************************** */
+
           toggleClick(1000000);
           setIsRead(true);
           if (lastMessage?.CustomerId === -1 && lastMessage?.IsRead === false) {

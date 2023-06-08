@@ -220,7 +220,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             height={35}
           ></img>
           <div className="ChatContent__header__user">
-            <div>{chatInfo.PartnerId.PartnerName}</div>
+            <div>{chatInfo?.PartnerId?.PartnerName}</div>
           </div>
         </div>
         {booking.length > 0 && (
