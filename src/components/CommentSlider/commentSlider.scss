@@ -12,9 +12,18 @@
             height: 100%;
             border: 1px solid #e7e7e7;
             border-radius: 8px;
-            overflow: hidden;
+            // overflow: hidden;
 
             text-align: start;
+            position: relative;
+
+            .icon-close {
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 1;
+                color: rgba($color: #000000, $alpha: 0.5);
+            }
 
             // cursor: pointer;
 
@@ -22,6 +31,7 @@
                 display: flex;
                 justify-content: space-between;
                 overflow: hidden;
+
             }
 
             &_info {
@@ -44,6 +54,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 height: 16;
+                width: 95%;
             }
 
             &_description {
