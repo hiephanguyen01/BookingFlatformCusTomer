@@ -74,6 +74,9 @@ const OrderDetail = () => {
       setFile(newFile);
     }
   };
+  console.log(
+    booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
+  );
   const CancleFreeDate = moment(
     booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
   )
@@ -83,19 +86,17 @@ const OrderDetail = () => {
         : booking?.FreeCancelByDate?.match(/\d+/g)[0],
       `${booking?.OrderByTime ? "hours" : "days"}`
     )
+    .utc()
     .format("DD/MM/YYYY HH:mm A");
-  // const CancleFreeDate = moment(booking?.CreationTime)
-  //   .add(
-  //     booking?.OrderByTime
-  //       ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
-  //       : booking?.FreeCancelByDate?.match(/\d+/g)[0],
-  //     `${booking?.OrderByTime ? "hours" : "days"}`
-  //   )
-  //   .format("DD/MM/YYYY HH:mm A");
+  
   const depositPercent = booking?.OrderByTime
     ? booking?.CancelPriceByHour
     : booking?.CancelPriceByDate;
-  const checkOrderByDateFrom = booking?.OrderByDateFrom > moment().format();
+  const checkOrderByDateFrom =
+    (booking?.OrderByTime
+      ? booking?.OrderByTimeFrom
+      : booking?.OrderByDateFrom) > moment().format();
+
   const handleCancelOrder = async () => {
     try {
       if (cancelReason === "") {
@@ -287,15 +288,21 @@ const OrderDetail = () => {
     ),
     2: (
       <div style={{ margin: "0 auto", gap: "8px" }} align="center">
-        {checkOrderByDateFrom && <Button
-          type="text"
-          onClick={() => setShowModal(true)}
-          style={{ color: "#e60019", marginRight: "20px", borderRadius: "8px" }}
-          size="large"
-        >
-          Huỷ đơn
-        </Button>} 
-        
+        {checkOrderByDateFrom && (
+          <Button
+            type="text"
+            onClick={() => setShowModal(true)}
+            style={{
+              color: "#e60019",
+              marginRight: "20px",
+              borderRadius: "8px",
+            }}
+            size="large"
+          >
+            Huỷ đơn
+          </Button>
+        )}
+
         <Button
           style={{
             color: "#009874",

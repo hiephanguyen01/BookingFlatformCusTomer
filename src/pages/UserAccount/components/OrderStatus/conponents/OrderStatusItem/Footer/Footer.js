@@ -38,8 +38,12 @@ export const Footer = ({
   const [cancelReason, setCancelReason] = useState("");
   // const [data, setDate] = useState([]);
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  console.log("booking", booking);
+  const checkOrderByDateFrom =
+    (booking?.OrderByTime
+      ? booking?.OrderByTimeFrom
+      : booking?.OrderByDateFrom) > moment().format();
 
-  const checkOrderByDateFrom = booking?.OrderByDateFrom > moment().format();
   const dispatch = useDispatch();
   const CancleFreeDate = moment(
     booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
@@ -49,7 +53,7 @@ export const Footer = ({
         ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
         : booking?.FreeCancelByDate?.match(/\d+/g)[0],
       `${booking?.OrderByTime ? "hours" : "days"}`
-    )
+    ).utc()
     .format("DD/MM/YYYY HH:mm A");
 
   const depositPercent = booking?.OrderByTime
@@ -128,7 +132,8 @@ export const Footer = ({
               }}
               //
 
-              className="FooterStatus__wait__button__1">
+              className="FooterStatus__wait__button__1"
+            >
               <UploadOutlined /> Đã thanh toán
             </Link>
             <Link
@@ -146,7 +151,8 @@ export const Footer = ({
                   moment().diff(booking.CreationTime, "minutes") > 15
                     ? "none"
                     : "auto",
-              }}>
+              }}
+            >
               Thanh toán cọc
             </Link>
           </div>
@@ -155,6 +161,12 @@ export const Footer = ({
     case 2:
       return (
         <div className="FooterStatus__comming">
+          {console.log(
+            "dsadsa",
+            booking?.OrderByTime
+              ? booking?.OrderByTimeFrom
+              : booking?.OrderByDateFrom
+          )}
           {checkOrderByDateFrom && (
             <button
               className="FooterStatus__comming__cancel"
