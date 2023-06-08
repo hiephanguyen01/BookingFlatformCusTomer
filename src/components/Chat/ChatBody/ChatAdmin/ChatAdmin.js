@@ -48,6 +48,11 @@ export const ChatAdmin = React.memo(
       }
       retrieveConversationMessages(setInfoChatAdmin);
 
+      // Remove this ConversationId out of notiMessage in Redux
+      // console.log(data.payload.id);
+      dispatch({ type: "REMOVE_NOTIFY_MESS", payload: data.payload.id });
+      //*******************************************************
+
       dispatch(createConverAction(data?.payload?.id));
     };
 
@@ -101,9 +106,11 @@ export const ChatAdmin = React.memo(
         className={toggleState === 1000000 ? "User  User__current " : "User "}
         onClick={async () => {
           //Create conversation in ConversationUser table
-          createConversationIfNoneWereFound();
-
+          if (socket) {
+            createConversationIfNoneWereFound();
+          }
           //**************************** */
+
           toggleClick(1000000);
           setIsRead(true);
           if (lastMessage?.CustomerId === -1 && lastMessage?.IsRead === false) {

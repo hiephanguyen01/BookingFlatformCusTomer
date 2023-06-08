@@ -1,4 +1,10 @@
-import { FIND_CONVERSATION ,CREATE_CONVERSATION,UPDATE_SCROLL, FLAG_CLOSE_CONVERSATION} from "../types/messType";
+import { chatService } from "../../services/ChatService";
+import {
+  FIND_CONVERSATION,
+  CREATE_CONVERSATION,
+  UPDATE_SCROLL,
+  FLAG_CLOSE_CONVERSATION,
+} from "../types/messType";
 
 export const findConverAction = (data) => {
   return {
@@ -15,12 +21,12 @@ export const createConverAction = (data) => {
 export const updateMAction = (data) => {
   return {
     type: UPDATE_SCROLL,
-    payload: data
+    payload: data,
   };
 };
-export const closeConversationAction = (data)=> {
+export const closeConversationAction = (data) => {
   return {
-    type:FLAG_CLOSE_CONVERSATION,
-    payload:data
-  }
-}
+    type: FLAG_CLOSE_CONVERSATION,
+    payload: data,
+  };
+};

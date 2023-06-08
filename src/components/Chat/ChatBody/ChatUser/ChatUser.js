@@ -62,7 +62,7 @@ export const ChatUser = React.memo(
         <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
           <div className="d-flex align-items-center h-100">
             <HandleImg
-              Name={userInfo?.PartnerId.PartnerName}
+              Name={userInfo?.PartnerId?.PartnerName}
               src={""}
               width={34}
               className="d-flex align-self-center me-10"
@@ -71,9 +71,9 @@ export const ChatUser = React.memo(
           <div className="py-2 h-100 w-100 d-flex flex-column justify-content-between">
             <div className="d-flex justify-content-between align-items-center h-100">
               <p className="User__name">
-                {userInfo?.PartnerId.PartnerName.toString().length <= 15
-                  ? userInfo?.PartnerId.PartnerName
-                  : `${userInfo?.PartnerId.PartnerName.toString().slice(
+                {userInfo?.PartnerId?.PartnerName.toString().length <= 15
+                  ? userInfo?.PartnerId?.PartnerName
+                  : `${userInfo?.PartnerId?.PartnerName.toString().slice(
                       0,
                       15
                     )}...`}

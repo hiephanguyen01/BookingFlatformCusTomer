@@ -24,6 +24,7 @@ import {
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import "./dao.scss";
 import Resizer from "react-image-file-resizer";
+import { useLocation } from "react-router-dom";
 export const resizeImage = (file) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
