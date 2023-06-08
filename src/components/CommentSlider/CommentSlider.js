@@ -6,8 +6,20 @@ import "./commentSlider.scss";
 import "swiper/css";
 import "swiper/css/navigation";
 import { convertImage } from "../../utils/convertImage";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
-const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
+const CommentSlider = ({
+  data = [],
+  slidesPerView = 2.5,
+  handleUpdateComment = () => {},
+  id,
+  PostId,
+  BookingUserId,
+}) => {
+  const currentUser = useSelector(
+    (state) => state.authenticateReducer.currentUser
+  );
   const convertCategory = (category) => {
     switch (category) {
       case 1:
@@ -59,6 +71,20 @@ const CommentSlider = ({ data = [], slidesPerView = 2.5 }) => {
       >
         {data?.map((item, index) => (
           <SwiperSlide key={index} className="post_slider_item w-100">
+            {currentUser?.id === BookingUserId && (
+              <CloseCircleOutlined
+                className="icon-close"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleUpdateComment({
+                    serviceId: item?.id,
+                    PostId,
+                    category: item?.category,
+                    id,
+                  });
+                }}
+              />
+            )}
             <a
               href={`${window.location.origin}/home/${convertCategory(
                 item.category
