@@ -47,7 +47,6 @@ const OrderStatusItem = ({
       }
     })();
   }, [TenantId, category]);
-  console.log(post, item);
   const navigateToDetail = () => {
     switch (category) {
       case 1:
