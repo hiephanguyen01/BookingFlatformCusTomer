@@ -278,7 +278,7 @@ const Dao = () => {
             </button>
           </PopUpSignIn>
         </header>
-        <article className="dao__container__tag d-flex align-items-center justify-content-evenly">
+        <article className="dao__container__tag d-flex align-items-center ">
           {screens.xs ? (
             <div className="category-mobile-slide">
               <li
@@ -315,6 +315,9 @@ const Dao = () => {
                     } else {
                       newFilter.tags.push(item.id);
                     }
+                    if (newFilter.tags.length === 6) {
+                      newFilter.tags = [];
+                    }
                     setFilter(newFilter);
                   }}
                 >
@@ -324,9 +327,9 @@ const Dao = () => {
               ))}
             </div>
           ) : (
-            <Row>
+            <Row className="w-100 category-desk" justify="space-between">
               <li
-                className={`dao__container__tag__item d-flex align-items-center ${
+                className={`dao__container__tag__item d-flex align-items-center justify-content-center ${
                   filter.tags.length > 0 &&
                   filter.tags.length !== tagItems.length
                     ? ""
@@ -346,7 +349,7 @@ const Dao = () => {
               </li>
               {tagItems.map((item, idx) => (
                 <li
-                  className={`dao__container__tag__item d-flex align-items-center ${
+                  className={`dao__container__tag__item d-flex align-items-center justify-content-center ${
                     filter.tags.includes(item.id) ? "active" : ""
                   }`}
                   key={item.id}
@@ -358,6 +361,9 @@ const Dao = () => {
                       );
                     } else {
                       newFilter.tags.push(item.id);
+                    }
+                    if (newFilter.tags.length === 6) {
+                      newFilter.tags = [];
                     }
                     setFilter(newFilter);
                   }}

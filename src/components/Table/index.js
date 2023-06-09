@@ -27,7 +27,7 @@ const Index = ({ column, row = [], rowNumber = 5, className = "", style }) => {
     <div className={`w-100 table ${className}`} style={{ ...style }} ref={ref}>
       <Row>
         <div
-          className="px-24 py-22 mb-12 w-100"
+          className="px-24 py-22 w-100"
           style={{
             backgroundColor: "#ffffff",
           }}

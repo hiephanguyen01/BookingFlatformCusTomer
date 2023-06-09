@@ -136,6 +136,7 @@
     overflow: hidden;
 
     text-overflow: ellipsis;
+    width: calc(100% - 30px);
   }
 
   div.description-category {
@@ -237,11 +238,11 @@
     //   height: 100%;
     // }
     .addition {
-      text-align: start;
+      text-align: end;
     }
 
     .right-text {
-      text-align: start;
+      text-align: end;
     }
   }
 

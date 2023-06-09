@@ -124,19 +124,19 @@ img {
 
 @media (max-width: 1024px) {
   .image {
-    height: 220px !important;
+    height: 160px !important;
   }
 }
 
 @media (max-width: 768px) {
   .image {
-    height: 250px !important;
+    height: 180px !important;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 560px) {
   .image {
-    height: 280px !important;
+    height: 200px !important;
   }
 }
 

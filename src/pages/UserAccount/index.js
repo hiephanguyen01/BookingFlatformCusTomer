@@ -1,4 +1,4 @@
-import {   Col, Grid,  Row } from "antd";
+import { Col, Grid, Row } from "antd";
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import AccountInfo from "./components/accountInfo/AccountInfo";
@@ -71,8 +71,8 @@ const Index = () => {
                     <Route path="terms-use" element={<TermsUser />} />
                     <Route path="privacy-policy" element={<PrivacyPolicy />} />
                     <Route
-                      path="support"
-                      element={<Navigate to="/home/helpCenter" />}
+                      path="/home/helpCenter"
+                      // element={<Navigate to="/home/helpCenter" />}
                     />
                   </Routes>
                 </Col>

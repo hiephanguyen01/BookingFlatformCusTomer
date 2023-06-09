@@ -12,6 +12,44 @@
 
 .filter {
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 22px;
+
+    .box {
+        height: 80px;
+        display: inline-flex;
+        align-items: center;
+        gap: 23px;
+        border: 1px solid #cacaca;
+        border-radius: 9px;
+        padding: 18px;
+
+        img {
+            width: 43px;
+            height: 43px;
+            object-fit: contain;
+        }
+
+        span {
+            flex: 1;
+        }
+
+        &.active {
+            border-color: #e22828;
+            color: #e22828;
+        }
+
+        &.shadow {
+            box-shadow: 1px 1px 20px #eaeaea;
+        }
+    }
+}
+
+.filter-mobile {
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: 18px;
     border-radius: 4px;

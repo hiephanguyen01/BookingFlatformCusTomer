@@ -1,16 +1,21 @@
-import { Row } from "antd";
-import React from "react";
+import { Modal, Row } from "antd";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
-import { ModalImage } from "../ModalImg";
+import ModalImage from "../ModalImg";
 import "./imagePost.scss";
 
 const ImagePost = ({ data = [] }) => {
+  const [openModal, setOpenModal] = useState(false);
   // const [toggle, setToggle] = useState(false);
-  // const [sIndex, setSIndex] = useState(0);
+  const [index, setIndex] = useState(0);
   // const [activeId, setActiveId] = useState(5);
   const dispatch = useDispatch();
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return (
     <>
       {data.length > 0 && (
@@ -21,12 +26,17 @@ const ImagePost = ({ data = [] }) => {
                 <div
                   key={index}
                   onClick={() =>
-                    dispatch({
-                      type: "SHOW_MODAL_LIST",
-                      Component: <ModalImage data={data} />,
-                    })
+                    // dispatch({
+                    //   type: "SHOW_MODAL_LIST",
+                    //   Component: <ModalImage data={data} />,
+                    // })
+                    {
+                      setOpenModal(true);
+                      setIndex(index);
+                    }
                   }
-                  className="image_item">
+                  className="image_item"
+                >
                   <img
                     alt=""
                     src={`${
@@ -40,14 +50,18 @@ const ImagePost = ({ data = [] }) => {
                 <div
                   key={index}
                   onClick={() =>
-                    dispatch({
-                      type: "SHOW_MODAL_LIST",
-                      Component: <ModalImage data={data} />,
-                    })
+                    // dispatch({
+                    //   type: "SHOW_MODAL_LIST",
+                    //   Component: <ModalImage data={data} />,
+                    // })
+                    // setOpenModal(true)
+                    {
+                      setOpenModal(true);
+                      setIndex(index);
+                    }
                   }
-                  className={`image_item ${
-                    data?.length > 5 ? "img_more" : ""
-                  }`}>
+                  className={`image_item ${data?.length > 5 ? "img_more" : ""}`}
+                >
                   <img
                     src={`${
                       item.includes("https://drive.google.com/")
@@ -65,6 +79,21 @@ const ImagePost = ({ data = [] }) => {
             })}
           </div>
         </Row>
+      )}
+      {openModal && (
+        <Modal
+          className={"modal-image"}
+          style={{ borderRadius: "6px" }}
+          closable={false}
+          footer={null}
+          maskClosable={true}
+          centered
+          visible={openModal}
+          onOk={() => setOpenModal(false)}
+          onCancel={() => setOpenModal(false)}
+        >
+          <ModalImage data={data} setOpenModal={setOpenModal} index={index} />
+        </Modal>
       )}
     </>
   );

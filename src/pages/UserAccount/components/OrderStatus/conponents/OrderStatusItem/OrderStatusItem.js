@@ -1,5 +1,5 @@
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { Col, Divider } from "antd";
+import { Col, Divider, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -87,10 +87,10 @@ const OrderStatusItem = ({
               twoToneColor="#52c41a"
             />
           </div>
-          <Col xs={0}>
-            <div className="OrderStatusItem__header__code">
+          <Col lg={8} md={12} sm={12} xs={0}>
+            <Row className="OrderStatusItem__header__code" justify="end">
               Mã booking: <span>{IdentifyCode}</span>
-            </div>
+            </Row>
           </Col>
         </div>
         <Divider className="style-divider" />

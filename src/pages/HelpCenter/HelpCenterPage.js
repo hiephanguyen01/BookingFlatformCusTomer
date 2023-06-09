@@ -23,31 +23,40 @@ const HelpCenterPage = () => {
       <div className="help-center-container">
         <div className="header">
           <h3>CHÀO MỪNG BẠN ĐẾN VỚI TRUNG TÂM TRỢ GIÚP</h3>
-          <div className="wrap-btn">
-            <Button
-              danger
-              className="btn-danger"
-              onClick={() => setModal1Open(true)}
-            >
-              <MailOutlined />
-              Gửi yêu cầu hỗ trợ
-            </Button>
-            <Button
-              danger
-              className="btn-danger "
-              onClick={() => setModal2Open(true)}
-            >
-              <PhoneOutlined />
-              Hotline 028.6.68.68.869
-            </Button>
-          </div>
+          <Row
+            className="wrap-btn"
+            align="middle"
+            justify="center"
+            gutter={[20, 15]}
+          >
+            <Col lg={7} md={8} sm={10} xs={24}>
+              <Button
+                danger
+                className="btn-danger"
+                onClick={() => setModal1Open(true)}
+              >
+                <MailOutlined />
+                Gửi yêu cầu hỗ trợ
+              </Button>
+            </Col>
+            <Col lg={7} md={8} sm={10} xs={24}>
+              <Button
+                danger
+                className="btn-danger "
+                onClick={() => setModal2Open(true)}
+              >
+                <PhoneOutlined />
+                Hotline 028.6.68.68.869
+              </Button>
+            </Col>
+          </Row>
         </div>
         <div className="container">
           <Row>
-            <Col lg={6} md={6} sm={6} xs={24}>
+            <Col lg={6} md={7} sm={24} xs={24}>
               <Aside ref={ref} />
             </Col>
-            <Col lg={18} md={18} sm={18} xs={24} className="col-right">
+            <Col lg={18} md={17} sm={24} xs={24} className="col-right">
               <HelpCenterContent ref={ref} />
             </Col>
           </Row>

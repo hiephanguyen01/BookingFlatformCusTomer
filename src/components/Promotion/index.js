@@ -68,6 +68,8 @@ const Index = () => {
   };
 
   const handleChooseVoucher = (code) => {
+    console.log("code", code);
+
     if (choose.id === code.id) {
       setChoose({});
       dispatch(setChoosePromotionUser({}));
