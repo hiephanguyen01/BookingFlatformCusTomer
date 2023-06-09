@@ -24,7 +24,7 @@ import {
   Typography,
 } from "antd";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -158,6 +158,7 @@ export const StudioDetail = () => {
     }
     dispatch(getDetailRoomAction(id));
     dispatch(getStudioSimilarAction(id, cate));
+    console.log(123);
   }, [id, dispatch, cate, currentUser]);
 
   const handleReport = () => {
@@ -167,278 +168,286 @@ export const StudioDetail = () => {
     });
   };
 
-  const ROW = (dataSource) => {
-    return dataSource?.map((data, index) => [
-      {
-        key: "title",
-        render: () => (
-          <div style={{ maxWidth: "300px" }}>
-            <Carousel autoplay style={{ width: "100%" }}>
-              {data.Image.map((val) => (
-                <Image
-                  key={val}
-                  preview={{ visible: false }}
-                  src={convertImage(val)}
-                  onClick={() => setVisible(data.id)}
-                />
-              ))}
-            </Carousel>
-            <div style={{ display: "none" }}>
-              <Image.PreviewGroup
-                preview={{
-                  visible: Boolean(visible === data.id),
-                  onVisibleChange: (vis) => setVisible(vis),
-                }}
-              >
+  console.log(123);
+
+  const ROW = useMemo(
+    () => (dataSource) => {
+      console.log(123);
+      return dataSource?.map((data, index) => [
+        {
+          key: "title",
+          render: () => (
+            <div style={{ maxWidth: "300px" }}>
+              <Carousel autoplay style={{ width: "100%" }}>
                 {data.Image.map((val) => (
-                  <Image src={convertImage(val)} />
+                  <Image
+                    key={val}
+                    preview={{ visible: false }}
+                    src={convertImage(val)}
+                    onClick={() => setVisible(data.id)}
+                  />
                 ))}
-              </Image.PreviewGroup>
-            </div>
-            <div
-              className="mt-10"
-              style={{
-                color: "#222222",
-                fontSize: "16px",
-                fontWeight: "700",
-                textTransform: "uppercase",
-              }}
-            >
-              {data?.Name}
-            </div>
-            <ReadMoreInfoService>
-              <div
-                className="mt-10"
-                style={{
-                  color: "#222222",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                <div>
-                  <img
-                    alt=""
-                    src={expand}
-                    className="me-10 mb-2"
-                    style={{ fontSize: "15px" }}
-                  />
-                  Kích thước
-                </div>
-                <ul className={cx("detail-description")}>
-                  <li>Diện tích {data?.Area}m2</li>
-                  <li>Chiều rộng {data?.Width}m</li>
-                  <li>Chiều dài {data?.Length}m</li>
-                  <li>Chiều cao trần {data?.Height}m</li>
-                </ul>
-              </div>
-              <div
-                className="mt-10"
-                style={{
-                  color: "#222222",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                <div>
-                  <img
-                    alt=""
-                    src={chair}
-                    className="me-10 mb-2"
-                    style={{ fontSize: "15px" }}
-                  />
-                  Thiết bị có sẵn
-                </div>
-                <ul className={cx("detail-description")}>
-                  {data?.HasBackground && (
-                    <li>{data?.BackgroundDescription}</li>
-                  )}
-                  {data?.HasLamp && <li>{data?.LampDescription}</li>}
-                  {data?.HasTable && <li>Bàn</li>}
-                  {data?.HasChair && <li>Ghế</li>}
-                  {data?.HasSofa && <li>Sofa</li>}
-                  {data?.HasFlower && <li>Hoa</li>}
-                  {data?.HasOtherDevice && (
-                    <li>{data?.OtherDeviceDescription}</li>
-                  )}
-                </ul>
-              </div>
-              <div
-                className="mt-10"
-                style={{
-                  color: "#222222",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                <div>
-                  <img
-                    alt=""
-                    src={conditional}
-                    className="me-10 mb-2"
-                    style={{ fontSize: "15px" }}
-                  />
-                  Tiện ích đi kèm
-                </div>
-                <ul className={cx("detail-description")}>
-                  {data?.HasAirConditioner && <li>Máy lạnh</li>}
-                  {data?.HasFan && <li>Quạt</li>}
-                  {data?.HasDressingRoom && <li>Phòng thay đồ riêng</li>}
-                  {data?.HasWC && <li>Nhà vệ sinh</li>}
-                  {data?.HasCamera && <li>Camera</li>}
-                  {data?.HasWifi && <li>Wifi</li>}
-                  {data?.HasMotorBikeParking && <li>Chổ để xe máy</li>}
-                  {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
-                  {data?.HasSupporter && <li>Người hỗ trợ</li>}
-                </ul>
-              </div>
-              <div
-                className="mt-10"
-                style={{
-                  color: "#222222",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-              >
-                <div>
-                  <TeamOutlined
-                    className="me-10 mb-2"
-                    style={{ fontSize: "15px" }}
-                  />
-                  Số lượng khách
-                </div>
-                <ul className={cx("detail-description")}>
-                  <li>Số lượng khách tối đa: {data?.MaximumCustomer} người</li>
-                  <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
-                </ul>
-              </div>
-              <div style={{ marginTop: "5px" }}>
-                <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
-                <p
-                  style={{
-                    fontWeight: 400,
-                    fontSize: "16px",
-                    color: "#222222",
+              </Carousel>
+              <div style={{ display: "none" }}>
+                <Image.PreviewGroup
+                  preview={{
+                    visible: Boolean(visible === data.id),
+                    onVisibleChange: (vis) => setVisible(vis),
                   }}
                 >
-                  {data?.Description}
-                </p>
+                  {data.Image.map((val) => (
+                    <Image src={convertImage(val)} />
+                  ))}
+                </Image.PreviewGroup>
               </div>
-            </ReadMoreInfoService>
-          </div>
-        ),
-      },
-      {
-        key: "desc",
-        render: (item) => {
-          return (
-            <SelectTimeOptionService service={{ ...data, category: cate }} />
-          );
-        },
-      },
-      {
-        key: "currency",
-        render: () => (
-          <>
-            {listTimeSelected?.find((item) => item.id === data?.id)
-              ?.OrderByTime !== -1 && (
-              <div className="mb-20">
+              <div
+                className="mt-10"
+                style={{
+                  color: "#222222",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  textTransform: "uppercase",
+                }}
+              >
+                {data?.Name}
+              </div>
+              <ReadMoreInfoService>
                 <div
+                  className="mt-10"
                   style={{
-                    display: "flex",
-                    gap: "10px",
-                    alignItems: "center",
-                    flexWrap: "wrap",
+                    color: "#222222",
+                    fontSize: "16px",
+                    fontWeight: "700",
                   }}
                 >
-                  <span
+                  <div>
+                    <img
+                      alt=""
+                      src={expand}
+                      className="me-10 mb-2"
+                      style={{ fontSize: "15px" }}
+                    />
+                    Kích thước
+                  </div>
+                  <ul className={cx("detail-description")}>
+                    <li>Diện tích {data?.Area}m2</li>
+                    <li>Chiều rộng {data?.Width}m</li>
+                    <li>Chiều dài {data?.Length}m</li>
+                    <li>Chiều cao trần {data?.Height}m</li>
+                  </ul>
+                </div>
+                <div
+                  className="mt-10"
+                  style={{
+                    color: "#222222",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                  }}
+                >
+                  <div>
+                    <img
+                      alt=""
+                      src={chair}
+                      className="me-10 mb-2"
+                      style={{ fontSize: "15px" }}
+                    />
+                    Thiết bị có sẵn
+                  </div>
+                  <ul className={cx("detail-description")}>
+                    {data?.HasBackground && (
+                      <li>{data?.BackgroundDescription}</li>
+                    )}
+                    {data?.HasLamp && <li>{data?.LampDescription}</li>}
+                    {data?.HasTable && <li>Bàn</li>}
+                    {data?.HasChair && <li>Ghế</li>}
+                    {data?.HasSofa && <li>Sofa</li>}
+                    {data?.HasFlower && <li>Hoa</li>}
+                    {data?.HasOtherDevice && (
+                      <li>{data?.OtherDeviceDescription}</li>
+                    )}
+                  </ul>
+                </div>
+                <div
+                  className="mt-10"
+                  style={{
+                    color: "#222222",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                  }}
+                >
+                  <div>
+                    <img
+                      alt=""
+                      src={conditional}
+                      className="me-10 mb-2"
+                      style={{ fontSize: "15px" }}
+                    />
+                    Tiện ích đi kèm
+                  </div>
+                  <ul className={cx("detail-description")}>
+                    {data?.HasAirConditioner && <li>Máy lạnh</li>}
+                    {data?.HasFan && <li>Quạt</li>}
+                    {data?.HasDressingRoom && <li>Phòng thay đồ riêng</li>}
+                    {data?.HasWC && <li>Nhà vệ sinh</li>}
+                    {data?.HasCamera && <li>Camera</li>}
+                    {data?.HasWifi && <li>Wifi</li>}
+                    {data?.HasMotorBikeParking && <li>Chổ để xe máy</li>}
+                    {data?.HasCarParking && <li>Chổ để xe ô tô</li>}
+                    {data?.HasSupporter && <li>Người hỗ trợ</li>}
+                  </ul>
+                </div>
+                <div
+                  className="mt-10"
+                  style={{
+                    color: "#222222",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                  }}
+                >
+                  <div>
+                    <TeamOutlined
+                      className="me-10 mb-2"
+                      style={{ fontSize: "15px" }}
+                    />
+                    Số lượng khách
+                  </div>
+                  <ul className={cx("detail-description")}>
+                    <li>
+                      Số lượng khách tối đa: {data?.MaximumCustomer} người
+                    </li>
+                    <li>Phụ thu: {convertPrice(data?.Surcharge)} VND/người</li>
+                  </ul>
+                </div>
+                <div style={{ marginTop: "5px" }}>
+                  <h5 style={{ margin: "0px" }}>Mô tả phòng</h5>
+                  <p
                     style={{
-                      color: "#E22828",
-                      fontSize: "20px",
-                      fontWeight: "700",
+                      fontWeight: 400,
+                      fontSize: "16px",
+                      color: "#222222",
                     }}
                   >
-                    {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 1 &&
-                      priceService(data?.pricesByHour, true)}
-                    {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 0 &&
-                      priceService(data?.pricesByDate, false)}
-                  </span>
-                  <span
+                    {data?.Description}
+                  </p>
+                </div>
+              </ReadMoreInfoService>
+            </div>
+          ),
+        },
+        {
+          key: "desc",
+          render: (item) => {
+            return (
+              <SelectTimeOptionService service={{ ...data, category: cate }} />
+            );
+          },
+        },
+        {
+          key: "currency",
+          render: () => (
+            <>
+              {listTimeSelected?.find((item) => item.id === data?.id)
+                ?.OrderByTime !== -1 && (
+                <div className="mb-20">
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 1 &&
+                        priceService(data?.pricesByHour, true)}
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 0 &&
+                        priceService(data?.pricesByDate, false)}
+                    </span>
+                    <span
+                      style={{
+                        color: "#828282",
+                        textDecoration: "line-through",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 1 &&
+                        priceService(data?.pricesByHour, true)}
+                      {listTimeSelected?.find((item) => item.id === data?.id)
+                        ?.OrderByTime === 0 &&
+                        priceService(data?.pricesByDate, false)}
+                    </span>
+                  </div>
+                  <p
                     style={{
                       color: "#828282",
-                      textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
                     }}
                   >
-                    {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 1 &&
-                      priceService(data?.pricesByHour, true)}
-                    {listTimeSelected?.find((item) => item.id === data?.id)
-                      ?.OrderByTime === 0 &&
-                      priceService(data?.pricesByDate, false)}
-                  </span>
+                    {data?.PriceNote}
+                  </p>
                 </div>
-                <p
-                  style={{
-                    color: "#828282",
-                    fontSize: "14px",
-                    fontWeight: "400",
-                  }}
-                >
-                  {data?.PriceNote}
-                </p>
-              </div>
-            )}
-            <div className="">
-              {chooseServiceList?.find((item) => item.id === data?.id) ? (
-                <Button
-                  type="default"
-                  size="large"
-                  onClick={() => {
-                    dispatch({ type: DELETE_CHOOSE_SERVICE });
-                    dispatch({ type: "SET_SELECT_TIME_ORDER" });
-                  }}
-                  style={{
-                    width: "100%",
-                    color: "#000",
-                    backgroundColor: "#E7E7E7",
-                    border: "none",
-
-                    borderRadius: "8px",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    lineHeight: "19px",
-
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Bỏ chọn
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => handleChooseService(data)}
-                  style={{
-                    width: "100%",
-                    borderRadius: "8px",
-                    fontWeight: "700",
-                    fontSize: "13px",
-
-                    lineHeight: "19px",
-                    textTransform: "uppercase",
-                  }}
-                  size="large"
-                >
-                  Chọn
-                </Button>
               )}
-            </div>
-          </>
-        ),
-      },
-    ]);
-  };
+              <div className="">
+                {chooseServiceList?.find((item) => item.id === data?.id) ? (
+                  <Button
+                    type="default"
+                    size="large"
+                    onClick={() => {
+                      dispatch({ type: DELETE_CHOOSE_SERVICE });
+                      dispatch({ type: "SET_SELECT_TIME_ORDER" });
+                    }}
+                    style={{
+                      width: "100%",
+                      color: "#000",
+                      backgroundColor: "#E7E7E7",
+                      border: "none",
+
+                      borderRadius: "8px",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      lineHeight: "19px",
+
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Bỏ chọn
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => handleChooseService(data)}
+                    style={{
+                      width: "100%",
+                      borderRadius: "8px",
+                      fontWeight: "700",
+                      fontSize: "13px",
+
+                      lineHeight: "19px",
+                      textTransform: "uppercase",
+                    }}
+                    size="large"
+                  >
+                    Chọn
+                  </Button>
+                )}
+              </div>
+            </>
+          ),
+        },
+      ]);
+    },
+    []
+  );
 
   const handleChooseService = (data) => {
     const findSelectTime = listTimeSelected.find((item) => item.id === data.id);

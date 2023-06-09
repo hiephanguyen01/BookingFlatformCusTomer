@@ -31,9 +31,12 @@ const Refund = () => {
   };
 
   const onConfirm = async () => {
-    if (!IdentifyCode) return openNotification("error", "Wrong!");
-    if (!category) return openNotification("error", "Wrong!");
-    if (!token) return openNotification("error", "Wrong!");
+    if (!IdentifyCode)
+      return openNotification("error", "Vui lòng kiểm tra lại thông tin!");
+    if (!category)
+      return openNotification("error", "Vui lòng kiểm tra lại thông tin!!");
+    if (!token)
+      return openNotification("error", "Vui lòng kiểm tra lại thông tin!!");
     try {
       setLoading(true);
       await orderService.updateRefundOrderByid(
@@ -76,7 +79,8 @@ const Refund = () => {
           onFinish={onFinish}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          layout="horizontal">
+          layout="horizontal"
+        >
           <Form.Item
             label="Ngân hàng"
             name="bank"
@@ -85,7 +89,8 @@ const Refund = () => {
                 required: true,
                 message: "Vui lòng chọn ngân hàng",
               },
-            ]}>
+            ]}
+          >
             <Select
               showSearch
               size="large"
@@ -111,7 +116,8 @@ const Refund = () => {
                 required: true,
                 message: "Vui lòng nhập số tài khoản",
               },
-            ]}>
+            ]}
+          >
             <Input size="large" />
           </Form.Item>
           <Form.Item
@@ -122,7 +128,8 @@ const Refund = () => {
                 required: true,
                 message: "Vui lòng nhập tên người thụ hưởng",
               },
-            ]}>
+            ]}
+          >
             <Input size="large" />
           </Form.Item>
 
@@ -131,7 +138,8 @@ const Refund = () => {
               style={{ padding: "0 65.5px", margin: "20px 0" }}
               htmlType="submit"
               size="large"
-              type="primary">
+              type="primary"
+            >
               Xác nhận
             </Button>
           </Form.Item>
@@ -149,7 +157,8 @@ const Refund = () => {
         footer={[]}
         title="Xác nhận"
         visible={isModalOpen}
-        onCancel={handleCancel}>
+        onCancel={handleCancel}
+      >
         <p style={{ fontWeight: "bold", padding: "24px 0 " }}>
           {" "}
           Chỉ được cập nhập thông tin hoàn tiền một lần duy nhất <br /> Vui lòng
@@ -180,7 +189,8 @@ const Refund = () => {
           style={{ margin: "24px 0" }}
           block
           size="large"
-          type="primary">
+          type="primary"
+        >
           {loading ? <LoadingOutlined /> : "Gửi"}
         </Button>
       </Modal>

@@ -280,7 +280,17 @@ const FilterCard = ({ data, category }) => {
                     </Col>
                   </Row>
                   <CurrencyFormat
-                    value={data?.Price}
+                    value={data?.service?.PriceByHour}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    renderText={(value) => (
+                      <p className="addition">
+                        {value} {data?.PriceUnit || ""}
+                      </p>
+                    )}
+                  />
+                  <CurrencyFormat
+                    value={data?.service?.PriceByDate}
                     displayType={"text"}
                     thousandSeparator={true}
                     renderText={(value) => (

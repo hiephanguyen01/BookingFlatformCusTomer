@@ -1,6 +1,6 @@
 import { DatePicker, Form, Radio, Space, TimePicker } from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { convertDateSendToDB } from "../../utils/convert";
 import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
@@ -426,4 +426,4 @@ const SelectTimeOptionService = ({ disabled, service, onClick }) => {
     </div>
   );
 };
-export default SelectTimeOptionService;
+export default memo(SelectTimeOptionService);
