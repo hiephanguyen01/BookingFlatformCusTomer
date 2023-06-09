@@ -49,18 +49,9 @@ export const chatReducer = (state = initState, action) => {
       };
     case "ADD_NOTIFY_MESS":
       if (!state.notiMessage.includes(action.payload)) {
-        console.log(
-          !state.notiMessage.includes(action.payload) && [
-            ...state.notiMessage,
-            action.payload,
-          ]
-        );
         return {
           ...state,
-          notiMessage: !state.notiMessage.includes(action.payload) && [
-            ...state.notiMessage,
-            action.payload,
-          ],
+          notiMessage: [...state.notiMessage, action.payload],
         };
       } else {
         return { ...state };
@@ -78,6 +69,7 @@ export const chatReducer = (state = initState, action) => {
           ...state,
         };
       }
+
     default:
       return state;
   }

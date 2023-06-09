@@ -33,6 +33,7 @@ export const ChatBody = () => {
         chat && (
           <ChatUser
             key={chat.id}
+            id={chat.id}
             userInfo={chat}
             toggleState={toggleState}
             toggleClick={(e) => {
@@ -111,7 +112,6 @@ export const ChatBody = () => {
       let newData = res?.data?.data.filter(
         (val) => !val.hasOwnProperty("AdminId")
       );
-      console.log(newData);
       initMountStateUser.current = newData;
       setConversation(newData);
       setToggleState(newData[0]?.id);
@@ -165,11 +165,11 @@ export const ChatBody = () => {
   return (
     <div className="Chat__body">
       <div className="Chat__body__user">
-        {/* <ChatUserFilter
+        <ChatUserFilter
           initMountStateUser={initMountStateUser}
           setToggleState={setToggleState}
           setConversation={setConversation}
-        /> */}
+        />
         <ChatAdmin
           info={infoChatAdmin}
           setInfoChatAdmin={setInfoChatAdmin}

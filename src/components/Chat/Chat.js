@@ -26,7 +26,6 @@ const Chat = () => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [conversationIds, setConversationIds] = useState([]);
-  // const [notiMessage, setNotiMessage] = useState([]); //store ConversationId
 
   useEffect(() => {
     const getAllConversationId = async () => {
@@ -48,11 +47,24 @@ const Chat = () => {
         }
       }
     };
+    const getTotalAmountOfConversationHasNewMess = async () => {
+      const { data } = await chatService.getTotalAmountOfConversationHasNewMess(
+        UserMe.id,
+        "User"
+      );
+      data.payload.forEach((val) => {
+        dispatch({
+          type: "ADD_NOTIFY_MESS",
+          payload: val,
+        });
+      });
+    };
     getAllConversationId();
+    getTotalAmountOfConversationHasNewMess();
   }, []);
-  useEffect(() => {
-    console.log(conversationIds);
-  }, [conversationIds]);
+  // useEffect(() => {
+  //   console.log(conversationIds);
+  // }, [conversationIds]);
 
   useEffect(() => {
     const socketListenerEvent = (typeOfUser, receivedMessage, status) => {
@@ -77,25 +89,6 @@ const Chat = () => {
     if (socket) {
       socket.emit("login_user", {
         userId: UserMe.id,
-      });
-
-      socket.on("receive_message_admin", (message) => {
-        const { ConversationId } = message?.messageContent;
-        console.log(message);
-        console.log(ConversationId);
-        if (
-          // conversationIds?.length > 0 &&
-          ConversationId &&
-          conversationIds.includes(ConversationId)
-        ) {
-          dispatch({ type: "ADD_NOTIFY_MESS", payload: ConversationId });
-        }
-      });
-      socket.on("receive_message", (message) => {
-        const { ConversationId } = message?.messageContent;
-        if (ConversationId && conversationIds.includes(ConversationId)) {
-          dispatch({ type: "ADD_NOTIFY_MESS", payload: ConversationId });
-        }
       });
 
       // *** Check for online user features ***
@@ -143,6 +136,35 @@ const Chat = () => {
       }
     };
   }, [socket]);
+  useEffect(() => {
+    socket.on("receive_message_admin", (message) => {
+      const { ConversationId, Chatting } = message?.messageContent;
+      if (
+        // conversationIds?.length > 0 &&
+        ConversationId &&
+        conversationIds.includes(ConversationId) &&
+        Chatting.id !== UserMe.id
+      ) {
+        dispatch({
+          type: "ADD_NOTIFY_MESS",
+          payload: ConversationId,
+        });
+      }
+    });
+    socket.on("receive_message", (message) => {
+      const { ConversationId, Chatting } = message;
+      if (
+        ConversationId &&
+        conversationIds.includes(ConversationId) &&
+        Chatting.id !== UserMe.id
+      ) {
+        dispatch({
+          type: "ADD_NOTIFY_MESS",
+          payload: ConversationId,
+        });
+      }
+    });
+  });
   useEffect(() => {
     setVisible(false);
   }, [closeConversation]);

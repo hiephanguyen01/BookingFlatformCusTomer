@@ -24,10 +24,13 @@ export const ChatUserFilter = (props) => {
 
   const getAllNewConversation = async () => {
     const res = await chatService.getConversation(8, 1, UserMe.id, 1);
-    initMountStateUser.current = res?.data?.data;
-    setConversation(res?.data?.data);
-    setToggleState(res?.data?.data[0]?.id);
-    dispatch({ type: TOGGLE_STATE, payload: res?.data?.data[0]?.id });
+    let newData = res?.data?.data.filter(
+      (val) => !val.hasOwnProperty("AdminId")
+    );
+    initMountStateUser.current = newData;
+    setConversation(newData);
+    setToggleState(newData[0]?.id);
+    dispatch({ type: TOGGLE_STATE, payload: newData[0]?.id });
   };
 
   const onChange = (value, option) => {
@@ -64,6 +67,7 @@ export const ChatUserFilter = (props) => {
 
   const onSearch = async (value) => {
     const { data } = await registerPartnerService.searchForRegisterPartner(
+      UserMe.id,
       value
     );
     // console.log(data.payload);

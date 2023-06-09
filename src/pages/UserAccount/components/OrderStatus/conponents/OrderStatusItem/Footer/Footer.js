@@ -10,6 +10,7 @@ import { orderService } from "../../../../../../../services/OrderService";
 import {
   createConverAction,
   findConverAction,
+  updateMAction,
 } from "../../../../../../../stores/actions/ChatAction";
 import {
   SHOW_CHAT,
@@ -53,7 +54,8 @@ export const Footer = ({
         ? booking?.FreeCancelByHour?.match(/\d+/g)[0]
         : booking?.FreeCancelByDate?.match(/\d+/g)[0],
       `${booking?.OrderByTime ? "hours" : "days"}`
-    ).utc()
+    )
+    .utc()
     .format("DD/MM/YYYY HH:mm A");
 
   const depositPercent = booking?.OrderByTime
@@ -87,21 +89,32 @@ export const Footer = ({
       const create = await chatService.createConversation(TenantId, UserMe.id);
       socket.emit("send_message", {
         id: Math.random(),
-        ConversationId: create.data.id,
+        ConversationId: create.data.payload.id,
         createdAt: moment().toISOString(),
         Content: "Xin chào chúng tôi có thể giúp được gì cho bạn !",
         Chatting: {
-          id: create.data.Partner.id,
-          PartnerName: create.data.Partner.PartnerName,
-          Phone: create.data.Partner.Phone ? create.data.Partner.Phone : "",
-          Email: create.data.Partner.Email ? create.data.Partner.Email : "",
+          id: create.data.payload.Partner.id,
+          PartnerName: create.data.payload.Partner.PartnerName,
+          Phone: create.data.payload.Partner.Phone
+            ? create.data.payload.Partner.Phone
+            : "",
+          Email: create.data.payload.Partner.Email
+            ? create.data.payload.Partner.Email
+            : "",
         },
         Type: "text",
       });
       dispatch(createConverAction(create.data.id));
+
+      //Pop up the right chat room
+      dispatch({ type: TOGGLE_STATE, payload: create.data.payload.id });
+      dispatch(updateMAction());
     } catch (error) {
-      dispatch(findConverAction(error.response.data.message.id));
-      dispatch({ type: TOGGLE_STATE, payload: error.response.data.message.id });
+      dispatch(findConverAction(error.response?.data.message.id));
+      dispatch({
+        type: TOGGLE_STATE,
+        payload: error.response?.data.message.id,
+      });
     }
   };
   switch (+status) {
@@ -131,7 +144,6 @@ export const Footer = ({
                 Category: Category,
               }}
               //
-
               className="FooterStatus__wait__button__1"
             >
               <UploadOutlined /> Đã thanh toán
@@ -161,12 +173,12 @@ export const Footer = ({
     case 2:
       return (
         <div className="FooterStatus__comming">
-          {console.log(
+          {/* {console.log(
             "dsadsa",
             booking?.OrderByTime
               ? booking?.OrderByTimeFrom
               : booking?.OrderByDateFrom
-          )}
+          )} */}
           {checkOrderByDateFrom && (
             <button
               className="FooterStatus__comming__cancel"
