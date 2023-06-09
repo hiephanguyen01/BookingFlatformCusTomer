@@ -42,9 +42,9 @@ class ChatService extends BaseService {
   sendMessageAdmin = (message) => {
     return this.post(`/api/chat/message`, message);
   };
-  readMessage = (id) => {
+  readMessage = (ConversationId) => {
     return this.patch(`/api/chat/message-user`, {
-      id,
+      ConversationId,
     });
   };
   readMessageAdmin = (id) => {
@@ -55,6 +55,13 @@ class ChatService extends BaseService {
   getListPartner = () => {
     return this.get(`/api/notification/user?option=0`);
   };
+
+  // id: UserId || AdminId || PartnerId
+  // role: "User" || "Admin" || "Partner"
+  getTotalAmountOfConversationHasNewMess = (id, role) =>
+    this.get(
+      `/api/chat/conversation-user/count-conversation-has-new-mess?id=${id}&role=${role}`
+    );
 }
 
 export const chatService = new ChatService();

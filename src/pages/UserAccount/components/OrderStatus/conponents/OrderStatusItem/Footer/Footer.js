@@ -10,6 +10,7 @@ import { orderService } from "../../../../../../../services/OrderService";
 import {
   createConverAction,
   findConverAction,
+  updateMAction,
 } from "../../../../../../../stores/actions/ChatAction";
 import {
   SHOW_CHAT,
@@ -82,21 +83,32 @@ export const Footer = ({
       const create = await chatService.createConversation(TenantId, UserMe.id);
       socket.emit("send_message", {
         id: Math.random(),
-        ConversationId: create.data.id,
+        ConversationId: create.data.payload.id,
         createdAt: moment().toISOString(),
         Content: "Xin chào chúng tôi có thể giúp được gì cho bạn !",
         Chatting: {
-          id: create.data.Partner.id,
-          PartnerName: create.data.Partner.PartnerName,
-          Phone: create.data.Partner.Phone ? create.data.Partner.Phone : "",
-          Email: create.data.Partner.Email ? create.data.Partner.Email : "",
+          id: create.data.payload.Partner.id,
+          PartnerName: create.data.payload.Partner.PartnerName,
+          Phone: create.data.payload.Partner.Phone
+            ? create.data.payload.Partner.Phone
+            : "",
+          Email: create.data.payload.Partner.Email
+            ? create.data.payload.Partner.Email
+            : "",
         },
         Type: "text",
       });
       dispatch(createConverAction(create.data.id));
+
+      //Pop up the right chat room
+      dispatch({ type: TOGGLE_STATE, payload: create.data.payload.id });
+      dispatch(updateMAction());
     } catch (error) {
-      dispatch(findConverAction(error.response.data.message.id));
-      dispatch({ type: TOGGLE_STATE, payload: error.response.data.message.id });
+      dispatch(findConverAction(error.response?.data.message.id));
+      dispatch({
+        type: TOGGLE_STATE,
+        payload: error.response?.data.message.id,
+      });
     }
   };
   switch (+status) {
@@ -114,7 +126,8 @@ export const Footer = ({
                 moment().diff(booking?.CreationTime, "minutes") > 15
                   ? "not-allowed"
                   : "",
-            }}>
+            }}
+          >
             <Link
               to={`/home/confirm-order/${id}`}
               state={{
@@ -131,7 +144,8 @@ export const Footer = ({
                     ? "none"
                     : "auto",
               }}
-              className="FooterStatus__wait__button__1">
+              className="FooterStatus__wait__button__1"
+            >
               <UploadOutlined /> Đã thanh toán
             </Link>
             <Link
@@ -143,7 +157,8 @@ export const Footer = ({
                 updatePay: true,
                 Category: Category,
               }}
-              className="FooterStatus__wait__button__2">
+              className="FooterStatus__wait__button__2"
+            >
               Thanh toán cọc
             </Link>
           </div>
@@ -154,7 +169,8 @@ export const Footer = ({
         <div className="FooterStatus__comming">
           <button
             className="FooterStatus__comming__cancel"
-            onClick={() => setShowModal(true)}>
+            onClick={() => setShowModal(true)}
+          >
             Hủy đơn
           </button>
           <button
@@ -162,7 +178,8 @@ export const Footer = ({
             onClick={() => {
               dispatch({ type: SHOW_CHAT });
               handleOpenChatPartner();
-            }}>
+            }}
+          >
             Liên hệ
           </button>
           <Modal
@@ -171,7 +188,8 @@ export const Footer = ({
             okText="Đồng ý"
             cancelText="Thoát"
             onCancel={() => setShowModal(false)}
-            onOk={() => handleCancelOrder()}>
+            onOk={() => handleCancelOrder()}
+          >
             <>
               <div>
                 Quý khách có thể huỷ đơn đặt cho đến{" "}
@@ -189,9 +207,8 @@ export const Footer = ({
                 className="mt-3"
                 rows={4}
                 style={{ resize: "none" }}
-                onChange={(e) =>
-                  setCancelReason(e.target.value)
-                }></Input.TextArea>
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></Input.TextArea>
               <Divider />
               <section className="chile">
                 <div className="df">
@@ -258,7 +275,8 @@ export const Footer = ({
             footer={false}
             width={600}
             closable={false}
-            className="FooterStatus__complete__modal">
+            className="FooterStatus__complete__modal"
+          >
             <RateModal
               onOk={() => setVisible(false)}
               onCancel={() => setVisible(false)}

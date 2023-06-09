@@ -23,6 +23,7 @@ export const ChatAdmin = React.memo(
     );
     const [isRead, setIsRead] = useState(false);
     const [lastMessage, setLastMessage] = useState();
+    const { notiMessage } = useSelector((state) => state.chatReducer);
     const dispatch = useDispatch();
 
     const createConversationIfNoneWereFound = async () => {
@@ -51,6 +52,8 @@ export const ChatAdmin = React.memo(
       // Remove this ConversationId out of notiMessage in Redux
       // console.log(data.payload.id);
       dispatch({ type: "REMOVE_NOTIFY_MESS", payload: data.payload.id });
+      await chatService.readMessage(data.payload.id);
+
       //*******************************************************
 
       dispatch(createConverAction(data?.payload?.id));
@@ -133,11 +136,16 @@ export const ChatAdmin = React.memo(
             <div className="d-flex justify-content-between align-items-center h-100">
               <p className="User__name">Booking Studio</p>
             </div>
+
             {lastMessage &&
               (lastMessage.CustomerId !== -1 ? (
                 <div
                   className="w-100 d-flex justify-content-between"
-                  style={{ color: "#828282", fontSize: "13px" }}
+                  style={{
+                    color: notiMessage.includes(info.id) ? "#828282" : "#000",
+                    fontSize: "13px",
+                    fontWeight: notiMessage.includes(info.id) ? 500 : 700,
+                  }}
                 >
                   <div>
                     Bạn:{" "}
@@ -157,9 +165,9 @@ export const ChatAdmin = React.memo(
                 <div
                   className="w-100 d-flex justify-content-between"
                   style={{
-                    color: isRead ? "#828282" : "#000",
+                    color: notiMessage.includes(info.id) ? "#828282" : "#000",
                     fontSize: "13px",
-                    fontWeight: isRead ? 500 : 700,
+                    fontWeight: notiMessage.includes(info.id) ? 500 : 700,
                   }}
                 >
                   <div>

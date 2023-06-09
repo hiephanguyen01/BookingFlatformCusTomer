@@ -153,6 +153,25 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       setFiles([]);
     }
   };
+  const renderMess = (itm) => {
+    if (itm.Type !== "text") {
+      return (
+        <img
+          onLoad={() => scrollToBottom()}
+          style={{
+            width: 200,
+            height: "auto",
+            borderRadius: "10px",
+            color: "#fff !important",
+          }}
+          src={IMG(itm.Content)}
+          alt={itm.fileName}
+        />
+      );
+    } else {
+      return <>{itm.Content}</>;
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -190,25 +209,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       }
     });
   }, [socket, id]);
-  const renderMess = (itm) => {
-    if (itm.Type !== "text") {
-      return (
-        <img
-          onLoad={() => scrollToBottom()}
-          style={{
-            width: 200,
-            height: "auto",
-            borderRadius: "10px",
-            color: "#fff !important",
-          }}
-          src={IMG(itm.Content)}
-          alt={itm.fileName}
-        />
-      );
-    } else {
-      return <>{itm.Content}</>;
-    }
-  };
+
   return (
     <div className="ChatContent">
       <div className="ChatContent__header">

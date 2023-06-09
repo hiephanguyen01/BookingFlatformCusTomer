@@ -3,7 +3,7 @@ import React from "react";
 import "./ChatUser.scss";
 import moment from "moment";
 import { useState, useEffect /* , useRef */ } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   onlinePartnerSelector,
   offlinePartnerSelector,
@@ -12,14 +12,21 @@ import { chatService } from "../../../../services/ChatService";
 import { HandleImg } from "../../../HandleImg/HandleImg";
 
 export const ChatUser = React.memo(
-  ({ userInfo, toggleState, toggleClick, setToggleState }) => {
+  ({ id, userInfo, toggleState, toggleClick, setToggleState }) => {
     const onlinePartnerList = useSelector(onlinePartnerSelector);
     const offlinePartnerList = useSelector(offlinePartnerSelector);
+    const { notiMessage } = useSelector((state) => state.chatReducer);
     const [isRead, setIsRead] = useState(false);
     const [isOnline, setIsOnline] = useState(false);
     const [lastMessage, setLastMessage] = useState(
       userInfo?.newestMessage ? userInfo?.newestMessage : null
     );
+    const dispatch = useDispatch();
+
+    const readMessage = async () => {
+      await chatService.readMessage(id);
+    };
+
     useEffect(() => {
       if (userInfo?.newestMessage) {
         if (userInfo.newestMessage?.UserId !== -1) {
@@ -46,8 +53,10 @@ export const ChatUser = React.memo(
         className={
           toggleState === userInfo?.id ? "User  User__current " : "User "
         }
-        onClick={() => {
+        onClick={async () => {
           toggleClick(userInfo?.id);
+          dispatch({ type: "REMOVE_NOTIFY_MESS", payload: id });
+          await readMessage();
           setIsRead(true);
           if (
             userInfo?.newestMessage.UserId === -1 &&
@@ -84,7 +93,28 @@ export const ChatUser = React.memo(
                 <span className="User__isOffline"></span>
               )} */}
             </div>
-            {lastMessage ? (
+            <div
+              className="w-100 d-flex justify-content-between"
+              style={{
+                color: isRead ? "#828282" : "#000",
+                fontSize: "13px",
+                fontWeight: isRead ? 500 : 700,
+              }}
+            >
+              <div>
+                {lastMessage.Type === "text" ? (
+                  <>
+                    {lastMessage.Content.toString().length <= 12
+                      ? lastMessage.Content
+                      : `${lastMessage.Content.toString().slice(0, 12)}...`}
+                  </>
+                ) : (
+                  <>Ảnh</>
+                )}
+              </div>
+              <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
+            </div>
+            {/* {notiMessage.includes(id) ? (
               lastMessage.UserId === userInfo.UserId.id ? (
                 <div
                   className="w-100 d-flex justify-content-between"
@@ -105,31 +135,11 @@ export const ChatUser = React.memo(
                   <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
                 </div>
               ) : (
-                <div
-                  className="w-100 d-flex justify-content-between"
-                  style={{
-                    color: isRead ? "#828282" : "#000",
-                    fontSize: "13px",
-                    fontWeight: isRead ? 500 : 700,
-                  }}
-                >
-                  <div>
-                    {lastMessage.Type === "text" ? (
-                      <>
-                        {lastMessage.Content.toString().length <= 12
-                          ? lastMessage.Content
-                          : `${lastMessage.Content.toString().slice(0, 12)}...`}
-                      </>
-                    ) : (
-                      <>Ảnh</>
-                    )}
-                  </div>
-                  <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
-                </div>
+                
               )
             ) : (
               ""
-            )}
+            )} */}
           </div>
         </div>
       </div>
