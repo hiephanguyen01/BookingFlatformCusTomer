@@ -5,14 +5,15 @@ import "./table.scss";
 import { useSelector } from "react-redux";
 import { ExclamationCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useRef } from "react";
+import { memo } from "react";
 
 const Index = ({ column, row = [], rowNumber = 5, className = "", style }) => {
-  const { chooseService } = useSelector((state) => state.studioPostReducer);
+  // const { chooseService } = useSelector((state) => state.studioPostReducer);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const ref = useRef(null);
 
-  useEffect(() => {}, [chooseService]);
+  // useEffect(() => {}, [chooseService]);
 
   const handleChangePageCurrent = (page) => {
     setLoading(true);
@@ -32,8 +33,6 @@ const Index = ({ column, row = [], rowNumber = 5, className = "", style }) => {
             backgroundColor: "#ffffff",
           }}
         >
-          {/* <SelectTimeOptionService service={service} /> */}
-
           <div className="warning-choose-time">
             <ExclamationCircleOutlined className="me-5" />
             Chọn khung giờ bạn muốn đặt để xem giá cho từng loại dịch vụ
@@ -117,4 +116,4 @@ const Index = ({ column, row = [], rowNumber = 5, className = "", style }) => {
   );
 };
 
-export default Index;
+export default memo(Index);

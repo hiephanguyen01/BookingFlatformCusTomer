@@ -191,7 +191,7 @@ const AccountInfo = () => {
 
         return openNotificationWithIcon(
           "error",
-          "Fail",
+          "Thất bại",
           "Vui lòng kiểm tra lại số điện thoại"
         );
       }
@@ -205,7 +205,7 @@ const AccountInfo = () => {
 
         return openNotificationWithIcon(
           "error",
-          "Fail",
+          "Thất bại",
           "Vui lòng kiểm tra lại mật khẩu!"
         );
       }
@@ -232,11 +232,11 @@ const AccountInfo = () => {
       await userService.saveInfo(formData);
       dispatch(getCurrentUser());
       setLoading(false);
-      openNotificationWithIcon("success", "Done", "Saved");
+      openNotificationWithIcon("success", "Lưu thông tin", "Thành công");
     } catch (error) {
       openNotificationWithIcon(
         "error",
-        "Please try again",
+        "Vui lòng thử lại!",
         error.response.data.message
       );
       setLoading(false);

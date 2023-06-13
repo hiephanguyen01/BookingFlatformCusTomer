@@ -5,7 +5,7 @@ import {
   LOADING,
   LOADING_SERVICE,
   SET_FILTER,
-  SET_FILTER_SERVICE,
+  SET_CHOOSE_SERVICE,
   SET_LIST_LIKED_CATEGORY,
   SET_POST_LIST,
   SET_POST_PAGINATION,
@@ -15,7 +15,10 @@ import {
   SET_STUDIO_NEAR,
   SET_STUDIO_SIMILAR,
 } from "../types/studioPostType";
-import { DELETE_CHOOSE_SERVICE, SET_CHOOSE_SERVICE } from "../types/OrderType";
+import {
+  DELETE_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE_LIST,
+} from "../types/OrderType";
 import moment from "moment";
 import toastMessage from "../../components/ToastMessage";
 
@@ -331,7 +334,7 @@ export const setFilterStudioService =
     dispatch({ type: LOADING_SERVICE, payload: true });
     try {
       dispatch({ type: SET_POST_PAGINATION, payload: { limit, page } });
-      // dispatch({ type: SET_FILTER_SERVICE, payload: filter });
+      // dispatch({ type: SET_CHOOSE_SERVICE, payload: filter });
     } catch (error) {
       console.error(error);
     }
@@ -341,6 +344,7 @@ export const setFilterStudioService =
 export const handlerSelectServiceAction = (data, chooseServiceTime) => {
   return async (dispatch) => {
     try {
+      console.log(23456);
       if (chooseServiceTime.OrderByTime === 1) {
         if (
           chooseServiceTime?.disableTimeOrder?.some((item) => {
@@ -377,9 +381,9 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
           );
         }
       }
-      dispatch({ type: SET_CHOOSE_SERVICE, payload: [data] });
+      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [data] });
       dispatch({
-        type: SET_FILTER_SERVICE,
+        type: SET_CHOOSE_SERVICE,
         payload: {
           ...chooseServiceTime,
           ...data,

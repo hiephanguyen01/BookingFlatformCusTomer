@@ -1,5 +1,5 @@
 import { Modal, Row } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
@@ -11,11 +11,7 @@ const ImagePost = ({ data = [] }) => {
   // const [toggle, setToggle] = useState(false);
   const [index, setIndex] = useState(0);
   // const [activeId, setActiveId] = useState(5);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    return () => {};
-  }, []);
-
+  console.log("Image post");
   return (
     <>
       {data.length > 0 && (
@@ -25,16 +21,10 @@ const ImagePost = ({ data = [] }) => {
               return index !== 4 ? (
                 <div
                   key={index}
-                  onClick={() =>
-                    // dispatch({
-                    //   type: "SHOW_MODAL_LIST",
-                    //   Component: <ModalImage data={data} />,
-                    // })
-                    {
-                      setOpenModal(true);
-                      setIndex(index);
-                    }
-                  }
+                  onClick={() => {
+                    setOpenModal(true);
+                    setIndex(index);
+                  }}
                   className="image_item"
                 >
                   <img
@@ -99,4 +89,4 @@ const ImagePost = ({ data = [] }) => {
   );
 };
 
-export default ImagePost;
+export default memo(ImagePost);

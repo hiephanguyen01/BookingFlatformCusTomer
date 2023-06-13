@@ -11,8 +11,10 @@ import "./styles.scss";
 // import required modules
 import { Navigation, Autoplay } from "swiper";
 import CarSkeleton from "../../../components/Skeleton/CarSkeleton";
+import { memo } from "react";
 
-export const SlideCard = ({ title, data, category, loading = false }) => {
+export const SlideCard = memo(({ title, data, category, loading = false }) => {
+  console.log("SliderCard");
   return (
     <>
       <div className={"ListItem"}>
@@ -28,7 +30,6 @@ export const SlideCard = ({ title, data, category, loading = false }) => {
             grabCursor={true}
             autoplay={{
               delay: 3500,
-              // disableOnInteraction: false,
             }}
             navigation={true}
             breakpoints={{
@@ -79,4 +80,4 @@ export const SlideCard = ({ title, data, category, loading = false }) => {
       </div>
     </>
   );
-};
+});

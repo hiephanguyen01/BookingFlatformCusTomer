@@ -6,7 +6,6 @@ import "./readMoreDesc.scss";
 
 const Index = ({ title = "", children }) => {
   const [toggle, setToggle] = useState(false);
-  console.log(addLinebreaks(children));
   return (
     <div className="wrap-read-more">
       {title && <div className="title">{title}</div>}

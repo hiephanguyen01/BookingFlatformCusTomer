@@ -117,8 +117,8 @@ export const googleLink =
           providerId: provider.providerId,
         });
         openNotificationWithIcon(
-          "success",
-          "Hủy liên kết tài khoản google thành công!"
+          "Hủy liên kết tài khoản google",
+          "Thành công!"
         );
       } else {
         res = await signInWithPopup(auth, provider);
@@ -126,10 +126,7 @@ export const googleLink =
           ...res.user,
           ...res.user.providerData[0],
         });
-        openNotificationWithIcon(
-          "success",
-          "Liên kiết tài khoản google thành công!"
-        );
+        openNotificationWithIcon("Liên kiết tài khoản google", "Thành công!");
       }
       setCheckedLink(!checkedLink);
       dispatch({ type: SET_USER, payload: resp.data.data });
@@ -155,8 +152,8 @@ export const facebookLink =
           providerId: provider.providerId,
         });
         openNotificationWithIcon(
-          "success",
-          "Hủy liên kết tài khoản facebook thành công!"
+          "Hủy liên kết tài khoản facebook",
+          "Thành công!"
         );
       } else {
         res = await signInWithPopup(auth, provider);
@@ -164,10 +161,7 @@ export const facebookLink =
           ...res.user,
           ...res.user.providerData[0],
         });
-        openNotificationWithIcon(
-          "success",
-          "Liên kết tài khoản facebook thành công!"
-        );
+        openNotificationWithIcon("Liên kết tài khoản facebook", "Thành công!");
       }
       setCheckedLink(!checkedLink);
       dispatch({ type: SET_USER, payload: resp.data.data });
@@ -216,7 +210,7 @@ export const handleSendOtp =
         onClick(num);
       }
     } catch (error) {
-      openNotificationWithIcon("error", "Something fail", "please try again");
+      openNotificationWithIcon("error", "Gửi OTP thất bại", "Vui lòng thử lại");
       setLoading(false);
     }
     dispatch({ type: SET_LOADING, payload: false });
@@ -234,7 +228,7 @@ export const SignUpWithPhoneNumber = (data, navigate) => async (dispatch) => {
       dispatch({ type: PHONE, payload: data });
     }
   } catch (error) {
-    openNotificationWithIcon("error", "Somthing fail", "please try again");
+    openNotificationWithIcon("error", "Đăng nhập thất bại", "Vui lòng thử lại");
   }
   dispatch({ type: SET_LOADING, payload: false });
 };
@@ -248,7 +242,7 @@ export const LoginWithPhoneNumber = (data, navigate) => async (dispatch) => {
     dispatch({ type: SET_USER, payload: resp.data.data });
   } catch (error) {
     console.log(error);
-    openNotificationWithIcon("error", "Somthing fail", "please try again");
+    openNotificationWithIcon("error", "Đăng nhập thất bại", "Vui lòng thử lại");
   }
   dispatch({ type: SET_LOADING, payload: false });
 };
@@ -279,8 +273,8 @@ export const changePassword = (data) => async (dispatch) => {
   } catch (error) {
     openNotificationWithIcon(
       "error",
-      "Change password fail",
-      "please try again"
+      "Thay đổi mật khẩu thất bại",
+      "Vui lòng thử lại"
     );
   }
   dispatch({ type: SET_LOADING, payload: false });

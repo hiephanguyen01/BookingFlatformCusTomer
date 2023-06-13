@@ -16,7 +16,7 @@ import images from "../../assets/images";
 import PopUpSignIn from "../../pages/Auth/PopUpSignIn/PopUpSignIn";
 import { studioPostService } from "../../services/StudioPostService";
 import { getLikeStudioPostAction } from "../../stores/actions/studioPostAction";
-import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
+import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 import { convertImage } from "../../utils/convertImage";
 import { ReactComponent as LocationIcon } from "../../assets/svg/location.svg";
 import "./FilterCard.scss";
@@ -89,7 +89,7 @@ const FilterCard = ({ data, category }) => {
           className="FilterCard"
           onClick={() => {
             dispatch({
-              type: SET_FILTER_SERVICE,
+              type: SET_CHOOSE_SERVICE,
               payload: {
                 OrderByTime: -1,
                 OrderByTimeFrom: "",
@@ -280,7 +280,17 @@ const FilterCard = ({ data, category }) => {
                     </Col>
                   </Row>
                   <CurrencyFormat
-                    value={data?.Price}
+                    value={data?.service?.PriceByHour}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    renderText={(value) => (
+                      <p className="addition">
+                        {value} {data?.PriceUnit || ""}
+                      </p>
+                    )}
+                  />
+                  <CurrencyFormat
+                    value={data?.service?.PriceByDate}
                     displayType={"text"}
                     thousandSeparator={true}
                     renderText={(value) => (

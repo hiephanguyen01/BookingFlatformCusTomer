@@ -11,6 +11,7 @@ import { CopyrightOutlined } from "@ant-design/icons";
 import QRCode from "qrcode.react";
 import { Link, useLocation } from "react-router-dom";
 import "./Footer.scss";
+import { memo } from "react";
 
 const { useBreakpoint } = Grid;
 
@@ -178,4 +179,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);
