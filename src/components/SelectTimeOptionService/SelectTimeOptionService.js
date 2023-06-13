@@ -149,14 +149,14 @@ const Option = ({ option, disabled, service }) => {
         service.id,
         service?.category
       );
-      dispatch({
-        type: "UPDATE_PRICE_SERVICE",
-        payload: {
-          ...data,
-          pricesByDate: data?.prices,
-          category: service?.category,
-        },
-      });
+      // dispatch({
+      //   type: "UPDATE_PRICE_SERVICE",
+      //   payload: {
+      //     ...data,
+      //     pricesByDate: data?.prices,
+      //     category: service?.category,
+      //   },
+      // });
       dispatch({
         type: ADD_TIME_ORDER,
         data: {
@@ -234,6 +234,11 @@ const Option = ({ option, disabled, service }) => {
                   array = [
                     ...array,
                     ...range(studioDetail?.data?.HourCloseDefault + 1, 23),
+                    ...range(
+                      studioDetail?.data?.CloseMorningHour,
+                      studioDetail?.data?.OpenAfternoonHour +
+                        (studioDetail?.data?.OpenAfternoonMinutes > 0 ? 1 : 0)
+                    ),
                   ];
                   if (dString === moment(new Date()).format("DD-MM-YYYY")) {
                     array = [

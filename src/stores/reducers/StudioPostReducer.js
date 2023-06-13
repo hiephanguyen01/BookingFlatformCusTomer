@@ -18,7 +18,7 @@ import {
   SET_LIST_LIKED_CATEGORY,
   SET_STUDIO_SIMILAR,
   SET_PROMOTION_CODE,
-  SET_FILTER_SERVICE,
+  SET_CHOOSE_SERVICE,
   LOADING_SERVICE,
   SET_SERVICE_SELECT,
   ADD_TIME_ORDER,
@@ -196,7 +196,7 @@ export const studioPostReducer = (state = initialState, action) => {
         ...state,
         loadingService: action.payload,
       };
-    case SET_FILTER_SERVICE:
+    case SET_CHOOSE_SERVICE:
       return {
         ...state,
         chooseService: { ...action.payload },

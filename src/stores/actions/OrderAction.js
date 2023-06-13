@@ -1,6 +1,6 @@
 import { orderService } from "../../services/OrderService";
 import {
-  SET_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE_LIST,
   ADD_ORDER,
   DELETE_ORDER,
   UPDATE_CHOOSE_SERVICE,
@@ -41,7 +41,7 @@ export const getTotalOrder = async (id, category) => {
 export const chooseServiceAction = (data) => async (dispatch) => {
   // dispatch({ type: LOADING, payload: true });
   try {
-    dispatch({ type: SET_CHOOSE_SERVICE, payload: data });
+    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: data });
     dispatch({ type: "SET_TIME_ORDER", data: [] });
   } catch (error) {
     console.log(error);

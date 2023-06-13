@@ -1,6 +1,6 @@
 import { CheckCircleOutlined, StarFilled } from "@ant-design/icons";
 import { Divider, Grid, Pagination, Rate } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import images from "../../assets/images";
 import { convertTime } from "../../utils/convert";
@@ -262,4 +262,4 @@ const Index = ({ data = [], className, isPerional }) => {
   );
 };
 
-export default Index;
+export default memo(Index);

@@ -1,6 +1,6 @@
 import {
   LOADING,
-  SET_CHOOSE_SERVICE,
+  SET_CHOOSE_SERVICE_LIST,
   DELETE_CHOOSE_SERVICE,
   ADD_ORDER,
   DELETE_ORDER,
@@ -27,7 +27,7 @@ export const OrderReducer = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
-    case SET_CHOOSE_SERVICE:
+    case SET_CHOOSE_SERVICE_LIST:
       // localStorage.setItem("choose-service", JSON.stringify(action.payload));
       return {
         ...state,

@@ -13,9 +13,9 @@ import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/OrderType";
 import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
-import { SET_FILTER_SERVICE } from "../../stores/types/studioPostType";
+import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 import { calDate, calTime, priceService } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
@@ -84,8 +84,8 @@ const Index = ({ linkTo = "" }) => {
     dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      dispatch({ type: SET_CHOOSE_SERVICE, payload: [] });
-      dispatch({ type: SET_FILTER_SERVICE, payload: {} });
+      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+      dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
     };
   }, [cate, dispatch, id, user]);
   useEffect(() => {
