@@ -7,7 +7,7 @@ import { SignIn } from "./SignIn/SignIn";
 import { SignUpWithPhone } from "./SignUp/SignUpWithPhone/SignUpWithPhone";
 import { ForgotPassword } from "./SignIn/FogotPassword/ForgotPassword";
 import { ProtectedRouter } from "./ProtectedRouter";
-export const AuthPage = () => {
+const AuthPage = () => {
   return (
     <AuthLayout>
       <Routes>
@@ -17,10 +17,10 @@ export const AuthPage = () => {
           path="sign-up/phone"
           element={
             <ProtectedRouter>
-            <SignUpWithPhone
-              backLink="/auth/sign-up"
-              nextLink="/auth/sign-up/set-password"
-            ></SignUpWithPhone>
+              <SignUpWithPhone
+                backLink="/auth/sign-up"
+                nextLink="/auth/sign-up/set-password"
+              ></SignUpWithPhone>
             </ProtectedRouter>
           }
         />
@@ -68,3 +68,5 @@ export const AuthPage = () => {
     </AuthLayout>
   );
 };
+
+export default AuthPage;

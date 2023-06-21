@@ -45,7 +45,7 @@ import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import SlideAlbum from "../../components/SlideAlbum";
 import { convertImage } from "../../utils/convertImage";
-import { SlideCard } from "../StudioDetail/SlideCard";
+import SlideCard from "../StudioDetail/SlideCard";
 import { calDate, calTime, priceService } from "../../utils/calculate";
 // import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import {

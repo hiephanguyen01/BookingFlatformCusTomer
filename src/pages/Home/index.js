@@ -14,23 +14,27 @@ import {
   getAllStudioLikedAction6,
   getFilterStudioPost,
 } from "../../stores/actions/studioPostAction";
-import {
-  getTop10OrderClothesAction,
-  getTop10OrderDeviceAction,
-  getTop10OrderMakeupAction,
-  getTop10OrderModelAction,
-  getTop10OrderPhotographerAction,
-  getTop10OrderStudioPostAction,
-} from "../../stores/actions/TopOrderCategoryAction";
 
 import { CATEGORIES } from "../../utils/category";
-import { SlideCard } from "../StudioDetail/SlideCard";
-import Banner from "./Banner/Banner";
+// import { SlideCard } from "../StudioDetail/SlideCard";
+import Banner from "./components/Banner/Banner";
 import styles from "./home.module.scss";
 import { Col, Grid } from "antd";
 import Header from "../../components/Header/Header";
+import { lazy } from "react";
+import { Suspense } from "react";
 
 const cx = classNames.bind(styles);
+const Top10Studio = lazy(() => import("./components/Top10Studio/Top10Studio"));
+const Top10Makeup = lazy(() => import("./components/Top10Makeup/Top10Makeup"));
+const Top10Photographer = lazy(() =>
+  import("./components/Top10Photographer/Top10Photographer")
+);
+const Top10Model = lazy(() => import("./components/Top10Model/Top10Model"));
+const Top10Clothes = lazy(() =>
+  import("./components/Top10Clothes/Top10Clothes")
+);
+const Top10Device = lazy(() => import("./components/Top10Device/Top10Device"));
 
 // ----------------------đừng xoá nhé ---------------------------------
 // export const Home = () => {
@@ -155,7 +159,7 @@ const cx = classNames.bind(styles);
 
 const { useBreakpoint } = Grid;
 
-export const Home = () => {
+const Home = () => {
   const { filter } = useSelector((state) => state.studioPostReducer);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
@@ -163,27 +167,6 @@ export const Home = () => {
   // const [provinces, setProvinces] = useState([]);
   const screens = useBreakpoint();
   const navigate = useNavigate();
-  const {
-    listOustandingStudioPost,
-    listOustandingModelPost,
-    listOustandingDevicePost,
-    listOustandingClothesPost,
-    listOustandingMakeupPost,
-    listOustandingPhotographerPost,
-  } = useSelector((state) => state.topOrderCategoryReducer);
-
-  useEffect(() => {
-    // (async () => {
-    //   const res = await studioPostService.getAllProvince();
-    //   setProvinces(res.data);
-    // })();
-    dispatch(getTop10OrderStudioPostAction(1));
-    dispatch(getTop10OrderPhotographerAction(2));
-    dispatch(getTop10OrderClothesAction(3));
-    dispatch(getTop10OrderMakeupAction(4));
-    dispatch(getTop10OrderDeviceAction(5));
-    dispatch(getTop10OrderModelAction(6));
-  }, [dispatch]);
 
   useEffect(() => {
     if (currentUser !== null) {
@@ -271,38 +254,28 @@ export const Home = () => {
                 ))}
           </div>
           <Banner banners={banners} />
-          <SlideCard
-            category={{ name: "studio", id: 1 }}
-            data={listOustandingStudioPost}
-            title="Top 10 Most Booked Studios"
-          />
-          <SlideCard
-            data={listOustandingModelPost}
-            category={{ name: "model", id: 6 }}
-            title="Top 10 Most Models"
-          />
-          <SlideCard
-            data={listOustandingClothesPost}
-            category={{ name: "clothes", id: 3 }}
-            title="Top 10 Most Clothes"
-          />
-          <SlideCard
-            data={listOustandingPhotographerPost}
-            category={{ name: "photographer", id: 2 }}
-            title="Top 10 Most Photographer"
-          />
-          <SlideCard
-            data={listOustandingDevicePost}
-            category={{ name: "device", id: 5 }}
-            title="Top 10 Most Devices"
-          />
-          <SlideCard
-            category={{ name: "makeup", id: 4 }}
-            data={listOustandingMakeupPost}
-            title="Top 10 Most Makeups"
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Top10Studio />
+          </Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Top10Model />
+          </Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Top10Clothes />
+          </Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Top10Photographer />
+          </Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Top10Device />
+          </Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Top10Makeup />
+          </Suspense>
         </div>
       </div>
     </>
   );
 };
+
+export default Home;

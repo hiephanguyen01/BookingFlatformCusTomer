@@ -53,7 +53,7 @@ import {
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
-import { SlideCard } from "../StudioDetail/SlideCard";
+import SlideCard from "../StudioDetail/SlideCard";
 import PromotionList from "../../components/PromotionList/PromotionList";
 import { calDate, calTime, priceService } from "../../utils/calculate";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";

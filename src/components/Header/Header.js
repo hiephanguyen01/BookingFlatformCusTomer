@@ -18,6 +18,9 @@ import {
   Grid,
   Badge,
   Slider,
+  Drawer,
+  Space,
+  Popover,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,7 +66,9 @@ const Header = () => {
   const [selectProvince, setSelectProvince] = useState(null);
   const [chooseCategory, setChooseCategory] = useState([]);
   const [openModalChat, setOpenModalChat] = useState(false);
+  const [open, setOpen] = useState(false);
   const [choosePrice, setChoosePrice] = useState({});
+  const [keyString, setKeyString] = useState("");
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const img = convertImage(user?.Image);
   const filter = useSelector((state) => state.studioPostReducer.filter);
@@ -117,7 +122,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -155,7 +161,8 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}>
+              onClick={() => navigate("/home/user/")}
+            >
               Thông tin tài khoản
             </Button>
           ),
@@ -168,7 +175,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -201,7 +209,6 @@ const Header = () => {
           const res = await studioPostService.getDistrictByProvince(
             selectProvince
           );
-          console.log(res.data);
           setDistricts(res.data);
         })();
       }
@@ -213,7 +220,7 @@ const Header = () => {
       ...filter,
       category: values.category || "",
       location: values?.province ? values.province : "",
-      keyString: values.keyString,
+      keyString: keyString,
       priceOption: values.price || 1,
       ratingOption: 3,
     };
@@ -235,14 +242,6 @@ const Header = () => {
         getFilterStudioPost(5, 1, newFilter, user, navigate, setVisible)
       );
     }
-
-    // const tempFilter = {
-    //   category: values.category,
-    //   provinceIds: values?.province ? [values.province] : [],
-    //   keyString: values.keyString,
-    //   priceOption: values.price,
-    // };
-    // navigate(`/home/filter?${queryString.stringify(tempFilter)}`);
   };
   const handleSignOut = () => {
     dispatch(logOut(navigate));
@@ -304,7 +303,6 @@ const Header = () => {
       <div className="Header">
         {screens.xs ? (
           <>
-            {" "}
             {visible && (
               <Modal
                 onCancel={handleCancel}
@@ -312,13 +310,15 @@ const Header = () => {
                 width={"100%"}
                 visible={visible}
                 footer={[]}
-                closable={false}>
+                closable={false}
+              >
                 <div className="search-container pt-30">
                   <Form onFinish={onFinish}>
                     <Row
                       className="w-100"
                       justify="space-between"
-                      align="middle">
+                      align="middle"
+                    >
                       <Col span={2}>
                         <CloseOutlined
                           className="mb-30"
@@ -351,7 +351,8 @@ const Header = () => {
                             </div>
                             <Row
                               gutter={[20, 20]}
-                              style={{ textAlign: "center", margin: "0 auto" }}>
+                              style={{ textAlign: "center", margin: "0 auto" }}
+                            >
                               {selectProvince ? (
                                 <>
                                   {districts.map((val) => (
@@ -367,7 +368,8 @@ const Header = () => {
                                         } `}
                                         onClick={() => {
                                           handleChooseDistrict(val);
-                                        }}>
+                                        }}
+                                      >
                                         {val.Name}
                                       </div>
                                     </Col>
@@ -388,7 +390,8 @@ const Header = () => {
                                         } `}
                                         onClick={() => {
                                           handleChooseProvince(val);
-                                        }}>
+                                        }}
+                                      >
                                         {val.Name}
                                       </div>
                                     </Col>
@@ -409,7 +412,8 @@ const Header = () => {
                               }
                             }}
                           />
-                        }>
+                        }
+                      >
                         <Button className="btn-item-filter">
                           Địa điểm <DownOutlined className="icon" />
                         </Button>
@@ -421,7 +425,8 @@ const Header = () => {
                             <h3 className="px-10 mb-20">Danh mục</h3>
                             <Row
                               gutter={[20, 20]}
-                              style={{ textAlign: "center", margin: "0 auto" }}>
+                              style={{ textAlign: "center", margin: "0 auto" }}
+                            >
                               {categories.slice(1, 7).map((val) => (
                                 <Col span={12}>
                                   <div
@@ -433,7 +438,8 @@ const Header = () => {
                                         ? "active"
                                         : ""
                                     } `}
-                                    onClick={() => handleChooseCategory(val)}>
+                                    onClick={() => handleChooseCategory(val)}
+                                  >
                                     {val.name}
                                   </div>
                                 </Col>
@@ -443,7 +449,8 @@ const Header = () => {
                         }
                         extendProp={false}
                         close={true}
-                        btnClose={<CheckSVG />}>
+                        btnClose={<CheckSVG />}
+                      >
                         <Button className="btn-item-filter">
                           Danh mục <DownOutlined className="icon" />
                         </Button>
@@ -454,7 +461,8 @@ const Header = () => {
                             <h3 className="px-10 mb-20">Giá</h3>
                             <Row
                               gutter={[20, 20]}
-                              style={{ textAlign: "center", margin: "0 auto" }}>
+                              style={{ textAlign: "center", margin: "0 auto" }}
+                            >
                               {PRICE_FILTER.map((val) => (
                                 <Col span={12}>
                                   <div
@@ -464,7 +472,8 @@ const Header = () => {
                                         ? "active"
                                         : ""
                                     }`}
-                                    onClick={() => setChoosePrice(val)}>
+                                    onClick={() => setChoosePrice(val)}
+                                  >
                                     {val.label}
                                   </div>
                                 </Col>
@@ -491,7 +500,8 @@ const Header = () => {
                         }
                         extendProp={false}
                         close={true}
-                        btnClose={<CheckSVG />}>
+                        btnClose={<CheckSVG />}
+                      >
                         <Button className="btn-item-filter">
                           Giá <DownOutlined className="icon" />
                         </Button>
@@ -503,13 +513,15 @@ const Header = () => {
                         width: "100%",
                         marginTop: "10px",
                         marginBottom: "35px",
-                      }}>
+                      }}
+                    >
                       <Button
                         type="primary"
                         htmlType="submit"
                         size="large"
                         style={{ width: "50%" }}
-                        className="btn-search">
+                        className="btn-search"
+                      >
                         Tìm kiếm
                       </Button>
                     </Form.Item>
@@ -525,7 +537,8 @@ const Header = () => {
             width={"700px"}
             visible={visible}
             footer={[]}
-            closable={false}>
+            closable={false}
+          >
             <div className="search-container">
               <div className="header-search">
                 <div className="logo">
@@ -546,7 +559,8 @@ const Header = () => {
                 <div className="option d-flex justify-content-between">
                   <Form.Item
                     name="province"
-                    style={{ width: "100%", marginRight: "20px" }}>
+                    style={{ width: "100%", marginRight: "20px" }}
+                  >
                     <Select
                       defaultValue=""
                       showSearch
@@ -556,7 +570,8 @@ const Header = () => {
                           .toLowerCase()
                           .includes(input.toLowerCase())
                       }
-                      className="select-item">
+                      className="select-item"
+                    >
                       <Option value="">Địa điểm</Option>
                       {Boolean(provinces) &&
                         provinces.map((val) => (
@@ -568,7 +583,8 @@ const Header = () => {
                   </Form.Item>
                   <Form.Item
                     name="category"
-                    style={{ width: "100%", marginRight: "20px" }}>
+                    style={{ width: "100%", marginRight: "20px" }}
+                  >
                     <Select defaultValue="-1" className="select-item">
                       <Option value="-1" disabled={true}>
                         Danh mục
@@ -595,13 +611,15 @@ const Header = () => {
                     width: "100%",
                     marginTop: "10px",
                     marginBottom: "35px",
-                  }}>
+                  }}
+                >
                   <Button
                     type="primary"
                     htmlType="submit"
                     size="large"
                     style={{ width: "50%" }}
-                    className="btn-search">
+                    className="btn-search"
+                  >
                     Tìm kiếm
                   </Button>
                 </Form.Item>
@@ -615,7 +633,8 @@ const Header = () => {
             align={"top"}
             gutter={
               screens?.xs || screens?.md || screens?.sm ? [0, 15] : [0, 0]
-            }>
+            }
+          >
             <Col
               lg={4}
               md={24}
@@ -629,7 +648,8 @@ const Header = () => {
                     : "flex-start"
                 }`,
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Link to="/home" className="link">
                 <div className="img">
                   {/* <img src={Logo} alt="" /> */}
@@ -646,17 +666,123 @@ const Header = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Row style={{ width: "100%" }} justify="space-between">
                 <Col lg={24} md={24} sm={24} xs={16}>
-                  <Input
-                    className="container__input"
-                    placeholder="Bạn đang tìm gì?"
-                    prefix={<SearchIcon />}
-                    suffix={<SearchButton />}
-                    onClick={() => setVisible(true)}
-                    readOnly
-                  />
+                  {screens?.xs ? (
+                    <Input
+                      className="container__input"
+                      placeholder="Bạn đang tìm gì?"
+                      prefix={<SearchIcon />}
+                      suffix={<SearchButton />}
+                      onChange={(e) => setKeyString(e.target.value)}
+                      onClick={() => setVisible(true)}
+                      readOnly
+                    />
+                  ) : (
+                    <Dropdown
+                      overlay={
+                        <div className="dropdown-search">
+                          <div className="search-container">
+                            <Form onFinish={onFinish}>
+                              <p className="filter">LỌC THEO</p>
+                              <div className="option d-flex justify-content-between">
+                                <Form.Item
+                                  name="province"
+                                  style={{ width: "100%", marginRight: "20px" }}
+                                >
+                                  <Select
+                                    defaultValue=""
+                                    showSearch
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                      option.children
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                    }
+                                    className="select-item"
+                                  >
+                                    <Option value="">Địa điểm</Option>
+                                    {Boolean(provinces) &&
+                                      provinces.map((val) => (
+                                        <Option key={val.id} value={val.Name}>
+                                          {val.Name}
+                                        </Option>
+                                      ))}
+                                  </Select>
+                                </Form.Item>
+                                <Form.Item
+                                  name="category"
+                                  style={{ width: "100%", marginRight: "20px" }}
+                                >
+                                  <Select
+                                    defaultValue="-1"
+                                    className="select-item"
+                                  >
+                                    <Option value="-1" disabled={true}>
+                                      Danh mục
+                                    </Option>
+                                    {categories.map((val) => (
+                                      <Option key={val.id} value={val.id}>
+                                        {val.name}
+                                      </Option>
+                                    ))}
+                                  </Select>
+                                </Form.Item>
+                                <Form.Item
+                                  name="price"
+                                  style={{ width: "100%" }}
+                                >
+                                  <Select
+                                    defaultValue=""
+                                    className="select-item"
+                                  >
+                                    <Option value="">Giá</Option>
+                                    <Option value={2}>Giá cao nhất</Option>
+                                    <Option value={1}>Giá thấp nhất </Option>
+                                    <Option value={3}>
+                                      Giảm giá nhiều nhất{" "}
+                                    </Option>
+                                  </Select>
+                                </Form.Item>
+                              </div>
+                              <Form.Item
+                                style={{
+                                  textAlign: "center",
+                                  width: "100%",
+                                  marginTop: "10px",
+                                  // marginBottom: "35px",
+                                }}
+                              >
+                                <Button
+                                  type="primary"
+                                  htmlType="submit"
+                                  size="large"
+                                  style={{ width: "50%" }}
+                                  className="btn-search"
+                                >
+                                  Tìm kiếm
+                                </Button>
+                              </Form.Item>
+                            </Form>
+                          </div>
+                        </div>
+                      }
+                      // placement="topRight"
+                      trigger={["click"]}
+                    >
+                      <Input
+                        className="container__input"
+                        placeholder="Bạn đang tìm gì?"
+                        prefix={<SearchIcon />}
+                        suffix={<SearchButton />}
+                        onChange={(e) => setKeyString(e.target.value)}
+                        // onClick={() => showDrawer()}
+                        // readOnly
+                      />
+                    </Dropdown>
+                  )}
                   {!screens.xs && <Hotkey />}
                 </Col>
                 <Col lg={0} md={0} sm={0} xs={7}>
@@ -664,11 +790,13 @@ const Header = () => {
                     <Col
                       style={{
                         textAlign: "center",
-                      }}>
+                      }}
+                    >
                       <Badge
                         count={0}
                         size="default"
-                        onClick={() => setOpenModalChat(true)}>
+                        onClick={() => setOpenModalChat(true)}
+                      >
                         <img src={Chat} className="h-20px" alt="" />
                       </Badge>
                       <p>Chat</p>
@@ -685,7 +813,8 @@ const Header = () => {
                       }
                       style={{
                         textAlign: "center",
-                      }}>
+                      }}
+                    >
                       <Badge count={0} size="default">
                         <ShoppingOutlined
                           style={{ fontSize: "19px", color: "#828282" }}
@@ -719,7 +848,8 @@ const Header = () => {
                       "",
                       {}
                     )
-                  }>
+                  }
+                >
                   <ShoppingOutlined
                     style={{ fontSize: "20px", color: "#828282" }}
                   />
@@ -750,7 +880,8 @@ const Header = () => {
                       className="btn-become-partner w-80 ms-30 mt-5"
                       onClick={() =>
                         window.open("https://partner.bookingstudio.vn", "blank")
-                      }>
+                      }
+                    >
                       Trở thành đối tác
                     </div>
                   </div>

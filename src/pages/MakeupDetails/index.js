@@ -41,7 +41,7 @@ import { calDate, calTime } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import { SlideCard } from "../StudioDetail/SlideCard";
+import SlideCard from "../StudioDetail/SlideCard";
 import "./makeupDetails.scss";
 import {
   SET_PROMOTION_CODE,

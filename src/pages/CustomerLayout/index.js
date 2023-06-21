@@ -7,7 +7,7 @@ import "./CustomerLayout.scss";
 import { Grid } from "antd";
 import BottomNav from "../../components/BottomNav/BottomNav";
 const { useBreakpoint } = Grid;
-export const CustomerLayout = ({ children }) => {
+const CustomerLayout = ({ children }) => {
   const screens = useBreakpoint();
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   return (
@@ -28,3 +28,5 @@ export const CustomerLayout = ({ children }) => {
     </div>
   );
 };
+
+export default CustomerLayout;

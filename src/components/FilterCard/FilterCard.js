@@ -6,7 +6,7 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import { Col, Grid, Row } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 import { convertImage } from "../../utils/convertImage";
 import { ReactComponent as LocationIcon } from "../../assets/svg/location.svg";
 import "./FilterCard.scss";
+import { convertPrice } from "../../utils/convert";
 const categories = {
   1: {
     id: 1,
@@ -279,26 +280,16 @@ const FilterCard = ({ data, category }) => {
                       <p>Đã đặt {data?.BookingCount}</p>
                     </Col>
                   </Row>
-                  <CurrencyFormat
-                    value={data?.service?.PriceByHour}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    renderText={(value) => (
-                      <p className="addition">
-                        {value} {data?.PriceUnit || ""}
-                      </p>
-                    )}
-                  />
-                  <CurrencyFormat
-                    value={data?.service?.PriceByDate}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    renderText={(value) => (
-                      <p className="addition">
-                        {value} {data?.PriceUnit || ""}
-                      </p>
-                    )}
-                  />
+                  {data?.PriceByHour && (
+                    <p className="addition">
+                      {convertPrice(data?.PriceByHour)} đ / giờ
+                    </p>
+                  )}
+                  {data?.PriceByDate && (
+                    <p className="addition">
+                      {convertPrice(data?.PriceByDate)} đ / ngày
+                    </p>
+                  )}
                 </Row>
               </div>
             </>
@@ -309,4 +300,4 @@ const FilterCard = ({ data, category }) => {
   );
 };
 
-export default FilterCard;
+export default memo(FilterCard);

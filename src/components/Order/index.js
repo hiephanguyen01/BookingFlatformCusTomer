@@ -315,6 +315,20 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const CancelFreeDate = moment(
+    chooseService?.OrderByTime
+      ? chooseService?.OrderByTimeFrom
+      : chooseService?.OrderByDateFrom
+  )
+    .subtract(
+      chooseService?.OrderByTime
+        ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
+        : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
+      `${chooseService?.OrderByTime ? "hours" : "days"}`
+    )
+    .utc()
+    .format("DD/MM/YYYY HH:mm A");
+
   return (
     <div className="order_container">
       <Row
@@ -397,6 +411,20 @@ const Index = ({ linkTo = "" }) => {
                   Thanh toán trực tiếp cho shop
                 </p>
               )}
+            </div>
+            <div className="border-bottom">
+              <Row
+                align={"middle"}
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  lineHeight: "22px",
+                  color: "#009874",
+                }}
+              >
+                <CheckCircleOutlined className="me-6 mb-3" /> Miễn phí hủy trước
+                ngày {CancelFreeDate}
+              </Row>
             </div>
             <div className={`${!screens?.xs && "border-bottom"}`}>
               <div className="text-title" style={{ marginBottom: "8px" }}>

@@ -1,6 +1,6 @@
 import { BackTop, Grid } from "antd";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { lazy, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import "./App.scss";
@@ -8,39 +8,42 @@ import { ReactComponent as BackTopIcon } from "./assets/BackToTop.svg";
 import UpdateConfirm from "./components/ConfirmOrder";
 import Success from "./components/Email/Success";
 import { ModalCustom } from "./components/Modal";
-import { AuthPage } from "./pages/Auth/AuthPage";
 import { ProtectedRouter } from "./pages/Auth/ProtectedRouter";
-import BookStudio from "./pages/BookStudio";
-import Cart from "./pages/Cart";
-import PageClothes from "./pages/ClothesDetails/PageClothes";
-import { CustomerLayout } from "./pages/CustomerLayout";
-import Dao from "./pages/Dao";
-import DetectApp from "./pages/DetectApp/DetectApp";
-import PageDevice from "./pages/DeviceDetails/PageDevice";
-import FilterPage from "./pages/FilterPage/FilterPage";
-import HelpCenterPage from "./pages/HelpCenter/HelpCenterPage";
-import { Home } from "./pages/Home";
-import PageMakeup from "./pages/MakeupDetails/PageMakeup";
-import PageModel from "./pages/ModelDetails/PageModel";
-import PagePhotographer from "./pages/PhotographerDetail/PagePhotographer";
-import PostDetail from "./pages/PostDetail/PostDetail";
-import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
-import Refund from "./pages/Refund/Refund";
-import PageStudio from "./pages/StudioDetail/PageStudio";
-import TermsUse from "./pages/TermsUse/TermsUse";
-import UserAccount from "./pages/UserAccount";
-import Verify from "./pages/Verify/Verify";
 import { visitService } from "./services/VisitService";
 import {
   getCurrentUser,
   setupSocket,
 } from "./stores/actions/autheticateAction";
 import { SET_USER } from "./stores/types/authType";
+import SuspenseWrap from "./components/SuspenseWrap/SuspenseWrap";
+
+const Dao = lazy(() => import("./pages/Dao"));
+const DetectApp = lazy(() => import("./pages/DetectApp/DetectApp"));
+const PageDevice = lazy(() => import("./pages/DeviceDetails/PageDevice"));
+const FilterPage = lazy(() => import("./pages/FilterPage/FilterPage"));
+const HelpCenterPage = lazy(() => import("./pages/HelpCenter/HelpCenterPage"));
+const AuthPage = lazy(() => import("./pages/Auth/AuthPage"));
+const BookStudio = lazy(() => import("./pages/BookStudio"));
+const Cart = lazy(() => import("./pages/Cart"));
+const PageClothes = lazy(() => import("./pages/ClothesDetails/PageClothes"));
+const CustomerLayout = lazy(() => import("./pages/CustomerLayout"));
+const Home = lazy(() => import("./pages/Home"));
+const PageMakeup = lazy(() => import("./pages/MakeupDetails/PageMakeup"));
+const PageModel = lazy(() => import("./pages/ModelDetails/PageModel"));
+const PagePhotographer = lazy(() =>
+  import("./pages/PhotographerDetail/PagePhotographer")
+);
+const PostDetail = lazy(() => import("./pages/PostDetail/PostDetail"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy/PrivacyPolicy"));
+const Refund = lazy(() => import("./pages/Refund/Refund"));
+const PageStudio = lazy(() => import("./pages/StudioDetail/PageStudio"));
+const TermsUse = lazy(() => import("./pages/TermsUse/TermsUse"));
+const UserAccount = lazy(() => import("./pages/UserAccount"));
+const Verify = lazy(() => import("./pages/Verify/Verify"));
 
 const { useBreakpoint } = Grid;
 
 function App() {
-  const screens = useBreakpoint();
   const dispatch = useDispatch();
   const { search } = useLocation();
   useEffect(() => {
@@ -109,8 +112,22 @@ function App() {
       </BackTop>
       <Routes>
         <Route index path="*" element={<Navigate to="/home" />} />
-        <Route path="/auth/*" element={<AuthPage />}></Route>
-        <Route path="/test" element={<Success />}></Route>
+        <Route
+          path="/auth/*"
+          element={
+            <SuspenseWrap>
+              <AuthPage />
+            </SuspenseWrap>
+          }
+        ></Route>
+        <Route
+          path="/test"
+          element={
+            <SuspenseWrap>
+              <Success />
+            </SuspenseWrap>
+          }
+        ></Route>
         <Route
           path="/verify/:token"
           element={
@@ -120,32 +137,146 @@ function App() {
           }
         ></Route>
         <Route path="home" element={<CustomerLayout />}>
-          <Route path="refund" element={<Refund />}></Route>
-          <Route index element={<Home />}></Route>
+          <Route
+            path="refund"
+            element={
+              <SuspenseWrap>
+                <Refund />
+              </SuspenseWrap>
+            }
+          ></Route>
+          <Route
+            index
+            element={
+              <SuspenseWrap>
+                <Home />
+              </SuspenseWrap>
+            }
+          ></Route>
           <Route
             path="user/*"
             element={
-              <ProtectedRouter>
-                <UserAccount />
-              </ProtectedRouter>
+              <SuspenseWrap>
+                <ProtectedRouter>
+                  <UserAccount />
+                </ProtectedRouter>
+              </SuspenseWrap>
             }
           ></Route>
-          <Route path="filter" element={<FilterPage />}></Route>
-          <Route path="dao" element={<Dao />} />
+          <Route
+            path="filter"
+            element={
+              <SuspenseWrap>
+                <FilterPage />
+              </SuspenseWrap>
+            }
+          ></Route>
+          <Route
+            path="dao"
+            element={
+              <SuspenseWrap>
+                <Dao />
+              </SuspenseWrap>
+            }
+          />
           <Route path="dao/posts/:postId" element={<PostDetail />} />
-          <Route path="studio/book" element={<BookStudio />} />
-          <Route path="cart" element={<Cart />} />
+          <Route
+            path="studio/book"
+            element={
+              <SuspenseWrap>
+                <BookStudio />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="cart"
+            element={
+              <SuspenseWrap>
+                <Cart />
+              </SuspenseWrap>
+            }
+          />
           <Route path="helpCenter/*" element={<HelpCenterPage />}></Route>
-          <Route path="studio/*" element={<PageStudio />} />
-          <Route path="photographer/*" element={<PagePhotographer />} />
-          <Route path="device/*" element={<PageDevice />} />
-          <Route path="clothes/*" element={<PageClothes />} />
-          <Route path="model/*" element={<PageModel />} />
-          <Route path="makeup/*" element={<PageMakeup />} />
-          <Route path="confirm-order/*" element={<UpdateConfirm />} />
-          <Route path="privacy-policy/*" element={<PrivacyPolicy />}></Route>
-          <Route path="terms-use/*" element={<TermsUse />}></Route>
-          <Route path="detect-app" element={<DetectApp />}></Route>
+          <Route
+            path="studio/*"
+            element={
+              <SuspenseWrap>
+                <PageStudio />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="photographer/*"
+            element={
+              <SuspenseWrap>
+                <PagePhotographer />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="device/*"
+            element={
+              <SuspenseWrap>
+                <PageDevice />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="clothes/*"
+            element={
+              <SuspenseWrap>
+                <PageClothes />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="model/*"
+            element={
+              <SuspenseWrap>
+                <PageModel />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="makeup/*"
+            element={
+              <SuspenseWrap>
+                <PageMakeup />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="confirm-order/*"
+            element={
+              <SuspenseWrap>
+                <UpdateConfirm />
+              </SuspenseWrap>
+            }
+          />
+          <Route
+            path="privacy-policy/*"
+            element={
+              <SuspenseWrap>
+                <PrivacyPolicy />
+              </SuspenseWrap>
+            }
+          ></Route>
+          <Route
+            path="terms-use/*"
+            element={
+              <SuspenseWrap>
+                <TermsUse />
+              </SuspenseWrap>
+            }
+          ></Route>
+          <Route
+            path="detect-app"
+            element={
+              <SuspenseWrap>
+                <DetectApp />
+              </SuspenseWrap>
+            }
+          ></Route>
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}

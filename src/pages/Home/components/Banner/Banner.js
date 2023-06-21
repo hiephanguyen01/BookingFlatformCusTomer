@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Autoplay, Lazy, Navigation, Pagination, Parallax } from "swiper";
 import "swiper/css";
 import "swiper/css/bundle";
@@ -6,10 +6,10 @@ import "swiper/css/lazy";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import BannerSkeleton from "../../../components/Skeleton/BannerSkeleton";
-import { convertImage } from "../../../utils/convertImage";
+import BannerSkeleton from "../../../../components/Skeleton/BannerSkeleton";
+import { convertImage } from "../../../../utils/convertImage";
 import "./banner.scss";
-import { Grid } from "antd";
+import { Col, Grid, Row } from "antd";
 const { useBreakpoint } = Grid;
 const Banner = ({ banners }) => {
   const screens = useBreakpoint();
@@ -31,17 +31,29 @@ const Banner = ({ banners }) => {
             banners.map(
               (banner) =>
                 banner.IsVisible && (
-                  <SwiperSlide key={banner.id}>
-                    <a href={banner.Description} className="h-100">
-                      <div data-swiper-parallax="-300" className="banner h-100">
-                        <img
-                          data-swiper-parallax="-300"
-                          slot="container-start"
-                          src={convertImage(banner.Image)}
-                          alt={banner.id}
-                          className="bg swiper-lazy"
-                        />
-                        <div
+                  <SwiperSlide key={banner.id} className="w-100">
+                    <a href={banner.Description} className="h-100 w-100">
+                      <Row
+                        // data-swiper-parallax="-300"
+                        className="banner h-100 w-100"
+                        justify={"space-between"}
+                      >
+                        {banner.Image.map((item) => (
+                          <Col
+                            span={banner.Image.length > 1 ? 12 : 24}
+                            className="w-100 h-100"
+                          >
+                            <img
+                              // data-swiper-parallax="-300"
+                              slot="container-start"
+                              src={convertImage(item)}
+                              alt={banner.id}
+                              className={`bg swiper-lazy w-100 h-100`}
+                            />
+                          </Col>
+                        ))}
+
+                        {/* <div
                           className="contentBanner"
                           data-swiper-parallax="-200"
                         >
@@ -51,9 +63,9 @@ const Banner = ({ banners }) => {
                           <p data-swiper-parallax="w-100">
                             {banner.description}
                           </p>
-                        </div>
-                      </div>
-                      <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                        </div> */}
+                      </Row>
+                      {/* <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div> */}
                     </a>
                   </SwiperSlide>
                 )
@@ -64,4 +76,4 @@ const Banner = ({ banners }) => {
   );
 };
 
-export default Banner;
+export default memo(Banner);

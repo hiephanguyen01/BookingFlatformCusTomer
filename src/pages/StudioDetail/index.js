@@ -54,7 +54,7 @@ import { IMG } from "../../utils/REACT_APP_DB_BASE_URL_IMG";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import styles from "./Detail.module.scss";
 import { Report } from "./Report";
-import { SlideCard } from "./SlideCard";
+import SlideCard from "./SlideCard";
 import BackNav from "../../components/BackNav/BackNav";
 import { ReactComponent as LocationIcon } from "../../assets/svg/location.svg";
 
@@ -76,7 +76,7 @@ const cx = classNames.bind(styles);
 
 const { useBreakpoint } = Grid;
 
-export const StudioDetail = () => {
+const StudioDetail = () => {
   const screens = useBreakpoint();
 
   const { id } = useParams();
@@ -1274,3 +1274,5 @@ export const StudioDetail = () => {
     </>
   );
 };
+
+export default StudioDetail;

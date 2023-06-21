@@ -42,7 +42,7 @@ import {
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { convertImage } from "../../utils/convertImage";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import { SlideCard } from "../StudioDetail/SlideCard";
+import SlideCard from "../StudioDetail/SlideCard";
 import "./clothesDetails.scss";
 import styles from "./Detail.module.scss";
 import {

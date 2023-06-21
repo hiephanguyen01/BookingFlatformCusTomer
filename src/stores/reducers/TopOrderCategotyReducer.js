@@ -3,7 +3,7 @@ import {
   SET_TOP_DEVICE_POST,
   SET_TOP_MAKEUP_POST,
   SET_TOP_MODEL_POST,
-  SET_TOP_ORDER_STUIDO_POST,
+  SET_TOP_ORDER_STUDIO_POST,
   SET_TOP_PHOTOGRAPHER_POST,
 } from "../types/TopOrderCategoryPostType";
 
@@ -26,7 +26,7 @@ export const topOrderCategoryReducer = (state = initialState, action) => {
       return { ...state, listOustandingMakeupPost: action.data };
     case SET_TOP_MODEL_POST:
       return { ...state, listOustandingModelPost: action.data };
-    case SET_TOP_ORDER_STUIDO_POST:
+    case SET_TOP_ORDER_STUDIO_POST:
       return { ...state, listOustandingStudioPost: action.data };
     case SET_TOP_PHOTOGRAPHER_POST:
       return { ...state, listOustandingPhotographerPost: action.data };
