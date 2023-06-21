@@ -168,7 +168,10 @@ const FilterCard = ({ data, category }) => {
                         twoToneColor="#F8D93A"
                         className="me-5"
                       />
-                      {data?.TotalRate} ({data?.NumberOfRating})
+                      {`${data?.TotalRate}${`(
+                          ${
+                            data?.NumberOfRating > 0 ? data?.NumberOfRating : 0
+                          })`}`}
                     </p>
                   </Row>
                   <Row justify="space-between" align="middle" className="mb-10">
@@ -260,7 +263,10 @@ const FilterCard = ({ data, category }) => {
                           twoToneColor="#F8D93A"
                           className="me-5"
                         />
-                        {data?.TotalRate} ({data?.NumberOfRating})
+                        {`${data?.TotalRate}${`(
+                          ${
+                            data?.NumberOfRating > 0 ? data?.NumberOfRating : 0
+                          })`}`}
                       </p>
                     </Col>
                   </Row>
