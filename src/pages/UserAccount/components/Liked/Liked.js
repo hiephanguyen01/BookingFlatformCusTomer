@@ -2,7 +2,7 @@ import { Grid, Tabs } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllStudioLikedAction } from "../../../../stores/actions/studioPostAction";
-import ListItemLikeCard from "../../../Home/ListCard/ListItemLikeCard";
+import ListItemLikeCard from "../../../Home/components/ListCard/ListItemLikeCard";
 import { DividerCustom } from "../OrderStatus/conponents/DividerCustom/DividerCustom";
 import "./liked.scss";
 import BackNav from "../../../../components/BackNav/BackNav";

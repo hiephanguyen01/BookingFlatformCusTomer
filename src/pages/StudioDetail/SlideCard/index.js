@@ -13,8 +13,7 @@ import { Navigation, Autoplay } from "swiper";
 import CarSkeleton from "../../../components/Skeleton/CarSkeleton";
 import { memo } from "react";
 
-export const SlideCard = memo(({ title, data, category, loading = false }) => {
-  console.log("SliderCard");
+const SlideCard = ({ title, data, category, loading = false }) => {
   return (
     <>
       <div className={"ListItem"}>
@@ -80,4 +79,6 @@ export const SlideCard = memo(({ title, data, category, loading = false }) => {
       </div>
     </>
   );
-});
+};
+
+export default memo(SlideCard);

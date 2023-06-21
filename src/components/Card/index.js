@@ -1,7 +1,7 @@
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
 import classNames from "classnames/bind";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import images from "../../assets/images";
@@ -13,7 +13,7 @@ import styles from "./Card.module.scss";
 
 const cx = classNames.bind(styles);
 
-export const Card = ({ value, category }) => {
+export const Card = memo(({ value, category }) => {
   const [newData, setNewData] = useState();
   const img = IMG(value?.Image[0] || value?.Image) || images.baby;
   const { currentUser } = useSelector((state) => state.authenticateReducer);
@@ -115,4 +115,4 @@ export const Card = ({ value, category }) => {
       </div>
     </div>
   );
-};
+});

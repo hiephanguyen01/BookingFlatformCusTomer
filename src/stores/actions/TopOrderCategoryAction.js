@@ -4,7 +4,7 @@ import {
   SET_TOP_DEVICE_POST,
   SET_TOP_MAKEUP_POST,
   SET_TOP_MODEL_POST,
-  SET_TOP_ORDER_STUIDO_POST,
+  SET_TOP_ORDER_STUDIO_POST,
   SET_TOP_PHOTOGRAPHER_POST,
 } from "../types/TopOrderCategoryPostType";
 
@@ -14,7 +14,7 @@ export const getTop10OrderStudioPostAction = (category) => {
       const { data } = await topOrderCategory.getTop10OrderCategoryPost(
         "studio-post"
       );
-      dispatch({ type: SET_TOP_ORDER_STUIDO_POST, data });
+      dispatch({ type: SET_TOP_ORDER_STUDIO_POST, data });
     } catch (error) {
       console.log(error);
     }

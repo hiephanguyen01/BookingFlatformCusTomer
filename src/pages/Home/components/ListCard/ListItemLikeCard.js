@@ -1,7 +1,7 @@
 import { Col, Grid, Pagination, Row } from "antd";
 import classNames from "classnames/bind";
 import React, { memo, useEffect, useState } from "react";
-import { CardLiked } from "../../../components/Card/CardLiked";
+import { CardLiked } from "../../../../components/Card/CardLiked";
 // import { getAllStudioLikedAction1 } from "../../../stores/actions/studioPostAction";
 import styles from "./ListCard.module.scss";
 const cx = classNames.bind(styles);

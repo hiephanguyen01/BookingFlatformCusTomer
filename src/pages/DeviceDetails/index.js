@@ -34,7 +34,7 @@ import {
 } from "../../stores/actions/studioPostAction";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
-import { SlideCard } from "../StudioDetail/SlideCard";
+import SlideCard from "../StudioDetail/SlideCard";
 // import { SET_PROMOTION_CODE_USER_SAVE } from "../../stores/types/promoCodeType";
 import {
   SET_PROMOTION_CODE,
