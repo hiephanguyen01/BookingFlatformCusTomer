@@ -238,22 +238,23 @@ const FilterPage = () => {
     },
   };
   const onChangeFilterCategory = (e) => {
+    // const newFilter = { ...filter, category: e.target.value };
+    // navigate(
+    //   `/home/filter?${queryString.stringify(
+    //     Object.keys(newFilter)?.reduce(
+    //       (newFilter, key) =>
+    //         newFilter[key] === "" || newFilter[key] === undefined
+    //           ? { ...newFilter }
+    //           : { ...newFilter, [key]: newFilter[key] },
+    //       {}
+    //     )
+    //   )}`
+    // );
     dispatch(
       getFilterStudioPost(
         5,
         1,
         { ...filter, category: e.target.value },
-        currentUser,
-        navigate
-      )
-    );
-  };
-  const onChangeFilterCategoryOption = (value) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, category: value },
         currentUser,
         navigate
       )
