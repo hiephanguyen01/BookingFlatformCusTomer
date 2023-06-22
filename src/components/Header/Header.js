@@ -60,7 +60,7 @@ const Header = () => {
   const inputSearchRef = useRef(null);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 5000000]);
+  const [priceRange, setPriceRange] = useState([]);
   const [chooseProvince, setChooseProvince] = useState([]);
   const [chooseDistrict, setChooseDistrict] = useState([]);
   const [selectProvince, setSelectProvince] = useState(null);
@@ -75,6 +75,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const screens = useBreakpoint();
+  const [filterProvinces, setFilterProvinces] = useState([]);
+  const [searchProvince, setSearchProvince] = useState("");
   const categories = [
     {
       id: "",
@@ -199,6 +201,7 @@ const Header = () => {
     (async () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
+      setFilterProvinces(res.data);
     })();
   }, []);
 
@@ -342,13 +345,26 @@ const Header = () => {
                         modalContent={
                           <div className="modal-province">
                             <h3 className="px-10 mb-20">Địa điểm</h3>
-                            <div className="px-10 mb-26">
-                              <Input
-                                placeholder="Bạn đang tìm gì?"
-                                prefix={<SearchOutlined />}
-                                className="input-search-province "
-                              />
-                            </div>
+                            {!selectProvince && (
+                              <div className="px-10 mb-26">
+                                <Input
+                                  placeholder="Bạn đang tìm gì?"
+                                  prefix={<SearchOutlined />}
+                                  value={searchProvince || ""}
+                                  className="input-search-province "
+                                  onChange={(e) => {
+                                    const filterProvince = provinces.filter(
+                                      (p) =>
+                                        p.Name.toUpperCase().includes(
+                                          e.target.value.toUpperCase()
+                                        )
+                                    );
+                                    setSearchProvince(e.target.value);
+                                    setFilterProvinces(filterProvince);
+                                  }}
+                                />
+                              </div>
+                            )}
                             <Row
                               gutter={[20, 20]}
                               style={{ textAlign: "center", margin: "0 auto" }}
@@ -377,7 +393,7 @@ const Header = () => {
                                 </>
                               ) : (
                                 <>
-                                  {provinces.map((val) => (
+                                  {filterProvinces.map((val) => (
                                     <Col span={12}>
                                       <div
                                         key={val.id}

@@ -187,16 +187,18 @@ const FilterCard = ({ data, category }) => {
                     <p>Đã đặt {data?.BookingCount}</p>
                   </Row>
                   <div className="d-flex justify-content-center align-items-center">
-                    <CurrencyFormat
-                      value={data?.Price}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      renderText={(value) => (
-                        <p className="addition">
-                          {value} {data?.PriceUnit || ""}
-                        </p>
-                      )}
-                    />
+                    {data?.PriceByHour && (
+                      <p className="addition">
+                        {convertPrice(data?.PriceByHour)} đ / giờ
+                      </p>
+                    )}
+                  </div>
+                  <div className="d-flex justify-content-center align-items-center">
+                    {data?.PriceByDate && (
+                      <p className="addition">
+                        {convertPrice(data?.PriceByDate)} đ / ngày
+                      </p>
+                    )}
                   </div>
                 </Col>
               </div>
