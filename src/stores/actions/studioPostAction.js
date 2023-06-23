@@ -54,6 +54,7 @@ export const getFilterStudioPost =
         dispatch(getAllStudioLikedAction1(filter.category));
       }
       setVisible(false);
+
       navigate(
         `/home/filter?${queryString.stringify(
           Object.keys(filter)?.reduce(

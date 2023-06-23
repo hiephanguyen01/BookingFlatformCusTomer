@@ -170,6 +170,7 @@ const FilterPage = () => {
         );
       } else {
         console.log("desktop");
+        console.log(query);
         dispatch(
           getFilterStudioPost(
             5,
@@ -210,11 +211,11 @@ const FilterPage = () => {
 
   useEffect(() => {
     if (provinces?.length > 0) {
-      const province = provinces.find((p) => p.Name === filter?.location);
+      const province = provinces.find((p) => p.Name === querySearch?.location);
       province && form.setFieldsValue({ location1: +province?.Code || "" });
       setSelectProvince(province?.Code || null);
     }
-  }, [filter, province]);
+  }, [province, querySearch, provinces, form]);
 
   useEffect(() => {
     if (selectProvince) {
@@ -237,27 +238,19 @@ const FilterPage = () => {
       label: <strong>{convertPrice(5000000)}đ</strong>,
     },
   };
+
   const onChangeFilterCategory = (e) => {
-    // const newFilter = { ...filter, category: e.target.value };
-    // navigate(
-    //   `/home/filter?${queryString.stringify(
-    //     Object.keys(newFilter)?.reduce(
-    //       (newFilter, key) =>
-    //         newFilter[key] === "" || newFilter[key] === undefined
-    //           ? { ...newFilter }
-    //           : { ...newFilter, [key]: newFilter[key] },
-    //       {}
-    //     )
-    //   )}`
-    // );
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, category: e.target.value },
-        currentUser,
-        navigate
-      )
+    const newFilter = { ...filter, category: e.target.value };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
@@ -267,14 +260,17 @@ const FilterPage = () => {
     if (value === "") {
       setSelectProvince(null);
       setDistricts([]);
-      dispatch(
-        getFilterStudioPost(
-          5,
-          1,
-          { ...filter, location: value },
-          currentUser,
-          navigate
-        )
+      const newFilter = { ...filter, location: value };
+      navigate(
+        `/home/filter?${queryString.stringify(
+          Object.keys(newFilter)?.reduce(
+            (obj, key) =>
+              newFilter[key] === "" || newFilter[key] === undefined
+                ? { ...obj }
+                : { ...obj, [key]: newFilter[key] },
+            {}
+          )
+        )}`
       );
     } else {
       setSelectProvince(value);
@@ -283,17 +279,20 @@ const FilterPage = () => {
       } else {
         newValue = prov.Name;
       }
-      dispatch(
-        getFilterStudioPost(
-          5,
-          1,
-          { ...filter, location: newValue },
-          currentUser,
-          navigate
-        )
+      const newFilter = { ...filter, location: newValue };
+      navigate(
+        `/home/filter?${queryString.stringify(
+          Object.keys(newFilter)?.reduce(
+            (obj, key) =>
+              newFilter[key] === "" || newFilter[key] === undefined
+                ? { ...obj }
+                : { ...obj, [key]: newFilter[key] },
+            {}
+          )
+        )}`
       );
     }
-    form.setFieldsValue({ location: "" });
+    // form.setFieldsValue({ location: "" });
   };
 
   const onChangeFilterDistrict = (value) => {
@@ -306,18 +305,39 @@ const FilterPage = () => {
     } else {
       newValue = value;
     }
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, location: newValue },
-        currentUser,
-        navigate
-      )
+    const newFilter = { ...filter, location: newValue };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const onChangeInput = (e) => {
+    const newQuery = {
+      ...filter,
+      keyString: e.target.value,
+    };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newQuery)?.reduce(
+          (newFilter, key) =>
+            newQuery[key] === "" || newQuery[key] === undefined
+              ? { ...newFilter }
+              : { ...newFilter, [key]: newQuery[key] },
+          {}
+        )
+      )}`
+    );
+  };
+
+  const onChangeInputMobile = (e) => {
     const newQuery = {
       keyString: e.target.value,
       category: chooseCategory,
@@ -337,44 +357,50 @@ const FilterPage = () => {
         )
       )}`
     );
-    // dispatch(
-    //   getFilterStudioPost(
-    //     5,
-    //     1,
-    //     { ...filter, keyString: e.target.value },
-    //     currentUser,
-    //     navigate
-    //   )
-    // );
   };
 
   const onChangePriceOption = (e) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, priceOption: e.target.value },
-        currentUser,
-        navigate
-      )
+    const newFilter = { ...filter, priceOption: e.target.value };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const onChangeRateOption = (e) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, ratingOption: e.target.value },
-        {},
-        navigate
-      )
+    const newFilter = { ...filter, ratingOption: e.target.value };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const onChangeSlideRange = (val) => {
-    dispatch(
-      getFilterStudioPost(5, 1, { ...filter, priceRange: val }, {}, navigate)
+    const newFilter = { ...filter, priceRange: val };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
@@ -386,26 +412,30 @@ const FilterPage = () => {
     }
     window.scrollTo({ behavior: "smooth", top: ref?.current?.offsetTop });
   };
+
   const handleClearFilter = () => {
     form.resetFields();
     setProvince("");
     setKeyString("");
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        {
-          keyString: "",
-          category: "",
-          priceOption: 1,
-          price1: undefined,
-          price2: undefined,
-          location1: province,
-          ratingOption: 3,
-        },
-        {},
-        navigate
-      )
+    const newFilter = {
+      keyString: "",
+      category: "",
+      priceOption: 1,
+      price1: undefined,
+      price2: undefined,
+      location1: province,
+      ratingOption: 3,
+    };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
@@ -535,7 +565,7 @@ const FilterPage = () => {
                     prefix={<SearchOutlined />}
                     className="input-search "
                     defaultValue={keyString || ""}
-                    onPressEnter={onChangeInput}
+                    onPressEnter={onChangeInputMobile}
                   />
                 </Col>
                 <Col span={3}>
@@ -887,7 +917,11 @@ const FilterPage = () => {
             </div>
           )}
           <Col lg={6} md={24} sm={24} xs={0}>
-            <Form {...layout} onFinish={handleClearFilter} form={form}>
+            <Form
+              {...layout}
+              //  onFinish={handleClearFilter}
+              form={form}
+            >
               <Row className="w-100">
                 <Col lg={24} md={24} sm={24} xs={24}>
                   <Row className="box" gutter={[10, 10]}>
@@ -895,7 +929,11 @@ const FilterPage = () => {
                       <p className="text">LỌC THEO</p>
                     </Col>
                     <Col sm={12} style={{ textAlign: "end" }}>
-                      <Button htmlType="submit" type="primary">
+                      <Button
+                        // htmlType="submit"
+                        type="primary"
+                        onClick={handleClearFilter}
+                      >
                         Xoá bộ lọc
                       </Button>
                     </Col>
@@ -905,7 +943,7 @@ const FilterPage = () => {
                         <Input
                           className={`${!screens?.lg && screens?.md && "w-70"}`}
                           style={{ borderRadius: "8px" }}
-                          onChange={onChangeInput}
+                          onPressEnter={onChangeInput}
                           defaultValue={keyString}
                         />
                       </Form.Item>
