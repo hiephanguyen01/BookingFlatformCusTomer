@@ -14,9 +14,7 @@ export const IMG = (imageId) => {
   const secrect2 = md5(md5(md5(secrect)) + moment().format("YYYY-MM-DD HH"));
   const ts = Math.floor(Date.now() / 1000);
   return (
-    window.location.protocol +
-    "//" +
-    window.location.host +
+    process.env.REACT_APP_DB_BASE_URL +
     `/api/image/${imageId}?ts=${ts}&token1=${secrect}&token2=${secrect2}`
   );
 };
