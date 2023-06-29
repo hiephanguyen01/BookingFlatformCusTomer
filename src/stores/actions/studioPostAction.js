@@ -345,7 +345,6 @@ export const setFilterStudioService =
 export const handlerSelectServiceAction = (data, chooseServiceTime) => {
   return async (dispatch) => {
     try {
-      console.log(23456);
       if (chooseServiceTime.OrderByTime === 1) {
         if (
           chooseServiceTime?.disableTimeOrder?.some((item) => {
@@ -382,7 +381,15 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
           );
         }
       }
-      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [data] });
+      dispatch({
+        type: SET_CHOOSE_SERVICE_LIST,
+        payload: [
+          {
+            ...chooseServiceTime,
+            ...data,
+          },
+        ],
+      });
       dispatch({
         type: SET_CHOOSE_SERVICE,
         payload: {
@@ -390,13 +397,6 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
           ...data,
         },
       });
-      // if (chooseService.id == data.id) {
-      //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
-      //       setChooseService([]);
-      //     } else {
-      //       setChooseService([{ ...data }]);
-      //     }
-      //   }
     } catch (error) {
       console.log(error);
     }
