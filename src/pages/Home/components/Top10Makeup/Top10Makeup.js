@@ -9,8 +9,6 @@ const Top10Studio = () => {
     (state) => state.topOrderCategoryReducer
   );
 
-  console.log("Top 10 makeup");
-
   const dispatch = useDispatch();
 
   useEffect(() => {

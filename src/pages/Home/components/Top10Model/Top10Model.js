@@ -9,8 +9,6 @@ const Top10Model = () => {
     (state) => state.topOrderCategoryReducer
   );
 
-  console.log("Top 10 model");
-
   const dispatch = useDispatch();
 
   useEffect(() => {

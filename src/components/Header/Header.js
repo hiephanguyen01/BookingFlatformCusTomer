@@ -18,9 +18,6 @@ import {
   Grid,
   Badge,
   Slider,
-  Drawer,
-  Space,
-  Popover,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -66,7 +63,6 @@ const Header = () => {
   const [selectProvince, setSelectProvince] = useState(null);
   const [chooseCategory, setChooseCategory] = useState([]);
   const [openModalChat, setOpenModalChat] = useState(false);
-  const [open, setOpen] = useState(false);
   const [choosePrice, setChoosePrice] = useState({});
   const [keyString, setKeyString] = useState("");
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -818,15 +814,7 @@ const Header = () => {
                       <p>Chat</p>
                     </Col>
                     <Col
-                      onClick={() =>
-                        toastMessage(
-                          "Chức năng này đang phát triển!",
-                          "info",
-                          1,
-                          "",
-                          {}
-                        )
-                      }
+                      onClick={() => navigate("/home/cart")}
                       style={{
                         textAlign: "center",
                       }}
@@ -853,19 +841,7 @@ const Header = () => {
                   <img src={DaoIcon} alt="" />
                   <p>Dạo</p>
                 </div>
-                <Link
-                  to={"#"}
-                  className="tip"
-                  onClick={() =>
-                    toastMessage(
-                      "Chức năng này đang phát triển!",
-                      "info",
-                      1,
-                      "",
-                      {}
-                    )
-                  }
-                >
+                <Link to={"/home/cart"} className="tip">
                   <ShoppingOutlined
                     style={{ fontSize: "20px", color: "#828282" }}
                   />

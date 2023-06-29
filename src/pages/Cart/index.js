@@ -1,75 +1,37 @@
 import { RightOutlined } from "@ant-design/icons";
 import { Button, Col, Dropdown, Menu, Row, Space, Tabs } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CheckBox from "../../components/CheckBox";
 import "./cart.scss";
 
 import img from "../../assets/dao/Frame 163.jpg";
-
-const TAGS = [
-  { id: "1", value: "Studio" },
-  { id: "2", value: "Nhiếp ảnh" },
-  { id: "3", value: "Thiết bị" },
-  { id: "4", value: "Trang phục" },
-  { id: "5", value: "Make up" },
-  { id: "6", value: "Người mẫu" },
-];
-
-const CART_ITEM_LIST = {
-  1: [
-    {
-      id: 1,
-      name: "Premium Wisteria - phong cách tối giản",
-      image: img,
-      date: "14/02/2021",
-      timeStart: "8:00 AM",
-      timeEnd: "8:30 PM",
-      price: "1500000",
-    },
-    {
-      id: 2,
-      name: "Premium Wisteria - phong cách tối giản",
-      image: img,
-      date: "14/02/2021",
-      timeStart: "8:00 AM",
-      timeEnd: "8:30 PM",
-      price: "1500000",
-    },
-    {
-      id: 3,
-      name: "Premium Wisteria - phong cách tối giản",
-      image: img,
-      date: "14/02/2021",
-      timeStart: "8:00 AM",
-      timeEnd: "8:30 PM",
-      price: "1500000",
-    },
-  ],
-  2: [
-    {
-      id: 1,
-      name: "Premium Wisteria - phong cách tối giản",
-      image: img,
-      date: "14/02/2021",
-      timeStart: "8:00 AM",
-      timeEnd: "8:30 PM",
-      price: "1500000",
-    },
-    {
-      id: 2,
-      name: "Premium Wisteria - phong cách tối giản",
-      image: img,
-      date: "14/02/2021",
-      timeStart: "8:00 AM",
-      timeEnd: "8:30 PM",
-      price: "1500000",
-    },
-  ],
-};
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import {
+  calculatePrice,
+  calculatePriceUsePromo,
+  calculateTotalPrice,
+} from "../../utils/calculate";
+import { convertImage } from "../../utils/convertImage";
+import { addServiceToList } from "../../stores/actions/OrderAction";
 
 const Index = () => {
-  const [checked, setChecked] = useState([]);
-  const [list, setList] = useState([...CART_ITEM_LIST["1"]]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { order, chooseServiceList } = useSelector(
+    (state) => state.OrderReducer
+  );
+  const { choosePromotionUser, promoCodeUserSave } = useSelector(
+    (state) => state.promoCodeReducer
+  );
+  const [chooseServices, setChooseServices] = useState([]);
+
+  useEffect(() => {
+    return () => {
+      setChooseServices([]);
+    };
+  }, []);
 
   const menu = (
     <Menu
@@ -91,128 +53,905 @@ const Index = () => {
     />
   );
 
+  const items = [
+    {
+      key: "1",
+      label: "Studio",
+      children: (
+        <Row gutter={[0, 6]}>
+          {order["studio"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper">
+              <CheckBox
+                key={index}
+                name="allCheck"
+                value="allCheck"
+                onClick={() =>
+                  handleOnCheckedAll(1, orderItem, orderItem?.Services)
+                }
+                checked={
+                  chooseServices.filter(
+                    (item) =>
+                      item?.category === 1 && item?.postId === orderItem?.id
+                  ).length === orderItem?.Services?.length
+                }
+              >
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "14px",
+                    lineHeight: "19px",
+                    color: "#3F3F3F",
+                  }}
+                >
+                  {orderItem?.Name}
+                </div>
+              </CheckBox>
+              {orderItem?.Services?.map((item, index) => (
+                <CheckBox
+                  onClick={() => handleOnChecked(1, orderItem, item)}
+                  key={index}
+                  name={item?.id}
+                  value={item?.id}
+                  checked={chooseServices.some(
+                    (service) =>
+                      service?.id === item?.id &&
+                      service?.postId === orderItem?.id &&
+                      service?.category === 1
+                  )}
+                >
+                  <Row
+                    className="checkbox_content w-100"
+                    align={"middle"}
+                    justify={"space-between"}
+                    gutter={[15, 10]}
+                  >
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row className="w-100 h-100" gutter={(0, 10)}>
+                        <Col span={6} className="">
+                          <img
+                            src={item?.Image[0]}
+                            className="w-100 h-80px"
+                            style={{ objectFit: "cover" }}
+                            alt=""
+                          />
+                        </Col>
+                        <Col span={18}>
+                          <label className="checkbox_label">{item?.Name}</label>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row
+                        className="w-100 mb-20"
+                        gutter={[0, 10]}
+                        align={"top"}
+                        justify={"space-between"}
+                      >
+                        <Col span={12} className="checkbox_desc">
+                          {item.OrderByTime ? (
+                            <>
+                              <div>
+                                Ngày
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "DD/MM/YYYY"
+                                  )}
+                                </span>
+                              </div>
+                              <div>
+                                Giờ
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "HH:mm"
+                                  )}
+                                </span>
+                                {" - "}
+                                <span>
+                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div>
+                              Ngày
+                              <span className="date">
+                                {moment(item?.OrderByDateFrom).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                              {" - "}
+                              <span>
+                                {moment(item?.OrderByDateTo).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                            </div>
+                          )}
+                        </Col>
+                        <Col span={12} className="checkbox_action">
+                          <div onClick={() => {}}>Xóa</div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={24} className="">
+                          <div className="price">
+                            {formatValue(calculatePrice(item))}đ
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </CheckBox>
+              ))}
+            </Col>
+          ))}
+        </Row>
+      ),
+    },
+    {
+      key: "2",
+      label: "Nhiếp ảnh",
+      children: (
+        <Row gutter={[0, 6]}>
+          {order["photographer"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper">
+              <CheckBox
+                key={index}
+                name="allCheck"
+                value="allCheck"
+                onClick={() =>
+                  handleOnCheckedAll(2, orderItem?.id, orderItem?.Services)
+                }
+                checked={
+                  chooseServices.filter(
+                    (item) =>
+                      item?.category === 2 && item?.postId === orderItem?.id
+                  ).length === orderItem?.Services?.length
+                }
+              >
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "14px",
+                    lineHeight: "19px",
+                    color: "#3F3F3F",
+                  }}
+                >
+                  {orderItem?.Name}
+                </div>
+              </CheckBox>
+              {orderItem?.Services?.map((item, index) => (
+                <CheckBox
+                  onClick={() => handleOnChecked(2, orderItem, item)}
+                  key={index}
+                  name={item?.id}
+                  value={item?.id}
+                  checked={chooseServices.some(
+                    (service) =>
+                      service?.id === item?.id &&
+                      service?.postId === orderItem?.id &&
+                      service?.category === 2
+                  )}
+                >
+                  <Row
+                    className="checkbox_content w-100"
+                    align={"middle"}
+                    justify={"space-between"}
+                    gutter={[15, 10]}
+                  >
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row className="w-100 h-100" gutter={(0, 10)}>
+                        <Col span={6} className="">
+                          <img
+                            src={item?.image}
+                            className="w-100 h-80px"
+                            style={{ objectFit: "cover" }}
+                            alt=""
+                          />
+                        </Col>
+                        <Col span={18}>
+                          <label className="checkbox_label">{item?.Name}</label>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row
+                        className="w-100 mb-20"
+                        gutter={[0, 10]}
+                        align={"top"}
+                        justify={"space-between"}
+                      >
+                        <Col span={12} className="checkbox_desc">
+                          {item.OrderByTime ? (
+                            <>
+                              <div>
+                                Ngày
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "DD/MM/YYYY"
+                                  )}
+                                </span>
+                              </div>
+                              <div>
+                                Giờ
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "HH:mm"
+                                  )}
+                                </span>
+                                {" - "}
+                                <span>
+                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div>
+                              Ngày
+                              <span className="date">
+                                {moment(item?.OrderByDateFrom).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                              {" - "}
+                              <span>
+                                {moment(item?.OrderByDateTo).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                            </div>
+                          )}
+                        </Col>
+                        <Col span={12} className="checkbox_action">
+                          <div onClick={() => {}}>Xóa</div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={24} className="">
+                          <div className="price">
+                            {" "}
+                            {formatValue(item?.Price)}đ
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </CheckBox>
+              ))}
+            </Col>
+          ))}
+        </Row>
+      ),
+    },
+    {
+      key: "3",
+      label: "Trang phục",
+      children: (
+        <Row gutter={[0, 6]}>
+          {order["clothes"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper">
+              <CheckBox
+                key={index}
+                name="allCheck"
+                value="allCheck"
+                onClick={() =>
+                  handleOnCheckedAll(3, orderItem?.id, orderItem?.Services)
+                }
+                checked={
+                  chooseServices.filter(
+                    (item) =>
+                      item?.category === 3 && item?.postId === orderItem?.id
+                  ).length === orderItem?.Services?.length
+                }
+              >
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "14px",
+                    lineHeight: "19px",
+                    color: "#3F3F3F",
+                  }}
+                >
+                  {orderItem?.Name}
+                </div>
+              </CheckBox>
+              {orderItem?.Services?.map((item, index) => (
+                <CheckBox
+                  onClick={() => handleOnChecked(3, orderItem, item)}
+                  key={index}
+                  name={item?.id}
+                  value={item?.id}
+                  checked={chooseServices.some(
+                    (service) =>
+                      service?.id === item?.id &&
+                      service?.postId === orderItem?.id &&
+                      service?.category === 3
+                  )}
+                >
+                  <Row
+                    className="checkbox_content w-100"
+                    align={"middle"}
+                    justify={"space-between"}
+                    gutter={[15, 10]}
+                  >
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row className="w-100 h-100" gutter={(0, 10)}>
+                        <Col span={6} className="">
+                          <img
+                            src={item?.image}
+                            className="w-100 h-80px"
+                            style={{ objectFit: "cover" }}
+                            alt=""
+                          />
+                        </Col>
+                        <Col span={18}>
+                          <label className="checkbox_label">{item?.Name}</label>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row
+                        className="w-100 mb-20"
+                        gutter={[0, 10]}
+                        align={"top"}
+                        justify={"space-between"}
+                      >
+                        <Col span={12} className="checkbox_desc">
+                          {item.OrderByTime ? (
+                            <>
+                              <div>
+                                Ngày
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "DD/MM/YYYY"
+                                  )}
+                                </span>
+                              </div>
+                              <div>
+                                Giờ
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "HH:mm"
+                                  )}
+                                </span>
+                                {" - "}
+                                <span>
+                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div>
+                              Ngày
+                              <span className="date">
+                                {moment(item?.OrderByDateFrom).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                              {" - "}
+                              <span>
+                                {moment(item?.OrderByDateTo).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                            </div>
+                          )}
+                        </Col>
+                        <Col span={12} className="checkbox_action">
+                          <div onClick={() => {}}>Xóa</div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={24} className="">
+                          <div className="price">
+                            {" "}
+                            {formatValue(item?.Price)}đ
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </CheckBox>
+              ))}
+            </Col>
+          ))}
+        </Row>
+      ),
+    },
+    {
+      key: "4",
+      label: "Make up",
+      children: (
+        <Row gutter={[0, 6]}>
+          {order["makeup"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper">
+              <CheckBox
+                key={index}
+                name="allCheck"
+                value="allCheck"
+                onClick={() =>
+                  handleOnCheckedAll(4, orderItem?.id, orderItem?.Services)
+                }
+                checked={
+                  chooseServices.filter(
+                    (item) =>
+                      item?.category === 4 && item?.postId === orderItem?.id
+                  ).length === orderItem?.Services?.length
+                }
+              >
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "14px",
+                    lineHeight: "19px",
+                    color: "#3F3F3F",
+                  }}
+                >
+                  {orderItem?.Name}
+                </div>
+              </CheckBox>
+              {orderItem?.Services?.map((item, index) => (
+                <CheckBox
+                  onClick={() => handleOnChecked(4, orderItem?.id, item)}
+                  key={index}
+                  name={item?.id}
+                  value={item?.id}
+                  checked={chooseServices.some(
+                    (service) =>
+                      service?.id === item?.id &&
+                      service?.postId === orderItem?.id &&
+                      service?.category === 4
+                  )}
+                >
+                  <Row
+                    className="checkbox_content w-100"
+                    align={"middle"}
+                    justify={"space-between"}
+                    gutter={[15, 10]}
+                  >
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row className="w-100 h-100" gutter={(0, 10)}>
+                        <Col span={6} className="">
+                          <img
+                            src={item?.image}
+                            className="w-100 h-80px"
+                            style={{ objectFit: "cover" }}
+                            alt=""
+                          />
+                        </Col>
+                        <Col span={18}>
+                          <label className="checkbox_label">{item?.Name}</label>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row
+                        className="w-100 mb-20"
+                        gutter={[0, 10]}
+                        align={"top"}
+                        justify={"space-between"}
+                      >
+                        <Col span={12} className="checkbox_desc">
+                          {item.OrderByTime ? (
+                            <>
+                              <div>
+                                Ngày
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "DD/MM/YYYY"
+                                  )}
+                                </span>
+                              </div>
+                              <div>
+                                Giờ
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "HH:mm"
+                                  )}
+                                </span>
+                                {" - "}
+                                <span>
+                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div>
+                              Ngày
+                              <span className="date">
+                                {moment(item?.OrderByDateFrom).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                              {" - "}
+                              <span>
+                                {moment(item?.OrderByDateTo).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                            </div>
+                          )}
+                        </Col>
+                        <Col span={12} className="checkbox_action">
+                          <div onClick={() => {}}>Xóa</div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={24} className="">
+                          <div className="price">
+                            {" "}
+                            {formatValue(item?.Price)}đ
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </CheckBox>
+              ))}
+            </Col>
+          ))}
+        </Row>
+      ),
+    },
+    {
+      key: "5",
+      label: "Thiết bị",
+      children: (
+        <Row gutter={[0, 6]}>
+          {order["device"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper">
+              <CheckBox
+                key={index}
+                name="allCheck"
+                value="allCheck"
+                onClick={() =>
+                  handleOnCheckedAll(5, orderItem?.id, orderItem?.Services)
+                }
+                checked={
+                  chooseServices.filter(
+                    (item) =>
+                      item?.category === 5 && item?.postId === orderItem?.id
+                  ).length === orderItem?.Services?.length
+                }
+              >
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "14px",
+                    lineHeight: "19px",
+                    color: "#3F3F3F",
+                  }}
+                >
+                  {orderItem?.Name}
+                </div>
+              </CheckBox>
+              {orderItem?.Services?.map((item, index) => (
+                <CheckBox
+                  onClick={() => handleOnChecked(5, orderItem?.id, item)}
+                  key={index}
+                  name={item?.id}
+                  value={item?.id}
+                  checked={chooseServices.some(
+                    (service) =>
+                      service?.id === item?.id &&
+                      service?.postId === orderItem?.id &&
+                      service?.category === 5
+                  )}
+                >
+                  <Row
+                    className="checkbox_content w-100"
+                    align={"middle"}
+                    justify={"space-between"}
+                    gutter={[15, 10]}
+                  >
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row className="w-100 h-100" gutter={(0, 10)}>
+                        <Col span={6} className="">
+                          <img
+                            src={item?.image}
+                            className="w-100 h-80px"
+                            style={{ objectFit: "cover" }}
+                            alt=""
+                          />
+                        </Col>
+                        <Col span={18}>
+                          <label className="checkbox_label">{item?.Name}</label>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row
+                        className="w-100 mb-20"
+                        gutter={[0, 10]}
+                        align={"top"}
+                        justify={"space-between"}
+                      >
+                        <Col span={12} className="checkbox_desc">
+                          {item.OrderByTime ? (
+                            <>
+                              <div>
+                                Ngày
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "DD/MM/YYYY"
+                                  )}
+                                </span>
+                              </div>
+                              <div>
+                                Giờ
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "HH:mm"
+                                  )}
+                                </span>
+                                {" - "}
+                                <span>
+                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div>
+                              Ngày
+                              <span className="date">
+                                {moment(item?.OrderByDateFrom).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                              {" - "}
+                              <span>
+                                {moment(item?.OrderByDateTo).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                            </div>
+                          )}
+                        </Col>
+                        <Col span={12} className="checkbox_action">
+                          <div onClick={() => {}}>Xóa</div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={24} className="">
+                          <div className="price">
+                            {" "}
+                            {formatValue(item?.Price)}đ
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </CheckBox>
+              ))}
+            </Col>
+          ))}
+        </Row>
+      ),
+    },
+    {
+      key: "6",
+      label: "Người mẫu",
+      children: (
+        <Row gutter={[0, 6]}>
+          {order["model"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper">
+              <CheckBox
+                key={index}
+                name="allCheck"
+                value="allCheck"
+                onClick={() =>
+                  handleOnCheckedAll(6, orderItem?.id, orderItem?.Services)
+                }
+                checked={
+                  chooseServices.filter(
+                    (item) =>
+                      item?.category === 6 && item?.postId === orderItem?.id
+                  ).length === orderItem?.Services?.length
+                }
+              >
+                <div
+                  style={{
+                    fontWeight: "400",
+                    fontSize: "14px",
+                    lineHeight: "19px",
+                    color: "#3F3F3F",
+                  }}
+                >
+                  {orderItem?.Name}
+                </div>
+              </CheckBox>
+              {orderItem?.Services?.map((item, index) => (
+                <CheckBox
+                  onClick={() => handleOnChecked(6, orderItem, item)}
+                  key={index}
+                  name={item?.id}
+                  value={item?.id}
+                  checked={chooseServices.some(
+                    (service) =>
+                      service?.id === item?.id &&
+                      service?.postId === orderItem?.id &&
+                      service?.category === 6
+                  )}
+                >
+                  <Row
+                    className="checkbox_content w-100"
+                    align={"middle"}
+                    justify={"space-between"}
+                    gutter={[15, 10]}
+                  >
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row className="w-100 h-100" gutter={(0, 10)}>
+                        <Col span={6} className="">
+                          <img
+                            src={convertImage(item?.Image)}
+                            className="w-100 h-80px"
+                            style={{ objectFit: "cover" }}
+                            alt=""
+                          />
+                        </Col>
+                        <Col span={18}>
+                          <label className="checkbox_label">{item?.Name}</label>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+                      <Row
+                        className="w-100 mb-20"
+                        gutter={[0, 10]}
+                        align={"top"}
+                        justify={"space-between"}
+                      >
+                        <Col span={12} className="checkbox_desc">
+                          {item.OrderByTime ? (
+                            <>
+                              <div>
+                                Ngày
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "DD/MM/YYYY"
+                                  )}
+                                </span>
+                              </div>
+                              <div>
+                                Giờ
+                                <span className="date">
+                                  {moment(item?.OrderByTimeFrom).format(
+                                    "HH:mm"
+                                  )}
+                                </span>
+                                {" - "}
+                                <span>
+                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
+                                </span>
+                              </div>
+                            </>
+                          ) : (
+                            <div>
+                              Ngày
+                              <span className="date">
+                                {moment(item?.OrderByDateFrom).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                              {" - "}
+                              <span>
+                                {moment(item?.OrderByDateTo).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </span>
+                            </div>
+                          )}
+                        </Col>
+                        <Col span={12} className="checkbox_action">
+                          <div onClick={() => {}}>Xóa</div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={24} className="">
+                          <div className="price">
+                            {" "}
+                            {formatValue(item?.Price)}đ
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </CheckBox>
+              ))}
+            </Col>
+          ))}
+        </Row>
+      ),
+    },
+  ];
+
   const onChange = (key) => {
-    setList([...CART_ITEM_LIST[key]]);
+    // setList([...CART_ITEM_LIST[key]]);
   };
 
-  const handleOnChecked = (id) => {
-    let newChecked = [...checked];
-    const findId = newChecked.indexOf(id);
-    if (findId !== -1) {
-      newChecked.splice(findId, 1);
-      if (newChecked.includes("allCheck")) {
-        newChecked.splice("allCheck", 1);
-      } else {
-        if (id === "allCheck") {
-          newChecked = [];
-        }
-      }
+  const handleOnChecked = (category, post, service, postName) => {
+    let newChooseService = [...chooseServices];
+    const findServiceIndex = newChooseService.findIndex(
+      (item) =>
+        item?.postId === post?.id &&
+        service?.id === item?.id &&
+        category === item?.category
+    );
+    if (findServiceIndex >= 0) {
+      newChooseService.splice(findServiceIndex, 1);
     } else {
-      if (id === "allCheck") {
-        newChecked = CART_ITEM_LIST.map((item) => item.id);
-      }
-      newChecked.unshift(id);
-      if (newChecked.length === CART_ITEM_LIST.length) {
-        newChecked.unshift("allCheck");
-      }
+      newChooseService.push({
+        ...service,
+        category,
+        postId: post?.id,
+        postName: post?.Name,
+      });
+    }
+    setChooseServices([...newChooseService]);
+  };
+
+  const handleOnCheckedAll = (category, post, services) => {
+    let newChooseService = [...chooseServices];
+    let temp = [];
+    const checkAll =
+      newChooseService.filter(
+        (item) => item?.category === category && item?.postId === post?.id
+      ).length === services?.length;
+    if (checkAll) {
+      newChooseService = newChooseService.filter(
+        (service) =>
+          !(service?.category === category && service?.postId === post?.id)
+      );
+    } else {
+      temp = services.reduce((arr, service) => {
+        if (
+          newChooseService.some(
+            (sv) =>
+              sv?.postId === post?.id &&
+              sv?.id === service?.id &&
+              category === sv?.category
+          )
+        ) {
+          return arr;
+        }
+        return [
+          ...arr,
+          {
+            ...service,
+            category,
+            postId: post?.id,
+            postName: post?.Name,
+          },
+        ];
+      }, []);
     }
 
-    setChecked([...newChecked]);
+    setChooseServices([...newChooseService, ...temp]);
+  };
+  const handleButtonOrder = () => {
+    try {
+      if (chooseServices.length > 0) {
+        dispatch(addServiceToList(chooseServices));
+        navigate("order");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div style={{ background: "#f5f5f5" }}>
       <div className="cart_container">
         <h3>Giỏ hàng</h3>
-        <Row className="cart_row">
-          <Col lg={16} sm={24} className="cart_col_left">
+        <Row className="cart_row" gutter={[12, 15]}>
+          <Col lg={16} md={16} sm={24} xs={24} className="cart_col_left">
             <div className="cart_tab_pane">
-              <Tabs defaultActiveKey="1" onChange={onChange}>
-                {TAGS.map((tag, index) => (
-                  <Tabs.TabPane tab={tag.value} key={tag.id}>
-                    <div>
-                      <CheckBox
-                        key={index}
-                        name="allCheck"
-                        value="allCheck"
-                        onClick={() => handleOnChecked("allCheck")}
-                        checked={checked.includes("allCheck")}
-                      >
-                        <div
-                          style={{
-                            fontWeight: "400",
-                            fontSize: "14px",
-                            lineHeight: "19px",
-                            color: "#3F3F3F",
-                          }}
-                        >
-                          {tag.value}
-                        </div>
-                      </CheckBox>
-                      {list.map((item, index) => (
-                        <CheckBox
-                          onClick={() => handleOnChecked(item.id)}
-                          key={index}
-                          name={item.id}
-                          value={item.id}
-                          checked={checked.includes(item.id)}
-                        >
-                          <div className="checkbox_content d-flex align-items-center w-100 justify-content-between">
-                            <div className="w-40 d-flex">
-                              <div className="w-76px h-76px me-12">
-                                <img
-                                  src={item.image}
-                                  className="w-76px h-100"
-                                  style={{ objectFit: "cover" }}
-                                  alt=""
-                                />
-                              </div>
-                              <label className="checkbox_label">
-                                {item.name}
-                              </label>
-                            </div>
-                            <div className="d-flex align-items-center justify-content-between w-50">
-                              <div className="checkbox_desc">
-                                <div>
-                                  Ngày
-                                  <span>{item.date}</span>
-                                </div>
-                                <div>
-                                  Giờ
-                                  <span>{item.timeStart}</span>
-                                  {"-"}
-                                  <span>{item.timeEnd}</span>
-                                </div>
-                              </div>
-                              <div className="checkbox_action">
-                                <Button
-                                  type="text"
-                                  onClick={() => {
-                                    const newList = list.filter(
-                                      (val) => val.id !== item.id
-                                    );
-                                    setList([...newList]);
-                                  }}
-                                >
-                                  Xóa
-                                </Button>
-                                <div className="price">
-                                  {" "}
-                                  {formatValue(item.price)}đ
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </CheckBox>
-                      ))}
-                    </div>
-                  </Tabs.TabPane>
-                ))}
-              </Tabs>
+              <Tabs defaultActiveKey="1" onChange={onChange} items={items} />
             </div>
           </Col>
-          <Col lg={8} sm={24} className="cart_col_right">
+          <Col lg={8} md={8} sm={24} xs={0} className="cart_col_right">
             <div
+              className="card"
               style={{
                 padding: "25px 25px ",
                 // marginBottom: "0.5rem",
@@ -238,48 +977,66 @@ const Index = () => {
                 </Dropdown>
               </div>
               <div style={{ padding: "16px 15px" }}>
-                <div className="d-flex justify-content-between">
-                  <div className="text-middle" style={{ color: "#222222" }}>
-                    Đã chọn 2 sản phẩm
-                  </div>
-                  <div
-                    className="text-description "
-                    style={{
-                      textDecoration: "line-through",
-                      color: "#828282",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    {`${formatValue(
-                      list.reduce((total, val) => total + Number(val.price), 0)
-                    )}đ`}
-                  </div>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <div
-                    className="text-description"
-                    style={{ color: "#616161" }}
-                  >
-                    Bao gồm 50.000đ thuế và phí
-                  </div>
-                  <div
-                    className=""
-                    style={{
-                      color: "#E22828",
-                      fontSize: "20px",
-                      lineHeight: "28px",
-                      fontWeight: "700",
-                    }}
-                  >
-                    {`${formatValue(
-                      list.reduce((total, val) => total + Number(val.price), 0)
-                    )}đ`}
-                  </div>
-                </div>
+                <Row
+                  align={"middle"}
+                  justify={"space-between"}
+                  className="mb-8"
+                  gutter={[0, 10]}
+                >
+                  <Col lg={14} md={24}>
+                    <div className="text-middle" style={{ color: "#222222" }}>
+                      Đã chọn {chooseServices.length} sản phẩm
+                    </div>
+                  </Col>
+                  <Col lg={10} style={{ textAlign: "end" }}>
+                    <div
+                      className="text-description "
+                      style={{
+                        textDecoration: "line-through",
+                        color: "#828282",
+                      }}
+                    >
+                      {`${formatValue(calculateTotalPrice(chooseServices))}đ`}
+                    </div>
+                  </Col>
+                </Row>
+                <Row
+                  align={"middle"}
+                  justify={"space-between"}
+                  gutter={[0, 10]}
+                >
+                  <Col lg={14}>
+                    <div
+                      className="text-description"
+                      style={{ color: "#616161" }}
+                    >
+                      Bao gồm 50.000đ thuế và phí
+                    </div>
+                  </Col>
+                  <Col lg={10} style={{ textAlign: "end" }}>
+                    <div
+                      className=""
+                      style={{
+                        color: "#E22828",
+                        fontSize: "20px",
+                        lineHeight: "28px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {`${formatValue(
+                        calculatePriceUsePromo(
+                          chooseServices,
+                          choosePromotionUser
+                        )
+                      )}đ`}
+                    </div>
+                  </Col>
+                </Row>
               </div>
               <Button
                 type="primary"
                 style={{ borderRadius: "8px", height: "45px", width: "100%" }}
+                onClick={handleButtonOrder}
               >
                 Đặt ngay
               </Button>

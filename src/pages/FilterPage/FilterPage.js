@@ -297,7 +297,6 @@ const FilterPage = () => {
 
   const onChangeFilterDistrict = (value) => {
     let newValue;
-    const prov = provinces.find((p) => +p.Code === selectProvince);
     if (value.includes("quận")) {
       newValue = value.split("quận")[1];
     } else if (value.includes("huyện")) {

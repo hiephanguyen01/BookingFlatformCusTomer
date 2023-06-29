@@ -12,8 +12,6 @@ const Top10Device = () => {
     (state) => state.topOrderCategoryReducer
   );
 
-  console.log("Top 10 device");
-
   const dispatch = useDispatch();
 
   useEffect(() => {
