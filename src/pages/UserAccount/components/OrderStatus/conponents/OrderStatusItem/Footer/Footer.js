@@ -72,7 +72,7 @@ export const Footer = ({
       formData.append("DeletionTime", new Date());
       formData.append("DeletedNote", cancelReason);
 
-      await orderService.updateOrder(formData, IdentifyCode);
+      await orderService.updateCart(formData, IdentifyCode);
       const newPageBooking = pageBooking.filter(
         (item) => item.IdentifyCode !== IdentifyCode
       );

@@ -18,7 +18,7 @@ import {
 import {
   DELETE_CHOOSE_SERVICE,
   SET_CHOOSE_SERVICE_LIST,
-} from "../types/OrderType";
+} from "../types/CartType";
 import moment from "moment";
 import toastMessage from "../../components/ToastMessage";
 

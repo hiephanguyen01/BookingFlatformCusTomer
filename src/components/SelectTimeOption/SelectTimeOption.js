@@ -87,7 +87,7 @@ const SelectTimeOption = ({ disabled, service }) => {
       <Radio.Group
         name="radiogroup"
         style={{ padding: "0 0 20px" }}
-        value={service?.OrderByTime}
+        value={Number(service?.OrderByTime)}
         // disabled={disabled}
       >
         <Space direction="vertical">

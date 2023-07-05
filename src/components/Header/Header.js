@@ -367,8 +367,8 @@ const Header = () => {
                             >
                               {selectProvince ? (
                                 <>
-                                  {districts.map((val) => (
-                                    <Col span={12}>
+                                  {districts.map((val, index) => (
+                                    <Col span={12} key={index}>
                                       <div
                                         key={val.id}
                                         className={`btn-province-item ${
@@ -389,8 +389,8 @@ const Header = () => {
                                 </>
                               ) : (
                                 <>
-                                  {filterProvinces.map((val) => (
-                                    <Col span={12}>
+                                  {filterProvinces.map((val, index) => (
+                                    <Col span={12} key={index}>
                                       <div
                                         key={val.id}
                                         className={`btn-province-item ${
@@ -439,8 +439,8 @@ const Header = () => {
                               gutter={[20, 20]}
                               style={{ textAlign: "center", margin: "0 auto" }}
                             >
-                              {categories.slice(1, 7).map((val) => (
-                                <Col span={12}>
+                              {categories.slice(1, 7).map((val, index) => (
+                                <Col span={12} key={index}>
                                   <div
                                     key={val.id}
                                     className={`btn-category-item ${
@@ -475,8 +475,8 @@ const Header = () => {
                               gutter={[20, 20]}
                               style={{ textAlign: "center", margin: "0 auto" }}
                             >
-                              {PRICE_FILTER.map((val) => (
-                                <Col span={12}>
+                              {PRICE_FILTER.map((val, index) => (
+                                <Col span={12} key={index}>
                                   <div
                                     key={val.value}
                                     className={`btn-price-item ${

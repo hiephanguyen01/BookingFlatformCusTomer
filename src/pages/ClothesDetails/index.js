@@ -78,7 +78,7 @@ const Index = () => {
     chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();

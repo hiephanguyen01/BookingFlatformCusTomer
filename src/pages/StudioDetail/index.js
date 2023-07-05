@@ -27,10 +27,8 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import {
-  addOrder,
-  chooseServiceAction,
-} from "../../stores/actions/OrderAction";
+// import { addCart, chooseServiceAction } from "../../stores/actions/OrderAction";
+import { addCart, chooseServiceAction } from "../../stores/actions/CartAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
@@ -44,7 +42,7 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   DELETE_CHOOSE_SERVICE,
   SET_CHOOSE_SERVICE_LIST,
-} from "../../stores/types/OrderType";
+} from "../../stores/types/CartType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calTime, priceService } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
@@ -88,7 +86,7 @@ const StudioDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const {
     studioDetail,
     studioNear,
@@ -1125,7 +1123,7 @@ const StudioDetail = () => {
                                 }
                                 onClick={() =>
                                   dispatch(
-                                    addOrder(
+                                    addCart(
                                       1,
                                       studioDetail?.data,
                                       chooseService
@@ -1241,7 +1239,7 @@ const StudioDetail = () => {
                                   }
                                   onClick={() =>
                                     dispatch(
-                                      addOrder(
+                                      addCart(
                                         1,
                                         studioDetail?.data,
                                         chooseService

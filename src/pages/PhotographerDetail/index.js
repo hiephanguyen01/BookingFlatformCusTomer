@@ -46,10 +46,7 @@ import {
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
 import toastMessage from "../../components/ToastMessage";
-import {
-  // addOrder,
-  chooseServiceAction,
-} from "../../stores/actions/OrderAction";
+import { addCart, chooseServiceAction } from "../../stores/actions/CartAction";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
 import { convertImage } from "../../utils/convertImage";
@@ -73,7 +70,7 @@ import different from "../../assets/svg/diffrent.svg";
 import {
   DELETE_CHOOSE_SERVICE,
   SET_CHOOSE_SERVICE_LIST,
-} from "../../stores/types/OrderType";
+} from "../../stores/types/CartType";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -101,7 +98,7 @@ const PhotographerDetail = () => {
     chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();

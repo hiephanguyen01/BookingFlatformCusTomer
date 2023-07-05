@@ -78,7 +78,7 @@ const Index = () => {
 
         const IdentifyCode = [...location?.state?.IdentifyCode];
 
-        await orderService.updateOrder(formData, IdentifyCode[0]);
+        await orderService.updateCart(formData, IdentifyCode[0]);
         const res = await orderService.getOrderByIdentify(
           booking?.IdentifyCode,
           cate

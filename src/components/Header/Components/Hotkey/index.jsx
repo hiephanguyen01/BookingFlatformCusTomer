@@ -33,10 +33,13 @@ const Hotkey = () => {
         prevArrow={<LeftOutlined />}
         nextArrow={<RightOutlined />}
       >
-        {hotKey?.map((smallArr) => (
-          <div style={{ display: "flex" }}>
-            {smallArr.map((val) => (
-              <div style={{ width: "fit-content", marginRight: "20px" }}>
+        {hotKey?.map((smallArr, index) => (
+          <div style={{ display: "flex" }} key={index}>
+            {smallArr.map((val, index) => (
+              <div
+                key={index}
+                style={{ width: "fit-content", marginRight: "20px" }}
+              >
                 <p
                   className="text"
                   style={{ cursor: "pointer" }}
