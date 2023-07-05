@@ -351,7 +351,15 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
           );
         }
       }
-      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [data] });
+      dispatch({
+        type: SET_CHOOSE_SERVICE_LIST,
+        payload: [
+          {
+            ...chooseServiceTime,
+            ...data,
+          },
+        ],
+      });
       dispatch({
         type: SET_CHOOSE_SERVICE,
         payload: {

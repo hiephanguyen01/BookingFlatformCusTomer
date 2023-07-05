@@ -144,3 +144,101 @@ export const priceService = (arr = [], OrderByTime) => {
       .replace("₫", "đ")}`;
   }
 };
+
+export const calculatePrice = (chooseService) => {
+  switch (chooseService?.OrderByTime) {
+    case 1:
+      return (
+        chooseService?.pricesByHour[0].PriceByHour *
+        calTime(chooseService?.OrderByTimeFrom, chooseService?.OrderByTimeTo) *
+        (chooseService?.amount || 1)
+      );
+    case 0:
+      return (
+        chooseService?.pricesByDate?.reduce(
+          (sum, cur) => sum + cur.PriceByDate,
+          0
+        ) * (chooseService?.amount || 1)
+      );
+
+    default:
+      break;
+  }
+};
+
+export const calculateTotalPrice = (chooseServiceList = []) => {
+  return (
+    chooseServiceList &&
+    chooseServiceList?.length > 0 &&
+    chooseServiceList?.reduce((total, item) => {
+      switch (item?.OrderByTime) {
+        case 1:
+          return (
+            total +
+            item?.pricesByHour[0].PriceByHour *
+              calTime(item?.OrderByTimeFrom, item?.OrderByTimeTo) *
+              (item?.amount || 1)
+          );
+        case 0:
+          return (
+            total +
+            item?.pricesByDate?.reduce((sum, cur) => sum + cur.PriceByDate, 0) *
+              (item?.amount || 1)
+          );
+
+        default:
+          break;
+      }
+      return total;
+    }, 0)
+  );
+};
+
+export const calculatePriceUsePromo = (
+  chooseServiceList,
+  choosePromotionUser
+) => {
+  return chooseServiceList.reduce((total, item) => {
+    switch (item?.OrderByTime) {
+      case 1:
+        const priceByHour =
+          item?.pricesByHour[0].PriceByHour *
+          calTime(item?.OrderByTimeFrom, item?.OrderByTimeTo) *
+          (item?.amount || 1);
+        if (choosePromotionUser?.TypeReduce === 1) {
+          return total + priceByHour - (choosePromotionUser?.ReduceValue || 0);
+        } else {
+          return (
+            total +
+            (priceByHour -
+              ((priceByHour * choosePromotionUser?.ReduceValue) / 100 >=
+              choosePromotionUser?.MaxReduce
+                ? choosePromotionUser?.MaxReduce
+                : (priceByHour / 100) *
+                  (choosePromotionUser?.ReduceValue || 0)))
+          );
+        }
+      case 0:
+        const priceByDate =
+          item?.pricesByDate?.reduce((sum, cur) => sum + cur.PriceByDate, 0) *
+            (item?.amount || 1) || 0;
+        if (choosePromotionUser?.TypeReduce === 1) {
+          return total + priceByDate - (choosePromotionUser?.ReduceValue || 0);
+        } else {
+          return (
+            total +
+            (priceByDate -
+              ((priceByDate * choosePromotionUser?.ReduceValue) / 100 >=
+              choosePromotionUser?.MaxReduce
+                ? choosePromotionUser?.MaxReduce
+                : (priceByDate / 100) *
+                  (choosePromotionUser?.ReduceValue || 0)))
+          );
+        }
+
+      default:
+        break;
+    }
+    return total;
+  }, 0);
+};
