@@ -1073,16 +1073,14 @@ const Index = () => {
                 padding: "25px 25px ",
                 // marginBottom: "0.5rem",
                 backgroundColor: "#FFFFFF",
-              }}
-            >
+              }}>
               <div
                 className="d-flex justify-content-between"
                 style={{
                   borderBottom: "0.6px solid #E7E7E7",
                   padding: "0 0 14px",
                   margin: "0 0 16px",
-                }}
-              >
+                }}>
                 <div>Chọn mã khuyến mãi</div>
 
                 <Space onClick={() => onClickModal()}>

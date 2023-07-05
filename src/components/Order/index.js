@@ -393,9 +393,7 @@ const Index = ({ linkTo = "" }) => {
       } else {
         toastMessage("Vui lòng điền đầy đủ thông tin!", "warn");
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const onClickModal = () => {
@@ -431,8 +429,7 @@ const Index = ({ linkTo = "" }) => {
         style={{
           margin: "auto",
           maxWidth: "1300px",
-        }}
-      >
+        }}>
         <Col lg={9} sm={24} xs={24} className="col">
           {chooseServiceList?.map((item, index) => (
             <div className="right_col">
@@ -677,19 +674,17 @@ const Index = ({ linkTo = "" }) => {
           )}
           <div
             style={{
-              padding: "25px 25px",
+              padding: "25px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}
-          >
+            }}>
             {screens?.xs ? (
               <div
                 style={{
                   fontSize: "16px",
                   fontWeight: "400",
                   marginBottom: "0.25rem",
-                }}
-              >
+                }}>
                 Thông tin liên hệ *
               </div>
             ) : (
@@ -699,8 +694,7 @@ const Index = ({ linkTo = "" }) => {
                   fontSize: "22px",
                   lineHeight: "30px",
                   marginBottom: "0.25rem",
-                }}
-              >
+                }}>
                 Vui lòng điền thông tin của bạn
               </div>
             )}
@@ -755,12 +749,9 @@ const Index = ({ linkTo = "" }) => {
                       Email: infoUser.Email,
                       UserId: user?.id || undefined,
                     });
-                  } catch (error) {
-                    console.log(error);
-                  }
+                  } catch (error) {}
                 }}
-                className={`${screens?.xs && "ms-5"}`}
-              >
+                className={`${screens?.xs && "ms-5"}`}>
                 Verify Email
               </Button>
             )}
@@ -769,8 +760,7 @@ const Index = ({ linkTo = "" }) => {
           {!screens?.xs ? (
             <div
               className="d-flex justify-content-end"
-              style={{ marginTop: "35px" }}
-            >
+              style={{ marginTop: "35px" }}>
               {infoUser?.IsActiveEmail &&
               infoUser?.Email?.trim() === user?.Email?.trim() ? (
                 <Button
@@ -783,8 +773,7 @@ const Index = ({ linkTo = "" }) => {
                     borderRadius: "8px",
                     height: "45px",
                     width: "270px",
-                  }}
-                >
+                  }}>
                   Hoàn tất đặt
                 </Button>
               ) : Valid ? (
@@ -797,8 +786,7 @@ const Index = ({ linkTo = "" }) => {
                     borderRadius: "8px",
                     height: "45px",
                     width: "270px",
-                  }}
-                >
+                  }}>
                   Hoàn tất đặt
                 </Button>
               ) : (
@@ -809,8 +797,7 @@ const Index = ({ linkTo = "" }) => {
                     borderRadius: "8px",
                     height: "45px",
                     width: "270px",
-                  }}
-                >
+                  }}>
                   Hoàn tất đặt
                 </Button>
               )}
@@ -825,8 +812,7 @@ const Index = ({ linkTo = "" }) => {
                   align="middle"
                   className="text-medium-re"
                   style={{ fontSize: "14px" }}
-                  onClick={() => onClickModal()}
-                >
+                  onClick={() => onClickModal()}>
                   {promoCodeUserSave.length} mã khuyến mãi{" "}
                   <RightOutlined
                     className="ms-5"
@@ -841,8 +827,7 @@ const Index = ({ linkTo = "" }) => {
                 </div>
                 <div
                   className="text-medium-re"
-                  style={{ textDecoration: "line-through" }}
-                >
+                  style={{ textDecoration: "line-through" }}>
                   {/* {chooseService?.OrderByTime === 1 &&
                     `${convertPrice(
                       chooseServiceList?.reduce(
@@ -887,8 +872,7 @@ const Index = ({ linkTo = "" }) => {
                     type="primary"
                     // disabled={Valid ? false : true}
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}
-                  >
+                    style={{ borderRadius: "8px" }}>
                     Hoàn tất đặt
                   </Button>
                 ) : Valid ? (
@@ -898,8 +882,7 @@ const Index = ({ linkTo = "" }) => {
                     }}
                     type="primary"
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}
-                  >
+                    style={{ borderRadius: "8px" }}>
                     Hoàn tất đặt
                   </Button>
                 ) : (
@@ -907,8 +890,7 @@ const Index = ({ linkTo = "" }) => {
                     type="primary"
                     disabled={true}
                     className="w-100 h-40px"
-                    style={{ borderRadius: "8px" }}
-                  >
+                    style={{ borderRadius: "8px" }}>
                     Hoàn tất đặt
                   </Button>
                 )}

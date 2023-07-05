@@ -250,8 +250,7 @@ const AccountInfo = () => {
           <BackNav title="Thông tin tài khoản" to="/home/user" />
           <div
             className=""
-            style={{ height: "10px", background: "#f6f6f6" }}
-          ></div>
+            style={{ height: "10px", background: "#f6f6f6" }}></div>
         </>
       ) : (
         <h4 style={{ marginBottom: "8px", fontSize: "16px" }}>
@@ -268,8 +267,7 @@ const AccountInfo = () => {
             }`}
             gutter={[60, 15]}
             justify="start"
-            align="top"
-          >
+            align="top">
             <Col lg={11} md={24} sm={24} xs={0}>
               <EditText
                 label="Họ và tên"
@@ -292,8 +290,7 @@ const AccountInfo = () => {
                         alignItems: "center",
                       }
                     : { display: "flex", alignItems: "center" }
-                }
-              >
+                }>
                 <div className="d-flex justify-content-center align-items-center me-10 AccountInfo__first__img">
                   {file ? (
                     <img
@@ -360,8 +357,7 @@ const AccountInfo = () => {
               />
               {UserMe?.IsActiveEmail ? (
                 <p
-                  style={{ color: "green", paddingLeft: "39.703px!important" }}
-                >
+                  style={{ color: "green", paddingLeft: "39.703px!important" }}>
                   Email đã được xác nhận
                 </p>
               ) : UserMe?.Email?.trim() !== " " ? (
@@ -389,15 +385,13 @@ const AccountInfo = () => {
         {screens.xs && (
           <div
             className="mb-24"
-            style={{ height: "10px", background: "#f6f6f6" }}
-          ></div>
+            style={{ height: "10px", background: "#f6f6f6" }}></div>
         )}
         {!UserMe.FacebookToken && !UserMe.TokenEmail && (
           <Row
             className="AccountInfo__second"
             justify="start"
-            gutter={[60, 10]}
-          >
+            gutter={[60, 10]}>
             <Col lg={11} sm={24} xs={24}>
               <EditText
                 label="Mật khẩu hiện tại"
@@ -435,14 +429,12 @@ const AccountInfo = () => {
         {screens.xs && (
           <div
             className="mb-24"
-            style={{ height: "10px", background: "#f6f6f6" }}
-          ></div>
+            style={{ height: "10px", background: "#f6f6f6" }}></div>
         )}
         <div
           style={
             screens.xs ? { padding: "0 18px 16px" } : { padding: "1.5rem 0" }
-          }
-        >
+          }>
           <div className="AccountInfo__social">Liên kết mạng xã hội</div>
           <Row
             style={
@@ -453,8 +445,7 @@ const AccountInfo = () => {
                     paddingBottom: "2rem",
                   }
             }
-            gutter={[60, 0]}
-          >
+            gutter={[60, 0]}>
             <Col lg={11} md={24} sm={24} xs={24}>
               <div className="d-flex justify-content-center align-items-center mb-30">
                 <ZaloLogo className="me-16" />
@@ -465,8 +456,7 @@ const AccountInfo = () => {
                 /> */}
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết Zalo
                   </span>
@@ -481,8 +471,7 @@ const AccountInfo = () => {
               </div>
               <div
                 className="d-flex justify-content-center align-items-center"
-                style={{ marginBottom: "30px" }}
-              >
+                style={{ marginBottom: "30px" }}>
                 {/* <img
                   src={imgFB}
                   alt=""
@@ -491,8 +480,7 @@ const AccountInfo = () => {
                 <FacebookLogo className="me-16" />
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết facebook
                   </span>
@@ -522,8 +510,7 @@ const AccountInfo = () => {
                 /> */}
                 <div
                   className="d-flex justify-content-between"
-                  style={{ flex: "1" }}
-                >
+                  style={{ flex: "1" }}>
                   <span className="AccountInfo__social__itm">
                     Liên Kết google
                   </span>
@@ -552,16 +539,14 @@ const AccountInfo = () => {
         {screens.xs && (
           <div
             className="mb-24"
-            style={{ height: "10px", background: "#f6f6f6" }}
-          ></div>
+            style={{ height: "10px", background: "#f6f6f6" }}></div>
         )}
         <div
           style={
             screens.xs
               ? { padding: "0 18px 16px" }
               : { paddingBottom: "1.5rem" }
-          }
-        >
+          }>
           <div className="AccountInfo__delete">Xóa tài khoản</div>
           <div className="AccountInfo__delete__container">
             <div className="AccountInfo__delete__container__content">
@@ -572,8 +557,7 @@ const AccountInfo = () => {
               type="primary"
               ghost
               className="AccountInfo__delete__container__button"
-              onClick={() => setVisible(true)}
-            >
+              onClick={() => setVisible(true)}>
               <span>Xóa tài khoản</span>
             </Button>
           </div>
@@ -581,44 +565,39 @@ const AccountInfo = () => {
         {screens.xs && (
           <div
             className="mb-24"
-            style={{ height: "10px", background: "#f6f6f6" }}
-          ></div>
+            style={{ height: "10px", background: "#f6f6f6" }}></div>
         )}
         <div className="d-flex justify-content-center">
           <Button
             type="primary"
             className="AccountInfo__save"
             onClick={saveChange}
-            disabled={loading}
-          >
+            disabled={loading}>
             {loading && <ClipLoader color="#fff" size={20} />} Lưu thay đổi
           </Button>
         </div>
         {screens.xs && (
           <div
             className="my-24"
-            style={{ height: "10px", background: "#f6f6f6" }}
-          ></div>
+            style={{ height: "10px", background: "#f6f6f6" }}></div>
         )}
       </div>
       <Modal
         centered
-        visible={visible}
+        open={visible}
         onOk={() => setVisible(false)}
         onCancel={() => setVisible(false)}
         width={550}
         // height={400}
         closable={false}
         className="AccountInfo__delete__modal"
-        footer={false}
-      >
+        footer={false}>
         <div className="AccountInfo__delete__modal__header">
           Bạn có chắc muốn xóa tài khoản này?
         </div>
         <div
           className="AccountInfo__delete__modal__content"
-          style={{ color: "#000" }}
-        >
+          style={{ color: "#000" }}>
           <div className="mb-20">
             Bằng cách bấm vào nút “Xóa tài khoản”, bạn tự nguyện chọn xóa bỏ tài
             khoản của mình hoàn toàn và không thể thay đổi được, và bạn đồng ý
@@ -632,8 +611,7 @@ const AccountInfo = () => {
               listStyleType: "disc",
               color: "#E22828",
               fontWeight: "600",
-            }}
-          >
+            }}>
             <li>Xóa bỏ tất cả thông tin trên hồ sơ của bạn</li>
             <li>Xóa bỏ tất cả thông tin về các đơn đặt phòng trước đây </li>
           </ul>
@@ -648,14 +626,12 @@ const AccountInfo = () => {
         <div className="AccountInfo__delete__modal__group__btn">
           <button
             className="AccountInfo__delete__modal__group__btn__cancel"
-            onClick={handleCancel}
-          >
+            onClick={handleCancel}>
             Hủy
           </button>
           <button
             className="AccountInfo__delete__modal__group__btn__delete"
-            onClick={handleDelete}
-          >
+            onClick={handleDelete}>
             Xóa
           </button>
         </div>

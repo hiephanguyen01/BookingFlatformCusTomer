@@ -54,8 +54,7 @@ export const ChatBody = () => {
             className={
               toggleState === chat?.id ? "Chat__body__content" : "d-none"
             }
-            key={chat.id}
-          >
+            key={chat.id}>
             <ChatContent chatInfo={chat} />
           </div>
         )
@@ -98,9 +97,7 @@ export const ChatBody = () => {
             setToggleState(data.data.id);
             dispatch({ type: TOGGLE_STATE, payload: data.data.id });
           }
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
       })();
     }
   }, [updateConversation, dispatch]);
@@ -221,8 +218,7 @@ export const ChatBody = () => {
                 setLoadMore(false);
               }
             }
-          }}
-        >
+          }}>
           {userChat()}
           {!hasMore && (
             <div className="Chat__body__userlist__no-more">
@@ -241,8 +237,7 @@ export const ChatBody = () => {
       <div className="Chat__body__divider"></div>
       <div
         className={toggleState === 1000000 ? "Chat__body__content" : "d-none"}
-        key={1000000}
-      >
+        key={1000000}>
         <ChatContentAdmin info={infoChatAdmin} />
       </div>
       {contentChat()}

@@ -307,7 +307,7 @@ const Header = () => {
                 onCancel={handleCancel}
                 className="search-modal mobile"
                 width={"100%"}
-                visible={visible}
+                open={visible}
                 footer={[]}
                 closable={false}
               >
@@ -547,7 +547,7 @@ const Header = () => {
             onCancel={handleCancel}
             className="search-modal"
             width={"700px"}
-            visible={visible}
+            open={visible}
             footer={[]}
             closable={false}
           >
@@ -702,7 +702,10 @@ const Header = () => {
                               <div className="option d-flex justify-content-between">
                                 <Form.Item
                                   name="province"
-                                  style={{ width: "100%", marginRight: "20px" }}
+                                  style={{
+                                    width: "100%",
+                                    marginRight: "20px",
+                                  }}
                                 >
                                   <Select
                                     defaultValue=""
@@ -726,7 +729,10 @@ const Header = () => {
                                 </Form.Item>
                                 <Form.Item
                                   name="category"
-                                  style={{ width: "100%", marginRight: "20px" }}
+                                  style={{
+                                    width: "100%",
+                                    marginRight: "20px",
+                                  }}
                                 >
                                   <Select
                                     defaultValue="-1"

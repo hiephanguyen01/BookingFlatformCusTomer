@@ -15,7 +15,7 @@ export const ModalCustom = () => {
       <Modal
         className={isListImage ? "modalCus" : undefined}
         style={{ borderRadius: "6px" }}
-        visible={visible}
+        open={visible}
         closable={false}
         footer={null}
         maskClosable={true}

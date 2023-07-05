@@ -7,8 +7,6 @@ export const reportDetailAction = (data) => {
     try {
       await reportService.createReportDetail(data);
       dispatch({ type: SHOW_MODAL, Component: <Reply /> });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };

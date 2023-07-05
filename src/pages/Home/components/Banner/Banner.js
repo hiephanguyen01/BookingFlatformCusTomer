@@ -25,24 +25,25 @@ const Banner = ({ banners }) => {
           lazy={true}
           speed={600}
           modules={[Navigation, Pagination, Autoplay, Lazy, Parallax]}
-          className="bannerSwiper"
-        >
+          className="bannerSwiper">
           {banners &&
             banners.map(
               (banner) =>
                 banner.IsVisible && (
                   <SwiperSlide key={banner.id} className="w-100">
-                    <a href={banner.Description} className="h-100 w-100">
+                    <a
+                      href={banner.Description}
+                      className="h-100 w-100"
+                      key={"banner"}>
                       <Row
                         // data-swiper-parallax="-300"
                         className="banner h-100 w-100"
-                        justify={"space-between"}
-                      >
-                        {banner.Image.map((item) => (
+                        justify={"space-between"}>
+                        {banner.Image.map((item, idx) => (
                           <Col
+                            key={idx}
                             span={banner.Image.length > 1 ? 12 : 24}
-                            className="w-100 h-100"
-                          >
+                            className="w-100 h-100">
                             <img
                               // data-swiper-parallax="-300"
                               slot="container-start"

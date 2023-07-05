@@ -18,8 +18,7 @@ const Option = ({ disabled, service }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "8px",
-            }}
-          >
+            }}>
             <DatePicker
               defaultValue={moment(service?.OrderByTimeFrom).utc()}
               format={"DD/MM/YYYY"}
@@ -33,8 +32,7 @@ const Option = ({ disabled, service }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}
-          >
+            }}>
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
@@ -60,8 +58,7 @@ const Option = ({ disabled, service }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}
-          >
+            }}>
             <DatePicker.RangePicker
               defaultValue={[
                 moment(service?.OrderByDateFrom),

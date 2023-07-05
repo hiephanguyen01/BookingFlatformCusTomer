@@ -38,7 +38,39 @@ const Index = () => {
     [dispatch]
   );
 
+<<<<<<< HEAD
   const disabledApply = (price, minApply) => price < minApply;
+=======
+      case 0:
+        price = chooseServiceList?.reduce(
+          (total, service) =>
+            total +
+            service.PriceByDate *
+              calDate(
+                chooseService?.OrderByDateFrom,
+                chooseService?.OrderByDateTo
+              ),
+          0
+        );
+        return price;
+
+      default:
+        break;
+    }
+  };
+
+  const handleChooseVoucher = (code) => {
+    if (choose.id === code.id) {
+      setChoose({});
+      dispatch(setChoosePromotionUser({}));
+    } else {
+      setChoose({ ...code });
+      dispatch(setChoosePromotionUser(code));
+    }
+  };
+
+  const disabledApply = (minApply) => priceOrder() < minApply;
+>>>>>>> 267c26203248e806b1ae44848041abe89a8220ae
 
   return (
     <div className="promotion_container">
@@ -46,8 +78,7 @@ const Index = () => {
         className="close_modal"
         onClick={() => {
           dispatch({ type: HIDE_MODAL });
-        }}
-      >
+        }}>
         <CloseOutlined />
       </div>
       <div className="w-100" style={{ maxHeight: "500px" }}>
@@ -176,8 +207,7 @@ const Index = () => {
                   className="btn_applied"
                   onClick={() => {
                     handleChooseVoucher(item);
-                  }}
-                >
+                  }}>
                   Đã áp dụng
                 </div>
               ) : (
@@ -190,8 +220,7 @@ const Index = () => {
                   onClick={() => {
                     handleChooseVoucher(item);
                   }}
-                  size="large"
-                >
+                  size="large">
                   Áp dụng
                 </Button>
               )}

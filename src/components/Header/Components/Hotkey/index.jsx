@@ -20,9 +20,7 @@ const Hotkey = () => {
           (_, i) => trueD.slice(i * chunkSize, i * chunkSize + chunkSize)
         );
         setHotKey(smallArrays);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     })();
   }, []);
 
@@ -33,11 +31,11 @@ const Hotkey = () => {
         prevArrow={<LeftOutlined />}
         nextArrow={<RightOutlined />}
       >
-        {hotKey?.map((smallArr, index) => (
-          <div style={{ display: "flex" }} key={index}>
-            {smallArr.map((val, index) => (
+        {hotKey?.map((smallArr, idx) => (
+          <div key={idx} style={{ display: "flex" }}>
+            {smallArr.map((val, id) => (
               <div
-                key={index}
+                key={id}
                 style={{ width: "fit-content", marginRight: "20px" }}
               >
                 <p

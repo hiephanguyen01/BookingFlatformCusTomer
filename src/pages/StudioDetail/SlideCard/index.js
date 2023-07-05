@@ -20,8 +20,9 @@ const SlideCard = ({ title, data, category, loading = false }) => {
         <div className={"title"}>
           <h3>{title}</h3>
         </div>
-        <div className="wrap-slide">
+        <div className="wrap-slide" key={title}>
           <Swiper
+            key={title}
             className="slideDetail"
             slidesPerView={1}
             spaceBetween={8}
@@ -57,17 +58,14 @@ const SlideCard = ({ title, data, category, loading = false }) => {
                 spaceBetween: 10,
               },
             }}
-            modules={[Navigation, Autoplay]}
-          >
+            modules={[Navigation, Autoplay]}>
             {data?.length <= 0
               ? Array(5)
                   .fill(0)
                   .map((val, idx) => (
-                    <>
-                      <SwiperSlide key={idx}>
-                        <CarSkeleton />
-                      </SwiperSlide>
-                    </>
+                    <SwiperSlide key={idx}>
+                      <CarSkeleton />
+                    </SwiperSlide>
                   ))
               : data.map((item, idx) => (
                   <SwiperSlide key={idx}>

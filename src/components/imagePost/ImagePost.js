@@ -8,10 +8,7 @@ import "./imagePost.scss";
 
 const ImagePost = ({ data = [] }) => {
   const [openModal, setOpenModal] = useState(false);
-  // const [toggle, setToggle] = useState(false);
   const [index, setIndex] = useState(0);
-  // const [activeId, setActiveId] = useState(5);
-  console.log("Image post");
   return (
     <>
       {data.length > 0 && (
@@ -25,8 +22,7 @@ const ImagePost = ({ data = [] }) => {
                     setOpenModal(true);
                     setIndex(index);
                   }}
-                  className="image_item"
-                >
+                  className="image_item">
                   <img
                     alt=""
                     src={`${
@@ -50,8 +46,9 @@ const ImagePost = ({ data = [] }) => {
                       setIndex(index);
                     }
                   }
-                  className={`image_item ${data?.length > 5 ? "img_more" : ""}`}
-                >
+                  className={`image_item ${
+                    data?.length > 5 ? "img_more" : ""
+                  }`}>
                   <img
                     src={`${
                       item.includes("https://drive.google.com/")
@@ -78,10 +75,9 @@ const ImagePost = ({ data = [] }) => {
           footer={null}
           maskClosable={true}
           centered
-          visible={openModal}
+          open={openModal}
           onOk={() => setOpenModal(false)}
-          onCancel={() => setOpenModal(false)}
-        >
+          onCancel={() => setOpenModal(false)}>
           <ModalImage data={data} setOpenModal={setOpenModal} index={index} />
         </Modal>
       )}
