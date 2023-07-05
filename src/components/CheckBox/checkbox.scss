@@ -4,8 +4,13 @@
     padding: 22px 0;
     border-top: 1px solid #E7E7E7;
 
+    &:first-child {
+        border: none;
+        padding: 15px 0;
+    }
+
     .check_box {
-        // cursor: pointer;
+        cursor: pointer;
         position: relative;
 
         .check_input {

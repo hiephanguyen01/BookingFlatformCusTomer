@@ -24,7 +24,7 @@ import {
   ADD_TIME_ORDER,
   SELECT_TIME_ORDER,
 } from "../types/studioPostType";
-import { DELETE_CHOOSE_SERVICE } from "../types/OrderType";
+import { DELETE_CHOOSE_SERVICE } from "../types/CartType";
 
 const initialState = {
   loading: false,

@@ -38,7 +38,7 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import { addCart, chooseServiceAction } from "../../stores/actions/CartAction";
 import toastMessage from "../../components/ToastMessage";
 // import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
@@ -61,7 +61,7 @@ import classNames from "classnames/bind";
 import {
   DELETE_CHOOSE_SERVICE,
   SET_CHOOSE_SERVICE_LIST,
-} from "../../stores/types/OrderType";
+} from "../../stores/types/CartType";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -90,7 +90,7 @@ const Index = () => {
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();

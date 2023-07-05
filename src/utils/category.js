@@ -38,3 +38,12 @@ export const CATEGORIES = [
     linkTo: "model",
   },
 ];
+
+export const categories = {
+  1: "studio",
+  2: "photographer",
+  3: "clothes",
+  4: "makeup",
+  5: "device",
+  6: "model",
+};

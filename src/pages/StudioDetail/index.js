@@ -26,7 +26,8 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
+// import { addCart, chooseServiceAction } from "../../stores/actions/OrderAction";
+import { addCart, chooseServiceAction } from "../../stores/actions/CartAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
@@ -40,7 +41,7 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   DELETE_CHOOSE_SERVICE,
   SET_CHOOSE_SERVICE_LIST,
-} from "../../stores/types/OrderType";
+} from "../../stores/types/CartType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calTime, priceService } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
@@ -83,7 +84,7 @@ const StudioDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const {
     studioDetail,
     studioNear,
@@ -284,6 +285,34 @@ const StudioDetail = () => {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
+
+  // const handleAddOrder = (data) => {
+  //   const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+  //   if (findSelectTime) {
+  //     if (
+  //       findSelectTime?.OrderByTime === 1 &&
+  //       findSelectTime?.OrderByTimeFrom !== undefined &&
+  //       findSelectTime?.OrderByTimeFrom !== "" &&
+  //       findSelectTime?.OrderByTimeTo !== undefined &&
+  //       findSelectTime?.OrderByTimeTo !== "" &&
+  //       findSelectTime?.OrderByTimeTo !== findSelectTime?.OrderByTimeFrom
+  //     ) {
+  //       dispatch(handlerSelectServiceAction(data, findSelectTime));
+  //     } else if (
+  //       findSelectTime?.OrderByTime === 0 &&
+  //       findSelectTime?.OrderByDateFrom !== undefined &&
+  //       findSelectTime?.OrderByDateFrom !== "" &&
+  //       findSelectTime?.OrderByDateTo !== undefined &&
+  //       findSelectTime?.OrderByDateTo !== ""
+  //     ) {
+  //       dispatch(handlerSelectServiceAction(data, findSelectTime));
+  //     } else {
+  //       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //     }
+  //   } else {
+  //     return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //   }
+  // };
 
   const handleChangeLike = (e) => {
     if (currentUser) {
@@ -1047,12 +1076,12 @@ const StudioDetail = () => {
                                   chooseServiceList?.length > 0 ? false : true
                                 }
                                 onClick={() =>
-                                  toastMessage(
-                                    "Chức năng này đang phát triển!",
-                                    "info",
-                                    1,
-                                    "",
-                                    {}
+                                  dispatch(
+                                    addCart(
+                                      1,
+                                      studioDetail?.data,
+                                      chooseService
+                                    )
                                   )
                                 }>
                                 <ShoppingCartOutlined />
@@ -1157,12 +1186,12 @@ const StudioDetail = () => {
                                     chooseServiceList?.length > 0 ? false : true
                                   }
                                   onClick={() =>
-                                    toastMessage(
-                                      "Chức năng này đang phát triển!",
-                                      "info",
-                                      1,
-                                      "",
-                                      {}
+                                    dispatch(
+                                      addCart(
+                                        1,
+                                        studioDetail?.data,
+                                        chooseService
+                                      )
                                     )
                                   }>
                                   <ShoppingCartOutlined />

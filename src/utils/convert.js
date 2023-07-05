@@ -74,3 +74,12 @@ export const dateStructure = (date) => {
 export const addLinebreaks = (anyString = "") => {
   return anyString?.replaceAll("\n", "<br />\r\n");
 };
+
+export const isJsonString = (str) => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};

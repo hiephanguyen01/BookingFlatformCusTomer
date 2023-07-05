@@ -18,9 +18,6 @@ import {
   Grid,
   Badge,
   Slider,
-  Drawer,
-  Space,
-  Popover,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -66,7 +63,6 @@ const Header = () => {
   const [selectProvince, setSelectProvince] = useState(null);
   const [chooseCategory, setChooseCategory] = useState([]);
   const [openModalChat, setOpenModalChat] = useState(false);
-  const [open, setOpen] = useState(false);
   const [choosePrice, setChoosePrice] = useState({});
   const [keyString, setKeyString] = useState("");
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -124,7 +120,8 @@ const Header = () => {
               <Button
                 type="primary"
                 className="w-100 "
-                style={{ borderRadius: "5px" }}>
+                style={{ borderRadius: "5px" }}
+              >
                 Đăng nhập
               </Button>
             </Link>
@@ -162,7 +159,8 @@ const Header = () => {
               type="secondary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => navigate("/home/user/")}>
+              onClick={() => navigate("/home/user/")}
+            >
               Thông tin tài khoản
             </Button>
           ),
@@ -175,7 +173,8 @@ const Header = () => {
               type="primary"
               className="w-100 "
               style={{ borderRadius: "5px" }}
-              onClick={() => handleSignOut()}>
+              onClick={() => handleSignOut()}
+            >
               Đăng xuất
             </Button>
           ),
@@ -310,13 +309,15 @@ const Header = () => {
                 width={"100%"}
                 open={visible}
                 footer={[]}
-                closable={false}>
+                closable={false}
+              >
                 <div className="search-container pt-30">
                   <Form onFinish={onFinish}>
                     <Row
                       className="w-100"
                       justify="space-between"
-                      align="middle">
+                      align="middle"
+                    >
                       <Col span={2}>
                         <CloseOutlined
                           className="mb-30"
@@ -362,11 +363,12 @@ const Header = () => {
                             )}
                             <Row
                               gutter={[20, 20]}
-                              style={{ textAlign: "center", margin: "0 auto" }}>
+                              style={{ textAlign: "center", margin: "0 auto" }}
+                            >
                               {selectProvince ? (
                                 <>
-                                  {districts.map((val) => (
-                                    <Col span={12}>
+                                  {districts.map((val, index) => (
+                                    <Col span={12} key={index}>
                                       <div
                                         key={val.id}
                                         className={`btn-province-item ${
@@ -378,7 +380,8 @@ const Header = () => {
                                         } `}
                                         onClick={() => {
                                           handleChooseDistrict(val);
-                                        }}>
+                                        }}
+                                      >
                                         {val.Name}
                                       </div>
                                     </Col>
@@ -386,8 +389,8 @@ const Header = () => {
                                 </>
                               ) : (
                                 <>
-                                  {filterProvinces.map((val) => (
-                                    <Col span={12}>
+                                  {filterProvinces.map((val, index) => (
+                                    <Col span={12} key={index}>
                                       <div
                                         key={val.id}
                                         className={`btn-province-item ${
@@ -399,7 +402,8 @@ const Header = () => {
                                         } `}
                                         onClick={() => {
                                           handleChooseProvince(val);
-                                        }}>
+                                        }}
+                                      >
                                         {val.Name}
                                       </div>
                                     </Col>
@@ -420,7 +424,8 @@ const Header = () => {
                               }
                             }}
                           />
-                        }>
+                        }
+                      >
                         <Button className="btn-item-filter">
                           Địa điểm <DownOutlined className="icon" />
                         </Button>
@@ -432,9 +437,10 @@ const Header = () => {
                             <h3 className="px-10 mb-20">Danh mục</h3>
                             <Row
                               gutter={[20, 20]}
-                              style={{ textAlign: "center", margin: "0 auto" }}>
-                              {categories.slice(1, 7).map((val) => (
-                                <Col span={12}>
+                              style={{ textAlign: "center", margin: "0 auto" }}
+                            >
+                              {categories.slice(1, 7).map((val, index) => (
+                                <Col span={12} key={index}>
                                   <div
                                     key={val.id}
                                     className={`btn-category-item ${
@@ -444,7 +450,8 @@ const Header = () => {
                                         ? "active"
                                         : ""
                                     } `}
-                                    onClick={() => handleChooseCategory(val)}>
+                                    onClick={() => handleChooseCategory(val)}
+                                  >
                                     {val.name}
                                   </div>
                                 </Col>
@@ -454,7 +461,8 @@ const Header = () => {
                         }
                         extendProp={false}
                         close={true}
-                        btnClose={<CheckSVG />}>
+                        btnClose={<CheckSVG />}
+                      >
                         <Button className="btn-item-filter">
                           Danh mục <DownOutlined className="icon" />
                         </Button>
@@ -465,9 +473,10 @@ const Header = () => {
                             <h3 className="px-10 mb-20">Giá</h3>
                             <Row
                               gutter={[20, 20]}
-                              style={{ textAlign: "center", margin: "0 auto" }}>
-                              {PRICE_FILTER.map((val) => (
-                                <Col span={12}>
+                              style={{ textAlign: "center", margin: "0 auto" }}
+                            >
+                              {PRICE_FILTER.map((val, index) => (
+                                <Col span={12} key={index}>
                                   <div
                                     key={val.value}
                                     className={`btn-price-item ${
@@ -475,7 +484,8 @@ const Header = () => {
                                         ? "active"
                                         : ""
                                     }`}
-                                    onClick={() => setChoosePrice(val)}>
+                                    onClick={() => setChoosePrice(val)}
+                                  >
                                     {val.label}
                                   </div>
                                 </Col>
@@ -502,7 +512,8 @@ const Header = () => {
                         }
                         extendProp={false}
                         close={true}
-                        btnClose={<CheckSVG />}>
+                        btnClose={<CheckSVG />}
+                      >
                         <Button className="btn-item-filter">
                           Giá <DownOutlined className="icon" />
                         </Button>
@@ -514,13 +525,15 @@ const Header = () => {
                         width: "100%",
                         marginTop: "10px",
                         marginBottom: "35px",
-                      }}>
+                      }}
+                    >
                       <Button
                         type="primary"
                         htmlType="submit"
                         size="large"
                         style={{ width: "50%" }}
-                        className="btn-search">
+                        className="btn-search"
+                      >
                         Tìm kiếm
                       </Button>
                     </Form.Item>
@@ -536,7 +549,8 @@ const Header = () => {
             width={"700px"}
             open={visible}
             footer={[]}
-            closable={false}>
+            closable={false}
+          >
             <div className="search-container">
               <div className="header-search">
                 <div className="logo">
@@ -557,7 +571,8 @@ const Header = () => {
                 <div className="option d-flex justify-content-between">
                   <Form.Item
                     name="province"
-                    style={{ width: "100%", marginRight: "20px" }}>
+                    style={{ width: "100%", marginRight: "20px" }}
+                  >
                     <Select
                       defaultValue=""
                       showSearch
@@ -567,7 +582,8 @@ const Header = () => {
                           .toLowerCase()
                           .includes(input.toLowerCase())
                       }
-                      className="select-item">
+                      className="select-item"
+                    >
                       <Option value="">Địa điểm</Option>
                       {Boolean(provinces) &&
                         provinces.map((val) => (
@@ -579,7 +595,8 @@ const Header = () => {
                   </Form.Item>
                   <Form.Item
                     name="category"
-                    style={{ width: "100%", marginRight: "20px" }}>
+                    style={{ width: "100%", marginRight: "20px" }}
+                  >
                     <Select defaultValue="-1" className="select-item">
                       <Option value="-1" disabled={true}>
                         Danh mục
@@ -606,13 +623,15 @@ const Header = () => {
                     width: "100%",
                     marginTop: "10px",
                     marginBottom: "35px",
-                  }}>
+                  }}
+                >
                   <Button
                     type="primary"
                     htmlType="submit"
                     size="large"
                     style={{ width: "50%" }}
-                    className="btn-search">
+                    className="btn-search"
+                  >
                     Tìm kiếm
                   </Button>
                 </Form.Item>
@@ -626,7 +645,8 @@ const Header = () => {
             align={"top"}
             gutter={
               screens?.xs || screens?.md || screens?.sm ? [0, 15] : [0, 0]
-            }>
+            }
+          >
             <Col
               lg={4}
               md={24}
@@ -640,7 +660,8 @@ const Header = () => {
                     : "flex-start"
                 }`,
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Link to="/home" className="link">
                 <div className="img">
                   {/* <img src={Logo} alt="" /> */}
@@ -657,7 +678,8 @@ const Header = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Row style={{ width: "100%" }} justify="space-between">
                 <Col lg={24} md={24} sm={24} xs={16}>
                   {screens?.xs ? (
@@ -683,7 +705,8 @@ const Header = () => {
                                   style={{
                                     width: "100%",
                                     marginRight: "20px",
-                                  }}>
+                                  }}
+                                >
                                   <Select
                                     defaultValue=""
                                     showSearch
@@ -693,7 +716,8 @@ const Header = () => {
                                         .toLowerCase()
                                         .includes(input.toLowerCase())
                                     }
-                                    className="select-item">
+                                    className="select-item"
+                                  >
                                     <Option value="">Địa điểm</Option>
                                     {Boolean(provinces) &&
                                       provinces.map((val) => (
@@ -708,10 +732,12 @@ const Header = () => {
                                   style={{
                                     width: "100%",
                                     marginRight: "20px",
-                                  }}>
+                                  }}
+                                >
                                   <Select
                                     defaultValue="-1"
-                                    className="select-item">
+                                    className="select-item"
+                                  >
                                     <Option value="-1" disabled={true}>
                                       Danh mục
                                     </Option>
@@ -724,10 +750,12 @@ const Header = () => {
                                 </Form.Item>
                                 <Form.Item
                                   name="price"
-                                  style={{ width: "100%" }}>
+                                  style={{ width: "100%" }}
+                                >
                                   <Select
                                     defaultValue=""
-                                    className="select-item">
+                                    className="select-item"
+                                  >
                                     <Option value="">Giá</Option>
                                     <Option value={2}>Giá cao nhất</Option>
                                     <Option value={1}>Giá thấp nhất </Option>
@@ -743,13 +771,15 @@ const Header = () => {
                                   width: "100%",
                                   marginTop: "10px",
                                   // marginBottom: "35px",
-                                }}>
+                                }}
+                              >
                                 <Button
                                   type="primary"
                                   htmlType="submit"
                                   size="large"
                                   style={{ width: "50%" }}
-                                  className="btn-search">
+                                  className="btn-search"
+                                >
                                   Tìm kiếm
                                 </Button>
                               </Form.Item>
@@ -758,7 +788,8 @@ const Header = () => {
                         </div>
                       }
                       // placement="topRight"
-                      trigger={["click"]}>
+                      trigger={["click"]}
+                    >
                       <Input
                         className="container__input"
                         placeholder="Bạn đang tìm gì?"
@@ -777,28 +808,23 @@ const Header = () => {
                     <Col
                       style={{
                         textAlign: "center",
-                      }}>
+                      }}
+                    >
                       <Badge
                         count={0}
                         size="default"
-                        onClick={() => setOpenModalChat(true)}>
+                        onClick={() => setOpenModalChat(true)}
+                      >
                         <img src={Chat} className="h-20px" alt="" />
                       </Badge>
                       <p>Chat</p>
                     </Col>
                     <Col
-                      onClick={() =>
-                        toastMessage(
-                          "Chức năng này đang phát triển!",
-                          "info",
-                          1,
-                          "",
-                          {}
-                        )
-                      }
+                      onClick={() => navigate("/home/cart")}
                       style={{
                         textAlign: "center",
-                      }}>
+                      }}
+                    >
                       <Badge count={0} size="default">
                         <ShoppingOutlined
                           style={{ fontSize: "19px", color: "#828282" }}
@@ -821,18 +847,7 @@ const Header = () => {
                   <img src={DaoIcon} alt="" />
                   <p>Dạo</p>
                 </div>
-                <Link
-                  to={"#"}
-                  className="tip"
-                  onClick={() =>
-                    toastMessage(
-                      "Chức năng này đang phát triển!",
-                      "info",
-                      1,
-                      "",
-                      {}
-                    )
-                  }>
+                <Link to={"/home/cart"} className="tip">
                   <ShoppingOutlined
                     style={{ fontSize: "20px", color: "#828282" }}
                   />
@@ -863,7 +878,8 @@ const Header = () => {
                       className="btn-become-partner w-80 ms-30 mt-5"
                       onClick={() =>
                         window.open("https://partner.bookingstudio.vn", "blank")
-                      }>
+                      }
+                    >
                       Trở thành đối tác
                     </div>
                   </div>

@@ -27,8 +27,11 @@ class OrderService extends BaseService {
       data
     );
   };
-  updateOrder = (data, IdentifyCode) => {
+  updateCart = (data, IdentifyCode) => {
     return this.put(`/api/booking/update/${IdentifyCode}`, data);
+  };
+  checkOrderTimeExits = (data) => {
+    return this.post(`/api/booking/checkOrderTimeExits`, data);
   };
 }
 

@@ -29,7 +29,7 @@ import SlideAlbum from "../../components/SlideAlbum";
 // import SelectTimeOption from "../../components/SelectTimeOption/SelectTimeOption";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import { addCart, chooseServiceAction } from "../../stores/actions/CartAction";
 import {
   getLikeStudioPostAction,
   getStudioSimilarAction,
@@ -59,7 +59,7 @@ import classNames from "classnames/bind";
 import {
   DELETE_CHOOSE_SERVICE,
   SET_CHOOSE_SERVICE_LIST,
-} from "../../stores/types/OrderType";
+} from "../../stores/types/CartType";
 import BackNav from "../../components/BackNav/BackNav";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -87,7 +87,7 @@ const Index = () => {
     chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();

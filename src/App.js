@@ -25,7 +25,7 @@ const FilterPage = lazy(() => import("./pages/FilterPage/FilterPage"));
 const HelpCenterPage = lazy(() => import("./pages/HelpCenter/HelpCenterPage"));
 const AuthPage = lazy(() => import("./pages/Auth/AuthPage"));
 const BookStudio = lazy(() => import("./pages/BookStudio"));
-const Cart = lazy(() => import("./pages/Cart"));
+const CartPage = lazy(() => import("./pages/Cart/CartPage"));
 const PageClothes = lazy(() => import("./pages/ClothesDetails/PageClothes"));
 const CustomerLayout = lazy(() => import("./pages/CustomerLayout"));
 const Home = lazy(() => import("./pages/Home"));
@@ -186,10 +186,10 @@ function App() {
             }
           />
           <Route
-            path="cart"
+            path="cart/*"
             element={
               <SuspenseWrap>
-                <Cart />
+                <CartPage />
               </SuspenseWrap>
             }
           />

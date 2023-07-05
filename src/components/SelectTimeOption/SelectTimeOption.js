@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 
 import "./selectTimeOption.scss";
 
-const Option = ({ disabled }) => {
+const Option = ({ disabled, service }) => {
   const { chooseService } = useSelector((state) => state.studioPostReducer);
 
-  switch (Number(chooseService?.OrderByTime)) {
+  switch (Number(service?.OrderByTime)) {
     case 1:
       return (
         <div className="timeContainer">
@@ -20,7 +20,7 @@ const Option = ({ disabled }) => {
               marginBottom: "8px",
             }}>
             <DatePicker
-              defaultValue={moment(chooseService?.OrderByTimeFrom).utc()}
+              defaultValue={moment(service?.OrderByTimeFrom).utc()}
               format={"DD/MM/YYYY"}
               disabled={disabled}
             />
@@ -38,8 +38,8 @@ const Option = ({ disabled }) => {
                 format="HH:mm"
                 style={{ marginRight: "10px" }}
                 value={[
-                  moment(chooseService?.OrderByTimeFrom).utc(),
-                  moment(chooseService?.OrderByTimeTo).utc(),
+                  moment(service?.OrderByTimeFrom).utc(),
+                  moment(service?.OrderByTimeTo).utc(),
                 ]}
                 disabled={disabled}
                 minuteStep={60}
@@ -61,8 +61,8 @@ const Option = ({ disabled }) => {
             }}>
             <DatePicker.RangePicker
               defaultValue={[
-                moment(chooseService?.OrderByDateFrom),
-                moment(chooseService?.OrderByDateTo),
+                moment(service?.OrderByDateFrom),
+                moment(service?.OrderByDateTo),
               ]}
               format="DD-MM-YYYY"
               disabled={disabled}
@@ -78,15 +78,13 @@ const Option = ({ disabled }) => {
   }
 };
 
-const SelectTimeOption = ({ disabled }) => {
-  const { chooseService } = useSelector((state) => state.studioPostReducer);
-
+const SelectTimeOption = ({ disabled, service }) => {
   return (
     <div className="selectTimeOptionContainer">
       <Radio.Group
         name="radiogroup"
-        style={{ paddingBottom: "20px" }}
-        value={chooseService.OrderByTime}
+        style={{ padding: "0 0 20px" }}
+        value={Number(service?.OrderByTime)}
         // disabled={disabled}
       >
         <Space direction="vertical">
@@ -94,7 +92,7 @@ const SelectTimeOption = ({ disabled }) => {
           <Radio value={0}>Đặt theo ngày</Radio>
         </Space>
       </Radio.Group>
-      <Option disabled={true} />
+      <Option disabled={true} service={service} />
     </div>
   );
 };
