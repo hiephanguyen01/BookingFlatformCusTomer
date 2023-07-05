@@ -11,7 +11,7 @@ import { topOrderCategoryReducer } from "./TopOrderCategotyReducer";
 
 import { OnlineReducer } from "./OnlineReducer";
 import { chatReducer } from "./ChatReducer";
-import { OrderReducer } from "./OrderReducer";
+import { CartReducer } from "./CartReducer";
 import { userReducer } from "./UserReducer";
 import { registerPartnerReducer } from "./RegisterPartnerReducer";
 import { shopReducer } from "./ShopsReducer";
@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
   OnlineReducer,
   chatReducer,
   topOrderCategoryReducer,
-  OrderReducer,
+  CartReducer,
   userReducer,
   registerPartnerReducer,
   shopReducer,

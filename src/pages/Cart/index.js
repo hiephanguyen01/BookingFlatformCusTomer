@@ -1,37 +1,58 @@
 import { RightOutlined } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Row, Space, Tabs } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Col, Dropdown, Menu, Row, Space, Tabs, message } from "antd";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CheckBox from "../../components/CheckBox";
 import "./cart.scss";
 
-import img from "../../assets/dao/Frame 163.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  calculatePrice,
   calculatePriceUsePromo,
   calculateTotalPrice,
 } from "../../utils/calculate";
 import { convertImage } from "../../utils/convertImage";
-import { addServiceToList } from "../../stores/actions/OrderAction";
+import {
+  addServiceList,
+  addServiceToList,
+  getCartItemByCategory,
+} from "../../stores/actions/CartAction";
+import queryString from "query-string";
+import { cartService } from "../../services/CartService";
+import { convertPrice } from "../../utils/convert";
+import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import Promotion from "../../components/Promotion";
+import { orderService } from "../../services/OrderService";
 
 const Index = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { order, chooseServiceList } = useSelector(
-    (state) => state.OrderReducer
-  );
-  const { choosePromotionUser, promoCodeUserSave } = useSelector(
+  const { cart, chooseServiceList } = useSelector((state) => state.CartReducer);
+  const { choosePromotionUser } = useSelector(
     (state) => state.promoCodeReducer
   );
+  const location = useLocation();
+  const query = useMemo(() => queryString.parse(location?.search), [location]);
   const [chooseServices, setChooseServices] = useState([]);
 
   useEffect(() => {
+    if (query?.category) {
+    } else {
+      navigate("/home/cart?category=1");
+    }
     return () => {
       setChooseServices([]);
     };
-  }, []);
+  }, [navigate, query]);
+
+  useEffect(() => {
+    if (query?.category) {
+      dispatch(getCartItemByCategory(query?.category));
+    }
+  }, [query, dispatch]);
+  // useEffect(() => {
+  //   dispatch(addServiceList(chooseServices));
+  // }, [chooseServices, dispatch]);
 
   const menu = (
     <Menu
@@ -59,19 +80,17 @@ const Index = () => {
       label: "Studio",
       children: (
         <Row gutter={[0, 6]}>
-          {order["studio"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper">
+          {cart["studio"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper" key={index}>
               <CheckBox
                 key={index}
                 name="allCheck"
                 value="allCheck"
-                onClick={() =>
-                  handleOnCheckedAll(1, orderItem, orderItem?.Services)
-                }
+                onClick={() => handleOnCheckedAll(1, orderItem)}
                 checked={
-                  chooseServices.filter(
+                  chooseServiceList?.filter(
                     (item) =>
-                      item?.category === 1 && item?.postId === orderItem?.id
+                      item?.Category === 1 && item?.postId === orderItem?.Id
                   ).length === orderItem?.Services?.length
                 }
               >
@@ -88,15 +107,15 @@ const Index = () => {
               </CheckBox>
               {orderItem?.Services?.map((item, index) => (
                 <CheckBox
-                  onClick={() => handleOnChecked(1, orderItem, item)}
+                  onClick={() => handleOnChecked(1, item, orderItem?.Id)}
                   key={index}
                   name={item?.id}
                   value={item?.id}
-                  checked={chooseServices.some(
+                  checked={chooseServiceList.some(
                     (service) =>
                       service?.id === item?.id &&
-                      service?.postId === orderItem?.id &&
-                      service?.category === 1
+                      service?.postId === orderItem?.Id &&
+                      service?.Category === 1
                   )}
                 >
                   <Row
@@ -109,14 +128,24 @@ const Index = () => {
                       <Row className="w-100 h-100" gutter={(0, 10)}>
                         <Col span={6} className="">
                           <img
-                            src={item?.Image[0]}
+                            src={convertImage(item?.StudioRoom?.Image1)}
                             className="w-100 h-80px"
-                            style={{ objectFit: "cover" }}
+                            style={{ objectFit: "cover", cursor: "pointer" }}
                             alt=""
+                            onClick={() =>
+                              navigate(`/home/studio/${orderItem?.Id}`)
+                            }
                           />
                         </Col>
                         <Col span={18}>
-                          <label className="checkbox_label">{item?.Name}</label>
+                          <label
+                            className="checkbox_label"
+                            onClick={() =>
+                              navigate(`/home/studio/${orderItem?.Id}`)
+                            }
+                          >
+                            {item?.StudioRoom?.Name}
+                          </label>
                         </Col>
                       </Row>
                     </Col>
@@ -133,21 +162,23 @@ const Index = () => {
                               <div>
                                 Ngày
                                 <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "DD/MM/YYYY"
-                                  )}
+                                  {moment(item?.OrderByTimeFrom)
+                                    .utc()
+                                    .format("DD/MM/YYYY")}
                                 </span>
                               </div>
                               <div>
                                 Giờ
                                 <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "HH:mm"
-                                  )}
+                                  {moment(item?.OrderByTimeFrom)
+                                    .utc()
+                                    .format("HH:mm")}
                                 </span>
                                 {" - "}
                                 <span>
-                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
+                                  {moment(item?.OrderByTimeTo)
+                                    .utc()
+                                    .format("HH:mm")}
                                 </span>
                               </div>
                             </>
@@ -155,27 +186,29 @@ const Index = () => {
                             <div>
                               Ngày
                               <span className="date">
-                                {moment(item?.OrderByDateFrom).format(
-                                  "DD/MM/YYYY"
-                                )}
+                                {moment(item?.OrderByDateFrom)
+                                  .utc()
+                                  .format("DD/MM/YYYY")}
                               </span>
                               {" - "}
                               <span>
-                                {moment(item?.OrderByDateTo).format(
-                                  "DD/MM/YYYY"
-                                )}
+                                {moment(item?.OrderByDateTo)
+                                  .utc()
+                                  .format("DD/MM/YYYY")}
                               </span>
                             </div>
                           )}
                         </Col>
                         <Col span={12} className="checkbox_action">
-                          <div onClick={() => {}}>Xóa</div>
+                          <div onClick={() => handleBtnDelete(item?.id)}>
+                            Xóa
+                          </div>
                         </Col>
                       </Row>
                       <Row>
                         <Col span={24} className="">
                           <div className="price">
-                            {formatValue(calculatePrice(item))}đ
+                            {convertPrice(item?.price)}đ
                           </div>
                         </Col>
                       </Row>
@@ -193,8 +226,8 @@ const Index = () => {
       label: "Nhiếp ảnh",
       children: (
         <Row gutter={[0, 6]}>
-          {order["photographer"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper">
+          {cart["photographer"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper" key={index}>
               <CheckBox
                 key={index}
                 name="allCheck"
@@ -222,7 +255,9 @@ const Index = () => {
               </CheckBox>
               {orderItem?.Services?.map((item, index) => (
                 <CheckBox
-                  onClick={() => handleOnChecked(2, orderItem, item)}
+                  onClick={() =>
+                    handleOnChecked(2, item, orderItem?.Id, orderItem?.Name)
+                  }
                   key={index}
                   name={item?.id}
                   value={item?.id}
@@ -310,7 +345,7 @@ const Index = () => {
                         <Col span={24} className="">
                           <div className="price">
                             {" "}
-                            {formatValue(item?.Price)}đ
+                            {convertPrice(item?.Price || item?.price)}đ
                           </div>
                         </Col>
                       </Row>
@@ -328,8 +363,8 @@ const Index = () => {
       label: "Trang phục",
       children: (
         <Row gutter={[0, 6]}>
-          {order["clothes"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper">
+          {cart["clothes"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper" key={index}>
               <CheckBox
                 key={index}
                 name="allCheck"
@@ -445,7 +480,7 @@ const Index = () => {
                         <Col span={24} className="">
                           <div className="price">
                             {" "}
-                            {formatValue(item?.Price)}đ
+                            {convertPrice(item?.Price)}đ
                           </div>
                         </Col>
                       </Row>
@@ -463,8 +498,8 @@ const Index = () => {
       label: "Make up",
       children: (
         <Row gutter={[0, 6]}>
-          {order["makeup"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper">
+          {cart["makeup"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper" key={index}>
               <CheckBox
                 key={index}
                 name="allCheck"
@@ -580,7 +615,7 @@ const Index = () => {
                         <Col span={24} className="">
                           <div className="price">
                             {" "}
-                            {formatValue(item?.Price)}đ
+                            {convertPrice(item?.Price)}đ
                           </div>
                         </Col>
                       </Row>
@@ -598,8 +633,8 @@ const Index = () => {
       label: "Thiết bị",
       children: (
         <Row gutter={[0, 6]}>
-          {order["device"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper">
+          {cart["device"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper" key={index}>
               <CheckBox
                 key={index}
                 name="allCheck"
@@ -715,7 +750,7 @@ const Index = () => {
                         <Col span={24} className="">
                           <div className="price">
                             {" "}
-                            {formatValue(item?.Price)}đ
+                            {convertPrice(item?.Price)}đ
                           </div>
                         </Col>
                       </Row>
@@ -733,8 +768,8 @@ const Index = () => {
       label: "Người mẫu",
       children: (
         <Row gutter={[0, 6]}>
-          {order["model"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper">
+          {cart["model"]?.map((orderItem, index) => (
+            <Col span={24} className="wrapper" key={index}>
               <CheckBox
                 key={index}
                 name="allCheck"
@@ -850,7 +885,7 @@ const Index = () => {
                         <Col span={24} className="">
                           <div className="price">
                             {" "}
-                            {formatValue(item?.Price)}đ
+                            {convertPrice(item?.Price)}đ
                           </div>
                         </Col>
                       </Row>
@@ -865,51 +900,91 @@ const Index = () => {
     },
   ];
 
+  const calculateTotal = useMemo(
+    () => () => chooseServices.reduce((total, item) => total + item?.price, 0),
+    [chooseServices]
+  );
+  const calculateTotalUsePromo = useMemo(
+    () => () => () => {
+      return chooseServices.reduce((total, item) => {
+        switch (item?.OrderByTime) {
+          case 1:
+            const priceByHour = calculateTotal() * (item?.amount || 1);
+            if (choosePromotionUser?.TypeReduce === 1) {
+              return (
+                total + priceByHour - (choosePromotionUser?.ReduceValue || 0)
+              );
+            } else {
+              return (
+                total +
+                (priceByHour -
+                  ((priceByHour * choosePromotionUser?.ReduceValue) / 100 >=
+                  choosePromotionUser?.MaxReduce
+                    ? choosePromotionUser?.MaxReduce
+                    : (priceByHour / 100) *
+                      (choosePromotionUser?.ReduceValue || 0)))
+              );
+            }
+          case 0:
+            const priceByDate = calculateTotal() * (item?.amount || 1) || 0;
+            if (choosePromotionUser?.TypeReduce === 1) {
+              return (
+                total + priceByDate - (choosePromotionUser?.ReduceValue || 0)
+              );
+            } else {
+              return (
+                total +
+                (priceByDate -
+                  ((priceByDate * choosePromotionUser?.ReduceValue) / 100 >=
+                  choosePromotionUser?.MaxReduce
+                    ? choosePromotionUser?.MaxReduce
+                    : (priceByDate / 100) *
+                      (choosePromotionUser?.ReduceValue || 0)))
+              );
+            }
+
+          default:
+            break;
+        }
+        return total;
+      }, 0);
+    },
+    [calculateTotal, choosePromotionUser, chooseServices]
+  );
+
   const onChange = (key) => {
     // setList([...CART_ITEM_LIST[key]]);
   };
 
-  const handleOnChecked = (category, post, service, postName) => {
-    let newChooseService = [...chooseServices];
-    const findServiceIndex = newChooseService.findIndex(
-      (item) =>
-        item?.postId === post?.id &&
-        service?.id === item?.id &&
-        category === item?.category
-    );
-    if (findServiceIndex >= 0) {
-      newChooseService.splice(findServiceIndex, 1);
-    } else {
-      newChooseService.push({
+  const handleOnChecked = (category, service, postId) => {
+    dispatch(
+      addServiceToList({
         ...service,
-        category,
-        postId: post?.id,
-        postName: post?.Name,
-      });
-    }
-    setChooseServices([...newChooseService]);
+        postId: postId,
+      })
+    );
   };
 
-  const handleOnCheckedAll = (category, post, services) => {
-    let newChooseService = [...chooseServices];
+  const handleOnCheckedAll = async (category, post) => {
+    let newChooseService = [...chooseServiceList];
     let temp = [];
     const checkAll =
       newChooseService.filter(
-        (item) => item?.category === category && item?.postId === post?.id
-      ).length === services?.length;
+        (item) => item?.Category === category && item?.postId === post?.Id
+      ).length === post?.Services?.length;
     if (checkAll) {
       newChooseService = newChooseService.filter(
         (service) =>
-          !(service?.category === category && service?.postId === post?.id)
+          !(service?.Category === category && service?.postId === post?.Id)
       );
     } else {
-      temp = services.reduce((arr, service) => {
+      temp = post?.Services.reduce((arr, service) => {
         if (
           newChooseService.some(
             (sv) =>
-              sv?.postId === post?.id &&
+              sv?.postId === post?.Id &&
               sv?.id === service?.id &&
-              category === sv?.category
+              category === sv?.Category
           )
         ) {
           return arr;
@@ -918,21 +993,63 @@ const Index = () => {
           ...arr,
           {
             ...service,
-            category,
-            postId: post?.id,
+            postId: post?.Id,
             postName: post?.Name,
           },
         ];
       }, []);
     }
 
-    setChooseServices([...newChooseService, ...temp]);
+    const checkTime = await Promise.all(
+      [...newChooseService, ...temp].map(async (item) => {
+        const res = await orderService.checkOrderTimeExits({
+          OrderByTime: item?.OrderByTime,
+          OrderByTimeFrom: item?.OrderByTimeFrom,
+          OrderByTimeTo: item?.OrderByTimeTo,
+          OrderByDateFrom: item?.OrderByDateFrom,
+          OrderByDateTo: item?.OrderByDateTo,
+          ServiceId: item?.StudioRoom?.Id,
+          Category: item?.Category,
+        });
+        return res?.data?.success;
+      })
+    );
+    if (!checkTime.some((item) => item)) {
+      dispatch(addServiceList([...newChooseService, ...temp]));
+    } else {
+      message.warning("Đã có người chọn trong khoảng thời gian này!");
+    }
   };
+
+  const handleBtnDelete = useCallback(
+    async (id) => {
+      try {
+        await cartService.removeServiceFromCart(id);
+        dispatch(getCartItemByCategory(query?.category));
+      } catch (error) {}
+    },
+    [dispatch, query]
+  );
+
+  const onClickModal = () => {
+    dispatch({
+      type: SHOW_MODAL,
+      Component: <Promotion />,
+    });
+  };
+
   const handleButtonOrder = () => {
     try {
       if (chooseServices.length > 0) {
-        dispatch(addServiceToList(chooseServices));
-        navigate("order");
+        // dispatch(addServiceList(chooseServices));
+        const arr = chooseServices.map((item) => ({
+          id: item?.id,
+          category: item?.Category,
+        }));
+        const createQuery = queryString.stringify({
+          cartItems: JSON.stringify(arr),
+        });
+        navigate(`order?${createQuery}`);
       }
     } catch (error) {
       console.log(error);
@@ -965,14 +1082,11 @@ const Index = () => {
                   margin: "0 0 16px",
                 }}>
                 <div>Chọn mã khuyến mãi</div>
-                <Dropdown overlay={menu}>
-                  <a onClick={(e) => e.preventDefault()} href="/#">
-                    <Space>
-                      2 Mã khuyến mãi
-                      <RightOutlined />
-                    </Space>
-                  </a>
-                </Dropdown>
+
+                <Space onClick={() => onClickModal()}>
+                  2 Mã khuyến mãi
+                  <RightOutlined />
+                </Space>
               </div>
               <div style={{ padding: "16px 15px" }}>
                 <Row
@@ -994,7 +1108,9 @@ const Index = () => {
                         color: "#828282",
                       }}
                     >
-                      {`${formatValue(calculateTotalPrice(chooseServices))}đ`}
+                      {`${convertPrice(
+                        calculateTotalPrice(chooseServices) || calculateTotal()
+                      )}đ`}
                     </div>
                   </Col>
                 </Row>
@@ -1021,11 +1137,11 @@ const Index = () => {
                         fontWeight: "700",
                       }}
                     >
-                      {`${formatValue(
+                      {`${convertPrice(
                         calculatePriceUsePromo(
                           chooseServices,
                           choosePromotionUser
-                        )
+                        ) || calculateTotal()
                       )}đ`}
                     </div>
                   </Col>
@@ -1047,13 +1163,3 @@ const Index = () => {
 };
 
 export default Index;
-
-export const formatValue = (num) => {
-  let format;
-  if (num) {
-    format = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  } else {
-    return 0;
-  }
-  return format;
-};

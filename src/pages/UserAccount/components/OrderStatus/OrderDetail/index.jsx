@@ -106,7 +106,7 @@ const OrderDetail = () => {
       formData.append("DeletionTime", new Date());
       formData.append("DeletedNote", cancelReason);
 
-      await orderService.updateOrder(formData, booking?.IdentifyCode);
+      await orderService.updateCart(formData, booking?.IdentifyCode);
 
       setShowModal(false);
       openNotification("success", "Hủy đơn thành công!");

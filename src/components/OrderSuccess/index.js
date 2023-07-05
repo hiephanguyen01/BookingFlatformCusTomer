@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { deleteChooseServiceAction } from "../../stores/actions/OrderAction";
+import { deleteChooseServiceAction } from "../../stores/actions/CartAction";
 import "./orderSuccess.scss";
 import { socket } from "../ConnectSocket/ConnectSocket";
 import { TOGGLE_STATE } from "../../stores/types/messType";

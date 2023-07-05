@@ -52,6 +52,7 @@
                 font-size: 18px;
                 line-height: 25px;
                 color: $neutral-600;
+                cursor: pointer;
               }
 
               .checkbox_desc {
@@ -71,6 +72,7 @@
 
               .checkbox_action {
                 text-align: end;
+                cursor: pointer;
 
                 div {
                   font-weight: 400;

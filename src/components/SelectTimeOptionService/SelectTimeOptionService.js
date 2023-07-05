@@ -7,7 +7,7 @@ import { ADD_TIME_ORDER } from "../../stores/types/studioPostType";
 
 import "./selectTimeOptionService.scss";
 import { handlerSelectServiceAction } from "../../stores/actions/studioPostAction";
-import { DELETE_CHOOSE_SERVICE } from "../../stores/types/OrderType";
+import { DELETE_CHOOSE_SERVICE } from "../../stores/types/CartType";
 import { roomService } from "../../services/RoomService";
 
 function dateRange(startDate, endDate, steps = 1) {
@@ -51,7 +51,7 @@ function remove_duplicates_es6(arr) {
 }
 
 const Option = ({ option, disabled, service }) => {
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const { listTimeSelected, studioDetail, chooseService } = useSelector(
     (state) => state.studioPostReducer
   );
@@ -384,7 +384,7 @@ const Option = ({ option, disabled, service }) => {
 };
 
 const SelectTimeOptionService = ({ disabled, service, onClick }) => {
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
 
   const [data, setData] = useState(service);
   const [selectTime, setSelectTime] = useState();

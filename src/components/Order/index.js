@@ -1,7 +1,7 @@
 import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Grid, Input, Row } from "antd";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Promotion from "../../components/Promotion";
@@ -13,16 +13,18 @@ import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
 import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/OrderType";
+import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/CartType";
 import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 import { calDate, calTime, priceService } from "../../utils/calculate";
-import { convertPrice } from "../../utils/convert";
+import { convertPrice, isJsonString } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
 import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import toastMessage from "../ToastMessage";
+import queryString from "query-string";
 import "./order.scss";
+import { getCartItemCheckout } from "../../stores/actions/CartAction";
 
 const { useBreakpoint } = Grid;
 
@@ -30,7 +32,7 @@ const Index = ({ linkTo = "" }) => {
   const screens = useBreakpoint();
   const socket = useSelector((state) => state.userReducer.socket);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const { partnerDetail } = useSelector(
     (state) => state.registerPartnerReducer
   );
@@ -46,6 +48,10 @@ const Index = ({ linkTo = "" }) => {
   const location = useLocation();
   const navigate = useNavigate();
   let cate;
+  const cartItems = useMemo(
+    () => queryString.parse(location?.search)?.cartItems,
+    [location?.search]
+  );
   const nameCategory = location.pathname
     .split("/")
     .filter((item) => item !== "")[1];
@@ -90,6 +96,16 @@ const Index = ({ linkTo = "" }) => {
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, []);
+
+  useEffect(() => {
+    if (cartItems?.length) {
+      if (isJsonString(cartItems)) {
+        dispatch(getCartItemCheckout(cartItems));
+      } else {
+        navigate(-1);
+      }
+    }
+  }, [cartItems, dispatch, navigate]);
 
   const isEmpty = () => {
     if (
@@ -184,6 +200,76 @@ const Index = ({ linkTo = "" }) => {
       return total;
     }, 0);
   };
+
+  const calculateTotalOrder = useMemo(
+    () => () => chooseServiceList.reduce((acc, item) => acc + item?.price, 0),
+    [chooseServiceList]
+  );
+
+  const calculateTotalOrderUsePromo = useMemo(
+    () => () => {
+      return chooseServiceList.reduce((total, item) => {
+        if (item?.promotion?.TypeReduce === 1) {
+          return total + item?.price - (item?.promotion?.ReduceValue || 0);
+        } else {
+          return (
+            total +
+            (item?.price -
+              ((item?.price * item?.promotion?.ReduceValue) / 100 >=
+              item?.promotion?.MaxReduce
+                ? item?.promotion?.MaxReduce
+                : (item?.price / 100) * (item?.promotion?.ReduceValue || 0)))
+          );
+        }
+
+        // switch (item?.OrderByTime) {
+        //   case 1:
+        //     if (choosePromotionUser?.TypeReduce === 1) {
+        //       return (
+        //         total +
+        //         calculateTotalOrder() -
+        //         (choosePromotionUser?.ReduceValue || 0)
+        //       );
+        //     } else {
+        //       return (
+        //         total +
+        //         (calculateTotalOrder() -
+        //           ((calculateTotalOrder() * choosePromotionUser?.ReduceValue) /
+        //             100 >=
+        //           choosePromotionUser?.MaxReduce
+        //             ? choosePromotionUser?.MaxReduce
+        //             : (calculateTotalOrder() / 100) *
+        //               (choosePromotionUser?.ReduceValue || 0)))
+        //       );
+        //     }
+        //   case 0:
+        //     if (choosePromotionUser?.TypeReduce === 1) {
+        //       return (
+        //         total +
+        //         calculateTotalOrder() -
+        //         (choosePromotionUser?.ReduceValue || 0)
+        //       );
+        //     } else {
+        //       return (
+        //         total +
+        //         (calculateTotalOrder() -
+        //           ((calculateTotalOrder() * choosePromotionUser?.ReduceValue) /
+        //             100 >=
+        //           choosePromotionUser?.MaxReduce
+        //             ? choosePromotionUser?.MaxReduce
+        //             : (calculateTotalOrder() / 100) *
+        //               (choosePromotionUser?.ReduceValue || 0)))
+        //       );
+        //     }
+
+        //   default:
+        //     break;
+        // }
+        // return total;
+      }, 0);
+    },
+    [chooseServiceList]
+  );
 
   const handleOnClickOrder = async () => {
     const AffiliateUserId = localStorage.getItem("qs");
@@ -321,19 +407,20 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const CancelFreeDate = moment(
-    chooseService?.OrderByTime
-      ? chooseService?.OrderByTimeFrom
-      : chooseService?.OrderByDateFrom
-  )
-    .subtract(
-      chooseService?.OrderByTime
-        ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
-        : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
-      `${chooseService?.OrderByTime ? "hours" : "days"}`
+  const CancelFreeDate = (service) =>
+    moment(
+      service?.OrderByTime ? service?.OrderByTimeFrom : service?.OrderByDateFrom
     )
-    .utc()
-    .format("DD/MM/YYYY HH:mm A");
+      .subtract(
+        service?.OrderByTime
+          ? service?.FreeCancelByHour?.match(/\d+/g)[0] ||
+              service?.StudioRoom?.FreeCancelByHour?.match(/\d+/g)[0]
+          : service?.FreeCancelByDate?.match(/\d+/g)[0] ||
+              service?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0],
+        `${service?.OrderByTime ? "hours" : "days"}`
+      )
+      .utc()
+      .format("DD/MM/YYYY HH:mm A");
 
   return (
     <div className="order_container">
@@ -344,11 +431,11 @@ const Index = ({ linkTo = "" }) => {
           maxWidth: "1300px",
         }}>
         <Col lg={9} sm={24} xs={24} className="col">
-          {chooseServiceList.map((item, index) => (
+          {chooseServiceList?.map((item, index) => (
             <div className="right_col">
               {index === 0 && <div className="text-title">Bạn đã chọn</div>}
               <div className="text-description">
-                {studioDetail?.data?.Name || item?.postName}
+                {studioDetail?.data?.Name || item?.StudioPost?.Name}
                 <CheckCircleOutlined
                   style={{
                     height: "100%",
@@ -366,7 +453,7 @@ const Index = ({ linkTo = "" }) => {
                     src={`${
                       item?.Image?.length > 0
                         ? convertImage(item?.Image[0])
-                        : ""
+                        : convertImage(item?.StudioRoom?.Image1) || ""
                     }`}
                     className="img_service"
                     alt=""
@@ -376,6 +463,9 @@ const Index = ({ linkTo = "" }) => {
                       {item?.Name?.length > 30
                         ? `${item?.Name.slice(0, 30)}...`
                         : item?.Name}
+                      {item?.StudioRoom?.Name?.length > 30
+                        ? `${item?.StudioRoom?.Name.slice(0, 30)}...`
+                        : item?.StudioRoom?.Name}
                     </span>
                     {/* <div
                           className="text-description mt-6 "
@@ -384,10 +474,15 @@ const Index = ({ linkTo = "" }) => {
                           Trắng, size S, Số lượng 1
                         </div> */}
                     <div className="text-middle mt-8">
-                      {item?.OrderByTime === 1 &&
-                        `${convertPrice(item?.pricesByHour[0].PriceByHour)} đ`}
-                      {item?.OrderByTime === 0 &&
-                        priceService(item?.pricesByDate, false)}
+                      {Number(item?.OrderByTime) === 1 &&
+                        `${convertPrice(
+                          item?.pricesByHour?.length > 0
+                            ? item?.pricesByHour[0].PriceByHour
+                            : item?.price
+                        )} đ`}
+                      {Number(item?.OrderByTime) === 0 &&
+                        (priceService(item?.pricesByDate, false) ||
+                          `${convertPrice(item?.price)} đ`)}
                     </div>
                   </div>
                 </div>
@@ -423,7 +518,7 @@ const Index = ({ linkTo = "" }) => {
                   }}
                 >
                   <CheckCircleOutlined className="me-6 mb-3" /> Miễn phí hủy
-                  trước ngày {CancelFreeDate}
+                  trước ngày {CancelFreeDate(item)}
                 </Row>
               </div>
               <div
@@ -501,7 +596,11 @@ const Index = ({ linkTo = "" }) => {
                           fontWeight: "700",
                         }}
                       >
-                        {convertPrice(calculatePriceUsePromo())}đ
+                        {convertPrice(
+                          calculatePriceUsePromo() |
+                            calculateTotalOrderUsePromo()
+                        )}
+                        đ
                       </div>
                     </div>
                   </div>
@@ -545,22 +644,7 @@ const Index = ({ linkTo = "" }) => {
                       marginBottom: "12px",
                     }}
                   >
-                    {/* {chooseService?.OrderByTime === 1 &&
-                        `${convertPrice(
-                          chooseService?.pricesByHour[0].PriceByHour *
-                            calTime(
-                              chooseService.OrderByTimeFrom,
-                              chooseService.OrderByTimeTo
-                            )
-                        )}đ`}
-                      {chooseService?.OrderByTime === 0 &&
-                        `${convertPrice(
-                          chooseService?.pricesByDate.reduce(
-                            (total, item) => total + chooseService?.priceByDate
-                          ),
-                          0
-                        )}đ`} */}
-                    {convertPrice(calculatePrice())}
+                    {convertPrice(calculatePrice() || calculateTotalOrder())}
                   </div>
                 </div>
                 <div className="d-flex justify-content-between">
@@ -579,7 +663,10 @@ const Index = ({ linkTo = "" }) => {
                       fontWeight: "700",
                     }}
                   >
-                    {convertPrice(calculatePriceUsePromo())}đ
+                    {convertPrice(
+                      calculatePriceUsePromo() || calculateTotalOrderUsePromo()
+                    )}
+                    đ
                   </div>
                 </div>
               </div>
