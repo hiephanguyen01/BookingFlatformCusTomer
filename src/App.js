@@ -105,7 +105,7 @@ function App() {
   useEffect(() => {
     // (process.env.NODE_ENV === "production" ||
     //  process.env.REACT_APP_ENV === "STAGING") &&
-    GlobalDebug(false, true);
+    process.env.NODE_ENV === "production" && GlobalDebug(false, true);
   }, []);
 
   return (
