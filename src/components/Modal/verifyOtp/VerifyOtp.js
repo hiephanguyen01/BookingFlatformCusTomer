@@ -130,9 +130,7 @@ export const VerifyOtp = ({ setValid, email }) => {
                     Email: email,
                     UserId: user?.id || undefined,
                   });
-                } catch (error) {
-                  console.log(error);
-                }
+                } catch (error) {}
               }}>
               Gửi lại
             </button>

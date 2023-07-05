@@ -66,9 +66,7 @@ export const getFilterStudioPost =
           )
         )}`
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
     dispatch({ type: LOADING, payload: false });
   };
 
@@ -100,9 +98,7 @@ export const getFilterStudioPostMobile =
           )
         )}`
       );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
     dispatch({ type: LOADING, payload: false });
   };
 
@@ -134,9 +130,7 @@ export const studioDetailAction = (id, category, currentUser) => {
           rating: data.rating,
         },
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
     dispatch({ type: LOADING, payload: false });
   };
 };
@@ -144,17 +138,13 @@ export const studioNearAction = (id, lat, lng) => async (dispatch) => {
   try {
     const { data } = await studioPostService.getStudioNear(id, lat, lng);
     dispatch({ type: SET_STUDIO_NEAR, payload: data });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 export const getStudioSimilarAction = (id, cate) => async (dispatch) => {
   try {
     const { data } = await studioPostService.getStudioSimilar(id, cate);
     dispatch({ type: SET_STUDIO_SIMILAR, data: data.data });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const studioDetailAction1 = (id, category) => {
@@ -165,9 +155,7 @@ export const studioDetailAction1 = (id, category) => {
 
       dispatch({ type: SET_STUDIO_DETAIL1, payload: data.data });
       dispatch(studioNearAction(data.data.Latitude, data.data.Longtitude));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
     dispatch({ type: LOADING, payload: false });
   };
 };
@@ -184,9 +172,7 @@ export const getLikeStudioPostAction = (postId, category, currentUser = "") => {
       if (currentUser) {
         dispatch(studioDetailAction(postId, category, currentUser));
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getAllStudioLikedAction6 = (category, sort = "") => {
@@ -203,9 +189,7 @@ export const getAllStudioLikedAction6 = (category, sort = "") => {
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getAllStudioLikedAction5 = (category, sort = "") => {
@@ -222,9 +206,7 @@ export const getAllStudioLikedAction5 = (category, sort = "") => {
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getAllStudioLikedAction4 = (category, sort = "") => {
@@ -241,9 +223,7 @@ export const getAllStudioLikedAction4 = (category, sort = "") => {
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 
@@ -260,9 +240,7 @@ export const getAllStudioLikedAction1 = (category, sort = "") => {
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 
@@ -274,9 +252,7 @@ export const getAllStudioLikedAction = (category, sort = "") => {
         type: SET_LIST_LIKED_CATEGORY,
         data: data,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 
@@ -294,9 +270,7 @@ export const getAllStudioLikedAction2 = (category, sort = "") => {
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getAllStudioLikedAction3 = (category, sort = "") => {
@@ -312,9 +286,7 @@ export const getAllStudioLikedAction3 = (category, sort = "") => {
         type: `SET_LIST_LIKED_CATEGORY_${category}`,
         data: data.Posts,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 
@@ -325,9 +297,7 @@ export const getPromotionByTenantId = (tenantId) => async (dispatch) => {
       type: SET_PROMOTION_CODE,
       data: data.data,
     });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const setFilterStudioService =
@@ -345,7 +315,6 @@ export const setFilterStudioService =
 export const handlerSelectServiceAction = (data, chooseServiceTime) => {
   return async (dispatch) => {
     try {
-      console.log(23456);
       if (chooseServiceTime.OrderByTime === 1) {
         if (
           chooseServiceTime?.disableTimeOrder?.some((item) => {
@@ -397,8 +366,6 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
       //       setChooseService([{ ...data }]);
       //     }
       //   }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };

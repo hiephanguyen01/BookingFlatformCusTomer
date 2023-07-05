@@ -6,8 +6,6 @@ export const getDetailShopAction = (id, category) => {
     try {
       const { data } = await shopService.getShopDetail(id, category);
       dispatch({ type: GET_DETAIL_SHOP_CLOTHES, data: data.data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };

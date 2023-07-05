@@ -6,8 +6,6 @@ export const getDetailRoomAction = (id) => {
     try {
       const { data } = await roomService.getDetailRoom(id);
       dispatch({ type: GET_DETAIL_ROOM, data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };

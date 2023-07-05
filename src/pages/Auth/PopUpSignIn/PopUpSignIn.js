@@ -38,8 +38,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
               }
         }
         className={className ? className : "pop-up-sign-in-button"}
-        style={style}
-      >
+        style={style}>
         {children}
       </span>
 
@@ -50,7 +49,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
           {page === 1 ? (
             <Modal
               centered
-              visible={visible}
+              open={visible}
               onOk={(e) => {
                 e.stopPropagation();
                 setVisible(false);
@@ -60,18 +59,16 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 setVisible(false);
               }}
               footer={false}
-              width={400}
-            >
+              width={400}>
               <SignIn
                 onClickPop={(e) => {
                   setPage(e);
-                }}
-              ></SignIn>
+                }}></SignIn>
             </Modal>
           ) : page === 2 ? (
             <Modal
               centered
-              visible={visible}
+              open={visible}
               onOk={(e) => {
                 e.stopPropagation();
                 setVisible(false);
@@ -81,8 +78,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 setVisible(false);
               }}
               footer={false}
-              width={400}
-            >
+              width={400}>
               <ForgotPassword
                 onClickPop={(e) => {
                   setPage(e);
@@ -92,7 +88,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
           ) : page === 3 ? (
             <Modal
               centered
-              visible={visible}
+              open={visible}
               onOk={(e) => {
                 e.stopPropagation();
                 setVisible(false);
@@ -102,25 +98,22 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 setVisible(false);
               }}
               footer={false}
-              width={400}
-            >
+              width={400}>
               <SignUpWithPhone
                 backLink=""
                 nextLink=""
                 onClickPop={(e) => {
                   setPage(e);
-                }}
-              ></SignUpWithPhone>
+                }}></SignUpWithPhone>
             </Modal>
           ) : page === 4 ? (
             <Modal
               centered
               closable={false}
-              visible={visible}
+              open={visible}
               footer={false}
               width={400}
-              confirm={true}
-            >
+              confirm={true}>
               <SetPassword
                 backLink=""
                 nextLink=""
@@ -128,13 +121,12 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 submit="Đặt lại mật khẩu"
                 onClickPop={(e) => {
                   setPage(e);
-                }}
-              ></SetPassword>
+                }}></SetPassword>
             </Modal>
           ) : page === 5 ? (
             <Modal
               centered
-              visible={visible}
+              open={visible}
               onOk={(e) => {
                 e.stopPropagation();
                 setVisible(false);
@@ -144,18 +136,16 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 setVisible(false);
               }}
               footer={false}
-              width={400}
-            >
+              width={400}>
               <SignUp
                 onClickSignUp={(e) => {
                   setPage(e);
-                }}
-              ></SignUp>
+                }}></SignUp>
             </Modal>
           ) : page === 6 ? (
             <Modal
               centered
-              visible={visible}
+              open={visible}
               onOk={(e) => {
                 e.stopPropagation();
                 setVisible(false);
@@ -165,26 +155,23 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 setVisible(false);
               }}
               footer={false}
-              width={400}
-            >
+              width={400}>
               <SignUpWithPhone
                 backLink=""
                 nextLink=""
                 onClickSignUp={(e) => {
                   setPage(e);
-                }}
-              ></SignUpWithPhone>
+                }}></SignUpWithPhone>
             </Modal>
           ) : page === 7 ? (
             <Modal
               centered
               closable={false}
-              visible={visible}
+              open={visible}
               header={false}
               footer={false}
               width={400}
-              confirm={true}
-            >
+              confirm={true}>
               <SetPassword
                 backLink=""
                 nextLink=""
@@ -192,8 +179,7 @@ const PopUpSignIn = ({ children, className, style, onClick }) => {
                 submit="Đăng ký"
                 onClickSignUp={(e) => {
                   setPage(e);
-                }}
-              ></SetPassword>
+                }}></SetPassword>
             </Modal>
           ) : (
             <div></div>

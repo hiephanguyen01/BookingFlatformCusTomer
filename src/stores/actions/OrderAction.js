@@ -43,9 +43,7 @@ export const chooseServiceAction = (data) => async (dispatch) => {
   try {
     dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: data });
     dispatch({ type: "SET_TIME_ORDER", data: [] });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
   // dispatch({ type: LOADING, payload: false });
 };
 
@@ -53,9 +51,7 @@ export const deleteChooseServiceAction = () => async (dispatch) => {
   // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: DELETE_CHOOSE_SERVICE });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
   // dispatch({ type: LOADING, payload: false });
 };
 
@@ -63,9 +59,7 @@ export const updateServiceListAction = (data) => async (dispatch) => {
   // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: UPDATE_CHOOSE_SERVICE, payload: data });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
   // dispatch({ type: LOADING, payload: false });
 };
 
@@ -73,9 +67,7 @@ export const deleteOrder = () => async (dispatch) => {
   // dispatch({ type: LOADING, payload: true });
   try {
     dispatch({ type: DELETE_ORDER });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
   // dispatch({ type: LOADING, payload: false });
 };
 

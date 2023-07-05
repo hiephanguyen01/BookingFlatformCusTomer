@@ -136,16 +136,14 @@ const Index = () => {
                         name="allCheck"
                         value="allCheck"
                         onClick={() => handleOnChecked("allCheck")}
-                        checked={checked.includes("allCheck")}
-                      >
+                        checked={checked.includes("allCheck")}>
                         <div
                           style={{
                             fontWeight: "400",
                             fontSize: "14px",
                             lineHeight: "19px",
                             color: "#3F3F3F",
-                          }}
-                        >
+                          }}>
                           {tag.value}
                         </div>
                       </CheckBox>
@@ -155,8 +153,7 @@ const Index = () => {
                           key={index}
                           name={item.id}
                           value={item.id}
-                          checked={checked.includes(item.id)}
-                        >
+                          checked={checked.includes(item.id)}>
                           <div className="checkbox_content d-flex align-items-center w-100 justify-content-between">
                             <div className="w-40 d-flex">
                               <div className="w-76px h-76px me-12">
@@ -192,8 +189,7 @@ const Index = () => {
                                       (val) => val.id !== item.id
                                     );
                                     setList([...newList]);
-                                  }}
-                                >
+                                  }}>
                                   Xóa
                                 </Button>
                                 <div className="price">
@@ -217,16 +213,14 @@ const Index = () => {
                 padding: "25px 25px ",
                 // marginBottom: "0.5rem",
                 backgroundColor: "#FFFFFF",
-              }}
-            >
+              }}>
               <div
                 className="d-flex justify-content-between"
                 style={{
                   borderBottom: "0.6px solid #E7E7E7",
                   padding: "0 0 14px",
                   margin: "0 0 16px",
-                }}
-              >
+                }}>
                 <div>Chọn mã khuyến mãi</div>
                 <Dropdown overlay={menu}>
                   <a onClick={(e) => e.preventDefault()} href="/#">
@@ -248,8 +242,7 @@ const Index = () => {
                       textDecoration: "line-through",
                       color: "#828282",
                       marginBottom: "12px",
-                    }}
-                  >
+                    }}>
                     {`${formatValue(
                       list.reduce((total, val) => total + Number(val.price), 0)
                     )}đ`}
@@ -258,8 +251,7 @@ const Index = () => {
                 <div className="d-flex justify-content-between">
                   <div
                     className="text-description"
-                    style={{ color: "#616161" }}
-                  >
+                    style={{ color: "#616161" }}>
                     Bao gồm 50.000đ thuế và phí
                   </div>
                   <div
@@ -269,8 +261,7 @@ const Index = () => {
                       fontSize: "20px",
                       lineHeight: "28px",
                       fontWeight: "700",
-                    }}
-                  >
+                    }}>
                     {`${formatValue(
                       list.reduce((total, val) => total + Number(val.price), 0)
                     )}đ`}
@@ -279,8 +270,7 @@ const Index = () => {
               </div>
               <Button
                 type="primary"
-                style={{ borderRadius: "8px", height: "45px", width: "100%" }}
-              >
+                style={{ borderRadius: "8px", height: "45px", width: "100%" }}>
                 Đặt ngay
               </Button>
             </div>

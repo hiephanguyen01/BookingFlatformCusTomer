@@ -18,8 +18,7 @@ const Option = ({ disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "8px",
-            }}
-          >
+            }}>
             <DatePicker
               defaultValue={moment(chooseService?.OrderByTimeFrom).utc()}
               format={"DD/MM/YYYY"}
@@ -33,8 +32,7 @@ const Option = ({ disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}
-          >
+            }}>
             <div className="" style={{ width: "200px" }}>
               <TimePicker.RangePicker
                 format="HH:mm"
@@ -60,8 +58,7 @@ const Option = ({ disabled }) => {
               width: "100%",
               marginRight: "20px",
               marginBottom: "10px",
-            }}
-          >
+            }}>
             <DatePicker.RangePicker
               defaultValue={[
                 moment(chooseService?.OrderByDateFrom),
@@ -88,7 +85,7 @@ const SelectTimeOption = ({ disabled }) => {
     <div className="selectTimeOptionContainer">
       <Radio.Group
         name="radiogroup"
-        style={{ padding: "0 0 20px" }}
+        style={{ paddingBottom: "20px" }}
         value={chooseService.OrderByTime}
         // disabled={disabled}
       >

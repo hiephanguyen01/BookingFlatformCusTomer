@@ -49,9 +49,7 @@ const PostDetail = () => {
       } else {
         setComments([...comments, ...data.data]);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -182,7 +180,6 @@ const PostDetail = () => {
   //       });
   //       dispatch(getPostDaoByIdAction(postId));
   //     } catch (error) {
-  //       console.log(error);
   //     }
   //   }
   // };

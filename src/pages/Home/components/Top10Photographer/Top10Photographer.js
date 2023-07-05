@@ -9,8 +9,6 @@ const Top10Photographer = () => {
     (state) => state.topOrderCategoryReducer
   );
 
-  console.log("Top 10 photographer");
-
   const dispatch = useDispatch();
 
   useEffect(() => {

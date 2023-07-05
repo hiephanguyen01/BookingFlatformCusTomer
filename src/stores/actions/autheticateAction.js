@@ -172,7 +172,6 @@ export const facebookLink =
             ...error.customData["_tokenResponse"],
             providerId: error.customData["_tokenResponse"].providerId,
           });
-          // console.log(respError.data);
           setCheckedLink(!checkedLink);
           dispatch({ type: SET_USER, payload: respError.data.data });
         } catch (error) {
@@ -241,7 +240,6 @@ export const LoginWithPhoneNumber = (data, navigate) => async (dispatch) => {
     setAuthToken(resp.data.token);
     dispatch({ type: SET_USER, payload: resp.data.data });
   } catch (error) {
-    console.log(error);
     openNotificationWithIcon("error", "Đăng nhập thất bại", "Vui lòng thử lại");
   }
   dispatch({ type: SET_LOADING, payload: false });
@@ -301,9 +299,7 @@ export const logOut = (navigate) => async (dispatch) => {
     setAuthToken(null);
     dispatch({ type: SET_USER, payload: null });
     localStorage.removeItem("access_token");
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const deleteMe = (navigate) => async (dispatch) => {
@@ -315,7 +311,6 @@ export const deleteMe = (navigate) => async (dispatch) => {
     dispatch({ type: SET_USER, payload: null });
     localStorage.removeItem("access_token");
   } catch (error) {
-    console.log(error);
     toastMessage(error.response.data.message, "error");
   }
 };

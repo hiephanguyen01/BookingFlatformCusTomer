@@ -90,8 +90,7 @@ const Index = ({ data = [], className, isPerional }) => {
               allowHalf
               value={Number(data?.data?.TotalRate)}
               style={{ fontSize: "10px" }}
-              disabled
-            ></Rate>
+              disabled></Rate>
             <div className="pt-3 ps-5">{`${data?.data?.TotalRate || 5} (${
               data?.rating?.length || 0
             })`}</div>
@@ -107,8 +106,7 @@ const Index = ({ data = [], className, isPerional }) => {
                   key={star.id}
                   className={`rate_item ${
                     chooseRating === star.id ? "active" : ""
-                  }`}
-                >
+                  }`}>
                   <span>{star.label}</span>
                   <StarFilled style={{ color: "#F8D93A" }} />
                   <span>
@@ -130,8 +128,7 @@ const Index = ({ data = [], className, isPerional }) => {
           <>
             <div
               className="rating_list"
-              style={screens?.xs ? { padding: "20px 20px" } : {}}
-            >
+              style={screens?.xs ? { padding: "20px" } : {}}>
               {values?.map(
                 (item, idx) =>
                   idx >= minIndex &&
@@ -178,8 +175,7 @@ const Index = ({ data = [], className, isPerional }) => {
                             type: "SHOW_MODAL_LIST",
                             Component: <ModalImage data={item?.Image} />,
                           })
-                        }
-                      >
+                        }>
                         {/* <li className="item-video">
                           <img src={imgCmt} alt="" />
                           <PlayCircleOutlined className="play" />
@@ -200,8 +196,7 @@ const Index = ({ data = [], className, isPerional }) => {
                       </ul>
                       <div
                         className="mt-16 mb-25 text-medium-re"
-                        style={{ color: "#828282" }}
-                      >
+                        style={{ color: "#828282" }}>
                         {item?.StudioRoom?.Name ||
                           item?.PhotographerServicePackage?.Name ||
                           item?.ModelServicePackage?.Name ||
