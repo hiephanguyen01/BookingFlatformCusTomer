@@ -39,8 +39,7 @@ const ModalImage = ({
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-      }}
-    >
+      }}>
       <h3>{title}</h3>
       <div onClick={() => setOpenModal(false)} className={"close"}>
         <CloseOutlined style={{ fontSize: "22px" }} />
@@ -65,8 +64,7 @@ const ModalImage = ({
               }}
               thumbs={{ swiper: thumbsSwiper }}
               modules={[FreeMode, Navigation, Pagination, Thumbs]}
-              className="swiperModalImg"
-            >
+              className="swiperModalImg">
               {data?.map((item, idx) => {
                 return (
                   <SwiperSlide key={idx}>
@@ -80,10 +78,10 @@ const ModalImage = ({
             style={{
               width: "100%",
               height: "108px",
-              padding: "0 40px",
+              paddingRight: "40px",
+              paddingLeft: "40px",
               marginTop: "30px",
-            }}
-          >
+            }}>
             <Swiper
               onSwiper={setThumbsSwiper}
               spaceBetween={10}
@@ -99,8 +97,7 @@ const ModalImage = ({
                   <SwiperSlide
                     key={idx}
                     className="slide-item"
-                    style={{ width: "187px", height: "108px" }}
-                  >
+                    style={{ width: "187px", height: "108px" }}>
                     <img
                       style={{
                         width: "187px",

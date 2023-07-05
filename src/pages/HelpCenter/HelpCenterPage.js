@@ -27,14 +27,12 @@ const HelpCenterPage = () => {
             className="wrap-btn"
             align="middle"
             justify="center"
-            gutter={[20, 15]}
-          >
+            gutter={[20, 15]}>
             <Col lg={7} md={8} sm={10} xs={24}>
               <Button
                 danger
                 className="btn-danger"
-                onClick={() => setModal1Open(true)}
-              >
+                onClick={() => setModal1Open(true)}>
                 <MailOutlined />
                 Gửi yêu cầu hỗ trợ
               </Button>
@@ -43,8 +41,7 @@ const HelpCenterPage = () => {
               <Button
                 danger
                 className="btn-danger "
-                onClick={() => setModal2Open(true)}
-              >
+                onClick={() => setModal2Open(true)}>
                 <PhoneOutlined />
                 Hotline 028.6.68.68.869
               </Button>
@@ -64,7 +61,7 @@ const HelpCenterPage = () => {
         <Modal
           title="Gửi yêu cầu hỗ trợ cho chúng tôi"
           centered
-          visible={modal1Open}
+          open={modal1Open}
           onOk={() => setModal1Open(false)}
           onCancel={() => setModal1Open(false)}
           footer={[
@@ -72,12 +69,10 @@ const HelpCenterPage = () => {
               key="submit"
               type="primary"
               onClick={() => setModal1Open(false)}
-              style={{ borderRadius: "5px" }}
-            >
+              style={{ borderRadius: "5px" }}>
               OK, Tôi hiểu rồi
             </Button>,
-          ]}
-        >
+          ]}>
           <p>
             Liên hệ với nhân viên của chúng tôi về đơn đặt của bạn và chúng tôi
             sẽ phản hồi ngay khi có thể.
@@ -90,7 +85,7 @@ const HelpCenterPage = () => {
         <Modal
           title="Gọi cho chúng tôi"
           centered
-          visible={modal2Open}
+          open={modal2Open}
           onOk={() => setModal2Open(false)}
           onCancel={() => setModal2Open(false)}
           footer={[
@@ -98,12 +93,10 @@ const HelpCenterPage = () => {
               key="submit"
               type="primary"
               onClick={() => setModal2Open(false)}
-              style={{ borderRadius: "5px" }}
-            >
+              style={{ borderRadius: "5px" }}>
               OK, Tôi hiểu rồi
             </Button>,
-          ]}
-        >
+          ]}>
           <p>
             Trong trường hợp khẩn cấp, bạn có thể gọi cho chúng tôi tới số điện
             thoại 028.6.68.68.869

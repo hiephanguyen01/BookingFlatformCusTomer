@@ -68,8 +68,6 @@ const Index = () => {
   };
 
   const handleChooseVoucher = (code) => {
-    console.log("code", code);
-
     if (choose.id === code.id) {
       setChoose({});
       dispatch(setChoosePromotionUser({}));
@@ -87,8 +85,7 @@ const Index = () => {
         className="close_modal"
         onClick={() => {
           dispatch({ type: HIDE_MODAL });
-        }}
-      >
+        }}>
         <CloseOutlined />
       </div>
       <header className="header_modal">Mã khuyến mãi</header>
@@ -127,8 +124,7 @@ const Index = () => {
                   className="btn_applied"
                   onClick={() => {
                     handleChooseVoucher(item);
-                  }}
-                >
+                  }}>
                   Đã áp dụng
                 </div>
               ) : (
@@ -141,8 +137,7 @@ const Index = () => {
                   onClick={() => {
                     handleChooseVoucher(item);
                   }}
-                  size="large"
-                >
+                  size="large">
                   Áp dụng
                 </Button>
               )}

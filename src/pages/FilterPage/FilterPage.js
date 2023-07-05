@@ -101,7 +101,6 @@ const FilterPage = () => {
   );
 
   const screens = useBreakpoint();
-  // console.log(location?.search, querySearch, screens);
 
   const dispatch = useDispatch();
   const [form] = Form.useForm();
@@ -145,9 +144,7 @@ const FilterPage = () => {
 
   const initState = useCallback(
     (query, device) => {
-      console.log(device);
       if (device) {
-        console.log("mobile");
         dispatch(
           getFilterStudioPostMobile(
             5,
@@ -169,8 +166,6 @@ const FilterPage = () => {
           )
         );
       } else {
-        console.log("desktop");
-        console.log(query);
         dispatch(
           getFilterStudioPost(
             5,
@@ -543,15 +538,13 @@ const FilterPage = () => {
       <div className="FilterPage">
         <Row
           gutter={[20, 20]}
-          style={{ padding: `${screens.xs ? "" : "10px 0px"}` }}
-        >
+          style={{ padding: `${screens.xs ? "" : "10px 0px"}` }}>
           {screens.xs && (
             <div className="filterHeader">
               <Row
                 align="middle"
                 justify="space-around"
-                style={{ textAlign: "center" }}
-              >
+                style={{ textAlign: "center" }}>
                 <Col span={3}>
                   <ArrowLeftOutlined
                     style={{ fontSize: "18px" }}
@@ -591,8 +584,7 @@ const FilterPage = () => {
                       "",
                       {}
                     )
-                  }
-                >
+                  }>
                   <Badge count={0} size="default">
                     <ShoppingOutlined
                       style={{ fontSize: "25px", color: "#828282" }}
@@ -634,8 +626,7 @@ const FilterPage = () => {
                         </div>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {selectProvince ? (
                             <>
                               {districts.map((val) => (
@@ -651,8 +642,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseDistrict(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -673,8 +663,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseProvinceMobile(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -733,8 +722,7 @@ const FilterPage = () => {
                           }
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Địa điểm <DownOutlined className="icon" />
                     </Button>
@@ -746,8 +734,7 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Danh mục</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {CATEGORIES.slice(1, 7).map((val) => (
                             <Col span={12}>
                               <div
@@ -759,8 +746,7 @@ const FilterPage = () => {
                                     ? "active"
                                     : ""
                                 } `}
-                                onClick={() => handleChooseCategoryMobile(val)}
-                              >
+                                onClick={() => handleChooseCategoryMobile(val)}>
                                 {val.name}
                               </div>
                             </Col>
@@ -812,8 +798,7 @@ const FilterPage = () => {
                           // );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Danh mục <DownOutlined className="icon" />
                     </Button>
@@ -824,8 +809,7 @@ const FilterPage = () => {
                         <h3 className="px-10 mb-20">Giá</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {PRICE_FILTER.map((val) => (
                             <Col span={12}>
                               <div
@@ -833,8 +817,7 @@ const FilterPage = () => {
                                 className={`btn-price-item ${
                                   choosePrice === val.value ? "active" : ""
                                 }`}
-                                onClick={() => setChoosePrice(val.value)}
-                              >
+                                onClick={() => setChoosePrice(val.value)}>
                                 {val.label}
                               </div>
                             </Col>
@@ -905,8 +888,7 @@ const FilterPage = () => {
                           // );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Giá <DownOutlined className="icon" />
                     </Button>
@@ -919,8 +901,7 @@ const FilterPage = () => {
             <Form
               {...layout}
               //  onFinish={handleClearFilter}
-              form={form}
-            >
+              form={form}>
               <Row className="w-100">
                 <Col lg={24} md={24} sm={24} xs={24}>
                   <Row className="box" gutter={[10, 10]}>
@@ -931,8 +912,7 @@ const FilterPage = () => {
                       <Button
                         // htmlType="submit"
                         type="primary"
-                        onClick={handleClearFilter}
-                      >
+                        onClick={handleClearFilter}>
                         Xoá bộ lọc
                       </Button>
                     </Col>
@@ -962,8 +942,7 @@ const FilterPage = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          defaultValue={province}
-                        >
+                          defaultValue={province}>
                           <Option value={""}>Tất cả</Option>
                           {provinces &&
                             provinces.map((val) => (
@@ -989,8 +968,7 @@ const FilterPage = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          defaultValue={province}
-                        >
+                          defaultValue={province}>
                           <Option value={""}>Tất cả</Option>
                           {districts &&
                             districts.map((val) => (
@@ -1007,8 +985,7 @@ const FilterPage = () => {
                         <div className="category_radio_group">
                           <Radio.Group
                             onChange={onChangeFilterCategory}
-                            value={filter.category}
-                          >
+                            value={filter.category}>
                             {CATEGORIES &&
                               CATEGORIES?.map((val) => (
                                 <Radio key={val.id} value={val.id}>
@@ -1026,8 +1003,7 @@ const FilterPage = () => {
                         <div className="filter_price_container">
                           <Radio.Group
                             onChange={onChangePriceOption}
-                            value={filter.priceOption}
-                          >
+                            value={filter.priceOption}>
                             <Row>
                               <Col span={24}>
                                 <Radio value={2}>Giá cao nhất</Radio>
@@ -1061,8 +1037,7 @@ const FilterPage = () => {
                         <div className="filter_rating_container">
                           <Radio.Group
                             onChange={onChangeRateOption}
-                            value={filter.ratingOption}
-                          >
+                            value={filter.ratingOption}>
                             <Row>
                               <Col span={24}>
                                 <Radio value={1}>Đánh giá nhiều nhất</Radio>
@@ -1091,8 +1066,7 @@ const FilterPage = () => {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                  }}
-                >
+                  }}>
                   <div
                     style={{
                       background: "white",
@@ -1100,8 +1074,7 @@ const FilterPage = () => {
                       borderRadius: "50%",
                       padding: "10px",
                       margin: "10px",
-                    }}
-                  >
+                    }}>
                     <LoadingOutlined style={{ fontSize: "40px" }} />
                   </div>
                 </div>
@@ -1112,8 +1085,7 @@ const FilterPage = () => {
                   <div
                     ref={ref}
                     style={{ width: "100%", backgroundColor: "#fff" }}
-                    className="px-16 py-20"
-                  >
+                    className="px-16 py-20">
                     {studioPostList?.map((val) => (
                       <FilterCard
                         data={val}
@@ -1134,8 +1106,7 @@ const FilterPage = () => {
                       padding: "10px 0px",
                       marginLeft: "auto",
                       textAlign: "end",
-                    }}
-                  >
+                    }}>
                     <Pagination
                       pageSize={pagination?.limit || 0}
                       current={pagination?.currentPage}
@@ -1152,10 +1123,9 @@ const FilterPage = () => {
           onCancel={handleCancel}
           className="search-modal mobile"
           width={"100%"}
-          visible={visible}
+          open={visible}
           footer={[]}
-          closable={false}
-        >
+          closable={false}>
           <div className="search-container pt-30">
             <Form onFinish={onFinish}>
               <Row className="w-100" justify="space-between" align="middle">
@@ -1191,8 +1161,7 @@ const FilterPage = () => {
                       </div>
                       <Row
                         gutter={[20, 20]}
-                        style={{ textAlign: "center", margin: "0 auto" }}
-                      >
+                        style={{ textAlign: "center", margin: "0 auto" }}>
                         {selectProvince ? (
                           <>
                             {districts.map((val) => (
@@ -1208,8 +1177,7 @@ const FilterPage = () => {
                                   } `}
                                   onClick={() => {
                                     handleChooseDistrict(val);
-                                  }}
-                                >
+                                  }}>
                                   {val.Name}
                                 </div>
                               </Col>
@@ -1230,8 +1198,7 @@ const FilterPage = () => {
                                   } `}
                                   onClick={() => {
                                     handleChooseProvince(val);
-                                  }}
-                                >
+                                  }}>
                                   {val.Name}
                                 </div>
                               </Col>
@@ -1252,8 +1219,7 @@ const FilterPage = () => {
                         }
                       }}
                     />
-                  }
-                >
+                  }>
                   <Button className="btn-item-filter">
                     Địa điểm <DownOutlined className="icon" />
                   </Button>
@@ -1265,8 +1231,7 @@ const FilterPage = () => {
                       <h3 className="px-10 mb-20">Danh mục</h3>
                       <Row
                         gutter={[20, 20]}
-                        style={{ textAlign: "center", margin: "0 auto" }}
-                      >
+                        style={{ textAlign: "center", margin: "0 auto" }}>
                         {CATEGORIES.slice(1, 7).map((val) => (
                           <Col span={12}>
                             <div
@@ -1278,8 +1243,7 @@ const FilterPage = () => {
                                   ? "active"
                                   : ""
                               } `}
-                              onClick={() => handleChooseCategoryMobile(val)}
-                            >
+                              onClick={() => handleChooseCategoryMobile(val)}>
                               {val.name}
                             </div>
                           </Col>
@@ -1289,8 +1253,7 @@ const FilterPage = () => {
                   }
                   extendProp={false}
                   close={true}
-                  btnClose={<CheckSVG />}
-                >
+                  btnClose={<CheckSVG />}>
                   <Button className="btn-item-filter">
                     Danh mục <DownOutlined className="icon" />
                   </Button>
@@ -1301,8 +1264,7 @@ const FilterPage = () => {
                       <h3 className="px-10 mb-20">Giá</h3>
                       <Row
                         gutter={[20, 20]}
-                        style={{ textAlign: "center", margin: "0 auto" }}
-                      >
+                        style={{ textAlign: "center", margin: "0 auto" }}>
                         {PRICE_FILTER.map((val) => (
                           <Col span={12}>
                             <div
@@ -1310,8 +1272,7 @@ const FilterPage = () => {
                               className={`btn-price-item ${
                                 choosePrice === val.value ? "active" : ""
                               }`}
-                              onClick={() => setChoosePrice(val)}
-                            >
+                              onClick={() => setChoosePrice(val)}>
                               {val.label}
                             </div>
                           </Col>
@@ -1338,8 +1299,7 @@ const FilterPage = () => {
                   }
                   extendProp={false}
                   close={true}
-                  btnClose={<CheckSVG />}
-                >
+                  btnClose={<CheckSVG />}>
                   <Button className="btn-item-filter">
                     Giá <DownOutlined className="icon" />
                   </Button>
@@ -1377,22 +1337,20 @@ const FilterPage = () => {
                   width: "100%",
                   marginTop: "10px",
                   marginBottom: "35px",
-                }}
-              >
+                }}>
                 <Button
                   type="primary"
                   htmlType="submit"
                   size="large"
                   style={{ width: "50%" }}
-                  className="btn-search"
-                >
+                  className="btn-search">
                   Tìm kiếm
                 </Button>
               </Form.Item>
             </Form>
             {/* {user ? (
             <div className="wrapper-user">
-              <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+              <Dropdown menu={menuSignOut} placement="topRight" arrow>
                 <div className="user">
                   <Avatar src={user.Image ? img : noBody} />
                   <div className="text ms-8">
@@ -1413,7 +1371,7 @@ const FilterPage = () => {
             </div>
           ) : (
             <div className="wrapper-user">
-              <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+              <Dropdown menu={menuSignIn} placement="topRight" arrow>
                 <div className="user">
                   <Avatar src={noBody} />
                   <div className="text">

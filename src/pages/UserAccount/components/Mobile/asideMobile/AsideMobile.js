@@ -70,8 +70,7 @@ const AsideMobile = ({ children }) => {
         <Row
           className={"item-account-info-row"}
           align="middle"
-          justify="space-between"
-        >
+          justify="space-between">
           <Col align="middle" span={2} justify={"center"}>
             {item.icon}
           </Col>
@@ -119,13 +118,12 @@ const AsideMobile = ({ children }) => {
         <span>Đăng xuất</span>
       </div>
       <Modal
-        visible={isModalOpen}
+        open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         centered
         footer={<></>}
         className="modal-logout"
-        closable={false}
-      >
+        closable={false}>
         <p>Bạn có chắc chắn muốn đăng xuất không?</p>
         <Row justify="end" className="mt-10">
           <div className="btn ">Hủy</div>

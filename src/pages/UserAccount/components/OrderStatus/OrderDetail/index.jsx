@@ -74,9 +74,7 @@ const OrderDetail = () => {
       setFile(newFile);
     }
   };
-  console.log(
-    booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
-  );
+
   const CancleFreeDate = moment(
     booking?.OrderByTime ? booking?.OrderByTimeFrom : booking?.OrderByDateFrom
   )
@@ -88,7 +86,7 @@ const OrderDetail = () => {
     )
     .utc()
     .format("DD/MM/YYYY HH:mm A");
-  
+
   const depositPercent = booking?.OrderByTime
     ? booking?.CancelPriceByHour
     : booking?.CancelPriceByDate;
@@ -113,7 +111,6 @@ const OrderDetail = () => {
       setShowModal(false);
       openNotification("success", "Hủy đơn thành công!");
     } catch (error) {
-      console.log(error);
       openNotification("error", "Hủy đơn thất bại!");
     }
   };
@@ -273,14 +270,12 @@ const OrderDetail = () => {
             updatePay: true,
             Category: searchParams.get("categoryId"),
             path: `/home/user/orderStatus/${id}?categoryId=1`,
-          }}
-        >
+          }}>
           <Button
             type="primary"
             icon={<UploadOutlined />}
             size="large"
-            onClick={() => navigate(`/home/confirm-order/${id}`)}
-          >
+            onClick={() => navigate(`/home/confirm-order/${id}`)}>
             Cập nhật minh chứng
           </Button>
         </Link>
@@ -297,8 +292,7 @@ const OrderDetail = () => {
               marginRight: "20px",
               borderRadius: "8px",
             }}
-            size="large"
-          >
+            size="large">
             Huỷ đơn
           </Button>
         )}
@@ -314,8 +308,7 @@ const OrderDetail = () => {
             dispatch({ type: SHOW_CHAT });
             handleOpenChatPartner();
           }}
-          size="large"
-        >
+          size="large">
           Liên hệ
         </Button>
       </div>
@@ -326,8 +319,7 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}
-      >
+        }}>
         {/* <Button
           onClick={navigateToDetail}
           style={{
@@ -357,12 +349,11 @@ const OrderDetail = () => {
 
         <Modal
           centered
-          visible={visible}
+          open={visible}
           footer={false}
           width={600}
           closable={false}
-          className="FooterStatus__complete__modal"
-        >
+          className="FooterStatus__complete__modal">
           <RateModal
             onOk={() => setVisible(false)}
             onCancel={() => setVisible(false)}
@@ -379,15 +370,13 @@ const OrderDetail = () => {
         {booking?.PaymentStatus === 2 ? (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
-          >
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
             <Button
               type="primary"
               ghost
               size="large"
               onClick={navigateToDetail}
-              style={{ color: "#1fcba2", background: "#fff" }}
-            >
+              style={{ color: "#1fcba2", background: "#fff" }}>
               Đặt lại
             </Button>
             <Button type="primary" size="large" onClick={navigateToDetail}>
@@ -397,8 +386,7 @@ const OrderDetail = () => {
         ) : (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
-          >
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
             <Button type="primary" size="large" onClick={navigateToDetail}>
               Đặt lại
             </Button>
@@ -412,8 +400,7 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}
-      >
+        }}>
         <Button
           onClick={navigateToDetail}
           style={{
@@ -424,8 +411,7 @@ const OrderDetail = () => {
             background: "#009874",
             width: "300px",
           }}
-          size="large"
-        >
+          size="large">
           Đặt lại
         </Button>
         {/* <Button
@@ -731,8 +717,7 @@ const OrderDetail = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}
-        >
+          }}>
           <Dolar />
           <div className="status_name">ĐÃ QUÁ HẠN THANH TOÁN</div>
           <p
@@ -740,8 +725,7 @@ const OrderDetail = () => {
               textAlign: "center",
               maxWidth: "500px",
               marginBottom: "1rem",
-            }}
-          >
+            }}>
             Đã quá thời hạn thanh toán, nếu quý khách đã thanh toán vui lòng tải
             hình ảnh chứa thông tin chuyển khoản tiền đặt cọc.{" "}
           </p>
@@ -752,8 +736,7 @@ const OrderDetail = () => {
               //   .isBefore(moment())}
               onChangeFile={onChangeFile}
               multiple={true}
-              image={file.preview || convertImageUrl(booking?.EvidenceImage)}
-            >
+              image={file.preview || convertImageUrl(booking?.EvidenceImage)}>
               <div className="btn_upload">Tải ảnh lên</div>
             </DropFileInput>
           </div>
@@ -763,15 +746,13 @@ const OrderDetail = () => {
               display: "inline-flex",
               flexDirection: "column",
               gap: "1rem",
-            }}
-          >
+            }}>
             <Button
               // type="primary"
 
               size="large"
               // onClick={navigateToDetail}
-              style={{ color: "#ffff", background: "#009874" }}
-            >
+              style={{ color: "#ffff", background: "#009874" }}>
               Cập nhật minh chứng
             </Button>
             <div className="d-flex">
@@ -879,8 +860,7 @@ const OrderDetail = () => {
             cursor: "pointer",
             gap: ".5rem",
           }}
-          onClick={() => setShowDetail(!showDetail)}
-        >
+          onClick={() => setShowDetail(!showDetail)}>
           <p> {showDetail ? "Ẩn chi tiết" : "Xem chi tiết"} </p>
           {showDetail ? <UpOutlined /> : <DownOutlined />}
         </div>
@@ -892,8 +872,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -928,8 +907,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -986,8 +964,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <img
                   alt=""
@@ -1054,8 +1031,7 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}
-            >
+              }}>
               <div>
                 <TeamOutlined
                   className="me-10 mb-2"
@@ -1148,12 +1124,11 @@ const OrderDetail = () => {
       <Modal
         className="confirm"
         title={"Huỷ đơn có thể bị mất phí"}
-        visible={showModal}
+        open={showModal}
         okText="Đồng ý"
         cancelText="Thoát"
         onCancel={() => setShowModal(false)}
-        onOk={() => handleCancelOrder()}
-      >
+        onOk={() => handleCancelOrder()}>
         <>
           <div>
             Quý khách có thể huỷ đơn đặt cho đến{" "}
@@ -1171,8 +1146,7 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}
-          ></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
           <Divider />
           <section className="chile">
             <div className="df">

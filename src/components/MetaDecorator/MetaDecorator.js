@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-const REACT_APP_BASE_URL = "https://demometa.surge.sh";
+const REACT_APP_BASE_URL = "https://bookingstudio.vn/";
 const MetaDecorator = ({ title, description, imgUrl, imgAlt, type }) => {
   return (
     <Helmet prioritizeSeoTags>

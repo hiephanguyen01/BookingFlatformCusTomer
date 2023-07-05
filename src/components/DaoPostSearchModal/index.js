@@ -36,7 +36,7 @@ const DaoPostSearchModal = (props) => {
   }, [pagination.total]);
   return (
     <Modal
-      visible={searchDaoPostVisible}
+      open={searchDaoPostVisible}
       onCancel={handleCancel}
       footer={[
         <button onClick={handleCancel} className="cancel-btn">

@@ -91,7 +91,6 @@ export const ChatContentAdmin = ({ info }) => {
       setMessage("");
       socket.emit("send_message_admin", messText);
       for (let file of files) {
-        console.log(file);
         delete file.preview;
         socket.emit("send_message_admin", {
           messageContent: {
@@ -197,7 +196,6 @@ export const ChatContentAdmin = ({ info }) => {
             return true;
           });
           if (!duplicateFlag) {
-            // console.log(data.messageContent);
             return [...list, data.messageContent];
           }
         });
@@ -278,8 +276,7 @@ export const ChatContentAdmin = ({ info }) => {
               setLoadMore(false);
             }
           }
-        }}
-      >
+        }}>
         {loading ? (
           <>
             {!hasMore && (
@@ -308,8 +305,7 @@ export const ChatContentAdmin = ({ info }) => {
                     itm?.Chatting?.user?.name
                       ? "ChatContent__conversation__other"
                       : "ChatContent__conversation__you"
-                  }
-                >
+                  }>
                   <div
                     className={
                       itm.Chatting?.AdminName === "admin" ||
@@ -358,8 +354,7 @@ export const ChatContentAdmin = ({ info }) => {
       </div>
       <div
         className="ChatContent__container"
-        style={{ height: files.length === 0 ? "70px" : "140px" }}
-      >
+        style={{ height: files.length === 0 ? "70px" : "140px" }}>
         <div className="ChatContent__container__upload">
           <UploadImage
             onChangeFile={onChangeFile}
@@ -367,8 +362,7 @@ export const ChatContentAdmin = ({ info }) => {
               width: "30px",
               height: "30px",
             }}
-            multiple={true}
-          >
+            multiple={true}>
             <PictureOutlined style={{ color: "#1FCBA2", fontSize: "30px" }} />
           </UploadImage>
         </div>
@@ -383,8 +377,7 @@ export const ChatContentAdmin = ({ info }) => {
                     width: "40px",
                     marginLeft: "10px",
                     marginBottom: "10px",
-                  }}
-                >
+                  }}>
                   <img
                     alt=""
                     src={item.preview}
@@ -411,8 +404,7 @@ export const ChatContentAdmin = ({ info }) => {
             value={message}
             onKeyDown={onEnterPress}
             onChange={onInputChange}
-            maxLength={2000}
-          ></textarea>
+            maxLength={2000}></textarea>
         </div>
       </div>
     </div>

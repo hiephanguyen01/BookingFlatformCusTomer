@@ -70,12 +70,9 @@ const OrderStatus = () => {
     (async () => {
       setLoading(true);
       try {
-        // console.log("params", params);
         const { data } = await orderService.getOrderStatus(params);
         setBooking(data.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
       setLoading(false);
     })();
   }, [params]);
@@ -102,8 +99,7 @@ const OrderStatus = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}
-          >
+            }}>
             <div
               style={{
                 background: "white",
@@ -111,8 +107,7 @@ const OrderStatus = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}
-            >
+              }}>
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -124,8 +119,7 @@ const OrderStatus = () => {
                   className={`header-tab-item ${
                     item.key === params?.key && "active"
                   }`}
-                  onClick={() => onChange(item.key)}
-                >
+                  onClick={() => onChange(item.key)}>
                   {item.title}
                 </div>
               ))}
@@ -161,8 +155,7 @@ const OrderStatus = () => {
             display: "flex",
             justifyContent: "right",
             padding: "10px 10px",
-          }}
-        >
+          }}>
           <Pagination
             defaultCurrent={1}
             onChange={handleChange}

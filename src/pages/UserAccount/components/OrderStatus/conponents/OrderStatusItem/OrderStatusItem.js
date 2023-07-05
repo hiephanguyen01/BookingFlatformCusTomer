@@ -42,9 +42,7 @@ const OrderStatusItem = ({
           category,
         });
         setPost(data.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     })();
   }, [TenantId, category]);
   const navigateToDetail = () => {
@@ -79,8 +77,7 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}
-          >
+            onClick={navigateToDetail}>
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
@@ -111,8 +108,7 @@ const OrderStatusItem = ({
                   navigate(
                     `/home/user/orderStatus/${id}?categoryId=${category}`
                   )
-                }
-              >
+                }>
                 {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">

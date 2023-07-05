@@ -16,6 +16,7 @@ import {
 } from "./stores/actions/autheticateAction";
 import { SET_USER } from "./stores/types/authType";
 import SuspenseWrap from "./components/SuspenseWrap/SuspenseWrap";
+import { GlobalDebug } from "./utils/remove-consoles";
 
 const Dao = lazy(() => import("./pages/Dao"));
 const DetectApp = lazy(() => import("./pages/DetectApp/DetectApp"));
@@ -67,9 +68,7 @@ function App() {
           AffiliateUserId: localStorage.getItem("qs"),
           IpAddress: data.IPv4,
         });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     (async () => {
@@ -90,9 +89,7 @@ function App() {
             localStorage.removeItem("@locate@vn@ipkd4couvnnter@ccesskdtime");
             await countAndSendTimeAcc();
           }
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
       }
     })();
     if (new URLSearchParams(search).get("qs") !== "") {
@@ -104,6 +101,13 @@ function App() {
       localStorage.setItem("id", new URLSearchParams(search).get("id"));
     }
   }, []);
+
+  useEffect(() => {
+    // (process.env.NODE_ENV === "production" ||
+    //  process.env.REACT_APP_ENV === "STAGING") &&
+    GlobalDebug(false, true);
+  }, []);
+
   return (
     <div className="App">
       <ModalCustom />
@@ -118,24 +122,21 @@ function App() {
             <SuspenseWrap>
               <AuthPage />
             </SuspenseWrap>
-          }
-        ></Route>
+          }></Route>
         <Route
           path="/test"
           element={
             <SuspenseWrap>
               <Success />
             </SuspenseWrap>
-          }
-        ></Route>
+          }></Route>
         <Route
           path="/verify/:token"
           element={
             <CustomerLayout>
               <Verify />
             </CustomerLayout>
-          }
-        ></Route>
+          }></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route
             path="refund"
@@ -143,16 +144,14 @@ function App() {
               <SuspenseWrap>
                 <Refund />
               </SuspenseWrap>
-            }
-          ></Route>
+            }></Route>
           <Route
             index
             element={
               <SuspenseWrap>
                 <Home />
               </SuspenseWrap>
-            }
-          ></Route>
+            }></Route>
           <Route
             path="user/*"
             element={
@@ -161,16 +160,14 @@ function App() {
                   <UserAccount />
                 </ProtectedRouter>
               </SuspenseWrap>
-            }
-          ></Route>
+            }></Route>
           <Route
             path="filter"
             element={
               <SuspenseWrap>
                 <FilterPage />
               </SuspenseWrap>
-            }
-          ></Route>
+            }></Route>
           <Route
             path="dao"
             element={
@@ -259,24 +256,21 @@ function App() {
               <SuspenseWrap>
                 <PrivacyPolicy />
               </SuspenseWrap>
-            }
-          ></Route>
+            }></Route>
           <Route
             path="terms-use/*"
             element={
               <SuspenseWrap>
                 <TermsUse />
               </SuspenseWrap>
-            }
-          ></Route>
+            }></Route>
           <Route
             path="detect-app"
             element={
               <SuspenseWrap>
                 <DetectApp />
               </SuspenseWrap>
-            }
-          ></Route>
+            }></Route>
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}

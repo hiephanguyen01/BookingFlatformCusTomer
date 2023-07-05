@@ -62,9 +62,6 @@ const Chat = () => {
     getAllConversationId();
     getTotalAmountOfConversationHasNewMess();
   }, []);
-  // useEffect(() => {
-  //   console.log(conversationIds);
-  // }, [conversationIds]);
 
   useEffect(() => {
     const socketListenerEvent = (typeOfUser, receivedMessage, status) => {
@@ -176,8 +173,7 @@ const Chat = () => {
           onClick={() => dispatch({ type: SHOW_CHAT })}
           className={
             notiMessage.length > 0 ? "Chat__noti-message Chat" : "Chat"
-          }
-        >
+          }>
           {notiMessage.length > 0 ? (
             <div className="Chat__noti-message__count">
               {notiMessage.length > 0 && notiMessage.length <= 10
@@ -190,8 +186,7 @@ const Chat = () => {
           <img
             alt="chatIcon"
             src={notiMessage.length > 0 ? ChatIconNoti : ChatIcon}
-            className="Chat__icon"
-          ></img>
+            className="Chat__icon"></img>
           Chat
         </div>
       </Draggable>
@@ -199,8 +194,7 @@ const Chat = () => {
         placement="right"
         width={750}
         onClose={() => dispatch({ type: SHOW_CHAT })}
-        open={showChat}
-      >
+        open={showChat}>
         <div className="Chat__container__header">
           <div className="Chat__container__header__left">
             <img alt="chatIcon" src={ChatIcon} className="Chat__icon"></img>

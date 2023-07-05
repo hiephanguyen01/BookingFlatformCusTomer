@@ -15,9 +15,7 @@ export const getTop10OrderStudioPostAction = (category) => {
         "studio-post"
       );
       dispatch({ type: SET_TOP_ORDER_STUDIO_POST, data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getTop10OrderModelAction = (category) => {
@@ -27,9 +25,7 @@ export const getTop10OrderModelAction = (category) => {
         "model"
       );
       dispatch({ type: SET_TOP_MODEL_POST, data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getTop10OrderClothesAction = (category) => {
@@ -39,9 +35,7 @@ export const getTop10OrderClothesAction = (category) => {
         "clothes"
       );
       dispatch({ type: SET_TOP_CLOTHES_POST, data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getTop10OrderDeviceAction = (category) => {
@@ -51,9 +45,7 @@ export const getTop10OrderDeviceAction = (category) => {
         "device"
       );
       dispatch({ type: SET_TOP_DEVICE_POST, data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getTop10OrderMakeupAction = (category) => {
@@ -63,9 +55,7 @@ export const getTop10OrderMakeupAction = (category) => {
         "makeup"
       );
       dispatch({ type: SET_TOP_MAKEUP_POST, data: data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getTop10OrderPhotographerAction = (category) => {
@@ -75,8 +65,6 @@ export const getTop10OrderPhotographerAction = (category) => {
         "photographer"
       );
       dispatch({ type: SET_TOP_PHOTOGRAPHER_POST, data: data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
