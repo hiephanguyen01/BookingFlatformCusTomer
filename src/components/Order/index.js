@@ -288,13 +288,6 @@ const Index = ({ linkTo = "" }) => {
       //   return;
       // }
       if (isEmpty()) {
-        let IdentifyCode = [],
-          TenantId,
-          checkError = false;
-
-        //Check coi có bị trùng cái thời gian đặt room này trên database ko
-
-        //**************************************
         const response = await Promise.all(
           chooseServiceList?.map(async (item) => {
             const res = await orderService.addOrder({
@@ -326,104 +319,6 @@ const Index = ({ linkTo = "" }) => {
             return res.data;
           })
         );
-        // if (chooseService?.OrderByTime === 0) {
-        //   const newData = {
-        //     OrderByTime: 0,
-        //     OrderByDateFrom: moment(new Date(chooseService?.OrderByDateFrom))
-        //       .add(studioDetail?.data?.HourOpenDefault, "h")
-        //       .add(studioDetail?.data?.MinutesOpenDefault, "m"),
-        //     OrderByDateTo: moment(new Date(chooseService?.OrderByDateTo))
-        //       .add(studioDetail?.data?.HourCloseDefault, "h")
-        //       .add(studioDetail?.data?.MinutesCloseDefault, "m"),
-        //     PaymentType: 0,
-        //     OrderNote: infoUser.Message,
-        //     BookingUserName: infoUser.Fullname,
-        //     BookingPhone: infoUser.Phone,
-        //     BookingEmail: infoUser.Email,
-        //     BookingUserId: user?.id || undefined,
-        //     CreatorUserId: user?.id || undefined,
-        //     ProductId: chooseService?.id,
-        //     Category: cate,
-        //     IsPayDeposit: 1,
-        //     BookingValueBeforeDiscount: calculatePrice(),
-        //     BookingValue: calculatePriceUsePromo(),
-        //     // DepositValue: (calculatePriceUsePromo() * 15) / 100,
-        //     AffiliateCommission: calculateCommisionAffiliate(
-        //       calculatePriceUsePromo()
-        //     ),
-        //     PromoCodeId: choosePromotionUser.id,
-        //     AffiliateUserId: Number(AffiliateUserId),
-        //     size: chooseService?.size,
-        //     color: chooseService?.color,
-        //     amount: chooseService?.amount,
-        //   };
-        //   response = await orderService.addOrder({
-        //     ...newData,
-        //     numberOfTime: `${
-        //       moment(chooseService?.OrderByDateTo).diff(
-        //         moment(chooseService?.OrderByDateFrom),
-        //         "days"
-        //       ) + 1
-        //     } ngày`,
-        //     initValue:
-        //       (chooseService?.Sales || chooseService?.PriceByDate) *
-        //       (moment(chooseService?.OrderByDateTo).diff(
-        //         moment(chooseService?.OrderByDateFrom),
-        //         "days"
-        //       ) +
-        //         1),
-        //   });
-        //   if (AffiliateUserId != null) {
-        //     localStorage.removeItem("qs");
-        //   }
-        //   IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
-        //   TenantId = response.data.TenantId;
-        // } else if (chooseService?.OrderByTime === 1) {
-        //   const newData = {
-        //     OrderByTime: 1,
-        //     OrderByTimeFrom: moment(chooseService?.OrderByTimeFrom),
-        //     OrderByTimeTo: moment(chooseService?.OrderByTimeTo),
-        //     PaymentType: 0,
-        //     OrderNote: infoUser.Message,
-        //     BookingUserName: infoUser.Fullname,
-        //     BookingPhone: infoUser.Phone,
-        //     BookingEmail: infoUser.Email,
-        //     BookingUserId: user?.id || undefined,
-        //     CreatorUserId: user?.id || undefined,
-        //     ProductId: chooseService?.id,
-        //     Category: cate,
-        //     IsPayDeposit: 1,
-        //     BookingValueBeforeDiscount: calculatePrice(),
-        //     BookingValue: calculatePriceUsePromo(),
-        //     // DepositValue: (calculatePriceUsePromo() * 15) / 100,
-        //     AffiliateCommission: calculateCommisionAffiliate(
-        //       calculatePriceUsePromo()
-        //     ),
-        //     PromoCodeId: choosePromotionUser.id,
-        //     AffiliateUserId: Number(AffiliateUserId),
-        //     size: chooseService?.size,
-        //     color: chooseService?.color,
-        //     amount: chooseService?.amount,
-        //   };
-        //   response = await orderService.addOrder({
-        //     ...newData,
-        //     numberOfTime: `${calTime(
-        //       chooseService?.OrderByTimeFrom,
-        //       chooseService?.OrderByTimeTo
-        //     )} giờ`,
-        //     initValue:
-        //       (chooseService?.Sales || chooseService?.PriceByHour) *
-        //       calTime(
-        //         chooseService?.OrderByTimeFrom,
-        //         chooseService?.OrderByTimeTo
-        //       ),
-        //   });
-        //   if (AffiliateUserId != null) {
-        //     localStorage.removeItem("qs");
-        //   }
-        //   IdentifyCode = [...IdentifyCode, response.data.IdentifyCode];
-        //   TenantId = response.data.TenantId;
-        // }
         if (AffiliateUserId != null) {
           localStorage.removeItem("qs");
         }
