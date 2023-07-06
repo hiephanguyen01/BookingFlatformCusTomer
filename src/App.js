@@ -104,7 +104,6 @@ function App() {
 
   useEffect(() => {
     // (process.env.NODE_ENV === "production" ||
-    //  process.env.REACT_APP_ENV === "STAGING") &&
     process.env.NODE_ENV === "production" && GlobalDebug(false, true);
   }, []);
 
@@ -122,21 +121,24 @@ function App() {
             <SuspenseWrap>
               <AuthPage />
             </SuspenseWrap>
-          }></Route>
+          }
+        ></Route>
         <Route
           path="/test"
           element={
             <SuspenseWrap>
               <Success />
             </SuspenseWrap>
-          }></Route>
+          }
+        ></Route>
         <Route
           path="/verify/:token"
           element={
             <CustomerLayout>
               <Verify />
             </CustomerLayout>
-          }></Route>
+          }
+        ></Route>
         <Route path="home" element={<CustomerLayout />}>
           <Route
             path="refund"
@@ -144,14 +146,16 @@ function App() {
               <SuspenseWrap>
                 <Refund />
               </SuspenseWrap>
-            }></Route>
+            }
+          ></Route>
           <Route
             index
             element={
               <SuspenseWrap>
                 <Home />
               </SuspenseWrap>
-            }></Route>
+            }
+          ></Route>
           <Route
             path="user/*"
             element={
@@ -160,14 +164,16 @@ function App() {
                   <UserAccount />
                 </ProtectedRouter>
               </SuspenseWrap>
-            }></Route>
+            }
+          ></Route>
           <Route
             path="filter"
             element={
               <SuspenseWrap>
                 <FilterPage />
               </SuspenseWrap>
-            }></Route>
+            }
+          ></Route>
           <Route
             path="dao"
             element={
@@ -256,21 +262,24 @@ function App() {
               <SuspenseWrap>
                 <PrivacyPolicy />
               </SuspenseWrap>
-            }></Route>
+            }
+          ></Route>
           <Route
             path="terms-use/*"
             element={
               <SuspenseWrap>
                 <TermsUse />
               </SuspenseWrap>
-            }></Route>
+            }
+          ></Route>
           <Route
             path="detect-app"
             element={
               <SuspenseWrap>
                 <DetectApp />
               </SuspenseWrap>
-            }></Route>
+            }
+          ></Route>
           {/* <Route
               path="costumeDetails/detailCostumeShop"
               element={<DetailCostumeShop />}
