@@ -102,6 +102,8 @@ const Index = ({ linkTo = "" }) => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, []);
 
+  console.log(cartItems);
+
   useEffect(() => {
     if (cartItems?.length && chooseServiceList?.length === 0) {
       if (isJsonString(cartItems)) {
@@ -329,8 +331,14 @@ const Index = ({ linkTo = "" }) => {
         navigate("confirm", {
           state: {
             IdentifyCode: response?.map((item) => item?.IdentifyCode),
-            TenantId: response?.length > 0 ? response[0]?.TenantId : null,
-            Category: cate,
+            TenantId:
+              response?.length > 0
+                ? response[0]?.TenantId
+                : response?.TenantId || null,
+            Category:
+              cate || response?.length > 0
+                ? response[0]?.Category
+                : response?.Category || null,
           },
         });
       } else {

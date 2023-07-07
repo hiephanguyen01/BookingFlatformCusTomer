@@ -22,7 +22,6 @@ const Index = () => {
   const [checkoutDisable, setCheckoutDisable] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  console.log(location.state);
   let cate;
   const nameCategory = location.pathname
     .split("/")
@@ -68,6 +67,8 @@ const Index = () => {
     }
   };
 
+  console.log(location?.state);
+
   const handleClickBtnUpdate = async () => {
     try {
       if (Object.keys(file).length > 0) {
@@ -103,8 +104,10 @@ const Index = () => {
   useEffect(() => {
     const getBookingByIdentify = async () => {
       const res = await orderService.getOrderByIdentify(
-        location?.state?.IdentifyCode[0],
-        cate
+        location?.state?.IdentifyCode.length > 0
+          ? location?.state?.IdentifyCode[0]
+          : location?.state?.IdentifyCode,
+        location?.state?.Category || cate
       );
       setBooking(res.data);
     };
@@ -141,7 +144,7 @@ const Index = () => {
             <div className="booking_code d-flex text-medium-re">
               <p style={{ color: "#616161" }}>Mã Booking:</p>
               <div className="banking-mess text-medium-se">
-                {booking?.IdentifyCode?.join(",")}
+                {booking?.IdentifyCode}
               </div>
             </div>
             <div
