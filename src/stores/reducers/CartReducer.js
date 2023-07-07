@@ -280,7 +280,8 @@ export const CartReducer = (state = initialState, action) => {
       }
       return {
         ...state,
-        chooseServiceList: [...newChooseServiceList, action?.payload?.service],
+        // chooseServiceList: [...newChooseServiceList, action?.payload?.service],
+        chooseServiceList: [action?.payload?.service],
       };
 
     case UPDATE_CHOOSE_SERVICE:

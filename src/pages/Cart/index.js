@@ -56,30 +56,7 @@ const Index = () => {
 
   useEffect(() => {
     dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
-  }, []);
-  // useEffect(() => {
-  //   dispatch(addServiceList(chooseServices));
-  // }, [chooseServices, dispatch]);
-
-  const menu = (
-    <Menu
-      onClick={() => {}}
-      items={[
-        {
-          label: "1st menu item",
-          key: "1",
-        },
-        {
-          label: "2nd menu item ",
-          key: "2",
-        },
-        {
-          label: "3rd menu item",
-          key: "3",
-        },
-      ]}
-    />
-  );
+  }, [dispatch]);
 
   const items = [
     {
@@ -89,7 +66,7 @@ const Index = () => {
         <Row gutter={[0, 6]}>
           {cart["studio"]?.map((orderItem, index) => (
             <Col span={24} className="wrapper" key={index}>
-              <CheckBox
+              {/* <CheckBox
                 key={index}
                 name="allCheck"
                 value="allCheck"
@@ -111,7 +88,18 @@ const Index = () => {
                 >
                   {orderItem?.Name}
                 </div>
-              </CheckBox>
+              </CheckBox> */}
+              <div
+                style={{
+                  fontWeight: "400",
+                  fontSize: "14px",
+                  lineHeight: "19px",
+                  color: "#3F3F3F",
+                  padding: "15px 0",
+                }}
+              >
+                {orderItem?.Name}
+              </div>
               {orderItem?.Services?.map((item, index) => (
                 <CheckBox
                   onClick={() =>
