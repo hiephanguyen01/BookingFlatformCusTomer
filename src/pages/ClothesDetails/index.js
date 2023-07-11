@@ -78,7 +78,7 @@ const Index = () => {
     chooseService,
     listTimeSelected,
   } = useSelector((state) => state.studioPostReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const { promoCodeUserSave } = useSelector((state) => state.promoCodeReducer);
   const { id } = useParams();
   const location = useLocation();
@@ -207,8 +207,7 @@ const Index = () => {
             margin: "auto",
             backgroundColor: "rgb(245, 245, 245)",
             padding: `${screens?.xs ? 0 : "2rem 0"}`,
-          }}
-        >
+          }}>
           {screens?.xs && (
             <BackNav
               to={location?.state?.pathname || "/home/filter?category=3"}
@@ -222,8 +221,7 @@ const Index = () => {
                         flexDirection: "column",
                         gap: "10px",
                         padding: "10px",
-                      }}
-                    >
+                      }}>
                       <Col span={24}>
                         <div
                           style={{
@@ -234,12 +232,10 @@ const Index = () => {
                           }}
                           onClick={() => {
                             navigate("/home");
-                          }}
-                        >
+                          }}>
                           <HomeOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Trở về trang chủ
                           </span>
                         </div>
@@ -255,14 +251,12 @@ const Index = () => {
                           onClick={() => {
                             handleReport();
                             setOpen(false);
-                          }}
-                        >
+                          }}>
                           <ExclamationCircleOutlined
                             style={{ fontSize: "20px" }}
                           />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Báo cáo
                           </span>
                         </div>
@@ -275,12 +269,10 @@ const Index = () => {
                             gap: "10px",
                             cursor: "pointer",
                           }}
-                          onClick={() => setOpen(false)}
-                        >
+                          onClick={() => setOpen(false)}>
                           <ShareAltOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}
-                          >
+                            style={{ fontSize: "18px", fontWeight: "bold" }}>
                             Chia sẻ
                           </span>
                         </div>
@@ -289,8 +281,7 @@ const Index = () => {
                   }
                   trigger="click"
                   visible={open}
-                  onVisibleChange={(value) => setOpen(value)}
-                >
+                  onVisibleChange={(value) => setOpen(value)}>
                   <MoreOutlined className={cx("item")} />
                 </Popover>
               }
@@ -304,8 +295,7 @@ const Index = () => {
                     dynamicBullets: true,
                   }}
                   modules={[Pagination]}
-                  className={cx("swiper-slide-detail")}
-                >
+                  className={cx("swiper-slide-detail")}>
                   {studioDetail?.data?.Image.map((item) => (
                     <SwiperSlide>
                       <img src={convertImage(item)} alt="" />
@@ -317,8 +307,7 @@ const Index = () => {
                     className={cx(
                       "title",
                       "d-flex justify-content-start align-items-center"
-                    )}
-                  >
+                    )}>
                     <h4 style={{ marginBottom: 0, marginRight: "10px" }}>
                       {studioDetail?.data?.Name}{" "}
                     </h4>
@@ -336,24 +325,21 @@ const Index = () => {
                         className="me-5"
                         disabled
                         allowHalf
-                        value={studioDetail?.data?.TotalRate}
-                      ></Rate>
+                        value={studioDetail?.data?.TotalRate}></Rate>
                       <span className="ms-5">
                         {studioDetail?.data?.TotalRate}
                       </span>
                       <div className={cx("line-col")}></div>
                       <span
                         className={cx("number-order")}
-                        style={{ fontSize: "15px" }}
-                      >
+                        style={{ fontSize: "15px" }}>
                         {studioDetail?.data?.BookingCount} đã đặt{" "}
                       </span>
                     </div>
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -373,8 +359,7 @@ const Index = () => {
               <div className="wrapper_banner">
                 <div
                   className="d-flex justify-content-between align-items-center header"
-                  style={{ marginBottom: "11px" }}
-                >
+                  style={{ marginBottom: "11px" }}>
                   <div className="header_title">
                     {studioDetail?.data?.Name}
                     <CheckCircleOutlined className="icon_check_circle" />
@@ -383,8 +368,7 @@ const Index = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}
-                    >
+                      }}>
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           style={{
@@ -428,27 +412,23 @@ const Index = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}
-                        >
+                          }}>
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}
-                          >
+                            }}>
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
+                              style={{ fontSize: "18px", fontWeight: "bold" }}>
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click"
-                    >
+                      trigger="click">
                       <MoreOutlined
                         style={{
                           fontSize: "25px",
@@ -495,8 +475,7 @@ const Index = () => {
                     className=" py-22 mb-12 h-100 px-22"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}
-                  >
+                    }}>
                     {chooseService.OrderByTime === -1 && (
                       <div className={cx("warning-choose-time")}>
                         <ExclamationCircleOutlined className="me-5" />
@@ -593,8 +572,7 @@ const Index = () => {
                 </div>
                 <div
                   style={{ backgroundColor: "#fff" }}
-                  className={cx("shop-info-mobile")}
-                >
+                  className={cx("shop-info-mobile")}>
                   <Row justify="space-between" align="middle" className="p-18">
                     <Col span={4}>
                       <img
@@ -637,8 +615,7 @@ const Index = () => {
                           state={{
                             pathname: `/home/clothes/${studioDetail?.data?.id}`,
                             pathnameFilter: `${location?.state?.pathname}`,
-                          }}
-                        >
+                          }}>
                           Xem shop
                         </Link>
                         {/* <iframe
@@ -663,8 +640,7 @@ const Index = () => {
                         padding: "24px 26px",
                         backgroundColor: "#ffffff",
                         // height: "100%",
-                      }}
-                    >
+                      }}>
                       <div className="d-flex justify-content-between mb-12">
                         <div
                           className=""
@@ -674,8 +650,7 @@ const Index = () => {
                             lineHeight: "25px",
                             /* Neutral/Grey 700 */
                             color: "#222222",
-                          }}
-                        >
+                          }}>
                           Giá trọn gói
                         </div>
                         <div
@@ -685,8 +660,7 @@ const Index = () => {
                             lineHeight: "22px",
                             textDecorationLine: "line-through",
                             color: "#828282",
-                          }}
-                        >
+                          }}>
                           {listTimeSelected?.find(
                             (item) => item?.id === studioDetail?.data?.id
                           )?.OrderByTime === 1 && (
@@ -746,8 +720,7 @@ const Index = () => {
                             lineHeight: "27px",
                             /* Primary/Red 700 */
                             color: "#E22828",
-                          }}
-                        >
+                          }}>
                           {listTimeSelected?.find(
                             (item) => item?.id === studioDetail?.data?.id
                           )?.OrderByTime === 1 && (
@@ -807,15 +780,13 @@ const Index = () => {
                               "",
                               {}
                             )
-                          }
-                        >
+                          }>
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
                         <Button
                           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                          onClick={handleBook}
-                        >
+                          onClick={handleBook}>
                           Đặt ngay
                         </Button>
                       </div>
@@ -836,8 +807,7 @@ const Index = () => {
                         </div>
                         <div
                           className={cx("text-medium-re")}
-                          style={{ marginBottom: "15px" }}
-                        >
+                          style={{ marginBottom: "15px" }}>
                           <img
                             src={svgLocation}
                             style={{ marginRight: "6px" }}
@@ -853,8 +823,7 @@ const Index = () => {
                         state={{
                           pathname: `/home/clothes/${studioDetail?.data?.id}`,
                           pathnameFilter: `${location?.state?.pathname}`,
-                        }}
-                      >
+                        }}>
                         Xem shop
                       </Link>
                       {/* <iframe
@@ -871,8 +840,7 @@ const Index = () => {
                         padding: "24px 26px",
                         backgroundColor: "#ffffff",
                         // height: "100%",
-                      }}
-                    >
+                      }}>
                       <div className="d-flex justify-content-between mb-12">
                         <div
                           className=""
@@ -882,8 +850,7 @@ const Index = () => {
                             lineHeight: "25px",
                             /* Neutral/Grey 700 */
                             color: "#222222",
-                          }}
-                        >
+                          }}>
                           Đã chọn {chooseServiceList.length} sản phẩm
                         </div>
                         {1 > 0 && (
@@ -895,8 +862,7 @@ const Index = () => {
                               textDecorationLine: "line-through",
                               /* Neutral/Grey 400 */
                               color: "#828282",
-                            }}
-                          >
+                            }}>
                             {listTimeSelected?.find(
                               (item) => item?.id === studioDetail?.data?.id
                             )?.OrderByTime === 1 && (
@@ -960,8 +926,7 @@ const Index = () => {
                             lineHeight: "27px",
                             /* Primary/Red 700 */
                             color: "#E22828",
-                          }}
-                        >
+                          }}>
                           {listTimeSelected?.find(
                             (item) => item?.id === studioDetail?.data?.id
                           )?.OrderByTime === 1 && (
@@ -1021,15 +986,13 @@ const Index = () => {
                               "",
                               {}
                             )
-                          }
-                        >
+                          }>
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
                         <Button
                           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                          onClick={handleBook}
-                        >
+                          onClick={handleBook}>
                           Đặt ngay
                         </Button>
                       </div>
@@ -1056,8 +1019,7 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}
-        >
+          }}>
           <div
             style={{
               background: "white",
@@ -1065,8 +1027,7 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}
-          >
+            }}>
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>

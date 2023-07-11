@@ -40,9 +40,7 @@ export const getAllPostDaoAction = (currentListPost = [], filter) => {
         type: GET_PAGINATE_POSIBILITY,
         data: data.pagination,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getPostDaoAction = (currentListPost = [], limit, page) => {
@@ -59,9 +57,7 @@ export const getPostDaoAction = (currentListPost = [], limit, page) => {
         type: GET_PAGINATE_POSIBILITY,
         data: data.pagination,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const getPostDaoByIdAction = (id) => {
@@ -116,7 +112,6 @@ export const getLikePostList = (userId) => {
 //       // const res = await postDaoService.getLike(userId);
 //       // dispatch({ type: "GET_LIKE_POST_LIST", data: res.data.data });
 //     } catch (err) {
-//       console.log(err);
 //     }
 //   };
 // };
@@ -126,9 +121,7 @@ export const getAllDefaultComments = () => {
     try {
       const { data } = await postDaoService.getAllDefaultComments();
       dispatch({ type: GET_ALL_DEFAULT_CMT, data: data });
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 };
 
@@ -144,18 +137,14 @@ export const createLikeCommentDao = (data1, id, setComments, pagination) => {
       setComments(data.data);
       // getComments(1);
       // dispatch(getAllDefaultComments);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 export const setRelatedService = (data) => {
   return async (dispatch) => {
     try {
       dispatch({ type: SET_RELATED_SERVICE, data: data });
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 };
 
@@ -164,9 +153,7 @@ export const toggleNotificationDaoAction = (data) => {
     try {
       await postDaoService.toggleNotificationDao(data);
       dispatch(getAllNotificationDaoAction());
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };
 
@@ -175,8 +162,6 @@ export const getAllNotificationDaoAction = () => {
     try {
       const { data } = await postDaoService.getAllNotificationDao();
       dispatch({ type: "SET_LIST_NOTIFICATION_USER", data: data.data });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 };

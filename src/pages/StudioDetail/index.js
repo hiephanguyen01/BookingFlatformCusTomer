@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-// import ReactStickyBox from "react-sticky-box";
 import images from "../../assets/images";
 import CommentRating from "../../components/CommentRating";
 import ImagePost from "../../components/imagePost/ImagePost";
@@ -27,7 +26,8 @@ import ReadMoreDesc from "../../components/ReadMoreDesc";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import Table from "../../components/Table";
 import toastMessage from "../../components/ToastMessage";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
+// import { addCart, chooseServiceAction } from "../../stores/actions/OrderAction";
+import { addCart, chooseServiceAction } from "../../stores/actions/CartAction";
 import { getPromotionCodeUserSave } from "../../stores/actions/promoCodeAction";
 import { getDetailRoomAction } from "../../stores/actions/roomAction";
 import {
@@ -41,7 +41,7 @@ import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   DELETE_CHOOSE_SERVICE,
   SET_CHOOSE_SERVICE_LIST,
-} from "../../stores/types/OrderType";
+} from "../../stores/types/CartType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calTime, priceService } from "../../utils/calculate";
 import { convertPrice } from "../../utils/convert";
@@ -57,6 +57,7 @@ import { Report } from "./Report";
 import SlideCard from "./SlideCard";
 import BackNav from "../../components/BackNav/BackNav";
 import { ReactComponent as LocationIcon } from "../../assets/svg/location.svg";
+import queryString from "query-string";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -66,6 +67,7 @@ import { Autoplay, Pagination } from "swiper";
 
 import { StickyContainer, Sticky } from "react-sticky";
 import InfoServiceDesk from "./components/InfoServiceDesk/InfoServiceDesk.js";
+import { cartService } from "../../services/CartService";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -81,11 +83,10 @@ const StudioDetail = () => {
 
   const { id } = useParams();
   const { pathname, state } = useLocation();
-  // State
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.authenticateReducer);
-  const { chooseServiceList } = useSelector((state) => state.OrderReducer);
+  const { chooseServiceList } = useSelector((state) => state.CartReducer);
   const {
     studioDetail,
     studioNear,
@@ -284,14 +285,62 @@ const StudioDetail = () => {
     }
   };
 
-  const handleBook = () => {
-    if (chooseServiceList.length > 0) {
-      dispatch(chooseServiceAction(chooseServiceList));
-      navigate("order");
+  const handleBook = async () => {
+    if (chooseService) {
+      // dispatch(chooseServiceAction(chooseServiceList));
+      const res = await cartService.addToCart({
+        category: 1,
+        CategoryPostId: studioDetail?.data?.id,
+        serviceId: chooseService?.id,
+        OrderByTime: chooseService?.OrderByTime,
+        OrderByTimeFrom: chooseService?.OrderByTimeFrom,
+        OrderByTimeTo: chooseService?.OrderByTimeTo,
+        OrderByDateFrom: chooseService?.OrderByDateFrom,
+        OrderByDateTo: chooseService?.OrderByDateTo,
+      });
+      // console.log(res?.data?.data?.cartItemId);
+      const arr = [
+        {
+          id: res?.data?.data?.cartItemId,
+          category: 1,
+        },
+      ];
+      const createQuery = queryString.stringify({
+        cartItems: JSON.stringify(arr),
+      });
+      navigate(`order?${createQuery}`);
     } else {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
   };
+
+  // const handleAddOrder = (data) => {
+  //   const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+  //   if (findSelectTime) {
+  //     if (
+  //       findSelectTime?.OrderByTime === 1 &&
+  //       findSelectTime?.OrderByTimeFrom !== undefined &&
+  //       findSelectTime?.OrderByTimeFrom !== "" &&
+  //       findSelectTime?.OrderByTimeTo !== undefined &&
+  //       findSelectTime?.OrderByTimeTo !== "" &&
+  //       findSelectTime?.OrderByTimeTo !== findSelectTime?.OrderByTimeFrom
+  //     ) {
+  //       dispatch(handlerSelectServiceAction(data, findSelectTime));
+  //     } else if (
+  //       findSelectTime?.OrderByTime === 0 &&
+  //       findSelectTime?.OrderByDateFrom !== undefined &&
+  //       findSelectTime?.OrderByDateFrom !== "" &&
+  //       findSelectTime?.OrderByDateTo !== undefined &&
+  //       findSelectTime?.OrderByDateTo !== ""
+  //     ) {
+  //       dispatch(handlerSelectServiceAction(data, findSelectTime));
+  //     } else {
+  //       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //     }
+  //   } else {
+  //     return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //   }
+  // };
 
   const handleChangeLike = (e) => {
     if (currentUser) {
@@ -1093,12 +1142,12 @@ const StudioDetail = () => {
                                   chooseServiceList?.length > 0 ? false : true
                                 }
                                 onClick={() =>
-                                  toastMessage(
-                                    "Chức năng này đang phát triển!",
-                                    "info",
-                                    1,
-                                    "",
-                                    {}
+                                  dispatch(
+                                    addCart(
+                                      1,
+                                      studioDetail?.data,
+                                      chooseService
+                                    )
                                   )
                                 }
                               >
@@ -1209,12 +1258,12 @@ const StudioDetail = () => {
                                     chooseServiceList?.length > 0 ? false : true
                                   }
                                   onClick={() =>
-                                    toastMessage(
-                                      "Chức năng này đang phát triển!",
-                                      "info",
-                                      1,
-                                      "",
-                                      {}
+                                    dispatch(
+                                      addCart(
+                                        1,
+                                        studioDetail?.data,
+                                        chooseService
+                                      )
                                     )
                                   }
                                 >

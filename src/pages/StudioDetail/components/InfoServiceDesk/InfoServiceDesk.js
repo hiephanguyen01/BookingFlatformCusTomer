@@ -12,7 +12,6 @@ import { convertPrice } from "../../../../utils/convert";
 import "./InfoServiceDesk.scss";
 
 const InfoServiceDesk = ({ data }) => {
-  console.log("InfoServiceDesk");
   const [visible, setVisible] = useState();
   return (
     <div style={{ maxWidth: "300px" }}>
@@ -31,8 +30,7 @@ const InfoServiceDesk = ({ data }) => {
           preview={{
             visible: Boolean(visible === data?.id),
             onVisibleChange: (vis) => setVisible(vis),
-          }}
-        >
+          }}>
           {data?.Image.map((val) => (
             <Image src={convertImage(val)} />
           ))}
@@ -45,8 +43,7 @@ const InfoServiceDesk = ({ data }) => {
           fontSize: "16px",
           fontWeight: "700",
           textTransform: "uppercase",
-        }}
-      >
+        }}>
         {data?.Name}
       </div>
       <ReadMoreInfoService>
@@ -56,8 +53,7 @@ const InfoServiceDesk = ({ data }) => {
             color: "#222222",
             fontSize: "16px",
             fontWeight: "700",
-          }}
-        >
+          }}>
           <div>
             <img
               alt=""
@@ -80,8 +76,7 @@ const InfoServiceDesk = ({ data }) => {
             color: "#222222",
             fontSize: "16px",
             fontWeight: "700",
-          }}
-        >
+          }}>
           <div>
             <img
               alt=""
@@ -107,8 +102,7 @@ const InfoServiceDesk = ({ data }) => {
             color: "#222222",
             fontSize: "16px",
             fontWeight: "700",
-          }}
-        >
+          }}>
           <div>
             <img
               alt=""
@@ -136,8 +130,7 @@ const InfoServiceDesk = ({ data }) => {
             color: "#222222",
             fontSize: "16px",
             fontWeight: "700",
-          }}
-        >
+          }}>
           <div>
             <TeamOutlined className="me-10 mb-2" style={{ fontSize: "15px" }} />
             Số lượng khách
@@ -154,8 +147,7 @@ const InfoServiceDesk = ({ data }) => {
               fontWeight: 400,
               fontSize: "16px",
               color: "#222222",
-            }}
-          >
+            }}>
             {data?.Description}
           </p>
         </div>

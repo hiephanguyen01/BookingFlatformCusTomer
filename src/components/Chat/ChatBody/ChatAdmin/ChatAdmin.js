@@ -50,7 +50,6 @@ export const ChatAdmin = React.memo(
       retrieveConversationMessages(setInfoChatAdmin);
 
       // Remove this ConversationId out of notiMessage in Redux
-      // console.log(data.payload.id);
       dispatch({ type: "REMOVE_NOTIFY_MESS", payload: data.payload.id });
       await chatService.readMessage(data.payload.id);
 
@@ -121,8 +120,7 @@ export const ChatAdmin = React.memo(
               await chatService.readMessageAdmin(lastMessage.id);
             })();
           }
-        }}
-      >
+        }}>
         <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
           <div className="d-flex align-items-center h-100">
             <img
@@ -145,8 +143,7 @@ export const ChatAdmin = React.memo(
                     color: notiMessage.includes(info.id) ? "#828282" : "#000",
                     fontSize: "13px",
                     fontWeight: notiMessage.includes(info.id) ? 500 : 700,
-                  }}
-                >
+                  }}>
                   <div>
                     Bạn:{" "}
                     {lastMessage.Type === "text" ? (
@@ -168,8 +165,7 @@ export const ChatAdmin = React.memo(
                     color: notiMessage.includes(info.id) ? "#828282" : "#000",
                     fontSize: "13px",
                     fontWeight: notiMessage.includes(info.id) ? 500 : 700,
-                  }}
-                >
+                  }}>
                   <div>
                     {lastMessage.Type === "text" ? (
                       <>

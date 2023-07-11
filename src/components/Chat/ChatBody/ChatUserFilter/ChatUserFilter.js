@@ -41,7 +41,6 @@ export const ChatUserFilter = (props) => {
           option.children.props.info.id,
           UserMe.id
         );
-        // console.log(data);
         socket.emit("send_message", {
           id: Math.random(),
           ConversationId: data.payload.id,
@@ -70,7 +69,6 @@ export const ChatUserFilter = (props) => {
       UserMe.id,
       value
     );
-    // console.log(data.payload);
     if (data.payload.length > 0) {
       const fetchedData = data.payload.reduce(
         (total, curr) => {
@@ -96,8 +94,7 @@ export const ChatUserFilter = (props) => {
       onSearch={onSearch}
       filterOption={false}
       showArrow={false}
-      value={value}
-    >
+      value={value}>
       {partnerList?.map((itm, index) => {
         return (
           <Option value={itm?.id?.toString()} key={index}>

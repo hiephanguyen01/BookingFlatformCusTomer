@@ -16,6 +16,7 @@ import {
 } from "./stores/actions/autheticateAction";
 import { SET_USER } from "./stores/types/authType";
 import SuspenseWrap from "./components/SuspenseWrap/SuspenseWrap";
+import { GlobalDebug } from "./utils/remove-consoles";
 
 const Dao = lazy(() => import("./pages/Dao"));
 const DetectApp = lazy(() => import("./pages/DetectApp/DetectApp"));
@@ -24,7 +25,7 @@ const FilterPage = lazy(() => import("./pages/FilterPage/FilterPage"));
 const HelpCenterPage = lazy(() => import("./pages/HelpCenter/HelpCenterPage"));
 const AuthPage = lazy(() => import("./pages/Auth/AuthPage"));
 const BookStudio = lazy(() => import("./pages/BookStudio"));
-const Cart = lazy(() => import("./pages/Cart"));
+const CartPage = lazy(() => import("./pages/Cart/CartPage"));
 const PageClothes = lazy(() => import("./pages/ClothesDetails/PageClothes"));
 const CustomerLayout = lazy(() => import("./pages/CustomerLayout"));
 const Home = lazy(() => import("./pages/Home"));
@@ -67,9 +68,7 @@ function App() {
           AffiliateUserId: localStorage.getItem("qs"),
           IpAddress: data.IPv4,
         });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     (async () => {
@@ -90,9 +89,7 @@ function App() {
             localStorage.removeItem("@locate@vn@ipkd4couvnnter@ccesskdtime");
             await countAndSendTimeAcc();
           }
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
       }
     })();
     if (new URLSearchParams(search).get("qs") !== "") {
@@ -104,6 +101,12 @@ function App() {
       localStorage.setItem("id", new URLSearchParams(search).get("id"));
     }
   }, []);
+
+  useEffect(() => {
+    // (process.env.NODE_ENV === "production" ||
+    process.env.NODE_ENV === "production" && GlobalDebug(false, true);
+  }, []);
+
   return (
     <div className="App">
       <ModalCustom />
@@ -189,10 +192,10 @@ function App() {
             }
           />
           <Route
-            path="cart"
+            path="cart/*"
             element={
               <SuspenseWrap>
-                <Cart />
+                <CartPage />
               </SuspenseWrap>
             }
           />

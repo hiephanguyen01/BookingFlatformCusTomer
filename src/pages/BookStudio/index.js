@@ -46,30 +46,26 @@ const Index = () => {
         margin: "auto",
         backgroundColor: "rgb(245, 245, 245)",
         padding: "2rem 0",
-      }}
-    >
+      }}>
       <Row
         style={{
           maxWidth: "1300px",
           margin: "auto",
-        }}
-      >
+        }}>
         <Col span={9}>
           <div
             style={{
               padding: "20px 25px 30px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}
-          >
+            }}>
             <div className="text-title" style={{ marginBottom: "1rem" }}>
               Bạn đã chọn
             </div>
             <div className="border-bottom">
               <div
                 className="text-description"
-                style={{ color: "#222222", marginBottom: "14px" }}
-              >
+                style={{ color: "#222222", marginBottom: "14px" }}>
                 Cho thuê trang phục Flux
                 <CheckCircleOutlined
                   style={{
@@ -81,8 +77,7 @@ const Index = () => {
               </div>
               <div
                 className="d-flex"
-                style={{ height: "88px", marginRight: "0.5rem" }}
-              >
+                style={{ height: "88px", marginRight: "0.5rem" }}>
                 <img
                   src={imgStudio}
                   style={{ height: "100%", marginRight: "20px" }}
@@ -92,8 +87,7 @@ const Index = () => {
                   <span className="text-middle">Váy cưới mã 01</span>
                   <div
                     className="text-description"
-                    style={{ color: "#3F3F3F", margin: "6px 0 8px" }}
-                  >
+                    style={{ color: "#3F3F3F", margin: "6px 0 8px" }}>
                     Trắng, size S, Số lượng 1
                   </div>
                   <span className="text-middle" style={{ color: "#3F3F3F" }}>
@@ -108,8 +102,7 @@ const Index = () => {
               </div>
               <div
                 className="text-description d-flex align-items-center"
-                style={{ marginBottom: "12px" }}
-              >
+                style={{ marginBottom: "12px" }}>
                 <div style={{ color: "#616161", width: "50px" }}>Ngày</div>
                 <DatePicker onChange={onChange} style={{ color: "#3F3F3F" }} />
               </div>
@@ -144,16 +137,14 @@ const Index = () => {
               padding: "20px 25px 30px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}
-          >
+            }}>
             <div className="text-title" style={{ marginBottom: "1rem" }}>
               Bạn đã chọn
             </div>
             <div className="border-bottom">
               <div
                 className="text-description"
-                style={{ color: "#222222", marginBottom: "14px" }}
-              >
+                style={{ color: "#222222", marginBottom: "14px" }}>
                 Cho thuê trang phục Flux
                 <CheckCircleOutlined
                   style={{
@@ -165,8 +156,7 @@ const Index = () => {
               </div>
               <div
                 className="d-flex"
-                style={{ height: "88px", marginRight: "0.5rem" }}
-              >
+                style={{ height: "88px", marginRight: "0.5rem" }}>
                 <img
                   src={imgStudio}
                   style={{ height: "100%", marginRight: "20px" }}
@@ -176,8 +166,7 @@ const Index = () => {
                   <span className="text-middle">Váy cưới mã 01</span>
                   <div
                     className="text-description"
-                    style={{ color: "#3F3F3F", margin: "6px 0 8px" }}
-                  >
+                    style={{ color: "#3F3F3F", margin: "6px 0 8px" }}>
                     Trắng, size S, Số lượng 1
                   </div>
                   <span className="text-middle" style={{ color: "#3F3F3F" }}>
@@ -192,8 +181,7 @@ const Index = () => {
               </div>
               <div
                 className="text-description d-flex align-items-center"
-                style={{ marginBottom: "12px" }}
-              >
+                style={{ marginBottom: "12px" }}>
                 <div style={{ color: "#616161", width: "50px" }}>Ngày</div>
                 <DatePicker onChange={onChange} style={{ color: "#3F3F3F" }} />
               </div>
@@ -230,12 +218,10 @@ const Index = () => {
               padding: "25px 25px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}
-          >
+            }}>
             <div
               className="d-flex justify-content-between"
-              style={{ marginBottom: "28px" }}
-            >
+              style={{ marginBottom: "28px" }}>
               <div>Chọn mã khuyến mãi</div>
               <Dropdown overlay={menu}>
                 <a onClick={(e) => e.preventDefault()} href="/#">
@@ -257,8 +243,7 @@ const Index = () => {
                     textDecoration: "line-through",
                     color: "#828282",
                     marginBottom: "12px",
-                  }}
-                >
+                  }}>
                   1.800.000
                 </div>
               </div>
@@ -273,8 +258,7 @@ const Index = () => {
                     fontSize: "20px",
                     lineHeight: "28px",
                     fontWeight: "700",
-                  }}
-                >
+                  }}>
                   1.500.000
                 </div>
               </div>
@@ -285,16 +269,14 @@ const Index = () => {
               padding: "25px 25px",
               marginBottom: "0.5rem",
               backgroundColor: "#FFFFFF",
-            }}
-          >
+            }}>
             <div
               className="text-title"
               style={{
                 fontSize: "22px",
                 lineHeight: "30px",
                 marginBottom: "0.25rem",
-              }}
-            >
+              }}>
               Vui lòng điền thông tin của bạn
             </div>
             <TextInput
@@ -309,12 +291,10 @@ const Index = () => {
           </div>
           <div
             className="d-flex justify-content-end"
-            style={{ marginTop: "35px" }}
-          >
+            style={{ marginTop: "35px" }}>
             <Button
               type="primary"
-              style={{ borderRadius: "8px", height: "45px", width: "270px" }}
-            >
+              style={{ borderRadius: "8px", height: "45px", width: "270px" }}>
               Hoàn tất đặt
             </Button>
           </div>

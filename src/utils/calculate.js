@@ -144,3 +144,135 @@ export const priceService = (arr = [], OrderByTime) => {
       .replace("₫", "đ")}`;
   }
 };
+
+export const calculatePrice = (chooseService) => {
+  switch (chooseService?.OrderByTime) {
+    case 1:
+      return (
+        chooseService?.pricesByHour[0].PriceByHour *
+        calTime(chooseService?.OrderByTimeFrom, chooseService?.OrderByTimeTo) *
+        (chooseService?.amount || 1)
+      );
+    case 0:
+      return (
+        chooseService?.pricesByDate?.reduce(
+          (sum, cur) => sum + cur.PriceByDate,
+          0
+        ) * (chooseService?.amount || 1)
+      );
+
+    default:
+      break;
+  }
+};
+
+export const calculateTotalPrice = (chooseServiceList = []) => {
+  return (
+    chooseServiceList &&
+    chooseServiceList?.length > 0 &&
+    chooseServiceList?.reduce((total, item) => {
+      switch (item?.OrderByTime) {
+        case 1:
+          return (
+            total +
+            item?.pricesByHour[0].PriceByHour *
+              calTime(item?.OrderByTimeFrom, item?.OrderByTimeTo) *
+              (item?.amount || 1)
+          );
+        case 0:
+          return (
+            total +
+            item?.pricesByDate?.reduce((sum, cur) => sum + cur.PriceByDate, 0) *
+              (item?.amount || 1)
+          );
+
+        default:
+          break;
+      }
+      return total;
+    }, 0)
+  );
+};
+
+export const calculatePriceUsePromo = (
+  chooseServiceList,
+  choosePromotionUser
+) => {
+  return chooseServiceList.reduce((total, item) => {
+    switch (item?.OrderByTime) {
+      case 1:
+        const priceByHour =
+          item?.pricesByHour[0].PriceByHour *
+          calTime(item?.OrderByTimeFrom, item?.OrderByTimeTo) *
+          (item?.amount || 1);
+        if (choosePromotionUser?.TypeReduce === 1) {
+          return total + priceByHour - (choosePromotionUser?.ReduceValue || 0);
+        } else {
+          return (
+            total +
+            (priceByHour -
+              ((priceByHour * choosePromotionUser?.ReduceValue) / 100 >=
+              choosePromotionUser?.MaxReduce
+                ? choosePromotionUser?.MaxReduce
+                : (priceByHour / 100) *
+                  (choosePromotionUser?.ReduceValue || 0)))
+          );
+        }
+      case 0:
+        const priceByDate =
+          item?.pricesByDate?.reduce((sum, cur) => sum + cur.PriceByDate, 0) *
+            (item?.amount || 1) || 0;
+        if (choosePromotionUser?.TypeReduce === 1) {
+          return total + priceByDate - (choosePromotionUser?.ReduceValue || 0);
+        } else {
+          return (
+            total +
+            (priceByDate -
+              ((priceByDate * choosePromotionUser?.ReduceValue) / 100 >=
+              choosePromotionUser?.MaxReduce
+                ? choosePromotionUser?.MaxReduce
+                : (priceByDate / 100) *
+                  (choosePromotionUser?.ReduceValue || 0)))
+          );
+        }
+
+      default:
+        break;
+    }
+    return total;
+  }, 0);
+};
+
+export const calculateTotal = (chooseServiceList) =>
+  chooseServiceList.reduce((total, item) => total + item?.price, 0);
+
+export const calculateTotalUsePromo = (chooseServiceList) => {
+  return chooseServiceList.reduce((total, item) => {
+    if (item?.promotion?.TypeReduce === 1) {
+      return total + item?.price - (item?.promotion?.ReduceValue || 0);
+    } else {
+      return (
+        total +
+        (item?.price -
+          ((item?.price * item?.promotion?.ReduceValue) / 100 >=
+          item?.promotion?.MaxReduce
+            ? item?.promotion?.MaxReduce
+            : (item?.price / 100) * (item?.promotion?.ReduceValue || 0)))
+      );
+    }
+  }, 0);
+};
+
+export const calculatePriceServiceUsePromo = (service) => {
+  if (service?.promotion?.TypeReduce === 1) {
+    return service?.price - (service?.promotion?.ReduceValue || 0);
+  } else {
+    return (
+      service?.price -
+      ((service?.price * service?.promotion?.ReduceValue) / 100 >=
+      service?.promotion?.MaxReduce
+        ? service?.promotion?.MaxReduce
+        : (service.price / 100) * (service.promotion?.ReduceValue || 0))
+    );
+  }
+};

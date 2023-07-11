@@ -20,7 +20,6 @@ export const FooterRating = ({ id, setVisible, visible, category }) => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.log(error);
       }
     })();
   }, [id, visible]);
@@ -42,8 +41,7 @@ export const FooterRating = ({ id, setVisible, visible, category }) => {
       ) : (
         <button
           className="FooterStatus__complete__rating"
-          onClick={() => setVisible(true)}
-        >
+          onClick={() => setVisible(true)}>
           Đánh giá
         </button>
       )}

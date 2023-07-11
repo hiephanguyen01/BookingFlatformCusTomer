@@ -18,9 +18,6 @@ import {
   Grid,
   Badge,
   Slider,
-  Drawer,
-  Space,
-  Popover,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,13 +57,12 @@ const Header = () => {
   const inputSearchRef = useRef(null);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 5000000]);
+  const [priceRange, setPriceRange] = useState([]);
   const [chooseProvince, setChooseProvince] = useState([]);
   const [chooseDistrict, setChooseDistrict] = useState([]);
   const [selectProvince, setSelectProvince] = useState(null);
   const [chooseCategory, setChooseCategory] = useState([]);
   const [openModalChat, setOpenModalChat] = useState(false);
-  const [open, setOpen] = useState(false);
   const [choosePrice, setChoosePrice] = useState({});
   const [keyString, setKeyString] = useState("");
   const user = useSelector((state) => state.authenticateReducer.currentUser);
@@ -75,6 +71,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const screens = useBreakpoint();
+  const [filterProvinces, setFilterProvinces] = useState([]);
+  const [searchProvince, setSearchProvince] = useState("");
   const categories = [
     {
       id: "",
@@ -199,6 +197,7 @@ const Header = () => {
     (async () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
+      setFilterProvinces(res.data);
     })();
   }, []);
 
@@ -308,7 +307,7 @@ const Header = () => {
                 onCancel={handleCancel}
                 className="search-modal mobile"
                 width={"100%"}
-                visible={visible}
+                open={visible}
                 footer={[]}
                 closable={false}
               >
@@ -342,21 +341,34 @@ const Header = () => {
                         modalContent={
                           <div className="modal-province">
                             <h3 className="px-10 mb-20">Địa điểm</h3>
-                            <div className="px-10 mb-26">
-                              <Input
-                                placeholder="Bạn đang tìm gì?"
-                                prefix={<SearchOutlined />}
-                                className="input-search-province "
-                              />
-                            </div>
+                            {!selectProvince && (
+                              <div className="px-10 mb-26">
+                                <Input
+                                  placeholder="Bạn đang tìm gì?"
+                                  prefix={<SearchOutlined />}
+                                  value={searchProvince || ""}
+                                  className="input-search-province "
+                                  onChange={(e) => {
+                                    const filterProvince = provinces.filter(
+                                      (p) =>
+                                        p.Name.toUpperCase().includes(
+                                          e.target.value.toUpperCase()
+                                        )
+                                    );
+                                    setSearchProvince(e.target.value);
+                                    setFilterProvinces(filterProvince);
+                                  }}
+                                />
+                              </div>
+                            )}
                             <Row
                               gutter={[20, 20]}
                               style={{ textAlign: "center", margin: "0 auto" }}
                             >
                               {selectProvince ? (
                                 <>
-                                  {districts.map((val) => (
-                                    <Col span={12}>
+                                  {districts.map((val, index) => (
+                                    <Col span={12} key={index}>
                                       <div
                                         key={val.id}
                                         className={`btn-province-item ${
@@ -377,8 +389,8 @@ const Header = () => {
                                 </>
                               ) : (
                                 <>
-                                  {provinces.map((val) => (
-                                    <Col span={12}>
+                                  {filterProvinces.map((val, index) => (
+                                    <Col span={12} key={index}>
                                       <div
                                         key={val.id}
                                         className={`btn-province-item ${
@@ -427,8 +439,8 @@ const Header = () => {
                               gutter={[20, 20]}
                               style={{ textAlign: "center", margin: "0 auto" }}
                             >
-                              {categories.slice(1, 7).map((val) => (
-                                <Col span={12}>
+                              {categories.slice(1, 7).map((val, index) => (
+                                <Col span={12} key={index}>
                                   <div
                                     key={val.id}
                                     className={`btn-category-item ${
@@ -463,8 +475,8 @@ const Header = () => {
                               gutter={[20, 20]}
                               style={{ textAlign: "center", margin: "0 auto" }}
                             >
-                              {PRICE_FILTER.map((val) => (
-                                <Col span={12}>
+                              {PRICE_FILTER.map((val, index) => (
+                                <Col span={12} key={index}>
                                   <div
                                     key={val.value}
                                     className={`btn-price-item ${
@@ -535,7 +547,7 @@ const Header = () => {
             onCancel={handleCancel}
             className="search-modal"
             width={"700px"}
-            visible={visible}
+            open={visible}
             footer={[]}
             closable={false}
           >
@@ -690,7 +702,10 @@ const Header = () => {
                               <div className="option d-flex justify-content-between">
                                 <Form.Item
                                   name="province"
-                                  style={{ width: "100%", marginRight: "20px" }}
+                                  style={{
+                                    width: "100%",
+                                    marginRight: "20px",
+                                  }}
                                 >
                                   <Select
                                     defaultValue=""
@@ -714,7 +729,10 @@ const Header = () => {
                                 </Form.Item>
                                 <Form.Item
                                   name="category"
-                                  style={{ width: "100%", marginRight: "20px" }}
+                                  style={{
+                                    width: "100%",
+                                    marginRight: "20px",
+                                  }}
                                 >
                                   <Select
                                     defaultValue="-1"
@@ -802,15 +820,7 @@ const Header = () => {
                       <p>Chat</p>
                     </Col>
                     <Col
-                      onClick={() =>
-                        toastMessage(
-                          "Chức năng này đang phát triển!",
-                          "info",
-                          1,
-                          "",
-                          {}
-                        )
-                      }
+                      onClick={() => navigate("/home/cart")}
                       style={{
                         textAlign: "center",
                       }}
@@ -837,19 +847,7 @@ const Header = () => {
                   <img src={DaoIcon} alt="" />
                   <p>Dạo</p>
                 </div>
-                <Link
-                  to={"#"}
-                  className="tip"
-                  onClick={() =>
-                    toastMessage(
-                      "Chức năng này đang phát triển!",
-                      "info",
-                      1,
-                      "",
-                      {}
-                    )
-                  }
-                >
+                <Link to={"/home/cart"} className="tip">
                   <ShoppingOutlined
                     style={{ fontSize: "20px", color: "#828282" }}
                   />

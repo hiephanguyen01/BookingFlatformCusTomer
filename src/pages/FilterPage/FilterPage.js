@@ -100,107 +100,117 @@ const FilterPage = () => {
     [location?.search]
   );
 
-  console.log(location?.search, querySearch);
+  const screens = useBreakpoint();
 
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const screens = useBreakpoint();
   const { filter, loading, pagination, studioPostList } = useSelector(
     (state) => state.studioPostReducer
   );
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const [provinces, setProvinces] = useState([]);
+  const [filterProvinces, setFilterProvinces] = useState([]);
+  const [searchProvince, setSearchProvince] = useState("");
   const [districts, setDistricts] = useState([]);
+  const [province, setProvince] = useState(
+    Number(querySearch?.location) || querySearch?.provinces || ""
+  );
+  const [priceRange, setPriceRange] = useState(querySearch?.priceRange || []);
+  const [chooseProvinceMobile, setChooseProvinceMobile] = useState(
+    querySearch?.provinces?.length > 0 &&
+      typeof querySearch?.provinces !== "string"
+      ? querySearch?.provinces
+      : [querySearch?.provinces] || []
+  );
+  const [chooseCategory, setChooseCategory] = useState(
+    querySearch?.category?.length > 0 &&
+      typeof querySearch?.category !== "string"
+      ? querySearch?.category
+      : isNaN(Number(querySearch?.category))
+      ? []
+      : [Number(querySearch?.category)]
+  );
+  const [choosePrice, setChoosePrice] = useState(
+    +querySearch?.priceOption || 1
+  );
+  const [keyString, setKeyString] = useState(querySearch?.keyString || "");
+  const [selectProvince, setSelectProvince] = useState(null);
+  const [chooseDistrict, setChooseDistrict] = useState([]);
 
   const [visible, setVisible] = useState(false);
   const handleCancel = () => {
     setVisible(false);
   };
 
-  const [province, setProvince] = useState(
-    Number(querySearch?.location) || querySearch?.provinces || ""
+  const initState = useCallback(
+    (query, device) => {
+      if (device) {
+        dispatch(
+          getFilterStudioPostMobile(
+            5,
+            1,
+            {
+              keyString: query?.keyString || "",
+              category:
+                typeof query?.category === "string"
+                  ? [query?.category]
+                  : query?.category,
+              priceOption: +query?.priceOption,
+              priceRange: query?.priceRange || [],
+              provinces: query?.provinces || [],
+              districts: query?.districts?.length > 0 ? query?.districts : [],
+              // ratingOption: +querySearch?.ratingOption || 1,
+            },
+            null,
+            navigate
+          )
+        );
+      } else {
+        dispatch(
+          getFilterStudioPost(
+            5,
+            1,
+            {
+              keyString: query?.keyString || "",
+              category:
+                +query?.category > 0 && +query?.category < 7
+                  ? +query?.category
+                  : "",
+              priceOption: +query?.priceOption,
+              priceRange: query?.priceRange || [],
+              location: query?.location || "",
+              ratingOption: +query?.ratingOption || 1,
+            },
+            null,
+            navigate
+          )
+        );
+      }
+    },
+    [navigate, dispatch]
   );
-  const [priceRange, setPriceRange] = useState(querySearch?.priceRange || []);
-  const [chooseProvince, setChooseProvince] = useState(
-    typeof filter?.provinces === "string" ||
-      typeof filter?.provinces === "number"
-      ? [filter?.provinces]
-      : filter?.provinces || []
-  );
-  const [chooseCategory, setChooseCategory] = useState(
-    typeof filter?.category === "string" || typeof filter?.category === "number"
-      ? [filter?.category]
-      : filter?.category
-  );
-  const [choosePrice, setChoosePrice] = useState(+filter?.priceOption || {});
-  const [keyString, setKeyString] = useState(querySearch?.keyString || "");
-  const [selectProvince, setSelectProvince] = useState(null);
-  const [chooseDistrict, setChooseDistrict] = useState([]);
 
-  const initState = useCallback(() => {
-    if (screens.xs) {
-      dispatch(
-        getFilterStudioPostMobile(
-          5,
-          1,
-          {
-            keyString: querySearch?.keyString || "",
-            category:
-              typeof querySearch?.category === "string"
-                ? [querySearch?.category]
-                : querySearch?.category,
-            priceOption: +querySearch?.priceOption,
-            priceRange: querySearch?.priceRange || [],
-            provinces: querySearch?.provinces || [],
-            districts:
-              querySearch?.districts?.length > 0 ? querySearch?.districts : [],
-            // ratingOption: +querySearch?.ratingOption || 1,
-          },
-          null,
-          navigate
-        )
-      );
-    } else {
-      dispatch(
-        getFilterStudioPost(
-          5,
-          1,
-          {
-            keyString: querySearch?.keyString || "",
-            category:
-              +querySearch?.category > 0 && +querySearch?.category < 7
-                ? +querySearch?.category
-                : "",
-            priceOption: +querySearch?.priceOption,
-            priceRange: querySearch?.priceRange || [],
-            location: querySearch?.location || "",
-            ratingOption: +querySearch?.ratingOption || 1,
-          },
-          null,
-          navigate
-        )
-      );
+  useEffect(() => {
+    if (Object.keys(screens).length > 0 && querySearch) {
+      initState(querySearch, screens.xs);
     }
-  }, [querySearch, navigate, screens, dispatch]);
+  }, [screens, querySearch, initState]);
 
   useEffect(() => {
     (async () => {
       const res = await studioPostService.getAllProvince();
       setProvinces(res.data);
+      setFilterProvinces(res.data);
     })();
   }, []);
 
   useEffect(() => {
-    initState();
-  }, []);
-
-  useEffect(() => {
     if (provinces?.length > 0) {
-      const province = provinces.find((p) => p.Name === filter?.location);
+      const province = provinces.find((p) => p.Name === querySearch?.location);
       province && form.setFieldsValue({ location1: +province?.Code || "" });
-      setSelectProvince(province?.Code || "");
+      setSelectProvince(province?.Code || null);
     }
-  }, [filter, province]);
+  }, [province, querySearch, provinces, form]);
 
   useEffect(() => {
     if (selectProvince) {
@@ -223,26 +233,19 @@ const FilterPage = () => {
       label: <strong>{convertPrice(5000000)}đ</strong>,
     },
   };
+
   const onChangeFilterCategory = (e) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, category: e.target.value },
-        currentUser,
-        navigate
-      )
-    );
-  };
-  const onChangeFilterCategoryOption = (value) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, category: value },
-        currentUser,
-        navigate
-      )
+    const newFilter = { ...filter, category: e.target.value };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
@@ -252,14 +255,17 @@ const FilterPage = () => {
     if (value === "") {
       setSelectProvince(null);
       setDistricts([]);
-      dispatch(
-        getFilterStudioPost(
-          5,
-          1,
-          { ...filter, location: value },
-          currentUser,
-          navigate
-        )
+      const newFilter = { ...filter, location: value };
+      navigate(
+        `/home/filter?${queryString.stringify(
+          Object.keys(newFilter)?.reduce(
+            (obj, key) =>
+              newFilter[key] === "" || newFilter[key] === undefined
+                ? { ...obj }
+                : { ...obj, [key]: newFilter[key] },
+            {}
+          )
+        )}`
       );
     } else {
       setSelectProvince(value);
@@ -268,22 +274,24 @@ const FilterPage = () => {
       } else {
         newValue = prov.Name;
       }
-      dispatch(
-        getFilterStudioPost(
-          5,
-          1,
-          { ...filter, location: newValue },
-          currentUser,
-          navigate
-        )
+      const newFilter = { ...filter, location: newValue };
+      navigate(
+        `/home/filter?${queryString.stringify(
+          Object.keys(newFilter)?.reduce(
+            (obj, key) =>
+              newFilter[key] === "" || newFilter[key] === undefined
+                ? { ...obj }
+                : { ...obj, [key]: newFilter[key] },
+            {}
+          )
+        )}`
       );
     }
-    form.setFieldsValue({ location: "" });
+    // form.setFieldsValue({ location: "" });
   };
 
   const onChangeFilterDistrict = (value) => {
     let newValue;
-    const prov = provinces.find((p) => +p.Code === selectProvince);
     if (value.includes("quận")) {
       newValue = value.split("quận")[1];
     } else if (value.includes("huyện")) {
@@ -291,57 +299,102 @@ const FilterPage = () => {
     } else {
       newValue = value;
     }
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, location: newValue },
-        currentUser,
-        navigate
-      )
+    const newFilter = { ...filter, location: newValue };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const onChangeInput = (e) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, keyString: e.target.value },
-        currentUser,
-        navigate
-      )
+    const newQuery = {
+      ...filter,
+      keyString: e.target.value,
+    };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newQuery)?.reduce(
+          (newFilter, key) =>
+            newQuery[key] === "" || newQuery[key] === undefined
+              ? { ...newFilter }
+              : { ...newFilter, [key]: newQuery[key] },
+          {}
+        )
+      )}`
+    );
+  };
+
+  const onChangeInputMobile = (e) => {
+    const newQuery = {
+      keyString: e.target.value,
+      category: chooseCategory,
+      priceOption: choosePrice,
+      priceRange: priceRange,
+      provinces: chooseProvinceMobile,
+      districts: chooseDistrict,
+    };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newQuery)?.reduce(
+          (newFilter, key) =>
+            newQuery[key] === "" || newQuery[key] === undefined
+              ? { ...newFilter }
+              : { ...newFilter, [key]: newQuery[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const onChangePriceOption = (e) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, priceOption: e.target.value },
-        currentUser,
-        navigate
-      )
+    const newFilter = { ...filter, priceOption: e.target.value };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const onChangeRateOption = (e) => {
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        { ...filter, ratingOption: e.target.value },
-        {},
-        navigate
-      )
+    const newFilter = { ...filter, ratingOption: e.target.value };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const onChangeSlideRange = (val) => {
-    const [price1, price2] = val;
-    dispatch(
-      getFilterStudioPost(5, 1, { ...filter, priceRange: val }, {}, navigate)
+    const newFilter = { ...filter, priceRange: val };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
@@ -353,31 +406,35 @@ const FilterPage = () => {
     }
     window.scrollTo({ behavior: "smooth", top: ref?.current?.offsetTop });
   };
+
   const handleClearFilter = () => {
     form.resetFields();
     setProvince("");
     setKeyString("");
-    dispatch(
-      getFilterStudioPost(
-        5,
-        1,
-        {
-          keyString: "",
-          category: "",
-          priceOption: 1,
-          price1: undefined,
-          price2: undefined,
-          location1: province,
-          ratingOption: 3,
-        },
-        {},
-        navigate
-      )
+    const newFilter = {
+      keyString: "",
+      category: "",
+      priceOption: 1,
+      price1: undefined,
+      price2: undefined,
+      location1: province,
+      ratingOption: 3,
+    };
+    navigate(
+      `/home/filter?${queryString.stringify(
+        Object.keys(newFilter)?.reduce(
+          (obj, key) =>
+            newFilter[key] === "" || newFilter[key] === undefined
+              ? { ...obj }
+              : { ...obj, [key]: newFilter[key] },
+          {}
+        )
+      )}`
     );
   };
 
   const handleChooseProvinceMobile = (province) => {
-    let newChooseProvince = [...chooseProvince];
+    let newChooseProvince = [...chooseProvinceMobile];
     const checkProvince = newChooseProvince.findIndex(
       (item) => item === province?.Name
     );
@@ -394,7 +451,7 @@ const FilterPage = () => {
       newChooseProvince.push(province.Name);
       setSelectProvince(province.Code);
     }
-    setChooseProvince(newChooseProvince);
+    setChooseProvinceMobile(newChooseProvince);
   };
 
   const handleChooseDistrict = (district) => {
@@ -410,7 +467,7 @@ const FilterPage = () => {
     setChooseDistrict(newChooseDistricts);
   };
 
-  const handleChooseCategory = (category) => {
+  const handleChooseCategoryMobile = (category) => {
     let newChooseCategory = [...chooseCategory];
     const checkCategory = newChooseCategory.findIndex(
       (item) => +item === category?.id
@@ -420,7 +477,7 @@ const FilterPage = () => {
     } else {
       newChooseCategory.push(category.id);
     }
-    setChooseCategory(newChooseCategory);
+    setChooseCategory(newChooseCategory.filter((item) => item !== ""));
   };
 
   const onFinish = (values) => {
@@ -435,7 +492,7 @@ const FilterPage = () => {
     if (screens.xs) {
       newFilter = {
         category: chooseCategory?.map((item) => item.id),
-        provinces: chooseProvince?.map((item) => item.Name),
+        provinces: chooseProvinceMobile?.map((item) => item.Name),
         keyString: values.keyString,
         priceOption: choosePrice.value || 1,
         priceRange: priceRange,
@@ -459,7 +516,7 @@ const FilterPage = () => {
   };
 
   const handleChooseProvince = (province) => {
-    let newChooseProvince = [...chooseProvince];
+    let newChooseProvince = [...chooseProvinceMobile];
     const checkProvince = newChooseProvince.findIndex(
       (item) => item?.Code === province?.Code
     );
@@ -473,7 +530,7 @@ const FilterPage = () => {
       newChooseProvince.push(province);
       setSelectProvince(province.Code);
     }
-    setChooseProvince(newChooseProvince);
+    setChooseProvinceMobile(newChooseProvince);
   };
 
   return (
@@ -481,15 +538,13 @@ const FilterPage = () => {
       <div className="FilterPage">
         <Row
           gutter={[20, 20]}
-          style={{ padding: `${screens.xs ? "" : "10px 0px"}` }}
-        >
+          style={{ padding: `${screens.xs ? "" : "10px 0px"}` }}>
           {screens.xs && (
             <div className="filterHeader">
               <Row
                 align="middle"
                 justify="space-around"
-                style={{ textAlign: "center" }}
-              >
+                style={{ textAlign: "center" }}>
                 <Col span={3}>
                   <ArrowLeftOutlined
                     style={{ fontSize: "18px" }}
@@ -501,9 +556,8 @@ const FilterPage = () => {
                     placeholder="Bạn đang tìm gì?"
                     prefix={<SearchOutlined />}
                     className="input-search "
-                    // onClick={() => setVisible(true)}
-                    // onChange={onChangeInput}
-                    onPressEnter={onChangeInput}
+                    defaultValue={keyString || ""}
+                    onPressEnter={onChangeInputMobile}
                   />
                 </Col>
                 <Col span={3}>
@@ -530,8 +584,7 @@ const FilterPage = () => {
                       "",
                       {}
                     )
-                  }
-                >
+                  }>
                   <Badge count={0} size="default">
                     <ShoppingOutlined
                       style={{ fontSize: "25px", color: "#828282" }}
@@ -546,23 +599,34 @@ const FilterPage = () => {
                   <ModalBottom
                     height={"40%"}
                     modalContent={
-                      <div className="modal-province">
+                      <div className="modal-province-filter-page">
                         <h3 className="px-10 mb-20">Địa điểm</h3>
                         <div className="px-10 mb-26">
-                          <Input
-                            placeholder={`${
-                              selectProvince
-                                ? "Nhập tên quận, huyện"
-                                : "Nhập tên tỉnh, thành phố"
-                            }`}
-                            prefix={<SearchOutlined />}
-                            className="input-search-province "
-                          />
+                          {!selectProvince && (
+                            <Input
+                              placeholder={`${
+                                selectProvince
+                                  ? "Nhập tên quận, huyện"
+                                  : "Nhập tên tỉnh, thành phố"
+                              }`}
+                              value={searchProvince || ""}
+                              prefix={<SearchOutlined />}
+                              className="input-search-province "
+                              onChange={(e) => {
+                                const filterProvince = provinces.filter((p) =>
+                                  p.Name.toUpperCase().includes(
+                                    e.target.value.toUpperCase()
+                                  )
+                                );
+                                setSearchProvince(e.target.value);
+                                setFilterProvinces(filterProvince);
+                              }}
+                            />
+                          )}
                         </div>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {selectProvince ? (
                             <>
                               {districts.map((val) => (
@@ -578,8 +642,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseDistrict(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -587,12 +650,12 @@ const FilterPage = () => {
                             </>
                           ) : (
                             <>
-                              {provinces.map((val) => (
+                              {filterProvinces?.map((val) => (
                                 <Col span={12}>
                                   <div
                                     key={val.id}
                                     className={`btn-province-item ${
-                                      chooseProvince?.find(
+                                      chooseProvinceMobile?.find(
                                         (value) => value === val.Name
                                       )
                                         ? "active"
@@ -600,8 +663,7 @@ const FilterPage = () => {
                                     } `}
                                     onClick={() => {
                                       handleChooseProvinceMobile(val);
-                                    }}
-                                  >
+                                    }}>
                                     {val.Name}
                                   </div>
                                 </Col>
@@ -620,28 +682,47 @@ const FilterPage = () => {
                             setSelectProvince(null);
                             setDistricts([]);
                           } else {
-                            dispatch(
-                              getFilterStudioPostMobile(
-                                5,
-                                1,
-                                {
-                                  keyString: "",
-                                  category: chooseCategory,
-                                  priceOption: choosePrice?.value,
-                                  priceRange: priceRange,
-                                  provinces: chooseProvince,
-                                  districts: chooseDistrict,
-                                  // ratingOption: +querySearch?.ratingOption || 1,
-                                },
-                                null,
-                                navigate
-                              )
+                            const newQuery = {
+                              keyString: keyString,
+                              category: chooseCategory,
+                              priceOption: choosePrice,
+                              priceRange: priceRange,
+                              provinces: chooseProvinceMobile,
+                              districts: chooseDistrict,
+                            };
+                            navigate(
+                              `/home/filter?${queryString.stringify(
+                                Object.keys(newQuery)?.reduce(
+                                  (newFilter, key) =>
+                                    newQuery[key] === "" ||
+                                    newQuery[key] === undefined
+                                      ? { ...newFilter }
+                                      : { ...newFilter, [key]: newQuery[key] },
+                                  {}
+                                )
+                              )}`
                             );
+                            // dispatch(
+                            //   getFilterStudioPostMobile(
+                            //     5,
+                            //     1,
+                            //     {
+                            //       keyString: "",
+                            //       category: chooseCategory,
+                            //       priceOption: choosePrice,
+                            //       priceRange: priceRange,
+                            //       provinces: chooseProvinceMobile,
+                            //       districts: chooseDistrict,
+                            //       // ratingOption: +querySearch?.ratingOption || 1,
+                            //     },
+                            //     null,
+                            //     navigate
+                            //   )
+                            // );
                           }
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Địa điểm <DownOutlined className="icon" />
                     </Button>
@@ -649,12 +730,11 @@ const FilterPage = () => {
                   <ModalBottom
                     height={"35%"}
                     modalContent={
-                      <div className="modal-category">
+                      <div className="modal-category-filter-page">
                         <h3 className="px-10 mb-20">Danh mục</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {CATEGORIES.slice(1, 7).map((val) => (
                             <Col span={12}>
                               <div
@@ -666,8 +746,7 @@ const FilterPage = () => {
                                     ? "active"
                                     : ""
                                 } `}
-                                onClick={() => handleChooseCategory(val)}
-                              >
+                                onClick={() => handleChooseCategoryMobile(val)}>
                                 {val.name}
                               </div>
                             </Col>
@@ -680,39 +759,57 @@ const FilterPage = () => {
                     btnClose={
                       <CheckSVG
                         onClick={(e) => {
-                          dispatch(
-                            getFilterStudioPostMobile(
-                              5,
-                              1,
-                              {
-                                keyString: "",
-                                category: chooseCategory,
-                                priceOption: choosePrice?.value,
-                                priceRange: priceRange,
-                                provinces: chooseProvince,
-                                districts: chooseDistrict,
-                                // ratingOption: +querySearch?.ratingOption || 1,
-                              },
-                              null,
-                              navigate
-                            )
+                          const newQuery = {
+                            keyString: keyString,
+                            category: chooseCategory,
+                            priceOption: choosePrice,
+                            priceRange: priceRange,
+                            provinces: chooseProvinceMobile,
+                            districts: chooseDistrict,
+                          };
+                          navigate(
+                            `/home/filter?${queryString.stringify(
+                              Object.keys(newQuery)?.reduce(
+                                (newFilter, key) =>
+                                  newQuery[key] === "" ||
+                                  newQuery[key] === undefined
+                                    ? { ...newFilter }
+                                    : { ...newFilter, [key]: newQuery[key] },
+                                {}
+                              )
+                            )}`
                           );
+                          // dispatch(
+                          //   getFilterStudioPostMobile(
+                          //     5,
+                          //     1,
+                          //     {
+                          //       keyString: "",
+                          //       category: chooseCategory,
+                          //       priceOption: choosePrice,
+                          //       priceRange: priceRange,
+                          //       provinces: chooseProvinceMobile,
+                          //       districts: chooseDistrict,
+                          //       // ratingOption: +querySearch?.ratingOption || 1,
+                          //     },
+                          //     null,
+                          //     navigate
+                          //   )
+                          // );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Danh mục <DownOutlined className="icon" />
                     </Button>
                   </ModalBottom>
                   <ModalBottom
                     modalContent={
-                      <div className="modal-price">
+                      <div className="modal-price-filter-page">
                         <h3 className="px-10 mb-20">Giá</h3>
                         <Row
                           gutter={[20, 20]}
-                          style={{ textAlign: "center", margin: "0 auto" }}
-                        >
+                          style={{ textAlign: "center", margin: "0 auto" }}>
                           {PRICE_FILTER.map((val) => (
                             <Col span={12}>
                               <div
@@ -720,8 +817,7 @@ const FilterPage = () => {
                                 className={`btn-price-item ${
                                   choosePrice === val.value ? "active" : ""
                                 }`}
-                                onClick={() => setChoosePrice(val.value)}
-                              >
+                                onClick={() => setChoosePrice(val.value)}>
                                 {val.label}
                               </div>
                             </Col>
@@ -753,27 +849,46 @@ const FilterPage = () => {
                     btnClose={
                       <CheckSVG
                         onClick={(e) => {
-                          dispatch(
-                            getFilterStudioPostMobile(
-                              5,
-                              1,
-                              {
-                                keyString: "",
-                                category: chooseCategory,
-                                priceOption: choosePrice?.value,
-                                priceRange: priceRange,
-                                provinces: chooseProvince,
-                                districts: chooseDistrict,
-                                // ratingOption: +querySearch?.ratingOption || 1,
-                              },
-                              null,
-                              navigate
-                            )
+                          const newQuery = {
+                            keyString: keyString,
+                            category: chooseCategory,
+                            priceOption: choosePrice,
+                            priceRange: priceRange,
+                            provinces: chooseProvinceMobile,
+                            districts: chooseDistrict,
+                          };
+                          navigate(
+                            `/home/filter?${queryString.stringify(
+                              Object.keys(newQuery)?.reduce(
+                                (newFilter, key) =>
+                                  newQuery[key] === "" ||
+                                  newQuery[key] === undefined
+                                    ? { ...newFilter }
+                                    : { ...newFilter, [key]: newQuery[key] },
+                                {}
+                              )
+                            )}`
                           );
+                          // dispatch(
+                          //   getFilterStudioPostMobile(
+                          //     5,
+                          //     1,
+                          //     {
+                          //       keyString: "",
+                          //       category: chooseCategory,
+                          //       priceOption: choosePrice,
+                          //       priceRange: priceRange,
+                          //       provinces: chooseProvinceMobile,
+                          //       districts: chooseDistrict,
+                          //       // ratingOption: +querySearch?.ratingOption || 1,
+                          //     },
+                          //     null,
+                          //     navigate
+                          //   )
+                          // );
                         }}
                       />
-                    }
-                  >
+                    }>
                     <Button className="btn-item-filter">
                       Giá <DownOutlined className="icon" />
                     </Button>
@@ -783,7 +898,10 @@ const FilterPage = () => {
             </div>
           )}
           <Col lg={6} md={24} sm={24} xs={0}>
-            <Form {...layout} onFinish={handleClearFilter} form={form}>
+            <Form
+              {...layout}
+              //  onFinish={handleClearFilter}
+              form={form}>
               <Row className="w-100">
                 <Col lg={24} md={24} sm={24} xs={24}>
                   <Row className="box" gutter={[10, 10]}>
@@ -791,7 +909,10 @@ const FilterPage = () => {
                       <p className="text">LỌC THEO</p>
                     </Col>
                     <Col sm={12} style={{ textAlign: "end" }}>
-                      <Button htmlType="submit" type="primary">
+                      <Button
+                        // htmlType="submit"
+                        type="primary"
+                        onClick={handleClearFilter}>
                         Xoá bộ lọc
                       </Button>
                     </Col>
@@ -801,7 +922,7 @@ const FilterPage = () => {
                         <Input
                           className={`${!screens?.lg && screens?.md && "w-70"}`}
                           style={{ borderRadius: "8px" }}
-                          onChange={onChangeInput}
+                          onPressEnter={onChangeInput}
                           defaultValue={keyString}
                         />
                       </Form.Item>
@@ -821,8 +942,7 @@ const FilterPage = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          defaultValue={province}
-                        >
+                          defaultValue={province}>
                           <Option value={""}>Tất cả</Option>
                           {provinces &&
                             provinces.map((val) => (
@@ -848,8 +968,7 @@ const FilterPage = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          defaultValue={province}
-                        >
+                          defaultValue={province}>
                           <Option value={""}>Tất cả</Option>
                           {districts &&
                             districts.map((val) => (
@@ -866,8 +985,7 @@ const FilterPage = () => {
                         <div className="category_radio_group">
                           <Radio.Group
                             onChange={onChangeFilterCategory}
-                            value={filter.category}
-                          >
+                            value={filter.category}>
                             {CATEGORIES &&
                               CATEGORIES?.map((val) => (
                                 <Radio key={val.id} value={val.id}>
@@ -885,8 +1003,7 @@ const FilterPage = () => {
                         <div className="filter_price_container">
                           <Radio.Group
                             onChange={onChangePriceOption}
-                            value={filter.priceOption}
-                          >
+                            value={filter.priceOption}>
                             <Row>
                               <Col span={24}>
                                 <Radio value={2}>Giá cao nhất</Radio>
@@ -920,8 +1037,7 @@ const FilterPage = () => {
                         <div className="filter_rating_container">
                           <Radio.Group
                             onChange={onChangeRateOption}
-                            value={filter.ratingOption}
-                          >
+                            value={filter.ratingOption}>
                             <Row>
                               <Col span={24}>
                                 <Radio value={1}>Đánh giá nhiều nhất</Radio>
@@ -950,8 +1066,7 @@ const FilterPage = () => {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                  }}
-                >
+                  }}>
                   <div
                     style={{
                       background: "white",
@@ -959,8 +1074,7 @@ const FilterPage = () => {
                       borderRadius: "50%",
                       padding: "10px",
                       margin: "10px",
-                    }}
-                  >
+                    }}>
                     <LoadingOutlined style={{ fontSize: "40px" }} />
                   </div>
                 </div>
@@ -971,8 +1085,7 @@ const FilterPage = () => {
                   <div
                     ref={ref}
                     style={{ width: "100%", backgroundColor: "#fff" }}
-                    className="px-16 py-20"
-                  >
+                    className="px-16 py-20">
                     {studioPostList?.map((val) => (
                       <FilterCard
                         data={val}
@@ -993,8 +1106,7 @@ const FilterPage = () => {
                       padding: "10px 0px",
                       marginLeft: "auto",
                       textAlign: "end",
-                    }}
-                  >
+                    }}>
                     <Pagination
                       pageSize={pagination?.limit || 0}
                       current={pagination?.currentPage}
@@ -1011,10 +1123,9 @@ const FilterPage = () => {
           onCancel={handleCancel}
           className="search-modal mobile"
           width={"100%"}
-          visible={visible}
+          open={visible}
           footer={[]}
-          closable={false}
-        >
+          closable={false}>
           <div className="search-container pt-30">
             <Form onFinish={onFinish}>
               <Row className="w-100" justify="space-between" align="middle">
@@ -1039,7 +1150,7 @@ const FilterPage = () => {
                 <ModalBottom
                   height={"40%"}
                   modalContent={
-                    <div className="modal-province">
+                    <div className="modal-province-filter-page">
                       <h3 className="px-10 mb-20">Địa điểm</h3>
                       <div className="px-10 mb-26">
                         <Input
@@ -1050,8 +1161,7 @@ const FilterPage = () => {
                       </div>
                       <Row
                         gutter={[20, 20]}
-                        style={{ textAlign: "center", margin: "0 auto" }}
-                      >
+                        style={{ textAlign: "center", margin: "0 auto" }}>
                         {selectProvince ? (
                           <>
                             {districts.map((val) => (
@@ -1067,8 +1177,7 @@ const FilterPage = () => {
                                   } `}
                                   onClick={() => {
                                     handleChooseDistrict(val);
-                                  }}
-                                >
+                                  }}>
                                   {val.Name}
                                 </div>
                               </Col>
@@ -1081,7 +1190,7 @@ const FilterPage = () => {
                                 <div
                                   key={val.id}
                                   className={`btn-province-item ${
-                                    chooseProvince?.find(
+                                    chooseProvinceMobile?.find(
                                       (value) => value?.Code === val?.Code
                                     )
                                       ? "active"
@@ -1089,8 +1198,7 @@ const FilterPage = () => {
                                   } `}
                                   onClick={() => {
                                     handleChooseProvince(val);
-                                  }}
-                                >
+                                  }}>
                                   {val.Name}
                                 </div>
                               </Col>
@@ -1111,8 +1219,7 @@ const FilterPage = () => {
                         }
                       }}
                     />
-                  }
-                >
+                  }>
                   <Button className="btn-item-filter">
                     Địa điểm <DownOutlined className="icon" />
                   </Button>
@@ -1120,12 +1227,11 @@ const FilterPage = () => {
                 <ModalBottom
                   height={"35%"}
                   modalContent={
-                    <div className="modal-category">
+                    <div className="modal-category-filter-page">
                       <h3 className="px-10 mb-20">Danh mục</h3>
                       <Row
                         gutter={[20, 20]}
-                        style={{ textAlign: "center", margin: "0 auto" }}
-                      >
+                        style={{ textAlign: "center", margin: "0 auto" }}>
                         {CATEGORIES.slice(1, 7).map((val) => (
                           <Col span={12}>
                             <div
@@ -1137,8 +1243,7 @@ const FilterPage = () => {
                                   ? "active"
                                   : ""
                               } `}
-                              onClick={() => handleChooseCategory(val)}
-                            >
+                              onClick={() => handleChooseCategoryMobile(val)}>
                               {val.name}
                             </div>
                           </Col>
@@ -1148,29 +1253,26 @@ const FilterPage = () => {
                   }
                   extendProp={false}
                   close={true}
-                  btnClose={<CheckSVG />}
-                >
+                  btnClose={<CheckSVG />}>
                   <Button className="btn-item-filter">
                     Danh mục <DownOutlined className="icon" />
                   </Button>
                 </ModalBottom>
                 <ModalBottom
                   modalContent={
-                    <div className="modal-price">
+                    <div className="modal-price-filter-page">
                       <h3 className="px-10 mb-20">Giá</h3>
                       <Row
                         gutter={[20, 20]}
-                        style={{ textAlign: "center", margin: "0 auto" }}
-                      >
+                        style={{ textAlign: "center", margin: "0 auto" }}>
                         {PRICE_FILTER.map((val) => (
                           <Col span={12}>
                             <div
                               key={val.value}
                               className={`btn-price-item ${
-                                choosePrice?.value === val.value ? "active" : ""
+                                choosePrice === val.value ? "active" : ""
                               }`}
-                              onClick={() => setChoosePrice(val)}
-                            >
+                              onClick={() => setChoosePrice(val)}>
                               {val.label}
                             </div>
                           </Col>
@@ -1197,8 +1299,7 @@ const FilterPage = () => {
                   }
                   extendProp={false}
                   close={true}
-                  btnClose={<CheckSVG />}
-                >
+                  btnClose={<CheckSVG />}>
                   <Button className="btn-item-filter">
                     Giá <DownOutlined className="icon" />
                   </Button>
@@ -1236,22 +1337,20 @@ const FilterPage = () => {
                   width: "100%",
                   marginTop: "10px",
                   marginBottom: "35px",
-                }}
-              >
+                }}>
                 <Button
                   type="primary"
                   htmlType="submit"
                   size="large"
                   style={{ width: "50%" }}
-                  className="btn-search"
-                >
+                  className="btn-search">
                   Tìm kiếm
                 </Button>
               </Form.Item>
             </Form>
             {/* {user ? (
             <div className="wrapper-user">
-              <Dropdown overlay={menuSignOut} placement="topRight" arrow>
+              <Dropdown menu={menuSignOut} placement="topRight" arrow>
                 <div className="user">
                   <Avatar src={user.Image ? img : noBody} />
                   <div className="text ms-8">
@@ -1272,7 +1371,7 @@ const FilterPage = () => {
             </div>
           ) : (
             <div className="wrapper-user">
-              <Dropdown overlay={menuSignIn} placement="topRight" arrow>
+              <Dropdown menu={menuSignIn} placement="topRight" arrow>
                 <div className="user">
                   <Avatar src={noBody} />
                   <div className="text">

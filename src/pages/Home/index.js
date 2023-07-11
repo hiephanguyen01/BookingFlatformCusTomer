@@ -40,12 +40,11 @@ const Top10Device = lazy(() => import("./components/Top10Device/Top10Device"));
 // export const Home = () => {
 //   const dispatch = useDispatch();
 //   const { selectSearch } = useSelector((state) => state.postDaoReducer);
-//   console.log(selectSearch);
 //   return (
 //     <>
 //       <Modal
 //         style={{ borderRadius: "6px" }}
-//         visible={true}
+//         open={true}
 //         closable={false}
 //         width="700px"
 //         footer={null}
@@ -219,8 +218,7 @@ const Home = () => {
                     padding: 29,
                     backgroundColor: "#ffff",
                   }
-            }
-          >
+            }>
             {screens.xs
               ? CATEGORIES.map((item) => (
                   <Col span={24} style={{ textAlign: "center" }}>
@@ -233,8 +231,7 @@ const Home = () => {
                       style={{
                         backgroundColor: "#ffff",
                         border: "none",
-                      }}
-                    >
+                      }}>
                       <img src={item.img} alt="a" />
                     </div>
                     <p style={{ fontSize: 16 }}>{item.label}</p>
@@ -246,8 +243,7 @@ const Home = () => {
                     className={cx("box")}
                     onClick={() => {
                       handleClickCategory(item.id);
-                    }}
-                  >
+                    }}>
                     <img src={item.img} alt="a" />
                     <span>{item.label}</span>
                   </div>

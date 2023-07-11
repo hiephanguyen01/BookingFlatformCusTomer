@@ -67,6 +67,8 @@ const Index = () => {
     }
   };
 
+  console.log(location?.state);
+
   const handleClickBtnUpdate = async () => {
     try {
       if (Object.keys(file).length > 0) {
@@ -78,7 +80,7 @@ const Index = () => {
 
         const IdentifyCode = [...location?.state?.IdentifyCode];
 
-        await orderService.updateOrder(formData, IdentifyCode[0]);
+        await orderService.updateCart(formData, IdentifyCode[0]);
         const res = await orderService.getOrderByIdentify(
           booking?.IdentifyCode,
           cate
@@ -95,7 +97,6 @@ const Index = () => {
         toastMessage("Vui lòng chọn ảnh minh chứng!", "warn");
       }
     } catch (error) {
-      console.log("🚀 ~ handleClickBtnUpdate ~ error:", error);
       toastMessage("Cập nhật minh chứng thất bại!", "error");
     }
   };
@@ -103,8 +104,10 @@ const Index = () => {
   useEffect(() => {
     const getBookingByIdentify = async () => {
       const res = await orderService.getOrderByIdentify(
-        location?.state?.IdentifyCode[0],
-        cate
+        location?.state?.IdentifyCode.length > 0
+          ? location?.state?.IdentifyCode[0]
+          : location?.state?.IdentifyCode,
+        location?.state?.Category || cate
       );
       setBooking(res.data);
     };
