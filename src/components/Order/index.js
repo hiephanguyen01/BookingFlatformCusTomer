@@ -85,33 +85,32 @@ const Index = ({ linkTo = "" }) => {
   }
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setInfoUser(user);
-    // dispatch(setStudioPostIdAction(id));
-    if (id) {
-      dispatch(studioDetailAction(id, cate));
-    }
-    dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
-    return () => {
-      dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
-      dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
-    };
-  }, [cate, dispatch, id, user]);
+  // useEffect(() => {
+  //   setInfoUser(user);
+  //   // dispatch(setStudioPostIdAction(id));
+  //   if (id) {
+  //     dispatch(studioDetailAction(id, cate));
+  //   }
+  //   dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
+  //   return () => {
+  //     dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+  //     dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+  //     dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
+  //   };
+  // }, [cate, dispatch, id, user]);
+
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, []);
 
-  console.log(cartItems);
-
   useEffect(() => {
-    if (cartItems?.length && chooseServiceList?.length === 0) {
-      if (isJsonString(cartItems)) {
-        dispatch(getCartItemCheckout(cartItems));
-      } else {
-        navigate(-1);
-      }
+    // if (cartItems?.length && chooseServiceList?.length === 0) {
+    if (isJsonString(cartItems)) {
+      dispatch(getCartItemCheckout(cartItems));
+    } else {
+      navigate(-1);
     }
+    // }
   }, [cartItems, dispatch, navigate]);
 
   const isEmpty = () => {
@@ -148,18 +147,18 @@ const Index = ({ linkTo = "" }) => {
       return total;
     }, 0);
   };
-  const calculateCommisionAffiliate = useMemo(
-    () => (price, service) => {
-      return (
-        (price *
-          ((service?.OrderByTime
-            ? service?.AffiliateCommissionByHour
-            : service?.AffiliateCommissionByDate) || 5)) /
-        100
-      );
-    },
-    []
-  );
+  // const calculateCommisionAffiliate = useMemo(
+  //   () => (price, service) => {
+  //     return (
+  //       (price *
+  //         ((service?.OrderByTime
+  //           ? service?.AffiliateCommissionByHour
+  //           : service?.AffiliateCommissionByDate) || 5)) /
+  //       100
+  //     );
+  //   },
+  //   []
+  // );
 
   const calculatePriceUsePromo = () => {
     return chooseServiceList.reduce((total, item) => {

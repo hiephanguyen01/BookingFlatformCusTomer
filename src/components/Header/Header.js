@@ -73,6 +73,13 @@ const Header = () => {
   const screens = useBreakpoint();
   const [filterProvinces, setFilterProvinces] = useState([]);
   const [searchProvince, setSearchProvince] = useState("");
+  const [filters, setFilters] = useState({
+    category: "",
+    location: "",
+    keyString: "",
+    priceOption: 1,
+    ratingOption: 3,
+  });
   const categories = [
     {
       id: "",
@@ -717,6 +724,12 @@ const Header = () => {
                                         .includes(input.toLowerCase())
                                     }
                                     className="select-item"
+                                    onChange={(value) =>
+                                      setFilters({
+                                        ...filters,
+                                        location: value,
+                                      })
+                                    }
                                   >
                                     <Option value="">Địa điểm</Option>
                                     {Boolean(provinces) &&
@@ -737,6 +750,12 @@ const Header = () => {
                                   <Select
                                     defaultValue="-1"
                                     className="select-item"
+                                    onChange={(value) =>
+                                      setFilters({
+                                        ...filters,
+                                        category: value,
+                                      })
+                                    }
                                   >
                                     <Option value="-1" disabled={true}>
                                       Danh mục
@@ -755,6 +774,12 @@ const Header = () => {
                                   <Select
                                     defaultValue=""
                                     className="select-item"
+                                    onChange={(value) =>
+                                      setFilters({
+                                        ...filters,
+                                        priceOption: value,
+                                      })
+                                    }
                                   >
                                     <Option value="">Giá</Option>
                                     <Option value={2}>Giá cao nhất</Option>
@@ -794,8 +819,38 @@ const Header = () => {
                         className="container__input"
                         placeholder="Bạn đang tìm gì?"
                         prefix={<SearchIcon />}
-                        suffix={<SearchButton />}
-                        onChange={(e) => setKeyString(e.target.value)}
+                        suffix={
+                          <SearchButton
+                            onClick={() =>
+                              dispatch(
+                                getFilterStudioPost(
+                                  5,
+                                  1,
+                                  filters,
+                                  user,
+                                  navigate,
+                                  setVisible
+                                )
+                              )
+                            }
+                          />
+                        }
+                        onChange={(e) => {
+                          setKeyString(e.target.value);
+                          setFilters({ ...filters, keyString: e.target.value });
+                        }}
+                        onPressEnter={(e) =>
+                          dispatch(
+                            getFilterStudioPost(
+                              5,
+                              1,
+                              { ...filters, keyString: e.target.value },
+                              user,
+                              navigate,
+                              setVisible
+                            )
+                          )
+                        }
                         // onClick={() => showDrawer()}
                         // readOnly
                       />
@@ -906,7 +961,9 @@ const Header = () => {
                     <div
                       // type="secondary"
                       className="btn-become-partner w-80 ms-30 mt-5 d-select"
-                      // onClick={() => navigate("/home/user/")}
+                      onClick={() =>
+                        window.open("https://partner.bookingstudio.vn", "blank")
+                      }
                     >
                       Trở thành đối tác
                     </div>
