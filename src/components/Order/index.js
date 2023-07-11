@@ -324,7 +324,15 @@ const Index = ({ linkTo = "" }) => {
       chooseService?.OrderByTime
         ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
         : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
-      `${chooseService?.OrderByTime ? "hours" : "days"}`
+      `${
+        chooseService?.OrderByTime
+          ? /ngày/.test(chooseService?.FreeCancelByHour)
+            ? "days"
+            : "hours"
+          : /ngày/.test(chooseService?.FreeCancelByDate)
+          ? "days"
+          : "hours"
+      }`
     )
     .utc()
     .format("DD/MM/YYYY HH:mm A");
