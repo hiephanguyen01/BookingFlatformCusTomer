@@ -23,6 +23,9 @@ import toastMessage from "../ToastMessage";
 import queryString from "query-string";
 import "./order.scss";
 import { getCartItemCheckout } from "../../stores/actions/CartAction";
+import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/CartType";
+import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 
 const { useBreakpoint } = Grid;
 
@@ -78,19 +81,19 @@ const Index = ({ linkTo = "" }) => {
   }
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   setInfoUser(user);
-  //   // dispatch(setStudioPostIdAction(id));
-  //   if (id) {
-  //     dispatch(studioDetailAction(id, cate));
-  //   }
-  //   dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
-  //   return () => {
-  //     dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-  //     dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
-  //     dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
-  //   };
-  // }, [cate, dispatch, id, user]);
+  useEffect(() => {
+    setInfoUser(user);
+    // dispatch(setStudioPostIdAction(id));
+    // if (id) {
+    //   dispatch(studioDetailAction(id, cate));
+    // }
+    // dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
+    return () => {
+      dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+      dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
+    };
+  }, [cate, dispatch, id, user]);
 
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
