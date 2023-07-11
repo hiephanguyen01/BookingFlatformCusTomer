@@ -360,9 +360,30 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+
+  const CancelFreeDate = moment(
+    chooseService?.OrderByTime
+      ? chooseService?.OrderByTimeFrom
+      : chooseService?.OrderByDateFrom
+  )
+    .subtract(
+      chooseService?.OrderByTime
+        ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
+        : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
+      `${
+        chooseService?.OrderByTime
+          ? /ngày/.test(chooseService?.FreeCancelByHour)
+            ? "days"
+            : "hours"
+          : /ngày/.test(chooseService?.FreeCancelByDate)
+          ? "days"
+          : "hours"
+      }`
+
   const CancelFreeDate = (service) =>
     moment(
       service?.OrderByTime ? service?.OrderByTimeFrom : service?.OrderByDateFrom
+
     )
       .subtract(
         service?.OrderByTime
