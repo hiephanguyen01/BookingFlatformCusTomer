@@ -1,7 +1,7 @@
 import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Grid, Input, Row, message } from "antd";
 import moment from "moment";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Promotion from "../../components/Promotion";
@@ -9,15 +9,8 @@ import TextInput from "../../components/TextInput/TextInput";
 import { orderService } from "../../services/OrderService";
 import { studioPostService } from "../../services/StudioPostService";
 import { getCurrentUser } from "../../stores/actions/autheticateAction";
-import { setStudioPostIdAction } from "../../stores/actions/promoCodeAction";
-import { getPartnerDetail } from "../../stores/actions/RegisterPartnerAction";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/CartType";
-import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 import {
-  calDate,
   calTime,
   calculatePriceServiceUsePromo,
   priceService,
@@ -85,33 +78,32 @@ const Index = ({ linkTo = "" }) => {
   }
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setInfoUser(user);
-    // dispatch(setStudioPostIdAction(id));
-    if (id) {
-      dispatch(studioDetailAction(id, cate));
-    }
-    dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
-    return () => {
-      dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
-      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
-      dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
-    };
-  }, [cate, dispatch, id, user]);
+  // useEffect(() => {
+  //   setInfoUser(user);
+  //   // dispatch(setStudioPostIdAction(id));
+  //   if (id) {
+  //     dispatch(studioDetailAction(id, cate));
+  //   }
+  //   dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
+  //   return () => {
+  //     dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+  //     dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+  //     dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
+  //   };
+  // }, [cate, dispatch, id, user]);
+
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, []);
 
-  console.log(cartItems);
-
   useEffect(() => {
-    if (cartItems?.length && chooseServiceList?.length === 0) {
-      if (isJsonString(cartItems)) {
-        dispatch(getCartItemCheckout(cartItems));
-      } else {
-        navigate(-1);
-      }
+    // if (cartItems?.length && chooseServiceList?.length === 0) {
+    if (isJsonString(cartItems)) {
+      dispatch(getCartItemCheckout(cartItems));
+    } else {
+      navigate(-1);
     }
+    // }
   }, [cartItems, dispatch, navigate]);
 
   const isEmpty = () => {
@@ -148,18 +140,18 @@ const Index = ({ linkTo = "" }) => {
       return total;
     }, 0);
   };
-  const calculateCommisionAffiliate = useMemo(
-    () => (price, service) => {
-      return (
-        (price *
-          ((service?.OrderByTime
-            ? service?.AffiliateCommissionByHour
-            : service?.AffiliateCommissionByDate) || 5)) /
-        100
-      );
-    },
-    []
-  );
+  // const calculateCommisionAffiliate = useMemo(
+  //   () => (price, service) => {
+  //     return (
+  //       (price *
+  //         ((service?.OrderByTime
+  //           ? service?.AffiliateCommissionByHour
+  //           : service?.AffiliateCommissionByDate) || 5)) /
+  //       100
+  //     );
+  //   },
+  //   []
+  // );
 
   const calculatePriceUsePromo = () => {
     return chooseServiceList.reduce((total, item) => {
@@ -360,30 +352,28 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-
-  const CancelFreeDate = moment(
-    chooseService?.OrderByTime
-      ? chooseService?.OrderByTimeFrom
-      : chooseService?.OrderByDateFrom
-  )
-    .subtract(
-      chooseService?.OrderByTime
-        ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
-        : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
-      `${
-        chooseService?.OrderByTime
-          ? /ngày/.test(chooseService?.FreeCancelByHour)
-            ? "days"
-            : "hours"
-          : /ngày/.test(chooseService?.FreeCancelByDate)
-          ? "days"
-          : "hours"
-      }`
+  // const CancelFreeDate = moment(
+  //   chooseService?.OrderByTime
+  //     ? chooseService?.OrderByTimeFrom
+  //     : chooseService?.OrderByDateFrom
+  // )
+  //   .subtract(
+  //     chooseService?.OrderByTime
+  //       ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
+  //       : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
+  //     `${
+  //       chooseService?.OrderByTime
+  //         ? /ngày/.test(chooseService?.FreeCancelByHour)
+  //           ? "days"
+  //           : "hours"
+  //         : /ngày/.test(chooseService?.FreeCancelByDate)
+  //         ? "days"
+  //         : "hours"
+  //     }`
 
   const CancelFreeDate = (service) =>
     moment(
       service?.OrderByTime ? service?.OrderByTimeFrom : service?.OrderByDateFrom
-
     )
       .subtract(
         service?.OrderByTime

@@ -99,7 +99,7 @@ export const getCartItemByCategory = (category) => async (dispatch) => {
 
 export const addCart = (category, post, service) => async (dispatch) => {
   try {
-    await cartService.addToCart({
+    const res = await cartService.addToCart({
       category,
       CategoryPostId: post?.id,
       serviceId: service?.id,
@@ -109,12 +109,16 @@ export const addCart = (category, post, service) => async (dispatch) => {
       OrderByDateFrom: service?.OrderByDateFrom,
       OrderByDateTo: service?.OrderByDateTo,
     });
-    dispatch({
-      type: ADD_CART,
-      payload: { category, post, service },
-    });
+
+    if (res.data.success) {
+      message.success(res.data.message);
+      dispatch({
+        type: ADD_CART,
+        payload: { category, post, service },
+      });
+    }
   } catch (error) {
-    console.error(error);
+    message.warning(error.response.data.message);
   }
 };
 
