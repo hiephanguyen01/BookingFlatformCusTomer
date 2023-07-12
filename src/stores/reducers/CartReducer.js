@@ -267,7 +267,6 @@ export const CartReducer = (state = initialState, action) => {
 
     case ADD_SERVICE_TO_LIST:
       let newChooseServiceList = [...state?.chooseServiceList];
-      console.log(newChooseServiceList);
 
       service = newChooseServiceList?.findIndex(
         (item) => item?.id === action.payload?.service?.id
@@ -281,7 +280,8 @@ export const CartReducer = (state = initialState, action) => {
       }
       return {
         ...state,
-        chooseServiceList: [...newChooseServiceList, action?.payload?.service],
+        // chooseServiceList: [...newChooseServiceList, action?.payload?.service],
+        chooseServiceList: [action?.payload?.service],
       };
 
     case UPDATE_CHOOSE_SERVICE:

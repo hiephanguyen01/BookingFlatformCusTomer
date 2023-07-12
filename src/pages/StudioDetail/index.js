@@ -57,6 +57,7 @@ import { Report } from "./Report";
 import SlideCard from "./SlideCard";
 import BackNav from "../../components/BackNav/BackNav";
 import { ReactComponent as LocationIcon } from "../../assets/svg/location.svg";
+import queryString from "query-string";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -66,6 +67,7 @@ import { Autoplay, Pagination } from "swiper";
 
 import { StickyContainer, Sticky } from "react-sticky";
 import InfoServiceDesk from "./components/InfoServiceDesk/InfoServiceDesk.js";
+import { cartService } from "../../services/CartService";
 
 const COLUMN = [
   { title: "Loại phòng", size: 7 },
@@ -163,13 +165,15 @@ const StudioDetail = () => {
                     gap: "10px",
                     alignItems: "center",
                     flexWrap: "wrap",
-                  }}>
+                  }}
+                >
                   <span
                     style={{
                       color: "#E22828",
                       fontSize: "20px",
                       fontWeight: "700",
-                    }}>
+                    }}
+                  >
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 1 &&
                       priceService(data?.pricesByHour, true)}
@@ -183,7 +187,8 @@ const StudioDetail = () => {
                       textDecoration: "line-through",
                       fontSize: "14px",
                       fontWeight: "400",
-                    }}>
+                    }}
+                  >
                     {listTimeSelected?.find((item) => item.id === data?.id)
                       ?.OrderByTime === 1 &&
                       priceService(data?.pricesByHour, true)}
@@ -197,7 +202,8 @@ const StudioDetail = () => {
                     color: "#828282",
                     fontSize: "14px",
                     fontWeight: "400",
-                  }}>
+                  }}
+                >
                   {data?.PriceNote}
                 </p>
               </div>
@@ -223,7 +229,8 @@ const StudioDetail = () => {
                     lineHeight: "19px",
 
                     textTransform: "uppercase",
-                  }}>
+                  }}
+                >
                   Bỏ chọn
                 </Button>
               ) : (
@@ -238,7 +245,8 @@ const StudioDetail = () => {
                     lineHeight: "19px",
                     textTransform: "uppercase",
                   }}
-                  size="large">
+                  size="large"
+                >
                   Chọn
                 </Button>
               )}
@@ -277,10 +285,28 @@ const StudioDetail = () => {
     }
   };
 
-  const handleBook = () => {
-    if (chooseServiceList.length > 0) {
-      dispatch(chooseServiceAction(chooseServiceList));
-      navigate("order");
+  const handleBook = async () => {
+    if (chooseService) {
+      const res = await cartService.addToCart({
+        category: 1,
+        CategoryPostId: studioDetail?.data?.id,
+        serviceId: chooseService?.id,
+        OrderByTime: chooseService?.OrderByTime,
+        OrderByTimeFrom: chooseService?.OrderByTimeFrom,
+        OrderByTimeTo: chooseService?.OrderByTimeTo,
+        OrderByDateFrom: chooseService?.OrderByDateFrom,
+        OrderByDateTo: chooseService?.OrderByDateTo,
+      });
+      const arr = [
+        {
+          id: res?.data?.data?.cartItemId,
+          category: 1,
+        },
+      ];
+      const createQuery = queryString.stringify({
+        cartItems: JSON.stringify(arr),
+      });
+      navigate(`order?${createQuery}`);
     } else {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
@@ -334,7 +360,8 @@ const StudioDetail = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -342,7 +369,8 @@ const StudioDetail = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>
@@ -361,7 +389,8 @@ const StudioDetail = () => {
                         flexDirection: "column",
                         gap: "10px",
                         padding: "10px",
-                      }}>
+                      }}
+                    >
                       <Col span={24}>
                         <div
                           style={{
@@ -372,10 +401,12 @@ const StudioDetail = () => {
                           }}
                           onClick={() => {
                             navigate("/home");
-                          }}>
+                          }}
+                        >
                           <HomeOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Trở về trang chủ
                           </span>
                         </div>
@@ -391,12 +422,14 @@ const StudioDetail = () => {
                           onClick={() => {
                             handleReport();
                             setOpen(false);
-                          }}>
+                          }}
+                        >
                           <ExclamationCircleOutlined
                             style={{ fontSize: "20px" }}
                           />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Báo cáo
                           </span>
                         </div>
@@ -409,10 +442,12 @@ const StudioDetail = () => {
                             gap: "10px",
                             cursor: "pointer",
                           }}
-                          onClick={() => setOpen(false)}>
+                          onClick={() => setOpen(false)}
+                        >
                           <ShareAltOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Chia sẻ
                           </span>
                         </div>
@@ -421,7 +456,8 @@ const StudioDetail = () => {
                   }
                   trigger="click"
                   visible={open}
-                  onVisibleChange={(value) => setOpen(value)}>
+                  onVisibleChange={(value) => setOpen(value)}
+                >
                   <MoreOutlined className={cx("item")} />
                 </Popover>
               }
@@ -436,7 +472,8 @@ const StudioDetail = () => {
                       dynamicBullets: true,
                     }}
                     modules={[Pagination]}
-                    className={cx("swiper-slide-detail")}>
+                    className={cx("swiper-slide-detail")}
+                  >
                     {studioDetail?.data?.Image.map((item) => (
                       <SwiperSlide>
                         <img src={convertImage(item)} alt="" />
@@ -448,7 +485,8 @@ const StudioDetail = () => {
                       className={cx(
                         "title",
                         "d-flex justify-content-start align-items-center"
-                      )}>
+                      )}
+                    >
                       <h4>{studioDetail?.data?.Name} </h4>
                       <CheckCircleOutlined
                         style={{ fontSize: "20px", color: "#03AC84" }}
@@ -463,7 +501,8 @@ const StudioDetail = () => {
                         <Rate
                           disabled
                           allowHalf
-                          value={studioDetail?.data?.TotalRate}></Rate>
+                          value={studioDetail?.data?.TotalRate}
+                        ></Rate>
                         <span>{studioDetail?.data?.TotalRate}</span>
                         <span className={cx("number-order")}></span>
                         <span style={{ fontSize: "15px" }}>
@@ -473,7 +512,8 @@ const StudioDetail = () => {
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                        }}>
+                        }}
+                      >
                         {studioDetail?.data?.UsersLiked ? (
                           <HeartFilled
                             onClick={handleChangeLike}
@@ -502,7 +542,8 @@ const StudioDetail = () => {
                       <PopUpSignIn
                         onClick={(e) => {
                           e.stopPropagation();
-                        }}>
+                        }}
+                      >
                         {studioDetail?.data?.UsersLiked ? (
                           <HeartFilled
                             onClick={handleChangeLike}
@@ -525,26 +566,30 @@ const StudioDetail = () => {
                               flexDirection: "column",
                               gap: "10px",
                               padding: "10px",
-                            }}>
+                            }}
+                          >
                             <div
                               style={{
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "10px",
                                 cursor: "pointer",
-                              }}>
+                              }}
+                            >
                               <WarningOutlined style={{ fontSize: "20px" }} />
                               <span
                                 style={{
                                   fontSize: "18px",
                                   fontWeight: "bold",
-                                }}>
+                                }}
+                              >
                                 Báo cáo
                               </span>
                             </div>
                           </div>
                         }
-                        trigger="click">
+                        trigger="click"
+                      >
                         <MoreOutlined className={cx("item")} />
                       </Popover>
                     </div>
@@ -557,7 +602,8 @@ const StudioDetail = () => {
                     <Rate
                       disabled
                       allowHalf
-                      value={studioDetail?.data?.TotalRate}></Rate>
+                      value={studioDetail?.data?.TotalRate}
+                    ></Rate>
                     <div className="mt-2">{studioDetail?.data?.TotalRate}</div>
                     <div className={cx("number-order")}></div>
                     <div style={{ fontSize: "15px" }} className="mt-2">
@@ -584,7 +630,8 @@ const StudioDetail = () => {
                       md={0}
                       sm={0}
                       xs={24}
-                      className={cx("map-mobile")}>
+                      className={cx("map-mobile")}
+                    >
                       <div className={cx("map")}>
                         <h3>Xem trên bản đồ</h3>
                         <div className={cx("address")}>
@@ -644,7 +691,8 @@ const StudioDetail = () => {
                           {studioDetail?.service?.map((data) => (
                             <Col
                               span={24}
-                              className={cx("wrapper-service-mobile")}>
+                              className={cx("wrapper-service-mobile")}
+                            >
                               <Swiper
                                 pagination={{
                                   dynamicBullets: true,
@@ -654,7 +702,8 @@ const StudioDetail = () => {
                                 autoplay={{
                                   delay: 2500,
                                   disableOnInteraction: false,
-                                }}>
+                                }}
+                              >
                                 {data?.Image.map((item) => (
                                   <SwiperSlide>
                                     <img
@@ -674,7 +723,8 @@ const StudioDetail = () => {
                                   color: "#222222",
                                   fontSize: "16px",
                                   fontWeight: "700",
-                                }}>
+                                }}
+                              >
                                 <div>
                                   <img
                                     alt=""
@@ -697,7 +747,8 @@ const StudioDetail = () => {
                                   color: "#222222",
                                   fontSize: "16px",
                                   fontWeight: "700",
-                                }}>
+                                }}
+                              >
                                 <div>
                                   <img
                                     alt=""
@@ -729,7 +780,8 @@ const StudioDetail = () => {
                                   color: "#222222",
                                   fontSize: "16px",
                                   fontWeight: "700",
-                                }}>
+                                }}
+                              >
                                 <div>
                                   <img
                                     alt=""
@@ -763,7 +815,8 @@ const StudioDetail = () => {
                                   color: "#222222",
                                   fontSize: "16px",
                                   fontWeight: "700",
-                                }}>
+                                }}
+                              >
                                 <div>
                                   <TeamOutlined
                                     className="me-10 mb-2"
@@ -802,12 +855,14 @@ const StudioDetail = () => {
                                     <>
                                       <Col
                                         span={24}
-                                        style={{ textAlign: "end" }}>
+                                        style={{ textAlign: "end" }}
+                                      >
                                         <div>Giá cho thời gian bạn đã chọn</div>
                                       </Col>{" "}
                                       <div
                                         className="mb-20"
-                                        style={{ textAlign: "end" }}>
+                                        style={{ textAlign: "end" }}
+                                      >
                                         <div
                                           style={{
                                             display: "flex",
@@ -815,14 +870,16 @@ const StudioDetail = () => {
                                             alignItems: "center",
                                             flexWrap: "wrap",
                                             justifyContent: "end",
-                                          }}>
+                                          }}
+                                        >
                                           <span
                                             style={{
                                               color: "#828282",
                                               textDecoration: "line-through",
                                               fontSize: "16px",
                                               fontWeight: "400",
-                                            }}>
+                                            }}
+                                          >
                                             {listTimeSelected?.find(
                                               (item) => item.id === data?.id
                                             )?.OrderByTime === 1 && (
@@ -874,7 +931,8 @@ const StudioDetail = () => {
                                               color: "#E22828",
                                               fontSize: "20px",
                                               fontWeight: "700",
-                                            }}>
+                                            }}
+                                          >
                                             {listTimeSelected?.find(
                                               (item) => item.id === data?.id
                                             )?.OrderByTime === 1 && (
@@ -927,7 +985,8 @@ const StudioDetail = () => {
                                             color: "#828282",
                                             fontSize: "14px",
                                             fontWeight: "400",
-                                          }}>
+                                          }}
+                                        >
                                           {data?.PriceNote}
                                         </p>
                                         <span>Bao gồm 50.000đ thuế và phí</span>
@@ -963,7 +1022,8 @@ const StudioDetail = () => {
                                         lineHeight: "19px",
 
                                         textTransform: "uppercase",
-                                      }}>
+                                      }}
+                                    >
                                       Bỏ chọn
                                     </Button>
                                   ) : (
@@ -978,7 +1038,8 @@ const StudioDetail = () => {
                                         lineHeight: "19px",
                                         textTransform: "uppercase",
                                       }}
-                                      size="large">
+                                      size="large"
+                                    >
                                       Chọn
                                     </Button>
                                   )}
@@ -1009,7 +1070,8 @@ const StudioDetail = () => {
                                     textDecoration: "line-through",
                                     fontSize: " 16px",
                                     color: "#828282",
-                                  }}>
+                                  }}
+                                >
                                   {chooseService?.OrderByTime === 1 &&
                                     convertPrice(
                                       chooseService?.pricesByHour[0]
@@ -1042,7 +1104,8 @@ const StudioDetail = () => {
                                     color: "#E22828",
                                     fontSize: "20px",
                                     fontWeight: "700",
-                                  }}>
+                                  }}
+                                >
                                   {chooseService?.OrderByTime === 1 &&
                                     convertPrice(
                                       chooseService?.pricesByHour[0]
@@ -1067,7 +1130,8 @@ const StudioDetail = () => {
                             <div
                               className={`${cx(
                                 "wrap_btn"
-                              )} w-100 d-flex justify-content-between mt-20 `}>
+                              )} w-100 d-flex justify-content-between mt-20 `}
+                            >
                               <Button
                                 className={`${cx(
                                   "btn_add"
@@ -1083,7 +1147,8 @@ const StudioDetail = () => {
                                       chooseService
                                     )
                                   )
-                                }>
+                                }
+                              >
                                 <ShoppingCartOutlined />
                                 Thêm vào giỏ hàng
                               </Button>
@@ -1097,7 +1162,8 @@ const StudioDetail = () => {
                                   chooseService.id > 0
                                     ? false
                                     : true
-                                }>
+                                }
+                              >
                                 Đặt ngay
                               </Button>
                             </div>
@@ -1108,7 +1174,8 @@ const StudioDetail = () => {
                           {({ style }) => (
                             <div
                               className={cx("order")}
-                              style={{ ...style, top: 10, height: "auto" }}>
+                              style={{ ...style, top: 10, height: "auto" }}
+                            >
                               <div className={cx("item")}>
                                 <h3>
                                   Đã chọn {chooseServiceList?.length} phòng
@@ -1119,7 +1186,8 @@ const StudioDetail = () => {
                                       textDecoration: "line-through",
                                       fontSize: " 16px",
                                       color: "#828282",
-                                    }}>
+                                    }}
+                                  >
                                     {chooseService?.OrderByTime === 1 &&
                                       convertPrice(
                                         chooseService?.pricesByHour[0]
@@ -1152,7 +1220,8 @@ const StudioDetail = () => {
                                       color: "#E22828",
                                       fontSize: "20px",
                                       fontWeight: "700",
-                                    }}>
+                                    }}
+                                  >
                                     {chooseService?.OrderByTime === 1 &&
                                       convertPrice(
                                         chooseService?.pricesByHour[0]
@@ -1177,7 +1246,8 @@ const StudioDetail = () => {
                               <div
                                 className={`${cx(
                                   "wrap_btn"
-                                )} w-100 d-flex justify-content-between mt-20 `}>
+                                )} w-100 d-flex justify-content-between mt-20 `}
+                              >
                                 <Button
                                   className={`${cx(
                                     "btn_add"
@@ -1193,7 +1263,8 @@ const StudioDetail = () => {
                                         chooseService
                                       )
                                     )
-                                  }>
+                                  }
+                                >
                                   <ShoppingCartOutlined />
                                   Thêm vào giỏ hàng
                                 </Button>
@@ -1207,7 +1278,8 @@ const StudioDetail = () => {
                                     chooseService.id > 0
                                       ? false
                                       : true
-                                  }>
+                                  }
+                                >
                                   Đặt ngay
                                 </Button>
                               </div>

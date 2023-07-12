@@ -9,7 +9,9 @@ import moment from "moment";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   calculatePriceUsePromo,
+  calculateTotal,
   calculateTotalPrice,
+  calculateTotalUsePromo,
 } from "../../utils/calculate";
 import { convertImage } from "../../utils/convertImage";
 import {
@@ -23,6 +25,7 @@ import { convertPrice } from "../../utils/convert";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import Promotion from "../../components/Promotion";
 import { orderService } from "../../services/OrderService";
+import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/CartType";
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -50,29 +53,10 @@ const Index = () => {
       dispatch(getCartItemByCategory(query?.category));
     }
   }, [query, dispatch]);
-  // useEffect(() => {
-  //   dispatch(addServiceList(chooseServices));
-  // }, [chooseServices, dispatch]);
 
-  const menu = (
-    <Menu
-      onClick={() => {}}
-      items={[
-        {
-          label: "1st menu item",
-          key: "1",
-        },
-        {
-          label: "2nd menu item ",
-          key: "2",
-        },
-        {
-          label: "3rd menu item",
-          key: "3",
-        },
-      ]}
-    />
-  );
+  useEffect(() => {
+    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+  }, [dispatch]);
 
   const items = [
     {
@@ -82,7 +66,7 @@ const Index = () => {
         <Row gutter={[0, 6]}>
           {cart["studio"]?.map((orderItem, index) => (
             <Col span={24} className="wrapper" key={index}>
-              <CheckBox
+              {/* <CheckBox
                 key={index}
                 name="allCheck"
                 value="allCheck"
@@ -104,10 +88,23 @@ const Index = () => {
                 >
                   {orderItem?.Name}
                 </div>
-              </CheckBox>
+              </CheckBox> */}
+              <div
+                style={{
+                  fontWeight: "400",
+                  fontSize: "14px",
+                  lineHeight: "19px",
+                  color: "#3F3F3F",
+                  padding: "15px 0",
+                }}
+              >
+                {orderItem?.Name}
+              </div>
               {orderItem?.Services?.map((item, index) => (
                 <CheckBox
-                  onClick={() => handleOnChecked(1, item, orderItem?.Id)}
+                  onClick={() =>
+                    handleOnChecked(1, item, orderItem?.Id, orderItem?.Name)
+                  }
                   key={index}
                   name={item?.id}
                   value={item?.id}
@@ -900,67 +897,16 @@ const Index = () => {
     },
   ];
 
-  const calculateTotal = useMemo(
-    () => () => chooseServices.reduce((total, item) => total + item?.price, 0),
-    [chooseServices]
-  );
-  const calculateTotalUsePromo = useMemo(
-    () => () => () => {
-      return chooseServices.reduce((total, item) => {
-        switch (item?.OrderByTime) {
-          case 1:
-            const priceByHour = calculateTotal() * (item?.amount || 1);
-            if (choosePromotionUser?.TypeReduce === 1) {
-              return (
-                total + priceByHour - (choosePromotionUser?.ReduceValue || 0)
-              );
-            } else {
-              return (
-                total +
-                (priceByHour -
-                  ((priceByHour * choosePromotionUser?.ReduceValue) / 100 >=
-                  choosePromotionUser?.MaxReduce
-                    ? choosePromotionUser?.MaxReduce
-                    : (priceByHour / 100) *
-                      (choosePromotionUser?.ReduceValue || 0)))
-              );
-            }
-          case 0:
-            const priceByDate = calculateTotal() * (item?.amount || 1) || 0;
-            if (choosePromotionUser?.TypeReduce === 1) {
-              return (
-                total + priceByDate - (choosePromotionUser?.ReduceValue || 0)
-              );
-            } else {
-              return (
-                total +
-                (priceByDate -
-                  ((priceByDate * choosePromotionUser?.ReduceValue) / 100 >=
-                  choosePromotionUser?.MaxReduce
-                    ? choosePromotionUser?.MaxReduce
-                    : (priceByDate / 100) *
-                      (choosePromotionUser?.ReduceValue || 0)))
-              );
-            }
-
-          default:
-            break;
-        }
-        return total;
-      }, 0);
-    },
-    [calculateTotal, choosePromotionUser, chooseServices]
-  );
-
   const onChange = (key) => {
     // setList([...CART_ITEM_LIST[key]]);
   };
 
-  const handleOnChecked = (category, service, postId) => {
+  const handleOnChecked = (category, service, postId, postName) => {
     dispatch(
       addServiceToList({
         ...service,
         postId: postId,
+        postName: postName,
       })
     );
   };
@@ -1040,9 +986,9 @@ const Index = () => {
 
   const handleButtonOrder = () => {
     try {
-      if (chooseServices.length > 0) {
+      if (chooseServiceList.length > 0) {
         // dispatch(addServiceList(chooseServices));
-        const arr = chooseServices.map((item) => ({
+        const arr = chooseServiceList.map((item) => ({
           id: item?.id,
           category: item?.Category,
         }));
@@ -1073,18 +1019,20 @@ const Index = () => {
                 padding: "25px 25px ",
                 // marginBottom: "0.5rem",
                 backgroundColor: "#FFFFFF",
-              }}>
+              }}
+            >
               <div
                 className="d-flex justify-content-between"
                 style={{
                   borderBottom: "0.6px solid #E7E7E7",
                   padding: "0 0 14px",
                   margin: "0 0 16px",
-                }}>
+                }}
+              >
                 <div>Chọn mã khuyến mãi</div>
 
                 <Space onClick={() => onClickModal()}>
-                  2 Mã khuyến mãi
+                  Mã khuyến mãi
                   <RightOutlined />
                 </Space>
               </div>
@@ -1097,7 +1045,7 @@ const Index = () => {
                 >
                   <Col lg={14} md={24}>
                     <div className="text-middle" style={{ color: "#222222" }}>
-                      Đã chọn {chooseServices.length} sản phẩm
+                      Đã chọn {chooseServiceList.length} sản phẩm
                     </div>
                   </Col>
                   <Col lg={10} style={{ textAlign: "end" }}>
@@ -1108,9 +1056,7 @@ const Index = () => {
                         color: "#828282",
                       }}
                     >
-                      {`${convertPrice(
-                        calculateTotalPrice(chooseServices) || calculateTotal()
-                      )}đ`}
+                      {`${convertPrice(calculateTotal(chooseServiceList))}đ`}
                     </div>
                   </Col>
                 </Row>
@@ -1138,10 +1084,7 @@ const Index = () => {
                       }}
                     >
                       {`${convertPrice(
-                        calculatePriceUsePromo(
-                          chooseServices,
-                          choosePromotionUser
-                        ) || calculateTotal()
+                        calculateTotalUsePromo(chooseServiceList)
                       )}đ`}
                     </div>
                   </Col>

@@ -76,7 +76,7 @@ const Index = () => {
                   }}
                   className="mb-12"
                 >
-                  {service?.StudioPost?.Name}
+                  {service?.StudioRoom?.Name}
                 </div>
                 {filter.map((item, index) => (
                   <div className="promotion_wrap">

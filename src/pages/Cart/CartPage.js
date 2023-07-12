@@ -10,7 +10,7 @@ const CartPage = () => {
     <Routes>
       <Route path="" element={<Cart />} />
       <Route path="order" element={<Order />} />
-      {/* <Route path="order/confirm" element={<ConfirmOrder />} /> */}
+      <Route path="order/confirm" element={<ConfirmOrder />} />
       {/* <Route path="order/confirm/orderSuccess" element={<OrderSuccess />} /> */}
     </Routes>
   );

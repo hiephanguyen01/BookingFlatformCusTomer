@@ -242,3 +242,37 @@ export const calculatePriceUsePromo = (
     return total;
   }, 0);
 };
+
+export const calculateTotal = (chooseServiceList) =>
+  chooseServiceList.reduce((total, item) => total + item?.price, 0);
+
+export const calculateTotalUsePromo = (chooseServiceList) => {
+  return chooseServiceList.reduce((total, item) => {
+    if (item?.promotion?.TypeReduce === 1) {
+      return total + item?.price - (item?.promotion?.ReduceValue || 0);
+    } else {
+      return (
+        total +
+        (item?.price -
+          ((item?.price * item?.promotion?.ReduceValue) / 100 >=
+          item?.promotion?.MaxReduce
+            ? item?.promotion?.MaxReduce
+            : (item?.price / 100) * (item?.promotion?.ReduceValue || 0)))
+      );
+    }
+  }, 0);
+};
+
+export const calculatePriceServiceUsePromo = (service) => {
+  if (service?.promotion?.TypeReduce === 1) {
+    return service?.price - (service?.promotion?.ReduceValue || 0);
+  } else {
+    return (
+      service?.price -
+      ((service?.price * service?.promotion?.ReduceValue) / 100 >=
+      service?.promotion?.MaxReduce
+        ? service?.promotion?.MaxReduce
+        : (service.price / 100) * (service.promotion?.ReduceValue || 0))
+    );
+  }
+};
