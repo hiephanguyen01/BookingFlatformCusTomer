@@ -39,7 +39,7 @@ export class BaseService {
       method: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
-      }, //access_token yêu cầu từ backend chứng minh user đã đăng nhập rồi
+      },
     });
   };
 
@@ -50,7 +50,7 @@ export class BaseService {
       data: model,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
-      }, //access_token yêu cầu từ backend chứng minh user đã đăng nhập rồi
+      },
     });
   };
 }
