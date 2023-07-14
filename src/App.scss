@@ -165,7 +165,6 @@ h5 {
 .container {
   margin: 0 auto;
   max-width: 1300px;
-
 }
 
 .container_detail {
@@ -341,9 +340,11 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-@media (max-width: 992px) {}
+@media (max-width: 992px) {
+}
 
-@media (max-width: 768px) {}
+@media (max-width: 768px) {
+}
 
 @media (max-width: 576px) {
   .App {
