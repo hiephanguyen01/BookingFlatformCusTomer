@@ -102,7 +102,7 @@ export const ChatUser = React.memo(
               }}
             >
               <div>
-                {lastMessage.Type === "text" ? (
+                {lastMessage?.Type === "text" ? (
                   <>
                     {lastMessage.Content.toString().length <= 12
                       ? lastMessage.Content
@@ -112,7 +112,7 @@ export const ChatUser = React.memo(
                   <>Ảnh</>
                 )}
               </div>
-              <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
+              <div>{moment(lastMessage?.createdAt).format("HH:mm")}</div>
             </div>
             {/* {notiMessage.includes(id) ? (
               lastMessage.UserId === userInfo.UserId.id ? (
@@ -122,7 +122,7 @@ export const ChatUser = React.memo(
                 >
                   <div>
                     Bạn:{" "}
-                    {lastMessage.Type === "text" ? (
+                    {lastMessage?.Type === "text" ? (
                       <>
                         {lastMessage.Content.toString().length <= 9
                           ? lastMessage.Content
@@ -132,7 +132,7 @@ export const ChatUser = React.memo(
                       <>Ảnh</>
                     )}
                   </div>
-                  <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
+                  <div>{moment(lastMessage?.createdAt).format("HH:mm")}</div>
                 </div>
               ) : (
                 

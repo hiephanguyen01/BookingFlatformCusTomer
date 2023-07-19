@@ -120,7 +120,8 @@ export const ChatAdmin = React.memo(
               await chatService.readMessageAdmin(lastMessage.id);
             })();
           }
-        }}>
+        }}
+      >
         <div className="d-flex flex-row w-100 px-6 align-items-center h-100">
           <div className="d-flex align-items-center h-100">
             <img
@@ -143,10 +144,11 @@ export const ChatAdmin = React.memo(
                     color: notiMessage.includes(info.id) ? "#828282" : "#000",
                     fontSize: "13px",
                     fontWeight: notiMessage.includes(info.id) ? 500 : 700,
-                  }}>
+                  }}
+                >
                   <div>
                     Bạn:{" "}
-                    {lastMessage.Type === "text" ? (
+                    {lastMessage?.Type === "text" ? (
                       <>
                         {lastMessage.Content.toString().length <= 9
                           ? lastMessage.Content
@@ -156,7 +158,7 @@ export const ChatAdmin = React.memo(
                       <>Ảnh</>
                     )}
                   </div>
-                  <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
+                  <div>{moment(lastMessage?.createdAt).format("HH:mm")}</div>
                 </div>
               ) : (
                 <div
@@ -165,9 +167,10 @@ export const ChatAdmin = React.memo(
                     color: notiMessage.includes(info.id) ? "#828282" : "#000",
                     fontSize: "13px",
                     fontWeight: notiMessage.includes(info.id) ? 500 : 700,
-                  }}>
+                  }}
+                >
                   <div>
-                    {lastMessage.Type === "text" ? (
+                    {lastMessage?.Type === "text" ? (
                       <>
                         {lastMessage.Content.toString().length <= 12
                           ? lastMessage.Content
@@ -177,7 +180,7 @@ export const ChatAdmin = React.memo(
                       <>Ảnh</>
                     )}
                   </div>
-                  <div>{moment(lastMessage.createdAt).format("HH:mm")}</div>
+                  <div>{moment(lastMessage?.createdAt).format("HH:mm")}</div>
                 </div>
               ))}
           </div>
