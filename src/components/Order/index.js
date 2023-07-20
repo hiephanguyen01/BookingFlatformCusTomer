@@ -360,30 +360,31 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-
-  const CancelFreeDate = moment(
-    chooseService?.OrderByTime
-      ? chooseService?.OrderByTimeFrom
-      : chooseService?.OrderByDateFrom
-  )
-    .subtract(
-      chooseService?.OrderByTime
-        ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
-        : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
-      `${
-        chooseService?.OrderByTime
-          ? /ngày/.test(chooseService?.FreeCancelByHour)
-            ? "days"
-            : "hours"
-          : /ngày/.test(chooseService?.FreeCancelByDate)
-          ? "days"
-          : "hours"
-      }`
+  // const CancelFreeDate = moment(
+  //   chooseService?.OrderByTime
+  //     ? chooseService?.OrderByTimeFrom
+  //     : chooseService?.OrderByDateFrom
+  // )
+  //   .subtract(
+  //     chooseService?.OrderByTime
+  //       ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
+  //       : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
+  //     `${
+  //       chooseService?.OrderByTime
+  //         ? /ngày/.test(chooseService?.FreeCancelByHour)
+  //           ? "days"
+  //           : "hours"
+  //         : /ngày/.test(chooseService?.FreeCancelByDate)
+  //         ? "days"
+  //         : "hours"
+  //     }`
+  //   )
+  //   .utc()
+  //   .format("DD/MM/YYYY HH:mm A");
 
   const CancelFreeDate = (service) =>
     moment(
       service?.OrderByTime ? service?.OrderByTimeFrom : service?.OrderByDateFrom
-
     )
       .subtract(
         service?.OrderByTime
@@ -391,11 +392,18 @@ const Index = ({ linkTo = "" }) => {
               service?.StudioRoom?.FreeCancelByHour?.match(/\d+/g)[0]
           : service?.FreeCancelByDate?.match(/\d+/g)[0] ||
               service?.StudioRoom?.FreeCancelByDate?.match(/\d+/g)[0],
-        `${service?.OrderByTime ? "hours" : "days"}`
+        `${
+          service?.OrderByTime
+            ? /ngày/.test(service?.FreeCancelByHour)
+              ? "days"
+              : "hours"
+            : /ngày/.test(service?.FreeCancelByDate)
+            ? "days"
+            : "hours"
+        }`
       )
       .utc()
       .format("DD/MM/YYYY HH:mm A");
-
   return (
     <div className="order_container">
       <Row
