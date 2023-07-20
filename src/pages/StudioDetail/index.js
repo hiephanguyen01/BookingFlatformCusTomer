@@ -287,7 +287,6 @@ const StudioDetail = () => {
 
   const handleBook = async () => {
     if (chooseService) {
-      // dispatch(chooseServiceAction(chooseServiceList));
       const res = await cartService.addToCart({
         category: 1,
         CategoryPostId: studioDetail?.data?.id,
@@ -298,7 +297,6 @@ const StudioDetail = () => {
         OrderByDateFrom: chooseService?.OrderByDateFrom,
         OrderByDateTo: chooseService?.OrderByDateTo,
       });
-      // console.log(res?.data?.data?.cartItemId);
       const arr = [
         {
           id: res?.data?.data?.cartItemId,

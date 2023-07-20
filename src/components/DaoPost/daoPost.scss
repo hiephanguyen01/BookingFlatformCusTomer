@@ -342,11 +342,7 @@
   width: 25px;
   height: 25px;
   border-radius: 0;
-  cursor: pointer
-}
-
-.ant-popover-inner-content {
-  padding: 0 !important;
+  cursor: pointer;
 }
 
 .more-option-modal {
@@ -580,7 +576,6 @@
 
 @media (max-width: 576px) {
   .post {
-
     &__middle {
       &__right-side {
         &__choose-service {
