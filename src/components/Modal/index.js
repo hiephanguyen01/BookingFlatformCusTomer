@@ -12,18 +12,21 @@ export const ModalCustom = () => {
 
   return (
     <div>
-      <Modal
-        className={isListImage ? "modalCus" : undefined}
-        style={{ borderRadius: "6px" }}
-        open={visible}
-        closable={false}
-        footer={null}
-        maskClosable={true}
-        // width={600}
-        onCancel={() => dispatch({ type: HIDE_MODAL })}
-        centered>
-        {Component}
-      </Modal>
+      {visible && (
+        <Modal
+          className={isListImage ? "modalCus" : undefined}
+          style={{ borderRadius: "6px" }}
+          open={visible}
+          closable={false}
+          footer={null}
+          maskClosable={true}
+          // width={600}
+          onCancel={() => dispatch({ type: HIDE_MODAL })}
+          centered
+        >
+          {Component}
+        </Modal>
+      )}
     </div>
   );
 };

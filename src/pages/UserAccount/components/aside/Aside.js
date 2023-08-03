@@ -116,7 +116,12 @@ const Aside = ({ children }) => {
             cursor: "pointer",
           }}
         >
-          {pathname.includes(item.linkTo) ? item?.iconActive : item?.icon}
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ width: "30px", height: "100%" }}
+          >
+            {pathname.includes(item.linkTo) ? item?.iconActive : item?.icon}
+          </div>
           <div
             style={
               pathname.includes(item.linkTo)
@@ -228,7 +233,7 @@ const Aside = ({ children }) => {
           paddingBottom: "1rem",
         }}
       >
-        <h5 style={{ textTransform: "uppercase" }}>Tài khoản của chúng tôi</h5>
+        <h5 style={{ textTransform: "uppercase" }}>Tài khoản của tôi</h5>
         {ITEM_USER_ACCOUNT_ASIDE.map((item, index) => (
           <AsideItems item={item} key={index} />
         ))}

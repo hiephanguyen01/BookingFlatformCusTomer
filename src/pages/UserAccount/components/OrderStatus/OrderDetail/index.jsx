@@ -32,7 +32,10 @@ import {
   convertTimeUTC,
 } from "../../../../../utils/convert";
 import { openNotification } from "../../../../../utils/Notification";
-import { IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import {
+  IMG,
+  tokenEmail,
+} from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { FooterRating } from "../conponents/OrderStatusItem/Footer/FooterRating";
 import { RateModal } from "../conponents/OrderStatusItem/Footer/RateModal/RateModal";
 import CancelIcon from "../Icon/CancelIcon";
@@ -70,7 +73,6 @@ const OrderDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
@@ -216,30 +218,40 @@ const OrderDetail = () => {
       </div>
     ),
   };
-  const navigateToDetail = () => {
-    switch (+searchParams.get("categoryId")) {
-      case 1:
-        navigate(`/home/studio/${post.id}`);
-        break;
-      case 2:
-        navigate(`/home/photographer/${post.id}`);
-        break;
-      case 3:
-        navigate(`/home/clothes/${post.id}`);
-        break;
-      case 4:
-        navigate(`/home/makeup/${post.id}`);
-        break;
-      case 5:
-        navigate(`/home/device/${post.id}`);
-        break;
-      case 6:
-        navigate(`/home/model/${post.id}`);
-        break;
-
-      default:
-        break;
-    }
+  const navigateToDetail = (bool) => {
+    // if() {} else {
+    //   switch (+searchParams.get("categoryId")) {
+    //     case 1:
+    //       navigate(`/home/studio/${post.id}`);
+    //       break;
+    //     case 2:
+    //       navigate(`/home/photographer/${post.id}`);
+    //       break;
+    //     case 3:
+    //       navigate(`/home/clothes/${post.id}`);
+    //       break;
+    //     case 4:
+    //       navigate(`/home/makeup/${post.id}`);
+    //       break;
+    //     case 5:
+    //       navigate(`/home/device/${post.id}`);
+    //       break;
+    //     case 6:
+    //       navigate(`/home/model/${post.id}`);
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
+  };
+  const navigateToRefund = () => {
+    const Category = searchParams.get("categoryId");
+    const IdentifyCode = booking?.IdentifyCode;
+    const url = `/home/refund?IdentifyCode=${IdentifyCode}&category=${Category}&token=${tokenEmail(
+      Category,
+      IdentifyCode
+    )}`;
+    return navigate(url);
   };
   const handleOpenChatPartner = async () => {
     try {
@@ -333,33 +345,13 @@ const OrderDetail = () => {
           width: "fit-content",
         }}
       >
-        {/* <Button
-          onClick={navigateToDetail}
-          style={{
-            color: "#009874",
-            borderColor: "#009874",
-            borderRadius: "8px",
-            padding: "0 55.5px",
-          }}
-          size="large">
-          Đặt lại
-        </Button>
-        <Button
-          type="primary"
-          size="large"
-          style={{
-            marginLeft: "20px",
-            color: "#fff",
-            borderColor: "#1fcba2",
-            background: "#1fcba2",
-            borderRadius: "6px",
-            padding: "0 52px",
-            backgroundColor: "#1fcba2",
-          }}>
-          Đánh giá
-        </Button> */}
-        <FooterRating id={+id} visible={visible} setVisible={setVisible} />
 
+        <FooterRating
+          id={+id}
+          visible={visible}
+          setVisible={setVisible}
+          category={1}
+        />
         <Modal
           centered
           open={visible}
@@ -395,7 +387,7 @@ const OrderDetail = () => {
             >
               Đặt lại
             </Button>
-            <Button type="primary" size="large" onClick={navigateToDetail}>
+            <Button type="primary" size="large" onClick={navigateToRefund}>
               Nhận tiền hoàn
             </Button>
           </div>

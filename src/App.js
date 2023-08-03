@@ -182,7 +182,14 @@ function App() {
               </SuspenseWrap>
             }
           />
-          <Route path="dao/posts/:postId" element={<PostDetail />} />
+          <Route
+            path="dao/posts/:postId"
+            element={
+              <SuspenseWrap>
+                <PostDetail />
+              </SuspenseWrap>
+            }
+          />
           <Route
             path="studio/book"
             element={
@@ -199,7 +206,14 @@ function App() {
               </SuspenseWrap>
             }
           />
-          <Route path="helpCenter/*" element={<HelpCenterPage />}></Route>
+          <Route
+            path="helpCenter"
+            element={
+              <SuspenseWrap>
+                <HelpCenterPage />
+              </SuspenseWrap>
+            }
+          ></Route>
           <Route
             path="studio/*"
             element={
