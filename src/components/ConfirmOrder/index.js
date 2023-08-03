@@ -165,80 +165,82 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="border_bottom">
-          <div className="d-flex justify-content-between mb-18">
-            <div
-              className=" text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
-              Số tài khoản:
+        {moment(booking.CreationTime).add(15, "minutes").isAfter(moment()) && (
+          <div className="border_bottom">
+            <div className="d-flex justify-content-between mb-18">
+              <div
+                className=" text-medium-re w-180px"
+                style={{ color: "#616161" }}
+              >
+                Số tài khoản:
+              </div>
+              <div
+                className="text-medium-re w-60"
+                style={{
+                  color: "#222222",
+                  fontWeight: "400",
+                  textAlign: "start",
+                }}
+              >
+                68000888
+              </div>
             </div>
-            <div
-              className="text-medium-re w-60"
-              style={{
-                color: "#222222",
-                fontWeight: "400",
-                textAlign: "start",
-              }}
-            >
-              68000888
+            <div className="d-flex justify-content-between mb-18">
+              <div
+                className="text-medium-re w-180px"
+                style={{ color: "#616161" }}
+              >
+                Ngân hàng:
+              </div>
+              <div
+                className="text-medium-se w-60"
+                style={{
+                  color: "#222222",
+                  fontWeight: "400",
+                  textAlign: "start",
+                }}
+              >
+                Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
+              </div>
+            </div>
+            <div className="d-flex justify-content-between mb-18">
+              <div
+                className="text-medium-re w-180px"
+                style={{ color: "#616161" }}
+              >
+                Tên thụ hưởng:
+              </div>
+              <div
+                className="text-medium-se w-60"
+                style={{
+                  color: "#222222",
+                  fontWeight: "400",
+                  textAlign: "start",
+                }}
+              >
+                Công ty cổ phần Công nghệ và Đầu tư VNPLUS
+              </div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <div
+                className="text-medium-re w-180px"
+                style={{ color: "#616161" }}
+              >
+                Nội dung chuyển khoản:
+              </div>
+              <div
+                className="text-medium-se w-60"
+                style={{
+                  color: "#222222",
+                  fontWeight: "400",
+                  textAlign: "start",
+                }}
+              >
+                {booking?.IdentifyCode}
+              </div>
             </div>
           </div>
-          <div className="d-flex justify-content-between mb-18">
-            <div
-              className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
-              Ngân hàng:
-            </div>
-            <div
-              className="text-medium-se w-60"
-              style={{
-                color: "#222222",
-                fontWeight: "400",
-                textAlign: "start",
-              }}
-            >
-              Ngân hàng TMCP Á Châu - PDG Nguyễn Thái Bình
-            </div>
-          </div>
-          <div className="d-flex justify-content-between mb-18">
-            <div
-              className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
-              Tên thụ hưởng:
-            </div>
-            <div
-              className="text-medium-se w-60"
-              style={{
-                color: "#222222",
-                fontWeight: "400",
-                textAlign: "start",
-              }}
-            >
-              Công ty cổ phần Công nghệ và Đầu tư VNPLUS
-            </div>
-          </div>
-          <div className="d-flex justify-content-between">
-            <div
-              className="text-medium-re w-180px"
-              style={{ color: "#616161" }}
-            >
-              Nội dung chuyển khoản:
-            </div>
-            <div
-              className="text-medium-se w-60"
-              style={{
-                color: "#222222",
-                fontWeight: "400",
-                textAlign: "start",
-              }}
-            >
-              {booking?.IdentifyCode}
-            </div>
-          </div>
-        </div>
+        )}
 
         <div className="border_bottom">
           <div className="text-medium-se mb-12">

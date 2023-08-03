@@ -28,7 +28,10 @@ import {
 import { SHOW_CHAT, TOGGLE_STATE } from "../../../../../stores/types/messType";
 import { convertPrice } from "../../../../../utils/convert";
 import { openNotification } from "../../../../../utils/Notification";
-import { IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import {
+  IMG,
+  tokenEmail,
+} from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { FooterRating } from "../conponents/OrderStatusItem/Footer/FooterRating";
 import { RateModal } from "../conponents/OrderStatusItem/Footer/RateModal/RateModal";
 import CancelIcon from "../Icon/CancelIcon";
@@ -233,6 +236,15 @@ const OrderDetail = () => {
     //   }
     // }
   };
+  const navigateToRefund = () => {
+    const Category = searchParams.get("categoryId");
+    const IdentifyCode = booking?.IdentifyCode;
+    const url = `/home/refund?IdentifyCode=${IdentifyCode}&category=${Category}&token=${tokenEmail(
+      Category,
+      IdentifyCode
+    )}`;
+    return navigate(url);
+  };
   const handleOpenChatPartner = async () => {
     try {
       const create = await chatService.createConversation(
@@ -361,12 +373,12 @@ const OrderDetail = () => {
               type="primary"
               ghost
               size="large"
-              onClick={navigateToDetail()}
+              onClick={navigateToDetail}
               style={{ color: "#1fcba2", background: "#fff" }}
             >
               Đặt lại
             </Button>
-            <Button type="primary" size="large" onClick={navigateToDetail}>
+            <Button type="primary" size="large" onClick={navigateToRefund}>
               Nhận tiền hoàn
             </Button>
           </div>

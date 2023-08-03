@@ -339,7 +339,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
                             : "right",
                       }}
                     >
-                      {moment(itm.createdAt).format("hh:mm DD/MM/YY")}
+                      {moment(itm.createdAt).format("HH:mm DD/MM/YY")}
                     </p>
                   </div>
                 </div>
