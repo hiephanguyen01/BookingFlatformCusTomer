@@ -35,10 +35,6 @@ const Index = () => {
             <Route path="recently-viewed" element={<RecentlyViewed />} />
             <Route path="terms-use" element={<TermsUser />} />
             <Route path="privacy-policy" element={<PrivacyPolicy />} />
-            <Route
-              path="support"
-              element={<Navigate to="/home/helpCenter" />}
-            />
           </Routes>
         ) : (
           <div
@@ -70,10 +66,6 @@ const Index = () => {
                     />
                     <Route path="terms-use" element={<TermsUser />} />
                     <Route path="privacy-policy" element={<PrivacyPolicy />} />
-                    <Route
-                      path="/home/helpCenter"
-                      // element={<Navigate to="/home/helpCenter" />}
-                    />
                   </Routes>
                 </Col>
               </Row>

@@ -69,7 +69,6 @@ const OrderDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
@@ -211,30 +210,31 @@ const OrderDetail = () => {
       </div>
     ),
   };
-  const navigateToDetail = () => {
-    switch (+searchParams.get("categoryId")) {
-      case 1:
-        navigate(`/home/studio/${post.id}`);
-        break;
-      case 2:
-        navigate(`/home/photographer/${post.id}`);
-        break;
-      case 3:
-        navigate(`/home/clothes/${post.id}`);
-        break;
-      case 4:
-        navigate(`/home/makeup/${post.id}`);
-        break;
-      case 5:
-        navigate(`/home/device/${post.id}`);
-        break;
-      case 6:
-        navigate(`/home/model/${post.id}`);
-        break;
-
-      default:
-        break;
-    }
+  const navigateToDetail = (bool) => {
+    // if() {} else {
+    //   switch (+searchParams.get("categoryId")) {
+    //     case 1:
+    //       navigate(`/home/studio/${post.id}`);
+    //       break;
+    //     case 2:
+    //       navigate(`/home/photographer/${post.id}`);
+    //       break;
+    //     case 3:
+    //       navigate(`/home/clothes/${post.id}`);
+    //       break;
+    //     case 4:
+    //       navigate(`/home/makeup/${post.id}`);
+    //       break;
+    //     case 5:
+    //       navigate(`/home/device/${post.id}`);
+    //       break;
+    //     case 6:
+    //       navigate(`/home/model/${post.id}`);
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
   };
   const navigateToRefund = () => {
     const Category = searchParams.get("categoryId");
@@ -337,33 +337,12 @@ const OrderDetail = () => {
           width: "fit-content",
         }}
       >
-        {/* <Button
-          onClick={navigateToDetail}
-          style={{
-            color: "#009874",
-            borderColor: "#009874",
-            borderRadius: "8px",
-            padding: "0 55.5px",
-          }}
-          size="large">
-          Đặt lại
-        </Button>
-        <Button
-          type="primary"
-          size="large"
-          style={{
-            marginLeft: "20px",
-            color: "#fff",
-            borderColor: "#1fcba2",
-            background: "#1fcba2",
-            borderRadius: "6px",
-            padding: "0 52px",
-            backgroundColor: "#1fcba2",
-          }}>
-          Đánh giá
-        </Button> */}
-        <FooterRating id={+id} visible={visible} setVisible={setVisible} />
-
+        <FooterRating
+          id={+id}
+          visible={visible}
+          setVisible={setVisible}
+          category={1}
+        />
         <Modal
           centered
           open={visible}
