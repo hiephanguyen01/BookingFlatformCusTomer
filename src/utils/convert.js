@@ -83,3 +83,10 @@ export const isJsonString = (str) => {
   }
   return true;
 };
+
+export const convertTimeUTC = (datetime, date) => {
+  if (date) {
+    return Moment(datetime).subtract(7, "hours").format("DD-MM-YYYY  HH:mm A");
+  }
+  return Moment(datetime).subtract(7, "hours").format("DD-MM-YYYY");
+};

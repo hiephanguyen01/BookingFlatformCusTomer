@@ -26,7 +26,11 @@ import {
   findConverAction,
 } from "../../../../../stores/actions/ChatAction";
 import { SHOW_CHAT, TOGGLE_STATE } from "../../../../../stores/types/messType";
-import { convertPrice } from "../../../../../utils/convert";
+import {
+  convertPrice,
+  convertTime,
+  convertTimeUTC,
+} from "../../../../../utils/convert";
 import { openNotification } from "../../../../../utils/Notification";
 import {
   IMG,
@@ -187,8 +191,12 @@ const OrderDetail = () => {
     ),
     2: (
       <div className="status_content">
-        Đừng quên bạn có hẹn với {post?.Name} vào lúc 08:00 AM ngày 14/02/2022
-        nhé!
+        Đừng quên bạn có hẹn với {post?.Name} vào lúc{" "}
+        {convertTimeUTC(
+          booking?.OrderByTimeFrom || booking?.OrderByDateFrom,
+          true
+        )}{" "}
+         nhé!
       </div>
     ),
     3: (
@@ -337,6 +345,7 @@ const OrderDetail = () => {
           width: "fit-content",
         }}
       >
+
         <FooterRating
           id={+id}
           visible={visible}
