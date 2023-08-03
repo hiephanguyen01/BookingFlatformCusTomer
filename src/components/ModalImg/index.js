@@ -27,9 +27,25 @@ const ModalImage = ({
   const screens = useBreakpoint();
   const dispatch = useDispatch();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [swiper, setSwiper] = useState(null);
+  console.log(swiper);
   useEffect(() => {
-    return () => {};
-  }, []);
+    const keydownHandler = (e) => {
+      if (swiper && e.keyCode == 39) {
+        e.preventDefault();
+        swiper.slideNext();
+      } else if (swiper && e.keyCode == 37) {
+        e.preventDefault();
+        swiper.slidePrev();
+      }
+    };
+
+    document.addEventListener("keydown", keydownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keydownHandler);
+    };
+  }, [swiper]);
 
   return (
     <div
@@ -39,10 +55,14 @@ const ModalImage = ({
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-      }}>
+      }}
+    >
       <h3>{title}</h3>
       <div onClick={() => setOpenModal(false)} className={"close"}>
-        <CloseOutlined style={{ fontSize: "22px" }} />
+        <CloseOutlined
+          style={{ fontSize: "22px" }}
+          onClick={() => dispatch({ type: HIDE_MODAL })}
+        />
       </div>
       {screens?.xs ? (
         <></>
@@ -50,6 +70,7 @@ const ModalImage = ({
         <>
           <div style={{ marginTop: "20px" }}>
             <Swiper
+              onSwiper={setSwiper}
               initialSlide={index}
               style={{
                 width: "758px",
@@ -64,7 +85,8 @@ const ModalImage = ({
               }}
               thumbs={{ swiper: thumbsSwiper }}
               modules={[FreeMode, Navigation, Pagination, Thumbs]}
-              className="swiperModalImg">
+              className="swiperModalImg"
+            >
               {data?.map((item, idx) => {
                 return (
                   <SwiperSlide key={idx}>
@@ -81,7 +103,8 @@ const ModalImage = ({
               paddingRight: "40px",
               paddingLeft: "40px",
               marginTop: "30px",
-            }}>
+            }}
+          >
             <Swiper
               onSwiper={setThumbsSwiper}
               spaceBetween={10}
@@ -97,7 +120,8 @@ const ModalImage = ({
                   <SwiperSlide
                     key={idx}
                     className="slide-item"
-                    style={{ width: "187px", height: "108px" }}>
+                    style={{ width: "187px", height: "108px" }}
+                  >
                     <img
                       style={{
                         width: "187px",

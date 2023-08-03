@@ -57,6 +57,7 @@ const OrderStatus = () => {
       setPageBooking(booking.slice(first, last));
     }
   };
+  console.log(pageBooking);
   const onChangeInput = (e) => {
     const input = e.target.value.toLowerCase();
     const newData = booking.filter(
@@ -99,7 +100,8 @@ const OrderStatus = () => {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <div
               style={{
                 background: "white",
@@ -107,7 +109,8 @@ const OrderStatus = () => {
                 borderRadius: "50%",
                 padding: "10px",
                 margin: "10px",
-              }}>
+              }}
+            >
               <LoadingOutlined style={{ fontSize: "40px" }} />
             </div>
           </div>
@@ -119,7 +122,8 @@ const OrderStatus = () => {
                   className={`header-tab-item ${
                     item.key === params?.key && "active"
                   }`}
-                  onClick={() => onChange(item.key)}>
+                  onClick={() => onChange(item.key)}
+                >
                   {item.title}
                 </div>
               ))}
@@ -143,6 +147,7 @@ const OrderStatus = () => {
                     item={item}
                     pageBooking={pageBooking}
                     setPageBooking={setPageBooking}
+                    IsVisible={item?.Item?.StudioPost?.IsVisible}
                   />
                 ))}
             </div>
@@ -155,7 +160,8 @@ const OrderStatus = () => {
             display: "flex",
             justifyContent: "right",
             padding: "10px 10px",
-          }}>
+          }}
+        >
           <Pagination
             defaultCurrent={1}
             onChange={handleChange}
