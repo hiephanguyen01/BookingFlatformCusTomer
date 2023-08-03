@@ -11,7 +11,7 @@ import {
   TeamOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Divider, Grid, Popover, Rate, Row } from "antd";
+import { Button, Col, Divider, Grid, Popover, Rate, Row, message } from "antd";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import "react-lightbox-pack/dist/index.css";
@@ -268,7 +268,12 @@ const StudioDetail = () => {
         findSelectTime?.OrderByTimeTo !== "" &&
         findSelectTime?.OrderByTimeTo !== findSelectTime?.OrderByTimeFrom
       ) {
-        dispatch(handlerSelectServiceAction(data, findSelectTime));
+        dispatch(
+          handlerSelectServiceAction(
+            { ...data, nameService: studioDetail?.data?.Name },
+            findSelectTime
+          )
+        );
       } else if (
         findSelectTime?.OrderByTime === 0 &&
         findSelectTime?.OrderByDateFrom !== undefined &&
@@ -276,7 +281,12 @@ const StudioDetail = () => {
         findSelectTime?.OrderByDateTo !== undefined &&
         findSelectTime?.OrderByDateTo !== ""
       ) {
-        dispatch(handlerSelectServiceAction(data, findSelectTime));
+        dispatch(
+          handlerSelectServiceAction(
+            { ...data, nameService: studioDetail?.data?.Name },
+            findSelectTime
+          )
+        );
       } else {
         return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
       }
@@ -287,26 +297,30 @@ const StudioDetail = () => {
 
   const handleBook = async () => {
     if (chooseService) {
-      const res = await cartService.addToCart({
-        category: 1,
-        CategoryPostId: studioDetail?.data?.id,
-        serviceId: chooseService?.id,
-        OrderByTime: chooseService?.OrderByTime,
-        OrderByTimeFrom: chooseService?.OrderByTimeFrom,
-        OrderByTimeTo: chooseService?.OrderByTimeTo,
-        OrderByDateFrom: chooseService?.OrderByDateFrom,
-        OrderByDateTo: chooseService?.OrderByDateTo,
-      });
-      const arr = [
-        {
-          id: res?.data?.data?.cartItemId,
+      if (currentUser) {
+        const res = await cartService.addToCart({
           category: 1,
-        },
-      ];
-      const createQuery = queryString.stringify({
-        cartItems: JSON.stringify(arr),
-      });
-      navigate(`order?${createQuery}`);
+          CategoryPostId: studioDetail?.data?.id,
+          serviceId: chooseService?.id,
+          OrderByTime: chooseService?.OrderByTime,
+          OrderByTimeFrom: chooseService?.OrderByTimeFrom,
+          OrderByTimeTo: chooseService?.OrderByTimeTo,
+          OrderByDateFrom: chooseService?.OrderByDateFrom,
+          OrderByDateTo: chooseService?.OrderByDateTo,
+        });
+        const arr = [
+          {
+            id: res?.data?.data?.cartItemId,
+            category: 1,
+          },
+        ];
+        const createQuery = queryString.stringify({
+          cartItems: JSON.stringify(arr),
+        });
+        navigate(`order?${createQuery}`);
+      } else {
+        navigate(`order`);
+      }
     } else {
       toastMessage("Bạn cần chọn dịch vụ!", "warn");
     }
@@ -1139,15 +1153,19 @@ const StudioDetail = () => {
                                 disabled={
                                   chooseServiceList?.length > 0 ? false : true
                                 }
-                                onClick={() =>
-                                  dispatch(
-                                    addCart(
-                                      1,
-                                      studioDetail?.data,
-                                      chooseService
-                                    )
-                                  )
-                                }
+                                onClick={() => {
+                                  if (currentUser) {
+                                    dispatch(
+                                      addCart(
+                                        1,
+                                        studioDetail?.data,
+                                        chooseService
+                                      )
+                                    );
+                                  } else {
+                                    message.warning("Vui lòng đăng nhập!");
+                                  }
+                                }}
                               >
                                 <ShoppingCartOutlined />
                                 Thêm vào giỏ hàng
@@ -1255,15 +1273,19 @@ const StudioDetail = () => {
                                   disabled={
                                     chooseServiceList?.length > 0 ? false : true
                                   }
-                                  onClick={() =>
-                                    dispatch(
-                                      addCart(
-                                        1,
-                                        studioDetail?.data,
-                                        chooseService
-                                      )
-                                    )
-                                  }
+                                  onClick={() => {
+                                    if (currentUser) {
+                                      dispatch(
+                                        addCart(
+                                          1,
+                                          studioDetail?.data,
+                                          chooseService
+                                        )
+                                      );
+                                    } else {
+                                      message.warning("Vui lòng đăng nhập!");
+                                    }
+                                  }}
                                 >
                                   <ShoppingCartOutlined />
                                   Thêm vào giỏ hàng

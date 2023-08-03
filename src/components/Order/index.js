@@ -23,9 +23,14 @@ import toastMessage from "../ToastMessage";
 import queryString from "query-string";
 import "./order.scss";
 import { getCartItemCheckout } from "../../stores/actions/CartAction";
-import { SET_CHOOSE_PROMOTION_USER } from "../../stores/types/promoCodeType";
+import {
+  GET_ALL_PROMO_CODE,
+  SET_CHOOSE_PROMOTION_USER,
+} from "../../stores/types/promoCodeType";
 import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/CartType";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
+import { studioDetailAction } from "../../stores/actions/studioPostAction";
+import { getPartnerDetail } from "./../../stores/actions/RegisterPartnerAction";
 
 const { useBreakpoint } = Grid;
 
@@ -83,13 +88,10 @@ const Index = ({ linkTo = "" }) => {
 
   useEffect(() => {
     setInfoUser(user);
-    // dispatch(setStudioPostIdAction(id));
-    // if (id) {
-    //   dispatch(studioDetailAction(id, cate));
-    // }
-    // dispatch(getPartnerDetail(studioDetail?.data?.TenantId));
+
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
+      dispatch({ type: GET_ALL_PROMO_CODE, data: [] });
       dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
       dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
     };
@@ -101,13 +103,19 @@ const Index = ({ linkTo = "" }) => {
 
   useEffect(() => {
     // if (cartItems?.length && chooseServiceList?.length === 0) {
-    if (isJsonString(cartItems)) {
-      dispatch(getCartItemCheckout(cartItems));
+    if (user) {
+      if (isJsonString(cartItems)) {
+        dispatch(getCartItemCheckout(cartItems));
+      } else {
+        navigate(-1);
+      }
     } else {
-      navigate(-1);
+      if (chooseServiceList.length === 0) {
+        navigate(-1);
+      }
     }
     // }
-  }, [cartItems, dispatch, navigate]);
+  }, [cartItems, dispatch, navigate, user]);
 
   const isEmpty = () => {
     if (
@@ -285,57 +293,121 @@ const Index = ({ linkTo = "" }) => {
       //   return;
       // }
       if (isEmpty()) {
-        const response = await Promise.all(
-          chooseServiceList?.map(async (item) => {
-            const res = await orderService.addOrder({
-              CartItemId: item?.id,
-              Price: item?.price,
-              PromoCodeId: item?.promotion?.id,
-              OrderNote: infoUser.Message,
-              BookingUserName: infoUser.Fullname,
-              BookingPhone: infoUser.Phone,
-              BookingEmail: infoUser.Email,
-              BookingUserId: user?.id || undefined,
-              CreatorUserId: user?.id || undefined,
-              BookingValueBeforeDiscount: item?.price,
-              BookingValue: calculatePriceServiceUsePromo(item),
-              // DepositValue: (calculatePriceUsePromo() * 15) / 100,
-              PaymentType: 0,
-              IsPayDeposit: 1,
-              AffiliateUserId: Number(AffiliateUserId),
-              numberOfTime: `${
-                moment(item?.OrderByDateTo).diff(
-                  moment(item?.OrderByDateFrom),
-                  "days"
-                ) + 1
-              } ngày`,
-              //     size: chooseService?.size,
-              //     color: chooseService?.color,
-              //     amount: chooseService?.amount,
-            });
-            return res.data;
-          })
-        );
-        if (AffiliateUserId != null) {
-          localStorage.removeItem("qs");
+        if (user) {
+          const response = await Promise.all(
+            chooseServiceList?.map(async (item) => {
+              const res = await orderService.addOrder({
+                CartItemId: item?.id,
+                Price: item?.price,
+                PromoCodeId: item?.promotion?.id,
+                OrderNote: infoUser.Message,
+                BookingUserName: infoUser.Fullname,
+                BookingPhone: infoUser.Phone,
+                BookingEmail: infoUser.Email,
+                BookingUserId: user?.id || undefined,
+                CreatorUserId: user?.id || undefined,
+                BookingValueBeforeDiscount: item?.price,
+                BookingValue: calculatePriceServiceUsePromo(item),
+                // DepositValue: (calculatePriceUsePromo() * 15) / 100,
+                PaymentType: 0,
+                IsPayDeposit: 1,
+                AffiliateUserId: Number(AffiliateUserId),
+                numberOfTime: `${
+                  moment(item?.OrderByDateTo).diff(
+                    moment(item?.OrderByDateFrom),
+                    "days"
+                  ) + 1
+                } ngày`,
+                //     size: chooseService?.size,
+                //     color: chooseService?.color,
+                //     amount: chooseService?.amount,
+              });
+              return res.data;
+            })
+          );
+          if (AffiliateUserId != null) {
+            localStorage.removeItem("qs");
+          }
+          for (let i = 0; i < response.length; i++) {
+            socket?.emit("newBooking", response[i]);
+          }
+          dispatch(getCurrentUser());
+          navigate("confirm", {
+            state: {
+              IdentifyCode: response?.map((item) => item?.IdentifyCode),
+              TenantId:
+                response?.length > 0
+                  ? response[0]?.TenantId
+                  : response?.TenantId || null,
+              Category:
+                cate || response?.length > 0
+                  ? response[0]?.Category
+                  : response?.Category || null,
+            },
+          });
+        } else {
+          const response = await Promise.all(
+            chooseServiceList?.map(async (item) => {
+              const res = await orderService.addOrder({
+                id: item?.id,
+
+                OrderByTime: item?.OrderByTime,
+                OrderByTimeFrom: item?.OrderByTimeFrom,
+                OrderByTimeTo: item?.OrderByTimeTo,
+                OrderByDateFrom: item?.OrderByDateFrom,
+                OrderByDateTo: item?.OrderByDateTo,
+                // RoomId: ,
+                PostId: id,
+                Category: cate,
+
+                Price: calculatePrice(),
+                PromoCodeId: choosePromotionUser?.id,
+                OrderNote: infoUser.Message,
+                BookingUserName: infoUser.Fullname,
+                BookingPhone: infoUser.Phone,
+                BookingEmail: infoUser.Email,
+                BookingUserId: user?.id || undefined,
+                CreatorUserId: user?.id || undefined,
+                BookingValueBeforeDiscount: calculatePrice(),
+                BookingValue: calculatePriceUsePromo(),
+                // DepositValue: (calculatePriceUsePromo() * 15) / 100,
+                PaymentType: 0,
+                IsPayDeposit: 1,
+                AffiliateUserId: Number(AffiliateUserId),
+                numberOfTime: `${
+                  moment(item?.OrderByDateTo).diff(
+                    moment(item?.OrderByDateFrom),
+                    "days"
+                  ) + 1
+                } ngày`,
+                //     size: chooseService?.size,
+                //     color: chooseService?.color,
+                //     amount: chooseService?.amount,
+              });
+              return res.data;
+            })
+          );
+          if (AffiliateUserId != null) {
+            localStorage.removeItem("qs");
+          }
+          for (let i = 0; i < response.length; i++) {
+            socket?.emit("newBooking", response[i]);
+          }
+          dispatch(getCurrentUser());
+          navigate("confirm", {
+            state: {
+              IdentifyCode: response?.map((item) => item?.IdentifyCode),
+              TenantId:
+                response?.length > 0
+                  ? response[0]?.TenantId
+                  : response?.TenantId || null,
+              Category:
+                cate || response?.length > 0
+                  ? response[0]?.Category
+                  : response?.Category || null,
+            },
+          });
         }
-        for (let i = 0; i < response.length; i++) {
-          socket?.emit("newBooking", response[i]);
-        }
-        dispatch(getCurrentUser());
-        navigate("confirm", {
-          state: {
-            IdentifyCode: response?.map((item) => item?.IdentifyCode),
-            TenantId:
-              response?.length > 0
-                ? response[0]?.TenantId
-                : response?.TenantId || null,
-            Category:
-              cate || response?.length > 0
-                ? response[0]?.Category
-                : response?.Category || null,
-          },
-        });
       } else {
         toastMessage("Vui lòng điền đầy đủ thông tin!", "warn");
       }
@@ -418,7 +490,8 @@ const Index = ({ linkTo = "" }) => {
               <div className="text-description">
                 {studioDetail?.data?.Name ||
                   item?.StudioPost?.Name ||
-                  item?.postName}
+                  item?.postName ||
+                  chooseService?.nameService}
                 <CheckCircleOutlined
                   style={{
                     height: "100%",

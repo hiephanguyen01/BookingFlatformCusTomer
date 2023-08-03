@@ -29,7 +29,11 @@ const setAuthToken = (token) => {
     delete axios.defaults.headers["Authorization"];
   }
 };
-export const openNotificationWithIcon = (type, message, description) => {
+export const openNotificationWithIcon = (
+  type = "success",
+  message,
+  description
+) => {
   notification[type]({
     message: message,
     description,
@@ -152,6 +156,7 @@ export const facebookLink =
           providerId: provider.providerId,
         });
         openNotificationWithIcon(
+          "success",
           "Hủy liên kết tài khoản facebook",
           "Thành công!"
         );
@@ -161,10 +166,14 @@ export const facebookLink =
           ...res.user,
           ...res.user.providerData[0],
         });
-        openNotificationWithIcon("Liên kết tài khoản facebook", "Thành công!");
+        openNotificationWithIcon(
+          "success",
+          "Liên kết tài khoản facebook",
+          "Thành công!"
+        );
       }
       setCheckedLink(!checkedLink);
-      dispatch({ type: SET_USER, payload: resp.data.data });
+      dispatch({ type: SET_USER, payload: resp?.data?.data });
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
         try {
@@ -173,18 +182,20 @@ export const facebookLink =
             providerId: error.customData["_tokenResponse"].providerId,
           });
           setCheckedLink(!checkedLink);
-          dispatch({ type: SET_USER, payload: respError.data.data });
+          dispatch({ type: SET_USER, payload: respError?.data?.data });
         } catch (error) {
           openNotificationWithIcon(
             "error",
-            error.response.data.message,
+            error?.response?.data?.message,
             "Vui lòng thử lại!"
           );
+          console.log(91011);
         }
       } else {
+        console.log(121314);
         openNotificationWithIcon(
           "error",
-          error.response.data.message,
+          error?.response?.data?.message,
           "Vui lòng thử lại!"
         );
       }

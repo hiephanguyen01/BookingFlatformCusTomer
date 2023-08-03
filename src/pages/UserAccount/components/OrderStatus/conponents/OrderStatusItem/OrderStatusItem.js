@@ -1,5 +1,5 @@
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Modal, Row } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +17,19 @@ const OrderStatusItem = ({
   setPageBooking,
   id,
   BookingStatus,
+  IsVisible,
 }) => {
   const [post, setPost] = useState();
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
+  const handleBtnOkModal = () => {
+    navigate("/home");
+  };
   const navigate = useNavigate();
   let {
     TenantId,
@@ -46,28 +57,32 @@ const OrderStatusItem = ({
     })();
   }, [TenantId, category]);
   const navigateToDetail = () => {
-    switch (category) {
-      case 1:
-        navigate(`/home/studio/${post.id}`);
-        break;
-      case 2:
-        navigate(`/home/photographer/${post.id}`);
-        break;
-      case 3:
-        navigate(`/home/clothes/${post.id}`);
-        break;
-      case 4:
-        navigate(`/home/makeup/${post.id}`);
-        break;
-      case 5:
-        navigate(`/home/device/${post.id}`);
-        break;
-      case 6:
-        navigate(`/home/model/${post.id}`);
-        break;
+    if (IsVisible) {
+      switch (category) {
+        case 1:
+          navigate(`/home/studio/${post.id}`);
+          break;
+        case 2:
+          navigate(`/home/photographer/${post.id}`);
+          break;
+        case 3:
+          navigate(`/home/clothes/${post.id}`);
+          break;
+        case 4:
+          navigate(`/home/makeup/${post.id}`);
+          break;
+        case 5:
+          navigate(`/home/device/${post.id}`);
+          break;
+        case 6:
+          navigate(`/home/model/${post.id}`);
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
+    } else {
+      showModal();
     }
   };
   return (
@@ -77,7 +92,8 @@ const OrderStatusItem = ({
         <div className="OrderStatusItem__header">
           <div
             className="OrderStatusItem__header__name"
-            onClick={navigateToDetail}>
+            onClick={navigateToDetail}
+          >
             {post?.Name}
             <CheckCircleTwoTone
               style={{ padding: "10px" }}
@@ -108,7 +124,8 @@ const OrderStatusItem = ({
                   navigate(
                     `/home/user/orderStatus/${id}?categoryId=${category}`
                   )
-                }>
+                }
+              >
                 {Item?.Name}
               </div>
               <div className="OrderStatusItem__body__info__content__date">
@@ -179,8 +196,19 @@ const OrderStatusItem = ({
           Item={Item || item}
           post={post}
           booking={item}
+          navigateToDetail={navigateToDetail}
         />
       </div>
+      <Modal
+        title={null}
+        open={open}
+        onOk={handleBtnOkModal}
+        onCancel={hideModal}
+        okText="Đến trang chủ"
+        cancelText="Ở lại trang"
+      >
+        <p>Bài đăng không còn tồn tại, Bạn có thể chọn bài đăng khác.</p>
+      </Modal>
     </>
   );
 };

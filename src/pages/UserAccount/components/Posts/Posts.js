@@ -4,7 +4,10 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import DaoPost from "../../../../components/DaoPost";
 // import { userService } from "../../../../services/UserService";
-import { getLikePostList } from "../../../../stores/actions/PostDaoAction";
+import {
+  getAllDefaultComments,
+  getLikePostList,
+} from "../../../../stores/actions/PostDaoAction";
 import { getListPosts } from "../../../../stores/actions/userAction";
 import "../PostsSaved/PostSaved";
 import { Grid } from "antd";
@@ -25,9 +28,14 @@ const Posts = () => {
     dispatch(getListPosts(setLoading));
     dispatch(getLikePostList(UserMe.id));
   }, [dispatch, UserMe.id]);
+
   useEffect(() => {
     setSavedPosts([...savedPostList]);
   }, [savedPostList]);
+
+  useEffect(() => {
+    dispatch(getAllDefaultComments());
+  }, [dispatch]);
 
   return (
     <>
@@ -61,18 +69,14 @@ const Posts = () => {
           ) : (
             <h4 className="PostSaved__header">Bài viết của tôi</h4>
           )}{" "}
-          <div>
-            {savedPosts.map((itm, index) => (
-              <div key={index}>
-                <div className="PostSaved__body">
-                  <DaoPost likePostList={likePostList} item={itm} type="post" />
-                </div>
-                <div
-                  style={{ height: "5px", backgroundColor: "#f6f6f6" }}
-                ></div>
+          {savedPosts.map((itm, index) => (
+            <div key={index}>
+              <div className="PostSaved__body">
+                <DaoPost likePostList={likePostList} item={itm} type="post" />
               </div>
-            ))}
-          </div>
+              <div style={{ height: "5px", backgroundColor: "#f6f6f6" }}></div>
+            </div>
+          ))}
         </>
       )}
     </>
