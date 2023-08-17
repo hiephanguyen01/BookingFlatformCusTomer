@@ -121,6 +121,7 @@ export const googleLink =
           providerId: provider.providerId,
         });
         openNotificationWithIcon(
+          "success",
           "Hủy liên kết tài khoản google",
           "Thành công!"
         );
@@ -130,14 +131,18 @@ export const googleLink =
           ...res.user,
           ...res.user.providerData[0],
         });
-        openNotificationWithIcon("Liên kiết tài khoản google", "Thành công!");
+        openNotificationWithIcon(
+          "success",
+          "Liên kiết tài khoản google",
+          "Thành công!"
+        );
       }
       setCheckedLink(!checkedLink);
-      dispatch({ type: SET_USER, payload: resp.data.data });
+      dispatch({ type: SET_USER, payload: resp?.data?.data });
     } catch (error) {
       openNotificationWithIcon(
         "error",
-        error.response.data.message,
+        error?.response?.data?.message,
         "Vui lòng thử lại!"
       );
       setCheckedLink(checkedLink);
