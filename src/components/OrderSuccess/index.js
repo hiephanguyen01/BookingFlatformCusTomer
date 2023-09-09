@@ -38,47 +38,46 @@ const Index = () => {
   //   dispatch({ type: TOGGLE_STATE, payload: res?.data?.data[0]?.id });
   // };
 
-  const makeConversationWithPartner = () => {
-    const type = pathname.split("/")[2];
-    (async () => {
-      try {
-        const studioPost = await studioPostService.getDetailStudio(
-          id,
-          enum_post[type]
-        );
-        const { data } = await chatService.createConversation(
-          studioPost.data.data?.TenantId, //partnerID
-          UserMe.id
-        );
-        if (data && studioPost) {
-          socket.emit("send_message", {
-            id: Math.random(),
-            ConversationId: data.payload.id,
-            createdAt: moment().toISOString(),
-            Content: "Xin chào chúng tôi có thể giúp được gì cho bạn !",
-            Chatting: {
-              id: studioPost.data.data?.TenantId,
-              PartnerName: studioPost.data.data?.Name,
-              Phone: data.payload.Partner.Phone
-                ? data.payload.Partner.Phone
-                : "",
-              Email: data.payload.Partner.Email
-                ? data.payload.Partner.Email
-                : "",
-            },
-            Type: "text",
-          });
-          dispatch(createConverAction(data.payload.id));
-        }
-      } catch (error) {
-        dispatch(findConverAction(error.response.data.message.id));
-      }
-    })();
-  };
+  // const makeConversationWithPartner = () => {
+  //   const type = pathname.split("/")[2];
+  //   (async () => {
+  //     try {
+  //       const studioPost = await studioPostService.getDetailStudio(
+  //         id,
+  //         enum_post[type]
+  //       );
+  //       const { data } = await chatService.createConversation(
+  //         studioPost.data.data?.TenantId, //partnerID
+  //         UserMe.id
+  //       );
+  //       if (data && studioPost) {
+  //         socket.emit("send_message", {
+  //           id: Math.random(),
+  //           ConversationId: data.payload.id,
+  //           createdAt: moment().toISOString(),
+  //           Content: "Xin chào chúng tôi có thể giúp được gì cho bạn !",
+  //           Chatting: {
+  //             id: studioPost.data.data?.TenantId,
+  //             PartnerName: studioPost.data.data?.Name,
+  //             Phone: data.payload.Partner.Phone
+  //               ? data.payload.Partner.Phone
+  //               : "",
+  //             Email: data.payload.Partner.Email
+  //               ? data.payload.Partner.Email
+  //               : "",
+  //           },
+  //           Type: "text",
+  //         });
+  //         dispatch(createConverAction(data.payload.id));
+  //       }
+  //     } catch (error) {
+  //       dispatch(findConverAction(error.response.data.message.id));
+  //     }
+  //   })();
+  // };
 
   useEffect(() => {
     dispatch(deleteChooseServiceAction());
-    makeConversationWithPartner();
   }, []);
 
   return (

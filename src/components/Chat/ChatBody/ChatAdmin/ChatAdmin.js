@@ -32,6 +32,10 @@ export const ChatAdmin = React.memo(
         UserMe.id,
         true
       );
+      socket.emit("joinChatRoom", {
+        roomId: data?.payload?.id,
+        memberId: UserMe?.id,
+      });
 
       if (data.payload.appropriateResponseType === "create") {
         socket.emit("send_message_admin", {
