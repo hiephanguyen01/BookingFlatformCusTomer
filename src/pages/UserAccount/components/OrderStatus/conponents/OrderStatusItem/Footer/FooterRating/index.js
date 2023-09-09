@@ -1,7 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const FooterRating = ({ id, setVisible, visible, category }) => {
+export const FooterRating = ({
+  id,
+  setVisible,
+  visible,
+  category,
+  navigateToDetail,
+}) => {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -41,12 +49,18 @@ export const FooterRating = ({ id, setVisible, visible, category }) => {
       ) : (
         <button
           className="FooterStatus__complete__rating"
-          onClick={() => setVisible(true)}>
+          onClick={() => setVisible(true)}
+        >
           Đánh giá
         </button>
       )}
 
-      <button className="FooterStatus__complete__order">Đặt lại</button>
+      <button
+        className="FooterStatus__complete__order"
+        onClick={() => navigateToDetail()}
+      >
+        Đặt lại
+      </button>
     </>
   );
 };

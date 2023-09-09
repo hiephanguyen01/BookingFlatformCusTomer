@@ -87,6 +87,7 @@ const DaoPost = (props) => {
   const [comments, setComments] = useState([]);
   const [paginationCmt, setPaginationCmt] = useState({});
   const [chooseCommentDefault, setChooseCommentDefault] = useState({});
+
   const getComments = async (currentPage) => {
     try {
       const { data } = await postDaoService.getComments(
@@ -111,6 +112,7 @@ const DaoPost = (props) => {
   useEffect(() => {
     dispatch(getAllNotificationDaoAction());
   }, [dispatch]);
+
   const handlerLikeComment = (id) => {
     // getComments(1);
     // setPost({ ...post, TotalComments: post?.TotalComments + 1 });
@@ -459,6 +461,7 @@ const DaoPost = (props) => {
       clearTimeout(a);
     };
   }, [post]);
+
   return (
     <article className="post" key={post?.id}>
       <section className="post__main d-flex flex-column">

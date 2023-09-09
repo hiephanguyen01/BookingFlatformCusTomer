@@ -12,6 +12,7 @@ import QRCode from "qrcode.react";
 import { Link, useLocation } from "react-router-dom";
 import "./Footer.scss";
 import { memo } from "react";
+import { version } from "../../utils/version";
 
 const { useBreakpoint } = Grid;
 
@@ -171,7 +172,7 @@ const Footer = () => {
           </div>
           <p className="copywrite">
             <CopyrightOutlined /> 2021 - Bản quyền thuộc công ty Cổ phần Công
-            nghệ và Đầu tư VNPLUS V2007
+            nghệ và Đầu tư VNPLUS {version}
           </p>
         </div>
       )}

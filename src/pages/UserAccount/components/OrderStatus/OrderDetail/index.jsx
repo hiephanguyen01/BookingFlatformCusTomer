@@ -26,9 +26,16 @@ import {
   findConverAction,
 } from "../../../../../stores/actions/ChatAction";
 import { SHOW_CHAT, TOGGLE_STATE } from "../../../../../stores/types/messType";
-import { convertPrice } from "../../../../../utils/convert";
+import {
+  convertPrice,
+  convertTime,
+  convertTimeUTC,
+} from "../../../../../utils/convert";
 import { openNotification } from "../../../../../utils/Notification";
-import { IMG } from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
+import {
+  IMG,
+  tokenEmail,
+} from "../../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { FooterRating } from "../conponents/OrderStatusItem/Footer/FooterRating";
 import { RateModal } from "../conponents/OrderStatusItem/Footer/RateModal/RateModal";
 import CancelIcon from "../Icon/CancelIcon";
@@ -66,7 +73,6 @@ const OrderDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
-
   const onChangeFile = (e) => {
     const newFile = e.target.files[0];
     newFile.preview = URL.createObjectURL(newFile);
@@ -185,8 +191,12 @@ const OrderDetail = () => {
     ),
     2: (
       <div className="status_content">
-        Đừng quên bạn có hẹn với {post?.Name} vào lúc 08:00 AM ngày 14/02/2022
-        nhé!
+        Đừng quên bạn có hẹn với {post?.Name} vào lúc{" "}
+        {convertTimeUTC(
+          booking?.OrderByTimeFrom || booking?.OrderByDateFrom,
+          true
+        )}{" "}
+         nhé!
       </div>
     ),
     3: (
@@ -208,30 +218,40 @@ const OrderDetail = () => {
       </div>
     ),
   };
-  const navigateToDetail = () => {
-    switch (+searchParams.get("categoryId")) {
-      case 1:
-        navigate(`/home/studio/${post.id}`);
-        break;
-      case 2:
-        navigate(`/home/photographer/${post.id}`);
-        break;
-      case 3:
-        navigate(`/home/clothes/${post.id}`);
-        break;
-      case 4:
-        navigate(`/home/makeup/${post.id}`);
-        break;
-      case 5:
-        navigate(`/home/device/${post.id}`);
-        break;
-      case 6:
-        navigate(`/home/model/${post.id}`);
-        break;
-
-      default:
-        break;
-    }
+  const navigateToDetail = (bool) => {
+    // if() {} else {
+    //   switch (+searchParams.get("categoryId")) {
+    //     case 1:
+    //       navigate(`/home/studio/${post.id}`);
+    //       break;
+    //     case 2:
+    //       navigate(`/home/photographer/${post.id}`);
+    //       break;
+    //     case 3:
+    //       navigate(`/home/clothes/${post.id}`);
+    //       break;
+    //     case 4:
+    //       navigate(`/home/makeup/${post.id}`);
+    //       break;
+    //     case 5:
+    //       navigate(`/home/device/${post.id}`);
+    //       break;
+    //     case 6:
+    //       navigate(`/home/model/${post.id}`);
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
+  };
+  const navigateToRefund = () => {
+    const Category = searchParams.get("categoryId");
+    const IdentifyCode = booking?.IdentifyCode;
+    const url = `/home/refund?IdentifyCode=${IdentifyCode}&category=${Category}&token=${tokenEmail(
+      Category,
+      IdentifyCode
+    )}`;
+    return navigate(url);
   };
   const handleOpenChatPartner = async () => {
     try {
@@ -270,12 +290,14 @@ const OrderDetail = () => {
             updatePay: true,
             Category: searchParams.get("categoryId"),
             path: `/home/user/orderStatus/${id}?categoryId=1`,
-          }}>
+          }}
+        >
           <Button
             type="primary"
             icon={<UploadOutlined />}
             size="large"
-            onClick={() => navigate(`/home/confirm-order/${id}`)}>
+            onClick={() => navigate(`/home/confirm-order/${id}`)}
+          >
             Cập nhật minh chứng
           </Button>
         </Link>
@@ -292,7 +314,8 @@ const OrderDetail = () => {
               marginRight: "20px",
               borderRadius: "8px",
             }}
-            size="large">
+            size="large"
+          >
             Huỷ đơn
           </Button>
         )}
@@ -308,7 +331,8 @@ const OrderDetail = () => {
             dispatch({ type: SHOW_CHAT });
             handleOpenChatPartner();
           }}
-          size="large">
+          size="large"
+        >
           Liên hệ
         </Button>
       </div>
@@ -319,41 +343,23 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
-        {/* <Button
-          onClick={navigateToDetail}
-          style={{
-            color: "#009874",
-            borderColor: "#009874",
-            borderRadius: "8px",
-            padding: "0 55.5px",
-          }}
-          size="large">
-          Đặt lại
-        </Button>
-        <Button
-          type="primary"
-          size="large"
-          style={{
-            marginLeft: "20px",
-            color: "#fff",
-            borderColor: "#1fcba2",
-            background: "#1fcba2",
-            borderRadius: "6px",
-            padding: "0 52px",
-            backgroundColor: "#1fcba2",
-          }}>
-          Đánh giá
-        </Button> */}
-        <FooterRating id={+id} visible={visible} setVisible={setVisible} />
+        }}
+      >
 
+        <FooterRating
+          id={+id}
+          visible={visible}
+          setVisible={setVisible}
+          category={1}
+        />
         <Modal
           centered
           open={visible}
           footer={false}
           width={600}
           closable={false}
-          className="FooterStatus__complete__modal">
+          className="FooterStatus__complete__modal"
+        >
           <RateModal
             onOk={() => setVisible(false)}
             onCancel={() => setVisible(false)}
@@ -370,23 +376,26 @@ const OrderDetail = () => {
         {booking?.PaymentStatus === 2 ? (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
             <Button
               type="primary"
               ghost
               size="large"
               onClick={navigateToDetail}
-              style={{ color: "#1fcba2", background: "#fff" }}>
+              style={{ color: "#1fcba2", background: "#fff" }}
+            >
               Đặt lại
             </Button>
-            <Button type="primary" size="large" onClick={navigateToDetail}>
+            <Button type="primary" size="large" onClick={navigateToRefund}>
               Nhận tiền hoàn
             </Button>
           </div>
         ) : (
           <div
             className="cx"
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
             <Button type="primary" size="large" onClick={navigateToDetail}>
               Đặt lại
             </Button>
@@ -400,7 +409,8 @@ const OrderDetail = () => {
           margin: "0 auto",
           alignItems: "center",
           width: "fit-content",
-        }}>
+        }}
+      >
         <Button
           onClick={navigateToDetail}
           style={{
@@ -411,7 +421,8 @@ const OrderDetail = () => {
             background: "#009874",
             width: "300px",
           }}
-          size="large">
+          size="large"
+        >
           Đặt lại
         </Button>
         {/* <Button
@@ -717,7 +728,8 @@ const OrderDetail = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Dolar />
           <div className="status_name">ĐÃ QUÁ HẠN THANH TOÁN</div>
           <p
@@ -725,7 +737,8 @@ const OrderDetail = () => {
               textAlign: "center",
               maxWidth: "500px",
               marginBottom: "1rem",
-            }}>
+            }}
+          >
             Đã quá thời hạn thanh toán, nếu quý khách đã thanh toán vui lòng tải
             hình ảnh chứa thông tin chuyển khoản tiền đặt cọc.{" "}
           </p>
@@ -736,7 +749,8 @@ const OrderDetail = () => {
               //   .isBefore(moment())}
               onChangeFile={onChangeFile}
               multiple={true}
-              image={file.preview || convertImageUrl(booking?.EvidenceImage)}>
+              image={file.preview || convertImageUrl(booking?.EvidenceImage)}
+            >
               <div className="btn_upload">Tải ảnh lên</div>
             </DropFileInput>
           </div>
@@ -746,13 +760,15 @@ const OrderDetail = () => {
               display: "inline-flex",
               flexDirection: "column",
               gap: "1rem",
-            }}>
+            }}
+          >
             <Button
               // type="primary"
 
               size="large"
               // onClick={navigateToDetail}
-              style={{ color: "#ffff", background: "#009874" }}>
+              style={{ color: "#ffff", background: "#009874" }}
+            >
               Cập nhật minh chứng
             </Button>
             <div className="d-flex">
@@ -860,7 +876,8 @@ const OrderDetail = () => {
             cursor: "pointer",
             gap: ".5rem",
           }}
-          onClick={() => setShowDetail(!showDetail)}>
+          onClick={() => setShowDetail(!showDetail)}
+        >
           <p> {showDetail ? "Ẩn chi tiết" : "Xem chi tiết"} </p>
           {showDetail ? <UpOutlined /> : <DownOutlined />}
         </div>
@@ -872,7 +889,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <img
                   alt=""
@@ -907,7 +925,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <img
                   alt=""
@@ -964,7 +983,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <img
                   alt=""
@@ -1031,7 +1051,8 @@ const OrderDetail = () => {
                 color: "#222222",
                 fontSize: "16px",
                 fontWeight: "700",
-              }}>
+              }}
+            >
               <div>
                 <TeamOutlined
                   className="me-10 mb-2"
@@ -1128,7 +1149,8 @@ const OrderDetail = () => {
         okText="Đồng ý"
         cancelText="Thoát"
         onCancel={() => setShowModal(false)}
-        onOk={() => handleCancelOrder()}>
+        onOk={() => handleCancelOrder()}
+      >
         <>
           <div>
             Quý khách có thể huỷ đơn đặt cho đến{" "}
@@ -1146,7 +1168,8 @@ const OrderDetail = () => {
             className="mt-3"
             rows={4}
             style={{ resize: "none" }}
-            onChange={(e) => setCancelReason(e.target.value)}></Input.TextArea>
+            onChange={(e) => setCancelReason(e.target.value)}
+          ></Input.TextArea>
           <Divider />
           <section className="chile">
             <div className="df">
