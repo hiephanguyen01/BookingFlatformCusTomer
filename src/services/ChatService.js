@@ -18,9 +18,17 @@ class ChatService extends BaseService {
       `/api/chat/conversation-user-all?partner=${partner}&id=${id}`
     );
   };
-  getConversationVsAdmin = (userId, partner, AdminId) => {
+  getConversationVsAdmin = (participantId, partner) => {
+    /**
+     * Input:
+     *  participantId <int>: UserId / PartnerId
+     *  partner <boolean>: Is partner or not?
+     *
+     * Ouput:
+     *  HTTP Get method
+     */
     return this.get(
-      `/api/chat/conversation-with-admin?id=${userId}&partnerWithAdmin=${partner}&AdminId=${AdminId}`
+      `/api/chat/conversation-with-admin?id=${participantId}&partnerWithAdmin=${partner}`
     );
   };
   getMesVsAdmin = (limit, page, ConversationId) => {
@@ -62,6 +70,19 @@ class ChatService extends BaseService {
     this.get(
       `/api/chat/conversation-user/count-conversation-has-new-mess?id=${id}&role=${role}`
     );
+
+  /**
+   * Input: memberId <int>, role <string>: "admin" || "partner" || "user"
+   *
+   * Output: HTTP request
+   */
+  getAllConversationId = (memberId, role) =>
+    this.get(
+      `/api/chat/conversation-user/all-ids?memberId=${memberId}&role=${role}`
+    );
+
+  deleteMessageForAllUserInRoom = (id) =>
+    this.delete(`/api/chat/message-user/${id}`);
 }
 
 export const chatService = new ChatService();

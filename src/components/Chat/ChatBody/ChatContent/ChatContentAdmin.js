@@ -1,5 +1,6 @@
 import { CloseCircleOutlined, PictureOutlined } from "@ant-design/icons";
 import moment from "moment";
+import { Button, Popover } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import adminLogo from "../../../../assets/Chat/AdminUser.png";
@@ -15,8 +16,7 @@ export const ChatContentAdmin = ({ info }) => {
   const updateScroll = useSelector(updateMSelector);
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
-  const typingTimeOutRef = useRef(null);
-  const [isTyping, setIsTyping] = useState(false);
+  const [renderMessageList, setRenderMessageList] = useState([]);
   const [loading, setLoading] = useState(false);
   const messageEndRef = useRef(null);
   const [hasMore, setHasMore] = useState(true);
@@ -32,7 +32,7 @@ export const ChatContentAdmin = ({ info }) => {
     const messText = {
       messageContent: {
         id: Math.random(),
-        ConversationId: id,
+        ConversationId: info.id,
         createdAt: moment().toISOString(),
         Content: message,
         Chatting: UserMe,
@@ -66,7 +66,7 @@ export const ChatContentAdmin = ({ info }) => {
         socket.emit("send_message_admin", {
           messageContent: {
             id: Math.random(),
-            ConversationId: id,
+            ConversationId: info.id,
             createdAt: moment().toISOString(),
             Content: file,
             Chatting: UserMe,
@@ -95,7 +95,7 @@ export const ChatContentAdmin = ({ info }) => {
         socket.emit("send_message_admin", {
           messageContent: {
             id: Math.random(),
-            ConversationId: id,
+            ConversationId: info.id,
             createdAt: moment().toISOString(),
             Content: file,
             Chatting: UserMe,
@@ -127,11 +127,13 @@ export const ChatContentAdmin = ({ info }) => {
     setFiles([...newFiles]);
     scrollToBottom();
   };
+
   const handleRemoveImage = (index) => {
     const newFiles = [...files];
     newFiles.splice(index, 1);
     setFiles([...newFiles]);
   };
+
   const onInputChange = async (event) => {
     setMessage(event.target.value);
     // socket.emit("typing_admin", {
@@ -148,72 +150,6 @@ export const ChatContentAdmin = ({ info }) => {
     //   });
     // }, 1000);
   };
-
-  // *** UseEffect to retrieve conversation message list ***
-  useEffect(() => {
-    if (info) {
-      (async () => {
-        const res = await chatService.getMesVsAdmin(10, 1, info.id);
-        setMessageList(res.data.data);
-        setFlag(true);
-      })();
-      setId(info.id);
-    }
-  }, [info]);
-  // ********************************************************
-
-  // *** UseEffect to scroll to bottom ***
-  useEffect(() => {
-    if (flag) {
-      scrollToBottom();
-    }
-  }, [messageList, updateScroll, flag]);
-  //**************************************
-
-  // *** UseEffect to retrieve message every time this component is rendered ***
-  useEffect(() => {
-    (async () => {
-      const res = await chatService.getMessByConversationId(10, 1, id);
-      setMessageList(res.data.data);
-      setLoading(true);
-      setFlag(true);
-    })();
-  }, []);
-  // ****************************************************************************
-
-  // *** UseEffect to listen to socket ***
-  useEffect(() => {
-    socket.on("receive_message_admin", (data) => {
-      if (data.messageContent.ConversationId === id) {
-        // setMessageList((list) => [...list, data.messageContent]);
-        setMessageList((list) => {
-          let duplicateFlag = false;
-          messageList.every((el) => {
-            if (el?.id === data.messageContent?.id) {
-              duplicateFlag = true;
-              return false;
-            }
-            return true;
-          });
-          if (!duplicateFlag) {
-            return [...list, data.messageContent];
-          }
-        });
-        setFlag(true);
-      } else {
-        return false;
-      }
-    });
-    // socket.on("isTyping_admin", (data) => {
-    //   if (data.ConversationId === id && data.typing === true) {
-    //     scrollToBottom();
-    //     setIsTyping(true);
-    //   } else {
-    //     setIsTyping(false);
-    //   }
-    // });
-  }, [socket, id]);
-  // **************************************
 
   const renderMess = (itm) => {
     if (itm.Type !== "text") {
@@ -234,6 +170,84 @@ export const ChatContentAdmin = ({ info }) => {
       return <>{itm.Content}</>;
     }
   };
+
+  const deleteMessForBoth = async (messageId) => {
+    const { data } = await chatService.deleteMessageForAllUserInRoom(messageId);
+    if (data.success) {
+      setMessageList((list) => [...list.filter((el) => el.id !== messageId)]);
+      setRenderMessageList((list) => [
+        ...list.filter((el) => el.id !== messageId),
+      ]);
+    }
+  };
+
+  const deleteMessForMyself = () => {};
+
+  const moreActionChatContent = (sender, messageId) =>
+    sender === "admin" ? (
+      <div className="ChatContent__conversation__moreaction">
+        <button onClick={deleteMessForMyself}>Xóa tin nhắn cho bạn</button>
+      </div>
+    ) : (
+      <div className="ChatContent__conversation__moreaction">
+        <button onClick={() => deleteMessForBoth(messageId)}>
+          Xóa tin nhắn cho cả 2 người
+        </button>
+        <button onClick={deleteMessForMyself} style={{ marginTop: "10px" }}>
+          Xóa tin nhắn cho bạn
+        </button>
+      </div>
+    );
+
+  // *** UseEffect to retrieve conversation message list ***
+  useEffect(() => {
+    if (info) {
+      (async () => {
+        const res = await chatService.getMesVsAdmin(10, 1, info.id);
+        setMessageList(res.data.data);
+        setRenderMessageList(res.data.data);
+        setLoading(true);
+        setFlag(true);
+      })();
+    }
+  }, [info]);
+  // ********************************************************
+
+  // *** UseEffect to scroll to bottom ***
+  useEffect(() => {
+    scrollToBottom();
+  }, [renderMessageList, messageList, updateScroll, flag]);
+  //**************************************
+
+  // *** UseEffect to listen to socket ***
+  useEffect(() => {
+    socket.on("receive_message_admin", (data) => {
+      setMessageList((list) => [...list, data.messageContent]);
+      setFlag(true);
+    });
+  });
+  // *************************************
+
+  // *** UseEffect to cleanup, filter duplicate item in messagelist ***
+  useEffect(() => {
+    setRenderMessageList(() => {
+      const uniqueIds = [];
+      const unique = messageList.filter((element) => {
+        const isDuplicate = uniqueIds.includes(element.id);
+
+        if (!isDuplicate) {
+          uniqueIds.push(element.id);
+
+          return true;
+        }
+
+        return false;
+      });
+
+      return [...unique];
+    });
+  }, [messageList]);
+  // *************************************
 
   return (
     <div className="ChatContent">
@@ -292,7 +306,7 @@ export const ChatContentAdmin = ({ info }) => {
                 </div>
               </div>
             )}
-            {messageList
+            {renderMessageList
               .sort((a, b) => {
                 const a1 = /* new Date(a.createdAt) */ a.id;
                 const b1 = /* new Date(b.createdAt) */ b.id;
@@ -302,42 +316,40 @@ export const ChatContentAdmin = ({ info }) => {
                 <div
                   key={index}
                   className={
-                    itm.Chatting?.AdminName === "admin" ||
-                    itm?.Chatting?.user?.name
+                    itm["sender"] === "admin"
                       ? "ChatContent__conversation__other"
                       : "ChatContent__conversation__you"
                   }
                 >
                   <div
                     className={
-                      itm.Chatting?.AdminName === "admin" ||
-                      (itm?.Chatting?.user?.name && itm.Type === "text")
+                      itm["sender"] === "admin" && itm.Type === "text"
                         ? "ChatContent__conversation__other__content"
-                        : itm.Chatting?.AdminName === "admin" ||
-                          (itm?.Chatting?.user?.name && itm.Type !== "text")
+                        : itm["sender"] === "admin" && itm.Type !== "text"
                         ? "ChatContent__conversation__other__img"
-                        : itm.Chatting?.AdminName !== "admin" &&
-                          !itm?.Chatting?.user?.name &&
-                          itm.Type === "text"
+                        : itm["sender"] !== "admin" && itm.Type === "text"
                         ? "ChatContent__conversation__you__content"
                         : "ChatContent__conversation__you__img"
                     }
-                    /*  className={
-                      itm.Chatting?.AdminName === "admin"
-                        ? "ChatContent__conversation__other__content"
-                        : "ChatContent__conversation__you__content"
-                    } */
                   >
-                    {renderMess(itm)}
+                    <Popover
+                      placement="right"
+                      content={() =>
+                        moreActionChatContent(itm["sender"], itm["id"])
+                      }
+                      trigger="contextMenu"
+                      style={{
+                        padding: 0,
+                      }}
+                    >
+                      {renderMess(itm)}
+                    </Popover>
                     <p
                       style={{
                         fontSize: "9px",
                         color: "#808080",
                         width: "100%",
-                        textAlign:
-                          itm.Chatting.PartnerName !== undefined
-                            ? "left"
-                            : "right",
+                        textAlign: itm["sender"] === "admin" ? "left" : "right",
                       }}
                     >
                       {moment(itm.createdAt).format("hh:mm DD/MM/YY")}
@@ -345,16 +357,6 @@ export const ChatContentAdmin = ({ info }) => {
                   </div>
                 </div>
               ))}
-            {/* {isTyping && (
-              <div>
-                <div className="ChatContent__conversation__typing">
-                  <div className="ChatContent__conversation__typing__content">
-                    Booking Studio
-                  </div>{" "}
-                  <div className="dot-typing" />
-                </div>
-              </div>
-            )} */}
           </>
         ) : (
           <div className="w-100 h-100 d-flex justify-content-center align-items-center">

@@ -19,6 +19,7 @@ export const ChatBody = () => {
   const getToggleState = useSelector((state) => state.chatReducer.toggleState);
   const updateConversation = useSelector(findConverSelector);
   const flagCreateConver = useSelector(createConverFlagSelector);
+
   const dispatch = useDispatch();
   const [toggleState, setToggleState] = useState(getToggleState);
   const initMountStateUser = useRef([]);
@@ -54,7 +55,8 @@ export const ChatBody = () => {
             className={
               toggleState === chat?.id ? "Chat__body__content" : "d-none"
             }
-            key={chat.id}>
+            key={chat.id}
+          >
             <ChatContent chatInfo={chat} />
           </div>
         )
@@ -151,7 +153,7 @@ export const ChatBody = () => {
   }, [UserMe?.id]);
 
   const retrieveConversationMessages = async (setInfoChatAdmin) => {
-    const res = await chatService.getConversationVsAdmin(UserMe.id, 0, 10);
+    const res = await chatService.getConversationVsAdmin(UserMe.id, 0);
     setInfoChatAdmin(res?.data?.data);
   };
   //******* Call API to retrieve the ConversationId with Admin *******
@@ -169,8 +171,10 @@ export const ChatBody = () => {
         />
         <ChatAdmin
           info={infoChatAdmin}
-          setInfoChatAdmin={setInfoChatAdmin}
-          retrieveConversationMessages={retrieveConversationMessages}
+          // setInfoChatAdmin={setInfoChatAdmin}
+          retrieveConversationMessages={() =>
+            retrieveConversationMessages(setInfoChatAdmin)
+          }
           toggleState={toggleState}
           setToggleState={setToggleState}
           toggleClick={(e) => {
@@ -218,7 +222,8 @@ export const ChatBody = () => {
                 setLoadMore(false);
               }
             }
-          }}>
+          }}
+        >
           {userChat()}
           {!hasMore && (
             <div className="Chat__body__userlist__no-more">
@@ -237,7 +242,8 @@ export const ChatBody = () => {
       <div className="Chat__body__divider"></div>
       <div
         className={toggleState === 1000000 ? "Chat__body__content" : "d-none"}
-        key={1000000}>
+        key={1000000}
+      >
         <ChatContentAdmin info={infoChatAdmin} />
       </div>
       {contentChat()}

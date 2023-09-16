@@ -17,7 +17,6 @@ import { closeConversationSelector } from "../../stores/selector/ChatSelector";
 import { SHOW_CHAT } from "../../stores/types/messType";
 import Draggable from "react-draggable";
 import { chatService } from "../../services/ChatService";
-import { getConversationIdForChat } from "../../stores/actions/ChatAction";
 
 const Chat = () => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
@@ -84,6 +83,16 @@ const Chat = () => {
     };
 
     if (socket) {
+      (async () => {
+        const { data } = await chatService.getAllConversationId(
+          UserMe.id,
+          "user"
+        );
+        data.payload.forEach((el) => {
+          socket.emit("joinChatRoom", { roomId: el, memberId: UserMe.id });
+        });
+      })();
+
       socket.emit("login_user", {
         userId: UserMe.id,
       });
@@ -136,14 +145,14 @@ const Chat = () => {
   useEffect(() => {
     // Listen to event which request this user to join room from admin every time an order's payment status was changed into "Đã cọc"
     // or "Đã thanh toán"
-    socket.on(
-      "requestUserAndPartnerJoinRoom",
-      ({ roomId, userId, partnerId }) => {
-        if (userId === UserMe?.id) {
-          socket.emit("joinChatRoom", { roomId, userId, partnerId: null });
-        }
-      }
-    );
+    // socket.on(
+    //   "requestUserAndPartnerJoinRoom",
+    //   ({ roomId, userId, partnerId }) => {
+    //     if (userId === UserMe?.id) {
+    //       socket.emit("joinChatRoom", { roomId, userId });
+    //     }
+    //   }
+    // );
 
     socket.on("receive_message_admin", (message) => {
       const { ConversationId, Chatting } = message?.messageContent;
