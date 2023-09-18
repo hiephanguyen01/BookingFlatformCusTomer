@@ -199,14 +199,16 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   }, []);
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      if (data.ConversationId === id) {
-        setMessageList((list) => [...list, data]);
-        setFlag(true);
-      } else {
-        return false;
-      }
+      console.log(data);
+      // if (data.ConversationId === id) {
+      //   setMessageList((list) => [...list, data]);
+      //   setFlag(true);
+      // } else {
+      //   return false;
+      // }
     });
-  }, [socket, id]);
+  });
+  // , [socket, id]
 
   return (
     <div className="ChatContent">
