@@ -106,8 +106,9 @@ function App() {
     // (process.env.NODE_ENV === "production" ||
     process.env.NODE_ENV === "production" && GlobalDebug(false, true);
   }, []);
-
+  
   return (
+   
     <div className="App">
       <ModalCustom />
       <BackTop>
