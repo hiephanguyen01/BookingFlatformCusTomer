@@ -179,7 +179,7 @@ const FilterPage = () => {
               priceOption: +query?.priceOption,
               priceRange: query?.priceRange || [],
               location: query?.location || "",
-              ratingOption: +query?.ratingOption || 1,
+              ratingOption: +query?.ratingOption,
             },
             null,
             navigate
@@ -369,6 +369,7 @@ const FilterPage = () => {
   };
 
   const onChangeRateOption = (e) => {
+    console.log(e.target.value);
     const newFilter = { ...filter, ratingOption: e.target.value };
     navigate(
       `/home/filter?${queryString.stringify(
@@ -1025,6 +1026,9 @@ const FilterPage = () => {
                           >
                             <Row>
                               <Col span={24}>
+                                <Radio value={0}>Mặc định</Radio>
+                              </Col>
+                              <Col span={24}>
                                 <Radio value={2}>Giá cao nhất</Radio>
                               </Col>
                               <Col span={24}>
@@ -1062,6 +1066,9 @@ const FilterPage = () => {
                             value={filter.ratingOption}
                           >
                             <Row>
+                              <Col span={24}>
+                                <Radio value={0}>Mặc định</Radio>
+                              </Col>
                               <Col span={24}>
                                 <Radio value={1}>Đánh giá nhiều nhất</Radio>
                               </Col>
