@@ -14,6 +14,14 @@ export const convertTime = (time) => {
 };
 
 export const convertPrice = (price) => {
+  /**Converts a price to a string with a decimal separator every 3 digits.
+
+  * Args:
+  *  price: A number representing the price.
+
+  * Returns:
+  *  A string representing the formatted price.
+  */
   if (Number.isNaN(price)) {
     price = 0;
   }

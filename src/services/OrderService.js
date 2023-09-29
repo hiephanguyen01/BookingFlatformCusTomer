@@ -18,6 +18,11 @@ class OrderService extends BaseService {
       `/api/booking/byIdentifyCode?identifyCode=${identifyCode}&category=${category}`
     );
   };
+  getLatestOrderByUserId = (UserId, PartnerId) =>
+    this.get(
+      `/api/booking/latestBookingbyUserId?UserId=${UserId}&PartnerId=${PartnerId}`
+    );
+
   addOrder = (data) => {
     return this.post("/api/booking", data);
   };

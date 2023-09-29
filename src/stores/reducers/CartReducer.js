@@ -64,190 +64,10 @@ const initialState = {
         ],
       },
     ],
-    clothes: [
-      {
-        Id: 1,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-      {
-        Id: 2,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-    ],
-    makeup: [
-      {
-        Id: 1,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-      {
-        Id: 2,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-    ],
-    device: [
-      {
-        Id: 1,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-      {
-        Id: 2,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-    ],
-    model: [
-      {
-        Id: 1,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-      {
-        Id: 2,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-    ],
+    clothes: [],
+    makeup: [],
+    device: [],
+    model: [],
   },
 };
 
@@ -321,24 +141,33 @@ export const CartReducer = (state = initialState, action) => {
         (item) => item?.id === post?.id
       );
       let newPost = [];
+      console.log("Trong SET_CART_BY_CATEGORY", findPost);
       if (findPost) {
+        console.log("trong findpost");
         if (
           !findPost?.Services?.some(
             (item) => (item?.Id || item?.id) === service?.id
           )
         ) {
-          findPost?.Services.push(service);
+          findPost?.Services.push({ ...service, ...post });
         } else {
           const newServices = findPost?.Services.map((item) => {
             if (item?.id === service?.id) {
-              return service;
+              return { ...service, ...post };
             }
             return item;
           });
           findPost.Services = newServices;
         }
       } else {
-        newPost = [{ id: post?.id, Name: post?.Name, Services: [service] }];
+        console.log("trong findpost");
+        newPost = [
+          {
+            id: post?.id,
+            Name: post?.Name,
+            Services: [{ ...service, ...post }],
+          },
+        ];
       }
 
       return {

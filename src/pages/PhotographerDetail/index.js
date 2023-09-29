@@ -1360,15 +1360,15 @@ const PhotographerDetail = () => {
                           <Button
                             className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
                             disabled={true}
-                            onClick={() =>
-                              toastMessage(
-                                "Chức năng này đang phát triển!",
-                                "info",
-                                1,
-                                "",
-                                {}
-                              )
-                            }
+                            onClick={() => {
+                              if (currentUser) {
+                                dispatch(
+                                  addCart(2, studioDetail?.data, chooseService)
+                                );
+                              } else {
+                                toastMessage.warning("Vui lòng đăng nhập!");
+                              }
+                            }}
                           >
                             <ShoppingCartOutlined />
                             Thêm vào giỏ hàng

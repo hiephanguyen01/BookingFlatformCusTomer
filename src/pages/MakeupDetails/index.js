@@ -1180,15 +1180,15 @@ const Index = () => {
                           disabled={
                             chooseServiceList?.length > 0 ? false : true
                           }
-                          onClick={() =>
-                            toastMessage(
-                              "Chức năng này đang phát triển!",
-                              "info",
-                              1,
-                              "",
-                              {}
-                            )
-                          }
+                          onClick={() => {
+                            if (currentUser) {
+                              dispatch(
+                                addCart(4, studioDetail?.data, chooseService)
+                              );
+                            } else {
+                              toastMessage.warning("Vui lòng đăng nhập!");
+                            }
+                          }}
                         >
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
@@ -1301,15 +1301,15 @@ const Index = () => {
                           disabled={
                             chooseServiceList?.length > 0 ? false : true
                           }
-                          onClick={() =>
-                            toastMessage(
-                              "Chức năng này đang phát triển!",
-                              "info",
-                              1,
-                              "",
-                              {}
-                            )
-                          }
+                          onClick={() => {
+                            if (currentUser) {
+                              dispatch(
+                                addCart(4, studioDetail?.data, chooseService)
+                              );
+                            } else {
+                              toastMessage.warning("Vui lòng đăng nhập!");
+                            }
+                          }}
                         >
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng

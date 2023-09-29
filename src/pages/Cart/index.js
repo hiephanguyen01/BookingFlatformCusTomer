@@ -40,6 +40,7 @@ const Index = () => {
 
   useEffect(() => {
     if (query?.category) {
+      dispatch(getCartItemByCategory(query?.category));
     } else {
       navigate("/home/cart?category=1");
     }
@@ -47,12 +48,6 @@ const Index = () => {
       setChooseServices([]);
     };
   }, [navigate, query]);
-
-  useEffect(() => {
-    if (query?.category) {
-      dispatch(getCartItemByCategory(query?.category));
-    }
-  }, [query, dispatch]);
 
   useEffect(() => {
     dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });

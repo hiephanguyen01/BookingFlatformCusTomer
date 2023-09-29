@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import "./ChatUser.scss";
 import moment from "moment";
-import { useState, useEffect /* , useRef */ } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   onlinePartnerSelector,
@@ -10,6 +9,7 @@ import {
 } from "../../../../stores/selector/OnlineSelector";
 import { chatService } from "../../../../services/ChatService";
 import { HandleImg } from "../../../HandleImg/HandleImg";
+import { orderService } from "../../../../services/OrderService";
 
 export const ChatUser = ({
   id,
@@ -17,12 +17,10 @@ export const ChatUser = ({
   toggleState,
   toggleClick,
   setToggleState,
+  setLatestBookingOfUser,
 }) => {
-  const onlinePartnerList = useSelector(onlinePartnerSelector);
-  const offlinePartnerList = useSelector(offlinePartnerSelector);
   const { notiMessage } = useSelector((state) => state.chatReducer);
   const [isRead, setIsRead] = useState(false);
-  const [isOnline, setIsOnline] = useState(false);
   const [lastMessage, setLastMessage] = useState(
     userInfo?.newestMessage ? userInfo?.newestMessage : null
   );
@@ -30,6 +28,14 @@ export const ChatUser = ({
 
   const readMessage = async () => {
     await chatService.readMessage(id);
+  };
+
+  const getLatestBookingByUserId = async () => {
+    const { data } = await orderService.getLatestOrderByUserId(
+      userInfo.UserId.id,
+      userInfo.PartnerId.id
+    );
+    if (data.payload) setLatestBookingOfUser(data.payload);
   };
 
   useEffect(() => {
@@ -42,17 +48,6 @@ export const ChatUser = ({
       setLastMessage(userInfo.newestMessage);
     }
   }, [userInfo]);
-  // useEffect(() => {
-  //   setIsOnline(onlinePartnerList.includes(userInfo.PartnerId.id));
-  // }, [onlinePartnerList]);
-  // useEffect(() => {
-  //   setIsOnline(offlinePartnerList.includes(userInfo.PartnerId.id));
-  // }, [offlinePartnerList]);
-  // useEffect(() => {
-  //   return () => {
-  //     setToggleState(1);
-  //   };
-  // }, []);
   return (
     <div
       className={
@@ -63,6 +58,9 @@ export const ChatUser = ({
         dispatch({ type: "REMOVE_NOTIFY_MESS", payload: id });
         await readMessage();
         setIsRead(true);
+
+        await getLatestBookingByUserId();
+
         if (
           userInfo?.newestMessage.UserId.id === -1 &&
           userInfo?.newestMessage.IsRead === false
@@ -92,11 +90,6 @@ export const ChatUser = ({
                     15
                   )}...`}
             </p>
-            {/* {isOnline ? (
-                <span className="User__isOnline"></span>
-              ) : (
-                <span className="User__isOffline"></span>
-              )} */}
           </div>
           <div
             className="w-100 d-flex justify-content-between"

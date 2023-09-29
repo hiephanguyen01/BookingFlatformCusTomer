@@ -14,23 +14,7 @@ import { IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
 import { socket } from "../../../ConnectSocket/ConnectSocket";
 import "./ChatContent.scss";
 
-/* export const UserMe = {
-  id: 5,
-  Username: "3871952632888744",
-  Image: "b953bcbb-96f8-4dc2-8b5d-9f9b895d0def",
-  Email: "anhsaobanga21@gmail.com",
-  Fullname: "Toàn Nguyễn",
-  Phone: "0909005001",
-}; */
-/* export const UserMe = {
-  id: 6,
-  Username: "hoanganhnguyen96kt@gmail.com",
-  Image: "15bc1346-7c8b-4844-b9b6-9d39cba1a7f4",
-  Email: "anhsaobanga21@gmail.com",
-  Fullname: "Nguyeh Hoanganh",
-  Phone: "",
-}; */
-export const ChatContent = React.memo(({ chatInfo }) => {
+export const ChatContent = ({ chatInfo, latestBookingOfUser }) => {
   const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
 
   const navigate = useNavigate();
@@ -39,14 +23,14 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   const { id } = chatInfo;
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
-  const typingTimeOutRef = useRef(null);
+  // const typingTimeOutRef = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
   const [loading, setLoading] = useState(false);
   const messageEndRef = useRef(null);
   const [hasMore, setHasMore] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
   const [flag, setFlag] = useState(true);
-  const [booking, setBooking] = useState([]);
+  // const [booking, setBooking] = useState([]);
   const [files, setFiles] = useState([]);
 
   const scrollToBottom = () => {
@@ -173,17 +157,17 @@ export const ChatContent = React.memo(({ chatInfo }) => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await orderService.getAllOrderByUserId({});
-        const filterBooking = data.data.filter(
-          (item) => item.TenantId === chatInfo.PartnerId?.id
-        );
-        setBooking(filterBooking);
-      } catch (error) {}
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const { data } = await orderService.getAllOrderByUserId({});
+  //       const filterBooking = data.data.filter(
+  //         (item) => item.TenantId === chatInfo.PartnerId?.id
+  //       );
+  //       setBooking(filterBooking);
+  //     } catch (error) {}
+  //   })();
+  // }, []);
   useEffect(() => {
     if (flag) {
       scrollToBottom();
@@ -199,16 +183,15 @@ export const ChatContent = React.memo(({ chatInfo }) => {
   }, []);
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log(data);
-      // if (data.ConversationId === id) {
-      //   setMessageList((list) => [...list, data]);
-      //   setFlag(true);
-      // } else {
-      //   return false;
-      // }
+      // console.log(data);
+      if (data.ConversationId === id) {
+        setMessageList((list) => [...list, data]);
+        setFlag(true);
+      } else {
+        return false;
+      }
     });
   });
-  // , [socket, id]
 
   return (
     <div className="ChatContent">
@@ -224,7 +207,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
             <div>{chatInfo?.PartnerId?.PartnerName}</div>
           </div>
         </div>
-        {booking.length > 0 && (
+        {latestBookingOfUser && (
           <button
             onClick={() => {
               navigate("user/orderStatus");
@@ -234,7 +217,7 @@ export const ChatContent = React.memo(({ chatInfo }) => {
           >
             <div className="d-flex flex-column align-items-center">
               <div style={{ fontSize: "14px", fontWeight: "600" }}>
-                Bạn đang có {booking.length} đơn đặt hàng
+                Bạn đang có {latestBookingOfUser.length} đơn đặt hàng
               </div>
               <div style={{ fontSize: "10px", fontWeight: "900" }}>
                 XEM CHI TIẾT
@@ -428,4 +411,4 @@ export const ChatContent = React.memo(({ chatInfo }) => {
       </div>
     </div>
   );
-});
+};

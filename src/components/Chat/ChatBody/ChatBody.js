@@ -27,6 +27,7 @@ export const ChatBody = () => {
   const [conversation, setConversation] = useState(initMountStateUser.current);
   const [hasMore, setHasMore] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
+  const [latestBookingOfUser, setLatestBookingOfUser] = useState([]);
 
   const userChat = () => {
     return conversation.map(
@@ -42,24 +43,23 @@ export const ChatBody = () => {
               dispatch({ type: TOGGLE_STATE, payload: e });
               dispatch(updateMAction());
             }}
+            setLatestBookingOfUser={setLatestBookingOfUser}
           />
         )
     );
   };
 
   const contentChat = () => {
-    return conversation.map(
-      (chat) =>
-        chat && (
-          <div
-            className={
-              toggleState === chat?.id ? "Chat__body__content" : "d-none"
-            }
-            key={chat.id}
-          >
-            <ChatContent chatInfo={chat} />
-          </div>
-        )
+    let toggleConversation = conversation.filter((el) => el.id === toggleState);
+    return toggleConversation.length > 0 ? (
+      <div className={"Chat__body__content"} key={toggleState}>
+        <ChatContent
+          chatInfo={toggleConversation[0]}
+          latestBookingOfUser={latestBookingOfUser}
+        />
+      </div>
+    ) : (
+      <></>
     );
   };
 
