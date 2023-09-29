@@ -86,18 +86,40 @@ export const updateServiceListAction = (promotion, id) => async (dispatch) => {
 };
 
 export const getCartItemByCategory = (category) => async (dispatch) => {
+  /**
+  * Gets the cart items for the given category.
+
+  * Args:
+  *   category: The category of the cart items.
+
+  * Returns:
+  *   A promise that resolves to an object containing the cart items for the given category, or rejects with an error if the cart items could not be retrieved.
+  */
   try {
     const res = await cartService.getCartItemByCategory(category);
-    dispatch({
-      type: SET_CART_BY_CATEGORY,
-      payload: { category, data: res.data.data },
-    });
+    if (res) {
+      dispatch({
+        type: SET_CART_BY_CATEGORY,
+        payload: { category, data: res.data.data },
+      });
+    }
   } catch (error) {
     console.error(error);
   }
 };
 
 export const addCart = (category, post, service) => async (dispatch) => {
+  /**
+  * This function adds an item to the cart.
+
+  * Args:
+  *   category: The category of the item.
+  *   post: The post object, if the item is a post.
+  *   service: The service object, if the item is a service.
+
+  * Returns:
+  *   A promise that resolves to an object containing the cart data, or rejects with an error if the item could not be added to the cart.
+  */
   try {
     const res = await cartService.addToCart({
       category,

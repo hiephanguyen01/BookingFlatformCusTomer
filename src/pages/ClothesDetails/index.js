@@ -22,17 +22,23 @@ import {
   Row,
   Select,
 } from "antd";
+import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import ReactStickyBox from "react-sticky-box";
 import imgPost from "../../assets/dao/Frame 163.jpg";
+import images from "../../assets/images";
 import svgLocation from "../../assets/svg/location.svg";
+import BackNav from "../../components/BackNav/BackNav";
 import CommentRating from "../../components/CommentRating";
-import ImagePost from "../../components/imagePost/ImagePost";
 import MetaDecorator from "../../components/MetaDecorator/MetaDecorator";
+import PromotionList from "../../components/PromotionList/PromotionList";
 import ReadMoreDesc from "../../components/ReadMoreDesc";
+import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import toastMessage from "../../components/ToastMessage";
-import { chooseServiceAction } from "../../stores/actions/OrderAction";
+import ImagePost from "../../components/imagePost/ImagePost";
+import { addCart } from "../../stores/actions/CartAction";
 import {
   getLikeStudioPostAction,
   getStudioSimilarAction,
@@ -40,30 +46,25 @@ import {
   studioDetailAction,
 } from "../../stores/actions/studioPostAction";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import { convertImage } from "../../utils/convertImage";
-import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
-import SlideCard from "../StudioDetail/SlideCard";
-import "./clothesDetails.scss";
-import styles from "./Detail.module.scss";
 import {
   SET_PROMOTION_CODE,
   SET_STUDIO_DETAIL,
 } from "../../stores/types/studioPostType";
-import PromotionList from "../../components/PromotionList/PromotionList";
+import { convertImage } from "../../utils/convertImage";
+import PopUpSignIn from "../Auth/PopUpSignIn/PopUpSignIn";
 import { Report } from "../StudioDetail/Report";
-import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
-import ReactStickyBox from "react-sticky-box";
-import classNames from "classnames/bind";
-import BackNav from "../../components/BackNav/BackNav";
-import images from "../../assets/images";
+import SlideCard from "../StudioDetail/SlideCard";
+import styles from "./Detail.module.scss";
+import "./clothesDetails.scss";
 
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
-// import required modules
-import { Pagination } from "swiper";
-import { convertPrice } from "../../utils/convert";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { calTime } from "../../utils/calculate";
+import { convertPrice } from "../../utils/convert";
+import { cartService } from "../../services/CartService";
+import queryString from "query-string";
 
 const cx = classNames.bind(styles);
 
@@ -103,7 +104,6 @@ const Index = () => {
   const [amount, setAmount] = useState(1);
   const [size, setSize] = useState("S");
   const [color, setColor] = useState("Trắng");
-  // const [chooseService, setChooseService] = useState([]);
   const [open, setOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.authenticateReducer);
   const dispatch = useDispatch();
@@ -141,7 +141,79 @@ const Index = () => {
     });
   };
 
-  const handleBook = () => {
+  // const handleChooseService = (data) => {
+  //   const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+  //   if (findSelectTime) {
+  //     if (
+  //       findSelectTime?.OrderByTime === 1 &&
+  //       findSelectTime?.OrderByTimeFrom !== undefined &&
+  //       findSelectTime?.OrderByTimeFrom !== "" &&
+  //       findSelectTime?.OrderByTimeTo !== undefined &&
+  //       findSelectTime?.OrderByTimeTo !== "" &&
+  //       findSelectTime?.OrderByTimeTo !== findSelectTime?.OrderByTimeFrom
+  //     ) {
+  //       dispatch(
+  //         handlerSelectServiceAction(
+  //           { ...data, nameService: studioDetail?.data?.Name },
+  //           findSelectTime
+  //         )
+  //       );
+  //     } else if (
+  //       findSelectTime?.OrderByTime === 0 &&
+  //       findSelectTime?.OrderByDateFrom !== undefined &&
+  //       findSelectTime?.OrderByDateFrom !== "" &&
+  //       findSelectTime?.OrderByDateTo !== undefined &&
+  //       findSelectTime?.OrderByDateTo !== ""
+  //     ) {
+  //       dispatch(
+  //         handlerSelectServiceAction(
+  //           { ...data, nameService: studioDetail?.data?.Name },
+  //           findSelectTime
+  //         )
+  //       );
+  //     } else {
+  //       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //     }
+  //   } else {
+  //     return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //   }
+  // };
+
+  // const handleBook = async () => {
+  //   if (chooseService) {
+  //     if (currentUser) {
+  //       const res = await cartService.addToCart({
+  //         category: 1,
+  //         CategoryPostId: studioDetail?.data?.id,
+  //         serviceId: chooseService?.id,
+  //         OrderByTime: chooseService?.OrderByTime,
+  //         OrderByTimeFrom: chooseService?.OrderByTimeFrom,
+  //         OrderByTimeTo: chooseService?.OrderByTimeTo,
+  //         OrderByDateFrom: chooseService?.OrderByDateFrom,
+  //         OrderByDateTo: chooseService?.OrderByDateTo,
+  //       });
+  //       const arr = [
+  //         {
+  //           id: res?.data?.data?.cartItemId,
+  //           category: 1,
+  //         },
+  //       ];
+  //       const createQuery = queryString.stringify({
+  //         cartItems: JSON.stringify(arr),
+  //       });
+  //       navigate(`order?${createQuery}`);
+  //     } else {
+  //       navigate(`order`);
+  //     }
+  //   } else {
+  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
+  //   }
+  // };
+
+  const handleChooseService = (
+    call_add_cart_flag = false,
+    data_pass_to_add_cart
+  ) => {
     const findSelectTime = listTimeSelected.find(
       (item) => item.id === studioDetail?.data.id
     );
@@ -155,12 +227,18 @@ const Index = () => {
         findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
       ) {
         dispatch(
-          handlerSelectServiceAction(studioDetail?.data, {
-            ...findSelectTime,
-            size,
-            color,
-            amount,
-          })
+          handlerSelectServiceAction(
+            {
+              ...studioDetail?.data,
+              nameService: studioDetail?.data?.Name,
+              size,
+              color,
+              amount,
+            },
+            findSelectTime,
+            call_add_cart_flag,
+            data_pass_to_add_cart
+          )
         );
       } else if (
         findSelectTime.OrderByTime === 0 &&
@@ -170,12 +248,18 @@ const Index = () => {
         findSelectTime.OrderByDateTo !== ""
       ) {
         dispatch(
-          handlerSelectServiceAction(studioDetail?.data, {
-            ...findSelectTime,
-            size,
-            color,
-            amount,
-          })
+          handlerSelectServiceAction(
+            {
+              ...studioDetail?.data,
+              nameService: studioDetail?.data?.Name,
+              size,
+              color,
+              amount,
+            },
+            findSelectTime,
+            call_add_cart_flag,
+            data_pass_to_add_cart
+          )
         );
       } else {
         return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
@@ -183,12 +267,44 @@ const Index = () => {
     } else {
       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
     }
+
     navigate("order");
     // if (chooseServiceList.length > 0) {
     //   dispatch(chooseServiceAction(chooseServiceList));
     // } else {
     //   toastMessage("Bạn cần chọn dịch vụ!", "warn");
     // }
+  };
+
+  const handleBook = async () => {
+    if (chooseService) {
+      if (currentUser) {
+        const res = await cartService.addToCart({
+          category: 1,
+          CategoryPostId: studioDetail?.data?.id,
+          serviceId: chooseService?.id,
+          OrderByTime: chooseService?.OrderByTime,
+          OrderByTimeFrom: chooseService?.OrderByTimeFrom,
+          OrderByTimeTo: chooseService?.OrderByTimeTo,
+          OrderByDateFrom: chooseService?.OrderByDateFrom,
+          OrderByDateTo: chooseService?.OrderByDateTo,
+        });
+        const arr = [
+          {
+            id: res?.data?.data?.cartItemId,
+            category: 1,
+          },
+        ];
+        const createQuery = queryString.stringify({
+          cartItems: JSON.stringify(arr),
+        });
+        navigate(`order?${createQuery}`);
+      } else {
+        navigate(`order`);
+      }
+    } else {
+      toastMessage("Bạn cần chọn dịch vụ!", "warn");
+    }
   };
 
   return (
@@ -207,7 +323,8 @@ const Index = () => {
             margin: "auto",
             backgroundColor: "rgb(245, 245, 245)",
             padding: `${screens?.xs ? 0 : "2rem 0"}`,
-          }}>
+          }}
+        >
           {screens?.xs && (
             <BackNav
               to={location?.state?.pathname || "/home/filter?category=3"}
@@ -221,7 +338,8 @@ const Index = () => {
                         flexDirection: "column",
                         gap: "10px",
                         padding: "10px",
-                      }}>
+                      }}
+                    >
                       <Col span={24}>
                         <div
                           style={{
@@ -232,10 +350,12 @@ const Index = () => {
                           }}
                           onClick={() => {
                             navigate("/home");
-                          }}>
+                          }}
+                        >
                           <HomeOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Trở về trang chủ
                           </span>
                         </div>
@@ -251,12 +371,14 @@ const Index = () => {
                           onClick={() => {
                             handleReport();
                             setOpen(false);
-                          }}>
+                          }}
+                        >
                           <ExclamationCircleOutlined
                             style={{ fontSize: "20px" }}
                           />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Báo cáo
                           </span>
                         </div>
@@ -269,10 +391,12 @@ const Index = () => {
                             gap: "10px",
                             cursor: "pointer",
                           }}
-                          onClick={() => setOpen(false)}>
+                          onClick={() => setOpen(false)}
+                        >
                           <ShareAltOutlined style={{ fontSize: "20px" }} />
                           <span
-                            style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            style={{ fontSize: "18px", fontWeight: "bold" }}
+                          >
                             Chia sẻ
                           </span>
                         </div>
@@ -280,8 +404,9 @@ const Index = () => {
                     </Row>
                   }
                   trigger="click"
-                  visible={open}
-                  onVisibleChange={(value) => setOpen(value)}>
+                  open={open}
+                  onOpenChange={(value) => setOpen(value)}
+                >
                   <MoreOutlined className={cx("item")} />
                 </Popover>
               }
@@ -295,7 +420,8 @@ const Index = () => {
                     dynamicBullets: true,
                   }}
                   modules={[Pagination]}
-                  className={cx("swiper-slide-detail")}>
+                  className={cx("swiper-slide-detail")}
+                >
                   {studioDetail?.data?.Image.map((item) => (
                     <SwiperSlide>
                       <img src={convertImage(item)} alt="" />
@@ -307,7 +433,8 @@ const Index = () => {
                     className={cx(
                       "title",
                       "d-flex justify-content-start align-items-center"
-                    )}>
+                    )}
+                  >
                     <h4 style={{ marginBottom: 0, marginRight: "10px" }}>
                       {studioDetail?.data?.Name}{" "}
                     </h4>
@@ -325,21 +452,24 @@ const Index = () => {
                         className="me-5"
                         disabled
                         allowHalf
-                        value={studioDetail?.data?.TotalRate}></Rate>
+                        value={studioDetail?.data?.TotalRate}
+                      ></Rate>
                       <span className="ms-5">
                         {studioDetail?.data?.TotalRate}
                       </span>
                       <div className={cx("line-col")}></div>
                       <span
                         className={cx("number-order")}
-                        style={{ fontSize: "15px" }}>
+                        style={{ fontSize: "15px" }}
+                      >
                         {studioDetail?.data?.BookingCount} đã đặt{" "}
                       </span>
                     </div>
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}>
+                      }}
+                    >
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           onClick={handleChangeLike}
@@ -359,7 +489,8 @@ const Index = () => {
               <div className="wrapper_banner">
                 <div
                   className="d-flex justify-content-between align-items-center header"
-                  style={{ marginBottom: "11px" }}>
+                  style={{ marginBottom: "11px" }}
+                >
                   <div className="header_title">
                     {studioDetail?.data?.Name}
                     <CheckCircleOutlined className="icon_check_circle" />
@@ -368,7 +499,8 @@ const Index = () => {
                     <PopUpSignIn
                       onClick={(e) => {
                         e.stopPropagation();
-                      }}>
+                      }}
+                    >
                       {studioDetail?.data?.UsersLiked ? (
                         <HeartFilled
                           style={{
@@ -412,23 +544,27 @@ const Index = () => {
                             flexDirection: "column",
                             gap: "10px",
                             padding: "10px",
-                          }}>
+                          }}
+                        >
                           <div
                             style={{
                               display: "flex",
                               alignItems: "center",
                               gap: "10px",
                               cursor: "pointer",
-                            }}>
+                            }}
+                          >
                             <WarningOutlined style={{ fontSize: "20px" }} />
                             <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
                               Báo cáo
                             </span>
                           </div>
                         </div>
                       }
-                      trigger="click">
+                      trigger="click"
+                    >
                       <MoreOutlined
                         style={{
                           fontSize: "25px",
@@ -475,7 +611,8 @@ const Index = () => {
                     className=" py-22 mb-12 h-100 px-22"
                     style={{
                       backgroundColor: "#ffffff",
-                    }}>
+                    }}
+                  >
                     {chooseService.OrderByTime === -1 && (
                       <div className={cx("warning-choose-time")}>
                         <ExclamationCircleOutlined className="me-5" />
@@ -572,7 +709,8 @@ const Index = () => {
                 </div>
                 <div
                   style={{ backgroundColor: "#fff" }}
-                  className={cx("shop-info-mobile")}>
+                  className={cx("shop-info-mobile")}
+                >
                   <Row justify="space-between" align="middle" className="p-18">
                     <Col span={4}>
                       <img
@@ -615,7 +753,8 @@ const Index = () => {
                           state={{
                             pathname: `/home/clothes/${studioDetail?.data?.id}`,
                             pathnameFilter: `${location?.state?.pathname}`,
-                          }}>
+                          }}
+                        >
                           Xem shop
                         </Link>
                         {/* <iframe
@@ -640,7 +779,8 @@ const Index = () => {
                         padding: "24px 26px",
                         backgroundColor: "#ffffff",
                         // height: "100%",
-                      }}>
+                      }}
+                    >
                       <div className="d-flex justify-content-between mb-12">
                         <div
                           className=""
@@ -650,7 +790,8 @@ const Index = () => {
                             lineHeight: "25px",
                             /* Neutral/Grey 700 */
                             color: "#222222",
-                          }}>
+                          }}
+                        >
                           Giá trọn gói
                         </div>
                         <div
@@ -660,7 +801,8 @@ const Index = () => {
                             lineHeight: "22px",
                             textDecorationLine: "line-through",
                             color: "#828282",
-                          }}>
+                          }}
+                        >
                           {listTimeSelected?.find(
                             (item) => item?.id === studioDetail?.data?.id
                           )?.OrderByTime === 1 && (
@@ -720,7 +862,8 @@ const Index = () => {
                             lineHeight: "27px",
                             /* Primary/Red 700 */
                             color: "#E22828",
-                          }}>
+                          }}
+                        >
                           {listTimeSelected?.find(
                             (item) => item?.id === studioDetail?.data?.id
                           )?.OrderByTime === 1 && (
@@ -772,21 +915,33 @@ const Index = () => {
                       <div className="w-100 d-flex justify-content-between">
                         <Button
                           className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                          onClick={() =>
-                            toastMessage(
-                              "Chức năng này đang phát triển!",
-                              "info",
-                              1,
-                              "",
-                              {}
-                            )
-                          }>
+                          onClick={() => {
+                            if (currentUser) {
+                              handleChooseService(true, {
+                                category_number: 3,
+                                data: studioDetail?.data,
+                                service: chooseService,
+                              });
+                              // dispatch();
+                              // addCart(3, studioDetail?.data, {
+                              //   ...studioDetail?.data,
+                              //   size,
+                              //   color,
+                              //   amount,
+                              // })
+                              // addCart(3, studioDetail?.data, chooseService);
+                            } else {
+                              toastMessage.warning("Vui lòng đăng nhập!");
+                            }
+                          }}
+                        >
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
                         <Button
                           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                          onClick={handleBook}>
+                          onClick={handleBook}
+                        >
                           Đặt ngay
                         </Button>
                       </div>
@@ -807,7 +962,8 @@ const Index = () => {
                         </div>
                         <div
                           className={cx("text-medium-re")}
-                          style={{ marginBottom: "15px" }}>
+                          style={{ marginBottom: "15px" }}
+                        >
                           <img
                             src={svgLocation}
                             style={{ marginRight: "6px" }}
@@ -823,7 +979,8 @@ const Index = () => {
                         state={{
                           pathname: `/home/clothes/${studioDetail?.data?.id}`,
                           pathnameFilter: `${location?.state?.pathname}`,
-                        }}>
+                        }}
+                      >
                         Xem shop
                       </Link>
                       {/* <iframe
@@ -840,7 +997,8 @@ const Index = () => {
                         padding: "24px 26px",
                         backgroundColor: "#ffffff",
                         // height: "100%",
-                      }}>
+                      }}
+                    >
                       <div className="d-flex justify-content-between mb-12">
                         <div
                           className=""
@@ -850,7 +1008,8 @@ const Index = () => {
                             lineHeight: "25px",
                             /* Neutral/Grey 700 */
                             color: "#222222",
-                          }}>
+                          }}
+                        >
                           Đã chọn {chooseServiceList.length} sản phẩm
                         </div>
                         {1 > 0 && (
@@ -862,7 +1021,8 @@ const Index = () => {
                               textDecorationLine: "line-through",
                               /* Neutral/Grey 400 */
                               color: "#828282",
-                            }}>
+                            }}
+                          >
                             {listTimeSelected?.find(
                               (item) => item?.id === studioDetail?.data?.id
                             )?.OrderByTime === 1 && (
@@ -926,7 +1086,8 @@ const Index = () => {
                             lineHeight: "27px",
                             /* Primary/Red 700 */
                             color: "#E22828",
-                          }}>
+                          }}
+                        >
                           {listTimeSelected?.find(
                             (item) => item?.id === studioDetail?.data?.id
                           )?.OrderByTime === 1 && (
@@ -978,21 +1139,29 @@ const Index = () => {
                       <div className="w-100 d-flex justify-content-between">
                         <Button
                           className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                          onClick={() =>
-                            toastMessage(
-                              "Chức năng này đang phát triển!",
-                              "info",
-                              1,
-                              "",
-                              {}
-                            )
-                          }>
+                          onClick={() => {
+                            if (currentUser) {
+                              // handleChooseService();
+                              // dispatch(
+                              //   addCart(3, studioDetail?.data, chooseService)
+                              // );
+                              handleChooseService(true, {
+                                category_number: 3,
+                                clothes_data: studioDetail?.data,
+                                service: chooseService,
+                              });
+                            } else {
+                              toastMessage.warning("Vui lòng đăng nhập!");
+                            }
+                          }}
+                        >
                           <ShoppingCartOutlined />
                           Thêm vào giỏ hàng
                         </Button>
                         <Button
                           className="w-38 h-48px d-flex justify-content-center align-items-center btn_order"
-                          onClick={handleBook}>
+                          onClick={handleBook}
+                        >
                           Đặt ngay
                         </Button>
                       </div>
@@ -1019,7 +1188,8 @@ const Index = () => {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <div
             style={{
               background: "white",
@@ -1027,7 +1197,8 @@ const Index = () => {
               borderRadius: "50%",
               padding: "10px",
               margin: "10px",
-            }}>
+            }}
+          >
             <LoadingOutlined style={{ fontSize: "40px" }} />
           </div>
         </div>

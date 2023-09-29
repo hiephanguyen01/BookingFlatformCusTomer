@@ -197,10 +197,12 @@ export const studioPostReducer = (state = initialState, action) => {
         loadingService: action.payload,
       };
     case SET_CHOOSE_SERVICE:
-      return {
-        ...state,
-        chooseService: { ...action.payload },
-      };
+      return Object.keys(action.payload).length > 0
+        ? {
+            ...state,
+            chooseService: { ...action.payload },
+          }
+        : { ...state };
     case SET_SERVICE_SELECT:
       return {
         ...state,

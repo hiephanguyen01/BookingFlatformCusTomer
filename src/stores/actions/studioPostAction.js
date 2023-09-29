@@ -21,6 +21,7 @@ import {
 } from "../types/CartType";
 import moment from "moment";
 import toastMessage from "../../components/ToastMessage";
+import { addCart } from "./CartAction";
 
 export const getAllStudioPost = (limit, page, category) => async (dispatch) => {
   dispatch({ type: LOADING, payload: true });
@@ -312,9 +313,16 @@ export const setFilterStudioService =
     dispatch({ type: LOADING_SERVICE, payload: false });
   };
 
-export const handlerSelectServiceAction = (data, chooseServiceTime) => {
+export const handlerSelectServiceAction = (
+  data,
+  chooseServiceTime,
+  call_add_cart_flag = false,
+  data_pass_to_add_cart = null
+) => {
   return async (dispatch) => {
     try {
+      console.log(data);
+      console.log(chooseServiceTime);
       if (chooseServiceTime.OrderByTime === 1) {
         if (
           chooseServiceTime?.disableTimeOrder?.some((item) => {
@@ -367,13 +375,13 @@ export const handlerSelectServiceAction = (data, chooseServiceTime) => {
           ...data,
         },
       });
-      // if (chooseService.id == data.id) {
-      //     if (chooseService.filter((item) => item.id === data.id).length > 0) {
-      //       setChooseService([]);
-      //     } else {
-      //       setChooseService([{ ...data }]);
-      //     }
-      //   }
+
+      if (call_add_cart_flag) {
+        const { category_number, clothes_data, service } =
+          data_pass_to_add_cart;
+        // const new_service = { ...service, serviceId: data.id };
+        dispatch(addCart(category_number, clothes_data, chooseServiceTime));
+      }
     } catch (error) {}
   };
 };

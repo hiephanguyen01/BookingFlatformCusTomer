@@ -64,8 +64,11 @@ class ChatService extends BaseService {
     return this.get(`/api/notification/user?option=0`);
   };
 
-  // id: UserId || AdminId || PartnerId
-  // role: "User" || "Admin" || "Partner"
+  /**
+   * Input: id <int>: UserId || AdminId || PartnerId, role <string>: "User" || "Admin" || "Partner"
+   *
+   * Output: HTTP request
+   */
   getTotalAmountOfConversationHasNewMess = (id, role) =>
     this.get(
       `/api/chat/conversation-user/count-conversation-has-new-mess?id=${id}&role=${role}`
