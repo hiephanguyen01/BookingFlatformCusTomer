@@ -27,7 +27,7 @@ import {
   GET_ALL_PROMO_CODE,
   SET_CHOOSE_PROMOTION_USER,
 } from "../../stores/types/promoCodeType";
-import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/CartType";
+import { DEFINE_SERVICES_TO_LIST } from "../../stores/types/CartType";
 import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 import { studioDetailAction } from "../../stores/actions/studioPostAction";
 import { getPartnerDetail } from "./../../stores/actions/RegisterPartnerAction";
@@ -36,6 +36,13 @@ const { useBreakpoint } = Grid;
 
 const Index = ({ linkTo = "" }) => {
   const screens = useBreakpoint();
+  const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const cartItems = useMemo(
+    () => queryString.parse(location?.search)?.cartItems,
+    [location?.search]
+  );
   const socket = useSelector((state) => state.userReducer.socket);
   const user = useSelector((state) => state.authenticateReducer.currentUser);
   const { chooseServiceList } = useSelector((state) => state.CartReducer);
@@ -50,55 +57,77 @@ const Index = ({ linkTo = "" }) => {
   );
   const [infoUser, setInfoUser] = useState();
   const [Valid, setValid] = useState(false);
-  const { id } = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
-  let cate;
-  const cartItems = useMemo(
-    () => queryString.parse(location?.search)?.cartItems,
-    [location?.search]
+  const [productId, setProductId] = useState("");
+  const [categoryName, setCategoryName] = useState({
+    1: "studio",
+    2: "photographer",
+    3: "clothes",
+    4: "makeup",
+    5: "device",
+    6: "model",
+  });
+  const [categoryNumber, setCategoryNumber] = useState(
+    JSON.parse(cartItems)[0].category
   );
-  const nameCategory = location.pathname
-    .split("/")
-    .filter((item) => item !== "")[1];
-  switch (nameCategory) {
-    case "studio":
-      cate = 1;
-      break;
-    case "photographer":
-      cate = 2;
-      break;
-    case "clothes":
-      cate = 3;
-      break;
-    case "makeup":
-      cate = 4;
-      break;
-    case "device":
-      cate = 5;
-      break;
-    case "model":
-      cate = 6;
-      break;
 
-    default:
-      break;
-  }
+  // let categoryNumber = parseInt(cartItems.category);
+  let cate = cartItems.category;
+  // let nameCategory = location.pathname
+  //   .split("/")
+  //   .filter((item) => item !== "")[1];
+  // switch (nameCategory) {
+  //   case "studio":
+  //     cate = 1;
+  //     break;
+  //   case "photographer":
+  //     cate = 2;
+  //     break;
+  //   case "clothes":
+  //     cate = 3;
+  //     break;
+  //   case "makeup":
+  //     cate = 4;
+  //     break;
+  //   case "device":
+  //     cate = 5;
+  //     break;
+  //   case "model":
+  //     cate = 6;
+  //     break;
+
+  //   default:
+  //     break;
+  // }
   const dispatch = useDispatch();
+
+  const setProductIdKey = () => {
+    /**
+     * Set productId state to use later when calling API create booking at line 334 and 386
+     */
+    if (typeof categoryNumber === "number") {
+      let categoryNameFunctionScope = categoryName[categoryNumber];
+      let firstCharOfNameCategory = categoryNameFunctionScope[0].toUpperCase();
+      categoryNameFunctionScope =
+        firstCharOfNameCategory + categoryNameFunctionScope.slice(1);
+      setProductId(`${categoryNameFunctionScope}PostId`);
+    }
+  };
 
   useEffect(() => {
     setInfoUser(user);
+    setProductIdKey();
 
     return () => {
       dispatch({ type: SET_CHOOSE_PROMOTION_USER, data: {} });
       dispatch({ type: GET_ALL_PROMO_CODE, data: [] });
-      dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+      dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: [] });
       dispatch({ type: SET_CHOOSE_SERVICE, payload: {} });
     };
-  }, [cate, dispatch, id, user]);
+  }, [categoryNumber, cate, dispatch, id, user]);
 
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
+    setProductIdKey();
   }, []);
 
   useEffect(() => {
@@ -117,7 +146,7 @@ const Index = ({ linkTo = "" }) => {
     // }
   }, [cartItems, dispatch, navigate, user]);
 
-  const isEmpty = () => {
+  const isNotEmpty = () => {
     if (
       infoUser.Fullname === "" ||
       infoUser.Phone === "" ||
@@ -292,7 +321,7 @@ const Index = ({ linkTo = "" }) => {
       //   // handleSendOtp(phoneNumber, Navigate, "", null, null);
       //   return;
       // }
-      if (isEmpty()) {
+      if (isNotEmpty()) {
         if (user) {
           const response = await Promise.all(
             chooseServiceList?.map(async (item) => {
@@ -308,6 +337,7 @@ const Index = ({ linkTo = "" }) => {
                 CreatorUserId: user?.id || undefined,
                 BookingValueBeforeDiscount: item?.price,
                 BookingValue: calculatePriceServiceUsePromo(item),
+                ProductId: item[productId],
                 // DepositValue: (calculatePriceUsePromo() * 15) / 100,
                 PaymentType: 0,
                 IsPayDeposit: 1,
@@ -359,6 +389,7 @@ const Index = ({ linkTo = "" }) => {
                 // RoomId: ,
                 PostId: id,
                 Category: cate,
+                ProductId: item[productId],
 
                 Price: calculatePrice(),
                 PromoCodeId: choosePromotionUser?.id,
@@ -449,8 +480,6 @@ const Index = ({ linkTo = "" }) => {
   //   )
   //   .utc()
   //   .format("DD/MM/YYYY HH:mm A");
-
-
 
   const CancelFreeDate = (service) =>
     moment(
@@ -825,23 +854,9 @@ const Index = ({ linkTo = "" }) => {
               className="d-flex justify-content-end"
               style={{ marginTop: "35px" }}
             >
-              {infoUser?.IsActiveEmail &&
-              infoUser?.Email?.trim() === user?.Email?.trim() ? (
-                <Button
-                  onClick={(e) => {
-                    handleOnClickOrder();
-                  }}
-                  type="primary"
-                  // disabled={Valid ? false : true}
-                  style={{
-                    borderRadius: "8px",
-                    height: "45px",
-                    width: "270px",
-                  }}
-                >
-                  Hoàn tất đặt
-                </Button>
-              ) : Valid ? (
+              {(infoUser?.IsActiveEmail &&
+                infoUser?.Email?.trim() === user?.Email?.trim()) ||
+              Valid ? (
                 <Button
                   onClick={(e) => {
                     handleOnClickOrder();

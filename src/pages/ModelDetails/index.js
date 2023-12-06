@@ -53,7 +53,7 @@ import PromotionList from "../../components/PromotionList/PromotionList";
 import SelectTimeOptionService from "../../components/SelectTimeOptionService/SelectTimeOptionService";
 import {
   DELETE_CHOOSE_SERVICE,
-  SET_CHOOSE_SERVICE_LIST,
+  DEFINE_SERVICES_TO_LIST,
 } from "../../stores/types/CartType";
 import {
   SET_PROMOTION_CODE,
@@ -134,7 +134,7 @@ const Index = () => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
     dispatch({ type: "SET_SERVICE_SELECT", payload: null });
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: [] });
   }, [id]);
 
   const handleChangeLike = (e) => {
@@ -377,22 +377,32 @@ const Index = () => {
     const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
     if (findSelectTime) {
       if (
-        findSelectTime.OrderByTime === 1 &&
-        findSelectTime.OrderByTimeFrom !== undefined &&
-        findSelectTime.OrderByTimeFrom !== "" &&
-        findSelectTime.OrderByTimeTo !== undefined &&
-        findSelectTime.OrderByTimeTo !== "" &&
-        findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+        findSelectTime?.OrderByTime === 1 &&
+        findSelectTime?.OrderByTimeFrom !== undefined &&
+        findSelectTime?.OrderByTimeFrom !== "" &&
+        findSelectTime?.OrderByTimeTo !== undefined &&
+        findSelectTime?.OrderByTimeTo !== "" &&
+        findSelectTime?.OrderByTimeTo !== findSelectTime?.OrderByTimeFrom
       ) {
-        dispatch(handlerSelectServiceAction(data, findSelectTime));
+        dispatch(
+          handlerSelectServiceAction(
+            { ...data, nameService: studioDetail?.data?.Name },
+            findSelectTime
+          )
+        );
       } else if (
-        findSelectTime.OrderByTime === 0 &&
-        findSelectTime.OrderByDateFrom !== undefined &&
-        findSelectTime.OrderByDateFrom !== "" &&
-        findSelectTime.OrderByDateTo !== undefined &&
-        findSelectTime.OrderByDateTo !== ""
+        findSelectTime?.OrderByTime === 0 &&
+        findSelectTime?.OrderByDateFrom !== undefined &&
+        findSelectTime?.OrderByDateFrom !== "" &&
+        findSelectTime?.OrderByDateTo !== undefined &&
+        findSelectTime?.OrderByDateTo !== ""
       ) {
-        dispatch(handlerSelectServiceAction(data, findSelectTime));
+        dispatch(
+          handlerSelectServiceAction(
+            { ...data, nameService: studioDetail?.data?.Name },
+            findSelectTime
+          )
+        );
       } else {
         return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
       }
@@ -400,6 +410,34 @@ const Index = () => {
       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
     }
   };
+
+  // const handleChooseService = (data) => {
+  //   const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
+  //   if (findSelectTime) {
+  //     if (
+  //       findSelectTime.OrderByTime === 1 &&
+  //       findSelectTime.OrderByTimeFrom !== undefined &&
+  //       findSelectTime.OrderByTimeFrom !== "" &&
+  //       findSelectTime.OrderByTimeTo !== undefined &&
+  //       findSelectTime.OrderByTimeTo !== "" &&
+  //       findSelectTime.OrderByTimeTo !== findSelectTime.OrderByTimeFrom
+  //     ) {
+  //       dispatch(handlerSelectServiceAction(data, findSelectTime));
+  //     } else if (
+  //       findSelectTime.OrderByTime === 0 &&
+  //       findSelectTime.OrderByDateFrom !== undefined &&
+  //       findSelectTime.OrderByDateFrom !== "" &&
+  //       findSelectTime.OrderByDateTo !== undefined &&
+  //       findSelectTime.OrderByDateTo !== ""
+  //     ) {
+  //       dispatch(handlerSelectServiceAction(data, findSelectTime));
+  //     } else {
+  //       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //     }
+  //   } else {
+  //     return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
+  //   }
+  // };
 
   const handleBook = () => {
     if (chooseServiceList.length > 0) {
@@ -1520,7 +1558,12 @@ const Index = () => {
                     <div className="w-100 d-flex justify-content-between mt-20">
                       <Button
                         className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                        disabled={chooseService.length > 0 ? false : true}
+                        disabled={
+                          chooseService.length > 0 ||
+                          Object.keys(chooseService).length > 0
+                            ? false
+                            : true
+                        }
                         onClick={() => {
                           if (currentUser) {
                             dispatch(

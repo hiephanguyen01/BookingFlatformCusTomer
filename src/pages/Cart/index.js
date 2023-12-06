@@ -1,216 +1,288 @@
 import { RightOutlined } from "@ant-design/icons";
-import { Button, Col, Dropdown, Menu, Row, Space, Tabs, message } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Button, Col, Row, Space, Tabs, message } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
 import CheckBox from "../../components/CheckBox";
 import "./cart.scss";
-
-import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  calculatePriceUsePromo,
-  calculateTotal,
-  calculateTotalPrice,
-  calculateTotalUsePromo,
-} from "../../utils/calculate";
-import { convertImage } from "../../utils/convertImage";
+import queryString from "query-string";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Promotion from "../../components/Promotion";
+import { cartService } from "../../services/CartService";
+import { orderService } from "../../services/OrderService";
 import {
   addServiceList,
   addServiceToList,
   getCartItemByCategory,
 } from "../../stores/actions/CartAction";
-import queryString from "query-string";
-import { cartService } from "../../services/CartService";
-import { convertPrice } from "../../utils/convert";
+import { DEFINE_SERVICES_TO_LIST } from "../../stores/types/CartType";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
-import Promotion from "../../components/Promotion";
-import { orderService } from "../../services/OrderService";
-import { SET_CHOOSE_SERVICE_LIST } from "../../stores/types/CartType";
+import { calculateTotal, calculateTotalUsePromo } from "../../utils/calculate";
+import { convertPrice } from "../../utils/convert";
+import { convertImage } from "../../utils/convertImage";
+import { compareItemChooseServiceListWithCartItem } from "../../utils/cartUtils";
+import CartCategory from "./CartCategory";
 
 const Index = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cart, chooseServiceList } = useSelector((state) => state.CartReducer);
-  const { choosePromotionUser } = useSelector(
-    (state) => state.promoCodeReducer
-  );
-  const location = useLocation();
-  const query = useMemo(() => queryString.parse(location?.search), [location]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [chooseServices, setChooseServices] = useState([]);
 
   useEffect(() => {
-    if (query?.category) {
-      dispatch(getCartItemByCategory(query?.category));
+    /**
+     * GET cart items
+     */
+    if (searchParams.get("category")) {
+      dispatch(getCartItemByCategory(searchParams.get("category")));
     } else {
       navigate("/home/cart?category=1");
     }
     return () => {
       setChooseServices([]);
     };
-  }, [navigate, query]);
+  }, [navigate, searchParams.get("category")]);
 
   useEffect(() => {
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: [] });
   }, [dispatch]);
+
+  const renderImageArgument = (orderItem, item) => {
+    if (orderItem?.Image) {
+      return orderItem?.Image;
+    } else {
+      return typeof item?.Image === "string" ? item?.Image : item?.Image[0];
+    }
+  };
+
+  const handleOnChecked = (category, cartService, postId, postName) => {
+    dispatch(
+      addServiceToList({
+        ...cartService,
+        postId: postId,
+        postName: postName,
+        category,
+      })
+    );
+  };
+
+  const handleOnCheckedAll = async (categoryId, post) => {
+    /**
+     * Handles the event when the user checks or unchecks the "Check all" checkbox for a post.
+
+      Params:
+        categoryId: The ID of the category that the post belongs to.
+        post: The post object === cart[category] items (look for it in Redux CartReducer).
+
+      Returns:
+        Void
+     */
+    let currentlyChosenServices = [...chooseServiceList];
+    const checkAll = compareItemChooseServiceListWithCartItem(
+      chooseServiceList,
+      post
+    );
+    if (checkAll) {
+      currentlyChosenServices = [];
+    } else {
+      currentlyChosenServices = [...post?.Services];
+    }
+
+    const checkTime = await Promise.all(
+      [...currentlyChosenServices].map(async (item) => {
+        const res = await orderService.checkOrderTimeExits({
+          OrderByTime: item?.OrderByTime,
+          OrderByTimeFrom: item?.OrderByTimeFrom,
+          OrderByTimeTo: item?.OrderByTimeTo,
+          OrderByDateFrom: item?.OrderByDateFrom,
+          OrderByDateTo: item?.OrderByDateTo,
+          ServiceId: item?.StudioRoom?.Id,
+          Category: item?.Category,
+        });
+        return res?.data?.success;
+      })
+    );
+    if (!checkTime.some((item) => item)) {
+      dispatch(addServiceList([...currentlyChosenServices]));
+    } else {
+      message.warning("Đã có người chọn trong khoảng thời gian này!");
+    }
+  };
+
+  const handleBtnDelete = useCallback(
+    async (id) => {
+      try {
+        await cartService.removeServiceFromCart(id);
+        dispatch(getCartItemByCategory(searchParams.get("category")));
+        if (chooseServiceList.filter((item) => item.id === id).length > 0) {
+          let newChooseServiceList = chooseServiceList.filter(
+            (item) => item.id !== id
+          );
+          dispatch(addServiceList(newChooseServiceList));
+        }
+      } catch (error) {}
+    },
+    [dispatch, searchParams.get("category")]
+  );
 
   const items = [
     {
       key: "1",
       label: "Studio",
       children: (
-        <Row gutter={[0, 6]}>
-          {cart["studio"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper" key={index}>
-              {/* <CheckBox
-                key={index}
-                name="allCheck"
-                value="allCheck"
-                onClick={() => handleOnCheckedAll(1, orderItem)}
-                checked={
-                  chooseServiceList?.filter(
-                    (item) =>
-                      item?.Category === 1 && item?.postId === orderItem?.Id
-                  ).length === orderItem?.Services?.length
-                }
-              >
-                <div
-                  style={{
-                    fontWeight: "400",
-                    fontSize: "14px",
-                    lineHeight: "19px",
-                    color: "#3F3F3F",
-                  }}
-                >
-                  {orderItem?.Name}
-                </div>
-              </CheckBox> */}
-              <div
-                style={{
-                  fontWeight: "400",
-                  fontSize: "14px",
-                  lineHeight: "19px",
-                  color: "#3F3F3F",
-                  padding: "15px 0",
-                }}
-              >
-                {orderItem?.Name}
-              </div>
-              {orderItem?.Services?.map((item, index) => (
-                <CheckBox
-                  onClick={() =>
-                    handleOnChecked(1, item, orderItem?.Id, orderItem?.Name)
-                  }
-                  key={index}
-                  name={item?.id}
-                  value={item?.id}
-                  checked={chooseServiceList.some(
-                    (service) =>
-                      service?.id === item?.id &&
-                      service?.postId === orderItem?.Id &&
-                      service?.Category === 1
-                  )}
-                >
-                  <Row
-                    className="checkbox_content w-100"
-                    align={"middle"}
-                    justify={"space-between"}
-                    gutter={[15, 10]}
-                  >
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row className="w-100 h-100" gutter={(0, 10)}>
-                        <Col span={6} className="">
-                          <img
-                            src={convertImage(item?.StudioRoom?.Image1)}
-                            className="w-100 h-80px"
-                            style={{ objectFit: "cover", cursor: "pointer" }}
-                            alt=""
-                            onClick={() =>
-                              navigate(`/home/studio/${orderItem?.Id}`)
-                            }
-                          />
-                        </Col>
-                        <Col span={18}>
-                          <label
-                            className="checkbox_label"
-                            onClick={() =>
-                              navigate(`/home/studio/${orderItem?.Id}`)
-                            }
-                          >
-                            {item?.StudioRoom?.Name}
-                          </label>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row
-                        className="w-100 mb-20"
-                        gutter={[0, 10]}
-                        align={"top"}
-                        justify={"space-between"}
-                      >
-                        <Col span={12} className="checkbox_desc">
-                          {item.OrderByTime ? (
-                            <>
-                              <div>
-                                Ngày
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom)
-                                    .utc()
-                                    .format("DD/MM/YYYY")}
-                                </span>
-                              </div>
-                              <div>
-                                Giờ
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom)
-                                    .utc()
-                                    .format("HH:mm")}
-                                </span>
-                                {" - "}
-                                <span>
-                                  {moment(item?.OrderByTimeTo)
-                                    .utc()
-                                    .format("HH:mm")}
-                                </span>
-                              </div>
-                            </>
-                          ) : (
-                            <div>
-                              Ngày
-                              <span className="date">
-                                {moment(item?.OrderByDateFrom)
-                                  .utc()
-                                  .format("DD/MM/YYYY")}
-                              </span>
-                              {" - "}
-                              <span>
-                                {moment(item?.OrderByDateTo)
-                                  .utc()
-                                  .format("DD/MM/YYYY")}
-                              </span>
-                            </div>
-                          )}
-                        </Col>
-                        <Col span={12} className="checkbox_action">
-                          <div onClick={() => handleBtnDelete(item?.id)}>
-                            Xóa
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={24} className="">
-                          <div className="price">
-                            {convertPrice(item?.price)}đ
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                </CheckBox>
-              ))}
-            </Col>
-          ))}
-        </Row>
+        // <Row gutter={[0, 6]}>
+        //   {cart["studio"]?.map((orderItem, index) => (
+        //     <Col span={24} className="wrapper" key={index}>
+        //       <CheckBox
+        //         key={index}
+        //         name="allCheck"
+        //         value="allCheck"
+        //         onClick={() => handleOnCheckedAll(1, orderItem)}
+        //         checked={
+        //           chooseServiceList.length > 0 &&
+        //           chooseServiceList.filter((item) => {
+        //             return orderItem?.Services.some(
+        //               (item2) => item?.Category === 1 && item?.id === item2?.id
+        //             );
+        //           }).length === orderItem?.Services?.length
+        //         }
+        //       >
+        //         <div
+        //           style={{
+        //             fontWeight: "400",
+        //             fontSize: "14px",
+        //             lineHeight: "19px",
+        //             color: "#3F3F3F",
+        //           }}
+        //         >
+        //           {orderItem?.Name}
+        //         </div>
+        //       </CheckBox>
+        //       {orderItem?.Services?.map((item, index) => (
+        //         <CheckBox
+        //           onClick={() =>
+        //             handleOnChecked(1, item, orderItem?.Id, orderItem?.Name)
+        //           }
+        //           key={index}
+        //           name={item?.id}
+        //           value={item?.id}
+        //           checked={chooseServiceList.some(
+        //             (service) =>
+        //               service?.id === item?.id &&
+        //               service?.postId === orderItem?.Id &&
+        //               service?.Category === 1
+        //           )}
+        //         >
+        //           <Row
+        //             className="checkbox_content w-100"
+        //             align={"middle"}
+        //             justify={"space-between"}
+        //             gutter={[15, 10]}
+        //           >
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row className="w-100 h-100" gutter={(0, 10)}>
+        //                 <Col span={6} className="">
+        //                   <img
+        //                     src={convertImage(item?.StudioRoom?.Image1)}
+        //                     className="w-100 h-80px"
+        //                     style={{ objectFit: "cover", cursor: "pointer" }}
+        //                     alt=""
+        //                     onClick={() =>
+        //                       navigate(`/home/studio/${orderItem?.Id}`)
+        //                     }
+        //                   />
+        //                 </Col>
+        //                 <Col span={18}>
+        //                   <label
+        //                     className="checkbox_label"
+        //                     onClick={() =>
+        //                       navigate(`/home/studio/${orderItem?.Id}`)
+        //                     }
+        //                   >
+        //                     {item?.StudioRoom?.Name}
+        //                   </label>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row
+        //                 className="w-100 mb-20"
+        //                 gutter={[0, 10]}
+        //                 align={"top"}
+        //                 justify={"space-between"}
+        //               >
+        //                 <Col span={12} className="checkbox_desc">
+        //                   {item.OrderByTime ? (
+        //                     <>
+        //                       <div>
+        //                         Ngày
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom)
+        //                             .utc()
+        //                             .format("DD/MM/YYYY")}
+        //                         </span>
+        //                       </div>
+        //                       <div>
+        //                         Giờ
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom)
+        //                             .utc()
+        //                             .format("HH:mm")}
+        //                         </span>
+        //                         {" - "}
+        //                         <span>
+        //                           {moment(item?.OrderByTimeTo)
+        //                             .utc()
+        //                             .format("HH:mm")}
+        //                         </span>
+        //                       </div>
+        //                     </>
+        //                   ) : (
+        //                     <div>
+        //                       Ngày
+        //                       <span className="date">
+        //                         {moment(item?.OrderByDateFrom)
+        //                           .utc()
+        //                           .format("DD/MM/YYYY")}
+        //                       </span>
+        //                       {" - "}
+        //                       <span>
+        //                         {moment(item?.OrderByDateTo)
+        //                           .utc()
+        //                           .format("DD/MM/YYYY")}
+        //                       </span>
+        //                     </div>
+        //                   )}
+        //                 </Col>
+        //                 <Col span={12} className="checkbox_action">
+        //                   <div onClick={() => handleBtnDelete(item?.id)}>
+        //                     Xóa
+        //                   </div>
+        //                 </Col>
+        //               </Row>
+        //               <Row>
+        //                 <Col span={24} className="">
+        //                   <div className="price">
+        //                     {convertPrice(item?.price)}đ
+        //                   </div>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //           </Row>
+        //         </CheckBox>
+        //       ))}
+        //     </Col>
+        //   ))}
+        // </Row>
+        <CartCategory
+          categoryId={1}
+          postUrlEnpoint={"studio"}
+          servicePackageName={"StudioRoom"}
+          handleOnCheckedAll={handleOnCheckedAll}
+          handleOnChecked={handleOnChecked}
+          handleBtnDelete={handleBtnDelete}
+        />
       ),
     },
     {
@@ -766,14 +838,14 @@ const Index = () => {
                 key={index}
                 name="allCheck"
                 value="allCheck"
-                onClick={() =>
-                  handleOnCheckedAll(6, orderItem?.id, orderItem?.Services)
-                }
+                onClick={() => handleOnCheckedAll(6, orderItem)}
                 checked={
-                  chooseServices.filter(
-                    (item) =>
-                      item?.category === 6 && item?.postId === orderItem?.id
-                  ).length === orderItem?.Services?.length
+                  chooseServiceList.length > 0 &&
+                  chooseServiceList.filter((item) => {
+                    return orderItem?.Services.some(
+                      (item2) => item?.Category === 6 && item?.id === item2?.id
+                    );
+                  }).length === orderItem?.Services?.length
                 }
               >
                 <div
@@ -789,16 +861,20 @@ const Index = () => {
               </CheckBox>
               {orderItem?.Services?.map((item, index) => (
                 <CheckBox
-                  onClick={() => handleOnChecked(6, orderItem, item)}
+                  onClick={() =>
+                    handleOnChecked(6, item, orderItem?.id, orderItem?.Name)
+                  }
                   key={index}
                   name={item?.id}
                   value={item?.id}
-                  checked={chooseServices.some(
-                    (service) =>
-                      service?.id === item?.id &&
-                      service?.postId === orderItem?.id &&
-                      service?.category === 6
-                  )}
+                  checked={
+                    chooseServiceList.length > 0
+                      ? chooseServiceList.some(
+                          (service) =>
+                            service?.id === item?.id && service?.Category === 6
+                        )
+                      : false
+                  }
                 >
                   <Row
                     className="checkbox_content w-100"
@@ -809,15 +885,29 @@ const Index = () => {
                     <Col lg={12} md={24} sm={24} xs={24} className="h-100">
                       <Row className="w-100 h-100" gutter={(0, 10)}>
                         <Col span={6} className="">
+                          {/* {item?.Image !== undefined && ( */}
                           <img
-                            src={convertImage(item?.Image)}
+                            src={convertImage(
+                              renderImageArgument(orderItem, item)
+                            )}
                             className="w-100 h-80px"
                             style={{ objectFit: "cover" }}
                             alt=""
+                            onClick={() =>
+                              navigate(`/home/model/${orderItem?.Id}`)
+                            }
                           />
+                          {/* )} */}
                         </Col>
                         <Col span={18}>
-                          <label className="checkbox_label">{item?.Name}</label>
+                          <label
+                            onClick={() =>
+                              navigate(`/home/model/${orderItem?.Id}`)
+                            }
+                            className="checkbox_label"
+                          >
+                            {item?.ModelServicePackage?.Name}
+                          </label>
                         </Col>
                       </Row>
                     </Col>
@@ -870,14 +960,16 @@ const Index = () => {
                           )}
                         </Col>
                         <Col span={12} className="checkbox_action">
-                          <div onClick={() => {}}>Xóa</div>
+                          <div onClick={() => handleBtnDelete(item?.id)}>
+                            Xóa
+                          </div>
                         </Col>
                       </Row>
                       <Row>
                         <Col span={24} className="">
                           <div className="price">
                             {" "}
-                            {convertPrice(item?.Price)}đ
+                            {convertPrice(item?.price)}đ
                           </div>
                         </Col>
                       </Row>
@@ -893,84 +985,8 @@ const Index = () => {
   ];
 
   const onChange = (key) => {
-    // setList([...CART_ITEM_LIST[key]]);
+    setSearchParams({ category: key });
   };
-
-  const handleOnChecked = (category, service, postId, postName) => {
-    dispatch(
-      addServiceToList({
-        ...service,
-        postId: postId,
-        postName: postName,
-      })
-    );
-  };
-
-  const handleOnCheckedAll = async (category, post) => {
-    let newChooseService = [...chooseServiceList];
-    let temp = [];
-    const checkAll =
-      newChooseService.filter(
-        (item) => item?.Category === category && item?.postId === post?.Id
-      ).length === post?.Services?.length;
-    if (checkAll) {
-      newChooseService = newChooseService.filter(
-        (service) =>
-          !(service?.Category === category && service?.postId === post?.Id)
-      );
-    } else {
-      temp = post?.Services.reduce((arr, service) => {
-        if (
-          newChooseService.some(
-            (sv) =>
-              sv?.postId === post?.Id &&
-              sv?.id === service?.id &&
-              category === sv?.Category
-          )
-        ) {
-          return arr;
-        }
-        return [
-          ...arr,
-          {
-            ...service,
-            postId: post?.Id,
-            postName: post?.Name,
-          },
-        ];
-      }, []);
-    }
-
-    const checkTime = await Promise.all(
-      [...newChooseService, ...temp].map(async (item) => {
-        const res = await orderService.checkOrderTimeExits({
-          OrderByTime: item?.OrderByTime,
-          OrderByTimeFrom: item?.OrderByTimeFrom,
-          OrderByTimeTo: item?.OrderByTimeTo,
-          OrderByDateFrom: item?.OrderByDateFrom,
-          OrderByDateTo: item?.OrderByDateTo,
-          ServiceId: item?.StudioRoom?.Id,
-          Category: item?.Category,
-        });
-        return res?.data?.success;
-      })
-    );
-    if (!checkTime.some((item) => item)) {
-      dispatch(addServiceList([...newChooseService, ...temp]));
-    } else {
-      message.warning("Đã có người chọn trong khoảng thời gian này!");
-    }
-  };
-
-  const handleBtnDelete = useCallback(
-    async (id) => {
-      try {
-        await cartService.removeServiceFromCart(id);
-        dispatch(getCartItemByCategory(query?.category));
-      } catch (error) {}
-    },
-    [dispatch, query]
-  );
 
   const onClickModal = () => {
     dispatch({
