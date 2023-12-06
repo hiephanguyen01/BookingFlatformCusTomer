@@ -142,12 +142,17 @@ const Footer = () => {
                       Trung tâm trợ giúp
                     </li>
                   </Link>
-                  <li
-                    className="item mt-20"
-                    style={screens.xs ? { textAlign: "center" } : {}}
+                  <a
+                    href={`${process.env.REACT_APP_DB_BASE_URL}/rule.pdf`}
+                    target="_blank"
                   >
-                    Quy định chung
-                  </li>
+                    <li
+                      className="item mt-20"
+                      style={screens.xs ? { textAlign: "center" } : {}}
+                    >
+                      Quy chế hoạt động
+                    </li>
+                  </a>
                 </ul>
               </Col>
               <Col

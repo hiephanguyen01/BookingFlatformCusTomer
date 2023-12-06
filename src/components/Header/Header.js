@@ -77,8 +77,8 @@ const Header = () => {
     category: "",
     location: "",
     keyString: "",
-    priceOption: 1,
-    ratingOption: 3,
+    priceOption: 0,
+    ratingOption: 0,
   });
   const categories = [
     {
@@ -227,8 +227,8 @@ const Header = () => {
       category: values.category || "",
       location: values?.province ? values.province : "",
       keyString: keyString,
-      priceOption: values.price || 1,
-      ratingOption: 3,
+      priceOption: values.price || 0,
+      ratingOption: 0,
     };
 
     if (screens.xs) {
