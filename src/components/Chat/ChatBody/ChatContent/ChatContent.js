@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import demopic1 from "../../../../assets/Chat/demo1.png";
 import UploadImage from "../../../../components/UploadImage";
 import { chatService } from "../../../../services/ChatService";
-import { orderService } from "../../../../services/OrderService";
 import { closeConversationAction } from "../../../../stores/actions/ChatAction";
 import { updateMSelector } from "../../../../stores/selector/ChatSelector";
 import { IMG } from "../../../../utils/REACT_APP_DB_BASE_URL_IMG";
@@ -157,17 +156,6 @@ export const ChatContent = ({ chatInfo, latestBookingOfUser }) => {
     }
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const { data } = await orderService.getAllOrderByUserId({});
-  //       const filterBooking = data.data.filter(
-  //         (item) => item.TenantId === chatInfo.PartnerId?.id
-  //       );
-  //       setBooking(filterBooking);
-  //     } catch (error) {}
-  //   })();
-  // }, []);
   useEffect(() => {
     if (flag) {
       scrollToBottom();
@@ -183,7 +171,6 @@ export const ChatContent = ({ chatInfo, latestBookingOfUser }) => {
   }, []);
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      // console.log(data);
       if (data.ConversationId === id) {
         setMessageList((list) => [...list, data]);
         setFlag(true);

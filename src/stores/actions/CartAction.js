@@ -2,7 +2,7 @@ import { message } from "antd";
 import { cartService } from "../../services/CartService";
 import { orderService } from "../../services/OrderService";
 import {
-  SET_CHOOSE_SERVICE_LIST,
+  DEFINE_SERVICES_TO_LIST,
   ADD_CART,
   UPDATE_CHOOSE_SERVICE,
   DELETE_CHOOSE_SERVICE,
@@ -14,7 +14,7 @@ import {
 export const chooseServiceAction = (data) => async (dispatch) => {
   // dispatch({ type: LOADING, payload: true });
   try {
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: data });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: data });
     dispatch({ type: "SET_TIME_ORDER", data: [] });
   } catch (error) {
     console.log(error);
@@ -25,7 +25,7 @@ export const chooseServiceAction = (data) => async (dispatch) => {
 export const getCartItemCheckout = (cartItems) => async (dispatch) => {
   try {
     const res = await cartService.getCartItemCheckout(cartItems);
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: res.data.data });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: res.data.data });
   } catch (error) {
     console.log(error);
   }
@@ -34,35 +34,37 @@ export const getCartItemCheckout = (cartItems) => async (dispatch) => {
 
 export const addServiceList = (data) => async (dispatch) => {
   try {
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: data });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: data });
   } catch (error) {
     console.log(error);
   }
   // dispatch({ type: LOADING, payload: false });
 };
 
-export const addServiceToList = (service) => async (dispatch) => {
+export const addServiceToList = (cartService) => async (dispatch) => {
   try {
     const res = await orderService.checkOrderTimeExits({
-      OrderByTime: service?.OrderByTime,
-      OrderByTimeFrom: service?.OrderByTimeFrom,
-      OrderByTimeTo: service?.OrderByTimeTo,
-      OrderByDateFrom: service?.OrderByDateFrom,
-      OrderByDateTo: service?.OrderByDateTo,
-      ServiceId: service?.StudioRoom?.Id,
-      Category: service?.Category,
+      OrderByTime: cartService?.OrderByTime,
+      OrderByTimeFrom: cartService?.OrderByTimeFrom,
+      OrderByTimeTo: cartService?.OrderByTimeTo,
+      OrderByDateFrom: cartService?.OrderByDateFrom,
+      OrderByDateTo: cartService?.OrderByDateTo,
+      ServiceId: cartService?.StudioRoom?.Id,
+      Category: cartService?.Category,
     });
     const checkTime = res?.data?.success;
+    cartService["CartItemId"] = cartService["id"];
     if (!checkTime) {
-      dispatch({ type: ADD_SERVICE_TO_LIST, payload: { service: service } });
-      // setChooseServices(service);
+      dispatch({
+        type: ADD_SERVICE_TO_LIST,
+        payload: { service: cartService },
+      });
     } else {
       message.warning("Đã có người đặt trong khoảng thời gian này rồi!");
     }
   } catch (error) {
     console.log(error);
   }
-  // dispatch({ type: LOADING, payload: false });
 };
 
 export const deleteChooseServiceAction = () => async (dispatch) => {
@@ -93,11 +95,12 @@ export const getCartItemByCategory = (category) => async (dispatch) => {
   *   category: The category of the cart items.
 
   * Returns:
-  *   A promise that resolves to an object containing the cart items for the given category, or rejects with an error if the cart items could not be retrieved.
+  *   A promise that resolves to an object containing the cart items for the given category, or rejects with
+  *   an error if the cart items could not be retrieved.
   */
   try {
     const res = await cartService.getCartItemByCategory(category);
-    if (res) {
+    if (res.data.data) {
       dispatch({
         type: SET_CART_BY_CATEGORY,
         payload: { category, data: res.data.data },
@@ -110,7 +113,7 @@ export const getCartItemByCategory = (category) => async (dispatch) => {
 
 export const addCart = (category, post, service) => async (dispatch) => {
   /**
-  * This function adds an item to the cart.
+  * Adds an item to the cart.
 
   * Args:
   *   category: The category of the item.
@@ -121,16 +124,51 @@ export const addCart = (category, post, service) => async (dispatch) => {
   *   A promise that resolves to an object containing the cart data, or rejects with an error if the item could not be added to the cart.
   */
   try {
-    const res = await cartService.addToCart({
-      category,
-      CategoryPostId: post?.id,
-      serviceId: service?.id,
-      OrderByTime: service?.OrderByTime,
-      OrderByTimeFrom: service?.OrderByTimeFrom,
-      OrderByTimeTo: service?.OrderByTimeTo,
-      OrderByDateFrom: service?.OrderByDateFrom,
-      OrderByDateTo: service?.OrderByDateTo,
-    });
+    console.log(post);
+    let req_body = null;
+    switch (category) {
+      case 3:
+        req_body = {
+          category,
+          CategoryPostId: post?.id,
+          serviceId: service?.id,
+          Size: post.size,
+          Color: post.color,
+          Amount: post.amount,
+          OrderByTime: service?.OrderByTime,
+          OrderByTimeFrom: service?.OrderByTimeFrom,
+          OrderByTimeTo: service?.OrderByTimeTo,
+          OrderByDateFrom: service?.OrderByDateFrom,
+          OrderByDateTo: service?.OrderByDateTo,
+        };
+        break;
+      case 5:
+        req_body = {
+          category,
+          CategoryPostId: post?.id,
+          serviceId: service?.id,
+          Amount: post.amount,
+          OrderByTime: service?.OrderByTime,
+          OrderByTimeFrom: service?.OrderByTimeFrom,
+          OrderByTimeTo: service?.OrderByTimeTo,
+          OrderByDateFrom: service?.OrderByDateFrom,
+          OrderByDateTo: service?.OrderByDateTo,
+        };
+        break;
+      default:
+        req_body = {
+          category,
+          CategoryPostId: post?.id,
+          serviceId: service?.id,
+          OrderByTime: service?.OrderByTime,
+          OrderByTimeFrom: service?.OrderByTimeFrom,
+          OrderByTimeTo: service?.OrderByTimeTo,
+          OrderByDateFrom: service?.OrderByDateFrom,
+          OrderByDateTo: service?.OrderByDateTo,
+        };
+        break;
+    }
+    const res = await cartService.addToCart({ ...req_body });
 
     if (res.data.success) {
       message.success(res.data.message);

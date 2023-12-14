@@ -40,7 +40,7 @@ import {
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import {
   DELETE_CHOOSE_SERVICE,
-  SET_CHOOSE_SERVICE_LIST,
+  DEFINE_SERVICES_TO_LIST,
 } from "../../stores/types/CartType";
 import { SET_PROMOTION_CODE } from "../../stores/types/studioPostType";
 import { calTime, priceService } from "../../utils/calculate";
@@ -104,7 +104,7 @@ const StudioDetail = () => {
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: [] });
     return () => {
       dispatch({ type: SET_PROMOTION_CODE, data: [] });
       dispatch({ type: "SET_SERVICE_SELECT", payload: null });

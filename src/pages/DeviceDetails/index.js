@@ -166,9 +166,11 @@ const Index = () => {
     }
     navigate("order");
   };
+
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
   }, [id]);
+
   return (
     <>
       <MetaDecorator
@@ -280,7 +282,7 @@ const Index = () => {
                       </Row>
                     }
                     trigger="click"
-                    visible={open}
+                    open={open}
                     onVisibleChange={(value) => setOpen(value)}
                   >
                     <MoreOutlined className={cx("item")} />
@@ -752,7 +754,11 @@ const Index = () => {
                           onClick={() => {
                             if (currentUser) {
                               dispatch(
-                                addCart(5, studioDetail?.data, chooseService)
+                                addCart(
+                                  5,
+                                  { ...studioDetail?.data },
+                                  chooseService
+                                )
                               );
                             } else {
                               toastMessage.warning("Vui lòng đăng nhập!");
@@ -966,7 +972,11 @@ const Index = () => {
                           onClick={() => {
                             if (currentUser) {
                               dispatch(
-                                addCart(5, studioDetail?.data, chooseService)
+                                addCart(
+                                  5,
+                                  { ...studioDetail?.data, amount },
+                                  chooseService
+                                )
                               );
                             } else {
                               toastMessage.warning("Vui lòng đăng nhập!");

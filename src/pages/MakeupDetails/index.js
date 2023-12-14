@@ -58,7 +58,7 @@ import cost from "../../assets/svg/cost.svg";
 import classNames from "classnames/bind";
 import {
   DELETE_CHOOSE_SERVICE,
-  SET_CHOOSE_SERVICE_LIST,
+  DEFINE_SERVICES_TO_LIST,
 } from "../../stores/types/CartType";
 import BackNav from "../../components/BackNav/BackNav";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -134,7 +134,7 @@ const Index = () => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
     dispatch({ type: "SET_SERVICE_SELECT", payload: null });
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: [] });
   }, [id, dispatch]);
 
   const handleReport = () => {

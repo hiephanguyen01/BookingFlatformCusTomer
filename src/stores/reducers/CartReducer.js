@@ -1,16 +1,20 @@
 import moment from "moment";
+import {
+  checkIfChosenServiceDifferentFromCurrentList,
+  checkIfChosenServiceExistInCurrentListInRedux,
+} from "../../utils/cartUtils";
 import { categories } from "../../utils/category";
 import {
-  UPDATE_CHOOSE_SERVICE,
-  LOADING,
-  SET_CHOOSE_SERVICE_LIST,
-  DELETE_CHOOSE_SERVICE,
   ADD_CART,
+  ADD_SERVICE_TO_LIST,
+  DEFINE_SERVICES_TO_LIST,
   DELETE_CART,
-  UPDATE_CART,
+  DELETE_CHOOSE_SERVICE,
+  LOADING,
   REMOVE_SERVICE_FROM_CART,
   SET_CART_BY_CATEGORY,
-  ADD_SERVICE_TO_LIST,
+  UPDATE_CART,
+  UPDATE_CHOOSE_SERVICE,
 } from "../types/CartType";
 
 const initialState = {
@@ -18,52 +22,7 @@ const initialState = {
   chooseServiceList: [],
   cart: JSON.parse(localStorage.getItem("cart")) || {
     studio: [],
-    photographer: [
-      {
-        Id: 1,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 2,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-      {
-        Id: 2,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 2,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-    ],
+    photographer: [],
     clothes: [],
     makeup: [],
     device: [],
@@ -79,29 +38,44 @@ export const CartReducer = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
-    case SET_CHOOSE_SERVICE_LIST:
+    case DEFINE_SERVICES_TO_LIST:
       return {
         ...state,
         chooseServiceList: action.payload,
       };
 
     case ADD_SERVICE_TO_LIST:
-      let newChooseServiceList = [...state?.chooseServiceList];
-
-      service = newChooseServiceList?.findIndex(
-        (item) => item?.id === action.payload?.service?.id
+      let currentChooseServiceList = [...state?.chooseServiceList];
+      let comparedResultId = checkIfChosenServiceExistInCurrentListInRedux(
+        state.chooseServiceList,
+        action?.payload?.service
       );
-      if (service >= 0) {
-        newChooseServiceList.splice(service, 1);
+
+      if (
+        checkIfChosenServiceDifferentFromCurrentList(
+          state.chooseServiceList,
+          action?.payload?.service
+        )
+      ) {
         return {
           ...state,
-          chooseServiceList: newChooseServiceList,
+          chooseServiceList: [action?.payload?.service],
+        };
+      }
+
+      if (comparedResultId.length > 0) {
+        currentChooseServiceList.splice(comparedResultId[0], 1);
+        return {
+          ...state,
+          chooseServiceList: currentChooseServiceList,
         };
       }
       return {
         ...state,
-        // chooseServiceList: [...newChooseServiceList, action?.payload?.service],
-        chooseServiceList: [action?.payload?.service],
+        chooseServiceList: [
+          ...state.chooseServiceList,
+          action?.payload?.service,
+        ],
       };
 
     case UPDATE_CHOOSE_SERVICE:
@@ -141,9 +115,7 @@ export const CartReducer = (state = initialState, action) => {
         (item) => item?.id === post?.id
       );
       let newPost = [];
-      console.log("Trong SET_CART_BY_CATEGORY", findPost);
       if (findPost) {
-        console.log("trong findpost");
         if (
           !findPost?.Services?.some(
             (item) => (item?.Id || item?.id) === service?.id
@@ -160,7 +132,6 @@ export const CartReducer = (state = initialState, action) => {
           findPost.Services = newServices;
         }
       } else {
-        console.log("trong findpost");
         newPost = [
           {
             id: post?.id,

@@ -69,7 +69,7 @@ import jiwery from "../../assets/svg/jiwery.svg";
 import different from "../../assets/svg/diffrent.svg";
 import {
   DELETE_CHOOSE_SERVICE,
-  SET_CHOOSE_SERVICE_LIST,
+  DEFINE_SERVICES_TO_LIST,
 } from "../../stores/types/CartType";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -151,7 +151,7 @@ const PhotographerDetail = () => {
     // window.scrollTo({ behavior: "smooth", top: 0 });
     dispatch({ type: "SET_SELECT_TIME_ORDER" });
     dispatch({ type: "SET_SERVICE_SELECT", payload: null });
-    dispatch({ type: SET_CHOOSE_SERVICE_LIST, payload: [] });
+    dispatch({ type: DEFINE_SERVICES_TO_LIST, payload: [] });
   }, [dispatch]);
   const ROW = (dataSource = []) => {
     if (dataSource.length > 0) {
@@ -1359,7 +1359,6 @@ const PhotographerDetail = () => {
                         <div className="w-100 d-flex justify-content-between mt-20">
                           <Button
                             className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                            disabled={true}
                             onClick={() => {
                               if (currentUser) {
                                 dispatch(

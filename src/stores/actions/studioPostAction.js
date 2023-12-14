@@ -17,7 +17,7 @@ import {
 } from "../types/studioPostType";
 import {
   DELETE_CHOOSE_SERVICE,
-  SET_CHOOSE_SERVICE_LIST,
+  DEFINE_SERVICES_TO_LIST,
 } from "../types/CartType";
 import moment from "moment";
 import toastMessage from "../../components/ToastMessage";
@@ -321,8 +321,6 @@ export const handlerSelectServiceAction = (
 ) => {
   return async (dispatch) => {
     try {
-      console.log(data);
-      console.log(chooseServiceTime);
       if (chooseServiceTime.OrderByTime === 1) {
         if (
           chooseServiceTime?.disableTimeOrder?.some((item) => {
@@ -360,7 +358,7 @@ export const handlerSelectServiceAction = (
         }
       }
       dispatch({
-        type: SET_CHOOSE_SERVICE_LIST,
+        type: DEFINE_SERVICES_TO_LIST,
         payload: [
           {
             ...chooseServiceTime,

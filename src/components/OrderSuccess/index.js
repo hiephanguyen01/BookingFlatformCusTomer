@@ -7,19 +7,19 @@ import "./orderSuccess.scss";
 
 moment().format();
 const Index = () => {
-  const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
+  // const UserMe = useSelector((state) => state.authenticateReducer.currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const { pathname } = useLocation();
-  const enum_post = {
-    studio: 1,
-    photographer: 2,
-    clothes: 3,
-    makeup: 4,
-    device: 5,
-    model: 6,
-  };
+  // const { id } = useParams();
+  // const { pathname } = useLocation();
+  // const enum_post = {
+  //   studio: 1,
+  //   photographer: 2,
+  //   clothes: 3,
+  //   makeup: 4,
+  //   device: 5,
+  //   model: 6,
+  // };
 
   useEffect(() => {
     dispatch(deleteChooseServiceAction());

@@ -21,6 +21,7 @@ import {
   Select,
   Slider,
 } from "antd";
+import queryString from "query-string";
 import React, {
   useCallback,
   useEffect,
@@ -29,7 +30,12 @@ import React, {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ReactComponent as FilterIcon } from "../../assets/header/filter.svg";
+import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
 import FilterCard from "../../components/FilterCard/FilterCard";
+import ModalBottom from "../../components/ModalBottom/ModalBottom";
+import toastMessage from "../../components/ToastMessage";
 import EmptyPage from "../../components/layouts/EmptyPage";
 import { studioPostService } from "../../services/StudioPostService";
 import {
@@ -37,13 +43,7 @@ import {
   getFilterStudioPostMobile,
 } from "../../stores/actions/studioPostAction";
 import { convertPrice } from "../../utils/convert";
-import queryString from "query-string";
 import "./FilterPage.scss";
-import { useLocation, useNavigate } from "react-router-dom";
-import ModalBottom from "../../components/ModalBottom/ModalBottom";
-import { ReactComponent as FilterIcon } from "../../assets/header/filter.svg";
-import toastMessage from "../../components/ToastMessage";
-import { ReactComponent as CheckSVG } from "../../assets/svg/check.svg";
 
 const { Option } = Select;
 const PRICE_FILTER = [
@@ -369,7 +369,6 @@ const FilterPage = () => {
   };
 
   const onChangeRateOption = (e) => {
-    console.log(e.target.value);
     const newFilter = { ...filter, ratingOption: e.target.value };
     navigate(
       `/home/filter?${queryString.stringify(
