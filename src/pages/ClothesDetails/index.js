@@ -141,75 +141,6 @@ const Index = () => {
     });
   };
 
-  // const handleChooseService = (data) => {
-  //   const findSelectTime = listTimeSelected.find((item) => item.id === data.id);
-  //   if (findSelectTime) {
-  //     if (
-  //       findSelectTime?.OrderByTime === 1 &&
-  //       findSelectTime?.OrderByTimeFrom !== undefined &&
-  //       findSelectTime?.OrderByTimeFrom !== "" &&
-  //       findSelectTime?.OrderByTimeTo !== undefined &&
-  //       findSelectTime?.OrderByTimeTo !== "" &&
-  //       findSelectTime?.OrderByTimeTo !== findSelectTime?.OrderByTimeFrom
-  //     ) {
-  //       dispatch(
-  //         handlerSelectServiceAction(
-  //           { ...data, nameService: studioDetail?.data?.Name },
-  //           findSelectTime
-  //         )
-  //       );
-  //     } else if (
-  //       findSelectTime?.OrderByTime === 0 &&
-  //       findSelectTime?.OrderByDateFrom !== undefined &&
-  //       findSelectTime?.OrderByDateFrom !== "" &&
-  //       findSelectTime?.OrderByDateTo !== undefined &&
-  //       findSelectTime?.OrderByDateTo !== ""
-  //     ) {
-  //       dispatch(
-  //         handlerSelectServiceAction(
-  //           { ...data, nameService: studioDetail?.data?.Name },
-  //           findSelectTime
-  //         )
-  //       );
-  //     } else {
-  //       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
-  //     }
-  //   } else {
-  //     return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
-  //   }
-  // };
-
-  // const handleBook = async () => {
-  //   if (chooseService) {
-  //     if (currentUser) {
-  //       const res = await cartService.addToCart({
-  //         category: 1,
-  //         CategoryPostId: studioDetail?.data?.id,
-  //         serviceId: chooseService?.id,
-  //         OrderByTime: chooseService?.OrderByTime,
-  //         OrderByTimeFrom: chooseService?.OrderByTimeFrom,
-  //         OrderByTimeTo: chooseService?.OrderByTimeTo,
-  //         OrderByDateFrom: chooseService?.OrderByDateFrom,
-  //         OrderByDateTo: chooseService?.OrderByDateTo,
-  //       });
-  //       const arr = [
-  //         {
-  //           id: res?.data?.data?.cartItemId,
-  //           category: 1,
-  //         },
-  //       ];
-  //       const createQuery = queryString.stringify({
-  //         cartItems: JSON.stringify(arr),
-  //       });
-  //       navigate(`order?${createQuery}`);
-  //     } else {
-  //       navigate(`order`);
-  //     }
-  //   } else {
-  //     toastMessage("Bạn cần chọn dịch vụ!", "warn");
-  //   }
-  // };
-
   const handleChooseService = (
     call_add_cart_flag = false,
     data_pass_to_add_cart
@@ -268,7 +199,7 @@ const Index = () => {
       return toastMessage("Vui lòng chọn thời gian để xem giá!", "warning");
     }
 
-    navigate("order");
+    // navigate("order");
     // if (chooseServiceList.length > 0) {
     //   dispatch(chooseServiceAction(chooseServiceList));
     // } else {
@@ -919,7 +850,12 @@ const Index = () => {
                             if (currentUser) {
                               handleChooseService(true, {
                                 category_number: 3,
-                                data: studioDetail?.data,
+                                clothes_data: {
+                                  ...studioDetail?.data,
+                                  size,
+                                  color,
+                                  amount,
+                                },
                                 service: chooseService,
                               });
                               // dispatch();
@@ -983,12 +919,6 @@ const Index = () => {
                       >
                         Xem shop
                       </Link>
-                      {/* <iframe
-                      style={{ width: "100%", height: "100%", border: "0" }}
-                      src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d251637.95196238213!2d105.6189045!3d9.779349!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1659429407556!5m2!1svi!2s"
-                      loading="lazy"
-                      referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe> */}
                     </Button>
                   </div>
                   <ReactStickyBox offsetTop={20} offsetBottom={20}>
@@ -996,7 +926,6 @@ const Index = () => {
                       style={{
                         padding: "24px 26px",
                         backgroundColor: "#ffffff",
-                        // height: "100%",
                       }}
                     >
                       <div className="d-flex justify-content-between mb-12">
@@ -1147,7 +1076,12 @@ const Index = () => {
                               // );
                               handleChooseService(true, {
                                 category_number: 3,
-                                clothes_data: studioDetail?.data,
+                                clothes_data: {
+                                  ...studioDetail?.data,
+                                  size,
+                                  color,
+                                  amount,
+                                },
                                 service: chooseService,
                               });
                             } else {

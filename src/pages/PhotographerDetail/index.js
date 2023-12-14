@@ -1359,7 +1359,6 @@ const PhotographerDetail = () => {
                         <div className="w-100 d-flex justify-content-between mt-20">
                           <Button
                             className="w-60 h-48px d-flex justify-content-center align-items-center btn_add"
-                            disabled={true}
                             onClick={() => {
                               if (currentUser) {
                                 dispatch(

@@ -22,35 +22,7 @@ const Index = () => {
   const [checkoutDisable, setCheckoutDisable] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  let cate;
-  const nameCategory = location.pathname
-    .split("/")
-    .filter((item) => item !== "")[1];
-  switch (nameCategory) {
-    case "studio":
-      cate = 1;
-      break;
-    case "photographer":
-      cate = 2;
-      break;
-    case "clothes":
-      cate = 3;
-      break;
-    case "makeup":
-      cate = 4;
-      break;
-    case "device":
-      cate = 5;
-      break;
-    case "model":
-      cate = 6;
-      break;
-    case "confirm-order":
-      cate = location?.state?.Category;
-      break;
-    default:
-      break;
-  }
+  let cate = location.state.Category;
   const [file, setFile] = useState({});
   const [booking, setBooking] = useState({});
 
@@ -66,8 +38,6 @@ const Index = () => {
       setFile(newFile);
     }
   };
-
-  console.log(location?.state);
 
   const handleClickBtnUpdate = async () => {
     try {
@@ -86,12 +56,18 @@ const Index = () => {
           cate
         );
 
-        socket?.emit("updateEvidence", res.data);
-        setBooking(res.data);
+        if (res.data) {
+          socket?.emit("updateEvidence", res.data);
+          setBooking(res.data);
+          if (res.data.EvidenceImage) {
+            toastMessage("Cập nhật minh chứng thành công!", "success");
+            navigate("orderSuccess");
+          }
+        }
         if (location?.state?.updatePay || false) {
           toastMessage("Cập nhật minh chứng thành công!", "success");
-        } else {
           navigate("orderSuccess");
+        } else {
         }
       } else {
         toastMessage("Vui lòng chọn ảnh minh chứng!", "warn");
@@ -109,7 +85,9 @@ const Index = () => {
           : location?.state?.IdentifyCode,
         location?.state?.Category || cate
       );
-      setBooking(res.data);
+      if (res.data) {
+        setBooking(res.data);
+      }
     };
     getBookingByIdentify();
   }, [location, cate]);

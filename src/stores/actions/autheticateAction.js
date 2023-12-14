@@ -1,5 +1,12 @@
 import { notification } from "antd";
 import axios from "axios";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import firebase from "../../pages/Auth/FireBaseSetUp/Firebase";
 import { authenticateService } from "../../services/AuthenticateService";
 import {
   AUTHING,
@@ -9,18 +16,11 @@ import {
   SET_SOCKET,
   SET_USER,
 } from "../types/authType";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  FacebookAuthProvider,
-} from "firebase/auth";
-import firebase from "../../pages/Auth/FireBaseSetUp/Firebase";
 
+import { io } from "socket.io-client";
+import toastMessage from "../../components/ToastMessage";
 import { auth } from "../../pages/Auth/FireBaseSetUp/Firebase";
 import { userService } from "../../services/UserService";
-import toastMessage from "../../components/ToastMessage";
-import { io } from "socket.io-client";
 
 const setAuthToken = (token) => {
   if (token) {
@@ -194,10 +194,8 @@ export const facebookLink =
             error?.response?.data?.message,
             "Vui lòng thử lại!"
           );
-          console.log(91011);
         }
       } else {
-        console.log(121314);
         openNotificationWithIcon(
           "error",
           error?.response?.data?.message,

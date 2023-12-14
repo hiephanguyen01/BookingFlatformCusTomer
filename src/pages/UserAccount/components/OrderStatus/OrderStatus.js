@@ -57,7 +57,6 @@ const OrderStatus = () => {
       setPageBooking(booking.slice(first, last));
     }
   };
-  console.log(pageBooking);
   const onChangeInput = (e) => {
     const input = e.target.value.toLowerCase();
     const newData = booking.filter(

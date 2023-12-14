@@ -53,12 +53,25 @@ const CartCategory = (props) => {
           {orderItem?.Services?.map((item, index) => (
             <CheckBox
               onClick={() =>
-                handleOnChecked(
-                  categoryId,
-                  item,
-                  orderItem?.Id,
-                  orderItem?.Name
-                )
+                [3].includes(categoryId)
+                  ? handleOnChecked(
+                      categoryId,
+                      {
+                        ...item,
+                        ClothesPost: {
+                          Name: orderItem?.Name,
+                          Image1: orderItem?.Image1,
+                        },
+                      },
+                      orderItem?.Id,
+                      orderItem?.Name
+                    )
+                  : handleOnChecked(
+                      categoryId,
+                      item,
+                      orderItem?.Id,
+                      orderItem?.Name
+                    )
               }
               key={index}
               name={item?.id}
@@ -83,7 +96,18 @@ const CartCategory = (props) => {
                   <Row className="w-100 h-100" gutter={(0, 10)}>
                     <Col span={6} className="">
                       <img
-                        src={convertImage(item?.StudioRoom?.Image1)}
+                        src={(() => {
+                          switch (categoryId) {
+                            case 3:
+                              return convertImage(orderItem?.Image1);
+                            // case 1:
+                            //   return convertImage(item?.Image[0]);
+                            default:
+                              return convertImage(
+                                item[servicePackageName]?.Image1
+                              );
+                          }
+                        })()}
                         className="w-100 h-80px"
                         style={{ objectFit: "cover", cursor: "pointer" }}
                         alt=""
@@ -99,7 +123,14 @@ const CartCategory = (props) => {
                           navigate(`/home/${postUrlEnpoint}/${orderItem?.Id}`)
                         }
                       >
-                        {item[servicePackageName]?.Name}
+                        {(() => {
+                          switch (categoryId) {
+                            case 3:
+                              return orderItem?.Name;
+                            default:
+                              return item[servicePackageName]?.Name;
+                          }
+                        })()}
                       </label>
                     </Col>
                   </Row>
@@ -160,7 +191,12 @@ const CartCategory = (props) => {
                   </Row>
                   <Row>
                     <Col span={24} className="">
-                      <div className="price">{convertPrice(item?.price)}đ</div>
+                      <div className="price">
+                        {categoryId == 2
+                          ? convertPrice(item[servicePackageName]?.PriceByDate)
+                          : convertPrice(item?.price)}
+                        đ
+                      </div>
                     </Col>
                   </Row>
                 </Col>

@@ -1,6 +1,7 @@
 import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Grid, Input, Row, message } from "antd";
 import moment from "moment";
+import queryString from "query-string";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -9,7 +10,13 @@ import TextInput from "../../components/TextInput/TextInput";
 import { orderService } from "../../services/OrderService";
 import { studioPostService } from "../../services/StudioPostService";
 import { getCurrentUser } from "../../stores/actions/autheticateAction";
+import { DEFINE_SERVICES_TO_LIST } from "../../stores/types/CartType";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
+import {
+  GET_ALL_PROMO_CODE,
+  SET_CHOOSE_PROMOTION_USER,
+} from "../../stores/types/promoCodeType";
+import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
 import {
   calTime,
   calculatePriceServiceUsePromo,
@@ -20,17 +27,9 @@ import { convertImage } from "../../utils/convertImage";
 import { VerifyOtp } from "../Modal/verifyOtp/VerifyOtp";
 import SelectTimeOption from "../SelectTimeOption/SelectTimeOption";
 import toastMessage from "../ToastMessage";
-import queryString from "query-string";
 import "./order.scss";
-import { getCartItemCheckout } from "../../stores/actions/CartAction";
-import {
-  GET_ALL_PROMO_CODE,
-  SET_CHOOSE_PROMOTION_USER,
-} from "../../stores/types/promoCodeType";
-import { DEFINE_SERVICES_TO_LIST } from "../../stores/types/CartType";
-import { SET_CHOOSE_SERVICE } from "../../stores/types/studioPostType";
-import { studioDetailAction } from "../../stores/actions/studioPostAction";
-import { getPartnerDetail } from "./../../stores/actions/RegisterPartnerAction";
+
+moment().format();
 
 const { useBreakpoint } = Grid;
 
@@ -69,35 +68,23 @@ const Index = ({ linkTo = "" }) => {
   const [categoryNumber, setCategoryNumber] = useState(
     JSON.parse(cartItems)[0].category
   );
+  const [clothesDeviceProperties, setClothesDeviceProperties] = useState({
+    Size: "",
+    Amount: 0,
+    Color: "",
+  });
 
-  // let categoryNumber = parseInt(cartItems.category);
+  const postDomain = {
+    1: "StudioRoom",
+    2: "PhotographerServicePackage",
+    3: "ClothesPost",
+    4: "MakeupServicePackage",
+    5: "DevicePost",
+    6: "ModelServicePackage",
+  };
+
   let cate = cartItems.category;
-  // let nameCategory = location.pathname
-  //   .split("/")
-  //   .filter((item) => item !== "")[1];
-  // switch (nameCategory) {
-  //   case "studio":
-  //     cate = 1;
-  //     break;
-  //   case "photographer":
-  //     cate = 2;
-  //     break;
-  //   case "clothes":
-  //     cate = 3;
-  //     break;
-  //   case "makeup":
-  //     cate = 4;
-  //     break;
-  //   case "device":
-  //     cate = 5;
-  //     break;
-  //   case "model":
-  //     cate = 6;
-  //     break;
 
-  //   default:
-  //     break;
-  // }
   const dispatch = useDispatch();
 
   const setProductIdKey = () => {
@@ -128,13 +115,26 @@ const Index = ({ linkTo = "" }) => {
   useEffect(() => {
     window.scrollTo({ behavior: "smooth", top: 0 });
     setProductIdKey();
+    switch (categoryNumber) {
+      case 3:
+        setClothesDeviceProperties({
+          Size: chooseServiceList[0].Size,
+          Amount: chooseServiceList[0].Amount,
+          Color: chooseServiceList[0].Color,
+        });
+        break;
+      case 5:
+        setClothesDeviceProperties({
+          Amount: chooseServiceList[0].Amount,
+        });
+        break;
+    }
   }, []);
 
   useEffect(() => {
-    // if (cartItems?.length && chooseServiceList?.length === 0) {
     if (user) {
       if (isJsonString(cartItems)) {
-        dispatch(getCartItemCheckout(cartItems));
+        // dispatch(getCartItemCheckout(cartItems));
       } else {
         navigate(-1);
       }
@@ -143,7 +143,6 @@ const Index = ({ linkTo = "" }) => {
         navigate(-1);
       }
     }
-    // }
   }, [cartItems, dispatch, navigate, user]);
 
   const isNotEmpty = () => {
@@ -180,18 +179,6 @@ const Index = ({ linkTo = "" }) => {
       return total;
     }, 0);
   };
-  // const calculateCommisionAffiliate = useMemo(
-  //   () => (price, service) => {
-  //     return (
-  //       (price *
-  //         ((service?.OrderByTime
-  //           ? service?.AffiliateCommissionByHour
-  //           : service?.AffiliateCommissionByDate) || 5)) /
-  //       100
-  //     );
-  //   },
-  //   []
-  // );
 
   const calculatePriceUsePromo = () => {
     return chooseServiceList.reduce((total, item) => {
@@ -263,51 +250,6 @@ const Index = ({ linkTo = "" }) => {
                 : (item?.price / 100) * (item?.promotion?.ReduceValue || 0)))
           );
         }
-
-        // switch (item?.OrderByTime) {
-        //   case 1:
-        //     if (choosePromotionUser?.TypeReduce === 1) {
-        //       return (
-        //         total +
-        //         calculateTotalOrder() -
-        //         (choosePromotionUser?.ReduceValue || 0)
-        //       );
-        //     } else {
-        //       return (
-        //         total +
-        //         (calculateTotalOrder() -
-        //           ((calculateTotalOrder() * choosePromotionUser?.ReduceValue) /
-        //             100 >=
-        //           choosePromotionUser?.MaxReduce
-        //             ? choosePromotionUser?.MaxReduce
-        //             : (calculateTotalOrder() / 100) *
-        //               (choosePromotionUser?.ReduceValue || 0)))
-        //       );
-        //     }
-        //   case 0:
-        //     if (choosePromotionUser?.TypeReduce === 1) {
-        //       return (
-        //         total +
-        //         calculateTotalOrder() -
-        //         (choosePromotionUser?.ReduceValue || 0)
-        //       );
-        //     } else {
-        //       return (
-        //         total +
-        //         (calculateTotalOrder() -
-        //           ((calculateTotalOrder() * choosePromotionUser?.ReduceValue) /
-        //             100 >=
-        //           choosePromotionUser?.MaxReduce
-        //             ? choosePromotionUser?.MaxReduce
-        //             : (calculateTotalOrder() / 100) *
-        //               (choosePromotionUser?.ReduceValue || 0)))
-        //       );
-        //     }
-
-        //   default:
-        //     break;
-        // }
-        // return total;
       }, 0);
     },
     [chooseServiceList]
@@ -317,16 +259,24 @@ const Index = ({ linkTo = "" }) => {
     const AffiliateUserId = localStorage.getItem("qs");
 
     try {
-      // if (user === null) {
-      //   // handleSendOtp(phoneNumber, Navigate, "", null, null);
-      //   return;
-      // }
       if (isNotEmpty()) {
         if (user) {
           const response = await Promise.all(
             chooseServiceList?.map(async (item) => {
-              const res = await orderService.addOrder({
-                CartItemId: item?.id,
+              let request_body = {
+                CartItemId: item?.CartItemId || null,
+                // id: item?.id,
+                OrderByTime: item?.OrderByTime,
+                OrderByTimeFrom: item?.OrderByTimeFrom,
+                OrderByTimeTo: item?.OrderByTimeTo,
+                OrderByDateFrom: item?.OrderByDateFrom,
+                OrderByDateTo: item?.OrderByDateTo,
+                RoomId: !item?.["CartItemId"]
+                  ? item?.id
+                  : item?.["RoomId"]
+                  ? item?.["RoomId"]
+                  : item?.["ServiceId"],
+                Category: categoryNumber,
                 Price: item?.price,
                 PromoCodeId: item?.promotion?.id,
                 OrderNote: infoUser.Message,
@@ -338,6 +288,7 @@ const Index = ({ linkTo = "" }) => {
                 BookingValueBeforeDiscount: item?.price,
                 BookingValue: calculatePriceServiceUsePromo(item),
                 ProductId: item[productId],
+                ModelServiceId: item?.ModelServicePackage?.Id,
                 // DepositValue: (calculatePriceUsePromo() * 15) / 100,
                 PaymentType: 0,
                 IsPayDeposit: 1,
@@ -348,10 +299,14 @@ const Index = ({ linkTo = "" }) => {
                     "days"
                   ) + 1
                 } ngày`,
-                //     size: chooseService?.size,
-                //     color: chooseService?.color,
-                //     amount: chooseService?.amount,
-              });
+              };
+
+              if ([3, 5].includes(categoryNumber)) {
+                request_body["Size"] = clothesDeviceProperties["Size"];
+                request_body["Amount"] = clothesDeviceProperties["Amount"];
+                request_body["Color"] = clothesDeviceProperties["Color"];
+              }
+              const res = await orderService.addOrder({ ...request_body });
               return res.data;
             })
           );
@@ -380,7 +335,6 @@ const Index = ({ linkTo = "" }) => {
             chooseServiceList?.map(async (item) => {
               const res = await orderService.addOrder({
                 id: item?.id,
-
                 OrderByTime: item?.OrderByTime,
                 OrderByTimeFrom: item?.OrderByTimeFrom,
                 OrderByTimeTo: item?.OrderByTimeTo,
@@ -390,7 +344,6 @@ const Index = ({ linkTo = "" }) => {
                 PostId: id,
                 Category: cate,
                 ProductId: item[productId],
-
                 Price: calculatePrice(),
                 PromoCodeId: choosePromotionUser?.id,
                 OrderNote: infoUser.Message,
@@ -458,29 +411,6 @@ const Index = ({ linkTo = "" }) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // const CancelFreeDate = moment(
-  //   chooseService?.OrderByTime
-  //     ? chooseService?.OrderByTimeFrom
-  //     : chooseService?.OrderByDateFrom
-  // )
-  //   .subtract(
-  //     chooseService?.OrderByTime
-  //       ? chooseService?.FreeCancelByHour?.match(/\d+/g)[0]
-  //       : chooseService?.FreeCancelByDate?.match(/\d+/g)[0],
-  //     `${
-  //       chooseService?.OrderByTime
-  //         ? /ngày/.test(chooseService?.FreeCancelByHour)
-  //           ? "days"
-  //           : "hours"
-  //         : /ngày/.test(chooseService?.FreeCancelByDate)
-  //         ? "days"
-  //         : "hours"
-  //     }`
-
-  //   )
-  //   .utc()
-  //   .format("DD/MM/YYYY HH:mm A");
-
   const CancelFreeDate = (service) =>
     moment(
       service?.OrderByTime ? service?.OrderByTimeFrom : service?.OrderByDateFrom
@@ -503,6 +433,7 @@ const Index = ({ linkTo = "" }) => {
       )
       .utc()
       .format("DD/MM/YYYY HH:mm A");
+
   return (
     <div className="order_container">
       <Row
@@ -536,38 +467,69 @@ const Index = ({ linkTo = "" }) => {
                 >
                   <img
                     src={`${
-                      item?.Image?.length > 0
+                      item?.Image
                         ? convertImage(item?.Image[0])
-                        : convertImage(item?.StudioRoom?.Image1) || ""
+                        : convertImage(item[postDomain[categoryNumber]]?.Image1)
                     }`}
                     className="img_service"
                     alt=""
                   />
                   <div>
                     <span className="text-middle">
-                      {item?.Name?.length > 30
-                        ? `${item?.Name.slice(0, 30)}...`
-                        : item?.Name}
-                      {item?.StudioRoom?.Name?.length > 30
-                        ? `${item?.StudioRoom?.Name.slice(0, 30)}...`
-                        : item?.StudioRoom?.Name}
+                      {item[postDomain[categoryNumber]]?.Name > 30
+                        ? `${item[postDomain[categoryNumber]]?.Name.slice(
+                            0,
+                            30
+                          )}...`
+                        : item[postDomain[categoryNumber]]?.Name}
                     </span>
-                    {/* <div
-                          className="text-description mt-6 "
-                          style={{ color: "#3F3F3F" }}
-                        >
-                          Trắng, size S, Số lượng 1
-                        </div> */}
+                    <div
+                      className="text-description mt-6 "
+                      style={{ color: "#3F3F3F" }}
+                    >
+                      {item["Amount"] &&
+                        `${item?.Color}, size ${item?.Size}, Số lượng: ${item?.Amount}`}
+                    </div>
                     <div className="text-middle mt-8">
-                      {Number(item?.OrderByTime) === 1 &&
-                        `${convertPrice(
-                          item?.pricesByHour?.length > 0
-                            ? item?.pricesByHour[0].PriceByHour
-                            : item?.price
-                        )} đ`}
-                      {Number(item?.OrderByTime) === 0 &&
-                        (priceService(item?.pricesByDate, false) ||
-                          `${convertPrice(item?.price)} đ`)}
+                      {(() => {
+                        if (Number(item?.OrderByTime) === 1) {
+                          if (categoryNumber === 3) {
+                            return `${convertPrice(
+                              item[postDomain[categoryNumber]]?.PriceByHour *
+                                moment(item?.OrderByTimeFrom).diff(
+                                  moment(item?.OrderByTimeTo),
+                                  "hours",
+                                  false
+                                )
+                            )} đ`;
+                          } else {
+                            return `${convertPrice(
+                              item?.pricesByHour?.length > 0
+                                ? item?.pricesByHour[0].PriceByHour
+                                : item?.price
+                            )} đ`;
+                          }
+                        }
+                      })()}
+                      {(() => {
+                        if (Number(item?.OrderByTime) === 0) {
+                          if (categoryNumber === 3) {
+                            return `${convertPrice(
+                              item[postDomain[categoryNumber]]?.PriceByDate *
+                                moment(item?.OrderByDateFrom).diff(
+                                  moment(item?.OrderByDateTo),
+                                  "days",
+                                  false
+                                )
+                            )} đ`;
+                          } else {
+                            return (
+                              priceService(item?.pricesByDate, false) ||
+                              `${convertPrice(item?.price)} đ`
+                            );
+                          }
+                        }
+                      })()}
                     </div>
                   </div>
                 </div>

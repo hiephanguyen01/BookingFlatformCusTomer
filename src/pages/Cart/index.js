@@ -1,12 +1,11 @@
 import { RightOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Space, Tabs, message } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
-import CheckBox from "../../components/CheckBox";
-import "./cart.scss";
 import moment from "moment";
 import queryString from "query-string";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import CheckBox from "../../components/CheckBox";
 import Promotion from "../../components/Promotion";
 import { cartService } from "../../services/CartService";
 import { orderService } from "../../services/OrderService";
@@ -18,10 +17,11 @@ import {
 import { DEFINE_SERVICES_TO_LIST } from "../../stores/types/CartType";
 import { SHOW_MODAL } from "../../stores/types/modalTypes";
 import { calculateTotal, calculateTotalUsePromo } from "../../utils/calculate";
+import { compareItemChooseServiceListWithCartItem } from "../../utils/cartUtils";
 import { convertPrice } from "../../utils/convert";
 import { convertImage } from "../../utils/convertImage";
-import { compareItemChooseServiceListWithCartItem } from "../../utils/cartUtils";
 import CartCategory from "./CartCategory";
+import "./cart.scss";
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -39,9 +39,9 @@ const Index = () => {
     } else {
       navigate("/home/cart?category=1");
     }
-    return () => {
-      setChooseServices([]);
-    };
+    // return () => {
+    //   setChooseServices([]);
+    // };
   }, [navigate, searchParams.get("category")]);
 
   useEffect(() => {
@@ -289,407 +289,433 @@ const Index = () => {
       key: "2",
       label: "Nhiếp ảnh",
       children: (
-        <Row gutter={[0, 6]}>
-          {cart["photographer"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper" key={index}>
-              <CheckBox
-                key={index}
-                name="allCheck"
-                value="allCheck"
-                onClick={() =>
-                  handleOnCheckedAll(2, orderItem?.id, orderItem?.Services)
-                }
-                checked={
-                  chooseServices.filter(
-                    (item) =>
-                      item?.category === 2 && item?.postId === orderItem?.id
-                  ).length === orderItem?.Services?.length
-                }
-              >
-                <div
-                  style={{
-                    fontWeight: "400",
-                    fontSize: "14px",
-                    lineHeight: "19px",
-                    color: "#3F3F3F",
-                  }}
-                >
-                  {orderItem?.Name}
-                </div>
-              </CheckBox>
-              {orderItem?.Services?.map((item, index) => (
-                <CheckBox
-                  onClick={() =>
-                    handleOnChecked(2, item, orderItem?.Id, orderItem?.Name)
-                  }
-                  key={index}
-                  name={item?.id}
-                  value={item?.id}
-                  checked={chooseServices.some(
-                    (service) =>
-                      service?.id === item?.id &&
-                      service?.postId === orderItem?.id &&
-                      service?.category === 2
-                  )}
-                >
-                  <Row
-                    className="checkbox_content w-100"
-                    align={"middle"}
-                    justify={"space-between"}
-                    gutter={[15, 10]}
-                  >
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row className="w-100 h-100" gutter={(0, 10)}>
-                        <Col span={6} className="">
-                          <img
-                            src={item?.image}
-                            className="w-100 h-80px"
-                            style={{ objectFit: "cover" }}
-                            alt=""
-                          />
-                        </Col>
-                        <Col span={18}>
-                          <label className="checkbox_label">{item?.Name}</label>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row
-                        className="w-100 mb-20"
-                        gutter={[0, 10]}
-                        align={"top"}
-                        justify={"space-between"}
-                      >
-                        <Col span={12} className="checkbox_desc">
-                          {item.OrderByTime ? (
-                            <>
-                              <div>
-                                Ngày
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                </span>
-                              </div>
-                              <div>
-                                Giờ
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "HH:mm"
-                                  )}
-                                </span>
-                                {" - "}
-                                <span>
-                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
-                                </span>
-                              </div>
-                            </>
-                          ) : (
-                            <div>
-                              Ngày
-                              <span className="date">
-                                {moment(item?.OrderByDateFrom).format(
-                                  "DD/MM/YYYY"
-                                )}
-                              </span>
-                              {" - "}
-                              <span>
-                                {moment(item?.OrderByDateTo).format(
-                                  "DD/MM/YYYY"
-                                )}
-                              </span>
-                            </div>
-                          )}
-                        </Col>
-                        <Col span={12} className="checkbox_action">
-                          <div onClick={() => {}}>Xóa</div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={24} className="">
-                          <div className="price">
-                            {" "}
-                            {convertPrice(item?.Price || item?.price)}đ
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                </CheckBox>
-              ))}
-            </Col>
-          ))}
-        </Row>
+        // <Row gutter={[0, 6]}>
+        //   {cart["photographer"]?.map((orderItem, index) => (
+        //     <Col span={24} className="wrapper" key={index}>
+        //       <CheckBox
+        //         key={index}
+        //         name="allCheck"
+        //         value="allCheck"
+        //         onClick={() =>
+        //           handleOnCheckedAll(2, orderItem?.id, orderItem?.Services)
+        //         }
+        //         checked={
+        //           chooseServices.filter(
+        //             (item) =>
+        //               item?.category === 2 && item?.postId === orderItem?.id
+        //           ).length === orderItem?.Services?.length
+        //         }
+        //       >
+        //         <div
+        //           style={{
+        //             fontWeight: "400",
+        //             fontSize: "14px",
+        //             lineHeight: "19px",
+        //             color: "#3F3F3F",
+        //           }}
+        //         >
+        //           {orderItem?.Name}
+        //         </div>
+        //       </CheckBox>
+        //       {orderItem?.Services?.map((item, index) => (
+        //         <CheckBox
+        //           onClick={() =>
+        //             handleOnChecked(2, item, orderItem?.Id, orderItem?.Name)
+        //           }
+        //           key={index}
+        //           name={item?.id}
+        //           value={item?.id}
+        //           checked={chooseServices.some(
+        //             (service) =>
+        //               service?.id === item?.id &&
+        //               service?.postId === orderItem?.id &&
+        //               service?.category === 2
+        //           )}
+        //         >
+        //           <Row
+        //             className="checkbox_content w-100"
+        //             align={"middle"}
+        //             justify={"space-between"}
+        //             gutter={[15, 10]}
+        //           >
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row className="w-100 h-100" gutter={(0, 10)}>
+        //                 <Col span={6} className="">
+        //                   <img
+        //                     src={item?.image}
+        //                     className="w-100 h-80px"
+        //                     style={{ objectFit: "cover" }}
+        //                     alt=""
+        //                   />
+        //                 </Col>
+        //                 <Col span={18}>
+        //                   <label className="checkbox_label">{item?.Name}</label>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row
+        //                 className="w-100 mb-20"
+        //                 gutter={[0, 10]}
+        //                 align={"top"}
+        //                 justify={"space-between"}
+        //               >
+        //                 <Col span={12} className="checkbox_desc">
+        //                   {item.OrderByTime ? (
+        //                     <>
+        //                       <div>
+        //                         Ngày
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom).format(
+        //                             "DD/MM/YYYY"
+        //                           )}
+        //                         </span>
+        //                       </div>
+        //                       <div>
+        //                         Giờ
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom).format(
+        //                             "HH:mm"
+        //                           )}
+        //                         </span>
+        //                         {" - "}
+        //                         <span>
+        //                           {moment(item?.OrderByTimeTo).format("HH:mm")}
+        //                         </span>
+        //                       </div>
+        //                     </>
+        //                   ) : (
+        //                     <div>
+        //                       Ngày
+        //                       <span className="date">
+        //                         {moment(item?.OrderByDateFrom).format(
+        //                           "DD/MM/YYYY"
+        //                         )}
+        //                       </span>
+        //                       {" - "}
+        //                       <span>
+        //                         {moment(item?.OrderByDateTo).format(
+        //                           "DD/MM/YYYY"
+        //                         )}
+        //                       </span>
+        //                     </div>
+        //                   )}
+        //                 </Col>
+        //                 <Col span={12} className="checkbox_action">
+        //                   <div onClick={() => {}}>Xóa</div>
+        //                 </Col>
+        //               </Row>
+        //               <Row>
+        //                 <Col span={24} className="">
+        //                   <div className="price">
+        //                     {" "}
+        //                     {convertPrice(item?.Price || item?.price)}đ
+        //                   </div>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //           </Row>
+        //         </CheckBox>
+        //       ))}
+        //     </Col>
+        //   ))}
+        // </Row>
+        <CartCategory
+          categoryId={2}
+          postUrlEnpoint={"photographer"}
+          servicePackageName={"PhotographerServicePackage"}
+          handleOnCheckedAll={handleOnCheckedAll}
+          handleOnChecked={handleOnChecked}
+          handleBtnDelete={handleBtnDelete}
+        />
       ),
     },
     {
       key: "3",
       label: "Trang phục",
       children: (
-        <Row gutter={[0, 6]}>
-          {cart["clothes"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper" key={index}>
-              <CheckBox
-                key={index}
-                name="allCheck"
-                value="allCheck"
-                onClick={() =>
-                  handleOnCheckedAll(3, orderItem?.id, orderItem?.Services)
-                }
-                checked={
-                  chooseServices.filter(
-                    (item) =>
-                      item?.category === 3 && item?.postId === orderItem?.id
-                  ).length === orderItem?.Services?.length
-                }
-              >
-                <div
-                  style={{
-                    fontWeight: "400",
-                    fontSize: "14px",
-                    lineHeight: "19px",
-                    color: "#3F3F3F",
-                  }}
-                >
-                  {orderItem?.Name}
-                </div>
-              </CheckBox>
-              {orderItem?.Services?.map((item, index) => (
-                <CheckBox
-                  onClick={() => handleOnChecked(3, orderItem, item)}
-                  key={index}
-                  name={item?.id}
-                  value={item?.id}
-                  checked={chooseServices.some(
-                    (service) =>
-                      service?.id === item?.id &&
-                      service?.postId === orderItem?.id &&
-                      service?.category === 3
-                  )}
-                >
-                  <Row
-                    className="checkbox_content w-100"
-                    align={"middle"}
-                    justify={"space-between"}
-                    gutter={[15, 10]}
-                  >
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row className="w-100 h-100" gutter={(0, 10)}>
-                        <Col span={6} className="">
-                          <img
-                            src={item?.image}
-                            className="w-100 h-80px"
-                            style={{ objectFit: "cover" }}
-                            alt=""
-                          />
-                        </Col>
-                        <Col span={18}>
-                          <label className="checkbox_label">{item?.Name}</label>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row
-                        className="w-100 mb-20"
-                        gutter={[0, 10]}
-                        align={"top"}
-                        justify={"space-between"}
-                      >
-                        <Col span={12} className="checkbox_desc">
-                          {item.OrderByTime ? (
-                            <>
-                              <div>
-                                Ngày
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                </span>
-                              </div>
-                              <div>
-                                Giờ
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "HH:mm"
-                                  )}
-                                </span>
-                                {" - "}
-                                <span>
-                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
-                                </span>
-                              </div>
-                            </>
-                          ) : (
-                            <div>
-                              Ngày
-                              <span className="date">
-                                {moment(item?.OrderByDateFrom).format(
-                                  "DD/MM/YYYY"
-                                )}
-                              </span>
-                              {" - "}
-                              <span>
-                                {moment(item?.OrderByDateTo).format(
-                                  "DD/MM/YYYY"
-                                )}
-                              </span>
-                            </div>
-                          )}
-                        </Col>
-                        <Col span={12} className="checkbox_action">
-                          <div onClick={() => {}}>Xóa</div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={24} className="">
-                          <div className="price">
-                            {" "}
-                            {convertPrice(item?.Price)}đ
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                </CheckBox>
-              ))}
-            </Col>
-          ))}
-        </Row>
+        // <Row gutter={[0, 6]}>
+        //   {cart["clothes"]?.map((orderItem, index) => (
+        //     <Col span={24} className="wrapper" key={index}>
+        //       <CheckBox
+        //         key={index}
+        //         name="allCheck"
+        //         value="allCheck"
+        //         onClick={() =>
+        //           handleOnCheckedAll(3, orderItem?.id, orderItem?.Services)
+        //         }
+        //         checked={
+        //           chooseServices.filter(
+        //             (item) =>
+        //               item?.category === 3 && item?.postId === orderItem?.id
+        //           ).length === orderItem?.Services?.length
+        //         }
+        //       >
+        //         <div
+        //           style={{
+        //             fontWeight: "400",
+        //             fontSize: "14px",
+        //             lineHeight: "19px",
+        //             color: "#3F3F3F",
+        //           }}
+        //         >
+        //           {orderItem?.Name}
+        //         </div>
+        //       </CheckBox>
+        //       {orderItem?.Services?.map((item, index) => (
+        //         <CheckBox
+        //           onClick={() => handleOnChecked(3, orderItem, item)}
+        //           key={index}
+        //           name={item?.id}
+        //           value={item?.id}
+        //           checked={chooseServices.some(
+        //             (service) =>
+        //               service?.id === item?.id &&
+        //               service?.postId === orderItem?.id &&
+        //               service?.category === 3
+        //           )}
+        //         >
+        //           <Row
+        //             className="checkbox_content w-100"
+        //             align={"middle"}
+        //             justify={"space-between"}
+        //             gutter={[15, 10]}
+        //           >
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row className="w-100 h-100" gutter={(0, 10)}>
+        //                 <Col span={6} className="">
+        //                   <img
+        //                     src={orderItem?.Image1}
+        //                     className="w-100 h-80px"
+        //                     style={{ objectFit: "cover" }}
+        //                     alt=""
+        //                   />
+        //                 </Col>
+        //                 <Col span={18}>
+        //                   <label className="checkbox_label">
+        //                     {orderItem?.Name}
+        //                   </label>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row
+        //                 className="w-100 mb-20"
+        //                 gutter={[0, 10]}
+        //                 align={"top"}
+        //                 justify={"space-between"}
+        //               >
+        //                 <Col span={12} className="checkbox_desc">
+        //                   {item.OrderByTime ? (
+        //                     <>
+        //                       <div>
+        //                         Ngày
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom).format(
+        //                             "DD/MM/YYYY"
+        //                           )}
+        //                         </span>
+        //                       </div>
+        //                       <div>
+        //                         Giờ
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom).format(
+        //                             "HH:mm"
+        //                           )}
+        //                         </span>
+        //                         {" - "}
+        //                         <span>
+        //                           {moment(item?.OrderByTimeTo).format("HH:mm")}
+        //                         </span>
+        //                       </div>
+        //                     </>
+        //                   ) : (
+        //                     <div>
+        //                       Ngày
+        //                       <span className="date">
+        //                         {moment(item?.OrderByDateFrom).format(
+        //                           "DD/MM/YYYY"
+        //                         )}
+        //                       </span>
+        //                       {" - "}
+        //                       <span>
+        //                         {moment(item?.OrderByDateTo).format(
+        //                           "DD/MM/YYYY"
+        //                         )}
+        //                       </span>
+        //                     </div>
+        //                   )}
+        //                 </Col>
+        //                 <Col span={12} className="checkbox_action">
+        //                   <div onClick={() => {}}>Xóa</div>
+        //                 </Col>
+        //               </Row>
+        //               <Row>
+        //                 <Col span={24} className="">
+        //                   <div className="price">
+        //                     {" "}
+        //                     {convertPrice(item?.Price)}đ
+        //                   </div>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //           </Row>
+        //         </CheckBox>
+        //       ))}
+        //     </Col>
+        //   ))}
+        // </Row>
+        <CartCategory
+          categoryId={3}
+          postUrlEnpoint={"clothes"}
+          servicePackageName={"ClothesPost"}
+          handleOnCheckedAll={handleOnCheckedAll}
+          handleOnChecked={handleOnChecked}
+          handleBtnDelete={handleBtnDelete}
+        />
       ),
     },
     {
       key: "4",
       label: "Make up",
       children: (
-        <Row gutter={[0, 6]}>
-          {cart["makeup"]?.map((orderItem, index) => (
-            <Col span={24} className="wrapper" key={index}>
-              <CheckBox
-                key={index}
-                name="allCheck"
-                value="allCheck"
-                onClick={() =>
-                  handleOnCheckedAll(4, orderItem?.id, orderItem?.Services)
-                }
-                checked={
-                  chooseServices.filter(
-                    (item) =>
-                      item?.category === 4 && item?.postId === orderItem?.id
-                  ).length === orderItem?.Services?.length
-                }
-              >
-                <div
-                  style={{
-                    fontWeight: "400",
-                    fontSize: "14px",
-                    lineHeight: "19px",
-                    color: "#3F3F3F",
-                  }}
-                >
-                  {orderItem?.Name}
-                </div>
-              </CheckBox>
-              {orderItem?.Services?.map((item, index) => (
-                <CheckBox
-                  onClick={() => handleOnChecked(4, orderItem?.id, item)}
-                  key={index}
-                  name={item?.id}
-                  value={item?.id}
-                  checked={chooseServices.some(
-                    (service) =>
-                      service?.id === item?.id &&
-                      service?.postId === orderItem?.id &&
-                      service?.category === 4
-                  )}
-                >
-                  <Row
-                    className="checkbox_content w-100"
-                    align={"middle"}
-                    justify={"space-between"}
-                    gutter={[15, 10]}
-                  >
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row className="w-100 h-100" gutter={(0, 10)}>
-                        <Col span={6} className="">
-                          <img
-                            src={item?.image}
-                            className="w-100 h-80px"
-                            style={{ objectFit: "cover" }}
-                            alt=""
-                          />
-                        </Col>
-                        <Col span={18}>
-                          <label className="checkbox_label">{item?.Name}</label>
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col lg={12} md={24} sm={24} xs={24} className="h-100">
-                      <Row
-                        className="w-100 mb-20"
-                        gutter={[0, 10]}
-                        align={"top"}
-                        justify={"space-between"}
-                      >
-                        <Col span={12} className="checkbox_desc">
-                          {item.OrderByTime ? (
-                            <>
-                              <div>
-                                Ngày
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                </span>
-                              </div>
-                              <div>
-                                Giờ
-                                <span className="date">
-                                  {moment(item?.OrderByTimeFrom).format(
-                                    "HH:mm"
-                                  )}
-                                </span>
-                                {" - "}
-                                <span>
-                                  {moment(item?.OrderByTimeTo).format("HH:mm")}
-                                </span>
-                              </div>
-                            </>
-                          ) : (
-                            <div>
-                              Ngày
-                              <span className="date">
-                                {moment(item?.OrderByDateFrom).format(
-                                  "DD/MM/YYYY"
-                                )}
-                              </span>
-                              {" - "}
-                              <span>
-                                {moment(item?.OrderByDateTo).format(
-                                  "DD/MM/YYYY"
-                                )}
-                              </span>
-                            </div>
-                          )}
-                        </Col>
-                        <Col span={12} className="checkbox_action">
-                          <div onClick={() => {}}>Xóa</div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={24} className="">
-                          <div className="price">
-                            {" "}
-                            {convertPrice(item?.Price)}đ
-                          </div>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Row>
-                </CheckBox>
-              ))}
-            </Col>
-          ))}
-        </Row>
+        // <Row gutter={[0, 6]}>
+        //   {cart["makeup"]?.map((orderItem, index) => (
+        //     <Col span={24} className="wrapper" key={index}>
+        //       <CheckBox
+        //         key={index}
+        //         name="allCheck"
+        //         value="allCheck"
+        //         onClick={() =>
+        //           handleOnCheckedAll(4, orderItem?.id, orderItem?.Services)
+        //         }
+        //         checked={
+        //           chooseServices.filter(
+        //             (item) =>
+        //               item?.category === 4 && item?.postId === orderItem?.id
+        //           ).length === orderItem?.Services?.length
+        //         }
+        //       >
+        //         <div
+        //           style={{
+        //             fontWeight: "400",
+        //             fontSize: "14px",
+        //             lineHeight: "19px",
+        //             color: "#3F3F3F",
+        //           }}
+        //         >
+        //           {orderItem?.Name}
+        //         </div>
+        //       </CheckBox>
+        //       {orderItem?.Services?.map((item, index) => (
+        //         <CheckBox
+        //           onClick={() => handleOnChecked(4, orderItem?.id, item)}
+        //           key={index}
+        //           name={item?.id}
+        //           value={item?.id}
+        //           checked={chooseServices.some(
+        //             (service) =>
+        //               service?.id === item?.id &&
+        //               service?.postId === orderItem?.id &&
+        //               service?.category === 4
+        //           )}
+        //         >
+        //           <Row
+        //             className="checkbox_content w-100"
+        //             align={"middle"}
+        //             justify={"space-between"}
+        //             gutter={[15, 10]}
+        //           >
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row className="w-100 h-100" gutter={(0, 10)}>
+        //                 <Col span={6} className="">
+        //                   <img
+        //                     src={item?.image}
+        //                     className="w-100 h-80px"
+        //                     style={{ objectFit: "cover" }}
+        //                     alt=""
+        //                   />
+        //                 </Col>
+        //                 <Col span={18}>
+        //                   <label className="checkbox_label">{item?.Name}</label>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //             <Col lg={12} md={24} sm={24} xs={24} className="h-100">
+        //               <Row
+        //                 className="w-100 mb-20"
+        //                 gutter={[0, 10]}
+        //                 align={"top"}
+        //                 justify={"space-between"}
+        //               >
+        //                 <Col span={12} className="checkbox_desc">
+        //                   {item.OrderByTime ? (
+        //                     <>
+        //                       <div>
+        //                         Ngày
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom).format(
+        //                             "DD/MM/YYYY"
+        //                           )}
+        //                         </span>
+        //                       </div>
+        //                       <div>
+        //                         Giờ
+        //                         <span className="date">
+        //                           {moment(item?.OrderByTimeFrom).format(
+        //                             "HH:mm"
+        //                           )}
+        //                         </span>
+        //                         {" - "}
+        //                         <span>
+        //                           {moment(item?.OrderByTimeTo).format("HH:mm")}
+        //                         </span>
+        //                       </div>
+        //                     </>
+        //                   ) : (
+        //                     <div>
+        //                       Ngày
+        //                       <span className="date">
+        //                         {moment(item?.OrderByDateFrom).format(
+        //                           "DD/MM/YYYY"
+        //                         )}
+        //                       </span>
+        //                       {" - "}
+        //                       <span>
+        //                         {moment(item?.OrderByDateTo).format(
+        //                           "DD/MM/YYYY"
+        //                         )}
+        //                       </span>
+        //                     </div>
+        //                   )}
+        //                 </Col>
+        //                 <Col span={12} className="checkbox_action">
+        //                   <div onClick={() => {}}>Xóa</div>
+        //                 </Col>
+        //               </Row>
+        //               <Row>
+        //                 <Col span={24} className="">
+        //                   <div className="price">
+        //                     {" "}
+        //                     {convertPrice(item?.Price)}đ
+        //                   </div>
+        //                 </Col>
+        //               </Row>
+        //             </Col>
+        //           </Row>
+        //         </CheckBox>
+        //       ))}
+        //     </Col>
+        //   ))}
+        // </Row>
+        <CartCategory
+          categoryId={4}
+          postUrlEnpoint={"makeup"}
+          servicePackageName={"MakeupServicePackage"}
+          handleOnCheckedAll={handleOnCheckedAll}
+          handleOnChecked={handleOnChecked}
+          handleBtnDelete={handleBtnDelete}
+        />
       ),
     },
     {
@@ -1028,7 +1054,6 @@ const Index = () => {
               className="card"
               style={{
                 padding: "25px 25px ",
-                // marginBottom: "0.5rem",
                 backgroundColor: "#FFFFFF",
               }}
             >

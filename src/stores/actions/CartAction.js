@@ -53,6 +53,7 @@ export const addServiceToList = (cartService) => async (dispatch) => {
       Category: cartService?.Category,
     });
     const checkTime = res?.data?.success;
+    cartService["CartItemId"] = cartService["id"];
     if (!checkTime) {
       dispatch({
         type: ADD_SERVICE_TO_LIST,
@@ -94,7 +95,8 @@ export const getCartItemByCategory = (category) => async (dispatch) => {
   *   category: The category of the cart items.
 
   * Returns:
-  *   A promise that resolves to an object containing the cart items for the given category, or rejects with an error if the cart items could not be retrieved.
+  *   A promise that resolves to an object containing the cart items for the given category, or rejects with
+  *   an error if the cart items could not be retrieved.
   */
   try {
     const res = await cartService.getCartItemByCategory(category);
@@ -122,16 +124,51 @@ export const addCart = (category, post, service) => async (dispatch) => {
   *   A promise that resolves to an object containing the cart data, or rejects with an error if the item could not be added to the cart.
   */
   try {
-    const res = await cartService.addToCart({
-      category,
-      CategoryPostId: post?.id,
-      serviceId: service?.id,
-      OrderByTime: service?.OrderByTime,
-      OrderByTimeFrom: service?.OrderByTimeFrom,
-      OrderByTimeTo: service?.OrderByTimeTo,
-      OrderByDateFrom: service?.OrderByDateFrom,
-      OrderByDateTo: service?.OrderByDateTo,
-    });
+    console.log(post);
+    let req_body = null;
+    switch (category) {
+      case 3:
+        req_body = {
+          category,
+          CategoryPostId: post?.id,
+          serviceId: service?.id,
+          Size: post.size,
+          Color: post.color,
+          Amount: post.amount,
+          OrderByTime: service?.OrderByTime,
+          OrderByTimeFrom: service?.OrderByTimeFrom,
+          OrderByTimeTo: service?.OrderByTimeTo,
+          OrderByDateFrom: service?.OrderByDateFrom,
+          OrderByDateTo: service?.OrderByDateTo,
+        };
+        break;
+      case 5:
+        req_body = {
+          category,
+          CategoryPostId: post?.id,
+          serviceId: service?.id,
+          Amount: post.amount,
+          OrderByTime: service?.OrderByTime,
+          OrderByTimeFrom: service?.OrderByTimeFrom,
+          OrderByTimeTo: service?.OrderByTimeTo,
+          OrderByDateFrom: service?.OrderByDateFrom,
+          OrderByDateTo: service?.OrderByDateTo,
+        };
+        break;
+      default:
+        req_body = {
+          category,
+          CategoryPostId: post?.id,
+          serviceId: service?.id,
+          OrderByTime: service?.OrderByTime,
+          OrderByTimeFrom: service?.OrderByTimeFrom,
+          OrderByTimeTo: service?.OrderByTimeTo,
+          OrderByDateFrom: service?.OrderByDateFrom,
+          OrderByDateTo: service?.OrderByDateTo,
+        };
+        break;
+    }
+    const res = await cartService.addToCart({ ...req_body });
 
     if (res.data.success) {
       message.success(res.data.message);

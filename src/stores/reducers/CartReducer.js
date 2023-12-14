@@ -22,52 +22,7 @@ const initialState = {
   chooseServiceList: [],
   cart: JSON.parse(localStorage.getItem("cart")) || {
     studio: [],
-    photographer: [
-      {
-        Id: 1,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 2,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-      {
-        Id: 2,
-        Name: "Studio Wisteria",
-        Services: [
-          {
-            Id: 1,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 1,
-            OrderByTimeFrom: moment(),
-            OrderByTimeTo: moment(),
-            Price: 500000,
-          },
-          {
-            Id: 2,
-            Name: "Premium Wisteria - phong cách tối giản",
-            OrderByTime: 0,
-            OrderByDateFrom: moment(),
-            OrderByDateTo: moment(),
-            Price: 500000,
-          },
-        ],
-      },
-    ],
+    photographer: [],
     clothes: [],
     makeup: [],
     device: [],
